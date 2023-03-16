@@ -18,7 +18,7 @@
                 </div>
 
                 <div class="col-md-8 text-right titulo">
-                    <b>CARGAR DOCUMENTO</b>
+                    <b>EDITAR ARCHIVO</b>
                 </div>
 
                 <div class="col-md-12">
@@ -32,31 +32,6 @@
                     <form method="POST" action="{{ route('archivos2.update', $archivos->idarchivo) }}"
                         enctype="multipart/form-data">
                         @csrf
-
-
-
-
-
-                        <div class="form-group row">
-                            <label for="nombre" style="color:black;font-weight: bold;"
-                                class="required col-md-4 col-form-label text-md-right">Nombre Documento:</label>
-
-                            <div class="col-md-6">
-                                <textarea type="text" name="nombredocumento" class="form-control" placeholder="Nombre..." required
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();" cols="50" rows="2">{{ $archivos->nombrearchivo }}</textarea>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="nombre" style="color:black;font-weight: bold;"
-                                class="required col-md-4 col-form-label text-md-right">Referencia:</label>
-
-                            <div class="col-md-6">
-                                <textarea type="text" name="referencia" class="form-control" placeholder="Referencia..." required
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();" cols="50" rows="2">{{ $archivos->referencia }}</textarea>
-                            </div>
-                        </div>
-
 
 
 
@@ -79,6 +54,41 @@
 
                             </div>
                         </div>
+
+                        <div class="form-group row">
+                            <label for="nombre" style="color:black;font-weight: bold;"
+                                class="required col-md-4 col-form-label text-md-right">Fecha Recepcion/Envio:</label>
+
+                                <div class="col-md-3">
+
+                                    <input type="text" name="fecha" value="{{ $date2}}"  class="form-control form-control-sm font-verdana-bg" id="fecha" data-language="es" autocomplete="off">
+                                </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="nombre" style="color:black;font-weight: bold;"
+                                class="required col-md-4 col-form-label text-md-right">N°:</label>
+
+                            <div class="col-md-2">
+                                <input type="text" name="nombredocumento" class="form-control" placeholder="Nombre..." required
+                                  value="{{ $archivos->nombrearchivo }}"  >
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="nombre" style="color:black;font-weight: bold;"
+                                class="required col-md-4 c  ol-form-label text-md-right">Referencia:</label>
+
+                            <div class="col-md-6">
+                                <textarea type="text" name="referencia" class="form-control" placeholder="Referencia..." required
+                                    onkeyup="javascript:this.value=this.value.toUpperCase();" cols="50" rows="2">{{ $archivos->referencia }}</textarea>
+                            </div>
+                        </div>
+
+
+
+
+
 
 
                         <div class="form-group row">
@@ -118,5 +128,12 @@
                 placeholder: "--Seleccionar--"
             });
         });
+
+        $("#fecha").datepicker({
+            inline: false,
+            dateFormat: "dd/mm/yyyy",
+            autoClose: true
+        });
+
     </script>
 @endsection

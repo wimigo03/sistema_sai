@@ -48,13 +48,13 @@
         <b style="color: red">--No puede generar la orden de compra hasta que esta sea aprovada--</b>
       @elseif ($estado == 1)
       <a href="{{ route('compras.detalle.principalorden', $idcompra) }}" class="tts:left tts-slideIn tts-custom" aria-label="Ir a Orden de Compra">
-        <button class="btn btn-sm btn-info   font-verdana" type="button" >
-            &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;Orden de Compra
+        <button class="btn btn-sm btn-success   font-verdana" type="button" >
+            &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;Acceder a la Orden de Compra
         </button>
     </a>
     @elseif ($estado == 0)
     <a href="{{ route('compras.detalle.principal', $idcompra) }}" class="tts:left tts-slideIn tts-custom" aria-label="Crear Orden de Compra">
-        <button class="btn btn-sm btn-info   font-verdana" type="button" >
+        <button class="btn btn-sm btn-warning   font-verdana" type="button" >
             &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;Crear Orden de Compra
         </button>
     </a>

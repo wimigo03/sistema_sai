@@ -261,4 +261,14 @@ Route::get('archivos2/{id}/edit', 'ArchivosController2@editar')->name('archivos2
 Route::POST('archivos2/{id}/update', 'ArchivosController2@update')->name('archivos2.update');
 
 
+/////////////////////////--ALMACEN--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Route::get('almacen/index', 'AlmacenController@index')->name('almacen.index');
+//Route::get('compras/pedido/index2', 'CompraController@index2')->name('compras.pedido.index2');
+//oute::get('compras/pedido/create', 'CompraController@create')->name('compras.pedido.create');
+//Route::post('compras/pedido/store', 'CompraController@store')->name('compras.pedido.store');
+//Route::get('compras/pedido/edit/{id}', 'CompraController@edit')->name('compras.pedido.edit');
+//Route::get('compras/pedido/editar/{id}', 'CompraController@editar')->name('compras.pedido.editar');
+//Route::post('compras/pedido/update', 'CompraController@update')->name('compras.pedido.update');
+
 });

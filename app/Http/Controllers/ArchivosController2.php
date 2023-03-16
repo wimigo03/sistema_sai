@@ -39,9 +39,9 @@ class ArchivosController2 extends Controller
             $data = DB::table('archivos as a')
                 ->join('areas as ar', 'ar.idarea', '=', 'a.idarea')
                 ->join('tipoarchivo as t', 'a.idtipo', '=', 't.idtipo')
-                ->select('a.idarchivo', 'a.referencia', 'a.nombrearchivo', 'a.documento', 'a.idarea', 't.nombretipo')
+                ->select('a.idarchivo', 'a.referencia','a.fecha','a.gestion', 'a.nombrearchivo', 'a.documento', 'a.idarea', 't.nombretipo')
                 ->where('ar.idarea', $personalArea->idarea)
-                ->orderBy('a.idarchivo', 'desc');
+                ->orderBy('a.gestion', 'desc');
 
             return Datatables::of($data)
                 ->addIndexColumn()
@@ -97,6 +97,9 @@ class ArchivosController2 extends Controller
         $userdate = User::find($id)->usuariosempleados;
         $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
 
+        $fecha_recepcion = substr($request->fecha, 6, 4) . '-' . substr($request->fecha, 3, 2) . '-' . substr($request->fecha, 0, 2);
+
+        $fecha_gestion = substr($request->fecha, 6, 4);
 
 
         if ($request->hasFile("documento")) {
@@ -120,12 +123,13 @@ class ArchivosController2 extends Controller
             $archivos = new ArchivosModel();
             $archivos->nombrearchivo = $request->input('nombredocumento');
             $archivos->referencia = $request->input('referencia');
-            $archivos->gestion = $request->input('anio');
+            $archivos->gestion = $fecha_gestion;
             $archivos->documento = $personalArea->nombrearea . '/' . $nombre;
             $archivos->idarea = $personalArea->idarea;
             $archivos->estado1 = 1;
             $archivos->idtipo = $request->input('tipodocumento');
             $archivos->id = $personal->id;
+            $archivos->fecha = $fecha_recepcion;
             $archivos->save();
       // }
 
@@ -145,13 +149,20 @@ class ArchivosController2 extends Controller
     public function editar($idarchivo)
     {
         $tipos = DB::table('tipoarchivo')->get();
-        $archivos = ArchivosModel::find($idarchivo);
+        $archivos = ArchivosModel::find($idarchivo)->first();
         $date = Carbon::now();
 
         $date = $date->format('Y');
 
-        // dd($compras);
-        return view('archivos2.edit', ["tipos" => $tipos, "archivos" => $archivos, "date" => $date]);
+        $date22 = $archivos->fecha;
+
+       $date2 = Carbon::createFromFormat('Y-m-d', $date22)
+       ->format('d/m/Y');
+
+
+        $anio = DB::table('anio')->get();
+
+        return view('archivos2.edit', ["date2" => $date2,"tipos" => $tipos, "archivos" => $archivos, "date" => $date, "anio" => $anio]);
     }
 
 
@@ -164,6 +175,10 @@ class ArchivosController2 extends Controller
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
         $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+
+        //$fecha_recepcion = substr($request->fecha, 6, 4) . '-' . substr($request->fecha, 3, 2) . '-' . substr($request->fecha, 0, 2);
+
+        $fecha_gestion = substr($request->fecha, 6, 4);
 
         $archivos = ArchivosModel::find($idarchivo);
         if ($request->file("documento") != null) {
@@ -187,6 +202,8 @@ class ArchivosController2 extends Controller
             $archivos->documento = $personalArea->nombrearea . '/' . $nombre;
             $archivos->idarea = $personalArea->idarea;
             $archivos->estado1 = 1;
+            $archivos->gestion = $fecha_gestion;
+            $archivos->fecha = $request->input('fecha');
             $archivos->idtipo = $request->input('tipodocumento');
 
 
@@ -197,6 +214,8 @@ class ArchivosController2 extends Controller
             //$archivos->documento = $personalArea->nombrearea . '/' . $nombre;
             $archivos->idarea = $personalArea->idarea;
             $archivos->estado1 = 1;
+            $archivos->gestion = $fecha_gestion;
+            $archivos->fecha = $request->input('fecha');
             $archivos->idtipo = $request->input('tipodocumento');
 
 

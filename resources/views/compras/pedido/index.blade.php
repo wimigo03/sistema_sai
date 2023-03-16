@@ -7,7 +7,7 @@
     <div class="col-md-4 text-right">
         @can('productos_create')
 
-        <a href="{{ route('compras.pedido.index2') }}" class="tts:left tts-slideIn tts-custom" aria-label="ir a solicitudes aprobadas">
+            <a href="{{ route('compras.pedido.index2') }}" class="tts:left tts-slideIn tts-custom" aria-label="ir a solicitudes aprobadas">
                 <button class="btn btn-sm btn-success font-verdana" type="button" >SOLICITUDES APROBADAS
                     &nbsp;<i class="fa-solid fa-thumbs-up" style="font-size:14px"></i>&nbsp;
                 </button>
@@ -42,9 +42,9 @@
                             <tbody>
                             </tbody>
                         </table>
-                    </center>
-                </div>
-            </div>
+        </center>
+    </div>
+</div>
 @section('scripts')
 
 <script type="text/javascript">

@@ -5,7 +5,7 @@
     <br>
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
-            <b>ARCHIVOS -- </b><b style='color:red'>{{ $idd->nombrearea }} </b>--
+            <b>ARCHIVOS -- </b><b style='color:orange'>{{ $idd->nombrearea }} </b>--
         </div>
         <div class="col-md-4 text-right titulo">
             @can('archivos_create')
@@ -33,9 +33,10 @@
                     <thead>
                         <tr>
                             <td class="text-justify p-1"><b>N°</b></td>
-                            <td class="text-justify p-1"><b>NOMBRE ARCHIVO</b></td>
+                            <td class="text-justify p-1"><b>GESTION</b></td>
+                            <td class="text-justify p-1"><b>FECHA REC./ENV.</b></td>
+                            <td class="text-justify p-1"><b>NUM.DOC.</b></td>
                             <td class="text-justify p-1"><b>REFERENCIA</b></td>
-                            <td class="text-justify p-1"><b>DOCUMENTO</b></td>
                             <td class="text-justify p-1"><b>TIPO</b></td>
                             <td class="text-center p-1 font-weight-bold">
                                 <i class="fa fa-bars" aria-hidden="true"></i>
@@ -67,14 +68,15 @@ ajax: "{{ route('archivos2.index') }}",
 columns: [
     {data: 'DT_RowIndex',orderable: false,searchable: false,class:'text-justify p-1 font-verdana'},
 
+    {data: 'gestion',name: 'a.gestion',class:'text-justify p-1 font-verdana'},
+
+    {data: 'fecha',name: 'a.fecha',class:'text-justify p-1 font-verdana'},
+
     { data: 'nombrearchivo',name: 'a.nombrearchivo',class:'text-justify p-1 font-verdana'},
 
     {data: 'referencia',name: 'a.referencia',class:'text-justify p-1 font-verdana'},
 
-    {data: 'documento',name: 'a.documento',class:'text-justify p-1 font-verdana'},
-
     {data: 'nombretipo',name: 't.nombretipo',class:'text-justify p-1 font-verdana'},
-
 
     {data: 'btn', name: 'btn', orderable: false, searchable: false },
 

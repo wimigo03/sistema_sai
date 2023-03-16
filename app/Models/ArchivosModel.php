@@ -20,7 +20,8 @@ class ArchivosModel extends Model
         'estado1',
         'idtipo',
         'referencia',
-        'idarea'
+        'idarea',
+        'fecha'
     ];
 
     protected $guarded = [

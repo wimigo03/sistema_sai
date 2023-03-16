@@ -11,8 +11,8 @@
             <span class="country" style="color:green">Yacuiba - Carapari - Villamontes</span>
        </P>
                 <a href="javascript:void(0)" onclick="$('#logout-form').submit();" class="dropdown-item">
-                    <i class="fa fa-sign-out" aria-hidden="true" style="color:red"></i>
-                    <span  style="color:red;">Cerrar Sesion</span>
+                    <i class="fa fa-sign-out" aria-hidden="true" style="color:black"></i>
+                    <span  style="color:black;">Cerrar Sesion</span>
 
                 </a>
 
@@ -26,7 +26,7 @@
                             <a href="" data-toggle="collapse" data-target="#dashboard_compras" class="active collapsed" aria-expanded="false">
                                 <i class="fa fa-shopping-cart" style="color:blue;font-weight: bold;"></i>
                                 <span class="nav-label mr-3 " style="color:blue;font-weight: bold;">Compras</span>
-                                <span class="fa fa-chevron-left pull-right" style="color:red;font-weight: bold;"></span>
+                                <span class="fa fa-square-left pull-right" style="color:black;font-weight: bold;"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_compras">
                                 @can('compras_panel_access')
@@ -102,6 +102,26 @@
                     @endcanany
 
 
+                    @canany(['archivos_access'])
+                    <li>
+                        <a href="" data-toggle="collapse" data-target="#dashboard_almacen" class="active collapsed" aria-expanded="false">
+                            <i class="fa fa-square" style="color:blue;font-weight: bold;"></i>
+                            <span class="nav-label mr-3" style="color:blue;font-weight: bold;">Almacen</span>
+                            <span class="fa fa-square-left pull-right" style="color:black;font-weight: bold;"></span>
+                        </a>
+                        <ul class="sub-menu collapse" id="dashboard_almacen">
+                            @can('archivos_access')
+                                <li>
+                                    <a href="{{ route('archivos2.index') }}">
+                                        &nbsp;&nbsp; &nbsp; <i class="fa fa-gear"></i>
+                                        <span class="nav-label mr-4">Ingresos</span>
+                                    </a>
+                                </li>
+                            @endcan
+
+                        </ul>
+                    </li>
+                @endcanany
 
 
 
@@ -111,7 +131,7 @@
                         <a href="" data-toggle="collapse" data-target="#dashboard_archivos2" class="active collapsed" aria-expanded="false">
                             <i class="fa fa-folder-open" style="color:blue;font-weight: bold;"></i>
                             <span class="nav-label mr-3" style="color:blue;font-weight: bold;">Archivos</span>
-                            <span class="fa fa-chevron-left pull-right" style="color:red;font-weight: bold;"></span>
+                            <span class="fa fa-square-left pull-right" style="color:black;font-weight: bold;"></span>
                         </a>
                         <ul class="sub-menu collapse" id="dashboard_archivos2">
                             @can('archivos_access')
@@ -136,7 +156,7 @@
                             <a href="" data-toggle="collapse" data-target="#dashboard_rrhh" class="active collapsed" aria-expanded="false">
                                 <i class="fa fa-users" style="color:blue;font-weight: bold;"></i>
                                 <span class="nav-label mr-3" style="color:blue;font-weight: bold;">Recursos Humanos</span>
-                                <span class="fa fa-chevron-left pull-right" style="color:red;font-weight: bold;"></span>
+                                <span class="fa fa-square-left pull-right" style="color:black;font-weight: bold;"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_rrhh">
                                 @can('areas_access')
@@ -192,7 +212,7 @@
                             <a href="" data-toggle="collapse" data-target="#dashboard_activos_fijos" class="active collapsed" aria-expanded="false">
                                 <i class="fa fa-file-text" style="color:blue;font-weight: bold;"></i>
                                 <span class="nav-label mr-3" style="color:blue;font-weight: bold;">PERSONERIAS</span>
-                                <span class="fa fa-chevron-left pull-right" style="color:red;font-weight: bold;"></span>
+                                <span class="fa fa-square-left pull-right" style="color:black;font-weight: bold;"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_activos_fijos" @if(request()->is('admin/users') || request()->is('admin/users/*')) in @endif ">
                                 @can('areas_access')
@@ -215,7 +235,7 @@
                             <a href="" data-toggle="collapse" data-target="#dashboard_activos_fijos" class="active collapsed" aria-expanded="false">
                                 <i class="fa fa-circle" style="color:blue;font-weight: bold;"></i>
                                 <span class="nav-label mr-3" style="color:blue;font-weight: bold;">Activos Fijos</span>
-                                <span class="fa fa-chevron-left pull-right" style="color:red;font-weight: bold;"></span>
+                                <span class="fa fa-square-left pull-right" style="color:black;font-weight: bold;"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_activos_fijos" @if(request()->is('admin/users') || request()->is('admin/users/*')) in @endif ">
                                 @can('areas_access')
@@ -238,7 +258,7 @@
                             <a href="" data-toggle="collapse" data-target="#dashboard_users" class="active collapsed" aria-expanded="false">
                                 <i class="fa fa-users" style="color:blue;font-weight: bold;"></i>
                                 <span class="nav-label mr-3" style="color:blue;font-weight: bold;">Usuarios</span>
-                                <span class="fa fa-chevron-left pull-right" style="color:red;font-weight: bold;"></span>
+                                <span class="fa fa-square-left pull-right" style="color:black;font-weight: bold;"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_users">
                                 @can('users_access')
@@ -276,7 +296,7 @@
                             <a href="" data-toggle="collapse" data-target="#dashboard_discapacidad" class="active collapsed" aria-expanded="false">
                                 <i class="fa fa-users" style="color:blue;font-weight: bold;"></i>
                                 <span class="nav-label mr-3" style="color:blue;font-weight: bold;">Discapacidad</span>
-                                <span class="fa fa-chevron-left pull-right" style="color:red;font-weight: bold;"></span>
+                                <span class="fa fa-square-left pull-right" style="color:black;font-weight: bold;"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_discapacidad">
                                 @can('entregas_acess')
@@ -306,7 +326,7 @@
                         <a href="" data-toggle="collapse" data-target="#dashboard_activosvsiaf" class="active collapsed" aria-expanded="false">
                             <i class="fa fa-users" style="color:blue;font-weight: bold;"></i>
                             <span class="nav-label mr-3" style="color:blue;font-weight: bold;">Activos</span>
-                            <span class="fa fa-chevron-left pull-right" style="color:red;font-weight: bold;"></span>
+                            <span class="fa fa-square-left pull-right" style="color:black;font-weight: bold;"></span>
                         </a>
                         <ul class="sub-menu collapse" id="dashboard_activosvsiaf">
                             @can('activos_listar')
