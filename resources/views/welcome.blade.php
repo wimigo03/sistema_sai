@@ -416,29 +416,19 @@
         @if (Route::has('login'))
         <div class="fixed">
             @auth
-
             @else
             <a href="{{ route('login') }}">
                 <h2 style='color:black'></h2>
             </a>
-
-
             @endauth
         </div>
         @endif
         <br><br>
         <div class="text-center col-md-12">
-
-        <a href="{{ route('login') }}">
+            <a href="{{ route('login') }}">
                 <img href="{{ route('login') }}" src="{{ asset('logos/GOBERNACION.jpg') }}" class="responsive" >
             </a>
-
-
         </div>
-
     </div>
-
-
 </body>
-
 </html>
