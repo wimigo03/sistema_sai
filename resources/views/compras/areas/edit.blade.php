@@ -1,60 +1,45 @@
 @extends('layouts.admin')
-
 @section('content')
-
-
-<div class="row justify-content-center">
-    <div class="col-md-10">
-
+{{--<div class="row justify-content-center">
+    <div class="col-md-10">--}}
         <div class="row font-verdana-bg">
-            <div class="col-md-4 titulo">
-                <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-                    <a href="{{ url()->previous() }}">
-                        <span class="color-icon-1">
-                            &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
-                        </span>
-                    </a>
-                </span>
+            <div class="col-md-3 titulo">
+                &nbsp;
             </div>
-            <div class="col-md-8 text-right titulo">
-                <b>EDITAR REGISTRO</b>
+            <div class="col-md-6 text-center titulo">
+                <b>EDITAR REGISTRO DE AREA</b>
             </div>
-            <div class="col-md-12">
-                <hr color="red">
+            <div class="col-md-3 titulo">
+                &nbsp;
             </div>
+            {{--<div class="col-md-12">
+                <hr class="hrr">
+            </div>--}}
         </div>
-
-
-            <div class="body-border">
-
-            <font size="2" face="Courier New" >
-                <form method="POST" action="{{ route('areas.update', $areas->idarea) }}">
-                    @csrf
-                    @method('POST')
-
-                    <div class="form-group row">
-                        <label for="nombre"
-                            class="required col-md-2 col-form-label text-md-right" style="font-weight: bold;">Nombre:</label>
-                        <div class="col-md-8">
-                            <input type="text" class="form-control" name="nombre" placeholder=""
-                                value="{{$areas->nombrearea}}"
-                                onkeyup="javascript:this.value=this.value.toUpperCase();">
-                        </div>
+        <div class="body-border">
+            <form method="POST" action="{{ route('areas.update', $areas->idarea) }}">
+                @csrf
+                @method('POST')
+                <div class="form-group row font-verdana-bg justify-content-center">
+                    <div class="col-md-4">
+                        <label for="nombre" class="d-inline">
+                            <b>Nombre</b>
+                        </label>
+                        <input type="text" name="nombre" value="{{$areas->nombrearea}}" class="form-control form-control-sm font-verdana-bg" onkeyup="javascript:this.value=this.value.toUpperCase();" required>
                     </div>
-
-
-
-                    <div align='center'>
-                               
-                        <button class="btn color-icon-2 font-verdana-bg" type="submit">
-                            <i class="fa-solid fa-paper-plane"></i>
-                            &nbsp;Actualizar
+                </div>
+                <div class="form-group row font-courier-bg justify-content-center">
+                    <div class="col-md-12 text-right">
+                        <button class="btn btn-outline-primary font-verdana-bg" type="submit">
+                            <i class="fa-solid fa-paper-plane"></i>&nbsp;Actualizar
                         </button>
+                        <a href="{{route('areas.index')}}" class="btn btn-outline-danger font-verdana-bg">
+                            <i class="fa fa-lg fa-reply" aria-hidden="true"></i>&nbsp;Cancelar
+                        </a>
                     </div>
-                </form>
-            </font>
+                </div>
+            </form>
         </div>
-</div>
-</div>
-</div>    
+    {{--</div>
+</div>--}}    
 @endsection

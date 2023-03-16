@@ -132,39 +132,35 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
     Route::get('compras/empleados/list', 'EmpleadosController@list')->name('empleados.list');
 
 
-    ///////////////////////////--RECURSOS HUMANOS PLANTA--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    Route::get('rechumanos/planta/index', 'PlantaController@index')->name('planta.index');
+    /*RECURSOS HUMANOS PLANTA*/
+    Route::get('rechumanos/planta', 'PlantaController@index')->name('planta.index');
     Route::get('rechumanos/planta/list', 'PlantaController@list')->name('planta.list');
     Route::get('rechumanos/planta/detalle/{id}', 'PlantaController@detalle')->name('planta_detalle');
     Route::get('rechumanos/planta/edit/{id}', 'PlantaController@edit')->name('planta.edit');
     Route::get('rechumanos/planta/lista/{id}', 'PlantaController@lista')->name('planta.lista');
     Route::get('rechumanos/planta/create/{id}', 'PlantaController@plantanuevo')->name('planta.crear');
     Route::get('rechumanos/planta/edit/{id}', 'PlantaController@editarplanta')->name('planta.editar');
-    Route::POST('rechumanos/planta/guardarplanta', 'PlantaController@guardarplanta')->name('planta.guardar');
-    Route::POST('rechumanos/planta/actualizarplanta', 'PlantaController@actualizarPlanta')->name('planta.actualizar');
-    Route::GET('rechumanos/planta/lista2', 'PlantaController@detallePlanta')->name('planta.listageneral');
-
+    Route::post('rechumanos/planta/guardarplanta', 'PlantaController@guardarplanta')->name('planta.guardar');
+    Route::post('rechumanos/planta/actualizarplanta', 'PlantaController@actualizarPlanta')->name('planta.actualizar');
+    Route::get('rechumanos/planta/lista2', 'PlantaController@detallePlanta')->name('planta.listageneral');
     Route::get('rechumanos/planta/delete/{id}', 'PlantaController@editarplanta2')->name('planta.editar2');
-    Route::POST('rechumanos/planta/deletePlanta', 'PlantaController@deletePlanta')->name('planta.delete');
+    Route::post('rechumanos/planta/deletePlanta', 'PlantaController@deletePlanta')->name('planta.delete');
 
 
-////////////////////////////////--RECURSOS HUMANOS CONTRATO--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*RECURSOS HUMANOS CONTRATO*/
+    Route::get('rechumanos/contrato/index', 'ContratoController@index')->name('contrato.index');
+    Route::get('rechumanos/contrato/list', 'ContratoController@list')->name('contrato.list');
+    Route::get('rechumanos/contrato/detalle/{id}', 'ContratoController@detalle')->name('contrato_detalle');
+    Route::get('rechumanos/contrato/edit/{id}', 'ContratoController@edit')->name('contrato.edit');
+    Route::get('rechumanos/contrato/lista/{id}', 'ContratoController@lista')->name('contrato.lista');
+    Route::get('rechumanos/contrato/create/{id}', 'ContratoController@contratonuevo')->name('contrato.crear');
+    Route::get('rechumanos/contrato/edit/{id}', 'ContratoController@editarcontrato')->name('contrato.editar');
+    Route::POST('rechumanos/contrato/guardarcontrato', 'ContratoController@guardarcontrato')->name('contrato.guardar');
+    Route::POST('rechumanos/contrato/actualizarcontrato', 'ContratoController@actualizarcontrato')->name('contrato.actualizar');
+    Route::GET('rechumanos/contrato/lista2', 'ContratoController@detallecontrato')->name('contrato.listageneral');
 
-   Route::get('rechumanos/contrato/index', 'ContratoController@index')->name('contrato.index');
-   Route::get('rechumanos/contrato/list', 'ContratoController@list')->name('contrato.list');
-   Route::get('rechumanos/contrato/detalle/{id}', 'ContratoController@detalle')->name('contrato_detalle');
-   Route::get('rechumanos/contrato/edit/{id}', 'ContratoController@edit')->name('contrato.edit');
-   Route::get('rechumanos/contrato/lista/{id}', 'ContratoController@lista')->name('contrato.lista');
-   Route::get('rechumanos/contrato/create/{id}', 'ContratoController@contratonuevo')->name('contrato.crear');
-   Route::get('rechumanos/contrato/edit/{id}', 'ContratoController@editarcontrato')->name('contrato.editar');
-   Route::POST('rechumanos/contrato/guardarcontrato', 'ContratoController@guardarcontrato')->name('contrato.guardar');
-   Route::POST('rechumanos/contrato/actualizarcontrato', 'ContratoController@actualizarcontrato')->name('contrato.actualizar');
-   Route::GET('rechumanos/contrato/lista2', 'ContratoController@detallecontrato')->name('contrato.listageneral');
 
-
-///////////////////////////////--COMPRAS PROVEEDORES--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    /*COMPRAS PROVEEDORES*/
     Route::get('compras/proveedores/index', 'ProveedoresController@index')->name('proveedores.index')->middleware('can:proveedores_access');
     Route::get('compras/proveedores/list', 'ProveedoresController@list')->name('proveedores.list')->middleware('can:proveedores_access');
     Route::get('compras/proveedores/{id}/edit', 'ProveedoresController@edit')->name('proveedores.edit')->middleware('can:proveedores_access');
@@ -175,8 +171,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
     Route::get('compras/proveedores/{id}/createdocproveedor', 'ProveedoresController@createdoc')->name('ProveedoresController.createdoc')->middleware('can:proveedores_access');
     Route::POST('compras/proveedores/insertar', 'ProveedoresController@insertar')->name('ProveedoresController.insertar')->middleware('can:proveedores_access');
 
-////////////////////////////////--COMPRAS AREAS--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    /*COMPRAS AREAS*/
     Route::get('compras/areas/index', 'AreasController@index')->name('areas.index')->middleware('can:areas_access');
     Route::get('compras/areas/list', 'AreasController@listado')->name('areas.list')->middleware('can:areas_access');
     Route::get('compras/areas/create', 'AreasController@create')->name('areas.create')->middleware('can:areas_access');

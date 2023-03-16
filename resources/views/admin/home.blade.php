@@ -1,12 +1,14 @@
 @extends('layouts.admin')
 <style>
     img {
-        width: 85%;
+        width: 30%;
         height: auto;
     }
 </style>
 @section('content')
-
+<br>
+<br>
+<br>
 <div class="row">
     <div class="col-md-12 text-center">
         <img src={{"logos/gobernacion.jpg"}} alt="logo"/>

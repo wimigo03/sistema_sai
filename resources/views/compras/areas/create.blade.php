@@ -1,76 +1,57 @@
 @extends('layouts.admin')
-
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-8">
-
+{{--<div class="row justify-content-center">
+    <div class="col-md-8">--}}
         <div class="row font-verdana-bg">
-            <div class="col-md-4 titulo">
-                <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-                    <a href="{{ url()->previous() }}">
-                        <span class="color-icon-1">
-                            &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
-                        </span>
-                    </a>
-                </span>
+            <div class="col-md-3 titulo">
+                &nbsp;
             </div>
-            <div class="col-md-8 text-right titulo">
-                <b>CREAR REGISTRO</b>
+            <div class="col-md-6 text-center titulo">
+                <b>REGISTRO DE AREA</b>
             </div>
-            <div class="col-md-12">
-                <hr color="red">
+            <div class="col-md-3">
+                &nbsp;
             </div>
+            {{--<div class="col-md-12">
+                <hr class="hrr">
+            </div>--}}
         </div>
-
-        
         <div class="body-border">
-            <font size="2" face="Courier New" >
-                <form method="POST" action="{{ route('areas.store') }}">
-                    @csrf
-
-                    <div class="form-group row">
-                        <label class="required  col-md-2 col-form-label text-md-right"
-                            style="font-weight: bold;">Nombre:</label>
-
-                        <div class="col-md-6">
-                            <input type="text" required name="nombre" class="form-control" placeholder="Nombre..."
-                                onkeyup="javascript:this.value=this.value.toUpperCase();">
-                        </div>
+            <form method="POST" action="{{ route('areas.store') }}">
+                @csrf
+                <div class="form-group row font-verdana-bg">
+                    <div class="col-md-4">
+                        <label for="nombre" class="d-inline">
+                            <b>Nombre</b>
+                        </label>
+                        <input type="text" name="nombre" class="form-control form-control-sm font-verdana-bg" onkeyup="javascript:this.value=this.value.toUpperCase();" required>
                     </div>
-
-                    <div class="form-group row">
-                        <label class="required  col-md-2 col-form-label text-md-right"
-                            style="font-weight: bold;">Nivel:</label>
-                        <div class="col-md-10" id="permissions-select">
-                            <select name="idnivel" required id="permissions" class="form-control select2    ">
-                                @foreach ($niveles as $nivel)
-
+                    <div class="col-md-8">
+                        <label for="idnivel" class="d-inline">
+                            <b>Nivel</b>
+                        </label><br>
+                        <select name="idnivel" id="permissions" class="form-control form-control-sm font-verdana-bg select2" required>
+                            @foreach ($niveles as $nivel)
                                 <option value="{{$nivel->idnivel}}">{{$nivel->nivel}} - {{$nivel->nombrenivel}}</option>
-
-                                @endforeach
-                            </select>
-                        </div>
+                            @endforeach
+                        </select>
                     </div>
-
-
-                    <div align='center'>
-                               
-                        <button class="btn color-icon-2 font-verdana-bg" type="submit">
-                            <i class="fa-solid fa-paper-plane"></i>
-                            &nbsp;Registrar
+                </div>
+                <div class="form-group row font-courier-bg">
+                    <div class="col-md-12 text-right">
+                        <button class="btn btn-outline-primary font-verdana-bg" type="submit">
+                            <i class="fa-solid fa-paper-plane"></i>&nbsp;Registrar
                         </button>
+                        <a href="{{route('areas.index')}}" class="btn btn-outline-danger font-verdana-bg">
+                            <i class="fa fa-lg fa-reply" aria-hidden="true"></i>&nbsp;Cancelar
+                        </a>
                     </div>
-                </form>
-
-            </font>
-
-
-
-
+                </div>
+            </form>
         </div>
        
-    </div>
-</div>
+    {{--</div>
+</div>--}}
               
 @endsection
 @section('scripts')

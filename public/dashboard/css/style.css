@@ -73,13 +73,13 @@ aside {
     -webkit-transform: translateX(100%);
     -ms-transform: translateX(100%);
     transform: translateX(100%); }
-    .show-sidebar aside .toggle .burger:before, .show-sidebar aside .toggle .burger span, .show-sidebar aside .toggle .burger:after {
+  .show-sidebar aside .toggle .burger:before, .show-sidebar aside .toggle .burger span, .show-sidebar aside .toggle .burger:after {
       background: #fff; }
   .show-sidebar aside {
     -webkit-box-shadow: 10px 0 30px 0 rgba(0, 0, 0, 0.1);
     box-shadow: 10px 0 30px 0 rgba(0, 0, 0, 0.1); }
   aside .side-inner {
-    padding: 30px 0;
+    padding: 30px;
     height: 100vh;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch; }
@@ -88,11 +88,11 @@ aside {
       margin-right: auto;
       text-align: center;
       margin-bottom: 30px;
-      padding-bottom: 30px;
+      padding-bottom: 15px;
       border-bottom: 1px solid #efefef; }
       aside .side-inner .profile img {
-        width: 80px;
-        margin: 0 auto 20px auto;
+        width: 30px;
+        margin: -3 auto 0 auto;
         border-radius: 50%; }
       aside .side-inner .profile .name {
         font-size: 18px;
@@ -117,8 +117,8 @@ aside {
       list-style: none; }
     aside .side-inner .nav-menu ul li a {
       display: block;
-      padding-left: 30px;
-      padding-right: 30px;
+      padding-left: 10px;
+      padding-right: 10px;
       padding-top: 10px;
       padding-bottom: 10px;
       color: #8b8b8b;
@@ -252,7 +252,7 @@ main {
 	color: #003d75;
 	font-weight: 700;
 	font-family: var(--roboto);
-	font-size: x-large;
+	font-size: large;
 }
 .hrr {
 	border: #003d75 solid 0.5px;
