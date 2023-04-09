@@ -2,18 +2,14 @@
 @section('content')
 <div class="row font-verdana-bg">
     <div class="col-md-8 titulo">
-        <b>SOLICITUDES APROBADAS</b>
+        <b>MODULO ALMACEN</b>
     </div>
     <div class="col-md-4 text-right">
         @can('productos_create')
 
-        <a href="{{ route('compras.pedido.index') }}" class="tts:left tts-slideIn tts-custom" aria-label="ir a solicitudes pendientes">
-            <button class="btn btn-sm btn-warning font-verdana" type="button" >VOLVER A PENDIENTES
-                &nbsp;<i class="fa-sharp fa-solid fa-thumbs-down"  style="font-size:14px"></i>&nbsp;
-            </button>
-        </a>
 
-        <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
+
+            <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
 
         @endcan
     </div>
@@ -36,16 +32,14 @@
                                     <td class="text-justify p-1"><b>PREVENTIVO</b></td>
                                     <td class="text-justify p-1"><b>NRO.COMPRA</b></td>
                                     <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
-                                    <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
-                                    <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
                                 </tr>
                             </thead>
                             <tbody>
                             </tbody>
                         </table>
-                    </center>
-                </div>
-            </div>
+        </center>
+    </div>
+</div>
 @section('scripts')
 
 <script type="text/javascript">
@@ -58,9 +52,11 @@ $(function() {
         processing: true,
         serverSide: true,
         autoWidth: false,
-        ajax: "{{ route('compras.pedido.index2') }}",
+        ajax: "{{ route('almacen.index') }}",
         columns: [
             {data: 'DT_RowIndex',orderable: false,searchable: false,class:'text-justify p-1 font-verdana'},
+
+            { data: 'idingreso',name: 'i.idingreso',class:'text-justify p-1 font-verdana'},
 
             { data: 'objeto',name: 'c.objeto',class:'text-justify p-1 font-verdana'},
 
@@ -72,13 +68,8 @@ $(function() {
 
             {data: 'numcompra',name: 'c.numcompra',class:'text-justify p-1 font-verdana'},
 
-            {data: 'btn', name: 'btn', orderable: false, searchable: false },
 
             {data: 'btn2', name: 'btn2', orderable: false, searchable: false },
-
-            {data: 'btn3', name: 'btn3', orderable: false, searchable: false },
-
-
 
         ],
 

@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class IngresoAlmacenModel extends Model
+class IngresoModel extends Model
 {
-    protected $table = 'ingresoalmacen';
+    protected $table = 'ingreso';
 
-    protected $primaryKey= 'idingresoalmacen';
+    protected $primaryKey= 'idingreso';
 
     public $timestamps = true;
 

@@ -65,6 +65,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
     Route::get('compras/pedido/edit/{id}', 'CompraController@edit')->name('compras.pedido.edit');
     Route::get('compras/pedido/editar/{id}', 'CompraController@editar')->name('compras.pedido.editar');
     Route::post('compras/pedido/update', 'CompraController@update')->name('compras.pedido.update');
+    Route::get('compras/enviar/{id}', 'CompraController@enviar')->name('compras.pedido.enviar');
 
     /////////////////////////--COMPRAS PEDIDO PARCIAL--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     Route::get('compras/pedidoparcial/index', 'CompraController2@index')->name('compras.pedidoparcial.index');
@@ -262,7 +263,7 @@ Route::get('almacen/index', 'AlmacenController@index')->name('almacen.index');
 //Route::get('compras/pedido/index2', 'CompraController@index2')->name('compras.pedido.index2');
 //oute::get('compras/pedido/create', 'CompraController@create')->name('compras.pedido.create');
 //Route::post('compras/pedido/store', 'CompraController@store')->name('compras.pedido.store');
-//Route::get('compras/pedido/edit/{id}', 'CompraController@edit')->name('compras.pedido.edit');
+Route::get('almacen/temporal/{id}','AlmacenController@temporal')->name('almacen.temporal');
 //Route::get('compras/pedido/editar/{id}', 'CompraController@editar')->name('compras.pedido.editar');
 //Route::post('compras/pedido/update', 'CompraController@update')->name('compras.pedido.update');
 

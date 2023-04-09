@@ -10,7 +10,7 @@
 <div class="row font-verdana-bg">
     <div class="col-md-2 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-            <a href="{{ url('/compras/pedidoparcial/index') }}">
+            <a href="{{ url('/compras/pedido/index') }}">
                 <span class="color-icon-1">
                     &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                 </span>
@@ -20,73 +20,58 @@
     <div class="col-md-10 text-right titulo">
         <b>DETALLE DE LA COMPRA</b>
     </div>
-    <div class="col-md-12">
+    <div class="col-md-12"  >
         <hr class="hrr">
     </div>
     <div class="col-md-12 text-right">
+
+        @if ($compras->idproveedor== 1)
+        <b style="color: orange">--Para aprovar la compra seleccione un Proveedor--</b>
+      @elseif ($compras->estadocompra == 1)
+
+      <a href="{{route('compras.detalle.aprovar',$compras->idcompra)}}" onclick="return confirm('Se va a aprovar la compra..esta seguro ?..')">
+        <button class="btn btn-sm btn-info   font-verdana" type="button" >
+            &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;Aprovar Compra
+        </button>
+    </a>
+
+    @elseif ($compras->estadocompra == 2)
+    <b style="color: green">Compra Aprovada</b>
+
+      @endif
+
         <input type="hidden" value="{{$idcompra}}" id="idcompra">
+        <input type="hidden" value="{{$compras->estadocompra}}" id="idcompra2">
+        <input type="hidden" value="{{$compras->idproveedor}}" id="idcompra3">
+
+        @if ($compras->estadocompra == 1)
+        <b style="color: red">--No puede generar la orden de compra hasta que esta sea aprovada--</b>
+      @elseif ($estado == 1)
+      <a href="{{ route('compras.detalle.principalorden', $idcompra) }}" class="tts:left tts-slideIn tts-custom" aria-label="Ir a Orden de Compra">
+        <button class="btn btn-sm btn-success   font-verdana" type="button" >
+            &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;Acceder a la Orden de Compra
+        </button>
+    </a>
+    @elseif ($estado == 0)
+    <a href="{{ route('compras.detalle.principal', $idcompra) }}" class="tts:left tts-slideIn tts-custom" aria-label="Crear Orden de Compra">
+        <button class="btn btn-sm btn-warning   font-verdana" type="button" >
+            &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;Crear Orden de Compra
+        </button>
+    </a>
+
+
+      @endif
 
         <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
-        @if($compras->estado1 == 2)
-        <b style="color:rgb(11, 170, 34);font-weight: bold;">SOLICITUD APROBADA</b>
 
-        <a href="{{ route('compras.detalleparcial.show') }}" class="tts:left tts-slideIn tts-custom" aria-label="Imprimir">
-            <button class="btn btn-sm btn-secondary   font-verdana" type="button" >
-                &nbsp;<i class="fa fa-print" aria-hidden="true"></i>&nbsp;Imprimir
-            </button>
-        </a>
 
-       @else
-
-       <p style="color:red;font-weight: bold;">Una vez que la compra sea aprovada se habilitará la impresión de la solicitud</p>
-
-       @endif
 
 
 
     </div>
 </div>
-<div class="body-border" style="background-color: #FFFFFF;">
-    <form action="{{ route('compras.detalleparcial.store') }}" method="post" id="form">
-        @csrf
-        <br>
-        <div class="form-group row">
-            <div class="col-md-8">
-                <label for="producto" class="d-inline font-verdana-bg">
-                    <b>Producto-Item</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <select name="producto" id="producto" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
-                    <option value="">-</option>
-
-                    @foreach ($productos as $index => $value)
-                        <option value="{{ $index }}">{{ $value }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-md-1">
-                <label for="cantidad" class="d-inline font-verdana-bg">
-                    <b>Cantidad</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input type="text" name="cantidad" value="{{request('cantidad')}}" class="form-control form-control-sm font-verdana-bg" id="cantidad" onkeypress="return valideNumber(event);">
-            </div>
-            <div class="col-md-2 text-right">
-                <br>
-                @if($compras->estado1 == 1)
-
-                <button class="btn btn-success font-verdana-bg" type="button" onclick="save();">
-                    <i class="fa-solid fa-plus"></i>
-                    &nbsp;Adicionar
-                </button>
-
-               @else
-
-
-               @endif
-
-
-            </div>
-        </div>
-    </form>
+<div>
+    <hr class="hrr">
 </div>
 <div class="row">
     <div class="col-md-12 table-responsive">
@@ -94,12 +79,12 @@
             <table id="dataTable" class="table display table-bordered responsive font-verdana" style="width:100%">
                 <thead>
                     <tr>
-                        <td class="text-justify p-1"><b>Nro</b></td>
+                        <td class="text-justify p-1"><b>N</b></td>
                         <td class="text-justify p-1"><b>PRODUCTO</b></td>
                         <td class="text-right p-1"><b>CANTIDAD</b></td>
                         <td class="text-right p-1"><b>PRECIO</b></td>
                         <td class="text-right p-1"><b>SUBTOTAL</b></td>
-                        <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -113,42 +98,23 @@
                             <td class="text-right p-1">{{$prod->cantidad}}</td>
                             <td class="text-right p-1">{{$prod->precio}}</td>
                             <td class="text-right p-1">{{$prod->subtotal}}</td>
-                            <td class="text-center p-1">
-                                @if($compras->estado1 == 1)
 
-                                <span class="tts:left tts-slideIn tts-custom" aria-label="Eliminar">
-                                    <a href="{{route('compras.detalleparcial.delete',$prod->iddetallecompra)}}" onclick="return confirm('Se va a eliminar el Item...')">
-                                        <span class="text-danger">
-                                            <i class="fa-solid fa-xl fa-trash" aria-hidden="true"></i>
-                                        </span>
-                                    </a>
-                                </span>
-
-                               @else
-
-
-                               @endif
-
-
-                            </td>
                         </tr>
                     @endforeach
                 </tbody>
-                <tfoot>
+                    <tfoot>
                     @if (count($prodserv) > 0)
                         <tr>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
-
                             <td class="text-right p-1">
                                 <b>TOTAL:</b>
                             </td>
-
                             <td class="text-right p-1">
-                                <b>{{$valor_total2}}</b>
+                                <b>{{$valor_total}}</b>
                             </td>
-                            <td>&nbsp;</td>
+
                         </tr>
                     @endif
                 </tfoot>
@@ -198,7 +164,7 @@
             $(".btn").hide();
             $(".spinner-btn-send").show();
             var idcompra = $("#idcompra").val();
-            var url = "{{ route('compras.detalleparcial.principalorden',':id') }}";
+            var url = "{{ route('compras.detalle.principalorden',':id') }}";
             url = url.replace(':id',idcompra);
             window.location.href = url;
         }
@@ -207,14 +173,14 @@
             $(".btn").hide();
             $(".spinner-btn-send").show();
 
-            window.location.href = "{{ route('compras.detalleparcial.show') }}";
+            window.location.href = "{{ route('compras.detalle.show') }}";
         }
 
         function create(){
             $(".btn").hide();
             $(".spinner-btn-send").show();
             var idcompra = $("#idcompra").val();
-            var url = "{{ route('compras.detalleparcial.principal',':id') }}";
+            var url = "{{ route('compras.detalle.principal',':id') }}";
             url = url.replace(':id',idcompra);
             window.location.href = url;
         }
