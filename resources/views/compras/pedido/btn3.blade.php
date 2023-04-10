@@ -3,7 +3,7 @@
 
 
 
-        <a href="{{route('compras.pedido.enviar', $idcompra) }}" onclick="return confirm('Se va a enviar la compra a almacen, esta ud. seguro ?...')">
+        <a href="{{route('compras.pedido.enviar', $compras->idcompra) }}" onclick="return confirm('Se va a enviar la compra a almacen, esta ud. seguro ?...')">
             <span class="text-info">
                 <i class="fa-solid fa-2xl fa-cart-plus"></i>
             </span>

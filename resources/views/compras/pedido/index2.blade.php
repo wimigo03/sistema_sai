@@ -2,7 +2,7 @@
 @section('content')
 <div class="row font-verdana-bg">
     <div class="col-md-8 titulo">
-        <b>SOLICITUDES APROBADAS</b>
+        <b>SOLICITUDES APROBADASeee</b>
     </div>
     <div class="col-md-4 text-right">
         @can('productos_create')
