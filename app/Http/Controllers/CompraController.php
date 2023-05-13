@@ -66,8 +66,20 @@ class CompraController extends Controller
                 ->addIndexColumn()
                 ->addColumn('btn', 'compras.pedido.btn')
                 ->addColumn('btn2', 'compras.pedido.btn2')
-                ->addColumn('btn3', 'compras.pedido.btn3')
-                ->rawColumns(['btn', 'btn2', 'btn3'])
+                //->addColumn('btn3', 'compras.pedido.btn3')
+
+                ->addColumn('btn3', function ($compras) {
+
+                    if ($compras->estado3 == 1) {
+                        return view('compras.pedido.btn3', compact('compras'));
+                    }
+                    if ($compras->estado3 == 2) {
+                        return 'Enviado';
+                    }
+                })
+
+
+                ->rawColumns(['btn', 'btn2'])
                 ->make(true);
         }
         return view('compras.pedido.index2');

@@ -8,9 +8,9 @@ class ActivosController extends Controller
 {
     public function index()
     {
-        
-      
-        
-         return view('activosFijos.activos.index');
+
+
+
+        return view('activosFijos.activos.index');
     }
 }

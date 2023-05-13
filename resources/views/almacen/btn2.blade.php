@@ -1,6 +1,6 @@
 <td style="padding: 0;" class="text-center p-1">
     <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle">
-        <a href="{{route('almacen.temporal', $idingreso)}}">
+        <a href="{{route('almacen.detalle', $idingreso)}}">
             <span class="text-primary">
                 <i class="fa-solid fa-2xl fa-list"></i>
             </span>

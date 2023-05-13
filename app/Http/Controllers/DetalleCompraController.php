@@ -43,10 +43,10 @@ class DetalleCompraController extends Controller
             ->select(DB::raw("concat(nombreprodserv,' // PRECIO BS. ',precioprodserv) as prodservicio"), 'idprodserv')
             ->pluck('prodservicio', 'idprodserv');
 
-            $compras = DB::table('compra as c')
+        $compras = DB::table('compra as c')
             ->join('proveedores as p', 'p.idproveedor', '=', 'c.idproveedor')
             ->where('c.idcompra', $id2)
-            ->select('c.idcompra','c.estado1','c.estadocompra','p.idproveedor','p.nombreproveedor')
+            ->select('c.idcompra', 'c.estado1', 'c.estadocompra', 'p.idproveedor', 'p.nombreproveedor')
             ->first();
 
         $valor_total = $prodserv->sum('subtotal');
@@ -191,8 +191,8 @@ class DetalleCompraController extends Controller
             $fechaAceptacion = Carbon::parse($fechaAceptacion)->isoFormat('D \d\e MMMM');
             $responsables = DB::table('responsables')->first();
 
-           $pdf = PDF::loadView('compras.detalle.pdf-invitacion', compact(['ordencompra', 'ordendoc', 'responsables', 'fechaInvitacion', 'fechaAceptacion']));
-           $pdf->setPaper('LETTER', 'portrait'); //landscape
+            $pdf = PDF::loadView('compras.detalle.pdf-invitacion', compact(['ordencompra', 'ordendoc', 'responsables', 'fechaInvitacion', 'fechaAceptacion']));
+            $pdf->setPaper('LETTER', 'portrait'); //landscape
             return $pdf->stream();
         } catch (Exception $ex) {
             \Log::error("Cotizacion Error: {$ex->getMessage()}");
@@ -202,7 +202,7 @@ class DetalleCompraController extends Controller
             ini_restore('max_execution_time');
         }
 
-       // return view('compras.detalle.invitacion',['ordencompra'=>$ordencompra,'ordendoc'=>$ordendoc,'responsables'=>$responsables,'fechaInvitacion'=>$fechaInvitacion,'fechaAceptacion'=>$fechaAceptacion]);
+        // return view('compras.detalle.invitacion',['ordencompra'=>$ordencompra,'ordendoc'=>$ordendoc,'responsables'=>$responsables,'fechaInvitacion'=>$fechaInvitacion,'fechaAceptacion'=>$fechaAceptacion]);
     }
 
     public function aceptacion($id)
@@ -325,7 +325,7 @@ class DetalleCompraController extends Controller
             $ordendoc = DB::table('ordencompra as o')
                 ->join('ordendoc as od', 'od.idorden', '=', 'o.idorden')
                 ->join('docorden as doc', 'doc.iddoc', '=', 'od.iddoc')
-                ->select('doc.nombredoc','doc.dato1','doc.dato2','doc.dato3','doc.dato4','doc.original','doc.fotocopia')
+                ->select('doc.nombredoc', 'doc.dato1', 'doc.dato2', 'doc.dato3', 'doc.dato4', 'doc.original', 'doc.fotocopia')
                 ->where('o.compra_idcompra', $id)
                 ->get();
 
@@ -337,8 +337,8 @@ class DetalleCompraController extends Controller
             $fechaorden = $ordencompra->fechaorden;
             $fechaorden = Carbon::parse($fechaorden)->isoFormat('dddd D \d\e MMMM \d\e\l Y');
 
-            $dateinvitacion= Carbon::parse($ordencompra->fechainvitacion)->format('d-m-Y');
-            $dateaceptacion= Carbon::parse($ordencompra->fechaaceptacion)->format('d-m-Y');
+            $dateinvitacion = Carbon::parse($ordencompra->fechainvitacion)->format('d-m-Y');
+            $dateaceptacion = Carbon::parse($ordencompra->fechaaceptacion)->format('d-m-Y');
 
 
 
@@ -370,7 +370,7 @@ class DetalleCompraController extends Controller
             ini_restore('max_execution_time');
         }
 
-       /* return view('compras.detalle.cotizacion',['valor_total2' => $valor_total2,
+        /* return view('compras.detalle.cotizacion',['valor_total2' => $valor_total2,
                                                     'prodserv' => $prodserv,
                                                     'valor_total' => $valor_total,
                                                     'ordencompra' => $ordencompra,
@@ -535,21 +535,20 @@ class DetalleCompraController extends Controller
             //$pdf->setPaper('LETTER', 'portrait'); //landscape
             //return $pdf->stream();
 
-            return view('compras.detalle.orden',[
-                                                'valor_total2' => $valor_total2,
-                                                'responsables' => $responsables,
-                                                'prodserv' => $prodserv,
-                                                'valor_total' => $valor_total,
-                                                'fechainiciosolici' => $fechainiciosolici,
-                                                'ordencompra' => $ordencompra,
-                                                'ordendoc' => $ordendoc,
-                                                'responsables' => $responsables,
-                                                'fechaInvitacion' => $fechaInvitacion,
-                                                'fechaAceptacion' => $fechaAceptacion,
-                                                'fechaorden' => $fechaorden
-                                                ]);
-        }
-        catch (Exception $ex) {
+            return view('compras.detalle.orden', [
+                'valor_total2' => $valor_total2,
+                'responsables' => $responsables,
+                'prodserv' => $prodserv,
+                'valor_total' => $valor_total,
+                'fechainiciosolici' => $fechainiciosolici,
+                'ordencompra' => $ordencompra,
+                'ordendoc' => $ordendoc,
+                'responsables' => $responsables,
+                'fechaInvitacion' => $fechaInvitacion,
+                'fechaAceptacion' => $fechaAceptacion,
+                'fechaorden' => $fechaorden
+            ]);
+        } catch (Exception $ex) {
             \Log::error("Orden Error: {$ex->getMessage()}");
             return redirect()->route('compras.detalle.index')->with('message', $ex->getMessage());
         } finally {

@@ -7,7 +7,7 @@
     </div>
     <div class="col-md-4 text-right">
         @can('medidas_create')
-       
+
         <a href="{{route('medidas.create')}}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar">
                 <button class="btn btn-sm btn-primary font-verdana" type="button" >
                     &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
@@ -15,7 +15,7 @@
             </a>
 
             <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
-       
+
         @endcan
     </div>
     <div class="col-md-12">
@@ -45,7 +45,7 @@
 <script type="text/javascript">
     $(function() {
         var table = $('.yajra-datatable').DataTable({
-            
+
             responsive: true,
             processing: true,
             serverSide: true,
@@ -58,7 +58,7 @@
             ],
 
 
-            
+
             language: {
             "decimal": "",
             "emptyTable": "No hay información",

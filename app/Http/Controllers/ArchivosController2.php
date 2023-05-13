@@ -39,7 +39,7 @@ class ArchivosController2 extends Controller
             $data = DB::table('archivos as a')
                 ->join('areas as ar', 'ar.idarea', '=', 'a.idarea')
                 ->join('tipoarchivo as t', 'a.idtipo', '=', 't.idtipo')
-                ->select('a.idarchivo', 'a.referencia','a.fecha','a.gestion', 'a.nombrearchivo', 'a.documento', 'a.idarea', 't.nombretipo')
+                ->select('a.idarchivo', 'a.referencia', 'a.fecha', 'a.gestion', 'a.nombrearchivo', 'a.documento', 'a.idarea', 't.nombretipo')
                 ->where('ar.idarea', $personalArea->idarea)
                 ->orderBy('a.gestion', 'desc');
 
@@ -47,7 +47,7 @@ class ArchivosController2 extends Controller
                 ->addIndexColumn()
                 ->addColumn('btn', 'archivos2.btn')
                 ->addColumn('btn2', 'archivos2.btn2')
-                ->rawColumns(['btn','btn2'])
+                ->rawColumns(['btn', 'btn2'])
 
 
 
@@ -119,19 +119,19 @@ class ArchivosController2 extends Controller
         //for ($i = 1; $i <= 3000; $i++) {
 
 
-            //$nombre2='hola';
-            $archivos = new ArchivosModel();
-            $archivos->nombrearchivo = $request->input('nombredocumento');
-            $archivos->referencia = $request->input('referencia');
-            $archivos->gestion = $fecha_gestion;
-            $archivos->documento = $personalArea->nombrearea . '/' . $nombre;
-            $archivos->idarea = $personalArea->idarea;
-            $archivos->estado1 = 1;
-            $archivos->idtipo = $request->input('tipodocumento');
-            $archivos->id = $personal->id;
-            $archivos->fecha = $fecha_recepcion;
-            $archivos->save();
-      // }
+        //$nombre2='hola';
+        $archivos = new ArchivosModel();
+        $archivos->nombrearchivo = $request->input('nombredocumento');
+        $archivos->referencia = $request->input('referencia');
+        $archivos->gestion = $fecha_gestion;
+        $archivos->documento = $personalArea->nombrearea . '/' . $nombre;
+        $archivos->idarea = $personalArea->idarea;
+        $archivos->estado1 = 1;
+        $archivos->idtipo = $request->input('tipodocumento');
+        $archivos->id = $personal->id;
+        $archivos->fecha = $fecha_recepcion;
+        $archivos->save();
+        // }
 
 
 
@@ -156,13 +156,13 @@ class ArchivosController2 extends Controller
 
         $date22 = $archivos->fecha;
 
-       $date2 = Carbon::createFromFormat('Y-m-d', $date22)
-       ->format('d/m/Y');
+        $date2 = Carbon::createFromFormat('Y-m-d', $date22)
+            ->format('d/m/Y');
 
 
         $anio = DB::table('anio')->get();
 
-        return view('archivos2.edit', ["date2" => $date2,"tipos" => $tipos, "archivos" => $archivos, "date" => $date, "anio" => $anio]);
+        return view('archivos2.edit', ["date2" => $date2, "tipos" => $tipos, "archivos" => $archivos, "date" => $date, "anio" => $anio]);
     }
 
 

@@ -61,14 +61,14 @@ class ArchivosController extends Controller
 
         $tipos = DB::table('tipoarchivo')->get();
         $anio = DB::table('anio')->get();
-        return view('archivos.createArchivo', ["tipos" => $tipos,"date" => $date,"anio" => $anio]);
+        return view('archivos.createArchivo', ["tipos" => $tipos, "date" => $date, "anio" => $anio]);
     }
 
     public function insertar(Request $request)
     {
-       // try{
-          //  ini_set('memory_limit','-1');
-           // ini_set('max_execution_time','-1');
+        // try{
+        //  ini_set('memory_limit','-1');
+        // ini_set('max_execution_time','-1');
 
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
@@ -109,12 +109,12 @@ class ArchivosController extends Controller
 
         return redirect()->action('App\Http\Controllers\ArchivosController@index');
 
-    //} catch (\Throwable $th){
-       // return '[ERROR_500]';
-    //}finally{
-       // ini_restore('memory_limit');
+        //} catch (\Throwable $th){
+        // return '[ERROR_500]';
+        //}finally{
+        // ini_restore('memory_limit');
         //ini_restore('max_execution_time');
-   // }
+        // }
     }
 
 

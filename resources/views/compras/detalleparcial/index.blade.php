@@ -73,7 +73,7 @@
                 <br>
                 @if($compras->estado1 == 1)
 
-                <button class="btn btn-success font-verdana-bg" type="button" onclick="save();">
+                <button class="btn btn-primary font-verdana-bg" type="button" onclick="save();">
                     <i class="fa-solid fa-plus"></i>
                     &nbsp;Adicionar
                 </button>

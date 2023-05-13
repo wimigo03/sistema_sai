@@ -6,9 +6,9 @@
     </div>
     <div class="side-inner">
         <div class="profile">
-            <img src="{{ asset('logos/logo2.png') }}" alt="Image" class="img-fluid"/>
+            <img src="{{ asset('logos/logo2.png') }}" alt="Image" class="img-fluid" />
             <span class="name font-verdana" style="color:green">S.A.I. - G.A.R.G.CH.</span>
-            {{--<span class="country" style="color:green">Yacuiba - Carapari - Villamontes</span>--}}
+            {{-- <span class="country" style="color:green">Yacuiba - Carapari - Villamontes</span> --}}
             <a href="javascript:void(0)" onclick="$('#logout-form').submit();" class="dropdown-item">
                 <i class="fa fa-sign-out" aria-hidden="true" style="color:red"></i>
                 <span class="font-verdana-bg" style="color:red;">Cerrar Sesion</span>
@@ -17,10 +17,35 @@
         <div class="nav-menu">
             <div class="sidebar left">
                 <ul class="list-sidebar bg-defoult">
-                    {{--COMPRAS--}}
+
+                    {{-- AGENDA --}}
+                    @canany(['agenda_access'])
+                        <li class="font-verdana-bg">
+                            <a href="" data-toggle="collapse" data-target="#dashboard_agenda"
+                                class="active collapsed" aria-expanded="false">
+                                <i class="fa-sharp fa-solid fa-calendar fa-beat"></i>
+                                <span class="nav-label mr-3">Agenda</span>
+                                <span class="fa fa-chevron-left float-right"></span>
+                            </a>
+                            <ul class="sub-menu collapse" id="dashboard_agenda">
+                                @can('agenda_access')
+                                    <li>
+                                        <a href="{{ route('agenda.index') }}">
+                                            &nbsp; <i class="fa fa-file-pdf"></i>
+                                            <span class="nav-label mr-4">Ingresar</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </li>
+                    @endcanany
+
+
+                    {{-- COMPRAS --}}
                     @canany(['compras_panel_access'])
                         <li class="font-verdana-bg">
-                            <a href="" data-toggle="collapse" data-target="#dashboard_compras" class="active collapsed" aria-expanded="false">
+                            <a href="" data-toggle="collapse" data-target="#dashboard_compras"
+                                class="active collapsed" aria-expanded="false">
                                 <i class="fa fa-shopping-cart"></i>
                                 <span class="nav-label mr-3">Compras</span>
                                 <span class="fa fa-chevron-left float-right"></span>
@@ -93,9 +118,34 @@
                             </ul>
                         </li>
                     @endcanany
+
+                    {{-- CORRESPONDENCIA --}}
+                    @canany(['ventanilla_access'])
+                        <li class="font-verdana-bg">
+                            <a href="" data-toggle="collapse" data-target="#dashboard_ventanilla"
+                                class="active collapsed" aria-expanded="false">
+                                <i class="fa fa-folder-open"></i>
+                                <span class="nav-label mr-3">Correspondencia</span>
+                                <span class="fa fa-chevron-left float-right"></span>
+                            </a>
+                            <ul class="sub-menu collapse" id="dashboard_ventanilla">
+                                @can('archivos_access')
+                                    <li>
+                                        <a href="{{ route('recepcion.index') }}">
+                                            &nbsp; <i class="fa fa-file-pdf"></i>
+                                            <span class="nav-label mr-4">Acceder</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </li>
+                    @endcanany
+
+                    {{-- ARCHIVOS --}}
                     @canany(['archivos_access'])
                         <li class="font-verdana-bg">
-                            <a href="" data-toggle="collapse" data-target="#dashboard_archivos2" class="active collapsed" aria-expanded="false">
+                            <a href="" data-toggle="collapse" data-target="#dashboard_archivos2"
+                                class="active collapsed" aria-expanded="false">
                                 <i class="fa fa-folder-open"></i>
                                 <span class="nav-label mr-3">Archivos</span>
                                 <span class="fa fa-chevron-left float-right"></span>
@@ -112,32 +162,45 @@
                             </ul>
                         </li>
                     @endcanany
-                    {{--ALMACEN--}}
+                    {{-- ALMACEN --}}
 
                     @canany(['archivos_access'])
-                    <li class="font-verdana-bg">
-                        <a href="" data-toggle="collapse" data-target="#dashboard_almacen" class="active collapsed" aria-expanded="false">
-                            <i class="fa fa-cart-plus"></i>
-                            <span class="nav-label mr-3">Almacen</span>
-                            <span class="fa fa-chevron-left float-right"></span>
-                        </a>
-                        <ul class="sub-menu collapse" id="dashboard_almacen">
-                            @can('archivos_access')
-                                <li>
-                                    <a href="{{ route('almacen.index') }}">
-                                        &nbsp; <i class="fa fa-file-pdf"></i>
-                                        <span class="nav-label mr-4">Ingresar   </span>
-                                    </a>
-                                </li>
-                            @endcan
-                        </ul>
-                    </li>
-                @endcanany
+                        <li class="font-verdana-bg">
+                            <a href="" data-toggle="collapse" data-target="#dashboard_almacen"
+                                class="active collapsed" aria-expanded="false">
+                                <i class="fa fa-cart-plus"></i>
+                                <span class="nav-label mr-3">Almacen</span>
+                                <span class="fa fa-chevron-left float-right"></span>
+                            </a>
+                            <ul class="sub-menu collapse" id="dashboard_almacen">
+                                @can('archivos_access')
+                                    <li>
+                                        <a href="{{ route('almacen.index') }}">
+                                            &nbsp; <i class="fa fa-file-pdf"></i>
+                                            <span class="nav-label mr-4">Ingresos</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
+
+                            <ul class="sub-menu collapse" id="dashboard_almacen">
+                                @can('archivos_access')
+                                    <li>
+                                        <a href="{{ route('almacen.index') }}">
+                                            &nbsp; <i class="fa fa-file-pdf"></i>
+                                            <span class="nav-label mr-4">Salidas</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </li>
+                    @endcanany
 
 
                     @canany(['recHumanos_access'])
                         <li class="font-verdana-bg">
-                            <a href="" data-toggle="collapse" data-target="#dashboard_rrhh" class="active collapsed" aria-expanded="false">
+                            <a href="" data-toggle="collapse" data-target="#dashboard_rrhh"
+                                class="active collapsed" aria-expanded="false">
                                 <i class="fa fa-users"></i>
                                 <span class="nav-label mr-3">Recursos Humanos</span>
                                 <span class="fa fa-chevron-left float-right"></span>
@@ -186,35 +249,37 @@
                             </ul>
                         </li>
                     @endcanany
-                    {{--Activos Fijos--}}
+                    {{-- Activos Fijos --}}
                     @canany(['recHumanos_access'])
                         <li class="font-verdana-bg">
-                            <a href="" data-toggle="collapse" data-target="#dashboard_activos_fijos" class="active collapsed" aria-expanded="false">
+                            <a href="" data-toggle="collapse" data-target="#dashboard_activos_fijos"
+                                class="active collapsed" aria-expanded="false">
                                 <i class="fa fa-file-text"></i>
                                 <span class="nav-label mr-3">Personerias</span>
                                 <span class="fa fa-chevron-left float-right"></span>
                             </a>
-                            <ul class="sub-menu collapse" id="dashboard_activos_fijos" @if(request()->is('admin/users') || request()->is('admin/users/*')) in @endif ">
-                                @can('areas_access')
-                                    <li>
-                                        <a href="{{ route('activos.index') }}">
-                                            &nbsp;<i class="fa fa-clipboard"></i>
-                                            <span class="nav-label mr-4">Personerias</span>
-                                        </a>
-                                    </li>
-                                @endcan
-                            </ul>
-                        </li>
+                            <ul class="sub-menu collapse" id="dashboard_activos_fijos"
+                                @if (request()->is('admin/users') || request()->is('admin/users/*')) in @endif ">
+                                    @can('areas_access')
+        <li>
+                                                <a href="{{ route('activos.index') }}">
+                                                    &nbsp;<i class="fa fa-clipboard"></i>
+                                                    <span class="nav-label mr-4">Personerias</span>
+                                                </a>
+                                            </li>
+    @endcan
+                                </ul>
+                            </li>
                     @endcanany
-                    {{--Activos Fijos--}}
+                    {{-- Activos Fijos --}}
                     @canany(['recHumanos_access'])
-                        <li class="font-verdana-bg">
-                            <a href="" data-toggle="collapse" data-target="#dashboard_activos_fijos" class="active collapsed" aria-expanded="false">
-                                <i class="fa fa-circle"></i>
-                                <span class="nav-label mr-3">Activos Fijos</span>
-                                <span class="fa fa-chevron-left float-right"></span>
-                            </a>
-                            <ul class="sub-menu collapse" id="dashboard_activos_fijos" @if(request()->is('admin/users') || request()->is('admin/users/*')) in @endif ">
+                            <li class="font-verdana-bg">
+                                <a href="" data-toggle="collapse" data-target="#dashboard_activos_fijos" class="active collapsed" aria-expanded="false">
+                                    <i class="fa fa-circle"></i>
+                                    <span class="nav-label mr-3">Activos Fijos</span>
+                                    <span class="fa fa-chevron-left float-right"></span>
+                                </a>
+                                <ul class="sub-menu collapse" id="dashboard_activos_fijos" @if (request()->is('admin/users') || request()->is('admin/users/*')) in @endif ">
                                 @can('areas_access')
                                     <li>
                                         <a href="{{ route('activos.index') }}">
@@ -226,10 +291,11 @@
                             </ul>
                         </li>
                     @endcanany
-                    {{--Usuarios--}}
-                    @canany(['users_access','roles_access','permissions_access'])
+                    {{-- Usuarios --}}
+                    @canany(['users_access', 'roles_access', 'permissions_access'])
                         <li class="font-verdana-bg">
-                            <a href="" data-toggle="collapse" data-target="#dashboard_users" class="active collapsed" aria-expanded="false">
+                            <a href="" data-toggle="collapse" data-target="#dashboard_users"
+                                class="active collapsed" aria-expanded="false">
                                 <i class="fa fa-users"></i>
                                 <span class="nav-label mr-3">Usuarios</span>
                                 <span class="fa fa-chevron-left float-right"></span>
@@ -262,10 +328,11 @@
                             </ul>
                         </li>
                     @endcanany
-                    {{--Discapacidad--}}
+                    {{-- Discapacidad --}}
                     @canany(['discapacidad_panel_acess'])
                         <li class="font-verdana-bg">
-                            <a href="" data-toggle="collapse" data-target="#dashboard_discapacidad" class="active collapsed" aria-expanded="false">
+                            <a href="" data-toggle="collapse" data-target="#dashboard_discapacidad"
+                                class="active collapsed" aria-expanded="false">
                                 <i class="fa fa-users"></i>
                                 <span class="nav-label mr-3">Discapacidad</span>
                                 <span class="fa fa-chevron-left float-right"></span>
@@ -288,10 +355,11 @@
                             </ul>
                         </li>
                     @endcanany
-                    {{--Activos--}}
+                    {{-- Activos --}}
                     @canany(['activos_panel_access'])
                         <li class="font-verdana-bg">
-                            <a href="" data-toggle="collapse" data-target="#dashboard_activosvsiaf" class="active collapsed" aria-expanded="false">
+                            <a href="" data-toggle="collapse" data-target="#dashboard_activosvsiaf"
+                                class="active collapsed" aria-expanded="false">
                                 <i class="fa fa-users"></i>
                                 <span class="nav-label mr-3">Activos</span>
                                 <span class="fa fa-chevron-left float-right"></span>
