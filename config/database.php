@@ -108,6 +108,21 @@ return [
             'sslmode' => 'prefer',
         ],
 
+        'pgsql_correspondencia' => [
+            'driver' => 'pgsql',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_HOST_FOURTH', '127.0.0.1'),
+            'port' => env('DB_PORT_FOURTH', '5432'),
+            'database' => env('DB_DATABASE_FOURTH', 'forge'),
+            'username' => env('DB_USERNAME_FOURTH', 'forge'),
+            'password' => env('DB_PASSWORD_FOURTH', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => false,
+            'schema' => 'public',
+            'sslmode' => 'prefer',
+        ],
+
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DATABASE_URL'),

@@ -69,7 +69,7 @@
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle">
                                     <a href="{{route('compras.pedidoparcial.edit',$comp->idcompra)}}">
                                         <span class="text-primary">
-                                            <i class="fa-solid fa-2xl fa-square-info"></i>
+                                            <i class="fa-solid fa-2xl fa-list"></i>
                                         </span>
                                     </a>
                                 </span>

@@ -12,26 +12,23 @@ use DataTables;
 
 class PartidaController extends Controller
 {
-  
-    public function index()
-    
-        {
-        
-         return view('compras.partida.index');
 
-        }
+    public function index()
+
+    {
+
+        return view('compras.partida.index');
+    }
 
 
     public function listado()
-      
-        {  
-     
-             $data = DB::table('partida');
-            
-             return Datatables::of($data)
-                    ->addIndexColumn()
-                    ->make(true);
-       }
 
+    {
 
+        $data = DB::table('partida');
+
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->make(true);
+    }
 }

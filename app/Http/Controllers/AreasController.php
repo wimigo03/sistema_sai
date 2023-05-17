@@ -13,40 +13,46 @@ use DataTables;
 
 class AreasController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         return view('compras.areas.index');
     }
 
-    public function listado(Request $request){
+    public function listado(Request $request)
+    {
         $data = DB::table('areas')->get();
         return Datatables::of($data)->addIndexColumn()
-                                    ->addColumn('btn','compras.areas.btn')
-                                    //->addColumn('btn2','compras.areas.btn2')
-                                    //->addColumn('btn3','compras.areas.btn3')
-                                    //->rawColumns(['btn','btn2','btn3'])
-                                    ->rawColumns(['btn'])
-                                    ->make(true);
+            ->addColumn('btn', 'compras.areas.btn')
+            //->addColumn('btn2','compras.areas.btn2')
+            //->addColumn('btn3','compras.areas.btn3')
+            //->rawColumns(['btn','btn2','btn3'])
+            ->rawColumns(['btn'])
+            ->make(true);
     }
 
-    public function create(){
+    public function create()
+    {
         $area = AreasModel::where('estadoarea', 1)->with('iPais_all')->get();
         $niveles = DB::table('niveles')->get();
-        return view('compras.areas.create', ["niveles" => $niveles,"area" => $area]);
+        return view('compras.areas.create', ["niveles" => $niveles, "area" => $area]);
     }
 
-    public function crearFile($idArea){
+    public function crearFile($idArea)
+    {
         $idarea = $idArea;
         $area = AreasModel::find($idarea);
-        return view('compras.areas.crearFile',compact('idarea','area'));
+        return view('compras.areas.crearFile', compact('idarea', 'area'));
     }
 
-    public function crearFile2($idArea){
+    public function crearFile2($idArea)
+    {
         $idarea = $idArea;
         $area = AreasModel::find($idarea);
-        return view('compras.areas.crearFile2',compact('idarea','area'));
+        return view('compras.areas.crearFile2', compact('idarea', 'area'));
     }
 
-    public function guardarfile(Request $request){
+    public function guardarfile(Request $request)
+    {
         $file = new FileModel();
         $file->numfile = $request->input('numfile');
         $file->cargo = $request->input('cargo');
@@ -61,16 +67,17 @@ class AreasController extends Controller
         $file->idarea = $request->input('idarea');
 
         $idarea = $request->input('idarea');
-        if($file->save()){
+        if ($file->save()) {
             $request->session()->flash('message', 'Registro Procesado Exitosamente');
-        }else{
+        } else {
             $request->session()->flash('message', 'Error al procesar el registro');
         }
 
         return redirect()->action('App\Http\Controllers\AreasController@file', ['id' => $idarea]);
     }
 
-    public function guardarfile2(Request $request){
+    public function guardarfile2(Request $request)
+    {
         $file = new FileModel();
         $file->numfile = $request->input('numfile');
         $file->cargo = $request->input('cargo');
@@ -85,9 +92,9 @@ class AreasController extends Controller
 
         $file->idarea = $request->input('idarea');
         $idarea = $request->input('idarea');
-        if($file->save()){
+        if ($file->save()) {
             $request->session()->flash('message', 'Registro Procesado Exitosamente');
-        }else{
+        } else {
             $request->session()->flash('message', 'Error al procesar el registro');
         }
 
@@ -96,92 +103,101 @@ class AreasController extends Controller
 
 
 
-    public function file($id){
+    public function file($id)
+    {
         $area = AreasModel::find($id);
         $file = DB::table('file as f')
-                    ->join('areas as a', 'a.idarea', 'f.idarea')
-                    ->select('f.idfile','f.numfile','f.cargo','f.nombrecargo','f.habbasico','f.categoria','f.niveladm','f.clase','f.nivelsal','a.nombrearea','f.estadofile')
-                    ->where('f.tipofile','=', 1)
-                    ->where('a.idarea','=', $id)
-                    ->orderBy('f.cargo','asc')
-                    ->get();
-                    //->paginate(5);
-    
-        return view('compras.areas.file', ["area" => $area,"file" => $file,"id" => $id]);
+            ->join('areas as a', 'a.idarea', 'f.idarea')
+            ->select('f.idfile', 'f.numfile', 'f.cargo', 'f.nombrecargo', 'f.habbasico', 'f.categoria', 'f.niveladm', 'f.clase', 'f.nivelsal', 'a.nombrearea', 'f.estadofile')
+            ->where('f.tipofile', '=', 1)
+            ->where('a.idarea', '=', $id)
+            ->orderBy('f.cargo', 'asc')
+            ->get();
+        //->paginate(5);
+
+        return view('compras.areas.file', ["area" => $area, "file" => $file, "id" => $id]);
     }
 
-    public function file2($id){
+    public function file2($id)
+    {
         $area = AreasModel::find($id);
         $file = DB::table('file as f')
-                    ->join('areas as a', 'a.idarea', '=', 'f.idarea')
-                    ->select('f.idfile','f.numfile','f.cargo','f.nombrecargo','f.habbasico','f.categoria','f.niveladm','f.clase','f.nivelsal','a.nombrearea','f.estadofile')
-                    ->where('f.tipofile', 2)
-                    ->where('a.idarea', $id)
-                    ->get();
+            ->join('areas as a', 'a.idarea', '=', 'f.idarea')
+            ->select('f.idfile', 'f.numfile', 'f.cargo', 'f.nombrecargo', 'f.habbasico', 'f.categoria', 'f.niveladm', 'f.clase', 'f.nivelsal', 'a.nombrearea', 'f.estadofile')
+            ->where('f.tipofile', 2)
+            ->where('a.idarea', $id)
+            ->get();
 
-         return view('compras.areas.file2', ["area" => $area,"file" => $file,"id" => $id]);
+        return view('compras.areas.file2', ["area" => $area, "file" => $file, "id" => $id]);
     }
 
-    public function byCategory($id){
-        return FileModel::where('idarea',$id)->get();
+    public function byCategory($id)
+    {
+        return FileModel::where('idarea', $id)->get();
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $areas = new AreasModel();
         $areas->nombrearea = $request->input('nombre');
         $areas->idnivel = $request->input('idnivel');
         $areas->estadoarea = 1;
-        if($areas->save()){
+        if ($areas->save()) {
             $request->session()->flash('message', 'Registro Procesado Exitosamente');
-        }else{
+        } else {
             $request->session()->flash('message', 'Error al procesar el registro');
         }
         return redirect()->route('areas.index');
     }
 
-    public function show($id){
-        
+    public function show($id)
+    {
     }
 
-    public function edit($idarea){
+    public function edit($idarea)
+    {
         $areas = AreasModel::find($idarea);
-        return view('compras.areas.edit',["areas" => $areas]);
+        return view('compras.areas.edit', ["areas" => $areas]);
     }
 
-    public function update(Request $request, $idarea){
+    public function update(Request $request, $idarea)
+    {
         $areas = AreasModel::find($idarea);
         $areas->nombrearea = $request->input('nombre');
-        if($areas->save()){
+        if ($areas->save()) {
             $request->session()->flash('message', 'Registro Procesado');
-        }else{
+        } else {
             $request->session()->flash('message', 'Error al Procesar Registro');
         }
         return redirect('compras/areas/index');
     }
 
-    public function destroy($id){
-        
+    public function destroy($id)
+    {
     }
 
-    public function editfile($idfile){
+    public function editfile($idfile)
+    {
         $files = FileModel::find($idfile);
         $file = $files;
         $area = AreasModel::find($files->idarea);
         $areas = DB::table('areas')->get();
-        return view('compras.areas.actualizarfile',compact('areas','file','area'));
+        return view('compras.areas.actualizarfile', compact('areas', 'file', 'area'));
     }
 
-    public function editfile2($idfile){
+    public function editfile2($idfile)
+    {
         $files = FileModel::find($idfile);
         $file = $files;
         $area = AreasModel::find($files->idarea);
         $areas = DB::table('areas')->get();
-    
-        return view('compras.areas.actualizarfile2',compact('areas','file','area'));
+
+        return view('compras.areas.actualizarfile2', compact('areas', 'file', 'area'));
     }
 
 
-    public function updatefile(Request $request){
+    public function updatefile(Request $request)
+    {
         $file = FileModel::find($request->input('idfile'));
         $file->numfile = $request->input('numfile');
         $file->cargo = $request->input('cargo');
@@ -193,16 +209,17 @@ class AreasController extends Controller
         $file->nivelsal = $request->input('nivelsal');
         $file->idarea = $request->input('idarea2');
 
-        if($file->save()){
+        if ($file->save()) {
             $request->session()->flash('message', 'Registro Procesado');
-        }else{
+        } else {
             $request->session()->flash('message', 'Error al Procesar Registro');
         }
 
         return redirect()->action('App\Http\Controllers\AreasController@file', [$request->input('idarea')]);
     }
 
-    public function updatefile2(Request $request){
+    public function updatefile2(Request $request)
+    {
         $file = FileModel::find($request->input('idfile'));
         $file->numfile = $request->input('numfile');
         $file->cargo = $request->input('cargo');
@@ -213,10 +230,10 @@ class AreasController extends Controller
         $file->clase = $request->input('clase');
         $file->nivelsal = $request->input('nivelsal');
         $file->idarea = $request->input('idarea2');
-       
-        if($file->save()){
+
+        if ($file->save()) {
             $request->session()->flash('message', 'Registro Procesado');
-        }else{
+        } else {
             $request->session()->flash('message', 'Error al Procesar Registro');
         }
 

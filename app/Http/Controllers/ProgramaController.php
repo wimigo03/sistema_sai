@@ -19,35 +19,34 @@ class ProgramaController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    //index 
-   public function index()
+    //index
+    public function index()
     {
-           
-      return view('compras.programas.index');
 
+        return view('compras.programas.index');
     }
 
 
     public function listado()
     {
-        $data = DB::table('programa') 
-        -> where('estadoprograma','=', 1);
+        $data = DB::table('programa')
+            ->where('estadoprograma', '=', 1);
         //-> get();
         // return view('compras.medidas.index', ["medidas" => $medidas]);
         // return view('compras.programas.index',compact('programas'));
 
         return Datatables::of($data)
-        ->addIndexColumn()
-              //->addColumn('btn', function($row){
-              // $btn = '<a href="'. route('programas.edit', $row->idprograma) .'" style="color:#017EBE;" class="fas fa-pencil-alt fa-lg" title="Editar"></a>';
-              // return $btn;
-              // })
-              //->rawColumns(['btn'])
-              //->make(true);
-        ->addIndexColumn()
-                ->addColumn('btn','compras.programas.btn')
-                ->rawColumns(['btn'])
-                ->make(true);
+            ->addIndexColumn()
+            //->addColumn('btn', function($row){
+            // $btn = '<a href="'. route('programas.edit', $row->idprograma) .'" style="color:#017EBE;" class="fas fa-pencil-alt fa-lg" title="Editar"></a>';
+            // return $btn;
+            // })
+            //->rawColumns(['btn'])
+            //->make(true);
+            ->addIndexColumn()
+            ->addColumn('btn', 'compras.programas.btn')
+            ->rawColumns(['btn'])
+            ->make(true);
     }
 
     /**
@@ -69,16 +68,16 @@ class ProgramaController extends Controller
     public function store(Request $request)
     {
         $programas = new ProgramaModel();
-        $programas -> nombreprograma = $request->input('nombre');
-       
-        
-        $programas -> estadoprograma = 1;
-      
-      
-        if($programas->save()){
+        $programas->nombreprograma = $request->input('nombre');
+
+
+        $programas->estadoprograma = 1;
+
+
+        if ($programas->save()) {
             $request->session()->flash('message', 'Registro Procesado Exitosamente');
             //echo 'Cliente salvo com sucesso';
-        }else{
+        } else {
             $request->session()->flash('message', 'Error al procesar el registro');
             //echo 'Houve um erro ao salvar';
         }
@@ -105,7 +104,7 @@ class ProgramaController extends Controller
     public function edit($idprograma)
     {
         $programas = ProgramaModel::find($idprograma);
-    
+
         return view('compras/programas/edit')->with('programas', $programas);
     }
 
@@ -119,14 +118,14 @@ class ProgramaController extends Controller
     public function update(Request $request, $idprograma)
     {
         $programas = ProgramaModel::find($idprograma);
-        $programas -> nombreprograma = $request->input('nombre');
-        
+        $programas->nombreprograma = $request->input('nombre');
+
         //$medida->update();
-        if($programas->save()){
-          $request->session()->flash('message', 'Registro Procesado');
-      }else{
-          $request->session()->flash('message', 'Error al Procesar Registro');
-      }
+        if ($programas->save()) {
+            $request->session()->flash('message', 'Registro Procesado');
+        } else {
+            $request->session()->flash('message', 'Error al Procesar Registro');
+        }
         return redirect('compras/programas/index');
     }
 

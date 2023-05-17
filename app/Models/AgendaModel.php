@@ -5,19 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class IngresoAlmacenModel extends Model
+class AgendaModel extends Model
 {
-    protected $table = 'ingresoalmacen';
+    protected $table = 'agenda';
 
-    protected $primaryKey= 'idingresoalmacen';
+    protected $primaryKey= 'idagenda';
 
     public $timestamps = true;
 
     protected $fillable = [
-        'idcompra',
-        'estadoingreso',
-        'fechaingreso'
-    ];
+
+         ];
 
     protected $guarded = [
 

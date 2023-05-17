@@ -57,10 +57,12 @@
                             <label for="nombre" style="color:black;font-weight: bold;"
                                 class="required col-md-4 col-form-label text-md-right">Fecha Recepcion/Envio:</label>
 
-                                <div class="col-md-3">
+                            <div class="col-md-3">
 
-                                    <input type="text" name="fecha"  placeholder="dd/mm/aaaa" class="form-control form-control-sm font-verdana-bg" id="fecha" data-language="es" autocomplete="off">
-                                </div>
+                                <input type="text" name="fecha" placeholder="dd/mm/aaaa"
+                                    class="form-control form-control-sm font-verdana-bg" id="fecha" data-language="es"
+                                    autocomplete="off">
+                            </div>
                         </div>
 
 
@@ -72,8 +74,8 @@
                                 class="required col-md-4 col-form-label text-md-right">N°:</label>
 
                             <div class="col-md-2">
-                                <input type="text" id="nombredocumento" name="nombredocumento" class="form-control" placeholder="N°. doc..."
-                                    required>
+                                <input type="text" id="nombredocumento" name="nombredocumento" class="form-control"
+                                    placeholder="N°. doc..." required>
                             </div>
                         </div>
 
@@ -103,12 +105,20 @@
 
                         <div align='center'>
 
+
+                            <button class="btn btn-danger font-verdana-bg" type="button" id="cancelar">
+                                Cancelar
+                            </button>
+
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+
                             <button class="btn color-icon-2 font-verdana-bg" type="button" id="insertar_item_material">
                                 <i class="fa-solid fa-paper-plane"></i>
-
-                                &nbsp;
                                 Guardar
                             </button>
+
+                            <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send"
+                                style="display: none;"></i>
 
                         </div>
                     </form>
@@ -121,10 +131,8 @@
     </div>
 @endsection
 @section('scripts')
-
     <script>
-
-       $(document).ready(function() {
+        $(document).ready(function() {
 
             $('.select2').select2({
                 placeholder: "--Seleccionar--"
@@ -133,9 +141,22 @@
 
         $("#insertar_item_material").click(function() {
             if (validar_detalle_material() == true) {
+
+                $(".btn").hide();
+                $(".spinner-btn-send").show();
                 $("#form").submit();
             }
         });
+
+
+        $("#cancelar    ").click(function() {
+
+            $(".btn").hide();
+            $(".spinner-btn-send").show();
+            window.location.href = "{{url('archivos2/index')}}";
+
+        });
+
 
 
         function validar_detalle_material() {
@@ -177,7 +198,5 @@
             dateFormat: "dd/mm/yyyy",
             autoClose: true
         });
-
-
     </script>
 @endsection

@@ -24,29 +24,30 @@ use PDF;
 
 class DetalleCompraController2 extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $detalle = TemporalModel::find($id);
         $id2 = $detalle->idcompra;
         $prodserv = DB::table('detallecompra as d')
-                        ->join('prodserv as ps', 'ps.idprodserv', '=', 'd.idprodserv')
-                        ->join('compra as c', 'c.idcompra', '=', 'd.idcompra')
-                        ->select('d.iddetallecompra', 'c.idcompra','ps.nombreprodserv','d.cantidad','d.subtotal','d.precio')
-                        ->where('d.idcompra', $id2)
-                        ->orderBy('d.iddetallecompra', 'desc')
-                        ->get();
+            ->join('prodserv as ps', 'ps.idprodserv', '=', 'd.idprodserv')
+            ->join('compra as c', 'c.idcompra', '=', 'd.idcompra')
+            ->select('d.iddetallecompra', 'c.idcompra', 'ps.nombreprodserv', 'd.cantidad', 'd.subtotal', 'd.precio')
+            ->where('d.idcompra', $id2)
+            ->orderBy('d.iddetallecompra', 'desc')
+            ->get();
         $productos = DB::table('prodserv')
-                        ->where('estadoprodserv',1)
-                        ->select(DB::raw("concat(nombreprodserv,' // ',detalleprodserv,' // PRECIO BS. ',precioprodserv) as prodservicio"),'idprodserv')
-                        ->pluck('prodservicio','idprodserv');
+            ->where('estadoprodserv', 1)
+            ->select(DB::raw("concat(nombreprodserv,' // ',detalleprodserv,' // PRECIO BS. ',precioprodserv) as prodservicio"), 'idprodserv')
+            ->pluck('prodservicio', 'idprodserv');
         $valor_total2 = $prodserv->sum('subtotal');
         $ordencompra = DB::table('ordencompra as o')
-                            ->select('o.nombrecompra','o.solicitante','o.proveedor')
-                            -> where('o.compra_idcompra','=', $id2)->first();
+            ->select('o.nombrecompra', 'o.solicitante', 'o.proveedor')
+            ->where('o.compra_idcompra', '=', $id2)->first();
         $resultado = $ordencompra;
         $estado = 1;
-        if(is_null($resultado)){
+        if (is_null($resultado)) {
             $estado = 0;
         }
         $compras = DB::table('compra as c')
@@ -54,14 +55,15 @@ class DetalleCompraController2 extends Controller
             ->join('catprogramatica as cat', 'cat.idcatprogramatica', 'c.idcatprogramatica')
             ->join('programa as prog', 'prog.idprograma', 'c.idprograma')
             ->join('areas as a', 'a.idarea', 'c.idarea')
-            ->select('c.idcompra','c.estado1', 'a.nombrearea', 'c.objeto', 'c.justificacion', 'c.preventivo', 'p.nombreproveedor', 'p.representante', 'p.cedula', 'p.nitci', 'p.telefonoproveedor', 'c.preventivo', 'c.numcompra', 'cat.codcatprogramatica', 'prog.nombreprograma')
+            ->select('c.idcompra', 'c.estado1', 'a.nombrearea', 'c.objeto', 'c.justificacion', 'c.preventivo', 'p.nombreproveedor', 'p.representante', 'p.cedula', 'p.nitci', 'p.telefonoproveedor', 'c.preventivo', 'c.numcompra', 'cat.codcatprogramatica', 'prog.nombreprograma')
             ->where('c.idcompra', '=', $id2)
             ->first();
 
-        return view('compras.detalleparcial.index',['prodserv'=>$prodserv,'productos'=>$productos,'valor_total2'=>$valor_total2,'idcompra'=>$id2,'estado'=>$estado,'compras'=>$compras]);
+        return view('compras.detalleparcial.index', ['prodserv' => $prodserv, 'productos' => $productos, 'valor_total2' => $valor_total2, 'idcompra' => $id2, 'estado' => $estado, 'compras' => $compras]);
     }
 
-    public function store (Request $request){
+    public function store(Request $request)
+    {
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $detalle = TemporalModel::find($id);
@@ -79,91 +81,118 @@ class DetalleCompraController2 extends Controller
         $detalle->subtotal = $precio * $cantidad;
 
         $detallito = DB::table('detallecompra as d')
-                            ->join('prodserv as ps', 'ps.idprodserv', 'd.idprodserv')
-                            ->join('compra as c', 'c.idcompra', 'd.idcompra')
-                            ->select('d.iddetallecompra', 'c.idcompra','ps.nombreprodserv','d.cantidad','d.subtotal','d.precio')
-                            -> orwhere('d.idprodserv', $prod)
-                            -> where('d.idcompra', $id2)->get();
+            ->join('prodserv as ps', 'ps.idprodserv', 'd.idprodserv')
+            ->join('compra as c', 'c.idcompra', 'd.idcompra')
+            ->select('d.iddetallecompra', 'c.idcompra', 'ps.nombreprodserv', 'd.cantidad', 'd.subtotal', 'd.precio')
+            ->orwhere('d.idprodserv', $prod)
+            ->where('d.idcompra', $id2)->get();
 
-        if($detallito->isEmpty()){
+        if ($detallito->isEmpty()) {
             $detalle->save();
             $request->session()->flash('message', 'Registro Agregado');
-        }else{
+        } else {
             $request->session()->flash('message', 'El Item Ya existe en la Planilla');
         }
         return redirect()->route('compras.detalleparcial.index');
     }
 
-    public function show(){
+    public function show()
+    {
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $detalle = TemporalModel::find($id);
         $id2 = $detalle->idcompra;
         // tomar en cuenta $compra = CompraModel::find($id2);
         $prodserv = DB::table('detallecompra as d')
-                        ->join('prodserv as ps', 'ps.idprodserv', '=', 'd.idprodserv')
-                        ->join('compra as c', 'c.idcompra', '=', 'd.idcompra')
-                        ->join('partida as par', 'par.idpartida', '=', 'ps.partida_idpartida')
-                        ->join('umedida as u', 'u.idumedida', '=', 'ps.umedida_idumedida')
-                        ->select('d.iddetallecompra', 'c.idcompra','ps.nombreprodserv','ps.detalleprodserv','par.codigopartida','u.nombreumedida','d.cantidad','d.subtotal','d.precio')
-                        -> where('d.idcompra','=', $id2)
-                        -> orderBy('d.iddetallecompra', 'asc')
-                        -> get();
+            ->join('prodserv as ps', 'ps.idprodserv', '=', 'd.idprodserv')
+            ->join('compra as c', 'c.idcompra', '=', 'd.idcompra')
+            ->join('partida as par', 'par.idpartida', '=', 'ps.partida_idpartida')
+            ->join('umedida as u', 'u.idumedida', '=', 'ps.umedida_idumedida')
+            ->select('d.iddetallecompra', 'c.idcompra', 'ps.nombreprodserv', 'ps.detalleprodserv', 'par.codigopartida', 'u.nombreumedida', 'd.cantidad', 'd.subtotal', 'd.precio')
+            ->where('d.idcompra', '=', $id2)
+            ->orderBy('d.iddetallecompra', 'asc')
+            ->get();
 
         $datos = DB::table('areas as a')->join('compra as c', 'c.idarea', '=', 'a.idarea')
-        -> where('c.idcompra', $id2)
-        ->select('a.nombrearea')
-        ->first();
+            ->where('c.idcompra', $id2)
+            ->select('a.nombrearea')
+            ->first();
         $valor_total = $prodserv->sum('subtotal');
 
 
 
         $compras = DB::table('compra as c')
-        ->join('proveedores as p', 'p.idproveedor', 'c.idproveedor')
-        ->join('catprogramatica as cat', 'cat.idcatprogramatica', 'c.idcatprogramatica')
-        ->join('programa as prog', 'prog.idprograma', 'c.idprograma')
-        ->join('areas as a', 'a.idarea', 'c.idarea')
-        ->select('c.idcompra','c.controlinterno','c.estado1','a.idarea','a.nombrearea','c.objeto', 'c.justificacion', 'c.preventivo','p.nombreproveedor','p.representante','p.cedula','p.nitci','p.telefonoproveedor','c.preventivo','c.numcompra','cat.codcatprogramatica','prog.nombreprograma')
-        ->where('c.idcompra','=', $id2)
-        ->first();
-         // dd($compras->idarea);
+            ->join('proveedores as p', 'p.idproveedor', 'c.idproveedor')
+            ->join('catprogramatica as cat', 'cat.idcatprogramatica', 'c.idcatprogramatica')
+            ->join('programa as prog', 'prog.idprograma', 'c.idprograma')
+            ->join('areas as a', 'a.idarea', 'c.idarea')
+            ->select('c.idcompra', 'c.controlinterno', 'c.estado1', 'a.idarea', 'a.nombrearea', 'c.objeto', 'c.justificacion', 'c.preventivo', 'p.nombreproveedor', 'p.representante', 'p.cedula', 'p.nitci', 'p.telefonoproveedor', 'c.preventivo', 'c.numcompra', 'cat.codcatprogramatica', 'prog.nombreprograma')
+            ->where('c.idcompra', '=', $id2)
+            ->first();
+        // dd($compras->idarea);
 
 
-       $encargado = DB::table('encargados as e')
-          ->join('areas as a', 'a.idarea', '=', 'e.idarea')
-          ->join('empleados as emp', 'e.idemp', '=', 'emp.idemp')
-        -> where('a.idarea', $compras->idarea)
-        ->select('emp.nombres','emp.ap_pat','emp.ap_mat','e.abrev')
-        ->first();
+        $encargado = DB::table('encargados as e')
+            ->join('areas as a', 'a.idarea', '=', 'e.idarea')
+            ->join('empleados as emp', 'e.idemp', '=', 'emp.idemp')
+            ->where('a.idarea', $compras->idarea)
+            ->select('emp.nombres', 'emp.ap_pat', 'emp.ap_mat', 'e.abrev')
+            ->first();
         //dd($encargado->nombres);
 
 
 
-        return view('compras.detalleparcial.print',compact('prodserv','valor_total','compras','datos','encargado'));
+        return view('compras.detalleparcial.print', compact('prodserv', 'valor_total', 'compras', 'datos', 'encargado'));
     }
 
-    public function invitacion($id){
+    public function invitacion($id)
+    {
         try {
-            ini_set('memory_limit','-1');
-            ini_set('max_execution_time','-1');
+            ini_set('memory_limit', '-1');
+            ini_set('max_execution_time', '-1');
 
             $ordencompra = DB::table('ordencompra as o')
-                                ->select('o.numinforme','o.fechaorden','o.nombrecompra','o.solicitante','o.modalidadcontratacion',
-                                'o.precioreferencial','o.proveedor','o.representante','o.cedula','o.nitci','o.telefono',
-                                'o.approgramatica','o.partida','o.actividad','o.nordencompra','o.npreventivo',
-                                'o.hojaruta','o.numcontrolinterno','o.plazoentrega','o.fechainicio',
-                                'o.fechaconclusion','o.fechainvitacion','o.fechaaceptacion','o.codciteinvitacion',
-                                'o.horapresentacion', 'o.cedulaaceptacion','o.numnotaadjudicacion','o.fechainiciosolproc',
-                                'o.controlinter','o.autoridadsolicitante')
-                                ->where('o.compra_idcompra', $id)
-                                ->first();
+                ->select(
+                    'o.numinforme',
+                    'o.fechaorden',
+                    'o.nombrecompra',
+                    'o.solicitante',
+                    'o.modalidadcontratacion',
+                    'o.precioreferencial',
+                    'o.proveedor',
+                    'o.representante',
+                    'o.cedula',
+                    'o.nitci',
+                    'o.telefono',
+                    'o.approgramatica',
+                    'o.partida',
+                    'o.actividad',
+                    'o.nordencompra',
+                    'o.npreventivo',
+                    'o.hojaruta',
+                    'o.numcontrolinterno',
+                    'o.plazoentrega',
+                    'o.fechainicio',
+                    'o.fechaconclusion',
+                    'o.fechainvitacion',
+                    'o.fechaaceptacion',
+                    'o.codciteinvitacion',
+                    'o.horapresentacion',
+                    'o.cedulaaceptacion',
+                    'o.numnotaadjudicacion',
+                    'o.fechainiciosolproc',
+                    'o.controlinter',
+                    'o.autoridadsolicitante'
+                )
+                ->where('o.compra_idcompra', $id)
+                ->first();
 
             $ordendoc = DB::table('ordencompra as o')
-                            ->join('ordendoc as od', 'od.idorden', '=', 'o.idorden')
-                            ->join('docorden as doc', 'doc.iddoc', '=', 'od.iddoc')
-                            ->select('doc.nombredoc')
-                            ->where('o.compra_idcompra', $id)
-                            ->get();
+                ->join('ordendoc as od', 'od.idorden', '=', 'o.idorden')
+                ->join('docorden as doc', 'doc.iddoc', '=', 'od.iddoc')
+                ->select('doc.nombredoc')
+                ->where('o.compra_idcompra', $id)
+                ->get();
 
             $fechaInvitacion = $ordencompra->fechainvitacion;
             $fechaInvitacion = Carbon::parse($fechaInvitacion)->isoFormat('D \d\e MMMM \d\e\l Y');
@@ -171,13 +200,12 @@ class DetalleCompraController2 extends Controller
             $fechaAceptacion = Carbon::parse($fechaAceptacion)->isoFormat('D \d\e MMMM');
             $responsables = DB::table('responsables')->first();
 
-            $pdf = PDF::loadView('compras.detalleparcial.pdf-invitacion',compact(['ordencompra','ordendoc','responsables','fechaInvitacion','fechaAceptacion']));
-            $pdf->setPaper('LETTER', 'portrait');//landscape
+            $pdf = PDF::loadView('compras.detalleparcial.pdf-invitacion', compact(['ordencompra', 'ordendoc', 'responsables', 'fechaInvitacion', 'fechaAceptacion']));
+            $pdf->setPaper('LETTER', 'portrait'); //landscape
             return $pdf->stream();
-
         } catch (Exception $ex) {
             \Log::error("Cotizacion Error: {$ex->getMessage()}");
-            return redirect()->route('compras.detalleparcial.index')->with('message',$ex->getMessage());
+            return redirect()->route('compras.detalleparcial.index')->with('message', $ex->getMessage());
         } finally {
             ini_restore('memory_limit');
             ini_restore('max_execution_time');
@@ -186,28 +214,54 @@ class DetalleCompraController2 extends Controller
         //return view('compras.detalle.invitacion',['ordencompra'=>$ordencompra,'ordendoc'=>$ordendoc,'responsables'=>$responsables,'fechaInvitacion'=>$fechaInvitacion,'fechaAceptacion'=>$fechaAceptacion]);
     }
 
-    public function aceptacion($id){
+    public function aceptacion($id)
+    {
         try {
-            ini_set('memory_limit','-1');
-            ini_set('max_execution_time','-1');
+            ini_set('memory_limit', '-1');
+            ini_set('max_execution_time', '-1');
 
             $ordencompra = DB::table('ordencompra as o')
-                                ->select('o.numinforme','o.fechaorden','o.nombrecompra','o.solicitante','o.modalidadcontratacion',
-                                'o.precioreferencial','o.proveedor','o.representante','o.cedula','o.nitci','o.telefono',
-                                'o.approgramatica','o.partida','o.actividad','o.nordencompra','o.npreventivo',
-                                'o.hojaruta','o.numcontrolinterno','o.plazoentrega','o.fechainicio',
-                                'o.fechaconclusion','o.fechainvitacion','o.fechaaceptacion','o.codciteinvitacion',
-                                'o.horapresentacion', 'o.cedulaaceptacion','o.numnotaadjudicacion','o.fechainiciosolproc',
-                                'o.controlinter','o.autoridadsolicitante')
-                                ->where('o.compra_idcompra', $id)
-                                ->first();
+                ->select(
+                    'o.numinforme',
+                    'o.fechaorden',
+                    'o.nombrecompra',
+                    'o.solicitante',
+                    'o.modalidadcontratacion',
+                    'o.precioreferencial',
+                    'o.proveedor',
+                    'o.representante',
+                    'o.cedula',
+                    'o.nitci',
+                    'o.telefono',
+                    'o.approgramatica',
+                    'o.partida',
+                    'o.actividad',
+                    'o.nordencompra',
+                    'o.npreventivo',
+                    'o.hojaruta',
+                    'o.numcontrolinterno',
+                    'o.plazoentrega',
+                    'o.fechainicio',
+                    'o.fechaconclusion',
+                    'o.fechainvitacion',
+                    'o.fechaaceptacion',
+                    'o.codciteinvitacion',
+                    'o.horapresentacion',
+                    'o.cedulaaceptacion',
+                    'o.numnotaadjudicacion',
+                    'o.fechainiciosolproc',
+                    'o.controlinter',
+                    'o.autoridadsolicitante'
+                )
+                ->where('o.compra_idcompra', $id)
+                ->first();
 
             $ordendoc = DB::table('ordencompra as o')
-                            ->join('ordendoc as od','od.idorden','o.idorden')
-                            ->join('docorden as doc','doc.iddoc','od.iddoc')
-                            ->select('doc.nombredoc')
-                            ->where('o.compra_idcompra', $id)
-                            ->get();
+                ->join('ordendoc as od', 'od.idorden', 'o.idorden')
+                ->join('docorden as doc', 'doc.iddoc', 'od.iddoc')
+                ->select('doc.nombredoc')
+                ->where('o.compra_idcompra', $id)
+                ->get();
 
             $fechaInvitacion = $ordencompra->fechainvitacion;
             $fechaInvitacion = Carbon::parse($fechaInvitacion)->isoFormat('D \d\e MMMM \d\e\l Y');
@@ -215,13 +269,12 @@ class DetalleCompraController2 extends Controller
             $fechaAceptacion = Carbon::parse($fechaAceptacion)->isoFormat('D \d\e MMMM \d\e\l Y');
             $responsables = DB::table('responsables')->first();
 
-            $pdf = PDF::loadView('compras.detalleparcial.pdf-aceptacion',compact(['ordencompra','ordendoc','responsables','fechaInvitacion','fechaAceptacion']));
-            $pdf->setPaper('LETTER', 'portrait');//landscape
+            $pdf = PDF::loadView('compras.detalleparcial.pdf-aceptacion', compact(['ordencompra', 'ordendoc', 'responsables', 'fechaInvitacion', 'fechaAceptacion']));
+            $pdf->setPaper('LETTER', 'portrait'); //landscape
             return $pdf->stream();
-
         } catch (Exception $ex) {
             \Log::error("Cotizacion Error: {$ex->getMessage()}");
-            return redirect()->route('compras.detalleparcial.index')->with('message',$ex->getMessage());
+            return redirect()->route('compras.detalleparcial.index')->with('message', $ex->getMessage());
         } finally {
             ini_restore('memory_limit');
             ini_restore('max_execution_time');
@@ -230,59 +283,84 @@ class DetalleCompraController2 extends Controller
         //return view('compras.detalle.aceptacion',['ordencompra'=>$ordencompra,'ordendoc'=>$ordendoc,'responsables'=>$responsables,'fechaInvitacion'=>$fechaInvitacion,'fechaAceptacion'=>$fechaAceptacion]);
     }
 
-    public function cotizacion($id){
+    public function cotizacion($id)
+    {
         try {
-            ini_set('memory_limit','-1');
-            ini_set('max_execution_time','-1');
+            ini_set('memory_limit', '-1');
+            ini_set('max_execution_time', '-1');
 
-                $ordencompra = DB::table('ordencompra as o')
-                                    ->select('o.numinforme','o.fechaorden','o.nombrecompra','o.solicitante','o.modalidadcontratacion',
-                                    'o.precioreferencial','o.proveedor','o.representante','o.cedula','o.nitci','o.telefono',
-                                    'o.approgramatica','o.partida','o.actividad','o.nordencompra','o.npreventivo',
-                                    'o.hojaruta','o.numcontrolinterno','o.plazoentrega','o.fechainicio',
-                                    'o.fechaconclusion','o.fechainvitacion','o.fechaaceptacion','o.codciteinvitacion',
-                                    'o.horapresentacion', 'o.cedulaaceptacion','o.numnotaadjudicacion','o.fechainiciosolproc',
-                                    'o.controlinter','o.autoridadsolicitante')
-                                    ->where('o.compra_idcompra', $id)
-                                    ->first();
+            $ordencompra = DB::table('ordencompra as o')
+                ->select(
+                    'o.numinforme',
+                    'o.fechaorden',
+                    'o.nombrecompra',
+                    'o.solicitante',
+                    'o.modalidadcontratacion',
+                    'o.precioreferencial',
+                    'o.proveedor',
+                    'o.representante',
+                    'o.cedula',
+                    'o.nitci',
+                    'o.telefono',
+                    'o.approgramatica',
+                    'o.partida',
+                    'o.actividad',
+                    'o.nordencompra',
+                    'o.npreventivo',
+                    'o.hojaruta',
+                    'o.numcontrolinterno',
+                    'o.plazoentrega',
+                    'o.fechainicio',
+                    'o.fechaconclusion',
+                    'o.fechainvitacion',
+                    'o.fechaaceptacion',
+                    'o.codciteinvitacion',
+                    'o.horapresentacion',
+                    'o.cedulaaceptacion',
+                    'o.numnotaadjudicacion',
+                    'o.fechainiciosolproc',
+                    'o.controlinter',
+                    'o.autoridadsolicitante'
+                )
+                ->where('o.compra_idcompra', $id)
+                ->first();
 
-                $ordendoc = DB::table('ordencompra as o')
-                                ->join('ordendoc as od', 'od.idorden', '=', 'o.idorden')
-                                ->join('docorden as doc', 'doc.iddoc', '=', 'od.iddoc')
-                                ->select('doc.nombredoc')
-                                ->where('o.compra_idcompra', $id)
-                                ->get();
+            $ordendoc = DB::table('ordencompra as o')
+                ->join('ordendoc as od', 'od.idorden', '=', 'o.idorden')
+                ->join('docorden as doc', 'doc.iddoc', '=', 'od.iddoc')
+                ->select('doc.nombredoc')
+                ->where('o.compra_idcompra', $id)
+                ->get();
 
-                $fechaInvitacion = $ordencompra->fechainvitacion;
-                $fechaInvitacion = Carbon::parse($fechaInvitacion)->isoFormat('D \d\e MMMM \d\e\l Y');
-                $fechaAceptacion = $ordencompra->fechaaceptacion;
-                $fechaAceptacion = Carbon::parse($fechaAceptacion)->isoFormat('D \d\e MMMM \d\e\l Y');
-                $responsables = DB::table('responsables')->first();
-                $fechaorden = $ordencompra->fechaorden;
-                $fechaorden = Carbon::parse($fechaorden)->isoFormat('dddd D \d\e MMMM \d\e\l Y');
-                // tomar en cuenta $compra = CompraModel::find($id2);
-                $prodserv = DB::table('detallecompra as d')
-                                ->join('prodserv as ps', 'ps.idprodserv','d.idprodserv')
-                                ->join('compra as c', 'c.idcompra','d.idcompra')
-                                ->join('partida as par', 'par.idpartida','ps.partida_idpartida')
-                                ->join('umedida as u', 'u.idumedida','ps.umedida_idumedida')
-                                ->select('d.iddetallecompra', 'c.idcompra','ps.nombreprodserv','ps.detalleprodserv','par.codigopartida','u.nombreumedida','d.cantidad','d.subtotal','d.precio')
-                                -> where('d.idcompra', $id)-> get();
+            $fechaInvitacion = $ordencompra->fechainvitacion;
+            $fechaInvitacion = Carbon::parse($fechaInvitacion)->isoFormat('D \d\e MMMM \d\e\l Y');
+            $fechaAceptacion = $ordencompra->fechaaceptacion;
+            $fechaAceptacion = Carbon::parse($fechaAceptacion)->isoFormat('D \d\e MMMM \d\e\l Y');
+            $responsables = DB::table('responsables')->first();
+            $fechaorden = $ordencompra->fechaorden;
+            $fechaorden = Carbon::parse($fechaorden)->isoFormat('dddd D \d\e MMMM \d\e\l Y');
+            // tomar en cuenta $compra = CompraModel::find($id2);
+            $prodserv = DB::table('detallecompra as d')
+                ->join('prodserv as ps', 'ps.idprodserv', 'd.idprodserv')
+                ->join('compra as c', 'c.idcompra', 'd.idcompra')
+                ->join('partida as par', 'par.idpartida', 'ps.partida_idpartida')
+                ->join('umedida as u', 'u.idumedida', 'ps.umedida_idumedida')
+                ->select('d.iddetallecompra', 'c.idcompra', 'ps.nombreprodserv', 'ps.detalleprodserv', 'par.codigopartida', 'u.nombreumedida', 'd.cantidad', 'd.subtotal', 'd.precio')
+                ->where('d.idcompra', $id)->get();
 
-                $valor_total = $prodserv->sum('subtotal');
-                $valor_total2 = NumerosEnLetras::convertir($valor_total,'Bolivianos',true);
+            $valor_total = $prodserv->sum('subtotal');
+            $valor_total2 = NumerosEnLetras::convertir($valor_total, 'Bolivianos', true);
 
-                $pdf = PDF::loadView('compras.detalleparcial.pdf-cotizacion',compact(['valor_total2','prodserv','valor_total','ordencompra','ordendoc','responsables','fechaInvitacion','fechaAceptacion','fechaorden']));
-                $pdf->setPaper('LETTER', 'portrait');//landscape
-                return $pdf->stream();
-
-            } catch (Exception $ex) {
-                \Log::error("Cotizacion Error: {$ex->getMessage()}");
-                return redirect()->route('compras.detalleparcial.index')->with('message',$ex->getMessage());
-            } finally {
-                ini_restore('memory_limit');
-                ini_restore('max_execution_time');
-            }
+            $pdf = PDF::loadView('compras.detalleparcial.pdf-cotizacion', compact(['valor_total2', 'prodserv', 'valor_total', 'ordencompra', 'ordendoc', 'responsables', 'fechaInvitacion', 'fechaAceptacion', 'fechaorden']));
+            $pdf->setPaper('LETTER', 'portrait'); //landscape
+            return $pdf->stream();
+        } catch (Exception $ex) {
+            \Log::error("Cotizacion Error: {$ex->getMessage()}");
+            return redirect()->route('compras.detalleparcial.index')->with('message', $ex->getMessage());
+        } finally {
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
 
         /*return view('compras.detalle.cotizacion',['valor_total2' => $valor_total2,
                                                     'prodserv' => $prodserv,
@@ -296,78 +374,130 @@ class DetalleCompraController2 extends Controller
                                                 ]);*/
     }
 
-    public function adjudicacion($id){
+    public function adjudicacion($id)
+    {
         $ordencompra = DB::table('ordencompra as o')
-                            ->select('o.numinforme','o.fechaorden','o.nombrecompra','o.solicitante','o.modalidadcontratacion',
-                            'o.precioreferencial','o.proveedor','o.representante','o.cedula','o.nitci','o.telefono',
-                            'o.approgramatica','o.partida','o.actividad','o.nordencompra','o.npreventivo',
-                            'o.hojaruta','o.numcontrolinterno','o.plazoentrega','o.fechainicio',
-                            'o.fechaconclusion','o.fechainvitacion','o.fechaaceptacion','o.codciteinvitacion',
-                            'o.horapresentacion', 'o.cedulaaceptacion','o.numnotaadjudicacion','o.fechainiciosolproc',
-                            'o.controlinter','o.autoridadsolicitante')
-                            ->where('o.compra_idcompra', $id)->first();
+            ->select(
+                'o.numinforme',
+                'o.fechaorden',
+                'o.nombrecompra',
+                'o.solicitante',
+                'o.modalidadcontratacion',
+                'o.precioreferencial',
+                'o.proveedor',
+                'o.representante',
+                'o.cedula',
+                'o.nitci',
+                'o.telefono',
+                'o.approgramatica',
+                'o.partida',
+                'o.actividad',
+                'o.nordencompra',
+                'o.npreventivo',
+                'o.hojaruta',
+                'o.numcontrolinterno',
+                'o.plazoentrega',
+                'o.fechainicio',
+                'o.fechaconclusion',
+                'o.fechainvitacion',
+                'o.fechaaceptacion',
+                'o.codciteinvitacion',
+                'o.horapresentacion',
+                'o.cedulaaceptacion',
+                'o.numnotaadjudicacion',
+                'o.fechainiciosolproc',
+                'o.controlinter',
+                'o.autoridadsolicitante'
+            )
+            ->where('o.compra_idcompra', $id)->first();
 
         $ordendoc = DB::table('ordencompra as o')
-                        ->join('ordendoc as od','od.idorden','o.idorden')
-                        ->join('docorden as doc','doc.iddoc','od.iddoc')
-                        ->select('doc.nombredoc')
-                        ->where('o.compra_idcompra', $id)->get();
+            ->join('ordendoc as od', 'od.idorden', 'o.idorden')
+            ->join('docorden as doc', 'doc.iddoc', 'od.iddoc')
+            ->select('doc.nombredoc')
+            ->where('o.compra_idcompra', $id)->get();
 
         $fechaInvitacion = $ordencompra->fechainvitacion;
         $fechaInvitacion = Carbon::parse($fechaInvitacion)->isoFormat('D \d\e MMMM \d\e\l Y');
         $fechaAceptacion = $ordencompra->fechaaceptacion;
         $fechaAceptacion = Carbon::parse($fechaAceptacion)->isoFormat('D \d\e MMMM \d\e\l Y');
         $responsables = DB::table('responsables')->first();
-        $fechaorden =$ordencompra->fechaorden;
+        $fechaorden = $ordencompra->fechaorden;
         $fechaorden = Carbon::parse($fechaorden)->isoFormat('D \d\e MMMM \d\e\l Y');
-        $fechainiciosolici =$ordencompra->fechainiciosolproc;
+        $fechainiciosolici = $ordencompra->fechainiciosolproc;
         $fechainiciosolici = Carbon::parse($fechainiciosolici)->isoFormat('D \d\e MMMM');
         // tomar en cuenta $compra = CompraModel::find($id2);
         $prodserv = DB::table('detallecompra as d')
-                        ->join('prodserv as ps', 'ps.idprodserv', '=', 'd.idprodserv')
-                        ->join('compra as c', 'c.idcompra', '=', 'd.idcompra')
-                        ->join('partida as par', 'par.idpartida', '=', 'ps.partida_idpartida')
-                        ->join('umedida as u', 'u.idumedida', '=', 'ps.umedida_idumedida')
-                        ->select('d.iddetallecompra', 'c.idcompra','ps.nombreprodserv','ps.detalleprodserv','par.codigopartida','u.nombreumedida','d.cantidad','d.subtotal','d.precio')
-                        ->where('d.idcompra','=', $id)-> get();
+            ->join('prodserv as ps', 'ps.idprodserv', '=', 'd.idprodserv')
+            ->join('compra as c', 'c.idcompra', '=', 'd.idcompra')
+            ->join('partida as par', 'par.idpartida', '=', 'ps.partida_idpartida')
+            ->join('umedida as u', 'u.idumedida', '=', 'ps.umedida_idumedida')
+            ->select('d.iddetallecompra', 'c.idcompra', 'ps.nombreprodserv', 'ps.detalleprodserv', 'par.codigopartida', 'u.nombreumedida', 'd.cantidad', 'd.subtotal', 'd.precio')
+            ->where('d.idcompra', '=', $id)->get();
 
         $valor_total = $prodserv->sum('subtotal');
         $responsables = DB::table('responsables')->first();
 
-        return view('compras.detalleparcial.adjudicacion',[
-                                                    'responsables' => $responsables,
-                                                    'prodserv' => $prodserv,
-                                                    'valor_total' => $valor_total,
-                                                    'fechainiciosolici' => $fechainiciosolici,
-                                                    'ordencompra' => $ordencompra,
-                                                    'ordendoc' => $ordendoc,
-                                                    'responsables' => $responsables,
-                                                    'fechaInvitacion' => $fechaInvitacion,
-                                                    'fechaAceptacion' => $fechaAceptacion,
-                                                    'fechaorden' => $fechaorden
-                                                    ]);
+        return view('compras.detalleparcial.adjudicacion', [
+            'responsables' => $responsables,
+            'prodserv' => $prodserv,
+            'valor_total' => $valor_total,
+            'fechainiciosolici' => $fechainiciosolici,
+            'ordencompra' => $ordencompra,
+            'ordendoc' => $ordendoc,
+            'responsables' => $responsables,
+            'fechaInvitacion' => $fechaInvitacion,
+            'fechaAceptacion' => $fechaAceptacion,
+            'fechaorden' => $fechaorden
+        ]);
     }
 
-    public function orden($id){
+    public function orden($id)
+    {
         try {
-            ini_set('memory_limit','-1');
-            ini_set('max_execution_time','-1');
+            ini_set('memory_limit', '-1');
+            ini_set('max_execution_time', '-1');
 
             $ordencompra = DB::table('ordencompra as o')
-                                ->select('o.numinforme','o.fechaorden','o.nombrecompra','o.solicitante','o.modalidadcontratacion',
-                                'o.precioreferencial','o.proveedor','o.representante','o.cedula','o.nitci','o.telefono',
-                                'o.approgramatica','o.partida','o.actividad','o.nordencompra','o.npreventivo',
-                                'o.hojaruta','o.numcontrolinterno','o.plazoentrega','o.fechainicio',
-                                'o.fechaconclusion','o.fechainvitacion','o.fechaaceptacion','o.codciteinvitacion',
-                                'o.horapresentacion', 'o.cedulaaceptacion','o.numnotaadjudicacion','o.fechainiciosolproc',
-                                'o.controlinter','o.autoridadsolicitante')
-                                ->where('o.compra_idcompra','=', $id)->first();
+                ->select(
+                    'o.numinforme',
+                    'o.fechaorden',
+                    'o.nombrecompra',
+                    'o.solicitante',
+                    'o.modalidadcontratacion',
+                    'o.precioreferencial',
+                    'o.proveedor',
+                    'o.representante',
+                    'o.cedula',
+                    'o.nitci',
+                    'o.telefono',
+                    'o.approgramatica',
+                    'o.partida',
+                    'o.actividad',
+                    'o.nordencompra',
+                    'o.npreventivo',
+                    'o.hojaruta',
+                    'o.numcontrolinterno',
+                    'o.plazoentrega',
+                    'o.fechainicio',
+                    'o.fechaconclusion',
+                    'o.fechainvitacion',
+                    'o.fechaaceptacion',
+                    'o.codciteinvitacion',
+                    'o.horapresentacion',
+                    'o.cedulaaceptacion',
+                    'o.numnotaadjudicacion',
+                    'o.fechainiciosolproc',
+                    'o.controlinter',
+                    'o.autoridadsolicitante'
+                )
+                ->where('o.compra_idcompra', '=', $id)->first();
 
             $ordendoc = DB::table('ordencompra as o')
-                            ->join('ordendoc as od', 'od.idorden', '=', 'o.idorden')
-                            ->join('docorden as doc', 'doc.iddoc', '=', 'od.iddoc')
-                            ->select('doc.nombredoc')
-                            ->where('o.compra_idcompra','=', $id)->get();
+                ->join('ordendoc as od', 'od.idorden', '=', 'o.idorden')
+                ->join('docorden as doc', 'doc.iddoc', '=', 'od.iddoc')
+                ->select('doc.nombredoc')
+                ->where('o.compra_idcompra', '=', $id)->get();
 
             $fechaInvitacion = $ordencompra->fechainvitacion;
             $fechaInvitacion = Carbon::parse($fechaInvitacion)->isoFormat('D \d\e MMMM \d\e\l Y');
@@ -380,18 +510,18 @@ class DetalleCompraController2 extends Controller
             $fechainiciosolici = Carbon::parse($fechainiciosolici)->isoFormat('D \d\e MMMM');
             // tomar en cuenta $compra = CompraModel::find($id2);
             $prodserv = DB::table('detallecompra as d')
-                            ->join('prodserv as ps', 'ps.idprodserv', '=', 'd.idprodserv')
-                            ->join('compra as c', 'c.idcompra', '=', 'd.idcompra')
-                            ->join('partida as par', 'par.idpartida', '=', 'ps.partida_idpartida')
-                            ->join('umedida as u', 'u.idumedida', '=', 'ps.umedida_idumedida')
-                            ->select('d.iddetallecompra', 'c.idcompra','ps.nombreprodserv','ps.detalleprodserv','par.codigopartida','u.nombreumedida','d.cantidad','d.subtotal','d.precio')
-                            ->where('d.idcompra','=', $id)-> get();
+                ->join('prodserv as ps', 'ps.idprodserv', '=', 'd.idprodserv')
+                ->join('compra as c', 'c.idcompra', '=', 'd.idcompra')
+                ->join('partida as par', 'par.idpartida', '=', 'ps.partida_idpartida')
+                ->join('umedida as u', 'u.idumedida', '=', 'ps.umedida_idumedida')
+                ->select('d.iddetallecompra', 'c.idcompra', 'ps.nombreprodserv', 'ps.detalleprodserv', 'par.codigopartida', 'u.nombreumedida', 'd.cantidad', 'd.subtotal', 'd.precio')
+                ->where('d.idcompra', '=', $id)->get();
 
             $valor_total = $prodserv->sum('subtotal');
-            $valor_total2 = NumerosEnLetras::convertir($valor_total,'Bolivianos',true);
+            $valor_total2 = NumerosEnLetras::convertir($valor_total, 'Bolivianos', true);
 
-            $pdf = PDF::loadView('compras.detalleparcial.pdf-orden',compact(['valor_total2','responsables','prodserv','valor_total','fechainiciosolici','ordencompra','ordendoc','responsables','fechaInvitacion','fechaAceptacion','fechaorden']));
-            $pdf->setPaper('LETTER', 'portrait');//landscape
+            $pdf = PDF::loadView('compras.detalleparcial.pdf-orden', compact(['valor_total2', 'responsables', 'prodserv', 'valor_total', 'fechainiciosolici', 'ordencompra', 'ordendoc', 'responsables', 'fechaInvitacion', 'fechaAceptacion', 'fechaorden']));
+            $pdf->setPaper('LETTER', 'portrait'); //landscape
             return $pdf->stream();
 
             /*return view('compras.detalle.orden',[
@@ -408,49 +538,51 @@ class DetalleCompraController2 extends Controller
                                                 'fechaorden' => $fechaorden
                                                 ]);*/
         } catch (Exception $ex) {
-                \Log::error("Orden Error: {$ex->getMessage()}");
-                return redirect()->route('compras.detalleparcial.index')->with('message',$ex->getMessage());
-            } finally {
-                ini_restore('memory_limit');
-                ini_restore('max_execution_time');
-            }
+            \Log::error("Orden Error: {$ex->getMessage()}");
+            return redirect()->route('compras.detalleparcial.index')->with('message', $ex->getMessage());
+        } finally {
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
     }
 
-    public function crearOrdenxxx($id){
+    public function crearOrdenxxx($id)
+    {
         $compras = DB::table('compra as c')
-                        ->join('proveedores as p', 'p.idproveedor', 'c.idproveedor')
-                        ->join('catprogramatica as cat', 'cat.idcatprogramatica', 'c.idcatprogramatica')
-                        ->join('programa as prog', 'prog.idprograma', 'c.idprograma')
-                        ->join('areas as a', 'a.idarea', 'c.idarea')
-                        ->select('c.idcompra','a.nombrearea','c.objeto', 'c.justificacion', 'c.preventivo','p.nombreproveedor','p.representante','p.cedula','p.nitci','p.telefonoproveedor','c.preventivo','c.numcompra','cat.codcatprogramatica','prog.nombreprograma')
-                        ->where('c.idcompra','=', $id)
-                        ->first();
+            ->join('proveedores as p', 'p.idproveedor', 'c.idproveedor')
+            ->join('catprogramatica as cat', 'cat.idcatprogramatica', 'c.idcatprogramatica')
+            ->join('programa as prog', 'prog.idprograma', 'c.idprograma')
+            ->join('areas as a', 'a.idarea', 'c.idarea')
+            ->select('c.idcompra', 'a.nombrearea', 'c.objeto', 'c.justificacion', 'c.preventivo', 'p.nombreproveedor', 'p.representante', 'p.cedula', 'p.nitci', 'p.telefonoproveedor', 'c.preventivo', 'c.numcompra', 'cat.codcatprogramatica', 'prog.nombreprograma')
+            ->where('c.idcompra', '=', $id)
+            ->first();
 
         $prodserv = DB::table('detallecompra as d')
-                        ->join('prodserv as ps', 'ps.idprodserv', 'd.idprodserv')
-                        ->join('compra as c', 'c.idcompra', 'd.idcompra')
-                        ->select('d.iddetallecompra', 'c.idcompra','ps.nombreprodserv','d.cantidad','d.subtotal','d.precio')
-                        ->where('d.idcompra', $id)->get();
+            ->join('prodserv as ps', 'ps.idprodserv', 'd.idprodserv')
+            ->join('compra as c', 'c.idcompra', 'd.idcompra')
+            ->select('d.iddetallecompra', 'c.idcompra', 'ps.nombreprodserv', 'd.cantidad', 'd.subtotal', 'd.precio')
+            ->where('d.idcompra', $id)->get();
 
         $subtotal = $prodserv->sum('subtotal');
 
-        return view('compras.detalleparcial.principal',['compras'=>$compras,'subtotal'=>$subtotal,'idcompra'=>$id]);
+        return view('compras.detalleparcial.principal', ['compras' => $compras, 'subtotal' => $subtotal, 'idcompra' => $id]);
     }
 
-    public function crearorden(Request $request){
+    public function crearorden(Request $request)
+    {
         $id = $request->idcompra;
         $ordencompra = DB::table('ordencompra as o')
-                            ->select('o.nombrecompra','o.solicitante','o.proveedor')
-                            -> where('o.compra_idcompra', $id)->first();
+            ->select('o.nombrecompra', 'o.solicitante', 'o.proveedor')
+            ->where('o.compra_idcompra', $id)->first();
         $resultado = $ordencompra;
 
-        $fecha_orden = substr($request->fechaOden,6,4) . '-' . substr($request->fechaOden,3,2) . '-' . substr($request->fechaOden,0,2);
-        $fecha_inicio = substr($request->fechainicio,6,4) . '-' . substr($request->fechainicio,3,2) . '-' . substr($request->fechainicio,0,2);
-        $fecha_conclusion = substr($request->fechaconclusion,6,4) . '-' . substr($request->fechaconclusion,3,2) . '-' . substr($request->fechaconclusion,0,2);
-        $fecha_invitacion = substr($request->fechainvitacion,6,4) . '-' . substr($request->fechainvitacion,3,2) . '-' . substr($request->fechainvitacion,0,2);
-        $fecha_aceptacion = substr($request->fechaaceptacion,6,4) . '-' . substr($request->fechaaceptacion,3,2) . '-' . substr($request->fechaaceptacion,0,2);
-        $fecha_iniciosoli = substr($request->fechainiciosoli,6,4) . '-' . substr($request->fechainiciosoli,3,2) . '-' . substr($request->fechainiciosoli,0,2);
-        if(is_null($resultado)){
+        $fecha_orden = substr($request->fechaOden, 6, 4) . '-' . substr($request->fechaOden, 3, 2) . '-' . substr($request->fechaOden, 0, 2);
+        $fecha_inicio = substr($request->fechainicio, 6, 4) . '-' . substr($request->fechainicio, 3, 2) . '-' . substr($request->fechainicio, 0, 2);
+        $fecha_conclusion = substr($request->fechaconclusion, 6, 4) . '-' . substr($request->fechaconclusion, 3, 2) . '-' . substr($request->fechaconclusion, 0, 2);
+        $fecha_invitacion = substr($request->fechainvitacion, 6, 4) . '-' . substr($request->fechainvitacion, 3, 2) . '-' . substr($request->fechainvitacion, 0, 2);
+        $fecha_aceptacion = substr($request->fechaaceptacion, 6, 4) . '-' . substr($request->fechaaceptacion, 3, 2) . '-' . substr($request->fechaaceptacion, 0, 2);
+        $fecha_iniciosoli = substr($request->fechainiciosoli, 6, 4) . '-' . substr($request->fechainiciosoli, 3, 2) . '-' . substr($request->fechainiciosoli, 0, 2);
+        if (is_null($resultado)) {
             $ordencompra = new OrdenCompraModel();
             $ordencompra->numinforme = $request->input('informe');
             $ordencompra->fechaorden = $fecha_orden;
@@ -487,35 +619,36 @@ class DetalleCompraController2 extends Controller
         }
 
         $ordencompra = DB::table('ordencompra as o')
-                            ->select('o.nombrecompra','o.solicitante','o.proveedor','o.fechaorden')
-                            ->where('o.compra_idcompra',$id)->get();
+            ->select('o.nombrecompra', 'o.solicitante', 'o.proveedor', 'o.fechaorden')
+            ->where('o.compra_idcompra', $id)->get();
 
-        $ordendoc= DB::table('ordencompra as o')
-                        ->join('ordendoc as od', 'od.idorden','o.idorden')
-                        ->join('docorden as doc', 'doc.iddoc','od.iddoc')
-                        ->select('doc.nombredoc')
-                        ->where('o.compra_idcompra',$id)->get();
+        $ordendoc = DB::table('ordencompra as o')
+            ->join('ordendoc as od', 'od.idorden', 'o.idorden')
+            ->join('docorden as doc', 'doc.iddoc', 'od.iddoc')
+            ->select('doc.nombredoc')
+            ->where('o.compra_idcompra', $id)->get();
 
-        $docorden= DB::table('docorden as doc')
-                        ->select('doc.nombredoc','doc.iddoc')
-                        -> where('doc.estadodoc',1)->get();
+        $docorden = DB::table('docorden as doc')
+            ->select('doc.nombredoc', 'doc.iddoc')
+            ->where('doc.estadodoc', 1)->get();
 
-        return view('compras.detalleparcial.principalorden', compact('ordencompra','id','ordendoc','docorden'));
+        return view('compras.detalleparcial.principalorden', compact('ordencompra', 'id', 'ordendoc', 'docorden'));
     }
 
-    public function crearOrdendoc(Request $request){
+    public function crearOrdendoc(Request $request)
+    {
         $id = $request->idcompra;
         $ordencompra = DB::table('ordencompra as o')
-                            ->select('o.nombrecompra','o.solicitante','o.proveedor','o.fechaorden')
-                            -> where('o.compra_idcompra','=', $id)->get();
+            ->select('o.nombrecompra', 'o.solicitante', 'o.proveedor', 'o.fechaorden')
+            ->where('o.compra_idcompra', '=', $id)->get();
 
-        $docorden= DB::table('docorden as doc')
-                        ->select('doc.nombredoc','doc.iddoc')
-                        ->where('doc.estadodoc','=', 1)->get();
+        $docorden = DB::table('docorden as doc')
+            ->select('doc.nombredoc', 'doc.iddoc')
+            ->where('doc.estadodoc', '=', 1)->get();
 
         $ordencompra2 = DB::table('ordencompra as o')
-                            ->select('o.idorden','o.nombrecompra','o.solicitante','o.proveedor','o.fechaorden')
-                            -> where('o.compra_idcompra','=', $id)->first();
+            ->select('o.idorden', 'o.nombrecompra', 'o.solicitante', 'o.proveedor', 'o.fechaorden')
+            ->where('o.compra_idcompra', '=', $id)->first();
 
         $idordencompra = $ordencompra2->idorden;
         $ordendoccreate = new OrdenDocModel;
@@ -523,65 +656,72 @@ class DetalleCompraController2 extends Controller
         $ordendoccreate->idorden = $idordencompra;
         $ordendoccreate->save();
 
-        $ordendoc= DB::table('ordencompra as o')
-                        ->join('ordendoc as od', 'od.idorden', '=', 'o.idorden')
-                        ->join('docorden as doc', 'doc.iddoc', '=', 'od.iddoc')
-                        ->select('doc.nombredoc')
-                        ->where('o.compra_idcompra','=', $id)->get();
+        $ordendoc = DB::table('ordencompra as o')
+            ->join('ordendoc as od', 'od.idorden', '=', 'o.idorden')
+            ->join('docorden as doc', 'doc.iddoc', '=', 'od.iddoc')
+            ->select('doc.nombredoc')
+            ->where('o.compra_idcompra', '=', $id)->get();
 
         return back();
     }
 
-    public function crearOrdendocxx($id){
+    public function crearOrdendocxx($id)
+    {
         $ordencompra = DB::table('ordencompra as o')
-                            ->select('o.nombrecompra','o.solicitante','o.proveedor','o.fechaorden')
-                            -> where('o.compra_idcompra','=', $id)->get();
+            ->select('o.nombrecompra', 'o.solicitante', 'o.proveedor', 'o.fechaorden')
+            ->where('o.compra_idcompra', '=', $id)->get();
 
         $ordencompra2 = DB::table('ordencompra as o')
-                            ->select('o.idorden','o.nombrecompra','o.solicitante','o.proveedor','o.fechaorden')
-                            -> where('o.compra_idcompra','=', $id)->first();
+            ->select('o.idorden', 'o.nombrecompra', 'o.solicitante', 'o.proveedor', 'o.fechaorden')
+            ->where('o.compra_idcompra', '=', $id)->first();
 
         $idordencompra = $ordencompra2->idorden;
-        $ordendoc= DB::table('ordencompra as o')
-                        ->join('ordendoc as od', 'od.idorden', '=', 'o.idorden')
-                        ->join('docorden as doc', 'doc.iddoc', '=', 'od.iddoc')
-                        ->select('od.idordendoc','doc.nombredoc')
-                        ->where('o.compra_idcompra','=', $id)->get();
+        $ordendoc = DB::table('ordencompra as o')
+            ->join('ordendoc as od', 'od.idorden', '=', 'o.idorden')
+            ->join('docorden as doc', 'doc.iddoc', '=', 'od.iddoc')
+            ->select('od.idordendoc', 'doc.nombredoc')
+            ->where('o.compra_idcompra', '=', $id)->get();
 
-        $docorden= DB::table('docorden as doc')
-                        ->select('doc.nombredoc','doc.iddoc')
-                        -> where('doc.estadodoc','=', 1)->get();
+        $docorden = DB::table('docorden as doc')
+            ->select('doc.nombredoc', 'doc.iddoc')
+            ->where('doc.estadodoc', '=', 1)->get();
 
-        return view('compras/detalleparcial/principalorden', compact('ordencompra','id','ordendoc','docorden','idordencompra'));
+        return view('compras/detalleparcial/principalorden', compact('ordencompra', 'id', 'ordendoc', 'docorden', 'idordencompra'));
     }
 
-    public function edit($id){
+    public function edit($id)
+    {
         //edit
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         //update
     }
 
-    public function create(){
-       //create
+    public function create()
+    {
+        //create
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         $detalle = DetalleCompraModel::find($id);
         $detalle->delete();
 
         return redirect('compras/detalleparcial');
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         $detalle = DetalleCompraModel::find($id);
         $detalle->delete();
 
         return redirect()->route('compras.detalleparcial.index');
     }
 
-    public function destroyed2($id){
+    public function destroyed2($id)
+    {
         $ordendoc = OrdenDocModel::find($id);
         $ordendoc->delete();
 

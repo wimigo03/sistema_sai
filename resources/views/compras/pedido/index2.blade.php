@@ -37,6 +37,7 @@
                                     <td class="text-justify p-1"><b>NRO.COMPRA</b></td>
                                     <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
                                     <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
+                                    <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -74,6 +75,10 @@ $(function() {
             {data: 'btn', name: 'btn', orderable: false, searchable: false },
 
             {data: 'btn2', name: 'btn2', orderable: false, searchable: false },
+
+            {data: 'btn3', name: 'btn3', orderable: false, searchable: false },
+
+
 
         ],
 

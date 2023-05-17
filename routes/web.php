@@ -65,6 +65,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
     Route::get('compras/pedido/edit/{id}', 'CompraController@edit')->name('compras.pedido.edit');
     Route::get('compras/pedido/editar/{id}', 'CompraController@editar')->name('compras.pedido.editar');
     Route::post('compras/pedido/update', 'CompraController@update')->name('compras.pedido.update');
+    Route::get('compras/enviar/{id}', 'CompraController@enviar')->name('compras.pedido.enviar');
 
     /////////////////////////--COMPRAS PEDIDO PARCIAL--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     Route::get('compras/pedidoparcial/index', 'CompraController2@index')->name('compras.pedidoparcial.index');
@@ -259,11 +260,59 @@ Route::POST('archivos2/{id}/update', 'ArchivosController2@update')->name('archiv
 /////////////////////////--ALMACEN--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Route::get('almacen/index', 'AlmacenController@index')->name('almacen.index');
+Route::get('almacen/detalle/{id}','AlmacenController@detalle')->name('almacen.detalle');
 //Route::get('compras/pedido/index2', 'CompraController@index2')->name('compras.pedido.index2');
 //oute::get('compras/pedido/create', 'CompraController@create')->name('compras.pedido.create');
 //Route::post('compras/pedido/store', 'CompraController@store')->name('compras.pedido.store');
-//Route::get('compras/pedido/edit/{id}', 'CompraController@edit')->name('compras.pedido.edit');
+Route::get('almacen/temporal/{id}','AlmacenController@temporal')->name('almacen.temporal');
 //Route::get('compras/pedido/editar/{id}', 'CompraController@editar')->name('compras.pedido.editar');
 //Route::post('compras/pedido/update', 'CompraController@update')->name('compras.pedido.update');
+
+/////////////////////////--CORRESPONDENCIA--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Route::get('correspondencia/index', 'RecepcionController@index')->name('recepcion.index');
+Route::get('correspondencia/createRecepcion', 'RecepcionController@create')->name('recepcion.create');
+Route::get('correspondencia/indexUnidad', 'RecepcionController@indexUnidad')->name('recepcion.unidadIndex');
+Route::get('correspondencia/indexRemitente', 'RecepcionController@indexRemitente')->name('recepcion.remitenteIndex');
+Route::get('correspondencia/createUnidad', 'RecepcionController@createLugar')->name('crear.lugar');
+Route::post('correspondencia/storeLugar', 'RecepcionController@storeLugar')->name('guardar.lugar');
+Route::get('correspondencia/createRemitente', 'RecepcionController@createRemitente')->name('crear.remitente');
+Route::post('correspondencia/storeRemitente', 'RecepcionController@storeRemitente')->name('guardar.remitente');
+Route::get('correspondencia/createRecepcion', 'RecepcionController@createRecepcion')->name('crear.recepcion');
+Route::post('correspondencia/storeRecepcion', 'RecepcionController@storeRecepcion')->name('guardar.recepcion');
+Route::get('correspondencia/{id}/edit', 'RecepcionController@editarCodigo')->name('correspondencia.edit');
+Route::POST('correspondencia/{id}/updateCodigo', 'RecepcionController@updateCodigo')->name('correspondencia.update');
+
+////////////////////////////--AGENDA--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Route::get('agenda/index', 'AgendaController@index')->name('agenda.index');
+Route::get('archivos2/createArchivo', 'ArchivosController@createArchivo')->name('agenda.create');
+Route::get('agenda/create', 'AgendaController@create')->name('agenda.create');
+Route::POST('agenda/insertar', 'AgendaController@insertar')->name('agenda.insertar');
+
+Route::get('agenda/{id}/edit', 'AgendaController@editar')->name('agenda.edit');
+Route::POST('agenda/{id}/update', 'AgendaController@update')->name('agenda.update');
+
+Route::get('agenda/{id}/edit2', 'AgendaController@editar2')->name('agenda.edit2');
+Route::POST('agenda/{id}/update2', 'AgendaController@update2')->name('agenda.update2');
+
+Route::get('agenda/indexayer', 'AgendaController@indexayer')->name('agenda.indexayer');
+Route::get('agenda/indexhoy', 'AgendaController@indexhoy')->name('agenda.indexhoy');
+Route::get('agenda/indexmaniana', 'AgendaController@indexmaniana')->name('agenda.indexmaniana');
+Route::get('agenda/delete/{id}', 'AgendaController@delete')->name('agenda.delete');
+Route::get('agenda/indextotal', 'AgendaController@indextotal')->name('agenda.indextotal');
+
+////evento////
+Route::get('Calendar/event','ControllerCalendar@index');
+Route::get('Calendar/event/{mes}','ControllerCalendar@index_month');
+
+// formulario
+Route::get('Evento/form','ControllerEvent@form');
+Route::post('Evento/create','ControllerEvent@create');
+// Detalles de evento
+Route::get('Evento/details/{id}','ControllerEvent@details');
+// Calendario
+Route::get('Evento/index','ControllerEvent@index');
+Route::get('Evento/index/{month}','ControllerEvent@index_month');
 
 });
