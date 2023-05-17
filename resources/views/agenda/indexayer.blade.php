@@ -1,27 +1,20 @@
 @extends('layouts.admin')
 @section('content')
-@include('layouts.message_alert')
-@if(Session::has('message'))
-    <div class="alert alert-success">
-        <em> {!! session('message') !!}</em>
-    </div>
-@endif
 
 
     <br>
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
-            <b style='color:rgb(39, 6, 185)'>-- AGENDA DEL EJECUTIVO --</b><b></b>
+            <b style='color:rgb(39, 6, 185)'>-- EVENTOS DE AYER--</b><b></b>
         </div>
         <div class="col-md-4 text-right titulo">
-            @can('agenda_create')
-                <a href="{{ route('agenda.create') }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar Evento">
-                    <button class="btn btn-sm btn-primary font-verdana" type="button">Nuevo Evento.
-                        &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
-                    </button>
+            <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
+                <a href="{{ url('/agenda/indexhoy') }}">
+                    <span class="color-icon-1">
+                        &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
+                    </span>
                 </a>
-            @endcan
-
+            </span>
 
         </div>
         <div class="col-md-12">
@@ -40,15 +33,7 @@
                             <td class="text-justify p-1"><b>HORA FIN</b></td>
                             <td class="text-justify p-1"><b>EVENTO</b></td>
                             <td class="text-justify p-1"><b>DETALLE</b></td>
-                            <td class="text-center p-1 font-weight-bold">
-                                <i class="fa fa-bars" aria-hidden="true"></i>
-                            </td>
-                            <td class="text-center p-1 font-weight-bold">
-                                <i class="fa fa-bars" aria-hidden="true"></i>
-                            </td>
-                            <td class="text-center p-1 font-weight-bold">
-                                <i class="fa fa-bars" aria-hidden="true"></i>
-                            </td>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -68,7 +53,7 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ajax: "{{ route('agenda.index') }}",
+                ajax: "{{ route('agenda.indexayer') }}",
                 columns: [{
                         data: 'DT_RowIndex',
                         orderable: false,
@@ -102,12 +87,9 @@
                         data: 'descripcion',
                         name: 'ag.descripcion',
                         class: 'text-justify p-1 font-verdana'
-                    },
+                    }
 
 
-                    {data: 'btn', name: 'btn', orderable: false, searchable: false },
-                    {data: 'btn2', name: 'btn2', orderable: false, searchable: false },
-                    {data: 'btn3', name: 'btn3', orderable: false, searchable: false }
 
 
 

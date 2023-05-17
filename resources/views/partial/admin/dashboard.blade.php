@@ -18,6 +18,28 @@
             <div class="sidebar left">
                 <ul class="list-sidebar bg-defoult">
 
+
+                                        {{-- EVENTO --}}
+                                        @canany(['agenda_access'])
+                                        <li class="font-verdana-bg">
+                                            <a href="" data-toggle="collapse" data-target="#dashboard_agenda"
+                                                class="active collapsed" aria-expanded="false">
+                                                <i class="fa-sharp fa-solid fa-calendar fa-beat"></i>
+                                                <span class="nav-label mr-3">Agenda</span>
+                                                <span class="fa fa-chevron-left float-right"></span>
+                                            </a>
+                                            <ul class="sub-menu collapse" id="dashboard_agenda">
+                                                @can('agenda_access')
+                                                    <li>
+                                                        <a href="{{ asset('/Calendar/event/') }}">Calendario</a>
+                                                    </li>
+                                                @endcan
+
+
+                                            </ul>
+                                        </li>
+                                    @endcanany
+
                     {{-- AGENDA --}}
                     @canany(['agenda_access'])
                         <li class="font-verdana-bg">
@@ -32,7 +54,16 @@
                                     <li>
                                         <a href="{{ route('agenda.index') }}">
                                             &nbsp; <i class="fa fa-file-pdf"></i>
-                                            <span class="nav-label mr-4">Ingresar</span>
+                                            <span class="nav-label mr-4">Administrar</span>
+                                        </a>
+                                    </li>
+                                @endcan
+
+                                 @can('agenda_access_ejecutivo')
+                                    <li>
+                                        <a href="{{ route('agenda.indexhoy') }}">
+                                            &nbsp; <i class="fa fa-file-pdf"></i>
+                                            <span class="nav-label mr-4">Eventos</span>
                                         </a>
                                     </li>
                                 @endcan

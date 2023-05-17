@@ -1,13 +1,6 @@
 @extends('layouts.admin')
 
 @section('content')
-@include('layouts.message_alert')
-@if(Session::has('message'))
-    <div class="alert alert-success">
-        <em> {!! session('message') !!}</em>
-    </div>
-@endif
-<br>
     <div class="row justify-content-center">
         <div class="col-md-10">
 
@@ -25,7 +18,7 @@
                 </div>
 
                 <div class="col-md-8 text-right titulo">
-                    <b>CARGAR AGENDA</b>
+                    <b>EDITAR AGENDA</b>
                 </div>
 
                 <div class="col-md-12">
@@ -36,9 +29,9 @@
 
             <div class="body-border">
                 <font size="2" face="Courier New">
-                    <form method="POST" action="{{ route('agenda.insertar') }}" enctype="multipart/form-data"
-                        id="form">
+                    <form method="POST" action="{{ route('agenda.update', $agenda->idagenda) }}" enctype="multipart/form-data">
                         @csrf
+
 
                         <div class="form-group row">
                             <label for="nombre" style="color:black;font-weight: bold;"
@@ -46,9 +39,9 @@
 
                             <div class="col-md-3">
 
-                                <input type="text" name="fecha" placeholder="dd/mm/aaaa"
+                                <input type="text" name="fecha" placeholder="aaaa/mm/dd"
                                     class="form-control form-control-sm font-verdana-bg" id="fecha" data-language="es"
-                                    autocomplete="off">
+                                    autocomplete="off"  value="{{ $date2}}">
                             </div>
                         </div>
 
@@ -57,7 +50,7 @@
                             <label for="nombre" style="color:black;font-weight: bold;"
                                 class="required col-md-4 col-form-label text-md-right">Hora Inicio:</label>
                             <div class="col-md-2">
-                                <input type="time" name="horaini"  class="form-control form-control-sm font-verdana-bg" id="horaini" >
+                                <input type="time" name="horaini" value="{{ $agenda->hora1}}"  class="form-control form-control-sm font-verdana-bg" id="horaini" >
                             </div>
                         </div>
 
@@ -65,7 +58,7 @@
                             <label for="nombre" style="color:black;font-weight: bold;"
                                 class="required col-md-4 col-form-label text-md-right">Hora Final:</label>
                             <div class="col-md-2">
-                                <input type="time" name="horafin"  class="form-control form-control-sm font-verdana-bg" id="horafin">
+                                <input type="time" name="horafin" value="{{ $agenda->hora2}}" class="form-control form-control-sm font-verdana-bg" id="horafin">
                             </div>
                         </div>
 
@@ -77,7 +70,7 @@
 
                             <div class="col-md-7">
                                 <textarea type="text" name="evento" class="form-control" placeholder="Evento..." required id="evento"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();" cols="50" rows="3"></textarea>
+                                    onkeyup="javascript:this.value=this.value.toUpperCase();" cols="50" rows="3">{{$agenda->evento}}</textarea>
                             </div>
                         </div>
 
@@ -90,27 +83,19 @@
 
                             <div class="col-md-7">
                                 <textarea type="text" name="descripcion" class="form-control" placeholder="Detalles..." required id="descripcion"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();" cols="50" rows="5"></textarea>
+                                    onkeyup="javascript:this.value=this.value.toUpperCase();" cols="50" rows="5">{{$agenda->descripcion}}</textarea>
                             </div>
                         </div>
 
 
                         <div align='center'>
 
-
-                            <button class="btn btn-success font-verdana-bg" type="button" id="cancelar">
-                                Cancelar
-                            </button>
-
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-
-                            <button class="btn color-icon-2 font-verdana-bg" type="button" id="insertar_item_material">
+                            <button class="btn color-icon-2 font-verdana-bg" type="submit">
                                 <i class="fa-solid fa-paper-plane"></i>
+
+                                &nbsp;
                                 Guardar
                             </button>
-
-                            <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send"
-                                style="display: none;"></i>
 
                         </div>
                     </form>
@@ -125,67 +110,16 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-
             $('.select2').select2({
                 placeholder: "--Seleccionar--"
             });
         });
-
-        $("#insertar_item_material").click(function() {
-            if (validar_detalle_material() == true) {
-
-                $(".btn").hide();
-                $(".spinner-btn-send").show();
-                $("#form").submit();
-            }
-        });
-
-
-        $("#cancelar").click(function() {
-
-            $(".btn").hide();
-            $(".spinner-btn-send").show();
-            window.location.href = "{{ url('agenda/index') }}";
-
-        });
-
-
-
-        function validar_detalle_material() {
-
-
-
-            if ($("#fecha").val() == "") {
-                alert('---EL CAMPO FECHA ES OBLIGATORIO---');
-                return false;
-            }
-            if ($("#horaini").val() == "") {
-                alert('---EL CAMPO HORA INICIO ES OBLIGATORIO---');
-                return false;
-            }
-            if ($("#horafin").val() == "") {
-                alert('---EL CAMPO HORA FIN ES OBLIGATORIO---');
-                return false;
-            }
-
-
-
-            if ($("#evento").val() == "") {
-                alert('---EL CAMPO EVENTO NO PUEDE ESTAR VACIO---');
-                return false;
-            }
-
-
-
-            return true;
-        };
 
         $("#fecha").datepicker({
             inline: false,
             dateFormat: "dd/mm/yyyy",
             autoClose: true
         });
-
 
     </script>
 @endsection

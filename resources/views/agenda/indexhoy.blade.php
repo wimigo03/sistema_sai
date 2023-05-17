@@ -1,29 +1,41 @@
 @extends('layouts.admin')
 @section('content')
-@include('layouts.message_alert')
-@if(Session::has('message'))
-    <div class="alert alert-success">
-        <em> {!! session('message') !!}</em>
-    </div>
-@endif
 
 
     <br>
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
-            <b style='color:rgb(39, 6, 185)'>-- AGENDA DEL EJECUTIVO --</b><b></b>
+            <b style='color:rgb(39, 6, 185)'>EVENTOS DE HOY</b>
         </div>
-        <div class="col-md-4 text-right titulo">
-            @can('agenda_create')
-                <a href="{{ route('agenda.create') }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar Evento">
-                    <button class="btn btn-sm btn-primary font-verdana" type="button">Nuevo Evento.
-                        &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
+
+        <div class="col-md-1 text-right titulo">
+            @can('agenda_access_ejecutivo')
+                <a href="{{ route('agenda.indexayer') }}" class="tts:left tts-slideIn tts-custom" aria-label="Eventos de ayer">
+                    <button class="btn btn-sm btn-danger font-verdana" type="button">Ayer
                     </button>
                 </a>
             @endcan
 
 
         </div>
+        <div class="col-md-1 text-right titulo">
+            @can('agenda_access_ejecutivo')
+                <a href="{{ route('agenda.indexmaniana') }}" class="tts:left tts-slideIn tts-custom" aria-label="Eventos de mañana">
+                    <button class="btn btn-sm btn-success font-verdana" type="button">mañana
+                    </button>
+                </a>
+            @endcan
+
+        </div>
+        <div class="col-md-1 text-right titulo">
+            @can('agenda_access_ejecutivo')
+                <a href="{{ route('agenda.indextotal') }}" class="tts:left tts-slideIn tts-custom" aria-label="Ver todos">
+                    <button class="btn btn-sm btn-info font-verdana" type="button">Todos
+                    </button>
+                </a>
+            @endcan
+        </div>
+
         <div class="col-md-12">
             <hr class="hrr">
         </div>
@@ -40,15 +52,7 @@
                             <td class="text-justify p-1"><b>HORA FIN</b></td>
                             <td class="text-justify p-1"><b>EVENTO</b></td>
                             <td class="text-justify p-1"><b>DETALLE</b></td>
-                            <td class="text-center p-1 font-weight-bold">
-                                <i class="fa fa-bars" aria-hidden="true"></i>
-                            </td>
-                            <td class="text-center p-1 font-weight-bold">
-                                <i class="fa fa-bars" aria-hidden="true"></i>
-                            </td>
-                            <td class="text-center p-1 font-weight-bold">
-                                <i class="fa fa-bars" aria-hidden="true"></i>
-                            </td>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -68,7 +72,7 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ajax: "{{ route('agenda.index') }}",
+                ajax: "{{ route('agenda.indexhoy') }}",
                 columns: [{
                         data: 'DT_RowIndex',
                         orderable: false,
@@ -102,13 +106,7 @@
                         data: 'descripcion',
                         name: 'ag.descripcion',
                         class: 'text-justify p-1 font-verdana'
-                    },
-
-
-                    {data: 'btn', name: 'btn', orderable: false, searchable: false },
-                    {data: 'btn2', name: 'btn2', orderable: false, searchable: false },
-                    {data: 'btn3', name: 'btn3', orderable: false, searchable: false }
-
+                    }
 
 
                 ],

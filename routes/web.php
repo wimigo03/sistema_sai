@@ -293,5 +293,26 @@ Route::POST('agenda/insertar', 'AgendaController@insertar')->name('agenda.insert
 Route::get('agenda/{id}/edit', 'AgendaController@editar')->name('agenda.edit');
 Route::POST('agenda/{id}/update', 'AgendaController@update')->name('agenda.update');
 
+Route::get('agenda/{id}/edit2', 'AgendaController@editar2')->name('agenda.edit2');
+Route::POST('agenda/{id}/update2', 'AgendaController@update2')->name('agenda.update2');
+
+Route::get('agenda/indexayer', 'AgendaController@indexayer')->name('agenda.indexayer');
+Route::get('agenda/indexhoy', 'AgendaController@indexhoy')->name('agenda.indexhoy');
+Route::get('agenda/indexmaniana', 'AgendaController@indexmaniana')->name('agenda.indexmaniana');
+Route::get('agenda/delete/{id}', 'AgendaController@delete')->name('agenda.delete');
+Route::get('agenda/indextotal', 'AgendaController@indextotal')->name('agenda.indextotal');
+
+////evento////
+Route::get('Calendar/event','ControllerCalendar@index');
+Route::get('Calendar/event/{mes}','ControllerCalendar@index_month');
+
+// formulario
+Route::get('Evento/form','ControllerEvent@form');
+Route::post('Evento/create','ControllerEvent@create');
+// Detalles de evento
+Route::get('Evento/details/{id}','ControllerEvent@details');
+// Calendario
+Route::get('Evento/index','ControllerEvent@index');
+Route::get('Evento/index/{month}','ControllerEvent@index_month');
 
 });

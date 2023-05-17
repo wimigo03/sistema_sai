@@ -29,35 +29,44 @@
 
             <div class="body-border">
                 <font size="2" face="Courier New">
-                    <form method="POST" action="{{ route('agenda.update', $agenda->idagenda) }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('agenda.update2', $agenda->idagenda) }}" enctype="multipart/form-data">
                         @csrf
 
 
+                        <div class="form-group row">
+                            <label for="nombre" style="color:black;font-weight: bold;"
+                                class="required col-md-4 col-form-label text-md-right">Dia:</label>
 
+                            <div class="col-md-3">
+
+                                <input type="text" name="fecha" placeholder="aaaa/mm/dd"
+                                    class="form-control form-control-sm font-verdana-bg" id="fecha" data-language="es"
+                                    autocomplete="off"  value="{{ $date2}}">
+                            </div>
+                        </div>
 
 
                         <div class="form-group row">
                             <label for="nombre" style="color:black;font-weight: bold;"
-                                class="required col-md-4 col-form-label text-md-right">Evento:</label>
+                                class="required col-md-4 col-form-label text-md-right">Hora Inicio:</label>
+                            <div class="col-md-2">
+                                <input type="time" name="horaini" value="{{ $agenda->hora1}}"  class="form-control form-control-sm font-verdana-bg" id="horaini" >
+                            </div>
+                        </div>
 
-                            <div class="col-md-7">
-                                <textarea type="text" name="evento" class="form-control" placeholder="Evento..." required id="evento"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();" cols="50" rows="3">{{$agenda->evento}}</textarea>
+                        <div class="form-group row">
+                            <label for="nombre" style="color:black;font-weight: bold;"
+                                class="required col-md-4 col-form-label text-md-right">Hora Final:</label>
+                            <div class="col-md-2">
+                                <input type="time" name="horafin" value="{{ $agenda->hora2}}" class="form-control form-control-sm font-verdana-bg" id="horafin">
                             </div>
                         </div>
 
 
 
 
-                        <div class="form-group row">
-                            <label for="nombre" style="color:black;font-weight: bold;"
-                                class="required col-md-4 col-form-label text-md-right">Detalles:</label>
 
-                            <div class="col-md-7">
-                                <textarea type="text" name="descripcion" class="form-control" placeholder="Detalles..." required id="descripcion"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();" cols="50" rows="5">{{$agenda->descripcion}}</textarea>
-                            </div>
-                        </div>
+
 
 
                         <div align='center'>
