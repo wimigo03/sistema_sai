@@ -22,7 +22,7 @@
 
                             <div class="col-md-2 ">
                                 <input required type="text" name="nombres" class="form-control"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();"></input>
+                                onchange="javascript:this.value=this.value.toUpperCase();"></input>
                             </div>
 
 
@@ -31,7 +31,7 @@
                                 style="color:black;font-weight: bold;">Ap.Paterno:</span>
                             <div class="col-md-2 ">
                                 <input required type="text" name="ap_pat" class="form-control "
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();"></input>
+                                onchange="javascript:this.value=this.value.toUpperCase();"></input>
                             </div>
 
 
@@ -39,7 +39,7 @@
                                 style="color:black;font-weight: bold;">Ap.Materno:</span>
                             <div class="col-md-2 ">
                                 <input required type="text" name="ap_mat" class="form-control"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();"></input>
+                                onchange="javascript:this.value=this.value.toUpperCase();"></input>
                             </div>
 
 
@@ -137,7 +137,7 @@
 
                             <div class="col-md-2">
                                 <input type="text" name="cvitae" class="form-control"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                onchange="javascript:this.value=this.value.toUpperCase();">
 
                             </div>
 
@@ -173,7 +173,7 @@
 
                             <div class="col-md-2">
                                 <input type="text" name="gradacademico" class="form-control"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                onchange="javascript:this.value=this.value.toUpperCase();">
 
                             </div>
 
@@ -252,7 +252,7 @@
 
                             <div class="col-md-2">
                                 <input type="text" name="idioma" class="form-control"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                onchange="javascript:this.value=this.value.toUpperCase();">
 
                             </div>
 
@@ -279,7 +279,7 @@
                                 style="color:black;font-weight: bold;">Sigep:</span>
 
                             <div class="col-md-2">
-                                
+
 
                                 <select name="sigep" class="form-control">
 
@@ -304,7 +304,7 @@
                         </div>
 
 
-                       
+
 
 
 

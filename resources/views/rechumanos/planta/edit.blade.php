@@ -9,11 +9,11 @@
 
             <div class="row">
 
-               
+
                 <a href="{{url()->previous()}}" class="btn blue darken-4 text-black "><i
                         style="color:#55CE63;font-weight: bold;" class="fa fa-plus-square"></i> Volver atras</a>
 
-                     
+
             </div>
 
             <div class="card-body">
@@ -31,7 +31,7 @@
 
                             <div class="col-md-2 ">
                                 <input required type="text" name="nombres" class="form-control"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();"
+                                onchange="javascript:this.value=this.value.toUpperCase();"
                                     value="{{$empleados->nombres}}"></input>
                             </div>
 
@@ -41,7 +41,7 @@
                                 style="color:#0186C2;font-weight: bold;">Ap.Paterno:</span>
                             <div class="col-md-2 ">
                                 <input required type="text" name="ap_pat" class="form-control "
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();"
+                                onchange="javascript:this.value=this.value.toUpperCase();"
                                     value="{{$empleados->ap_pat}}"></input>
                             </div>
 
@@ -50,7 +50,7 @@
                                 style="color:#0186C2;font-weight: bold;">Ap.Materno:</span>
                             <div class="col-md-2 ">
                                 <input required type="text" name="ap_mat" class="form-control"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();"
+                                onchange="javascript:this.value=this.value.toUpperCase();"
                                     value="{{$empleados->ap_mat}}"></input>
                             </div>
 

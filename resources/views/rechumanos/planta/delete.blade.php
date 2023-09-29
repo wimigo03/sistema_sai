@@ -36,7 +36,7 @@
                             style="color:red;font-weight: bold;">Motivo:</span>
                         <div class="col-md-2 ">
                             <input required type="text" name="motivo" class="form-control "
-                                onkeyup="javascript:this.value=this.value.toUpperCase();"
+                            onchange="javascript:this.value=this.value.toUpperCase();"
                               ></input>
                         </div>
 
@@ -52,7 +52,7 @@
 
                         <div class="col-md-2 ">
                             <input required type="text" name="nombres" class="form-control"
-                                onkeyup="javascript:this.value=this.value.toUpperCase();"
+                            onchange="javascript:this.value=this.value.toUpperCase();"
                                 value="{{$empleados->nombres}}"></input>
                         </div>
 
@@ -62,7 +62,7 @@
                             style="color:#0186C2;font-weight: bold;">Ap.Paterno:</span>
                         <div class="col-md-2 ">
                             <input required type="text" name="ap_pat" class="form-control "
-                                onkeyup="javascript:this.value=this.value.toUpperCase();"
+                            onchange="javascript:this.value=this.value.toUpperCase();"
                                 value="{{$empleados->ap_pat}}"></input>
                         </div>
 
@@ -71,7 +71,7 @@
                             style="color:#0186C2;font-weight: bold;">Ap.Materno:</span>
                         <div class="col-md-2 ">
                             <input required type="text" name="ap_mat" class="form-control"
-                                onkeyup="javascript:this.value=this.value.toUpperCase();"
+                            onchange="javascript:this.value=this.value.toUpperCase();"
                                 value="{{$empleados->ap_mat}}"></input>
                         </div>
 
@@ -337,7 +337,7 @@
 
                         <div class="col-md-2">
                             <input type="text" name="gradacademico" class="form-control"
-                            onkeyup="javascript:this.value=this.value.toUpperCase();"
+                            onchange="javascript:this.value=this.value.toUpperCase();"
                                 value="{{$empleados->gradacademico}}">
 
                         </div>

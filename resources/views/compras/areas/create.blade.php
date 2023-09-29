@@ -24,7 +24,7 @@
                         <label for="nombre" class="d-inline">
                             <b>Nombre</b>
                         </label>
-                        <input type="text" name="nombre" class="form-control form-control-sm font-verdana-bg" onkeyup="javascript:this.value=this.value.toUpperCase();" required>
+                        <input type="text" name="nombre" class="form-control form-control-sm font-verdana-bg" onchange="javascript:this.value=this.value.toUpperCase();" required>
                     </div>
                     <div class="col-md-8">
                         <label for="idnivel" class="d-inline">
@@ -49,10 +49,10 @@
                 </div>
             </form>
         </div>
-       
+
     {{--</div>
 </div>--}}
-              
+
 @endsection
 @section('scripts')
 <script>

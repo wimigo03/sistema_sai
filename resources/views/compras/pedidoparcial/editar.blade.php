@@ -32,13 +32,13 @@
                 <label for="objeto" class="d-inline font-verdana-bg">
                     <b>Objeto</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <textarea name="objeto" cols="1" rows="3" class="form-control form-control-sm font-verdana-bg" id="objeto" onkeyup="javascript:this.value=this.value.toUpperCase();">{{$compras->objeto}}</textarea>
+                <textarea name="objeto" cols="1" rows="3" class="form-control form-control-sm font-verdana-bg" id="objeto" onchange="javascript:this.value=this.value.toUpperCase();">{{$compras->objeto}}</textarea>
             </div>
             <div class="col-md-6">
                 <label for="justificacion" class="d-inline font-verdana-bg">
                     <b>Justificacion</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <textarea name="justificacion" cols="1" rows="10" class="form-control form-control-sm font-verdana-bg" id="justificacion" onkeyup="javascript:this.value=this.value.toUpperCase();">{{$compras->justificacion}}</textarea>
+                <textarea name="justificacion" cols="1" rows="10" class="form-control form-control-sm font-verdana-bg" id="justificacion" onchange="javascript:this.value=this.value.toUpperCase();">{{$compras->justificacion}}</textarea>
             </div>
             <div class="col-md-2">
                 <label for="controlinterno" class="d-inline font-verdana-bg">

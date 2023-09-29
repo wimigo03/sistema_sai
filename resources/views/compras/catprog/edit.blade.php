@@ -27,7 +27,7 @@
 
         </div>
 
-        
+
         <div class="body-border">
 
             <font size="2" face="Courier New" >
@@ -41,7 +41,7 @@
                         <div class="col-md-6">
                             <input type="text" required class="form-control" name="codigo" placeholder=""
                                 value="{{$catprogs->codcatprogramatica}}"
-                                onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                onchange="javascript:this.value=this.value.toUpperCase();">
                         </div>
                     </div>
 
@@ -51,24 +51,24 @@
                         <div class="col-md-6">
                             <input type="text" required class="form-control" name="nombre" placeholder=""
                                 value="{{$catprogs->nombrecatprogramatica}}"
-                                onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                onchange="javascript:this.value=this.value.toUpperCase();">
                         </div>
                     </div>
-                  
+
 
                     <div align='center'>
-                               
+
                         <button class="btn color-icon-2 font-verdana-bg" type="submit">
                             <i class="fa-solid fa-paper-plane"></i>
                             &nbsp;Actualizar
                         </button>
                     </div>
-                    
+
 
                 </form>
             </font>
      </div>
-    
+
 </div>
 
 @endsection

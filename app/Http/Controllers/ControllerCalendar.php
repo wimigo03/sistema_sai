@@ -18,7 +18,7 @@ class ControllerCalendar extends Controller
         $mespanish = $this->spanish_month($mes);
         $mes = $data['month'];
 
-        return view("index",[
+        return view("evento/index",[
           'data' => $data,
           'mes' => $mes,
           'mespanish' => $mespanish

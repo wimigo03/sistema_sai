@@ -37,7 +37,7 @@
 
                         <div class="col-md-6">
                             <input type="text" required name="nombre" class="form-control" placeholder="Nombre..."
-                                onkeyup="javascript:this.value=this.value.toUpperCase();">
+                            onchange="javascript:this.value=this.value.toUpperCase();">
                         </div>
                     </div>
 
@@ -48,7 +48,7 @@
                         <div class="col-md-6">
                             <input type="text" required name="representante" class="form-control"
                                 placeholder="representante..."
-                                onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                onchange="javascript:this.value=this.value.toUpperCase();">
                         </div>
                     </div>
 

@@ -47,17 +47,17 @@ class ActivosActual extends Model{
     public $timestamps = false;
 
     public function scopeByUnidad($query, $unidad){
-        if($unidad) 
+        if($unidad)
         return $query->where('unidad','LIKE','%'.strtoupper($unidad).'%');
     }
 
     public function scopeByCodigo($query, $codigo){
-        if($codigo) 
+        if($codigo)
         return $query->where('codigo','LIKE','%'.strtoupper($codigo).'%');
     }
 
     public function scopeByDescripcion($query, $descripcion){
-        if($descripcion) 
+        if($descripcion)
         return $query->where('descrip','LIKE','%'.strtoupper($descripcion).'%');
     }
 

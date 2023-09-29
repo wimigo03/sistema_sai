@@ -5,11 +5,11 @@
         background-color: #FFDA67;
         padding: 16px;
     }
-    
+
     .div-2 {
     	background-color: #ABBAEA;
     }
-    
+
     .div-3 {
     	background-color: #FBD603;
     }
@@ -21,11 +21,11 @@
 
             <div class="row">
 
-               
+
                 <a href="{{url()->previous()}}" class="btn blue darken-4 text-black "><i
                         style="color:#55CE63;font-weight: bold;" class="fa fa-plus-square"></i> Volver atras</a>
 
-                     
+
             </div>
 
             <div class="card-body div-1 ">
@@ -33,14 +33,14 @@
                     <form method="POST" >
                         @csrf
                         @method('POST')
-                  
+
 
                         <div class="form-group row">
                             <span class="input-group col-md-1" style="color:black;font-weight: bold;">ENTIDAD:</span>
 
                             <div class="col-md-1">
                                 <input required type="text" name="nombres" class="form-control"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();" 
+                                onchange="javascript:this.value=this.value.toUpperCase();"
                                     ></input>
                             </div>
 
@@ -50,7 +50,7 @@
                                 style="color:black;font-weight: bold;">DIR.ADMIN.:</span>
                             <div class="col-md-1">
                                 <input required type="text" name="ap_pat" class="form-control "
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();"
+                                onchange="javascript:this.value=this.value.toUpperCase();"
                                     ></input>
                             </div>
 
@@ -65,16 +65,16 @@
                          style="color:black;font-weight: bold;">N.ORDEN.:</span>
                         <div class="col-md-1">
                             <input required type="text" name="ap_mat" class="form-control"
-                                onkeyup="javascript:this.value=this.value.toUpperCase();"
+                            onchange="javascript:this.value=this.value.toUpperCase();"
                                 ></input>
                         </div>
 
-                        
+
                         <span class="input-group  col-md-1"
                          style="color:black;font-weight: bold;">N.PREV.:</span>
                         <div class="col-md-1">
                             <input required type="text" name="ap_mat" class="form-control"
-                                onkeyup="javascript:this.value=this.value.toUpperCase();"
+                            onchange="javascript:this.value=this.value.toUpperCase();"
                                 ></input>
                         </div>
 
@@ -89,7 +89,7 @@
                                 style="color:black;font-weight: bold;">CODIGO:</span>
                             <div class="col-md-1">
                                 <input required type="text" name="codigo" class="form-control"
-                                onkeyup="javascript:this.value=this.value.toUpperCase();"
+                                onchange="javascript:this.value=this.value.toUpperCase();"
                                 ></input>
                             </div>
 
@@ -98,7 +98,7 @@
 
                             <div class="col-md-2 ">
                                 <input required type="text" name="unidadsolicitante" class="form-control"
-                                onkeyup="javascript:this.value=this.value.toUpperCase();"
+                                onchange="javascript:this.value=this.value.toUpperCase();"
                                 ></input>
                             </div>
 
@@ -108,7 +108,7 @@
 
                             <div class="col-md-1">
                                 <input required type="text" name="ufv" class="form-control"
-                                onkeyup="javascript:this.value=this.value.toUpperCase();"
+                                onchange="javascript:this.value=this.value.toUpperCase();"
                                 ></input>
                             </div>
 
@@ -117,7 +117,7 @@
 
                             <div class="col-md-1">
                                 <input required type="text" name="ufv" class="form-control"
-                                onkeyup="javascript:this.value=this.value.toUpperCase();"
+                                onchange="javascript:this.value=this.value.toUpperCase();"
                                 ></input>
                             </div>
 
@@ -126,7 +126,7 @@
 
                         <div class="col-md-1">
                             <input required type="text" name="hojacirculacion" class="form-control"
-                            onkeyup="javascript:this.value=this.value.toUpperCase();"
+                            onchange="javascript:this.value=this.value.toUpperCase();"
                             ></input>
                         </div>
 
@@ -175,11 +175,11 @@
                             <span class="input-group col-md-1 " style="color:black;font-weight: bold;">DESCRIPCION:</span>
                             <div class="col-md-10">
                                 <input type="text" name="descripcion" class="form-control"
-                                onkeyup="javascript:this.value=this.value.toUpperCase();" >
+                                onchange="javascript:this.value=this.value.toUpperCase();" >
 
                            </div>
 
-                        
+
                         </div>
 
 
@@ -300,7 +300,7 @@
                                     ></input>
                             </div>
 
-                            
+
 
                         </div>
 
@@ -328,7 +328,7 @@
 
                             </div>
 
-                         
+
 
 
                         </div>
@@ -355,7 +355,7 @@
 
                             </div>
 
-                    
+
 
 
                         </div>
@@ -381,7 +381,7 @@
 
                             </div>
 
-                          
+
                         </div>
 
                         <div class="form-group row">
@@ -395,14 +395,14 @@
 
                             </div>
 
-                            
 
-                         
+
+
 
                         </div>
                         </br>
 
-                        
+
 
                         <div class="form-group row">
                             <span class="input-group col-md-1 "
@@ -543,7 +543,7 @@
                         </div>
 
 
-                        
+
 
 
 
@@ -554,7 +554,7 @@
                         <div class="box-footer" align="center">
                             <button type="submit" class="btn btn-info btn-sm">Guardar</button>
                         </div>
-    
+
                     </form>
                 </font>
 

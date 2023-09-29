@@ -256,6 +256,16 @@ Route::POST('archivos2/insertar', 'ArchivosController2@insertar')->name('archivo
 Route::get('archivos2/{id}/edit', 'ArchivosController2@editar')->name('archivos2.edit');
 Route::POST('archivos2/{id}/update', 'ArchivosController2@update')->name('archivos2.update');
 
+Route::get('archivos2/index2', 'ArchivosController2@index2')->name('archivos2.index2');
+Route::get('/archivos2/datatable', 'ArchivosController2@index22')->name('archivos2.index22');
+Route::get('/archivos2/tipoarchivo', 'ArchivosController2@tipo')->name('archivos2.tipo');
+Route::POST('/archivos2/tipoarchivo', 'ArchivosController2@guardartipoarea')->name('archivos2.guardartipo');
+Route::get('/archivos2/delete{id}', 'ArchivosController2@delete')->name('archivos2.delete');
+
+
+Route::get('archivos2/createtipo', 'ArchivosController2@createtipoarchivo')->name('archivos2.createtipo');
+Route::POST('archivos2/createtipoarchivo', 'ArchivosController2@guardartipoarchivo')->name('archivos2.storecreatetipo');
+
 
 /////////////////////////--ALMACEN--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -307,12 +317,93 @@ Route::get('Calendar/event','ControllerCalendar@index');
 Route::get('Calendar/event/{mes}','ControllerCalendar@index_month');
 
 // formulario
-Route::get('Evento/form','ControllerEvent@form');
+Route::get('Evento/form/{mes}','ControllerEvent@form');
 Route::post('Evento/create','ControllerEvent@create');
 // Detalles de evento
-Route::get('Evento/details/{id}','ControllerEvent@details');
+Route::get('Evento/details/{id},{id2},{id3}','ControllerEvent@details');
+Route::get('Evento/details2/{id}','ControllerEvent@details2');
 // Calendario
 Route::get('Evento/index','ControllerEvent@index');
 Route::get('Evento/index/{month}','ControllerEvent@index_month');
 
+// editar
+Route::get('Evento/actualizar/{id}','ControllerEvent@editar');
+Route::post('Evento/actualizar2/{id}','ControllerEvent@actualizar');
+
+/////////////////////////--CORRESPONDENCIA 2--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Route::get('correspondencia2/index', 'Recepcion2Controller@index')->name('recepcion2.index');
+Route::get('correspondencia2/{id}/edit', 'Recepcion2Controller@editarCodigo')->name('correspondencia2.edit');
+Route::POST('correspondencia2/{id}/updateCodigo', 'Recepcion2Controller@updateCodigo')->name('correspondencia2.update');
+Route::get('correspondencia2/createRecepcion', 'Recepcion2Controller@createRecepcion')->name('crear2.recepcion');
+Route::post('correspondencia2/storeRecepcion', 'Recepcion2Controller@storeRecepcion')->name('guardar2.recepcion');
+Route::get('correspondencia2/indexUnidad', 'Recepcion2Controller@indexUnidad')->name('recepcion2.unidadIndex');
+Route::get('correspondencia2/createUnidad', 'Recepcion2Controller@createLugar')->name('crear2.lugar');
+Route::post('correspondencia2/storeLugar', 'Recepcion2Controller@storeLugar')->name('guardar2.lugar');
+Route::get('correspondencia2/indexRemitente', 'Recepcion2Controller@indexRemitente')->name('recepcion2.remitenteIndex');
+Route::get('correspondencia2/createRemitente', 'Recepcion2Controller@createRemitente')->name('crear2.remitente');
+Route::post('correspondencia2/storeRemitente', 'Recepcion2Controller@storeRemitente')->name('guardar2.remitente');
+Route::get('correspondencia2/createTipo', 'Recepcion2Controller@createTipo')->name('crear2.tipo');
+Route::post('correspondencia2/storeTipo', 'Recepcion2Controller@storeTipo')->name('guardar2.tipo');
+//////////////////
+Route::get('correspondencia2/{id}/gestionarCorrespondencia', 'Recepcion2Controller@gestionarCorrespondencia')->name('correspondencia2.gestionar');
+Route::get('correspondencia2/{id}/cargarpdf', 'Recepcion2Controller@cargarpdf')->name('correspondencia2.cargarpdf');
+Route::post('correspondencia2/storepdf', 'Recepcion2Controller@storepdf')->name('correspondencia2.storepdf');
+Route::get('correspondencia2/{id}/derivar', 'Recepcion2Controller@derivar')->name('correspondencia2.derivar');
+Route::get('correspondencia2/derivar2', 'Recepcion2Controller@guardarderivacion')->name('correspondencia2.guardarderivacion');
+Route::get('correspondencia2/delete{id}', 'Recepcion2Controller@delete')->name('correspondencia2.delete');
+Route::get('correspondencia2/urlfile/{id}', 'Recepcion2Controller@urlfile')->name('correspondencia2.urlfile');
+Route::get('correspondencia2/{id}/actualizarpdf', 'Recepcion2Controller@actualizarpdf')->name('correspondencia2.actualizarpdf');
+Route::post('correspondencia2/updatepdf', 'Recepcion2Controller@updatepdf')->name('correspondencia2.updatepdf');
+Route::get('correspondencia2/notificacion', 'Recepcion2Controller@notificacion')->name('correspondencia2.notificacion');
+///////////
+Route::get('derivacion/index', 'Recepcion2Controller@indexderivacion')->name('derivacion.index');
+Route::get('derivacion/{id}/gestionarCorrespondencia', 'Recepcion2Controller@gestionarCorrespondencia2')->name('derivacion.gestionar');
+
+
+
+////evento2////
+
+// formulario
+Route::get('Evento2/form/{mes}','ControllerEvent2@form');
+Route::post('Evento2/create','ControllerEvent2@create');
+// Detalles de evento
+Route::get('Evento2/details/{id},{id2},{id3}','ControllerEvent2@details');
+Route::get('Evento2/details2/{id}','ControllerEvent2@details2');
+// Calendario
+Route::get('Evento2/index','ControllerEvent2@index');
+Route::get('Evento2/index/{month}','ControllerEvent2@index_month');
+
+// editar
+Route::get('Evento2/actualizar/{id}','ControllerEvent2@editar');
+Route::post('Evento2/actualizar2/{id}','ControllerEvent2@actualizar');
+
+Route::get('Evento2/{id}/cargarpdf', 'ControllerEvent2@cargarpdf')->name('evento2.cargarpdf');
+Route::post('Evento2/storepdf', 'ControllerEvent2@storepdf')->name('evento2.storepdf');
+Route::get('Evento2/{id}/actualizarpdf', 'ControllerEvent2@actualizarpdf')->name('evento2.actualizarpdf');
+Route::POST('Evento2/updatepdf', 'ControllerEvent2@updatepdf')->name('evento2.updatepdf');
+Route::get('Evento2/urlfile/{id}', 'ControllerEvent2@urlfile')->name('evento2.urlfile');
+
+
+
+
+
+/////////////////////////--CANASTA--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Route::get('canasta/index', 'CanastaBeneficiariosController@index')->name('canasta.index');
+Route::get('canasta/search', 'CanastaBeneficiariosController@search')->name('canasta.search');
+Route::get('almacen/detalle/{id}','AlmacenController@detalle')->name('almacen.detalle');
+
+
+//Route::get('compras/pedido/index2', 'CompraController@index2')->name('compras.pedido.index2');
+//oute::get('compras/pedido/create', 'CompraController@create')->name('compras.pedido.create');
+//Route::post('compras/pedido/store', 'CompraController@store')->name('compras.pedido.store');
+//Route::get('almacen/temporal/{id}','AlmacenController@temporal')->name('almacen.temporal');
+//Route::get('compras/pedido/editar/{id}', 'CompraController@editar')->name('compras.pedido.editar');
+//Route::post('compras/pedido/update', 'CompraController@update')->name('compras.pedido.update');
+
 });
+
+
+
+

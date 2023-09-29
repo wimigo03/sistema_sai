@@ -75,23 +75,23 @@ class AlmacenController extends Controller
 
 
 
-    public function detalle()
+    public function detalle($idingreso)
     {
-        $personal = User::find(Auth::user()->id);
-        $id = $personal->id;
-        $detalle = TemporalAlmacenModel::find($id);
-        $id2 = $detalle->idingreso;
+       // $personal = User::find(Auth::user()->id);
+        //$id = $personal->id;
+       // $detalle = TemporalAlmacenModel::find($id);
+        //$id2 = $detalle->idingreso;
         $prodserv = DB::table('detalleingreso as d')
             ->join('ingreso as i', 'i.idingreso', '=', 'd.idingreso')
             ->join('compra as c', 'c.idcompra', '=', 'i.idcompra')
             ->join('prodserv as ps', 'ps.idprodserv', '=', 'd.idprodserv')
             ->select('d.iddetalleingreso', 'c.idcompra', 'ps.nombreprodserv', 'd.ingresos', 'd.salidas', 'd.saldo')
-            ->where('i.idingreso', $id2)
+            ->where('i.idingreso', $idingreso)
             ->orderBy('d.iddetalleingreso', 'desc')
             ->get();
 
 
-     // dd($prodserv);
+    // dd($prodserv);
 
         return view('almacen.detalle', ['prodserv' => $prodserv]);
     }

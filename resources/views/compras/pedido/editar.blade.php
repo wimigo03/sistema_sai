@@ -29,13 +29,13 @@
                 <label for="objeto" class="d-inline font-verdana-bg">
                     <b>Objeto</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <textarea name="objeto" cols="1" rows="3" class="form-control form-control-sm font-verdana-bg" id="objeto" onkeyup="javascript:this.value=this.value.toUpperCase();">{{$compras->objeto}}</textarea>
+                <textarea name="objeto" cols="1" rows="3" class="form-control form-control-sm font-verdana-bg" id="objeto" onchange="javascript:this.value=this.value.toUpperCase();">{{$compras->objeto}}</textarea>
             </div>
             <div class="col-md-6">
                 <label for="justificacion" class="d-inline font-verdana-bg">
                     <b>Justificacion</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <textarea name="justificacion" cols="1" rows="3" class="form-control form-control-sm font-verdana-bg" id="justificacion" onkeyup="javascript:this.value=this.value.toUpperCase();">{{$compras->justificacion}}</textarea>
+                <textarea name="justificacion" cols="1" rows="3" class="form-control form-control-sm font-verdana-bg" id="justificacion" onchange="javascript:this.value=this.value.toUpperCase();">{{$compras->justificacion}}</textarea>
             </div>
             <div class="col-md-2">
                 <label for="preventivo" class="d-inline font-verdana-bg">
@@ -48,10 +48,10 @@
                     <b>Tipo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="tipo" id="tipo" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
-                   
+
                     <option {{old('tipo',$compras->tipo)=="1"? 'selected':''}}  value="1">PRODUCTO</option>
                     <option {{old('tipo',$compras->tipo)=="2"? 'selected':''}} value="2">SERVICIO</option>
-                                                           
+
                 </select>
             </div>
             <div class="col-md-2">
@@ -109,7 +109,7 @@
                     <option value="">-</option>
                     @foreach ($catprogramaticas as $catprogramatica)
 
-                   
+
                     @if ($catprogramatica->idcatprogramatica==$compras->idcatprogramatica)
                     <option value="{{$catprogramatica->idcatprogramatica}}" selected>
                         {{$catprogramatica->nombrecatprogramatica}}</option>
@@ -128,7 +128,7 @@
                     <option value="">-</option>
                     @foreach ($proveedores as $proveedor)
 
-                   
+
                     @if ($proveedor->idproveedor==$compras->idproveedor)
                     <option value="{{$proveedor->idproveedor}}" selected>{{$proveedor->nombreproveedor}}
                     </option>
@@ -147,7 +147,7 @@
                     &nbsp;Actualizar
                 </button>
                 <button class="btn btn-danger font-verdana-bg" type="button" >
-                    
+
                     <a href="{{url()->previous()}}" style="color:white">Cancelar</a>
                 </button>
 
@@ -186,43 +186,43 @@
         }
 
         function validar_formulario(){
-            if($("#objeto").val() == ""){   
+            if($("#objeto").val() == ""){
                 message_alert("El campo <b>[Objeto]</b> es un dato obligatorio...");
                 return false;
             }
-            if($("#justificacion").val() == ""){   
+            if($("#justificacion").val() == ""){
                 message_alert("El campo <b>[Justificacion]</b> es un dato obligatorio...");
                 return false;
             }
-            if($("#preventivo").val() == ""){   
+            if($("#preventivo").val() == ""){
                 message_alert("El campo <b>[Preventivo]</b> es un dato obligatorio...");
                 return false;
             }
-            if($("#tipo >option:selected").val() == ""){   
+            if($("#tipo >option:selected").val() == ""){
                 message_alert("El campo de seleccion <b>[Tipo]</b> es un dato obligatorio...");
                 return false;
             }
-            if($("#numcompra").val() == ""){   
+            if($("#numcompra").val() == ""){
                 message_alert("El campo <b>[Nro. Compra]</b> es un dato obligatorio...");
                 return false;
             }
-            if($("#controlinterno").val() == ""){   
+            if($("#controlinterno").val() == ""){
                 message_alert("El campo <b>[Control Interno]</b> es un dato obligatorio...");
                 return false;
             }
-            if($("#idarea >option:selected").val() == ""){   
+            if($("#idarea >option:selected").val() == ""){
                 message_alert("El campo de seleccion <b>[Area]</b> es un dato obligatorio...");
                 return false;
             }
-            if($("#idprograma >option:selected").val() == ""){   
+            if($("#idprograma >option:selected").val() == ""){
                 message_alert("El campo de seleccion <b>[Programa]</b> es un dato obligatorio...");
                 return false;
             }
-            if($("#idcatprogramatica >option:selected").val() == ""){   
+            if($("#idcatprogramatica >option:selected").val() == ""){
                 message_alert("El campo de seleccion <b>[Cat. Programatica]</b> es un dato obligatorio...");
                 return false;
             }
-            if($("#idproveedor >option:selected").val() == ""){   
+            if($("#idproveedor >option:selected").val() == ""){
                 message_alert("El campo de seleccion <b>[Proveedor]</b> es un dato obligatorio...");
                 return false;
             }

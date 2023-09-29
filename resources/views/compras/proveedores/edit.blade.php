@@ -36,7 +36,7 @@
                             <div class="col-md-6">
                                 <input type="text" required class="form-control" name="nombre" placeholder=""
                                     value="{{$proveedores->nombreproveedor}}"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                    onchange="javascript:this.value=this.value.toUpperCase();">
                             </div>
                         </div>
 
@@ -46,7 +46,7 @@
                             <div class="col-md-6">
                                 <input type="text" required class="form-control" name="representante" placeholder=""
                                     value="{{$proveedores->representante}}"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                    onchange="javascript:this.value=this.value.toUpperCase();">
                             </div>
                         </div>
 
@@ -56,7 +56,7 @@
                             <div class="col-md-4">
                                 <input type="text" required class="form-control" name="cedula" placeholder=""
                                     value="{{$proveedores->cedula}}"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                    onchange="javascript:this.value=this.value.toUpperCase();">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -73,7 +73,7 @@
                             <div class="col-md-4">
                                 <input type="text" required class="form-control" name="nitci" placeholder=""
                                     value="{{$proveedores->nitci}}"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                    onchange="javascript:this.value=this.value.toUpperCase();">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -82,7 +82,7 @@
                             <div class="col-md-4">
                                 <input type="text" required class="form-control" name="telefono" placeholder=""
                                     value="{{$proveedores->telefonoproveedor}}"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                    onchange="javascript:this.value=this.value.toUpperCase();">
                             </div>
                         </div>
 

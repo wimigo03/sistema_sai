@@ -23,28 +23,28 @@
             </div>
         </div>
 
-        
+
         <div class="body-border">
             <font size="2" face="Courier New" >
-                 
+
                 <form method="POST" action="{{ route('medidas.store') }}">
                     @csrf
 
                     <div class="form-group row">
                     <label for="role_id" style="color:black;font-weight: bold;"
                                 class="required col-md-4 col-form-label text-md-right">{{ __('Nombre:') }}</label>
-                        
+
                         <div class="col-md-6">
                             <input type="text" name="nombre" required class="form-control"
                                 placeholder="Escriba la medida..."
-                                onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                onchange="javascript:this.value=this.value.toUpperCase();">
                         </div>
                     </div>
 
                     <br>
 
                     <div align='center'>
-                               
+
                         <button class="btn color-icon-2 font-verdana-bg" type="submit">
                             <i class="fa-solid fa-paper-plane"></i>
                             &nbsp;Registrar
@@ -58,7 +58,7 @@
 
 
         </div>
-       
+
     </div>
 </div>
 

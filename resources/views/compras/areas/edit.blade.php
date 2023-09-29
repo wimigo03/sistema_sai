@@ -25,7 +25,7 @@
                         <label for="nombre" class="d-inline">
                             <b>Nombre</b>
                         </label>
-                        <input type="text" name="nombre" value="{{$areas->nombrearea}}" class="form-control form-control-sm font-verdana-bg" onkeyup="javascript:this.value=this.value.toUpperCase();" required>
+                        <input type="text" name="nombre" value="{{$areas->nombrearea}}" class="form-control form-control-sm font-verdana-bg" onchange="javascript:this.value=this.value.toUpperCase();" required>
                     </div>
                 </div>
                 <div class="form-group row font-courier-bg justify-content-center">
@@ -41,5 +41,5 @@
             </form>
         </div>
     {{--</div>
-</div>--}}    
+</div>--}}
 @endsection

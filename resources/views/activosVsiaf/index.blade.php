@@ -2,7 +2,7 @@
 @section('content')
 @include('layouts.message_alert')
 <style>
-    table tbody tr:hover{background:orange!important;} 
+    table tbody tr:hover{background:orange!important;}
 </style>
 <br>
 <div class="header">
@@ -68,15 +68,15 @@
                                     <td class="text-justify p-1">{{$datos->descrip}}</td>
                                     {{--<td class="text-justify p-1">{{$datos->afiliado == null ? 'S/N':\Carbon\Carbon::parse($datos->afiliado->f_vencimiento)->format('d/m/Y')}}</td>--}}
                                     {{--<td class="text-justify p-1">{{$datos->afiliado == null ? 'S/N':$datos->afiliado->nombre_tutor}}</td>--}}
-                                </tr> 
+                                </tr>
                             @endforeach
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td colspan="12">
                                     {{$activos->appends(Request::all())->links()}}
-                                    <p class="text-muted">Mostrando 
-                                        <strong>{{$activos->count()}}</strong> registros de 
+                                    <p class="text-muted">Mostrando
+                                        <strong>{{$activos->count()}}</strong> registros de
                                         <strong>{{$activos->total()}}</strong> totales
                                     </p>
                                 </td>
@@ -122,18 +122,18 @@
         $(".spinner-btn-send").show();
         $("#form-detalle-pdf").submit();
     }
-    
+
     function message_alert(mensaje){
         $("#modal-alert .modal-body").html(mensaje);
         $('#modal-alert').modal({keyboard: false});
     }
 
     function validar_formulario(){
-        if($("#periodo >option:selected").val() == ""){   
+        if($("#periodo >option:selected").val() == ""){
             message_alert("El campo <b>[Periodo]</b> es un campo requerido...");
             return false;
         }
-        if($("#anho").val() == ""){   
+        if($("#anho").val() == ""){
             message_alert("El campo <b>[Gestion]</b> es un campo requerido...");
             return false;
         }

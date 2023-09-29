@@ -66,7 +66,7 @@
     </style>
     @yield('styles')
 </head>
-<body style="background-color: #fafafa;">
+<body style="background-color: #fafafa;" onLoad="document.getElementById('alx').click();">
 {{--<body style="background-color: #f8f8f8;">--}}
     @include('partial.admin.dashboard')
     <main>

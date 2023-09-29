@@ -37,7 +37,7 @@
                         <div class="col-md-9">
                             <input type="text" name="nombre" required class="form-control"
                                 placeholder="Escriba el Area-Unidad.."
-                                onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                onchange="javascript:this.value=this.value.toUpperCase();">
                         </div>
                     </div>
 

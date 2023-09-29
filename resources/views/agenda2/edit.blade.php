@@ -42,7 +42,7 @@
 
                             <div class="col-md-7">
                                 <textarea type="text" name="evento" class="form-control" placeholder="Evento..." required id="evento"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();" cols="50" rows="3">{{$agenda->evento}}</textarea>
+                                onchange="javascript:this.value=this.value.toUpperCase();" cols="50" rows="3">{{$agenda->evento}}</textarea>
                             </div>
                         </div>
 
@@ -55,7 +55,7 @@
 
                             <div class="col-md-7">
                                 <textarea type="text" name="descripcion" class="form-control" placeholder="Detalles..." required id="descripcion"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();" cols="50" rows="5">{{$agenda->descripcion}}</textarea>
+                                onchange="javascript:this.value=this.value.toUpperCase();" cols="50" rows="5">{{$agenda->descripcion}}</textarea>
                             </div>
                         </div>
 

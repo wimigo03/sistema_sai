@@ -30,7 +30,7 @@
                 <form method="POST" action="{{ route('medidas.update', $medida->idumedida) }}">
                     @csrf
                     @method('POST')
-                   
+
 
                         <div class="form-group row">
                             <label for="role_id" style="color:black;font-weight: bold;"
@@ -39,16 +39,16 @@
                             <div class="col-md-6">
                                 <input type="text" required name="nombre" value="{{$medida->nombreumedida}}"
                                     class="form-control" placeholder="Escriba aqui la nueva medida..."
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                    onchange="javascript:this.value=this.value.toUpperCase();">
                             </div>
                         </div>
 
                         </br>
 
-                       
+
 
                         <div align='center'>
-                               
+
                             <button class="btn color-icon-2 font-verdana-bg" type="submit">
                                 <i class="fa-solid fa-paper-plane"></i>
                                 &nbsp;Actualizar

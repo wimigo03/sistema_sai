@@ -83,7 +83,7 @@
                         <div class="col-md-6">
                             <input type="text" name="cargo" required class="form-control"
                             placeholder="--Cargo del responsable--" value="{{$responsable->cargo}}"
-                            onkeyup="javascript:this.value=this.value.toUpperCase();">
+                            onchange="javascript:this.value=this.value.toUpperCase();">
                         </div>
                     </div>
 

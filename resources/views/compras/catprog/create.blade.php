@@ -29,7 +29,7 @@
 
         </div>
 
-        
+
         <div class="body-border">
             <font size="2" face="Courier New" >
                 <form method="POST" action="{{ route('catprog.store') }}">
@@ -42,7 +42,7 @@
                         <div class="col-md-6">
                             <input type="text" required name="codigo" class="form-control"
                                 placeholder="Escriba el Codigo..."
-                                onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                onchange="javascript:this.value=this.value.toUpperCase();">
                         </div>
                     </div>
 
@@ -53,7 +53,7 @@
                         <div class="col-md-6">
                             <input type="text" required name="nombre" class="form-control"
                                 placeholder="Escriba el Nombre..."
-                                onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                onchange="javascript:this.value=this.value.toUpperCase();">
                         </div>
                     </div>
 
@@ -61,7 +61,7 @@
 
 
                     <div align='center'>
-                               
+
                         <button class="btn color-icon-2 font-verdana-bg" type="submit">
                             <i class="fa-solid fa-paper-plane"></i>
                             &nbsp;Guardar
@@ -72,7 +72,7 @@
             </font>
 
         </div>
-       
+
     </div>
 </div>
 

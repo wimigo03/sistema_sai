@@ -24,7 +24,7 @@
 
                             <div class="col-md-2 ">
                                 <input required type="text" name="nombres" class="form-control"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();"
+                                onchange="javascript:this.value=this.value.toUpperCase();"
                                     value="{{$empleados->nombres}}"></input>
                             </div>
 
@@ -34,7 +34,7 @@
                                 style="color:black;font-weight: bold;">Ap.Paterno:</span>
                             <div class="col-md-2 ">
                                 <input required type="text" name="ap_pat" class="form-control "
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();"
+                                onchange="javascript:this.value=this.value.toUpperCase();"
                                     value="{{$empleados->ap_pat}}"></input>
                             </div>
 
@@ -43,7 +43,7 @@
                                 style="color:black;font-weight: bold;">Ap.Materno:</span>
                             <div class="col-md-2 ">
                                 <input required type="text" name="ap_mat" class="form-control"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();"
+                                onchange="javascript:this.value=this.value.toUpperCase();"
                                     value="{{$empleados->ap_mat}}"></input>
                             </div>
 
@@ -166,7 +166,7 @@
 
                             <div class="col-md-2">
                                 <input type="text" name="cvitae" class="form-control" value="{{$empleados->cvitae}}"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                onchange="javascript:this.value=this.value.toUpperCase();">
 
                             </div>
 
@@ -202,7 +202,7 @@
 
                             <div class="col-md-2">
                                 <input type="text" name="gradacademico" class="form-control" value="{{$empleados->gradacademico}}"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                onchange="javascript:this.value=this.value.toUpperCase();">
 
                             </div>
 
@@ -255,7 +255,7 @@
                                 style="color:black;font-weight: bold;">Aportes.Afp:</span>
                             <div class="col-md-2">
                                 <select name="aportesafp" class="form-control" value="{{$empleados->aportesafp}}">
-                                  
+
                                 <option {{ ($empleados->aportesafp) == 'PREVISION AFP' ? 'selected' : '' }} value="PREVISION AFP">PREVISION AFP</option>
                                 <option {{ ($empleados->aportesafp) == 'FUTURO DE BOLIVIA' ? 'selected' : '' }} value="FUTURO DE BOLIVIA">FUTURO DE BOLIVIA</option>
                                 </select>
@@ -277,7 +277,7 @@
 
                             <div class="col-md-2">
                                 <input type="text" name="idioma" class="form-control"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();" value="{{$empleados->idioma}}">
+                                onchange="javascript:this.value=this.value.toUpperCase();" value="{{$empleados->idioma}}">
 
                             </div>
 
@@ -307,11 +307,11 @@
 
 
                                 <select name="sigep" class="form-control" value="{{$empleados->sigep}}">
-                                  
+
                                   <option {{ ($empleados->sigep) == 'ACTIVO' ? 'selected' : '' }} value="ACTIVO">ACTIVO</option>
                                   <option {{ ($empleados->sigep) == 'INACTIVO' ? 'selected' : '' }} value="INACTIVO">INACTIVO</option>
                                   </select>
-  
+
                             </div>
 
                             <span class="input-group col-md-1 offset-md-1"

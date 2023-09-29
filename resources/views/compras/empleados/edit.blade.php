@@ -21,7 +21,7 @@
                 <label for="name" class="required col-md-4 col-form-label text-md-right">{{ __('Nombres') }}</label>
                 <div class="col-md-4">
                     <input type="text" class="form-control" name="nombres" placeholder=""
-                        value="{{$empleados->nombres}}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                        value="{{$empleados->nombres}}" onchange="javascript:this.value=this.value.toUpperCase();">
                 </div>
             </div>
             <div class="form-group row">
@@ -29,7 +29,7 @@
                     class="required col-md-4 col-form-label text-md-right">{{ __('Ap.Paterno') }}</label>
                 <div class="col-md-4">
                     <input type="text" class="form-control" name="ap_pat" placeholder="" value="{{$empleados->ap_pat}}"
-                        onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    onchange="javascript:this.value=this.value.toUpperCase();">
                 </div>
             </div>
             <div class="form-group row">
@@ -37,14 +37,14 @@
                     class="required col-md-4 col-form-label text-md-right">{{ __('Ap.Materno') }}</label>
                 <div class="col-md-4">
                     <input type="text" class="form-control" name="ap_mat" placeholder="" value="{{$empleados->ap_mat}}"
-                        onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    onchange="javascript:this.value=this.value.toUpperCase();">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="ci" class="required col-md-4 col-form-label text-md-right">{{ __('C.I.') }}</label>
                 <div class="col-md-4">
                     <input type="text" class="form-control" name="ci" placeholder="" value="{{$empleados->ci}}"
-                        onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    onchange="javascript:this.value=this.value.toUpperCase();">
                 </div>
             </div>
             <div class="form-group row">
@@ -66,10 +66,10 @@
                 <label for="sexo" class="required col-md-4 col-form-label text-md-right">{{ __('Sexo') }}</label>
                 <div class="col-md-2">
                 <select name="sexo" class="form-control" data-selected="F" value="{{$empleados->sexo}}">
-								
-								
-								
-								
+
+
+
+
 
                                 @if($empleados->sexo=='M')
 								<option value="M" selected="true">MASCULINO</option>
@@ -78,7 +78,7 @@
                                 <option value="M">MASCULINO</option>
 								<option value="F" selected="true">FEMENINO</option>
 								@else
-								
+
 								@endif
 						</select>
 
@@ -118,7 +118,7 @@
                 <label for="cargo" class="required col-md-4 col-form-label text-md-right">{{ __('Cargo') }}</label>
                 <div class="col-md-4">
                     <input type="text" class="form-control" name="cargo" placeholder="" value="{{$empleados->cargo}}"
-                        onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    onchange="javascript:this.value=this.value.toUpperCase();">
                 </div>
             </div>
 

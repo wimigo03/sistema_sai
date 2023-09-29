@@ -24,7 +24,7 @@
                             class="required col-md-4 col-form-label text-md-right">{{ __('Objeto') }}</label>
                         <div class="col-md-6">
                             <textarea type="text" id="objeto" name="objeto" cols="60" rows="3" placeholder="Objeto..."
-                                onkeyup="javascript:this.value=this.value.toUpperCase();">{{$compras->objeto}}</textarea>
+                            onchange="javascript:this.value=this.value.toUpperCase();">{{$compras->objeto}}</textarea>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -33,7 +33,7 @@
                         <div class="col-md-6">
                             <textarea id="detalle" type="text" name="justificacion" cols="60" rows="8"
                                 placeholder="Detalle..."
-                                onkeyup="javascript:this.value=this.value.toUpperCase();">{{$compras->justificacion}}</textarea>
+                                onchange="javascript:this.value=this.value.toUpperCase();">{{$compras->justificacion}}</textarea>
                         </div>
                     </div>
 
@@ -67,7 +67,7 @@
                             class="required col-md-4 col-form-label text-md-right">{{ __('Num.Compra') }}</label>
                         <div class="col-md-4">
                             <input type="text" class="form-control" name="numcompra" placeholder=""
-                                onkeyup="javascript:this.value=this.value.toUpperCase();"
+                            onchange="javascript:this.value=this.value.toUpperCase();"
                                 value="{{$compras->numcompra}}">
                         </div>
                     </div>

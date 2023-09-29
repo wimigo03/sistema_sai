@@ -29,7 +29,7 @@
 
         </div>
 
-        
+
         <div class="body-border">
             <font size="2" face="Courier New" >
                 <form method="POST" action="{{ route('compras.pedidoparcial.storeEncargado') }}">
@@ -75,14 +75,14 @@
                         <div class="col-md-6">
                             <input type="text" name="cargo" required class="form-control"
                             placeholder="--Cargo del responsable--"
-                            onkeyup="javascript:this.value=this.value.toUpperCase();">
+                            onchange="javascript:this.value=this.value.toUpperCase();">
                         </div>
                     </div>
 
-                   
+
 
                     <div align='center'>
-                               
+
                         <button class="btn color-icon-2 font-verdana-bg" type="submit">
                             <i class="fa-solid fa-paper-plane"></i>
                             &nbsp;Guardar
@@ -93,7 +93,7 @@
             </font>
 
         </div>
-       
+
     </div>
 </div>
 
@@ -106,7 +106,7 @@ $(document).ready(function() {
                 placeholder: "--Seleccionar--"
             });
         });
-    
+
 /*var permission_select = new SlimSelect({
     select: '#permissions-select select',
     //showSearch: false,

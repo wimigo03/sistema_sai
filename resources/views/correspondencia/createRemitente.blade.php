@@ -36,8 +36,8 @@
                                 class="required col-md-4 col-form-label text-md-right">Nombres:</label>
 
                             <div class="col-md-6">
-                                <input type="text" required name="nombres" class="form-control" placeholder="Nombre..."
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                <input type="text" required name="nombres" id="nombres"
+                                    class="form-control " placeholder="Nombre...">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -45,9 +45,8 @@
                                 class="required col-md-4 col-form-label text-md-right">Ap/Paterno:</label>
 
                             <div class="col-md-6">
-                                <input type="text" required name="apPat" class="form-control"
-                                    placeholder="Apellido Paterno..."
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                <input type="text" required name="apPat" id="apellido-paterno"
+                                    class="form-control " placeholder="Apellido Paterno...">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -55,9 +54,8 @@
                                 class="required col-md-4 col-form-label text-md-right">Ap/Materno:</label>
 
                             <div class="col-md-6">
-                                <input type="text" required name="apMat" class="form-control"
-                                    placeholder="Apellido Materno..."
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                <input type="text" required name="apMat" id="apellido-materno"
+                                    class="form-control " placeholder="Apellido Materno...">
                             </div>
                         </div>
 
@@ -114,12 +112,12 @@
         });
 
         $("#insertar_item_material").click(function() {
+            if (validar_detalle_material() == true) {
 
-
-            $(".btn").hide();
-            $(".spinner-btn-send").show();
-            $("#form").submit();
-
+                $(".btn").hide();
+                $(".spinner-btn-send").show();
+                $("#form").submit();
+            }
         });
 
         $("#cancelar    ").click(function() {
@@ -129,5 +127,24 @@
             window.location.href = "{{ url('correspondencia/indexRemitente') }}";
 
         });
+
+        function validar_detalle_material() {
+
+
+
+            if ($("#nombres").val() == "") {
+                alert('---EL CAMPO NOMBRES ES OBLIGATORIO---');
+                return false;
+            }
+
+            if ($("#apellido-paterno").val() == "") {
+                alert('---EL CAMPO APELLIDO PATERNO NO PUEDE ESTAR VACIO---');
+                return false;
+            }
+
+
+
+            return true;
+        };
     </script>
 @endsection

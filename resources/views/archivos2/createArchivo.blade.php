@@ -33,11 +33,6 @@
                         id="form">
                         @csrf
 
-
-
-
-
-
                         <div class="form-group row">
                             <label class="required  col-md-4 col-form-label text-md-right"
                                 style="color:black;font-weight: bold;">Tipo Documento:</label>
@@ -85,7 +80,7 @@
 
                             <div class="col-md-6">
                                 <textarea type="text" name="referencia" class="form-control" placeholder="Ref. doc..." required id="referencia"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();" cols="50" rows="2"></textarea>
+                                    onchange="javascript:this.value=this.value.toUpperCase();" cols="50" rows="2"></textarea>
                             </div>
                         </div>
 
@@ -94,8 +89,8 @@
 
                         <div class="form-group row">
                             <label for="documento" style="color:black;font-weight: bold;"
-                                class=" required col-md-4 col-form-label text-md-right"><b style="color: red">El tamaño del
-                                    archivo no debe superar los 10 mb. Archivos(solo.pdf):</b></label>
+                                class=" required col-md-4 col-form-label text-md-right"><b style="color: red">Limite 200
+                                    mb.(solo.pdf):</b></label>
 
                             <div class="col-md-6">
                                 <input type="file" required name="documento" id="file">
@@ -106,20 +101,15 @@
                         <div align='center'>
 
 
-                            <button class="btn btn-danger font-verdana-bg" type="button" id="cancelar">
-                                Cancelar
-                            </button>
+                            <input type="button" id="cancelar" value="Cancelar">
 
                             &nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="button" value="Guardar" onclick="uploadFile()" id="insertar_item_material">
 
-                            <button class="btn color-icon-2 font-verdana-bg" type="button" id="insertar_item_material">
-                                <i class="fa-solid fa-paper-plane"></i>
-                                Guardar
-                            </button>
-
-                            <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send"
-                                style="display: none;"></i>
-
+                            </br></br>
+                            <progress id="progressBar" value="0" max="100"
+                                style="width:300px;display:none"></progress>
+                            <p id="loaded_n_total"></p>
                         </div>
                     </form>
 
@@ -149,11 +139,11 @@
         });
 
 
-        $("#cancelar    ").click(function() {
+        $("#cancelar").click(function() {
 
             $(".btn").hide();
             $(".spinner-btn-send").show();
-            window.location.href = "{{url('archivos2/index')}}";
+            window.location.href = "{{ url('archivos2/index') }}";
 
         });
 
@@ -198,5 +188,50 @@
             dateFormat: "dd/mm/yyyy",
             autoClose: true
         });
+
+
+
+
+
+        function uploadFile() {
+            // get the file
+            let file = document.getElementById("file").files[0];
+
+            //print file details
+            console.log("File Name : ", file.name);
+            console.log("File size : ", file.size);
+            console.log("File type : ", file.type);
+
+            // create form data to send via XHR request
+            var formdata = new FormData();
+            formdata.append("file1", file);
+
+            //create XHR object to send request
+            var ajax = new XMLHttpRequest();
+
+            // add progress event to find the progress of file upload
+            ajax.upload.addEventListener("progress", progressHandler);
+
+            // initializes a newly-created request
+            ajax.open("POST", "your_upload_url"); // replace with your file URL
+
+            // send request to the server
+            ajax.send(formdata);
+        }
+
+        function progressHandler(ev) {
+
+            let totalSize = ev.total; // total size of the file in bytes
+            let loadedSize = ev.loaded; // loaded size of the file in bytes
+
+            document.getElementById("loaded_n_total").innerHTML = "Uploaded " + loadedSize + " bytes of " + totalSize +
+                " bytes.";
+
+            // calculate percentage
+            var percent = (ev.loaded / ev.total) * 100;
+            document.getElementById("progressBar").style.display = "";
+            document.getElementById("progressBar").value = Math.round(percent);
+
+        }
     </script>
 @endsection

@@ -37,7 +37,7 @@ class UserController extends Controller
             ->select('u.id as idu', 'u.name', 'u.email', 'u.password', 'r.id', 'r.title', 'e.idemp', 'e.nombres', 'u.estadouser')
             // -> where('ps.estadoprodserv','=', 1)
             ->orderBy('u.id', 'asc')
-            ->paginate(10);
+            ->get();
         return view('admin.users.index', compact('users'));
     }
 

@@ -67,7 +67,7 @@
 
                             <div class="col-md-6">
                                 <textarea type="text" name="asunto" class="form-control" placeholder="Asunto..." required id="referencia"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();" cols="50" rows="2"></textarea>
+                                onchange="javascript:this.value=this.value.toUpperCase();" cols="50" rows="2"></textarea>
                             </div>
                         </div>
 
@@ -78,7 +78,7 @@
 
                             <div class="col-md-2">
                                 <input type="text" required name="codigo" class="form-control" placeholder="Codigo..."
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                onchange="javascript:this.value=this.value.toUpperCase();">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -88,7 +88,7 @@
                             <div class="col-md-2">
                                 <input type="text" required name="oficio" class="form-control"
                                     placeholder="NOficio..."
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                    onchange="javascript:this.value=this.value.toUpperCase();">
                             </div>
                         </div>
 
@@ -113,8 +113,12 @@
                         <br>
 
                         <div align='center'>
-
-
+                            <a href="{{ route('crear.remitente') }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar Remitente">
+                                <button class="btn btn-sm btn-success font-verdana" type="button">
+                                    &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
+                                </button>
+                            </a>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
                             <button class="btn btn-danger font-verdana-bg" type="button" id="cancelar">
                                 Cancelar
                             </button>

@@ -60,7 +60,7 @@
 
                             <div class="col-md-6">
                                 <textarea type="text" name="nombredocumento" class="form-control" placeholder="Nombre del Doc..."
-                                   required onkeyup="javascript:this.value=this.value.toUpperCase();" cols="50" rows="2"></textarea>
+                                   required onchange="javascript:this.value=this.value.toUpperCase();" cols="50" rows="2"></textarea>
                             </div>
                         </div>
 
@@ -70,7 +70,7 @@
 
                             <div class="col-md-6">
                                 <textarea type="text" name="referencia" class="form-control" placeholder="Referencia..."
-                                   required onkeyup="javascript:this.value=this.value.toUpperCase();" cols="50" rows="2"></textarea>
+                                   required onchange="javascript:this.value=this.value.toUpperCase();" cols="50" rows="2"></textarea>
                             </div>
                         </div>
 

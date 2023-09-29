@@ -21,7 +21,7 @@
                 <label for="objeto" class="required col-md-4 col-form-label text-md-right">{{ __('Objeto') }}</label>
                     <div class="col-md-6">
                         <textarea  required id="objeto" type="text" name="objeto" cols="60" rows="3" placeholder="Objeto..."
-                        onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
+                        onchange="javascript:this.value=this.value.toUpperCase();"></textarea>
                     </div>
                 </div>
 
@@ -29,13 +29,13 @@
                 <label for="justificacion" class="required col-md-4 col-form-label text-md-right">{{ __('Justificacion') }}</label>
                     <div class="col-md-6">
                         <textarea  id="detalle" type="text" name="justificacion" cols="60" rows="8" placeholder="Detalle..."
-                        onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
+                        onchange="javascript:this.value=this.value.toUpperCase();"></textarea>
                     </div>
                 </div>
             <div class="form-group row">
                 <label for="preventivo" class="required col-md-4 col-form-label text-md-right">{{ __('Preventivo') }}</label>
                 <div class="col-md-2">
-                    <input type="text" class="form-control" name="preventivo" placeholder="" 
+                    <input type="text" class="form-control" name="preventivo" placeholder=""
                         >
                 </div>
             </div>
@@ -45,10 +45,10 @@
                     <select name="tipo" class="form-control"  >
 
 
-                      
+
                         <option value="1" >Producto</option>
                         <option value="2">Servicio</option>
-                        
+
                     </select>
 
                 </div>
@@ -57,8 +57,8 @@
             <div class="form-group row">
                 <label for="numcompra" class="required col-md-4 col-form-label text-md-right">{{ __('Num.Compra') }}</label>
                 <div class="col-md-4">
-                    <input type="text" class="form-control" name="numcompra" placeholder="" 
-                        onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    <input type="text" class="form-control" name="numcompra" placeholder=""
+                    onchange="javascript:this.value=this.value.toUpperCase();">
                 </div>
             </div>
             <div class="form-group row">
@@ -68,7 +68,7 @@
                 </div>
             </div>
 
-        
+
 
 
 
@@ -78,9 +78,9 @@
 
                     <select name="idarea" id="permissions" class="col-md-8">
                         @foreach ($areas as $area)
-                      
+
                         <option value="{{$area->idarea}}" selected>{{$area->nombrearea}}</option>
-                      
+
                         @endforeach
                     </select>
                 </div>
@@ -92,9 +92,9 @@
 
                     <select name="idprograma" id="permissions" class="col-md-10">
                         @foreach ($programas as $programa)
-                      
+
                         <option value="{{$programa->idprograma}}" selected>{{$programa->nombreprograma}}</option>
-                      
+
                         @endforeach
                     </select>
                 </div>
@@ -106,9 +106,9 @@
 
                     <select name="idcatprogramatica" id="permissions" class="col-md-8">
                         @foreach ($catprogramaticas as $catprogramatica)
-                      
+
                         <option value="{{$catprogramatica->idcatprogramatica}}" selected>{{$catprogramatica->nombrecatprogramatica}}</option>
-                      
+
                         @endforeach
                     </select>
                 </div>
@@ -120,9 +120,9 @@
 
                     <select name="idproveedor" id="permissions" class="col-md-8">
                         @foreach ($proveedores as $proveedor)
-                      
+
                         <option value="{{$proveedor->idproveedor}}" selected>{{$proveedor->nombreproveedor}}</option>
-                      
+
                         @endforeach
                     </select>
                 </div>

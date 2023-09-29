@@ -36,17 +36,17 @@
                         <div class="col-md-7">
                             <textarea id="name" required type="text" name="nombre" placeholder="Nombre..." cols="50"
                                 rows="2" class="form-control"
-                                onkeyup="javascript:this.value=this.value.toUpperCase();">{{$productos->nombreprodserv}}</textarea>
+                                onchange="javascript:this.value=this.value.toUpperCase();">{{$productos->nombreprodserv}}</textarea>
                         </div>
                     </div>
-            
+
             <div class="form-group row">
                 <label style="color:black;font-weight: bold;" for="detalle"
                     class="required col-md-4 col-form-label text-md-right">{{ __('Detalle') }}</label>
                 <div class="col-md-7">
                     <textarea id="detalle" required type="text" name="detalle" cols="51" rows="4"
                         placeholder="Detalle..." class="form-control"
-                        onkeyup="javascript:this.value=this.value.toUpperCase();">{{$productos->detalleprodserv}}</textarea>
+                        onchange="javascript:this.value=this.value.toUpperCase();">{{$productos->detalleprodserv}}</textarea>
                 </div>
             </div>
             <div class="form-group row">
@@ -94,16 +94,16 @@
                 </div>
             </div>
 
-           
+
 
             <div align='center'>
-                               
+
                 <button class="btn color-icon-2 font-verdana-bg" type="submit">
                     <i class="fa-solid fa-paper-plane"></i>
                     &nbsp;Actualizar
                 </button>
             </div>
-            
+
             </form>
 
         </font>

@@ -20,15 +20,15 @@
                 <label for="name" class="required col-md-4 col-form-label text-md-right">{{ __('Nombres') }}</label>
                 <div class="col-md-4">
                     <input type="text" class="form-control" name="nombres" placeholder=""
-                         onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    onchange="javascript:this.value=this.value.toUpperCase();">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="ap_pat"
                     class="required col-md-4 col-form-label text-md-right">{{ __('Ap.Paterno') }}</label>
                 <div class="col-md-4">
-                    <input type="text" class="form-control" name="ap_pat" placeholder="" 
-                        onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    <input type="text" class="form-control" name="ap_pat" placeholder=""
+                    onchange="javascript:this.value=this.value.toUpperCase();">
                 </div>
             </div>
             <div class="form-group row">
@@ -36,14 +36,14 @@
                     class="required col-md-4 col-form-label text-md-right">{{ __('Ap.Materno') }}</label>
                 <div class="col-md-4">
                     <input type="text" class="form-control" name="ap_mat" placeholder=""
-                        onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    onchange="javascript:this.value=this.value.toUpperCase();">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="ci" class="required col-md-4 col-form-label text-md-right">{{ __('C.I.') }}</label>
                 <div class="col-md-4">
-                    <input type="text" class="form-control" name="ci" placeholder="" 
-                        onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    <input type="text" class="form-control" name="ci" placeholder=""
+                    onchange="javascript:this.value=this.value.toUpperCase();">
                 </div>
             </div>
             <div class="form-group row">
@@ -67,10 +67,10 @@
                     <select name="sexo" class="form-control"  >
 
 
-                      
+
                         <option value="M" >MASCULINO</option>
                         <option value="F">FEMENINO</option>
-                        
+
                     </select>
 
                 </div>
@@ -92,9 +92,9 @@
 
                     <select name="idarea" id="permissions" class="col-md-6">
                         @foreach ($areas as $area)
-                      
+
                         <option value="{{$area->idarea}}" selected>{{$area->nombrearea}}</option>
-                      
+
 
 
                         @endforeach
@@ -108,7 +108,7 @@
                     class="required col-md-4 col-form-label text-md-right">{{ __('Cargo') }}</label>
                 <div class="col-md-4">
                     <input type="text"  class="form-control" name="cargo" placeholder=""
-                    onkeyup="javascript:this.value=this.value.toUpperCase();" >
+                    onchange="javascript:this.value=this.value.toUpperCase();" >
                 </div>
             </div>
 

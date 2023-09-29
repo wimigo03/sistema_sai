@@ -75,6 +75,7 @@ $(function() {
 
             {data: 'btn2', name: 'btn2', orderable: false, searchable: false },
 
+
         ],
 
 

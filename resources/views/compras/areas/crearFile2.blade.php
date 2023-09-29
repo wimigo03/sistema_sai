@@ -23,13 +23,13 @@
                     <label for="cargo" class="d-inline">
                         <b>Cargo</b>
                     </label>
-                    <input type="text" name="cargo" class="form-control form-control-sm font-courier-bg" onkeyup="javascript:this.value=this.value.toUpperCase();" required>
+                    <input type="text" name="cargo" class="form-control form-control-sm font-courier-bg" onchange="javascript:this.value=this.value.toUpperCase();" required>
                 </div>
                 <div class="col-md-4">
                     <label for="nombrecargo" class="d-inline">
                         <b>Nombre de Cargo</b>
                     </label>
-                    <input type="text" name="nombrecargo" class="form-control form-control-sm font-courier-bg" onkeyup="javascript:this.value=this.value.toUpperCase();" required>
+                    <input type="text" name="nombrecargo" class="form-control form-control-sm font-courier-bg" onchange="javascript:this.value=this.value.toUpperCase();" required>
                 </div>
                 <div class="col-md-2">
                     <label for="habbasico" class="d-inline">

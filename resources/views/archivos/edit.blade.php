@@ -43,7 +43,7 @@
 
                             <div class="col-md-6">
                                 <textarea type="text" name="nombredocumento" class="form-control" placeholder="Nombre..." required
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();" cols="50" rows="2">{{ $archivos->nombrearchivo }}</textarea>
+                                onchange="javascript:this.value=this.value.toUpperCase();" cols="50" rows="2">{{ $archivos->nombrearchivo }}</textarea>
                             </div>
                         </div>
 
@@ -53,7 +53,7 @@
 
                             <div class="col-md-6">
                                 <textarea type="text" name="referencia" class="form-control" placeholder="Referencia..." required
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();" cols="50" rows="2">{{ $archivos->referencia }}</textarea>
+                                onchange="javascript:this.value=this.value.toUpperCase();" cols="50" rows="2">{{ $archivos->referencia }}</textarea>
                             </div>
                         </div>
 

@@ -23,7 +23,7 @@
             </div>
         </div>
 
-        
+
         <div class="body-border">
             <font size="2" face="Courier New" >
                 <form method="POST" action="{{ route('programas.update', $programas->idprograma) }}">
@@ -36,7 +36,7 @@
                         <div class="col-md-8">
                             <input type="text" required class="form-control" name="nombre" placeholder=""
                                 value="{{$programas->nombreprograma}}"
-                                onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                onchange="javascript:this.value=this.value.toUpperCase();">
                         </div>
                     </div>
 
@@ -44,13 +44,13 @@
 
 
                     <div align='center'>
-                               
+
                         <button class="btn color-icon-2 font-verdana-bg" type="submit">
                             <i class="fa-solid fa-paper-plane"></i>
                             &nbsp;Actualizar
                         </button>
                     </div>
-                    
+
                 </form>
 
             </font>
@@ -59,7 +59,7 @@
 
 
         </div>
-       
+
     </div>
 </div>
 @endsection

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class AreasModel extends Model
 {
     protected $table = 'areas';
-    
+
     protected $primaryKey= 'idarea';
 
     public $timestamps = false;
@@ -21,7 +21,7 @@ class AreasModel extends Model
 
     protected $guarded = [
 
-        
+
     ];
 
     public function purchases()

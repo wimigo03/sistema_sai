@@ -2,15 +2,15 @@
 <div class="form-group row font-verdana-bg">
     <div class="col-md-2">
         <label for="nombres"><b>Nombre(s)</b></label>
-        <input type="text" name="nombres" class="form-control form-control-sm font-verdana-bg" onkeyup="javascript:this.value=this.value.toUpperCase();">
+        <input type="text" name="nombres" class="form-control form-control-sm font-verdana-bg" onchange="javascript:this.value=this.value.toUpperCase();">
     </div>
     <div class="col-md-2">
         <label for="ap_paterno"><b>Ap. Paterno</b></label>
-        <input type="text" name="ap_pat" class="form-control form-control-sm font-verdana-bg" onkeyup="javascript:this.value=this.value.toUpperCase();">
+        <input type="text" name="ap_pat" class="form-control form-control-sm font-verdana-bg" onchange="javascript:this.value=this.value.toUpperCase();">
     </div>
     <div class="col-md-2">
         <label for="ap_materno"><b>Ap. Materno</b></label>
-        <input type="text" name="ap_mat" class="form-control form-control-sm font-verdana-bg" onkeyup="javascript:this.value=this.value.toUpperCase();">
+        <input type="text" name="ap_mat" class="form-control form-control-sm font-verdana-bg" onchange="javascript:this.value=this.value.toUpperCase();">
     </div>
     <div class="col-md-2">
         <label for="nro_carnet"><b>N° Carnet</b></label>
@@ -36,7 +36,7 @@
         <input type="date" name="natalicio" class="form-control form-control-sm font-verdana-bg">
     </div>
 </div>
-<div class="form-group row font-verdana-bg"> 
+<div class="form-group row font-verdana-bg">
     <div class="col-md-2">
         <div class="row">
             <div class="col-md-6">

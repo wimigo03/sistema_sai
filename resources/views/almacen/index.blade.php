@@ -56,7 +56,6 @@ $(function() {
         columns: [
             {data: 'DT_RowIndex',orderable: false,searchable: false,class:'text-justify p-1 font-verdana'},
 
-            { data: 'idingreso',name: 'i.idingreso',class:'text-justify p-1 font-verdana'},
 
             { data: 'objeto',name: 'c.objeto',class:'text-justify p-1 font-verdana'},
 

@@ -35,7 +35,7 @@
                             class="required col-md-4 col-form-label text-md-right">{{ __('Nombre') }}</label>
                         <div class="col-md-7">
                             <textarea id="name" required type="text" require name="nombre" placeholder="Nombre..."
-                            class="form-control"  cols="50" rows="2" onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
+                            class="form-control"  cols="50" rows="2" onchange="javascript:this.value=this.value.toUpperCase();"></textarea>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -44,7 +44,7 @@
                         <div class="col-md-7">
                             <textarea id="detalle" required type="text" name="detalle" cols="50" rows="4"
                                 placeholder="Detalle..." class="form-control"
-                                onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
+                                onchange="javascript:this.value=this.value.toUpperCase();"></textarea>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -86,9 +86,9 @@
                         </div>
                     </div>
 
-                   
+
             <div align='center'>
-                               
+
                 <button class="btn color-icon-2 font-verdana-bg" type="submit">
                     <i class="fa-solid fa-paper-plane"></i>
                     &nbsp;Registrar
@@ -102,7 +102,7 @@
 
 
         </div>
-       
+
     </div>
 </div>
 @endsection
@@ -113,7 +113,7 @@ $(document).ready(function() {
                 placeholder: "--Seleccionar--"
             });
         });
-    
+
 /*var permission_select = new SlimSelect({
     select: '#permissions-select select',
     //showSearch: false,

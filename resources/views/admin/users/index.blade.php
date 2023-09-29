@@ -14,7 +14,8 @@
 
 
 
-            <table class="table table-borderless hoverTable">
+            <table class="table table-borderless hoverTable" id="myTable">
+                <thead>
                 <tr class="bg-info text-light">
                     <th class="text-center">ID</th>
                     <th>Nombre</th>
@@ -24,6 +25,8 @@
                         &nbsp;
                     </th>
                 </tr>
+                </thead>
+                <tbody>
                 @forelse ($users as $user)
                     <tr>
                         <td>{{ $user->idu }}</td>
@@ -61,17 +64,25 @@
                         <td colspan="100%" class="text-center text-muted py-3">No Users Found</td>
                     </tr>
                 @endforelse
+                </tbody>
+                <tfoot>
+                </tfoot>
             </table>
 
 
 
 
-            @if ($users->total() > $users->perPage())
-                <br><br>
-                {{ $users->links() }}
-            @endif
+
 
         </div>
     </div>
 
+@endsection
+@section('scripts')
+    <script >
+$(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+
+    </script>
 @endsection

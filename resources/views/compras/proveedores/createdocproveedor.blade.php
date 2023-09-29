@@ -45,7 +45,7 @@
 
                             <div class="col-md-6">
                                 <input type="text" name="nombredocumento" class="form-control" placeholder="Nombre..."
-                                   required onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                   required onchange="javascript:this.value=this.value.toUpperCase();">
                             </div>
                         </div>
 
