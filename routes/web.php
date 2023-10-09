@@ -402,6 +402,67 @@ Route::get('almacen/detalle/{id}','AlmacenController@detalle')->name('almacen.de
 //Route::get('compras/pedido/editar/{id}', 'CompraController@editar')->name('compras.pedido.editar');
 //Route::post('compras/pedido/update', 'CompraController@update')->name('compras.pedido.update');
 
+
+///////////////////REGISTRO DE ASISTENCIAS/////////////////
+
+Route::get('notificacion/index', 'NotifcacionController@index')->name('notificacion.index');
+
+
+
+Route::put('/horarios/{id}/updateEstado', 'HorarioController@updateEstado')->name('horarios.updateEstado')->middleware('can:horario_access');
+
+Route::get('horarios/cambio/{empleado}', 'HorarioController@cambio')->name('horarios.cambio');
+
+Route::put('/horarios/{horario}/updatehora', 'HorarioController@updatehora')->name('horarios.updatehora');
+
+
+Route::get('horarios/index', 'HorarioController@index')->name('horarios.index')->middleware('can:horario_access');
+Route::get('horarios/create', 'HorarioController@create')->name('horarios.create')->middleware('can:horario_access');
+Route::post('horarios/store', 'HorarioController@store')->name('horarios.store')->middleware('can:horario_access');
+Route::get('horarios/show/{horario}', 'HorarioController@show')->name('horarios.show')->middleware('can:horario_access');
+Route::get('horarios/destroy/{horario}', 'HorarioController@destroy')->name('horarios.destroy')->middleware('can:horario_access');
+Route::get('horarios/{horario}/edit', 'HorarioController@edit')->name('horarios.edit')->middleware('can:horario_access');
+Route::put('horarios/update/{horario}', 'HorarioController@update')->name('horarios.update')->middleware('can:horario_access');
+Route::put('horarios/guardar/{empleado}', 'HorarioController@guardar')->name('horarios.guardar')->middleware('can:horario_access');
+
+
+Route::get('empleadoasistencias/index', 'EmpleadoAsistenciasController@index')->name('empleadoasistencias.index')->middleware('can:asistencias_access');
+Route::get('empleadoasistencias/show/{id}', 'EmpleadoAsistenciasController@show')->name('empleadoasistencias.show')->middleware('can:asistencias_access');
+
+
+Route::get('descuentos/index', 'DescuentosController@index')->name('descuentos.index')->middleware('can:horario_access');
+Route::get('descuentos/create', 'DescuentosController@create')->name('descuentos.create')->middleware('can:horario_access');
+Route::post('descuentos/store', 'DescuentosController@store')->name('descuentos.store')->middleware('can:horario_access');
+Route::get('descuentos/show/{id}', 'DescuentosController@show')->name('descuentos.show')->middleware('can:horario_access');
+Route::put('descuentos/update/{descuento}', 'DescuentosController@update')->name('descuentos.update')->middleware('can:horario_access');
+Route::get('descuentos/{descuento}/edit', 'DescuentosController@edit')->name('descuentos.edit')->middleware('can:horario_access');
+
+
+Route::get('registroasistencia', 'RegistroAsistenciaController@index')->name('registroasistencia.index')->middleware('can:asistencias_access');
+Route::get('registroasistencia/create', 'RegistroAsistenciaController@create')->name('registroasistencia.create')->middleware('can:asistencias_access');
+Route::post('registroasistencia/store', 'RegistroAsistenciaController@store')->name('registroasistencia.store')->middleware('can:asistencias_access');
+/////////////
+Route::get('retrasosempleado', 'RetrasoController@index')->name('retrasos.index')->middleware('can:asistencias_access');
+
+Route::get('reportes', 'ReporteController@index')->name('reportes.index')->middleware('can:reporte_access');
+Route::get('reportes/create', 'ReporteController@create')->name('reportes.create')->middleware('can:reporte_access');
+Route::post('reportes/store', 'ReporteController@store')->name('reportes.store')->middleware('can:reporte_access');
+Route::get('reportes/show/{reporte}', 'ReporteController@show')->name('reportes.show')->middleware('can:reporte_access');
+Route::get('reportes/getReporte', 'ReporteController@getReporte')->name('reportes.getReporte')->middleware('can:reporte_access');
+
+
+Route::get('permisos', 'PermisosPersonalesController@index')->name('permisospersonales.index')->middleware('can:reporte_access');
+ 
+Route::get('permisos/nuevo/{id}/{permiso_id}', 'PermisosPersonalesController@nuevo')->name('permisospersonales.nuevo')->middleware('can:reporte_access');
+Route::get('permisos/get', 'PermisosPersonalesController@getEmpleados')->name('empleados.get')->middleware('can:reporte_access');
+Route::get('permisos/create/', 'PermisosPersonalesController@create')->name('permisospersonales.create')->middleware('can:reporte_access');
+Route::post('permisos/store/', 'PermisosPersonalesController@store')->name('permisospersonales.store')->middleware('can:reporte_access');
+Route::get('permisos/detalle/{id}/{permiso_id}', 'PermisosPersonalesController@detalle')->name('permisospersonales.detalle');
+Route::get('permisos/show', 'PermisosPersonalesController@show')->name('permisospersonales.show')->middleware('can:reporte_access');
+
+Route::get('licencias', 'LicenciasPersonalesController@index')->name('licenciaspersonales.index')->middleware('can:reporte_access');
+
+
 });
 
 
