@@ -128,7 +128,7 @@
                     class: 'text-center p-1 font-verdana',
                     orderable: false,
                     searchable: false
-                } 
+                }
 
 
             ],

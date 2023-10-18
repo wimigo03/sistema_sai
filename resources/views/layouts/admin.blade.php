@@ -2,6 +2,8 @@
 <html lang="en">
 
 <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -93,7 +95,72 @@
     <script src="{{ asset('datepicker/datepicker.min.js') }}"></script>
     <script src="{{ asset('datepicker/datepicker.es.js') }}"></script>
 
+
+
+
     @yield('scripts')
+    <script>
+        var id = 2;
+
+        function fetchdata() {
+
+            $.ajax({
+                url: "{{ route('pregunta') }}",
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+
+                dataType: 'JSON',
+                success: function(data) {
+                   // console.log(data); //Try to log the data and check the response
+                    if (data.success == true) {
+                        //alert('success :  user logged in');
+                        // notifyMe();
+                    } else {
+                        //alert('Erreur login');
+                    }
+                }
+
+
+
+            });
+
+        }
+
+        $(document).ready(function() {
+            setInterval(fetchdata, 8000);
+        });
+
+
+        function notifyMe() {
+            if (!("Notification" in window)) {
+                alert("Este navegador no soporta notificaciones de escritorio");
+            } else if (Notification.permission === "granted") {
+                var options = {
+                    body: "Usted Tiene Una Correspondencia sin responder",
+                    icon: href="{{ asset('logos/logo2.png') }}",
+                    dir: "ltr"
+                };
+                var notification = new Notification("!! ATENCION !!", options);
+            } else if (Notification.permission !== 'denied') {
+                Notification.requestPermission(function(permission) {
+                    if (!('permission' in Notification)) {
+                        Notification.permission = permission;
+                    }
+                    if (permission === "granted") {
+                        var options = {
+                            body: "Descripción o cuerpo de la notificación",
+                            icon: "url_del_icono.jpg",
+                            dir: "ltr"
+                        };
+                        var notification = new Notification("Hola :)", options);
+                    }
+                });
+            }
+        }
+    </script>
+
 </body>
 {{--<footer class="text-center">
     © 2022 Gobierno Autonomo Regional del Gran Chaco <a href="https://granchaco.gob.bo/">Pagina Web</a>

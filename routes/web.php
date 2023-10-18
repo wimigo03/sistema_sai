@@ -359,9 +359,11 @@ Route::get('correspondencia2/notificacion', 'Recepcion2Controller@notificacion')
 ///////////
 Route::get('derivacion/index', 'Recepcion2Controller@indexderivacion')->name('derivacion.index');
 Route::get('derivacion/{id}/gestionarCorrespondencia', 'Recepcion2Controller@gestionarCorrespondencia2')->name('derivacion.gestionar');
-
-
-
+Route::get('correspondencia2/urlfilederivacion/{id}', 'Recepcion2Controller@urlfile')->name('derivacion.urlfilederivacion');
+Route::get('correspondencia2/pregunta', 'Recepcion2Controller@pregunta2')->name('derivacion.pregunta');
+Route::get('/get-users', 'Recepcion2Controller@getUsers')->name('get-users');
+Route::post('/ruta', 'Recepcion2Controller@respuesta')->name('pregunta');
+//Route::post('product-data', 'HomeController@postform');
 ////evento2////
 
 // formulario

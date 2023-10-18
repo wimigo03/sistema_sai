@@ -85,7 +85,7 @@
                                         @can('planta_edit_access')
                                             <span class="tts:right tts-slideIn tts-custom" aria-label="Modificar">
                                                 <a href="{{ route('planta.editar', $empleado->idemp)}}">
-                                                    <span class="text-primary"><i class="fa-solid fa-2xl fa-pen-to-square"></i></span>
+                                                    <span class="text-primary"><i class="fa-solid fa-xl fa-pen-to-square"></i></span>
                                                 </a>
                                             </span>
                                         @endcan
@@ -94,7 +94,7 @@
                                         @can('planta_edit_access')
                                             <span class="tts:right tts-slideIn tts-custom" aria-label="Activar o Desactivar">
                                                 <a href="{{ route('planta.editar2', $empleado->idemp)}}">
-                                                    <span class="text-warning"><i class="fas fa-2xl fa-minus-circle"></i></span>
+                                                    <span class="text-warning"><i class="fas fa-xl fa-minus-circle"></i></span>
                                                 </a>
                                             </span>
                                         @endcan

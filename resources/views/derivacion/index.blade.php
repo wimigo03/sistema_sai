@@ -44,7 +44,6 @@
                                 <td class="text-center p-1"><b>Fecha/Recepcion</b></td>
                                 <td class="text-center p-1"><b>Fecha/Derivacion</b></td>
 
-                                <td class="text-center p-1"><b>Asunto</b></td>
                                 <td class="text-center p-1"><b>Gestionar</b></td>
                                 <td class="text-center p-1"><b>Estado</b></td>
 
@@ -57,7 +56,7 @@
                                     <td class="text-center p-1">{{$datos->recepcion->fecha_recepcion}}</td>
                                     <td class="text-center p-1">{{$datos->fechaderivacion}}</td>
 
-                                    <td class="text-center p-1">{{$datos->recepcion->asunto}}</td>
+
 
                                     <td class="text-center p-1">
 

@@ -382,7 +382,22 @@ class Recepcion2Controller extends Controller
             ->where('r.id_recepcion', $recepcion->id_recepcion)
             ->first();
 
-        //dd($data->id_recepcion);
+            //$personal = User::find(Auth::user()->id);
+            //$id = $personal->id;
+           // $userdate = User::find($id)->usuariosempleados;
+           // $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+
+           // $dataderivacion = DB::table('derivCorresp as d')
+            //->join('remitente as re', 're.id_remitente', '=', 'r.id_remitente')
+            //->join('areas as a', 'a.idarea', '=', 'd.idarea')
+           // ->select('d.idarea','d.idderivacion','d.estadoderiv1')
+           //->where('d.idarea', $personalArea->idarea)
+          //->where('d.estadoderiv1', 1)
+
+           // ->get();
+
+      // dd($dataderivacion);
+
         //return view('correspondencia2/gestionarCorrespondencia')->with('data', $data);
         return view('correspondencia2.gestionarCorrespondencia', ["data" => $data]);
     }
@@ -523,7 +538,7 @@ class Recepcion2Controller extends Controller
             ->join('recepcion as r', 'r.id_recepcion', '=', 'd.id_recepcion')
             ->select('r.id_recepcion', 'd.idderivacion', 'ar.nombrearea')
             ->where('ar.idarea', '=', $request->input('tipo'))
-            ->where('r.id_recepcion', '=', $request->input('id_recepcion'))
+            ->where('r.id_recepcion', '=', $request->input('idrecepcion'))
             ->orderBy('d.idderivacion', 'desc')
             ->get();
         //dd($detallito);
@@ -612,12 +627,129 @@ class Recepcion2Controller extends Controller
                 ->join('remitente as re', 're.id_remitente', '=', 'r.id_remitente')
                 ->join('unidad as u', 'u.id_unidad', '=', 're.id_unidad')
                 ->select('r.estado_corresp', 'r.id_recepcion', 'r.asunto', 'r.fecha_recepcion', 'r.n_oficio', 'r.observaciones', 're.nombres_remitente', 're.apellidos_remitente', 'u.nombre_unidad')
-                ->where('r.id_recepcion', $derivacion->idderivacion)
+                ->where('r.id_recepcion', $derivacion->id_recepcion)
                 ->first();
 
-            //dd($data->id_recepcion);
+       // dd($data);
             //return view('correspondencia2/gestionarCorrespondencia')->with('data', $data);
-            return view('derivacion.gestionarCorrespondencia');
+           // return view('derivacion.gestionarCorrespondencia');
+           return view('derivacion.gestionarCorrespondencia', ["data" => $data]);
         }
+
+
+        public function urlfilederivacion($recepcion_id)
+        {
+            // $file = ThesisFile::where('thesis_id',$thesis_id)->where('state',1)->first();
+            // return response()->json(['response' => [
+            // 'url' => $file->url,
+            // 'name' => $file->name,
+            // ]
+            // ], 201);
+
+            $data = DB::table('archivocorresp as a')
+                ->join('recepcion as r', 'r.id_recepcion', '=', 'a.id_recepcion')
+                //->join('unidad as u', 'u.id_unidad', '=', 're.id_unidad')
+                ->select('r.id_recepcion', 'a.documento')
+                ->where('r.id_recepcion', $recepcion_id)
+                ->first();
+
+            //dd($data->documento);
+
+            $redirect = '../public/Documentos_Correspondencia/';
+            // return Redirect::to($redirect);
+            //return Redirect::to($redirect)->with('_blank');
+            return redirect()->to($redirect . $data->documento);
+        }
+
+        public function pregunta()
+        {
+            //$personal = User::find(Auth::user()->id);
+            //$id = $personal->id;
+            //$userdate = User::find($id)->usuariosempleados;
+           // $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+
+            //$dataderivacion = DB::table('derivCorresp as d')
+            //->join('remitente as re', 're.id_remitente', '=', 'r.id_remitente')
+            //->join('unidad as u', 'u.id_unidad', '=', 're.id_unidad')
+            //->select('d.idarea','d.idderivacion','d.estadoderiv1')
+          //->where('d.idarea', $personalArea->idarea)
+          // ->where('d.estadoderiv1', 1)
+
+          //  ;
+
+       // dd($personalArea->idarea);
+
+           // if ($request->ajax()) {
+
+              //  $noti = 1;
+
+                //return response()->json($noti);
+              // return response()->json(['dataderivacion' => $dataderivacion]);
+           // }
+
+
+          // $proyecto = Proyecto::where('empresa_id',$id)->pluck('name','id');
+          // if($dataderivacion->count()>0){
+             //  return $dataderivacion;
+          // }
+
+           //else return response()->json(['error'=>'Algo Salio Mal']);
+
+          // $user = User::find($id);
+          $a=1;
+           if($id === 1) {
+                   //$user->delete();
+                   return response(json)->response([
+                    'success'=>"Record deleted."
+                   ]);
+           }
+           else{
+            return response(json)->response([
+                'error' => "You can not delete this"
+            ], 400); // 400 means bad request
+        }
+
+        }
+
+        public function nombreDelMetodo2(Request $request)
+        {
+            // Procesa los datos recibidos
+            // ...
+
+            // Devuelve una respuesta
+            return response()->json(['mensajes' => 'Petición procesada']);
+        }
+
+        public function respuesta(Request $request)
+        {
+
+            if ($request->ajax()) {
+                $personal = User::find(Auth::user()->id);
+                $id = $personal->id;
+                $userdate = User::find($id)->usuariosempleados;
+                $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+
+                $dataderivacion = DB::table('derivCorresp as d')
+                //->join('remitente as re', 're.id_remitente', '=', 'r.id_remitente')
+                ->join('areas as a', 'a.idarea', '=', 'd.idarea')
+                ->select('d.idarea','d.idderivacion','d.estadoderiv1')
+               ->where('d.idarea', $personalArea->idarea)
+              ->where('d.estadoderiv1', 1)
+
+                ->get();
+
+
+                $data = "hola";
+                $data2 = "holaSSSS";
+               // return ['success' => true, 'data' => $data];
+
+                if($dataderivacion->count()>0){
+                    return ['success' => true, 'data' => $data];
+                } else  return ['success' => false, 'data' => $data2];
+
+
+        }
+    }
+
 
 }

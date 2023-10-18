@@ -50,6 +50,7 @@
                             <div class="col-md-8">
                                 <select name="emp" id="emp" class="col-md-10 form-control select2">
                                     @foreach ($remitentes as $remitente)
+                                    <option value="">-</option>
                                         <option value="{{ $remitente->id_remitente }}">
                                             {{ $remitente->nombres_remitente}}
                                             {{ $remitente->apellidos_remitente}}
@@ -99,6 +100,7 @@
                             <div class="col-md-8">
                                 <select name="tipo" id="tipo" class="col-md-10 form-control select2">
                                     @foreach ($tipos as $tipo)
+                                    <option value="">-</option>
                                         <option value="{{$tipo->idtipo_corresp}}">
                                             {{ $tipo->nombre_tipo}}
                                         </option>
@@ -196,6 +198,11 @@
                 return false;
             }
 
+            if ($("#emp").val() == "") {
+                alert('---EL CAMPO REMITENTE ES OBLIGATORIO--');
+                return false;
+            }
+
             if ($("#asunto").val() == "") {
                 alert('---EL CAMPO ASUNTO ES OBLIGATORIO--');
                 return false;
@@ -203,6 +210,11 @@
 
             if ($("#codigo").val() == "") {
                 alert('---EL CAMPO CODIGO ES OBLIGATORIO--');
+                return false;
+            }
+
+            if ($("#tipo").val() == "") {
+                alert('---EL CAMPO TIPO CORRESPONDENCIA ES OBLIGATORIO--');
                 return false;
             }
 

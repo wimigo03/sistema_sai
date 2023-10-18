@@ -45,23 +45,24 @@
                     @elseif ($data->estado_corresp == 1)
                         <a href="{{ route('correspondencia2.urlfile', $data->id_recepcion) }}" target="blank_">
                             <button class="btn btn-sm btn-light   font-verdana" type="button">
-                                &nbsp;<i class="fa fa-lg fa-eye" style="color: blue "
-                                    aria-hidden="true"></i>&nbsp;Ver Archivo
+                                &nbsp;<i class="fa fa-lg fa-eye" style="color: blue " aria-hidden="true"></i>&nbsp;Ver
+                                Archivo
                             </button>
                         </a>
 
                         <a href="{{ route('correspondencia2.actualizarpdf', $data->id_recepcion) }}">
-                        <button class="btn btn-sm btn-light   font-verdana" type="button">
-                            &nbsp;<i class="fa fa-lg fa-file" style="color: orange"
-                                aria-hidden="true"></i>&nbsp;Cambiar Digital
-                        </button>
+                            <button class="btn btn-sm btn-light   font-verdana" type="button">
+                                &nbsp;<i class="fa fa-lg fa-file" style="color: orange" aria-hidden="true"></i>&nbsp;Cambiar
+                                Digital
+                            </button>
 
-                       </a>
+                        </a>
                     @endif
 
                     <a href="{{ route('correspondencia2.edit', $data->id_recepcion) }}">
                         <button class="btn btn-sm btn-light   font-verdana" type="button">
-                            &nbsp;<i class="fa fa-lg fa-pencil" style="color: brown " aria-hidden="true"></i>&nbsp;Edit.Corresp.
+                            &nbsp;<i class="fa fa-lg fa-pencil" style="color: brown "
+                                aria-hidden="true"></i>&nbsp;Edit.Corresp.
                         </button>
                     </a>
 
@@ -110,8 +111,8 @@
                             class="required col-md-4 col-form-label text-md-right">REMITENTE:</label>
                         <div class="col-md-7">
                             <input id="detalle" required type="text" name="detalle" cols="50" rows="1"
-                                class="form-control" value="{{ $data->nombres_remitente }} {{ $data->apellidos_remitente }}"
-                                readonly></input>
+                                class="form-control"
+                                value="{{ $data->nombres_remitente }} {{ $data->apellidos_remitente }}" readonly></input>
                         </div>
                     </div>
 
@@ -156,5 +157,5 @@
     </div>
 @endsection
 @section('scripts')
-    <script></script>
+
 @endsection

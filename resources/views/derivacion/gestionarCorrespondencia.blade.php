@@ -12,7 +12,7 @@
             <div class="row font-verdana-bg">
                 <div class="col-md-4 titulo">
                     <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-                        <a href="{{ url('/correspondencia2/index') }}">
+                        <a href="{{ url('/derivacion/index') }}">
                             <span class="color-icon-1">
                                 &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                             </span>
@@ -28,42 +28,17 @@
 
                 <div class="col-md-12 text-right">
 
-                    <a href="{{ route('correspondencia2.notificacion') }}">
-                        <button class="btn btn-sm btn-light   font-verdana" type="button">
-                            &nbsp;<i class="fa fa-lg fa-file-pdf" style="color: green "
-                                aria-hidden="true"></i>&nbsp;Agreg.Digital
-                        </button>
-                    </a>
 
-                    @if ($data->estado_corresp == 0)
-                        <a href="{{ route('correspondencia2.cargarpdf', $data->id_recepcion) }}">
-                            <button class="btn btn-sm btn-light   font-verdana" type="button">
-                                &nbsp;<i class="fa fa-lg fa-file-pdf" style="color: green "
-                                    aria-hidden="true"></i>&nbsp;Agreg.Digital
-                            </button>
-                        </a>
-                    @elseif ($data->estado_corresp == 1)
-                        <a href="{{ route('correspondencia2.urlfile', $data->id_recepcion) }}" target="blank_">
+
+                        <a href="{{ route('derivacion.urlfilederivacion', $data->id_recepcion) }}" target="blank_">
                             <button class="btn btn-sm btn-light   font-verdana" type="button">
                                 &nbsp;<i class="fa fa-lg fa-eye" style="color: blue "
-                                    aria-hidden="true"></i>&nbsp;Ver Archivo
+                                    aria-hidden="true"></i>&nbsp;Ver Correspondencia
                             </button>
                         </a>
 
-                        <a href="{{ route('correspondencia2.actualizarpdf', $data->id_recepcion) }}">
-                        <button class="btn btn-sm btn-light   font-verdana" type="button">
-                            &nbsp;<i class="fa fa-lg fa-file" style="color: orange"
-                                aria-hidden="true"></i>&nbsp;Cambiar Digital
-                        </button>
 
-                       </a>
-                    @endif
 
-                    <a href="{{ route('correspondencia2.edit', $data->id_recepcion) }}">
-                        <button class="btn btn-sm btn-light   font-verdana" type="button">
-                            &nbsp;<i class="fa fa-lg fa-pencil" style="color: brown " aria-hidden="true"></i>&nbsp;Edit.Corresp.
-                        </button>
-                    </a>
 
                     @if ($data->estado_corresp == 0)
                         <b style="color: red">--SIN DIGITAL--</b>
@@ -71,7 +46,7 @@
                         <a href="{{ route('correspondencia2.derivar', $data->id_recepcion) }}">
                             <button class="btn btn-sm btn-light   font-verdana" type="button">
                                 &nbsp;<i class="fa fa-lg fa-random" style="color: green "
-                                    aria-hidden="true"></i>&nbsp;Deriv.Corresp
+                                    aria-hidden="true"></i>&nbsp;Responder
                             </button>
                         </a>
                     @endif
