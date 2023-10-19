@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\MedidaController;
 /*use App\Http\Controllers\MedidaController;
 use App\Http\Controllers\ProveedoresController;
 use App\Http\Controllers\PrartidaController;
@@ -47,7 +49,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
     Route::get('compras/medidas/list', 'MedidaController@listado')->name('medidas.list');
     Route::get('compras/medidas/{id}/edit', 'MedidaController@editar')->name('medidas.edit');
     Route::post('compras/medidas/{id}/update', 'MedidaController@update')->name('medidas.update');
-    Route::get('compras/medidas/create', 'MedidaController@create')->name('medidas.create');
+   // Route::get('compras/medidas/create', 'MedidaController@create')->name('medidas.create');
     Route::post('compras/medidas/store', 'MedidaController@store')->name('medidas.store');
 
 
@@ -398,14 +400,30 @@ Route::get('almacen/detalle/{id}','AlmacenController@detalle')->name('almacen.de
 
 
 //Route::get('compras/pedido/index2', 'CompraController@index2')->name('compras.pedido.index2');
-//oute::get('compras/pedido/create', 'CompraController@create')->name('compras.pedido.create');
+//Route::get('compras/pedido/create', 'CompraController@create')->name('compras.pedido.create');
 //Route::post('compras/pedido/store', 'CompraController@store')->name('compras.pedido.store');
 //Route::get('almacen/temporal/{id}','AlmacenController@temporal')->name('almacen.temporal');
 //Route::get('compras/pedido/editar/{id}', 'CompraController@editar')->name('compras.pedido.editar');
 //Route::post('compras/pedido/update', 'CompraController@update')->name('compras.pedido.update');
 
+/////////////////////////--EXPOCHACO SUDAMERICANO--//////////////////////
+    Route::get('expochaco/index', 'ExpoController@index')->name('expochaco.index');
+    Route::get('expochaco/rubro', 'ExpoController@rubro')->name('expochaco.rubro');
+
+    Route::get('expochaco/create', 'ExpoController@create')->name('expochaco.rubro.create');
+    Route::post('expochaco/store', 'ExpoController@store')->name('expochaco.rubro.store');
 });
 
 
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/compras/medidas/create', [MedidaController::class, 'create'])->name('medidas.create');
+
+/////////////////////////--EXPOCHACO SUDAMERICANO--//////////////////////
+    //Route::get('expochaco/rubro', 'ExpoController@rubro')->name('expochaco.rubro');
+
+});
 
 

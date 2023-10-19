@@ -10,7 +10,7 @@
     <div class="row font-verdana-bg">
         <div class="col-md-2 titulo">
             <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-                <a href="{{ route('correspondencia2.gestionar', $idrecepcion) }}">
+                <a  href="{{ route('expochaco.index') }}">
                     <span class="color-icon-1">
                         &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                     </span>
@@ -19,7 +19,7 @@
         </div>
 
         <div class="col-md-4 text-right titulo">
-            <b>DERIVAR CORRESPONDENCIA</b>
+            <b>RUBROS</b>
         </div>
 
         <div class="col-md-12">
@@ -27,57 +27,7 @@
         </div>
 
     </div>
-    <div class="body-border" style="background-color: #FFFFFF;">
-        <form action="{{ route('correspondencia2.guardarderivacion') }}" method="get" id="form">
-            @csrf
-            <br>
-            <input type="hidden" value="{{ $idrecepcion }}" name="idrecepcion">
-            <div class="form-group row">
-                <div class="col-md-8">
-                    <label for="producto" class="d-inline font-verdana-bg">
-                        <b>Seleccione la Unidad a derivar</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                    </label>
-                    <select name="tipo" id="tipo" placeholder="--Seleccionar--"
-                        class="form-control form-control-sm select2">
-                        <option value="">-</option>
 
-                        @foreach ($area as $areas)
-
-                            <option value="{{ $areas->idarea }}">{{ $areas->nombrearea }}</option>
-
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="col-md-8">
-                    <label for="producto" class="d-inline font-verdana-bg">
-                        <b>Seleccione la Instruccion</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                    </label>
-                    <select name="tipo" id="tipo" placeholder="--Seleccionar--"
-                        class="form-control form-control-sm select3">
-                        <option value="">-</option>
-
-                        @foreach ($area as $areas)
-
-                            <option value="{{ $areas->idarea }}">{{ $areas->nombrearea }}</option>
-
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="col-md-2 text-right">
-                    <br>
-
-
-                    <button class="btn btn-info font-verdana-bg" type="button" onclick="save();">
-                        <i class="fa-solid fa-plus"></i>
-                        &nbsp;Adicionar
-                    </button>
-
-                </div>
-            </div>
-        </form>
-    </div>
     <div class="row">
         <div class="col-md-12 table-responsive">
             <center>
@@ -85,29 +35,18 @@
                     <thead>
                         <tr>
                             <td class="text-justify p-1"><b>Nro</b></td>
-                            <td class="text-justify p-1"><b>UNIDAD AREA</b></td>
-                            <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
+                            <td class="text-justify p-1"><b>NOMBRE RUBRO</b></td>
                         </tr>
                     </thead>
                     <tbody>
                         @php
                             $num = 1;
                         @endphp
-                        @forelse ($derivacionCorresp as $key => $derivacionCorresps)
+                        @forelse ($rubros as $key => $rubro)
                             <tr>
                                 <td class="text-justify p-1">{{ $key + 1 }}</td>
-                                <td class="text-justify p-1">{{ $derivacionCorresps->nombrearea }}</td>
+                                <td class="text-justify p-1">{{ $rubro->nombrerubro }}</td>
 
-                                <td class="text-center p-1">
-                                    <span class="tts:left tts-slideIn tts-custom" aria-label="Eliminar">
-                                        <a href="{{ route('correspondencia2.delete', $derivacionCorresps->idderivacion) }}"
-                                            onclick="return confirm('Se va a eliminar el Item...')">
-                                            <span class="text-danger">
-                                                <i class="fa-solid fa-xl fa-trash" aria-hidden="true"></i>
-                                            </span>
-                                        </a>
-                                    </span>
-                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -151,7 +90,7 @@
 
         });
 
-        
+
 
 
         function message_alert(mensaje) {
