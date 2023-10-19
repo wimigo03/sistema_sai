@@ -3,12 +3,17 @@
 @section('content')
 
 <div class="card">
-    <div class="card-header">{{ __('Editar usuario') }}</div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="row">
-                <a href="{{ url('/admin/users') }}" class="btn blue darken-4 text-black "><i
-                        class="fa fa-plus-square"></i> Volver atras</a>
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card-title"><b>MODIFICAR USUARIO</b></div>
+            </div>
+            <div class="col-md-6 text-right">
+                <span class="tts:left tts-slideIn tts-custom" aria-label="Ir atras">
+                    <a href="{{ url('admin/users/index') }}" class="text-black">
+                        <i class="fa fa-reply"></i>
+                    </a>
+                </span>
             </div>
         </div>
     </div>

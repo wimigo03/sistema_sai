@@ -240,13 +240,24 @@ main {
 .bg-gradient-secondary {background-color: #6c757d;background-image: linear-gradient(180deg,#6c757d 10%,#807e7e 100%);background-size: cover;}
 .row-reverse{flex-direction: row-reverse;}
 .font-verdana-xs {font-size: 10px; font-family: verdana,arial,helvetica;}
-.font-verdana {font-size: 11px; font-family: verdana,arial,helvetica;}
-.font-verdana-bg {font-size: 12px; font-family: verdana,arial,helvetica;}
+.font-verdana-sm {font-size: 11px; font-family: verdana,arial,helvetica;}
+.font-verdana {font-size: 12px; font-family: verdana,arial,helvetica;}
+.font-verdana-bg {font-size: 13px; font-family: verdana,arial,helvetica;}
 .font-courier{font-size:11px;font-family: Courier New,Courier,Lucida Sans Typewriter,Lucida Typewriter,monospace;}
 .btn-color-primary{background:#2962FF;}
 .btn-color-success{background:#28a745;}
+.hoverTable tr:hover {background-color: #CAE3FF;}
+.btn-xs {
+	padding: 0.25rem 0.5rem;
+	font-size: 0.5rem;
+	line-height: 1.5;
+	border-radius: 0.2rem;
+}
+.badge-with-padding {
+	padding: 7px 4px;
+}
 .form-control{
-	height: 35px;
+	height: 30px;
 }
 .titulo {
 	color: #003d75;

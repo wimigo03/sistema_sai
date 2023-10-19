@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -27,22 +25,6 @@
     <link href="{{ asset('datepicker/datepicker.min.css') }}" rel="stylesheet">
     <link href="{{ asset('dashboard/css/tooltips.min.css') }}" rel="stylesheet">
     <style>
-         .hoverTable tr:hover {
-            background-color: #CAE3FF;
-        }
-
-        .font-verdana-xs {font-size: 10px; font-family: verdana,arial,helvetica;}
-        .font-verdana-sm {font-size: 11px; font-family: verdana,arial,helvetica;}
-        .font-verdana {font-size: 12px; font-family: verdana,arial,helvetica;}
-        .font-verdana-bg {font-size: 13px; font-family: verdana,arial,helvetica;}
-
-        .font-courier-xs {font-size: 10px; font-family: courier, courier new, serif;}
-        .font-courier-sm {font-size: 11px; font-family: courier, courier new, serif;}
-        .font-courier {font-size: 12px; font-family: courier, courier new, serif;}
-        .font-courier-bg {font-size: 13px; font-family: courier, courier new, serif;}
-
-        /*@import "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css";
-        @import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700');*/
         #customers-table tbody td.details-control {
             background-image: url('{{ asset('admin_assets/images/details_open.png') }}');
             cursor: pointer;
@@ -68,7 +50,7 @@
     </style>
     @yield('styles')
 </head>
-<body style="background-color: #fafafa;" onLoad="document.getElementById('alx').click();">
+<body style="background-color: #fafafa;" {{--onLoad="document.getElementById('alx').click();"--}}>
 {{--<body style="background-color: #f8f8f8;">--}}
     @include('partial.admin.dashboard')
     <main>
