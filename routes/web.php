@@ -2,10 +2,10 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\MedidaController;
-/*use App\Http\Controllers\MedidaController;
-use App\Http\Controllers\ProveedoresController;
+use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\UserController;
+/*use App\Http\Controllers\ProveedoresController;
 use App\Http\Controllers\PrartidaController;
 use App\Http\Controllers\ProdServController;
 use App\Http\Controllers\PlantaController;
@@ -27,18 +27,40 @@ Route::get('/', function () {
     return view('/auth/login');
 });
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('admin/users/index', [UserController::class, 'index'])->name('admin.users.index');
+    Route::get('admin/users/search', [UserController::class, 'search'])->name('admin.users.search');
+    Route::get('admin/users/excel', [UserController::class, 'excel'])->name('admin.users.excel');
+    Route::get('admin/users/create', [UserController::class, 'create'])->name('admin.users.create');
+    Route::post('admin/users/store', [UserController::class, 'store'])->name('admin.users.store');
+    Route::get('admin/users/edit/{id}', [UserController::class, 'edit'])->name('admin.users.edit');
+    Route::put('admin/users/update', [UserController::class, 'update'])->name('admin.users.update');
+    Route::get('admin/users/baja/{id}', [UserController::class, 'baja'])->name('admin.users.baja');
+    Route::get('admin/users/alta/{id}', [UserController::class, 'alta'])->name('admin.users.alta');
+    Route::get('/compras/medidas/create', [MedidaController::class, 'create'])->name('medidas.create');
+});
+
 Auth::routes();
 
-
-
-Route::group(['prefix'=>"admin",'as' => 'admin.','namespace' => 'App\Http\Controllers\Admin','middleware' => ['auth','AdminPanelAccess']], function () {
-
-    Route::get('/', 'HomeController@index')->name('home');
-    Route::resource('/users', 'UserController');
+Route::group(['prefix'=>"admin/",
+                'as' => 'admin.',
+                'namespace' => 'App\Http\Controllers\Admin',
+                'middleware' => ['auth','AdminPanelAccess']],
+function () {
+    //Route::get('/', 'HomeController@index')->name('home');
+    //Route::resource('/users', 'UserController');
+    //Route::get('users/index', 'UserController@index')->name('users.index');
+    //Route::get('users/search', 'UserController@search')->name('users.search');
+    //Route::get('users/create', 'Admin\UserController@create')->name('users.create');
     Route::resource('/roles', 'RoleController');
     Route::resource('/permissions', 'PermissionController')->except(['show']);
 
+    //Route::get('compras/medidas/create', 'MedidaController@create')->name('medidas.create');
 
+    /*Route::group(['namespace' => 'App\Http\Controllers'], function() {
+        Route::get('compras/medidas/index', 'MedidaController@index')->name('medidas.index')->middleware('can:medidas_access');
+    });*/
 });
 
 
@@ -50,13 +72,14 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
     Route::get('compras/medidas/{id}/edit', 'MedidaController@editar')->name('medidas.edit');
     Route::post('compras/medidas/{id}/update', 'MedidaController@update')->name('medidas.update');
    // Route::get('compras/medidas/create', 'MedidaController@create')->name('medidas.create');
+    //Route::get('compras/medidas/create', 'MedidaController@create')->name('medidas.create');
     Route::post('compras/medidas/store', 'MedidaController@store')->name('medidas.store');
 
 
-    Route::get('admin/users/baja/{id}', 'Admin\UserController@baja')->name('users.baja');
-    Route::get('admin/users/alta/{id}', 'Admin\UserController@alta')->name('users.alta');
-    Route::get('admin/users//index', 'Admin\UserController@index')->name('users.index');
-
+    //Route::get('admin/users/baja/{id}', 'Admin\UserController@baja')->name('users.baja');
+    //Route::get('admin/users/alta/{id}', 'Admin\UserController@alta')->name('users.alta');
+    //Route::get('admin/users/index', 'Admin\UserController@index')->name('users.index');
+    //Route::get('admin/users/search', 'Admin\UserController@search')->name('users.search');
 
 /////////////////////////--COMPRAS PEDIDO--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

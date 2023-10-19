@@ -41,16 +41,12 @@ class LoginController extends Controller
     }
 
     public function username()
-{
-    return 'name';
-}
-
-
-protected function credentials(Request $request)
-
     {
-       $request['estadouser'] = 1;
-       return $request->only($this->username(), 'password', 'estadouser');
+        return 'name';
     }
 
+    protected function credentials(Request $request){
+        $request['estadouser'] = 1;
+        return $request->only($this->username(), 'password', 'estadouser');
+    }
 }
