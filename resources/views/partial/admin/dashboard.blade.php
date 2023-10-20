@@ -63,9 +63,9 @@
            <ul class="sub-menu collapse" id="dashboard_expochaco">
                @can('agenda_ejecutivo')
                    <li>
-                       <a href="{{ route('expochaco.rubro') }}">
+                       <a href="{{ route('expochaco.index') }}">
                            &nbsp; &nbsp; &nbsp;
-                           <span class="nav-label mr-4">crear rubro</span>
+                           <span class="nav-label mr-4">Ingresar</span>
                        </a>
                    </li>
                @endcan

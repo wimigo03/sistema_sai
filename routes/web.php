@@ -450,3 +450,27 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
+Route::group(['namespace' => 'App\Http\Controllers\Fexpo'], function() {
+
+    Route::get('expochaco/index', 'SolicitudController@index')
+    ->name('expochaco.index');
+
+    Route::get('expochaco/create', 'SolicitudController@create')
+    ->name('expochaco.create');
+
+    Route::post('expochaco/store', 'SolicitudController@store')
+    ->name('expochaco.store');
+
+    Route::get('expochaco/{id}/editar', 'SolicitudController@editar')
+    ->name('expochaco.editar');
+
+    Route::post('expochaco/update', 'SolicitudController@update')
+    ->name('expochaco.update');
+
+    Route::get('expochaco/delete2/{id}', 'SolicitudController@delete')
+    ->name('expochaco.delete');
+
+    Route::get('expochaco/aprovar/{id}', 'SolicitudController@aprovar')
+    ->name('expochaco.aprovar');
+});
+
