@@ -239,7 +239,7 @@ class RegistroAsistenciaController extends Controller
 
                             $registroactual->registro_salida = $horaActual;
                             $this->sumarRetrasos($registroactual);
-                            Session::flash('success', ' Registro de salida guardado exitosamente. Retraso ID:');
+                            Session::flash('success', ' Registro de salida guardado exitosamente.');
                         }
 
                         $registroactual->save();

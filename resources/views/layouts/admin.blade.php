@@ -86,12 +86,40 @@
     <script src="{{ asset('dataTable_1.10.22/js/jquery-3.5.1.js') }}"></script>
     <script src="{{ asset('dataTable_1.10.22/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('dataTable_1.10.22/js/dataTables.responsive.min.js') }}"></script>
+
+
+    <script src="{{ asset('DataTables/RowGroup-1.2.0/js/dataTables.rowGroup.min.js') }}"></script>
+    <script src="{{ asset('DataTables/Buttons-2.2.3/js/buttons.dataTables.min.js') }}"></script>
+
+    <script src="{{ asset('DataTables/Buttons-2.2.3/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('DataTables/Buttons-2.2.3/js/buttons.colVis.min.js') }}"></script>
+
+    <script src="{{ asset('DataTables/JSZip-2.5.0/jszip.min.js') }}"></script>
+    <script src="{{ asset('DataTables/pdfmake-0.1.36/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('DataTables/pdfmake-0.1.36/vfs_fonts.js') }}"></script>
+   
+
+
     <script src="{{ asset('dashboard/js/popper.min.js') }}"></script>
     <script src="{{ asset('dashboard/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('dashboard/js/main.js') }}"></script>
     <script src="{{ asset('dashboard/js/select2.min.js') }}"></script>
     <script src="{{ asset('datepicker/datepicker.min.js') }}"></script>
     <script src="{{ asset('datepicker/datepicker.es.js') }}"></script>
+
+<!-- Estilos CSS de DataTables y Buttons -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+
+<!-- Archivos JavaScript de DataTables y Buttons -->
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+
+<!-- Archivo de idioma en español para DataTables y Buttons -->
+<script src="https://cdn.datatables.net/plug-ins/1.11.5/i18n/Spanish.json"></script>
+
 
     @yield('scripts')
 </body>

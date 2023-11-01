@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Notificacion;
 use Illuminate\Http\Request;
 use App\Models\EmpleadosModel;
+use App\Models\AreasModel;
 use App\Models\MovimientosPtModel;
 
 
@@ -19,8 +20,8 @@ class NotifcacionController extends Controller
     {
         $currentDate = now();
 
-        $personasmes = EmpleadosModel::whereDay('natalicio', $currentDate->day)
-        ->whereMonth('natalicio', $currentDate->month)
+        $personasmes = EmpleadosModel::whereMonth('natalicio', $currentDate->month)
+        
         ->where('tipo',1)
         ->get(['nombres', 'ap_pat','ap_mat','natalicio']);
 
@@ -35,6 +36,9 @@ class NotifcacionController extends Controller
         
         //return view('cumpleanios.index', compact('cumplenAnios'));
         return view('asistencias.notificacion.index', compact('personashoy','cumplenAnioshoy','personasmes','cumplenAniosmes'));
+              
+
+
     }
 
     /**

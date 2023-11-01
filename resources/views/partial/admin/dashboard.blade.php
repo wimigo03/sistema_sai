@@ -421,7 +421,7 @@
                         @can('horario_access')
                         <li>
                             <a href="{{ route('notificacion.index') }}">
-                                <span class="nav-label mr-4">Notificaciones</span><span class="badge badge-primary">9</span>
+                                <span class="nav-label mr-4">Notificaciones</span>
                             </a>
                         </li>
                         @endcan

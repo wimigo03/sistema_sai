@@ -405,7 +405,7 @@ Route::get('almacen/detalle/{id}','AlmacenController@detalle')->name('almacen.de
 
 ///////////////////REGISTRO DE ASISTENCIAS/////////////////
 
-Route::get('notificacion/index', 'NotifcacionController@index')->name('notificacion.index');
+Route::get('notificacion/index', 'NotifcacionController@index')->name('notificacion.index')->middleware('can:horario_access');
 
 
 

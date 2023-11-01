@@ -21,21 +21,21 @@
                             <h1>0</h1>
                         @endif
                     </div>
-
                     <div class="text-right ml-5 ">
 
-                        <a href="#mostrar" data-toggle="modal" class="text-white-50"><i class=" mdi-arrow-right h6">Mas
-                                infor</i></a>
+                        <a href="#hoy" data-toggle="modal" class="text-white-50"><i class=" mdi-arrow-right h6">HOY
+                                </i></a>
                         </a>
                     
                     </div>
                     <div class="text-right ml-5 ">
 
-                        <a href="#mes" data-toggle="modal" class="text-white-50"><i class=" mdi-arrow-right h6">Por
-                                Mes</i></a>
+                        <a href="#mes" data-toggle="modal" class="text-white-50"><i class=" mdi-arrow-right h6">MES
+                                </i></a>
                         </a>
                     
                     </div>
+    
                    
 
 
@@ -49,5 +49,16 @@
     </div>
 
     @include('asistencias.notificacion.mostrar_emp')
-    
+    @section('scripts')
+<script>
+$(document).ready(function() {
+    $('#empleados-fecha').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'excelHtml5' // Agrega el botón de exportación a Excel
+        ]
+    });
+});
+</script>
+@endsection
   @endsection

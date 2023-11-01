@@ -110,7 +110,7 @@
                 }
             ],
             lengthChange: false,
-            buttons: ['copy', 'excel', 'pdf', 'colvis']
+            buttons: [ 'excel', 'pdf']
         });
         $('#retrasos-table').on('draw.dt', function() {
             $('ul.pagination').addClass('pagination-sm');
