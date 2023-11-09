@@ -35,4 +35,8 @@ class MovimientosPtModel extends Model
 
         
     ];
+    public function empleado()
+    {
+        return $this->belongsTo(EmpleadosModel::class, 'idemp');
+    }
 }

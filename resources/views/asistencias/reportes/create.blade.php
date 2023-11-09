@@ -30,10 +30,6 @@
             {{ session('error') }}
         </div>
         @endif
-
-        <!-- Resto del contenido de la vista -->
-
-
         <!-- Mostrar mensaje de error -->
         @if(Session::has('success'))
         <div class="alert alert-success">
@@ -46,8 +42,6 @@
         </div>
         @endif
 
-
-
         <div class="col-md-4 text-right">
             <a class="tts:left tts-slideIn tts-custom" aria-label="Ver Reportes Guardados" href="{{route('reportes.index')}}">
                 <button class="btn btn-sm btn-info font-verdana" type="button">
@@ -59,30 +53,110 @@
         <div class="col-md-12">
             <hr class="hrr">
         </div>
+        <ul class="nav nav-tabs" id="myTabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#tab1">Retrasos Personales</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#tab2">Retrasos Por Area</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#tab3">Retrasos Area</a>
+            </li>
+        </ul>
     </div>
-    <div class="row font-verdana">
-        <div class="col-md-12 table-responsive center">
-            <div class="body-border">
-
+    <div class="tab-content font-verdana">
+        <div class="tab-pane fade show active" id="tab1">
+            <div class="body-border ">
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label for="fecha_inicio">Fecha Inicio</label>
+                            <label for="empleado">Nombre de Personal</label>
+                            <select name="empleado" id="empleado" aria-label="Seleciona Permiso" class="form-control form-control-sm" required>
+                                <option value="">-</option>
+                                @foreach ($empleados as $index => $value)
+                                <option value="{{ $value->idemp }}" @if(request('empleado')==$value->idemp) selected @endif> {{ $value->nombres }} {{ $value->ap_pat }} {{ $value->ap_mat }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="fecha_inicio2">Fecha Inicio</label>
+                            <input type="date" id="fecha_inicio2" name="fecha_inicio3" value="" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="fecha_final2">Fecha Final</label>
+                            <input type="date" id="fecha_final2" name="fecha_final2" value="" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+
+                        <label for="fecha_final">Opciones</label>
+                        <div class="form-group">
+                            <div class="">
+                                <button class="btn btn-primary" id="verBtn2">Ver</button>
+                                <!-- Botón para guardar -->
+                                <button class="btn btn-success" id="guardarBtn" disabled>Guardar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 table-responsive center">
+                <table class="table-bordered  hoverTable table display responsive" style="width:100%" id="personal-reportes-table">
+                    <thead>
+                        <tr class="text-center">
+                            <th>Nombres</th>
+                            <th>Minutos de Retraso</th>
+                            <th>Observaciones</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="tab2">
+            <div class="body-border ">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="area">Area de Personal</label>
+                            <div id="area-select2" class="col-md-12" >
+
+                                <select name="area_id" id="area2" aria-label="Selecion de Área"  required>
+                                    <option value=""></option>
+                                    @foreach ($data as $index => $value)
+                                    <option value="{{ $value->idarea }}"> {{ $value->nombrearea }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="fecha_inicio2">Fecha Inicio</label>
                             <input type="date" id="fecha_inicio" name="fecha_inicio" value="" class="form-control" required>
                         </div>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label for="fecha_final">Fecha Final</label>
                             <input type="date" id="fecha_final" name="fecha_final" value="" class="form-control" required>
                         </div>
                     </div>
 
-                    <div class="col-md-4">
+
+                    <div class="col-md-2">
+
                         <label for="fecha_final">Opciones</label>
-                        <div class="row">
-                            <div class="form-group">
+                        <div class="form-group">
+                            <div class="">
                                 <button class="btn btn-primary" id="verBtn">Ver</button>
                                 <!-- Botón para guardar -->
                                 <button class="btn btn-success" id="guardarBtn" disabled>Guardar</button>
@@ -91,24 +165,21 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-12 table-responsive center">
+                <table class="table-bordered  hoverTable table display responsive" style="width:100%" id="area-personal-reportes-table">
+                    <thead>
+                        <tr class="text-center">
+                            <th>Nombres</th>
+                            <th>Minutos de Retraso</th>
+                            <th>Observaciones</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
         </div>
-    </div>
-    <div class="row font-verdana">
-        <div class="col-md-8 titulo">
-            <b>Lista de Retrasos</b>
-        </div>
-    </div>
-    <div class="row font-verdana">
-        <div class="col-md-12 table-responsive center">
-            <table class="table-bordered  hoverTable table display responsive font-verdana" style="width:100%" id="empleados-reportes-table">
-                <thead class="font-verdana">
-                    <tr class="text-center">
-                        <th>Nombres</th>
-                        <th>Minutos de Retraso</th>
-                        <th>Observaciones</th>
-                    </tr>
-                </thead>
-            </table>
+        <div class="tab-pane fade" id="tab3">
+
         </div>
     </div>
 </div>
@@ -128,20 +199,61 @@
         </div>
     </div>
 </div>
+
+
+
 @section('scripts')
+
 <script>
     $(document).ready(function() {
+
+        $('#empleado').select2({
+            placeholder: "--Seleccionar--"
+        });
+        var area_select = new SlimSelect({
+            select: '#area-select2 select',
+            //showSearch: false,
+            placeholder: 'Select Permissions',
+            deselectLabel: '<span>&times;</span>',
+            hideSelectedOption: true,
+        });
         verificarFechas();
-        var dataTable = $('#empleados-reportes-table').DataTable({
+
+        var dataTable = $('#personal-reportes-table').DataTable({
             processing: false,
             serverSide: false, // Changed to false if you're not using server-side processing
             ajax: {
-                url: "{{ route('reportes.getReporte') }}",
+                url: "{{ route('personalreportes.getReporte') }}",
                 type: "GET", // Change the request type to GET
                 data: function(d) {
                     // Append parameters to the URL
-                    d.fecha_inicio = $('#fecha_inicio').val();
-                    d.fecha_final = $('#fecha_final').val();
+                    d.empleado = $('#empleado').val();
+                    d.fecha_inicio = $('#fecha_inicio2').val();
+                    d.fecha_final = $('#fecha_final2').val();
+                }
+            },
+            columns: [{
+                    data: "empleado"
+                },
+                {
+                    data: "total_retrasos"
+                },
+                {
+                    data: "observaciones"
+                }
+            ]
+        });
+        var dataTable = $('#area-personal-reportes-table').DataTable({
+            processing: false,
+            serverSide: false, // Changed to false if you're not using server-side processing
+            ajax: {
+                url: "{{ route('personalreportes.getReporte') }}",
+                type: "GET", // Change the request type to GET
+                data: function(d) {
+                    // Append parameters to the URL
+                    d.empleado = $('#empleado').val();
+                    d.fecha_inicio = $('#fecha_inicio2').val();
+                    d.fecha_final = $('#fecha_final2').val();
                 }
             },
             columns: [{
@@ -157,63 +269,28 @@
         });
 
         function verificarFechas() {
-            var fechaInicio = $('#fecha_inicio').val();
-            var fechaFinal = $('#fecha_final').val();
-            $('#verBtn').prop('disabled', !fechaInicio || !fechaFinal);
+            var fechaInicio = $('#fecha_inicio2').val();
+            var fechaFinal = $('#fecha_final2').val();
+            $('#verBtn2').prop('disabled', !fechaInicio || !fechaFinal);
         }
-
-        $('#fecha_inicio, #fecha_final').on('change', function() {
+        $('#fecha_inicio2, #fecha_final2', ).on('change', function() {
             // Verificar si ambas fechas están seleccionadas
-            var fechaInicio = $('#fecha_inicio').val();
-            var fechaFinal = $('#fecha_final').val();
+            var fechaInicio = $('#fecha_inicio2').val();
+            var fechaFinal = $('#fecha_final2').val();
 
             // Habilitar o deshabilitar el botón "Ver" según la presencia de fechas
-            $('#verBtn').prop('disabled', !fechaInicio || !fechaFinal);
+            $('#verBtn2').prop('disabled', !fechaInicio || !fechaFinal);
         });
 
         // Apply filter on button click
-        $('#verBtn').on('click', function() {
+        $('#verBtn2').on('click', function() {
             // Reload the DataTable with new parameters
             dataTable.ajax.reload();
             $('#guardarBtn').prop('disabled', false);
             $('#verBtn').prop('disabled', false);
 
         });
-        $('#guardarBtn').click(function() {
-            // Obtener los valores de fecha de inicio y fecha final
-            var fechaInicio = $('#fecha_inicio').val();
-            var fechaFinal = $('#fecha_final').val();
 
-            // Realizar la solicitud AJAX al servidor
-            $.ajax({
-                url: "{{ route('reportes.store') }}",
-                type: "POST",
-                data: {
-                    fecha_inicio: fechaInicio,
-                    fecha_final: fechaFinal,
-                    _token: '{{ csrf_token() }}'
-                },
-
-                success: function(data) {
-                    if (data.success) {
-                        // Muestra el mensaje de éxito en un modal
-                        $('#successMessage').text(data.success);
-                        $('#successModal').modal('show');
-
-                        // Cierra el modal después de 3 segundos (3000 milisegundos)
-                        setTimeout(function() {
-                            $('#successModal').modal('hide');
-                        }, 2000);
-                    } else {
-                        // No hay mensaje de éxito, puedes manejarlo de otra manera si es necesario
-                    }
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    // Manejar errores si es necesario
-                    console.error(errorThrown);
-                }
-            });
-        });
 
     });
 </script>

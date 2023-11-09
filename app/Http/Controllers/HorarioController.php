@@ -23,16 +23,28 @@ class HorarioController extends Controller
     {
         //
         if ($request->ajax()) {
-            $horarios = HorarioModel::select(['id', 'Nombre', 'hora_entrada', 'hora_salida', 'excepcion', 'estado'])
+            $horarios = HorarioModel::select(['id', 'Nombre', 'hora_final', 'hora_inicio', 'hora_entrada', 'hora_salida', 'excepcion', 'estado'])
                 ->withCount('empleados')->get();
 
 
             return DataTables::of($horarios)
-                ->addColumn('entrada', function ($horario) {
-                    return Carbon::parse($horario->hora_entrada)->format('H:i');
+                ->addColumn('mañana', function ($horario) {
+                    if(!$horario->hora_salida){
+                        return Carbon::parse($horario->hora_inicio)->format('H:i');
+                    }else{
+                        $horaI = Carbon::parse($horario->hora_inicio)->format('H:i');
+                        $horaS = Carbon::parse($horario->hora_salida)->format('H:i');
+                        return $horaI.' - '.$horaS;
+                    }
                 })
-                ->addColumn('salida', function ($horario) {
-                    return Carbon::parse($horario->hora_salida)->format('H:i');
+                ->addColumn('tarde', function ($horario) {
+                    if(!$horario->hora_salida){
+                        return Carbon::parse($horario->hora_final)->format('H:i');
+                    }else{
+                        $horaE = Carbon::parse($horario->hora_entrada)->format('H:i');
+                        $horaF = Carbon::parse($horario->hora_final)->format('H:i');
+                        return $horaE.' - '.$horaF;
+                    }
                 })
                 ->addColumn('excepcion', function ($horario) {
                     return Carbon::parse($horario->excepcion)->format('H:i');
@@ -86,11 +98,16 @@ class HorarioController extends Controller
 
         $horario->Nombre = $request->nombre;
         $horario->hora_entrada = $request->hora_entrada;
+        $horario->hora_inicio = $request->hora_inicio;
+        $horario->hora_final = $request->hora_final;
         $horario->hora_salida = $request->hora_salida;
         $horario->excepcion = $request->excepcion;
         $horario->usuario_creacion = Auth::user()->name;
         $horario->estado = 0;
         $horario->save();
+        if ($horario->hora_entrada && $horario->hora_salida) {
+            $horario->tipo = 0;
+        }
 
         if ($request->has('asignado')) {
             $horario->estado = 1;
@@ -184,22 +201,6 @@ class HorarioController extends Controller
                 ->whereIn('horarios.id', $request->horarios)
                 ->update(['horarios.estado' => 1]);
 
-            // Obtén todos los horarios
-            $horarios = HorarioModel::all();
-
-            // Itera sobre los horarios
-            foreach ($horarios as $horario) {
-                // Cuenta cuántos empleados están asociados a este horario
-                $cantidadEmpleados = $horario->empleados()->count();
-
-                // Verifica si no hay empleados asociados
-                if ($cantidadEmpleados === 0) {
-                    // Cambia el estado del horario
-                    $horario->update(['estado' => 2]);
-                }
-            }
-
-
             return redirect()->route('empleadoasistencias.index')->with('success', 'Horarios de Empleado Activados');
         } catch (\Exception $e) {
             // Captura cualquier excepción que pueda ocurrir y muestra un mensaje de error
@@ -213,7 +214,7 @@ class HorarioController extends Controller
     public function cambio(EmpleadosModel $empleado)
     {
         $horarios = HorarioModel::all()->pluck('Nombre', 'id');
-        $horariosCompletos = HorarioModel::all(['id', 'Nombre', 'hora_entrada', 'hora_salida', 'estado']);
+        $horariosCompletos = HorarioModel::all(['id', 'Nombre','hora_inicio', 'hora_final','hora_entrada', 'hora_salida', 'estado']);
 
         if ($empleado) {
             return view('asistencias.horarios.cambio', compact('empleado', 'horarios', 'horariosCompletos'));
@@ -232,9 +233,14 @@ class HorarioController extends Controller
 
     public function update(HoraEmpleadoRequest $request, HorarioModel $horario)
     {
+        
         $request->validated();
 
         $horario->Nombre = $request->input('nombre');
+        $horario->hora_entrada = $request->input('hora_entrada');
+        $horario->hora_inicio = $request->input('hora_inicio');
+        $horario->hora_final = $request->input('hora_final');
+      
         $horario->hora_entrada = $request->input('hora_entrada');
         $horario->hora_salida = $request->input('hora_salida');
         $horario->excepcion = $request->input('excepcion');
@@ -245,6 +251,9 @@ class HorarioController extends Controller
 
         // Guardar el nuevo horario en la base de datos
         $horario->save();
+        if (!$horario->hora_entrada && !$horario->hora_salida) {
+            $horario->tipo = 0;
+        }
 
         if ($request->has('asignado')) {
             $horario->estado = 1;

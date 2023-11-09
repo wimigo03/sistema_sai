@@ -366,6 +366,22 @@
                             </a>
                         </li>
                         @endcan
+                        @can('planta_access')
+                        <li>
+                            <a href="{{ route('movimientosplanta.index') }}">
+                                &nbsp; &nbsp; &nbsp;
+                                <span class="nav-label mr-4">Movimientos Planta</span>
+                            </a>
+                        </li>
+                        @endcan
+                        @can('personal_contrato_access')
+                        <li>
+                            <a href="{{ route('movimientoscontrato.index') }}">
+                                &nbsp; &nbsp; &nbsp;
+                                <span class="nav-label mr-4">Movimientos Contrato</span>
+                            </a>
+                        </li>
+                        @endcan
                     </ul>
                 </li>
                 @endcanany
@@ -397,6 +413,20 @@
                                 <span class="nav-label mr-4">Gestion de Horarios</span>
                             </a>
 
+                        </li>
+                        @endcan
+                        @can('horario_access')
+                        <li>
+                            <a href="{{ route('lectordactilar.index') }}">
+                                <span class="nav-label mr-4">Lector Dactilar</span>
+                            </a>
+                        </li>
+                        @endcan
+                        @can('horario_access')
+                        <li>
+                            <a href="{{ route('ausencias.index') }}">
+                                <span class="nav-label mr-4">Gestionar Ausencias</span>
+                            </a>
                         </li>
                         @endcan
                         @can('horario_access')

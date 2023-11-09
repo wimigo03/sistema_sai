@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RegistroAsistencia;
 use App\Models\RetrasosEmpleado;
 use App\Models\RetrasosModel;
 
@@ -14,7 +15,7 @@ class RetrasoController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = RetrasosEmpleado::with('empleado')->where('minutos_diario','>',0);
+            $data = RegistroAsistencia::with('empleado')->where('minutos_retraso','>',0);
             
             $data = $data->get();
 
@@ -32,7 +33,7 @@ class RetrasoController extends Controller
                     return $ap_pat . ' ' . $ap_mat;
                 })
                 ->addColumn('minutos', function ($row) {
-                    return $row->minutos_diario ?? 'vacio';
+                    return $row->minutos_retraso ?? 'vacio';
                 })
                 ->make(true);
         }

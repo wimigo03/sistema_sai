@@ -20,7 +20,7 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <table class="table table-bordered customers-table table-hover" id="customers-table">
+      <table class="table table-bordered customers-table table-hover" id="customers-table" style="width:100%">
           <thead>
               <tr>
                   <th class="text-center"></th>

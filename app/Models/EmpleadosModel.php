@@ -108,6 +108,19 @@ class EmpleadosModel extends Model
         return $this->belongsToMany(PermisoModel::class, 'empleado_permiso', 'empleado_id', 'permiso_id')
             ->withPivot(['hora_salida', 'hora_retorno', 'fecha_solicitud', 'horas_utilizadas']);
     }
+    public function licencias()
+    {
+        return $this->belongsToMany(LicenciasRipModel::class, 'empleado_licencia', 'empleado_id', 'licencia_id')
+            ->withPivot(['fecha_solicitud', 'dias_utilizados']);
+    }
+    public function movimientosPt()
+    {
+        return $this->hasMany(MovimientosPtModel::class,'idemp');
+    }
+    public function movimientosCont()
+    {
+        return $this->hasMany(MovimientosContModel::class, 'idemp');
+    }
 
 
 

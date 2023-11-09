@@ -7,7 +7,16 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <span class="mr-auto">Crear Permiso para Empleado</span>
-                    <span class="text-right">{{ $permiso->permiso }}</span>
+                    @php
+                    use Carbon\Carbon;
+
+                    $fechaCarbon = Carbon::createFromFormat('Y-m', $permiso->mes);
+                    $fechaEnEspañol = mb_strtoupper($fechaCarbon->locale('es')->isoFormat('MMMM YYYY'), 'UTF-8');
+
+                    @endphp
+                    <span  class="text-right">{{$fechaEnEspañol}}</span> &nbsp;
+
+ 
                     <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{ route('permisospersonales.index') }}">
                         <button class="btn btn-sm btn-danger font-verdana" type="button" aria-label="Cerrar">
                             &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
@@ -44,6 +53,8 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="empleado_id">Nombre:</label>
+                                    <input type="hidden" name="permiso_id" value="{{ $permiso->id }}" readonly class="form-control">
+
                                     <input type="hidden" name="empleado_id" id="empleado_id" value="{{ $empleado->idemp }}" readonly class="form-control">
                                     <input type="text" name="empleado" id="empleado" value="{{ $empleado->nombres }}" readonly class="form-control">
                                 </div>
@@ -51,8 +62,15 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="fecha_solicitud">Fecha de Solicitud:</label>
-                                    <input type="date" name="fecha_solicitud" id="fecha_solicitud" value="{{ date('Y-m-d') }}" required class="form-control">
+
+                                    @php
+                                    $permiso = $permiso->mes . '-01'; // Agregar el día 01 al mes seleccionado
+                                    $fechaCarbon = \Carbon\Carbon::createFromFormat('Y-m-d', $permiso);
+                                    @endphp
+
+                                    <input type="date" name="fecha_solicitud" id="fecha_solicitud" value="{{ $fechaCarbon->format('Y-m-d') }}" required class="form-control">
                                 </div>
+
                             </div>
                         </div>
 
@@ -60,7 +78,6 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="permiso_id">Asunto:</label>
-                                    <input type="hidden" name="permiso_id" value="{{ $permiso->id }}" readonly class="form-control">
                                     <input type="text" name="asunto" value="Personal" class="form-control">
                                 </div>
                             </div>

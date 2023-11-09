@@ -305,7 +305,7 @@
 
 
 
-
+ 
 
 
 
@@ -317,7 +317,7 @@
                             <label class="col-md-1" style="color:black;font-weight: bold;">File:</label>
                             <div id="permissions-select2">
 
-                                <select name="idfile" id="permissions2" class="col-md-6">
+                                <select name="idfile" id="permissions2" class="col-md-6" required>
                                     <option value="">== Seleccione un File ==</option>
                                     @foreach($area as $areas)
                                     <option disabled>

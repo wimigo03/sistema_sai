@@ -10,7 +10,7 @@
         </div>
     <div class="panel-body">
       <font size="2" face="Courier New" >
-        <table class="table table-bordered customers-table table-hover" id="customers-table">
+        <table class="table table-bordered customers-table table-hover" id="customers-table" style="width:100%">
             <thead>
             <tr>
                 <th></th>
@@ -56,7 +56,7 @@
         serverSide: true,
        
         scrollY: true,
-        ajax: '{{ route('contrato.list') }}',
+        ajax: "{{ route('contrato.list') }}",
         columns: [
           {
             "className":      'details-control',

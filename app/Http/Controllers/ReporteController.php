@@ -10,6 +10,8 @@ use App\Models\RetrasosModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use App\Models\RegistroAsistencia;
+use Illuminate\Support\Facades\DB;
 
 
 class ReporteController extends Controller
@@ -66,9 +68,14 @@ class ReporteController extends Controller
      */
     public function create()
     {
-        //
+        $data = DB::table('areas')->get();
+      
+        $empleados = EmpleadosModel::where('estadoemp1', 1)
+            ->where('estadoemp2', 1)
+            ->select('idemp', 'nombres', 'ap_mat', 'ap_pat')
+            ->get();
 
-        return view('asistencias.reportes.create');
+        return view('asistencias.reportes.create', compact('empleados','data'));
     }
 
     /**
@@ -107,16 +114,16 @@ class ReporteController extends Controller
                 $observacion = '';
 
                 // Buscar el descuento correspondiente en la tabla "descuentos"
-                 $descuento = DescuentoModel::where('retraso_max', '>=', $suma_retrasos)->orderBy('retraso_max', 'asc')->first();
+                $descuento = DescuentoModel::where('retraso_max', '>=', $suma_retrasos)->orderBy('retraso_max', 'asc')->first();
 
                 if ($descuento) {
                     $observacion = $descuento->descripcion;
-                }else{
+                } else {
                     $descuento = DescuentoModel::where('retraso_max', '<=', $suma_retrasos)->orderBy('retraso_max', 'desc')->first();
 
                     $observacion = $descuento->descripcion;
                 }
-    
+
 
                 $reporte->empleados()->attach($empleado, [
                     'total_retrasos' => $suma_retrasos,
@@ -124,7 +131,6 @@ class ReporteController extends Controller
                 ]);
             }
             return response()->json(['success' => 'Datos guardados con éxito']);
-
         } catch (\Exception $e) {
             // Catch any exception that may occur and return an error message
             return response()->json(['error' => 'Error al guardar datos']);
@@ -133,7 +139,7 @@ class ReporteController extends Controller
     public function getReporte(Request $request)
     {
         if ($request->ajax()) {
-            
+
             $fechaInicio = $request->input('fecha_inicio');
             $fechaFinal = $request->input('fecha_final');
 
@@ -161,7 +167,7 @@ class ReporteController extends Controller
 
                 if ($descuento) {
                     $observacion = $descuento->descripcion;
-                }else{
+                } else {
                     $descuento = DescuentoModel::where('retraso_max', '<=', $suma_retrasos)->orderBy('retraso_max', 'desc')->first();
 
                     $observacion = $descuento->descripcion;
@@ -185,7 +191,67 @@ class ReporteController extends Controller
         }
 
         // For non-AJAX requests, return the view
-    
+
+    }
+    public function personalgetReporte(Request $request)
+    {
+        if ($request->ajax()) {
+            $empleado_id = $request->input('empleado');
+            $fechaInicio = $request->input('fecha_inicio');
+            $fechaFinal = $request->input('fecha_final');
+
+            $query = EmpleadosModel::whereHas('registrosAsistencia', function ($query) use ($empleado_id, $fechaInicio, $fechaFinal) {
+                $query
+                    ->where('empleado_id', $empleado_id)
+                    ->where('estado', 1)
+                    ->where('minutos_retraso', '>', 60)
+                    ->whereRaw("DATE(created_at) BETWEEN ? AND ?", [$fechaInicio, $fechaFinal]);
+            });
+
+            $totalRecords = $query->count();
+
+            $query->skip($request->input('start'))
+                ->take($request->input('length'));
+
+            $empleados = $query->get();
+
+            $empleadosData = [];
+            foreach ($empleados as $empleado) {
+                $suma_retrasos = RegistroAsistencia::where('empleado_id', $empleado->idemp)
+                    ->whereRaw("DATE(created_at) BETWEEN ? AND ?", [$fechaInicio, $fechaFinal])
+                    ->sum('minutos_retraso');
+
+                $observacion = '';
+
+                $descuento = DescuentoModel::where('retraso_max', '>=', $suma_retrasos)->orderBy('retraso_max', 'asc')->first();
+
+                if ($descuento) {
+                    $observacion = $descuento->descripcion;
+                } else {
+                    $descuento = DescuentoModel::where('retraso_max', '<=', $suma_retrasos)->orderBy('retraso_max', 'desc')->first();
+
+                    $observacion = $descuento->descripcion;
+                }
+
+                $empleadosData[] = [
+                    'empleado' => $empleado->nombres,
+                    'total_retrasos' => $suma_retrasos,
+                    'observaciones' => $observacion,
+                ];
+            }
+
+            $data = [
+                'draw' => $request->input('draw'),
+                'recordsTotal' => $totalRecords,
+                'recordsFiltered' => $totalRecords,
+                'data' => $empleadosData,
+            ];
+
+            return response()->json($data);
+        }
+
+        // For non-AJAX requests, return the view
+
     }
 
 
@@ -202,9 +268,9 @@ class ReporteController extends Controller
      */
     public function show(ReporteModel $reporte)
     {
-        $empleadosReportes = $reporte->empleados()->with('empleado')->get();
+        $reportes = $reporte->empleados()->with('empleado')->get();
         if (request()->ajax()) {
-            return DataTables::of($empleadosReportes)
+            return DataTables::of($reportes)
                 ->addColumn('empleado', function ($row) {
                     return  $row->empleado->nombres ?? '-';
                 })
@@ -224,7 +290,7 @@ class ReporteController extends Controller
 
             $currentDate = now();
         }
-        return view('asistencias.reportes.show', compact('reporte', 'empleadosReportes'));
+        return view('asistencias.reportes.show', compact('reporte', 'reportes'));
     }
 
     /**

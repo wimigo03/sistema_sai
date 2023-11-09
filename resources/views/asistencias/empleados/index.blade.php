@@ -38,7 +38,7 @@
 
     <div class="row font-verdana">
         <div class="col-md-12 table-responsive center">
-            <table class="table-bordered yajra-datatable hoverTable table display responsive font-verdana" id="empleados-table">
+            <table class="table-bordered yajra-datatable hoverTable table display responsive font-verdana" id="empleados-table" style="width:100%">
                 <thead class="table-light">
                     <tr>
                         <th>ID</th>

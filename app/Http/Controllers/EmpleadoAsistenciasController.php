@@ -20,7 +20,7 @@ class EmpleadoAsistenciasController extends Controller
         if ($request->ajax()) {
 
 
-            $data = EmpleadosModel::with(['registrosAsistencia', 'horarios' => function ($query) {
+            $data = EmpleadosModel::with(['horarios' => function ($query) {
                 $query->where('estado', 1); // Filtrar los horarios con estado activo (estado = 1)
             }])->select(['idemp', 'nombres', 'ap_pat', 'ap_mat']);
 

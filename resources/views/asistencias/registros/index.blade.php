@@ -39,8 +39,10 @@
                         <th>Fecha</th>
                         <th>Nombres Apellidos</th>
                         <th>Horario</th>
-                        <th>Registro Entrada</th>
-                        <th>Registro Salida</th>
+                        <th> Entrada</th>
+                        <th> Salida</th>
+                        <th> Entrada</th>
+                        <th> Salida</th>
                         <th>Minutos Retraso</th>
                     </tr>
                 </thead>
@@ -169,14 +171,25 @@
                     name: 'horario',
                     class: 'text-center p-1 font-verdana-sm'
                 },
-                {
-                    data: 'registro_entrada',
-                    name: 'registro_entrada',
+                 {
+                    data: 'registro_inicio',
+                    name: 'registro_inicio',
                     class: 'text-center p-1 font-verdana-sm'
                 },
                 {
                     data: 'registro_salida',
                     name: 'registro_salida',
+                    class: 'text-center p-1 font-verdana-sm'
+                },
+                {
+                    data: 'registro_entrada',
+                    name: 'registro_entrada',
+                    class: 'text-center p-1 font-verdana-sm'
+                },
+                
+                {
+                    data: 'registro_final',
+                    name: 'registro_final',
                     class: 'text-center p-1 font-verdana-sm'
                 },
                 {

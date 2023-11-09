@@ -22,7 +22,7 @@
     </div>
     <div class="row font-verdana">
         <div class="col-md-6 table-responsive center">
-            <table class="table-bordered display compact yajra-datatable hoverTable table display responsive font-verdana" class="table text-center" id="registrosTable">
+            <table class="table-bordered display compact yajra-datatable hoverTable table display responsive font-verdana" style="width:100%" class="table text-center" id="registrosTable">
                 <thead class="font-verdana">
                     <tr class="text-center">
                         <th>ID</th>

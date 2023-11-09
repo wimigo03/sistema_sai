@@ -13,6 +13,11 @@
     <link rel="stylesheet" href="{{ asset('admin_assets/plugins/slim-select/slimselect.min.css') }}">
     <link rel="stylesheet" href="{{ asset('dataTable_1.10.22/css/jquery.dataTables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('dataTable_1.10.22/css/responsive.dataTables.min.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('DataTables\Buttons-2.2.3\css\buttons.bootstrap4.min.css') }}">
+ 
+
+
     {{--<link rel="stylesheet" href="{{ asset('plugins2/datatables/dataTables.css') }}" />--}}
     <link href="{{ asset('dashboard/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('dashboard/css/fonts/roboto.css') }}" rel="stylesheet">
@@ -42,7 +47,7 @@
         /*@import "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css";
         @import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700');*/
         #customers-table tbody td.details-control {
-            background-image: url('{{ asset('admin_assets/images/details_open.png') }}');
+            background-image: url("{{ asset('admin_assets/images/details_open.png') }}");
             cursor: pointer;
             background-repeat: no-repeat;
             background-position: center;
@@ -51,7 +56,7 @@
             padding: 7px;
         }
         #customers-table tbody tr.shown td.details-control {
-            background-image: url('{{ asset('admin_assets/images/details_close.png') }}');
+            background-image: url("{{ asset('admin_assets/images/details_close.png') }}");
             cursor: pointer;
             background-repeat: no-repeat;
             background-position: center;
@@ -89,16 +94,19 @@
 
 
     <script src="{{ asset('DataTables/RowGroup-1.2.0/js/dataTables.rowGroup.min.js') }}"></script>
-    <script src="{{ asset('DataTables/Buttons-2.2.3/js/buttons.dataTables.min.js') }}"></script>
-
+ 
+    <script src="{{ asset('DataTables\Buttons-2.2.3\js\dataTables.buttons.min.js') }}"></script>
+     <script src="{{ asset('DataTables\Buttons-2.2.3\js\buttons.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('DataTables/Buttons-2.2.3/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('DataTables/Buttons-2.2.3/js/buttons.colVis.min.js') }}"></script>
 
     <script src="{{ asset('DataTables/JSZip-2.5.0/jszip.min.js') }}"></script>
     <script src="{{ asset('DataTables/pdfmake-0.1.36/pdfmake.min.js') }}"></script>
     <script src="{{ asset('DataTables/pdfmake-0.1.36/vfs_fonts.js') }}"></script>
-   
+    <script src="{{ asset('DataTables/RowGroup-1.2.0/js/dataTables.rowGroup.min.js') }}"></script>
+ 
 
+  
 
     <script src="{{ asset('dashboard/js/popper.min.js') }}"></script>
     <script src="{{ asset('dashboard/js/bootstrap.min.js') }}"></script>
@@ -107,18 +115,6 @@
     <script src="{{ asset('datepicker/datepicker.min.js') }}"></script>
     <script src="{{ asset('datepicker/datepicker.es.js') }}"></script>
 
-<!-- Estilos CSS de DataTables y Buttons -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
-
-<!-- Archivos JavaScript de DataTables y Buttons -->
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
-
-<!-- Archivo de idioma en español para DataTables y Buttons -->
-<script src="https://cdn.datatables.net/plug-ins/1.11.5/i18n/Spanish.json"></script>
 
 
     @yield('scripts')

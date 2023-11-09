@@ -411,9 +411,9 @@ Route::get('notificacion/index', 'NotifcacionController@index')->name('notificac
 
 Route::put('/horarios/{id}/updateEstado', 'HorarioController@updateEstado')->name('horarios.updateEstado')->middleware('can:horario_access');
 
-Route::get('horarios/cambio/{empleado}', 'HorarioController@cambio')->name('horarios.cambio');
+Route::get('horarios/cambio/{empleado}', 'HorarioController@cambio')->name('horarios.cambio')->middleware('can:horario_access');
 
-Route::put('/horarios/{horario}/updatehora', 'HorarioController@updatehora')->name('horarios.updatehora');
+Route::put('/horarios/{horario}/updatehora', 'HorarioController@updatehora')->name('horarios.updatehora')->middleware('can:horario_access');
 
 
 Route::get('horarios/index', 'HorarioController@index')->name('horarios.index')->middleware('can:horario_access');
@@ -443,24 +443,41 @@ Route::get('registroasistencia/create', 'RegistroAsistenciaController@create')->
 Route::post('registroasistencia/store', 'RegistroAsistenciaController@store')->name('registroasistencia.store')->middleware('can:asistencias_access');
 /////////////
 Route::get('retrasosempleado', 'RetrasoController@index')->name('retrasos.index')->middleware('can:asistencias_access');
+Route::get('ausencias', 'AusenciasController@index')->name('ausencias.index')->middleware('can:asistencias_access');
 
 Route::get('reportes', 'ReporteController@index')->name('reportes.index')->middleware('can:reporte_access');
 Route::get('reportes/create', 'ReporteController@create')->name('reportes.create')->middleware('can:reporte_access');
 Route::post('reportes/store', 'ReporteController@store')->name('reportes.store')->middleware('can:reporte_access');
 Route::get('reportes/show/{reporte}', 'ReporteController@show')->name('reportes.show')->middleware('can:reporte_access');
 Route::get('reportes/getReporte', 'ReporteController@getReporte')->name('reportes.getReporte')->middleware('can:reporte_access');
+Route::get('reportes/personalgetReporte', 'ReporteController@personalgetReporte')->name('personalreportes.getReporte')->middleware('can:reporte_access');
+Route::get('reportes/areapersonalgetReporte', 'ReporteController@areapersonalgetReporte')->name('areapersonalreportes.getReporte')->middleware('can:reporte_access');
 
 
+Route::get('permisos/id', 'PermisosPersonalesController@getID')->name('permisospersonales.getID')->middleware('can:reporte_access');
 Route::get('permisos', 'PermisosPersonalesController@index')->name('permisospersonales.index')->middleware('can:reporte_access');
  
 Route::get('permisos/nuevo/{id}/{permiso_id}', 'PermisosPersonalesController@nuevo')->name('permisospersonales.nuevo')->middleware('can:reporte_access');
-Route::get('permisos/get', 'PermisosPersonalesController@getEmpleados')->name('empleados.get')->middleware('can:reporte_access');
+Route::get('permisos/get', 'PermisosPersonalesController@getEmpleados')->name('permisosempleados.get')->middleware('can:reporte_access');
 Route::get('permisos/create/', 'PermisosPersonalesController@create')->name('permisospersonales.create')->middleware('can:reporte_access');
 Route::post('permisos/store/', 'PermisosPersonalesController@store')->name('permisospersonales.store')->middleware('can:reporte_access');
 Route::get('permisos/detalle/{id}/{permiso_id}', 'PermisosPersonalesController@detalle')->name('permisospersonales.detalle');
 Route::get('permisos/show', 'PermisosPersonalesController@show')->name('permisospersonales.show')->middleware('can:reporte_access');
 
 Route::get('licencias', 'LicenciasPersonalesController@index')->name('licenciaspersonales.index')->middleware('can:reporte_access');
+
+Route::get('licencias/id', 'LicenciasPersonalesController@getID')->name('licenciaspersonales.getID')->middleware('can:reporte_access'); 
+Route::get('licencias/nuevo/{id}/{licencia_id}', 'LicenciasPersonalesController@nuevo')->name('licenciaspersonales.nuevo')->middleware('can:reporte_access');
+Route::get('licencias/get', 'LicenciasPersonalesController@getEmpleados')->name('licenciasempleados.get')->middleware('can:reporte_access');
+Route::get('licencias/create/', 'LicenciasPersonalesController@create')->name('licenciaspersonales.create')->middleware('can:reporte_access');
+Route::post('licencias/store/', 'LicenciasPersonalesController@store')->name('licenciaspersonales.store')->middleware('can:reporte_access');
+Route::get('licencias/detalle/{id}/{licencia_id}', 'LicenciasPersonalesController@detalle')->name('licenciaspersonales.detalle');
+Route::get('licencias/show', 'LicenciasPersonalesController@show')->name('licenciaspersonales.show')->middleware('can:reporte_access');
+
+Route::get('rechumanos/planta/movimientos/list', 'MovimientosPlantaController@index')->name('movimientosplanta.index');
+Route::get('rechumanos/contrato/movimientos/list', 'MovimientosContratoController@index')->name('movimientoscontrato.index');
+
+Route::get('lectordactilar', 'LectorDactilarController@index')->name('lectordactilar.index');
 
 
 });

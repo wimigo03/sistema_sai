@@ -1,69 +1,115 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="container-xl">
-    <div class="row font-verdana-bg">
-        <div class="col-md-4 titulo mt-4">
-            <b>Lista de Horarios de Trabajo</b>
+<div class="container-xl font-verdana-bg">
+<div class="row font-verdana-bg">
+    <div class="col-md-12">
+        @if(Session::has('pendiente'))
+         <div class="alert alert-danger font-verdana-bg">
+            {{ Session::get('pendiente') }}
         </div>
-       
+        <hr>
+
+        @endif
+
+        @if(Session::has('success'))
+        <div class="alert alert-success">
+            {{ Session::get('success') }}
+        </div>
+        <hr>
+
+        @endif
+        @if(Session::has('error'))
+         <div class="alert alert-danger font-verdana-bg">
+            {{ Session::get('error') }}
+        </div>
+        <hr>
+
+        @endif
+     </div>
+</div>
+    <div class="row font-verdana-bg">
+        <div class="col-md-6 titulo">
+            <b>Horario Activo :</b>
+        </div>
+
         @can('horario_access')
-        <div class="col-md-8 text-right">
+        <div class="col-md-6 text-right">
+        <a href="{{ route('empleadoasistencias.index') }}" class="tts:left tts-slideIn tts-custom" aria-label="Ver Fechas">
+                <button class="btn btn-sm btn-warning text-white font-verdana" type="button" aria-label="Ver Empleados ">
+                Fechas&nbsp;<i class="fa-sharp fa-solid fa-calendar"></i>&nbsp;
+                </button>
+            </a>
             <a href="{{ route('empleadoasistencias.index') }}" class="tts:left tts-slideIn tts-custom" aria-label="Ver Empleados">
                 <button class="btn btn-sm btn-info font-verdana" type="button" aria-label="Ver Empleados ">
-                    &nbsp;<i class="fa-solid fa-users-line">Empleados</i>&nbsp;
+                Empleados&nbsp;<i class="fa-sharp fa-solid fa-people-arrows"></i>&nbsp;
                 </button>
             </a>
             <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
 
             <a href="{{ route('horarios.create') }}" class="tts:left tts-slideIn tts-custom" aria-label="Crear Nuevo Horario">
                 <button class="btn btn-sm btn-success font-verdana" type="button" aria-label="Agregar Nuevo Horario">
-                    &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
+                    Agregar Nuevo Horario&nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
                 </button>
             </a>
             <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
         </div>
         @endcan
-        <div class="col-md-12">
-            @if(Session::has('pendiente'))
-            <hr>
-            <div class="alert alert-danger font-verdana-bg">
-                {{ Session::get('pendiente') }}
-            </div>
-            @endif
+    </div>
+    <div class="body-border ">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="empleado">
+                        <b> Fecha Actual</b></label>
+                    <input type="date" id="fecha_actual" name="fecha_actual" value="{{date('Y-m-d')}}" class="form-control" readonly>
 
-            @if(Session::has('success'))
-            <hr>
-            <div class="alert alert-success">
-                {{ Session::get('success') }}
+                </div>
             </div>
-            @endif
-            @if(Session::has('error'))
-            <hr>
-            <div class="alert alert-danger font-verdana-bg">
-                {{ Session::get('error') }}
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="fecha_inicio2">Horario Entrada</label>
+                    <input type="time" id="fecha_inicio" name="fecha_inicio" value="" class="form-control" readonly>
+                    <label for="fecha_inicio2">Horario Salida</label>
+                    <input type="time" id="fecha_inicio" name="fecha_inicio" value="" class="form-control" readonly>
+                </div>
             </div>
-            @endif
-            <hr class="hrr">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="fecha_inicio2">Horario Entrada</label>
+                    <input type="time" id="fecha_inicio" name="fecha_inicio" value="" class="form-control" readonly>
+
+                    <label for="fecha_inicio2">Horario Salida</label>
+                    <input type="time" id="fecha_inicio" name="fecha_inicio" value="" class="form-control" readonly>
+                </div>
+            </div>
         </div>
+
     </div>
-    <div class="row font-verdana">
-        <div class="col-md-12 table-responsive center">
-            <table id="horarios-table" class="table-bordered yajra-datatable hoverTable font-verdana-sm" style="width:100%">
-                <thead class="table-light">
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Hora de Entrada</th>
-                        <th>Hora de Salida</th>
-                        <th>Asignados</th>
-                        <th>Tiempo de Excepcion</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
+</div>
+<hr>
+<div class="row font-verdana-bg">
+    <div class="col-md-6 titulo">
+        <b>Lista de Horarios de Trabajo</b>
     </div>
+</div>
+<div class="row font-verdana">
+    <div class="col-md-12 table-responsive center">
+        <table id="horarios-table" class="table-bordered yajra-datatable hoverTable table display responsive font-verdana" style="width:100%">
+            <thead class="table-light">
+                <tr>
+                    <th>Horario</th>
+                    <th>Mañana</th>
+                    <th>Tarde</th>
+                    <th>Asignados</th>
+                    <th>Excepcion</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
 </div>
 
 
@@ -73,7 +119,8 @@
         $('#horarios-table').DataTable({
             serverSide: true,
             processing: true,
-            ordering: true,  
+            lengthChange: false,
+            searching: false, 
             language: {
                 info: "<span class='font-verdana'>Mostrando _START_ al _END_ de _TOTAL_</span>",
                 search: '',
@@ -105,13 +152,13 @@
                 },
                 {
                     className: 'text-center p-1 font-verdana',
-                    data: 'entrada',
-                    name: 'entrada'
+                    data: 'mañana',
+                    name: 'mañana'
                 },
                 {
                     className: 'text-center p-1 font-verdana',
-                    data: 'salida',
-                    name: 'salida'
+                    data: 'tarde',
+                    name: 'tarde'
                 },
                 {
                     className: 'text-center p-1 font-verdana',

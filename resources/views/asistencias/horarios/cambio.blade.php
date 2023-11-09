@@ -60,17 +60,18 @@
                         <div class="col-md-12" id="horarios-select">
                             <select name="horarios[]" id="horarios" class="@error('horarios') is-invalid @enderror" class="form-control" required multiple>
                                 @foreach ($horarios as $id => $horario)
+
                                 @php
-                                // Obtén el horario completo a partir del ID
                                 $horarioCompleto = $horariosCompletos->firstWhere('id', $id);
-                    
-                          
+                                $claseFondo = $horarioCompleto->estado == 1 ? 'text-success' : 'bg-danger';
                                 @endphp
-                                <option value="{{ $id }}"     {{ (in_array($id, old('horarios', [])) || $empleado->horarios->contains($id)) ? 'selected' : '' }}>
-                                    {{ $horario }} -   {{ $horarioCompleto->hora_entrada ?? 'N/A' }} -   {{ $horarioCompleto->hora_salida ?? 'N/A' }} - Estado: {{ $horarioCompleto->estado ?? 'N/A' }}
+
+                                <option value="{{ $id }}" class="{{ $claseFondo }} text-white" {{ (in_array($id, old('horarios', [])) || $empleado->horarios->contains($id)) ? 'selected' : '' }}>
+                                     Mañana: {{ $horarioCompleto->hora_inicio ?? '-' }} - {{ $horarioCompleto->hora_salida ?? ' - ' }} - Tarde:{{ $horarioCompleto->hora_entrada ?? '-' }} - {{ $horarioCompleto->hora_final ?? 'N/A' }}
                                 </option>
+
                                 @endforeach
- 
+
 
 
                             </select>

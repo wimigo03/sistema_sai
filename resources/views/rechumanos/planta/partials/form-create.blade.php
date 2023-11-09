@@ -2,11 +2,11 @@
 <div class="form-group row font-verdana-bg">
     <div class="col-md-2">
         <label for="nombres"><b>Nombre(s)</b></label>
-        <input type="text" name="nombres" class="form-control form-control-sm font-verdana-bg" onchange="javascript:this.value=this.value.toUpperCase();">
+        <input type="text" name="nombres" class="form-control form-control-sm font-verdana-bg" required onchange="javascript:this.value=this.value.toUpperCase();">
     </div>
     <div class="col-md-2">
         <label for="ap_paterno"><b>Ap. Paterno</b></label>
-        <input type="text" name="ap_pat" class="form-control form-control-sm font-verdana-bg" onchange="javascript:this.value=this.value.toUpperCase();">
+        <input type="text" name="ap_pat" class="form-control form-control-sm font-verdana-bg" required onchange="javascript:this.value=this.value.toUpperCase();">
     </div>
     <div class="col-md-2">
         <label for="ap_materno"><b>Ap. Materno</b></label>
@@ -14,11 +14,11 @@
     </div>
     <div class="col-md-2">
         <label for="nro_carnet"><b>N° Carnet</b></label>
-        <input type="text" name="ci" class="form-control form-control-sm font-verdana-bg">
+        <input type="text" name="ci" class="form-control form-control-sm font-verdana-bg" required>
     </div>
     <div class="col-md-2">
         <label for="procedencia"><b>Procedencia</b></label><br>
-        <select name="procedencia" id="procedencia" class="form-control form-control-sm">
+        <select name="procedencia" id="procedencia" class="form-control form-control-sm" required>
             <option value="">-</option>
             <option value="TJ" @if(request('procedencia') == 'TJ') selected @endif >TARIJA</option>
             <option value="CH" @if(request('procedencia') == 'CH') selected @endif >CHUQUISACA</option>
@@ -166,7 +166,7 @@
     </div>
     <div class="col-md-4">
         <label for="idfile"><b>File</b></label><br>
-        <select name="idfile" id="idfile" class="form-control form-control-sm">
+        <select name="idfile" id="idfile" class="form-control form-control-sm" required>
             <option value="">-</option>
             @foreach ($files as $index => $value)
                 <option value="{{ $index }}" @if(request('idfile') == $index) selected @endif >{{ $value }}</option>

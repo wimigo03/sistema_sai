@@ -5,17 +5,14 @@
     <br>
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
-            <b> Permisos Personales </b>
+            <b> Registro de Permisos Personales </b>
         </div>
         <div class="col-md-4 text-right">
             <div class="btn-group">
-                <select id="permiso" aria-label="Seleciona Permiso" class="form-control">
-                    @foreach($permisos as $permiso)
-                    <option value="{{ $permiso->id }}">{{ $permiso->permiso }}</option>
-                    @endforeach
-                </select>
-            </div>
+                <input type="month" name="fecha" id="fecha" class="form-control" value="{{ $añoMesActual }}">
+                <input type="hidden" id="permiso" value="{{ $permiso->id }}">
 
+            </div>
         </div>
         <div class="col-md-12">
             <!-- Dentro de tu vista -->
@@ -49,7 +46,7 @@
                         <th></th>
                         <th>Nombres</th>
                         <th>Apellidos</th>
-                        <th>Horas Dispobles</th>
+                        <th>Horas Disponibles</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -58,6 +55,48 @@
     </div>
 
 </div>
+<!-- Bootstrap modal -->
+<div class="modal fade font-verdana" id="miModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Regularizar Asistencia</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body form">
+                <div class="container">
+                    <form action="#" id="form" class="form-horizontal">
+                        <input type="hidden" value="" name="book_id" />
+                        <div class="form-body">
+
+                            <div class="form-group">
+                                <label class="control-label">Nombre y Apellido</label>
+                                <input name="book_isbn" placeholder="Nombre y Apellido" class="form-control" value="JUAN" type="text" readonly>
+
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Fecha Asistencia</label>
+                            
+                                    <input name="Fecha" placeholder="Fecha Asistencia" class="form-control" type="text" readonly>
+                              
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label"></label>
+                          
+                            </div>
+                  
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnSave" onclick="save()" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 
 
 @section('scripts')
@@ -70,6 +109,7 @@
                         <th>Hora de Salida</th>
                         <th>Hora de Retorno</th>
                         <th>Horas Utilizadas</th>
+                        <th>Opciones</th>
                     </tr>
                 </thead>
         </table>
@@ -79,7 +119,38 @@
 
 <script>
     var template = Handlebars.compile($("#details-template").html());
+    var permisoInput = document.getElementById('permiso');
+    $('#fecha').on('change', function() {
+        var mesID = $(this).val();
+
+        // Realizar una petición AJAX para obtener los empleados de la oficina seleccionada
+        $.ajax({
+            url: "{{ route('permisospersonales.getID') }}",
+            type: 'GET',
+            data: {
+                mesID: mesID
+            },
+            success: function(data) {
+                var permiso = data.id;
+                // Limpiar el selector de empleados y agregar las nuevas opciones
+                var permisoInput = document.getElementById('permiso');
+                permisoInput.value = permiso;
+                table.ajax.url("{{ route('permisosempleados.get') }}?permiso_id=" + permiso).load();
+
+                //$.each(cargo, function(index, cargo) {
+                //});
+            }
+        });
+    });
+
     var selectedPermisoId = $('#permiso').val();
+    $('#permiso').on('change', function() {
+        selectedPermisoId = $(this).val(); // Actualiza el valor del permiso seleccionado
+        // Actualiza la URL de la solicitud AJAX con el nuevo permiso seleccionado
+        table.ajax.url("{{ route('permisosempleados.get') }}?permiso_id=" + selectedPermisoId).load();
+    });
+
+
     var table = $('#customers-table').DataTable({
         responsive: true,
         processing: true,
@@ -89,7 +160,7 @@
             info: "<span class='font-verdana'>Mostrando _START_ al _END_ de _TOTAL_</span>",
             search: '',
             searchPlaceholder: "Buscar",
-             
+
             paginate: {
                 next: "<span class='font-verdana'><b>Siguiente</b></span>",
                 previous: "<span class='font-verdana'><b>Anterior</b></span>",
@@ -108,7 +179,7 @@
             infoEmpty: "<span class='font-verdana'>Ningun registro encontrado</span>",
             infoFiltered: "<span class='font-verdana'>(filtrados de un total de _MAX_ registros)</span>"
         },
-        ajax: "{{ route('empleados.get') }}?permiso_id=" + selectedPermisoId, // URL inicial
+        ajax: "{{ route('permisosempleados.get') }}?permiso_id=" + selectedPermisoId, // URL inicial
 
         columns: [{
                 "className": 'details-control',
@@ -141,12 +212,6 @@
             }
         ]
     });
-    $('#permiso').on('change', function() {
-        selectedPermisoId = $(this).val(); // Actualiza el valor del permiso seleccionado
-        // Actualiza la URL de la solicitud AJAX con el nuevo permiso seleccionado
-        table.ajax.url("{{ route('empleados.get') }}?permiso_id=" + selectedPermisoId).load();
-    });
-    
 
     $('#customers-table').on('draw.dt', function() {
         $('ul.pagination').addClass('pagination-sm');
@@ -169,7 +234,6 @@
             tr.next().find('td').addClass('no-padding bg-gray');
         }
     });
-
 
     function initTable(tableId, data) {
         $('#' + tableId).DataTable({
@@ -196,9 +260,21 @@
                     data: 'horas_utilizadas',
                     name: 'horas_utilizadas'
                 }
+                ,
+                {
+                    data: 'opciones',
+                    name: 'opciones'
+                }
             ]
         });
     };
+    $(document).ready(function() {
+        $('#miModal').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget); // Botón que activó el modal
+            var id = button.data('id'); // Obtener el valor de data-id
+            $('#modalIdField').val(id); // Actualizar el campo oculto con el valor del ID
+        });
+    });
 </script>
 @endsection
 @endsection

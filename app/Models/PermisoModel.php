@@ -9,12 +9,17 @@ class PermisoModel extends Model
 {
     use HasFactory;
     public $timestamps = false;
-    protected $table = 'permisos';
+    protected $table = 'permisos_mensuales';
     protected $primaryKey = 'id';   
     protected $fillable = [
-        'permiso', // Agrega 'permiso' aquí si deseas permitir la asignación en masa
+        'mes', // Agrega 'permiso' aquí si deseas permitir la asignación en masa
         'horas_permitidas',
     ];
+
+    public function permiso()
+    {
+        return $this->belongsTo(PermisoModel::class, 'id');
+    }
 
 
     public function empleados()
