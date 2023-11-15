@@ -451,7 +451,7 @@ Route::post('reportes/store', 'ReporteController@store')->name('reportes.store')
 Route::get('reportes/show/{reporte}', 'ReporteController@show')->name('reportes.show')->middleware('can:reporte_access');
 Route::get('reportes/getReporte', 'ReporteController@getReporte')->name('reportes.getReporte')->middleware('can:reporte_access');
 Route::get('reportes/personalgetReporte', 'ReporteController@personalgetReporte')->name('personalreportes.getReporte')->middleware('can:reporte_access');
-Route::get('reportes/areapersonalgetReporte', 'ReporteController@areapersonalgetReporte')->name('areapersonalreportes.getReporte')->middleware('can:reporte_access');
+Route::get('reportes/areaGetReporte', 'ReporteController@areaGetReporte')->name('areaGetReportes.getReporte')->middleware('can:reporte_access');
 
 
 Route::get('permisos/id', 'PermisosPersonalesController@getID')->name('permisospersonales.getID')->middleware('can:reporte_access');

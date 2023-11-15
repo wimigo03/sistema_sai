@@ -22,6 +22,7 @@ class HorarioController extends Controller
     public function index(Request $request)
     {
         //
+        $horarioActivo = HorarioModel::where('estado', 1)->first();
         if ($request->ajax()) {
             $horarios = HorarioModel::select(['id', 'Nombre', 'hora_final', 'hora_inicio', 'hora_entrada', 'hora_salida', 'excepcion', 'estado'])
                 ->withCount('empleados')->get();
@@ -81,7 +82,7 @@ class HorarioController extends Controller
                 ->make(true);
         }
 
-        return view('asistencias.horarios.index');
+        return view('asistencias.horarios.index', compact('horarioActivo'));
     }
 
     public function create()

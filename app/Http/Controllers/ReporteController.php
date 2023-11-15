@@ -69,13 +69,13 @@ class ReporteController extends Controller
     public function create()
     {
         $data = DB::table('areas')->get();
-      
+
         $empleados = EmpleadosModel::where('estadoemp1', 1)
             ->where('estadoemp2', 1)
             ->select('idemp', 'nombres', 'ap_mat', 'ap_pat')
             ->get();
 
-        return view('asistencias.reportes.create', compact('empleados','data'));
+        return view('asistencias.reportes.create', compact('empleados', 'data'));
     }
 
     /**
@@ -136,44 +136,41 @@ class ReporteController extends Controller
             return response()->json(['error' => 'Error al guardar datos']);
         }
     }
-    public function getReporte(Request $request)
+    public function areaGetReporte(Request $request)
     {
         if ($request->ajax()) {
 
-            $fechaInicio = $request->input('fecha_inicio');
-            $fechaFinal = $request->input('fecha_final');
+            $fechaInicio = $request->input('fecha_inicio2');
+            $fechaFinal = $request->input('fecha_final2');
+            $area_id = $request->input('area_id');
 
-            $query = EmpleadosModel::whereHas('retrasos', function ($query) use ($fechaInicio, $fechaFinal) {
-                $query->where('minutos_diario', '>=', 0)
+
+
+            $empleados = EmpleadosModel::whereHas('registrosAsistencia', function ($query) use ($fechaInicio, $fechaFinal) {
+                $query
+
+                    ->where('estado', '=', 1)
+                    ->where('minutos_retraso', '>', 0)
                     ->whereRaw("DATE(created_at) BETWEEN ? AND ?", [$fechaInicio, $fechaFinal]);
-            });
+            })
+                ->where('idarea', $area_id)
+                ->select('idemp', 'nombres', 'ap_mat', 'ap_pat')
+                ->get();
 
-            $totalRecords = $query->count();
 
-            $query->skip($request->input('start'))
-                ->take($request->input('length'));
 
-            $empleados = $query->get();
+            $totalRecords = $empleados->count();
 
-            $empleadosData = [];
+            $areaempleadosData = [];
+
             foreach ($empleados as $empleado) {
-                $suma_retrasos = RetrasosEmpleado::where('empleado_id', $empleado->idemp)
+                $suma_retrasos = RegistroAsistencia::where('empleado_id', $empleado->idemp)
                     ->whereRaw("DATE(created_at) BETWEEN ? AND ?", [$fechaInicio, $fechaFinal])
-                    ->sum('minutos_diario');
+                    ->sum('minutos_retraso');
 
-                $observacion = '';
+                $observacion = $this->calculateObservation($suma_retrasos);
 
-                $descuento = DescuentoModel::where('retraso_max', '>=', $suma_retrasos)->orderBy('retraso_max', 'asc')->first();
-
-                if ($descuento) {
-                    $observacion = $descuento->descripcion;
-                } else {
-                    $descuento = DescuentoModel::where('retraso_max', '<=', $suma_retrasos)->orderBy('retraso_max', 'desc')->first();
-
-                    $observacion = $descuento->descripcion;
-                }
-
-                $empleadosData[] = [
+                $areaempleadosData[] = [
                     'empleado' => $empleado->nombres,
                     'total_retrasos' => $suma_retrasos,
                     'observaciones' => $observacion,
@@ -184,7 +181,7 @@ class ReporteController extends Controller
                 'draw' => $request->input('draw'),
                 'recordsTotal' => $totalRecords,
                 'recordsFiltered' => $totalRecords,
-                'data' => $empleadosData,
+                'data' => $areaempleadosData,
             ];
 
             return response()->json($data);
@@ -203,8 +200,8 @@ class ReporteController extends Controller
             $query = EmpleadosModel::whereHas('registrosAsistencia', function ($query) use ($empleado_id, $fechaInicio, $fechaFinal) {
                 $query
                     ->where('empleado_id', $empleado_id)
-                    ->where('estado', 1)
-                    ->where('minutos_retraso', '>', 60)
+                    ->where('estado', '=', 1)
+                    ->where('minutos_retraso', '>', 0)
                     ->whereRaw("DATE(created_at) BETWEEN ? AND ?", [$fechaInicio, $fechaFinal]);
             });
 
@@ -221,17 +218,7 @@ class ReporteController extends Controller
                     ->whereRaw("DATE(created_at) BETWEEN ? AND ?", [$fechaInicio, $fechaFinal])
                     ->sum('minutos_retraso');
 
-                $observacion = '';
-
-                $descuento = DescuentoModel::where('retraso_max', '>=', $suma_retrasos)->orderBy('retraso_max', 'asc')->first();
-
-                if ($descuento) {
-                    $observacion = $descuento->descripcion;
-                } else {
-                    $descuento = DescuentoModel::where('retraso_max', '<=', $suma_retrasos)->orderBy('retraso_max', 'desc')->first();
-
-                    $observacion = $descuento->descripcion;
-                }
+                $observacion = $this->calculateObservation($suma_retrasos);
 
                 $empleadosData[] = [
                     'empleado' => $empleado->nombres,
@@ -249,10 +236,24 @@ class ReporteController extends Controller
 
             return response()->json($data);
         }
-
-        // For non-AJAX requests, return the view
-
     }
+
+    private function calculateObservation($suma_retrasos)
+    {
+        $observacion = '';
+
+        $descuento = DescuentoModel::where('retraso_max', '>=', $suma_retrasos)->orderBy('retraso_max', 'asc')->first();
+
+        if ($descuento) {
+            $observacion = $descuento->descripcion;
+        } else {
+            $descuento = DescuentoModel::where('retraso_max', '<=', $suma_retrasos)->orderBy('retraso_max', 'desc')->first();
+            $observacion = $descuento->descripcion;
+        }
+
+        return $observacion;
+    }
+
 
 
 

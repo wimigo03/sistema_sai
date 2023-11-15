@@ -26,8 +26,8 @@ class HoraEmpleadoRequest extends FormRequest
         return [
             //
             'nombre' => 'required',
-            'hora_entrada' => 'required',
-            'hora_salida' => 'required',
+            'hora_inicio' => 'required',
+            'hora_final' => 'required',
             'excepcion' => 'required',
         ];
     }

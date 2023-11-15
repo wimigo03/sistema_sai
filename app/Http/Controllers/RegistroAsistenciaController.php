@@ -259,11 +259,11 @@ class RegistroAsistenciaController extends Controller
             'fecha' => 'required',
             'hora' => 'required|date_format:H:i:s',
         ]);
- 
+
         try {
             $pin = $request->input('pin');
             $id = $request->input('id');
- 
+
             if (!empty($pin)) {
                 $emp = EmpleadosModel::where('pin', $pin)->first();
             }
@@ -271,12 +271,14 @@ class RegistroAsistenciaController extends Controller
 
 
             $this->registrar($emp, $hora);
+            
             return redirect()->back();
         } catch (\Exception $e) {
             Session::flash('error', 'Error: ' . $e->getMessage());
             return redirect()->back();
         }
     }
+
     private function registrar($emp, $hora)
     {
         if ($emp) {
@@ -286,7 +288,7 @@ class RegistroAsistenciaController extends Controller
 
             if (!$horario) {
                 // No se encontró un horario válido para la hora actual
-                Session::flash('error', 'NO SE ENCONTRÓ HORARIO DEL EMPLEADO PARA REGISTRO');
+                Session::flash('error', 'NO SE ENCONTRÓ HORARIO AACTIVO PARA EL EMPLEADO PARA REGISTRO');
                 return redirect()->back();
             } else {
                 $horarioID = $horario->id;
@@ -295,28 +297,30 @@ class RegistroAsistenciaController extends Controller
                     ->whereDate('created_at', Carbon::today())
                     ->where('horario_id', $horarioID)
                     ->first();
+                //sumar minutos de excepcion
+                $horaInicio = Carbon::parse($horario->hora_inicio);
+                $horaEntrada = Carbon::parse($horario->hora_entrada);
+                $excepcion = Carbon::parse($horario->excepcion);
+
+                $suma = $horaInicio->addHours($excepcion->hour)->addMinutes($excepcion->minute)->addSeconds($excepcion->second);
+                $suma2 = $horaEntrada->addHours($excepcion->hour)->addMinutes($excepcion->minute)->addSeconds($excepcion->second);
+
+                $sumaInicioFormateada = $suma->format('H:i:s');
+                $sumaEntradaFormateada = $suma2->format('H:i:s');
+
+                //tiempo minimo y maximo para entrada y salida
+                $horaInicioCarbon = Carbon::parse($horario->hora_inicio); 
+                $horaSalidaCarbon = Carbon::parse($horario->hora_salida);
+                $horaEntradaCarbon = Carbon::parse($horario->hora_entrada); 
+                $horaFinalCarbon = Carbon::parse($horario->hora_final);
+
+                $horaMinimaInicio = $horaInicioCarbon->subMinutes(45)->format('H:i:s');
+                $horaMaximaSalida = $horaSalidaCarbon->addMinutes(45)->format('H:i:s');
+                $horaMinimaEntrada = $horaEntradaCarbon->subMinutes(45)->format('H:i:s');
+                $horaMaximaFinal = $horaFinalCarbon->addMinutes(45)->format('H:i:s');
 
                 if (!$registro) {
-
-                    $horaInicioCarbon = Carbon::parse($horario->hora_inicio); // Parse the input string to a Carbon instance
-                    $horaSalidaCarbon = Carbon::parse($horario->hora_salida);
-                    $horaEntradaCarbon = Carbon::parse($horario->hora_entrada); // Parse the input string to a Carbon instance
-                    $horaFinalCarbon = Carbon::parse($horario->hora_final);
-
-                    $horaMinimaInicio = $horaInicioCarbon->subMinutes(45)->format('H:i:s');
-                    $horaMaximaSalida = $horaSalidaCarbon->addMinutes(45)->format('H:i:s');
-                    $horaMinimaEntrada = $horaEntradaCarbon->subMinutes(45)->format('H:i:s');
-                    $horaMaximaFinal = $horaFinalCarbon->addMinutes(45)->format('H:i:s');
-
-                    $horaInicio = Carbon::parse($horario->hora_inicio);
-                    $horaEntrada = Carbon::parse($horario->hora_entrada);
-                    $excepcion = Carbon::parse($horario->excepcion);
-
-                    $suma = $horaInicio->addHours($excepcion->hour)->addMinutes($excepcion->minute)->addSeconds($excepcion->second);
-                    $suma2 = $horaEntrada->addHours($excepcion->hour)->addMinutes($excepcion->minute)->addSeconds($excepcion->second);
-                    $sumaInicioFormateada = $suma->format('H:i:s');
-                    $sumaEntradaFormateada = $suma2->format('H:i:s');
-                    Session::flash('error', 'SE ENCONTRÓ HORARIO: Tipo' . $horario->tipo . ' PARA REGISTRO : ');
+                    //Session::flash('error', 'SE ENCONTRÓ HORARIO: Tipo' . $horario->tipo . ' PARA REGISTRO : ');
 
                     if ($horario->tipo == 1) {
 
@@ -478,27 +482,7 @@ class RegistroAsistenciaController extends Controller
                         return redirect()->back();
                     }
                 } else {
-                    $horaInicio = Carbon::parse($horario->hora_inicio);
-                    $horaEntrada = Carbon::parse($horario->hora_entrada);
-                    $excepcion = Carbon::parse($horario->excepcion);
-
-                    $suma = $horaInicio->addHours($excepcion->hour)->addMinutes($excepcion->minute)->addSeconds($excepcion->second);
-                    $suma2 = $horaEntrada->addHours($excepcion->hour)->addMinutes($excepcion->minute)->addSeconds($excepcion->second);
-
-                    $sumaInicioFormateada = $suma->format('H:i:s');
-                    $sumaEntradaFormateada = $suma2->format('H:i:s');
-
-                    $horaInicioCarbon = Carbon::parse($horario->hora_inicio); // Parse the input string to a Carbon instance
-                    $horaSalidaCarbon = Carbon::parse($horario->hora_salida);
-                    $horaEntradaCarbon = Carbon::parse($horario->hora_entrada); // Parse the input string to a Carbon instance
-                    $horaFinalCarbon = Carbon::parse($horario->hora_final);
-
-                    $horaMinimaInicio = $horaInicioCarbon->subMinutes(45)->format('H:i:s');
-                    $horaMaximaSalida = $horaSalidaCarbon->addMinutes(45)->format('H:i:s');
-                    $horaMinimaEntrada = $horaEntradaCarbon->subMinutes(45)->format('H:i:s');
-                    $horaMaximaFinal = $horaFinalCarbon->addMinutes(45)->format('H:i:s');
-
-                    Session::flash('success', 'SE ENCONTRÓ: ' . $horario->tipo . ' PARA REGISTRO');
+                    //Session::flash('success', 'SE ENCONTRÓ: ' . $horario->tipo . ' PARA REGISTRO');
 
                     if ($horario->tipo == 1) {
                         if ($horaActual  >= $horario->hora_inicio && $horaActual  <= $sumaInicioFormateada) {

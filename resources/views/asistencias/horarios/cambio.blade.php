@@ -60,22 +60,15 @@
                         <div class="col-md-12" id="horarios-select">
                             <select name="horarios[]" id="horarios" class="@error('horarios') is-invalid @enderror" class="form-control" required multiple>
                                 @foreach ($horarios as $id => $horario)
-
                                 @php
                                 $horarioCompleto = $horariosCompletos->firstWhere('id', $id);
-                                $claseFondo = $horarioCompleto->estado == 1 ? 'text-success' : 'bg-danger';
-                                @endphp
-
-                                <option value="{{ $id }}" class="{{ $claseFondo }} text-white" {{ (in_array($id, old('horarios', [])) || $empleado->horarios->contains($id)) ? 'selected' : '' }}>
+                                 @endphp
+                                <option value="{{ $id }}"  {{ (in_array($id, old('horarios', [])) || $empleado->horarios->contains($id)) ? 'selected' : '' }}>
                                      Mañana: {{ $horarioCompleto->hora_inicio ?? '-' }} - {{ $horarioCompleto->hora_salida ?? ' - ' }} - Tarde:{{ $horarioCompleto->hora_entrada ?? '-' }} - {{ $horarioCompleto->hora_final ?? 'N/A' }}
                                 </option>
-
                                 @endforeach
-
-
-
                             </select>
-                            <a href="#" id="horario-select-all" class="btn btn-success  btn-sm">Seleccionar Todo</a>
+                            
                             <a href="#" id="horario-deselect-all" class="btn btn-danger  btn-sm">Quitar Selección</a>
 
                             @error('horarios')
@@ -113,14 +106,6 @@
         hideSelectedOption: true,
     })
 
-    $('#horarios-select #horario-select-all').click(function() {
-        var options = [];
-        $('#horarios-select select option').each(function() {
-            options.push($(this).attr('value'));
-        });
-
-        horario_select.set(options);
-    })
 
     $('#horarios-select #horario-deselect-all').click(function() {
         horario_select.set([]);
