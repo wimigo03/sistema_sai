@@ -113,6 +113,8 @@ class HorarioController extends Controller
         if ($request->has('asignado')) {
             $horario->estado = 1;
             $horario->save();
+            HorarioModel::where('id', '<>', $horario->id)->where('estado','=',1)->update(['estado' => 0]);
+
             $empleados = EmpleadosModel::all();
 
             foreach ($empleados as $empleado) {
@@ -126,10 +128,13 @@ class HorarioController extends Controller
     public function updateEstado($id)
     {
         $horario = HorarioModel::findOrFail($id);
+        
         // Actualizar el valor del estado según la lógica deseada
         if ($horario->estado == 0) {
             $horario->estado = 1; // Cambiar de activado a activo
             $horario->save();
+            HorarioModel::where('id', '<>', $id)->where('estado','=',1)->update(['estado' => 0]);
+
 
             return redirect()->route('horarios.index')->with('success', 'Estado de horario actualizado a activo.');
         } else if ($horario->estado == 1) {
@@ -259,6 +264,8 @@ class HorarioController extends Controller
         if ($request->has('asignado')) {
             $horario->estado = 1;
             $horario->save();
+            HorarioModel::where('id', '<>', $horario->id)->where('estado','=',1)->update(['estado' => 0]);
+
             $empleados = EmpleadosModel::all();
             foreach ($empleados as $empleado) {
                 $empleado->horarios()->syncWithoutDetaching([$horario->id]);

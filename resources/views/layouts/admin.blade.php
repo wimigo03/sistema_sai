@@ -64,6 +64,24 @@
             background-size: 20px;
             padding: 7px;
         }
+        #personal-reportes-table tbody td.details-control {
+            background-image: url("{{ asset('admin_assets/images/details_open.png') }}");
+            cursor: pointer;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-origin: content-box;
+            background-size: 20px;
+            padding: 7px;
+        }
+        #personal-reportes-table tbody tr.shown td.details-control {
+            background-image: url("{{ asset('admin_assets/images/details_close.png') }}");
+            cursor: pointer;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-origin: content-box;
+            background-size: 20px;
+            padding: 7px;
+        }
         .hrrr {
             border: rgb(102, 100, 100) solid 1px;
             padding: 0px;

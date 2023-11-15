@@ -216,11 +216,16 @@ class ReporteController extends Controller
             foreach ($empleados as $empleado) {
                 $suma_retrasos = RegistroAsistencia::where('empleado_id', $empleado->idemp)
                     ->whereRaw("DATE(created_at) BETWEEN ? AND ?", [$fechaInicio, $fechaFinal])
+                    ->where('estado', '=', 1)
                     ->sum('minutos_retraso');
 
                 $observacion = $this->calculateObservation($suma_retrasos);
 
                 $empleadosData[] = [
+                    'details_url' => (function ($empleado) use ($fechaInicio, $fechaFinal) {
+                        return route('reportespersonales.detalle', ['id' => $empleado->idemp, 'fecha_i' => $fechaInicio, 'fecha_f' => $fechaFinal]);
+                    })($empleado),
+                    'idemp' => $empleado->idemp,
                     'empleado' => $empleado->nombres,
                     'total_retrasos' => $suma_retrasos,
                     'observaciones' => $observacion,
@@ -252,6 +257,21 @@ class ReporteController extends Controller
         }
 
         return $observacion;
+    }
+
+    public function detalle($id, $fechaI, $fechaF)
+    {
+        $retrasos = RegistroAsistencia::where('empleado_id', $id)->whereRaw("DATE(created_at) BETWEEN ? AND ?", [$fechaI, $fechaF])
+            ->where('estado', '=', 1)
+            ->get();
+        return Datatables::of($retrasos)
+            ->addColumn('fecha', function ($row) {
+                return $row->created_at ? Carbon::parse($row->created_at)->format('Y-m-d') : '-';
+            })
+            ->addColumn('horario', function ($row) {
+                return $row->horario->Nombre ?? '-';
+            })
+            ->make(true);
     }
 
 

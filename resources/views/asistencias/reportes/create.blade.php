@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
-            <b>Crear Reporte</b>
+            <b>Reporte de Retrasos</b>
         </div>
         <!-- Vista de retorno (por ejemplo, index.blade.php) -->
         @if($errors->any())
@@ -58,10 +58,10 @@
                 <a class="nav-link active" data-toggle="tab" href="#tab1">Retrasos Personales</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#tab2">Retrasos Por Area</a>
+                <a class="nav-link" data-toggle="tab" href="#tab2">Retrasos Por Unidad</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#tab3">Retrasos Area</a>
+                <a class="nav-link" data-toggle="tab" href="#tab3">Retrasos en General</a>
             </li>
         </ul>
     </div>
@@ -83,16 +83,21 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="fecha_inicio">Fecha Inicio</label>
-                            <input type="date" id="fecha_inicio" name="fecha_inicio" value="" class="form-control" required>
+                            <?php
+                            // Calcular la fecha del mes anterior
+                            $fechaMesAnterior = date('Y-m-d', strtotime('first day of last month'));
+                            ?>
+                            <input type="date" id="fecha_inicio" name="fecha_inicio" value="{{ $fechaMesAnterior }}" class="form-control" required>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="fecha_final">Fecha Final</label>
-                            <input type="date" id="fecha_final" name="fecha_final" value="" class="form-control" required>
+                            <input type="date" id="fecha_final" name="fecha_final" value="{{ date('Y-m-d') }}" class="form-control" required>
                         </div>
                     </div>
+
                     <div class="col-md-2">
 
                         <label for="fecha_final">Opciones</label>
@@ -109,7 +114,8 @@
             <div class="col-md-12 table-responsive center">
                 <table class="table-bordered  hoverTable table display responsive" style="width:100%" id="personal-reportes-table">
                     <thead>
-                        <tr class="text-center">
+                        <tr>
+                            <th></th>
                             <th>Nombres</th>
                             <th>Minutos de Retraso</th>
                             <th>Descuento Según Haber Básico</th>
@@ -183,11 +189,30 @@
         </div>
     </div>
 </div>
- 
+
 
 
 
 @section('scripts')
+<script id="details-template" type="text/x-handlebars-template">
+    @verbatim
+        <table class="display compact hoverTable" id="registros-{{idemp}}" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                
+                        <th>Horario</th>
+                        <th> Entrada Mañana</th>
+                        <th> Salida Mañana</th>
+                        <th> Entrada Tarde</th>
+                        <th> Salida Tarde</th>
+                        <th>Minutos Retraso</th>
+                  
+                    </tr>
+                </thead>
+        </table>
+    @endverbatim
+</script>
 
 <script>
     $(document).ready(function() {
@@ -197,6 +222,7 @@
         });
 
         verificarFechas();
+        var template = Handlebars.compile($("#details-template").html());
 
         var dataTable = $('#personal-reportes-table').DataTable({
             processing: false,
@@ -212,6 +238,15 @@
                 }
             },
             columns: [{
+                    className: 'details-control',
+                    orderable: false,
+                    searchable: false,
+                    data: null,
+                    defaultContent: ''
+
+
+                }, // Nueva columna para el botón o enlace
+                {
                     data: "empleado"
                 },
                 {
@@ -222,6 +257,75 @@
                 }
             ]
         });
+        $('#personal-reportes-table tbody').on('click', 'td.details-control', function() {
+            var tr = $(this).closest('tr');
+            var row = dataTable.row(tr);
+            var tableId = 'registros-' + row.data().idemp;
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+                // Open this row
+                row.child(template(row.data())).show();
+                initTable(tableId, row.data());
+                console.log(row.data());
+                tr.addClass('shown');
+                tr.next().find('td').addClass('no-padding bg-gray');
+            }
+        });
+
+        function initTable(tableId, data) {
+            $('#' + tableId).DataTable({
+                responsive: true,
+                processing: true,
+                serverSide: true,
+                lengthChange: false,
+                info: false,
+                searching: false, // Oculta la barra de búsqueda
+                paging: false, // Desactiva la paginación
+
+                ajax: data.details_url,
+                columns: [{
+                        data: 'fecha',
+                        name: 'fecha',
+                        class: 'text-justify p-1 font-verdana-sm'
+                    },
+                   
+                    {
+                        data: 'horario',
+                        name: 'horario',
+                        class: 'text-center p-1 font-verdana-sm'
+                    },
+                    {
+                        data: 'registro_inicio',
+                        name: 'registro_inicio',
+                        class: 'text-center p-1 font-verdana-sm'
+                    },
+                    {
+                        data: 'registro_salida',
+                        name: 'registro_salida',
+                        class: 'text-center p-1 font-verdana-sm'
+                    },
+                    {
+                        data: 'registro_entrada',
+                        name: 'registro_entrada',
+                        class: 'text-center p-1 font-verdana-sm'
+                    },
+
+                    {
+                        data: 'registro_final',
+                        name: 'registro_final',
+                        class: 'text-center p-1 font-verdana-sm'
+                    },
+                    {
+                        data: 'minutos_retraso',
+                        name: 'minutos_retraso',
+                        class: 'text-justify p-1 font-verdana-sm'
+                    },
+                ],
+            });
+        };
 
 
         function verificarFechas() {
@@ -270,11 +374,19 @@
                     d.fecha_final2 = $('#fecha_final2').val();
                 }
             },
-            columns: [
-            { data: 'empleado', name: 'empleado' },
-            { data: 'total_retrasos', name: 'total_retrasos' },
-            { data: 'observaciones', name: 'observaciones' },
-        ]
+            columns: [{
+                    data: 'empleado',
+                    name: 'empleado'
+                },
+                {
+                    data: 'total_retrasos',
+                    name: 'total_retrasos'
+                },
+                {
+                    data: 'observaciones',
+                    name: 'observaciones'
+                },
+            ]
         });
 
         function verificarFechas2() {
@@ -302,7 +414,5 @@
 
     });
 </script>
-
-
 @endsection
 @endsection
