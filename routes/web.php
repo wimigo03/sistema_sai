@@ -464,7 +464,10 @@ Route::get('permisos/create/', 'PermisosPersonalesController@create')->name('per
 Route::post('permisos/store/', 'PermisosPersonalesController@store')->name('permisospersonales.store')->middleware('can:reporte_access');
 Route::get('permisos/detalle/{id}/{permiso_id}', 'PermisosPersonalesController@detalle')->name('permisospersonales.detalle');
 Route::get('permisos/show', 'PermisosPersonalesController@show')->name('permisospersonales.show')->middleware('can:reporte_access');
-
+Route::get('editar-permiso/{id}', 'PermisosPersonalesController@editarPermiso')->name('editar.permiso');
+Route::put('actualizar-permiso/{id}', 'PermisosPersonalesController@actualizarPermiso')->name('update.permiso');
+Route::get('listar-permisos/{id}', 'PermisosPersonalesController@listarPermiso')->name('listar.permiso');
+ 
 Route::get('licencias', 'LicenciasPersonalesController@index')->name('licenciaspersonales.index')->middleware('can:reporte_access');
 
 Route::get('licencias/id', 'LicenciasPersonalesController@getID')->name('licenciaspersonales.getID')->middleware('can:reporte_access'); 
@@ -474,7 +477,10 @@ Route::get('licencias/create/', 'LicenciasPersonalesController@create')->name('l
 Route::post('licencias/store/', 'LicenciasPersonalesController@store')->name('licenciaspersonales.store')->middleware('can:reporte_access');
 Route::get('licencias/detalle/{id}/{licencia_id}', 'LicenciasPersonalesController@detalle')->name('licenciaspersonales.detalle');
 Route::get('licencias/show', 'LicenciasPersonalesController@show')->name('licenciaspersonales.show')->middleware('can:reporte_access');
-
+Route::get('editar-licencia/{id}', 'LicenciasPersonalesController@editarLicencias')->name('editar.licencia');
+Route::put('actualizar-licencia/{id}', 'LicenciasPersonalesController@actualizarLicencias')->name('update.licencia');
+Route::get('listar-licencia/{id}', 'LicenciasPersonalesController@listarLicencias')->name('listar.licencias');
+ 
 Route::get('rechumanos/planta/movimientos/list', 'MovimientosPlantaController@index')->name('movimientosplanta.index');
 Route::get('rechumanos/contrato/movimientos/list', 'MovimientosContratoController@index')->name('movimientoscontrato.index');
 

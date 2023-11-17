@@ -13,7 +13,7 @@ class EmpleadoLicenciasModel extends Model
     protected $primaryKey = 'id';
     public $incrementing = false; // Ya que no es autoincremental
     public $timestamps = false; // No hay columnas de timestamps
-    protected $fillable = ['fecha_solicitud', 'dias_utilizados'];
+    protected $fillable = ['fecha_solicitud', 'dias_utilizados','asunto','usuario_creacion','usuario_modificacion'];
 
     public function empleado()
     {

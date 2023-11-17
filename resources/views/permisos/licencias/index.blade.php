@@ -64,6 +64,7 @@
                 <thead>
                     <tr>
                         <th>Fecha de Solicitud</th>
+                        <th>Asunto</th>
                         <th>Días Utilizados</th>
                         <th>Opciones</th>
                     </tr>
@@ -204,6 +205,12 @@
             columns: [{
                     data: 'fecha_solicitud',
                     name: 'fecha_solicitud'
+                }
+                ,
+                {
+                  
+                    data: 'asunto',
+                    name: 'asunto'
                 },
                 {
                   

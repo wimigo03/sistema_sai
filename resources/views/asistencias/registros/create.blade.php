@@ -24,18 +24,20 @@
 
     <div class="row font-verdana">
         <div class="col-md-6 offset-md-3">
-            <!-- Mostrar mensaje de error -->
-            @if(Session::has('success'))
-            <div class="alert alert-success">
-                {{ Session::get('success') }}
-            </div>
-            @endif
-            @if(Session::has('error'))
-            <div class="alert alert-danger">
-                {{ Session::get('error') }}
-            </div>
-            @endif
+      
             <div class="body-border">
+            @if(session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                <!-- Mostrar mensajes de error -->
+                @if(session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
                 <form action="{{ route('registroasistencia.store') }}" method="POST">
                     @csrf
                     <div class="form-group">

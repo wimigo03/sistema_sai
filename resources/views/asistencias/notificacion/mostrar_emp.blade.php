@@ -33,7 +33,7 @@
 
 
  <div class="modal fade" id="mes">
-     <div class="modal-dialog">
+     <div class="modal-dialog modal-lg">
          <div class="modal-content">
              <!-- Log on to codeastro.com for more projects! -->
 
@@ -43,7 +43,7 @@
              </div>
              <div class="modal-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-hover table-sm" id="empleados-fecha">
+                    <table class="table table-bordered  table-hover table-sm" id="empleados-fecha">
                         <thead class="text-center">
                             <tr>
                                 <th>Nombre</th>

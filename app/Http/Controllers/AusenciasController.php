@@ -12,12 +12,148 @@ use App\Models\RegistroAsistencia;
 
 class AusenciasController extends Controller
 {
+    private function verificarMarcado(RegistroAsistencia $registro)
+    {
+        if ($registro->horario->tipo == 1) {
+            if (
+                $registro->registro_inicio &&
+                $registro->registro_salida &&
+                $registro->registro_entrada &&
+                $registro->registro_final
+            ) {
+                $registro->estado = 1;
+                $registro->save();
+            } else if (
+                !$registro->registro_inicio &&
+                !$registro->registro_salida &&
+                $registro->registro_entrada &&
+                $registro->registro_final
+            ) {
+                $registro->estado = 4;
+                $registro->save();
+            } else if (
+                !$registro->registro_inicio &&
+                $registro->registro_salida &&
+                $registro->registro_entrada &&
+                $registro->registro_final
+            ) {
+                $registro->estado = 4;
+                $registro->save();
+            } else if (
+                $registro->registro_inicio &&
+                $registro->registro_salida &&
+                !$registro->registro_entrada &&
+                !$registro->registro_final
+            ) {
+                $registro->estado = 3;
+                $registro->save();
+            } else if (
+                $registro->registro_inicio &&
+                !$registro->registro_salida &&
+                !$registro->registro_entrada &&
+                $registro->registro_final
+            ) {
+                $registro->estado = 5;
+                $registro->save();
+            } else if (
+                !$registro->registro_inicio &&
+                $registro->registro_salida &&
+                $registro->registro_entrada &&
+                !$registro->registro_final
+            ) {
+                $registro->estado = 5;
+                $registro->save();
+            }
+            else if (
+                $registro->registro_inicio &&
+                $registro->registro_salida &&
+                $registro->registro_entrada &&
+                !$registro->registro_final
+            ) {
+                $registro->estado = 3;
+                $registro->save();
+            } else if (
+                !$registro->registro_inicio &&
+                !$registro->registro_salida &&
+                !$registro->registro_entrada &&
+                $registro->registro_final
+            ) {
+                $registro->estado = 3;
+                $registro->save();
+            }else if (
+                $registro->registro_inicio &&
+                !$registro->registro_salida &&
+                !$registro->registro_entrada &&
+                !$registro->registro_final
+            ) {
+                $registro->estado = 5;
+                $registro->save();
+            }else if (
+                !$registro->registro_inicio &&
+                $registro->registro_salida &&
+                !$registro->registro_entrada &&
+                $registro->registro_final
+            ) {
+                $registro->estado = 5;
+                $registro->save();
+            }
+            else if (
+                $registro->registro_inicio &&
+                $registro->registro_salida &&
+                !$registro->registro_entrada &&
+                $registro->registro_final
+            ) {
+                $registro->estado = 3;
+                $registro->save();
+            }
+            else if (
+                !$registro->registro_inicio &&
+                !$registro->registro_salida &&
+                $registro->registro_entrada &&
+                !$registro->registro_final
+            ) {
+                $registro->estado = 5;
+                $registro->save();
+            }else if (
+                $registro->registro_inicio &&
+                !$registro->registro_salida &&
+                $registro->registro_entrada &&
+                !$registro->registro_final
+            ) {
+                $registro->estado = 5;
+                $registro->save();
+            }
+        }
+        if ($registro->horario->tipo == 0) {
+            if ($registro->registro_final && $registro->registro_inicio) {
+                $registro->estado = 1;
+                $registro->save();
+            } else if (!$registro->registro_final && $registro->registro_inicio) {
+                $registro->estado = 2;
+                $registro->save();
+            }  else if ($registro->registro_final && !$registro->registro_inicio) {
+                $registro->estado = 5;
+                $registro->save();
+            } else {
+                $registro->estado = 0;
+                $registro->save();
+            }
+        }
+    }
     public function index(Request $request)
     {
+        $registros = RegistroAsistencia::all(); // Asumiendo que quieres obtener los resultados
+
+        foreach ($registros as $registro) {
+            $this->verificarMarcado($registro);
+        }
         if ($request->ajax()) {
 
-            $data = RegistroAsistencia::with('empleado')->where('estado', 0);
-            $data = $data->get();
+           
+
+            $data = RegistroAsistencia::with('empleado')->where('estado','<>',1)->get();
+
+
 
             return DataTables::of($data)
 
@@ -33,6 +169,14 @@ class AusenciasController extends Controller
                 ->addColumn('estado', function ($row) {
                     if ($row->estado == 0) {
                         return 'FALTA';
+                    } else if ($row->estado == 2) {
+                        return 'No marco Salida';
+                    } else if ($row->estado == 4) {
+                        return 'Regularizar Registro de la mañana';
+                    } else if ($row->estado == 3) {
+                        return 'Regularizar Registro de la tarde';
+                    }else if ($row->estado == 5) {
+                        return 'Regularizar Registro de Mañana y Tarde';
                     } else {
                         return '-'; // You can customize this message as needed
                     }
@@ -42,8 +186,8 @@ class AusenciasController extends Controller
                                 <i class="fa-solid fa-2xl fa-square-pen text-warning"></i>
                             </a>';
                 })
-                
-                
+
+
                 ->rawColumns(['opciones'])
 
                 ->make(true);

@@ -226,7 +226,7 @@ class ReporteController extends Controller
                         return route('reportespersonales.detalle', ['id' => $empleado->idemp, 'fecha_i' => $fechaInicio, 'fecha_f' => $fechaFinal]);
                     })($empleado),
                     'idemp' => $empleado->idemp,
-                    'empleado' => $empleado->nombres,
+                    'empleado' => $empleado->nombres.' '.$empleado->ap_pat.' '.$empleado->ap_mat,
                     'total_retrasos' => $suma_retrasos,
                     'observaciones' => $observacion,
                 ];
@@ -269,8 +269,10 @@ class ReporteController extends Controller
                 return $row->created_at ? Carbon::parse($row->created_at)->format('Y-m-d') : '-';
             })
             ->addColumn('horario', function ($row) {
-                return $row->horario->Nombre ?? '-';
+                $horario = $row->horario->Nombre;
+                return $horario;
             })
+            
             ->make(true);
     }
 

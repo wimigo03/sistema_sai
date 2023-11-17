@@ -19,6 +19,6 @@ class LicenciasRipModel extends Model
     public function empleados()
     {
         return $this->belongsToMany(EmpleadosModel::class,'empleado_licencia', 'licencia_id', 'empleado_id')
-            ->withPivot(['fecha_solicitud', 'dias_utilizados']);
+            ->withPivot(['fecha_solicitud', 'dias_utilizados','asunto','usuario_creacion','usuario_modificacion']);
     }
 }

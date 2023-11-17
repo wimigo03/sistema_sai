@@ -13,7 +13,7 @@ class EmpleadoPermisoModel extends Model
     protected $primaryKey = 'id';
     public $incrementing = false; // Ya que no es autoincremental
     public $timestamps = false; // No hay columnas de timestamps
-    protected $fillable = ['hora_salida', 'hora_retorno', 'fecha_solicitud', 'horas_utilizadas'];
+    protected $fillable = ['hora_salida', 'hora_retorno', 'fecha_solicitud', 'horas_utilizadas','usuario_modificacion','usuario_creacion'];
 
     public function empleado()
     {

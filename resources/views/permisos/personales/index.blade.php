@@ -55,48 +55,6 @@
     </div>
 
 </div>
-<!-- Bootstrap modal -->
-<div class="modal fade font-verdana" id="miModal" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Regularizar Asistencia</h2>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-            </div>
-            <div class="modal-body form">
-                <div class="container">
-                    <form action="#" id="form" class="form-horizontal">
-                        <input type="hidden" value="" name="book_id" />
-                        <div class="form-body">
-
-                            <div class="form-group">
-                                <label class="control-label">Nombre y Apellido</label>
-                                <input name="book_isbn" placeholder="Nombre y Apellido" class="form-control" value="JUAN" type="text" readonly>
-
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label">Fecha Asistencia</label>
-                            
-                                    <input name="Fecha" placeholder="Fecha Asistencia" class="form-control" type="text" readonly>
-                              
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label"></label>
-                          
-                            </div>
-                  
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="btnSave" onclick="save()" class="btn btn-primary">Save</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
 
 
 @section('scripts')
@@ -131,11 +89,14 @@
                 mesID: mesID
             },
             success: function(data) {
-                var permiso = data.id;
+                var permisoId = data.id;
+                var permisoMes = data.mes;
                 // Limpiar el selector de empleados y agregar las nuevas opciones
                 var permisoInput = document.getElementById('permiso');
-                permisoInput.value = permiso;
-                table.ajax.url("{{ route('permisosempleados.get') }}?permiso_id=" + permiso).load();
+                var fechaInput = document.getElementById('fecha');
+                permisoInput.value = permisoId;
+                fechaInput.value = permisoMes;
+                table.ajax.url("{{ route('permisosempleados.get') }}?permiso_id=" + permisoId).load();
 
                 //$.each(cargo, function(index, cargo) {
                 //});
@@ -259,8 +220,7 @@
                 {
                     data: 'horas_utilizadas',
                     name: 'horas_utilizadas'
-                }
-                ,
+                },
                 {
                     data: 'opciones',
                     name: 'opciones'

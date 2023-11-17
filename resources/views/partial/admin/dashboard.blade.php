@@ -415,13 +415,7 @@
 
                         </li>
                         @endcan
-                        @can('horario_access')
-                        <li>
-                            <a href="{{ route('lectordactilar.index') }}">
-                                <span class="nav-label mr-4">Lector Dactilar</span>
-                            </a>
-                        </li>
-                        @endcan
+                 
                         @can('horario_access')
                         <li>
                             <a href="{{ route('ausencias.index') }}">
@@ -484,7 +478,7 @@
                 @endcanany
 
                 {{-- Personerias --}}
-                @canany(['recHumanos_access'])
+                @canany(['recHumanos'])
                 <li class="font-verdana-bg">
                     <a href="" data-toggle="collapse" data-target="#dashboard_personeria" class="active collapsed" aria-expanded="false">
                         <i class="fa fa-file-text" style="color:green"></i>
@@ -492,7 +486,7 @@
                         <span class="fa fa-arrow-circle-left float-right"></span>
                     </a>
                     <ul class="sub-menu collapse" id="dashboard_personeria" @if (request()->is('admin/users') || request()->is('admin/users/*')) in @endif>
-                        @can('areas_access')
+                        @can('areas')
                         <li>
                             <a href="{{ route('activos.index') }}">
                                 &nbsp; &nbsp; &nbsp;
@@ -504,7 +498,7 @@
                 </li>
                 @endcanany
                 {{-- Activos Fijos --}}
-                @canany(['recHumanos_access'])
+                @canany(['recHumanos'])
                 <li class="font-verdana-bg">
                     <a href="" data-toggle="collapse" data-target="#dashboard_activos_fijos" class="active collapsed" aria-expanded="false">
                         <i class="fa fa-circle" style="color:green"></i>
@@ -512,7 +506,7 @@
                         <span class="fa fa-arrow-circle-left float-right"></span>
                     </a>
                     <ul class="sub-menu collapse" id="dashboard_activos_fijos" @if (request()->is('admin/users') || request()->is('admin/users/*')) in @endif ">
-                        @can('areas_access')
+                        @can('areas')
                         <li>
                             <a href="{{ route('activos.index') }}">
                                 &nbsp; &nbsp; &nbsp;

@@ -4,11 +4,11 @@
 <div class="container ">
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
-            <b>Lista de Registros de Permisos Personles Mensuales</b>
+            <b>Lista de Registros de Licencias Cargo RIP</b>
         </div>
 
         <div class="col-md-4 text-right">
-            <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('permisospersonales.index')}}">
+            <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('licenciaspersonales.index')}}">
                 <button class="btn btn-sm btn-danger font-verdana" type="button">
                     &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
                 </button>
@@ -28,11 +28,10 @@
             <table class="table-bordered yajra-datatable hoverTable font-verdana-sm" style="width:100%" id="registrosTable">
                 <thead class="table-light">
                     <tr>
-                        <th>Mes</th>
+                        <th>Año</th>
                         <th>Fecha Solicitud</th>
+                        <th>Asunto</th>
                         <th>Registrado por Usuario</th>
-                        <th>Hora de Salida</th>
-                        <th>Hora de Retorno</th>
                         <th>Horas Utilizadas</th>
                     </tr>
                 </thead>
@@ -68,41 +67,35 @@
             },
             processing: true,
             serverSide: true,
-            ajax: "{{ route('listar.permiso', $empleado->idemp) }}",
+            ajax: "{{ route('listar.licencias', $empleado->idemp) }}",
             orderFixed: [0, 'desc'],
             rowGroup: {
-                dataSrc: 'mes'
+                dataSrc: 'licencia'
             },
             columns: [{
-                    data: 'mes',
-                    name: 'mes',
+                    data: 'licencia',
+                    name: 'licencia',
                     class: 'text-justify p-1 font-verdana-sm'
                 },
+
                 {
                     data: 'pivot.fecha_solicitud',
                     name: 'pivot.fecha_solicitud',
                     class: 'text-justify p-1 font-verdana-sm'
                 },
-                
                 {
-                    data: 'pivot.usuario_creacion',
-                    name: 'pivot.usuario_creacion',
+                    data: 'pivot.asunto',
+                    name: 'pivot.asunto',
+                    class: 'text-justify p-1 font-verdana-sm'
+                }, 
+                {
+                    data: 'pivot.usuario_creac',
+                    name: 'pivot.usuario_creac',
                     class: 'text-justify p-1 font-verdana-sm'
                 },
                 {
-                    data: 'pivot.hora_salida',
-                    name: 'pivot.hora_salida',
-                    class: 'text-justify p-1 font-verdana-sm'
-                },
-                {
-                    data: 'pivot.hora_retorno',
-                    name: 'pivot.hora_retorno',
-                    class: 'text-justify p-1 font-verdana-sm'
-                },
-
-                {
-                    data: 'horas_utilizadas',
-                    name: 'horas_utilizadas',
+                    data: 'dias_utilizados',
+                    name: 'dias_utilizados',
                     class: 'text-justify p-1 font-verdana-sm'
                 }
 

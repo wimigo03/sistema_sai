@@ -25,6 +25,6 @@ class PermisoModel extends Model
     public function empleados()
     {
         return $this->belongsToMany(EmpleadosModel::class,'empleado_permiso', 'permiso_id', 'empleado_id')
-            ->withPivot(['hora_salida', 'hora_retorno', 'fecha_solicitud', 'horas_utilizadas']);
+            ->withPivot(['hora_salida', 'hora_retorno', 'fecha_solicitud', 'horas_utilizadas','usuario_modificacion','usuario_creacion']);
     }
 }

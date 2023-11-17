@@ -6,16 +6,17 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <span class="mr-auto">Crear Permiso para Empleado</span>
+                    <span class="mr-auto">Editar Permiso para Empleado</span>
                     @php
                     use Carbon\Carbon;
 
-                    $fechaCarbon = Carbon::createFromFormat('Y-m', $permiso->mes);
+                    $fechaCarbon = Carbon::createFromFormat('Y-m', $permiso->permiso->mes);
                     $fechaEnEspañol = mb_strtoupper($fechaCarbon->locale('es')->isoFormat('MMMM YYYY'), 'UTF-8');
 
                     @endphp
-                    <span  class="text-right">{{$fechaEnEspañol}}</span> &nbsp;
-                    
+                    <span class="text-right">{{$fechaEnEspañol}}</span> &nbsp;
+
+
                     <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{ route('permisospersonales.index') }}">
                         <button class="btn btn-sm btn-danger font-verdana" type="button" aria-label="Cerrar">
                             &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
@@ -46,28 +47,23 @@
                 </div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('permisospersonales.store') }}">
+                    <form method="POST" action="{{ route('update.permiso', $permiso->id) }} ">
                         @csrf
+                        @method('PUT')
                         <div class="form-row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="empleado_id">Nombre:</label>
-                                    <input type="hidden" name="permiso_id" value="{{ $permiso->id }}" readonly class="form-control">
+                                    <label for="empleado_id">Nombre:</label>{{$permiso->id}}
+                                    <input type="hidden" name="permiso_id" value="{{ $permiso->permiso_id }}" readonly class="form-control">
 
-                                    <input type="hidden" name="empleado_id" id="empleado_id" value="{{ $empleado->idemp }}" readonly class="form-control">
-                                    <input type="text" name="empleado" id="empleado" value="{{ $empleado->nombres }}" readonly class="form-control">
+                                    <input type="hidden" name="empleado_id" id="empleado_id" value="{{ $permiso->empleado_id }}" readonly class="form-control">
+                                    <input type="text" name="empleado" id="empleado" value="{{ $permiso->empleado->nombres }}" readonly class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="fecha_solicitud">Fecha de Solicitud:</label>
-
-                                    @php
-                                    $permiso = $permiso->mes . '-01'; // Agregar el día 01 al mes seleccionado
-                                    $fechaCarbon = \Carbon\Carbon::createFromFormat('Y-m-d', $permiso);
-                                    @endphp
-
-                                    <input type="date" name="fecha_solicitud" id="fecha_solicitud" value="{{ $fechaCarbon->format('Y-m-d') }}" required class="form-control">
+                                    <input type="date" name="fecha_solicitud" id="fecha_solicitud" value="{{ $permiso->fecha_solicitud }}" required class="form-control">
                                 </div>
 
                             </div>
@@ -76,7 +72,7 @@
                         <div class="form-row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="permiso_id">Asunto:</label>
+                                    <label for="asunto">Asunto:</label>
                                     <input type="text" name="asunto" value="Personal" class="form-control">
                                 </div>
                             </div>
@@ -97,11 +93,17 @@
                                             $durationText .= "$minutes $minuteLabel";
                                             }
                                             @endphp
-                                            <option value="{{ $i }}">{{ $durationText }}</option>
+
+                                            {{-- Comparar con el valor actual del permiso y seleccionar si es igual --}}
+                                            <option value="{{ $i }}" {{ (isset($permiso->horas_utilizadas) && $i == $permiso->horas_utilizadas) ? 'selected' : '' }}>
+                                                {{ $durationText }}
+                                            </option>
+
                                             @endfor
                                     </select>
                                 </div>
                             </div>
+
 
                         </div>
 
@@ -109,7 +111,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="hora_salida">Hora de Salida:</label>
-                                    <input type="time" name="hora_salida_input" id="hora_salida_input" required class="form-control">
+                                    <input type="time" name="hora_salida_input" id="hora_salida_input" value="{{ $permiso->hora_salida }}" required class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -120,9 +122,9 @@
                             </div>
                         </div>
 
-                        <input type="hidden" name="hora_actual" id="hora_salida" value="{{ date('H:i') }}" required class="form-control">
+                        <input type="hidden" name="hora_actual" id="hora_salida" required class="form-control">
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Crear Permiso</button>
+                            <button type="submit" class="btn btn-primary">Actualizar Registro</button>
                         </div>
                     </form>
                 </div>
