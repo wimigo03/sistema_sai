@@ -1,6 +1,15 @@
 @extends('layouts.admin')
-
 @section('content')
+<div class="card">
+    <div class="card-header">
+        <b>PERSONAL</b>
+    </div>
+    <div class="card-body">
+        {{--@include('admin.users.partials.search')--}}
+        @include('rechumanos.planta.partials.table-lista2')
+    </div>
+</div>
+
 <div class="row justify-content-center">
     <div style="color:black;font-weight: bold;font-size: 18px;">Lista General Empleados Planta
         &nbsp;&nbsp;

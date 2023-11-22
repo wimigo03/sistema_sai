@@ -4,18 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\FileModel;
 class EmpleadosModel extends Model
 {
-        //
         protected $table = 'empleados';
-
         protected $primaryKey= 'idemp';
-
         public $timestamps = true;
-
         protected $fillable = [
-
             'numfile',
             'nombres',
             'ap_pat',
@@ -59,10 +54,8 @@ class EmpleadosModel extends Model
             'estadoemp1',
             'estadoemp2',
             'tipo',
-
             'idfile',
             'idarea',
-
             'totalpresupuesto',
             'fechafinal',
             'ncontrato',
@@ -77,18 +70,17 @@ class EmpleadosModel extends Model
 
         ];
 
-        protected $guarded = [
+        protected $guarded = [];
 
-
-        ];
-
-        public function empleadosareas()
-        {
-           // return $this->belongsTo('App\Models\EmpleadosModel', 'id', 'idemp');
-           // return $this->belongsTo(Profession::class, 'profession_name', 'name');
-           //return $this->hasMany('App\Models\EmpleadosModel', 'id');
-           //return $this->belongsTo(User::class,'id','idusuario');
+        public function empleadosareas(){
            return $this->belongsTo(AreasModel::class, 'idarea', 'idarea');
         }
 
+        public function area(){
+            return $this->belongsTo(AreasModel::class, 'idarea', 'idarea')->select('nombrearea');
+         }
+
+        public function file(){
+            return $this->belongsTo(FileModel::class, 'idfile', 'idfile');
+        }
 }

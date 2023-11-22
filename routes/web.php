@@ -5,10 +5,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MedidaController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\PlantaController;
+
 /*use App\Http\Controllers\ProveedoresController;
 use App\Http\Controllers\PrartidaController;
 use App\Http\Controllers\ProdServController;
-use App\Http\Controllers\PlantaController;
 use App\Http\Controllers\DetalleCompraController;*/
 
 /*
@@ -38,7 +39,11 @@ Route::middleware(['auth'])->group(function () {
     Route::put('admin/users/update', [UserController::class, 'update'])->name('admin.users.update');
     Route::get('admin/users/baja/{id}', [UserController::class, 'baja'])->name('admin.users.baja');
     Route::get('admin/users/alta/{id}', [UserController::class, 'alta'])->name('admin.users.alta');
+
     Route::get('/compras/medidas/create', [MedidaController::class, 'create'])->name('medidas.create');
+
+    Route::get('rechumanos/planta/lista2', [PlantaController::class, 'detallePlanta'])->name('planta.listageneral');
+    Route::get('rechumanos/planta/lista2/show/{id}', [PlantaController::class, 'detallePlantaShow'])->name('planta.listageneral.show');
 });
 
 Auth::routes();
@@ -167,7 +172,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
     Route::get('rechumanos/planta/edit/{id}', 'PlantaController@editarplanta')->name('planta.editar');
     Route::post('rechumanos/planta/guardarplanta', 'PlantaController@guardarplanta')->name('planta.guardar');
     Route::post('rechumanos/planta/actualizarplanta', 'PlantaController@actualizarPlanta')->name('planta.actualizar');
-    Route::get('rechumanos/planta/lista2', 'PlantaController@detallePlanta')->name('planta.listageneral');
+    //Route::get('rechumanos/planta/lista2', 'PlantaController@detallePlanta')->name('planta.listageneral');
     Route::get('rechumanos/planta/delete/{id}', 'PlantaController@editarplanta2')->name('planta.editar2');
     Route::post('rechumanos/planta/deletePlanta', 'PlantaController@deletePlanta')->name('planta.delete');
 
