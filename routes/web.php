@@ -433,8 +433,34 @@ Route::get('almacen/detalle/{id}','AlmacenController@detalle')->name('almacen.de
     Route::get('expochaco/index', 'ExpoController@index')->name('expochaco.index');
     Route::get('expochaco/rubro', 'ExpoController@rubro')->name('expochaco.rubro');
 
-    Route::get('expochaco/create', 'ExpoController@create')->name('expochaco.rubro.create');
-    Route::post('expochaco/store', 'ExpoController@store')->name('expochaco.rubro.store');
+    Route::get('expochaco/createrubro', 'ExpoController@createrubro')
+    ->name('expochaco.createrubro');
+    Route::post('expochaco/storerubro', 'ExpoController@storerubro')
+    ->name('expochaco.storerubro');
+
+
+    //////PERSONERIAS/////
+   Route::get('personerias/index', 'Personerias\PersoneriasController@index')
+   ->name('personerias.index');
+
+   Route::get('personerias/index2', 'Personerias\PersoneriasController@indexantiguo')
+   ->name('personerias.index2');
+
+   Route::get('personerias/index3', 'Personerias\PersoneriasController@indexActualizada')
+   ->name('personerias.index3');
+
+   Route::post('personerias/index2/{id}', 'Personerias\PersoneriasController@update')
+   ->name('personerias.update');
+
+   Route::get('personerias/index3/{id}', 'Personerias\PersoneriasController@borrar')
+   ->name('personerias.destroy');
+
+   Route::post('personerias/index4', 'Personerias\PersoneriasController@create')
+   ->name('personerias.create');
+
+   Route::post('personerias/index5/{id}', 'Personerias\PersoneriasController@create2')
+   ->name('personerias.create2');
+
 });
 
 
@@ -452,8 +478,15 @@ Route::middleware(['auth'])->group(function () {
 
 Route::group(['namespace' => 'App\Http\Controllers\Fexpo'], function() {
 
+
+    Route::get('expochaco/pdf-reporte', 'SolicitudController@reporte')
+    ->name('expochaco.reporte');
+
     Route::get('expochaco/index', 'SolicitudController@index')
     ->name('expochaco.index');
+
+    Route::get('expochaco/index2', 'SolicitudController@index2')
+    ->name('expochaco.index2');
 
     Route::get('expochaco/create', 'SolicitudController@create')
     ->name('expochaco.create');
@@ -464,6 +497,10 @@ Route::group(['namespace' => 'App\Http\Controllers\Fexpo'], function() {
     Route::get('expochaco/{id}/editar', 'SolicitudController@editar')
     ->name('expochaco.editar');
 
+
+    Route::get('expochaco/imprimir/{id}', 'SolicitudController@imprimirboleta')
+    ->name('expochaco.imprimir');
+
     Route::post('expochaco/update', 'SolicitudController@update')
     ->name('expochaco.update');
 
@@ -472,5 +509,39 @@ Route::group(['namespace' => 'App\Http\Controllers\Fexpo'], function() {
 
     Route::get('expochaco/aprovar/{id}', 'SolicitudController@aprovar')
     ->name('expochaco.aprovar');
+
+    Route::get('expochaco/credenciales/{id}', 'SolicitudController@credencial')
+    ->name('expochaco.credencial');
+
+    Route::get('expochaco/credenciales/{id}', 'SolicitudController@credencial')
+    ->name('expochaco.credencial');
+
+
+    Route::get('expochaco/createcredencial/{id}', 'SolicitudController@createcredencial')->name('credencial.create');
+    Route::POST('expochaco/insertarcredencial', 'SolicitudController@insertarcredencial')->name('credencial.insertarcredencial');
+
+    Route::get('expochaco/generarqr/{id}', 'SolicitudController@codigoqr')
+    ->name('expochaco.generarqr');
+
+
+    Route::post('/ruta2', 'SolicitudController@respuesta2')->name('pregunta2');
+
+    //Route::get('qrcode', function () {
+       // return QrCode::size(300)->generate('A basic example of QR code!');
+   // })->name('qrr');
+
+
+
+   Route::get('expochaco3/index', 'SolicitudController2@index')
+   ->name('expochaco3.index');
+
+   Route::post('expochaco3/index2/{id}', 'SolicitudController2@update')
+   ->name('employees.update');
+
+   Route::get('expochaco3/index3/{id}', 'SolicitudController2@borrar')
+   ->name('employees.destroy');
+
+
+
 });
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="utf-8">
@@ -25,6 +26,22 @@
     <link href="{{ asset('datepicker/datepicker.min.css') }}" rel="stylesheet">
     <link href="{{ asset('dashboard/css/tooltips.min.css') }}" rel="stylesheet">
     <style>
+         .hoverTable tr:hover {
+            background-color: #CAE3FF;
+        }
+
+        .font-verdana-xs {font-size: 10px; font-family: verdana,arial,helvetica;}
+        .font-verdana-sm {font-size: 11px; font-family: verdana,arial,helvetica;}
+        .font-verdana {font-size: 12px; font-family: verdana,arial,helvetica;}
+        .font-verdana-bg {font-size: 13px; font-family: verdana,arial,helvetica;}
+
+        .font-courier-xs {font-size: 10px; font-family: courier, courier new, serif;}
+        .font-courier-sm {font-size: 11px; font-family: courier, courier new, serif;}
+        .font-courier {font-size: 12px; font-family: courier, courier new, serif;}
+        .font-courier-bg {font-size: 13px; font-family: courier, courier new, serif;}
+
+        /*@import "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css";
+        @import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700');*/
         #customers-table tbody td.details-control {
             background-image: url('{{ asset('admin_assets/images/details_open.png') }}');
             cursor: pointer;
@@ -50,7 +67,7 @@
     </style>
     @yield('styles')
 </head>
-<body style="background-color: #fafafa;" {{--onLoad="document.getElementById('alx').click();"--}}>
+<body style="background-color: #cfecf8;">
 {{--<body style="background-color: #f8f8f8;">--}}
     <main>
         {{--<div class="site-section">--}}
@@ -79,69 +96,7 @@
 
 
 
-    @yield('scripts')
-    <script>
-        var id = 2;
-
-        function fetchdata() {
-
-            $.ajax({
-                url: "{{ route('pregunta') }}",
-                type: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-
-                dataType: 'JSON',
-                success: function(data) {
-                   // console.log(data); //Try to log the data and check the response
-                    if (data.success == true) {
-                        //alert('success :  user logged in');
-                        // notifyMe();
-                    } else {
-                        //alert('Erreur login');
-                    }
-                }
-
-
-
-            });
-
-        }
-
-        $(document).ready(function() {
-            setInterval(fetchdata, 8000);
-        });
-
-
-        function notifyMe() {
-            if (!("Notification" in window)) {
-                alert("Este navegador no soporta notificaciones de escritorio");
-            } else if (Notification.permission === "granted") {
-                var options = {
-                    body: "Usted Tiene Una Correspondencia sin responder",
-                    icon: href="{{ asset('logos/logo2.png') }}",
-                    dir: "ltr"
-                };
-                var notification = new Notification("!! ATENCION !!", options);
-            } else if (Notification.permission !== 'denied') {
-                Notification.requestPermission(function(permission) {
-                    if (!('permission' in Notification)) {
-                        Notification.permission = permission;
-                    }
-                    if (permission === "granted") {
-                        var options = {
-                            body: "Descripción o cuerpo de la notificación",
-                            icon: "url_del_icono.jpg",
-                            dir: "ltr"
-                        };
-                        var notification = new Notification("Hola :)", options);
-                    }
-                });
-            }
-        }
-    </script>
-
+       @yield('scripts')
 </body>
 {{--<footer class="text-center">
     © 2022 Gobierno Autonomo Regional del Gran Chaco <a href="https://granchaco.gob.bo/">Pagina Web</a>

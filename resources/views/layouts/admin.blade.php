@@ -87,7 +87,7 @@
         function fetchdata() {
 
             $.ajax({
-                url: "{{ route('pregunta') }}",
+                url: "{{ route('pregunta/id') }}",
                 type: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -98,7 +98,8 @@
                    // console.log(data); //Try to log the data and check the response
                     if (data.success == true) {
                         //alert('success :  user logged in');
-                        // notifyMe();
+                       // console.log(data);
+                        //notifyMe();
                     } else {
                         //alert('Erreur login');
                     }
@@ -110,9 +111,9 @@
 
         }
 
-        $(document).ready(function() {
-            setInterval(fetchdata, 8000);
-        });
+        //$(document).ready(function() {
+        //    setInterval(fetchdata, 8000);
+       // });
 
 
         function notifyMe() {

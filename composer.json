@@ -20,6 +20,7 @@
         "luecano/numero-a-letras": "^3.0",
         "maatwebsite/excel": "^3.1",
         "nesbot/carbon": "^2.58",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "styde/html": "~1.0",
         "villca/numeros-en-letras": "^1.2",
         "yajra/laravel-datatables-oracle": "~9.0"
