@@ -149,6 +149,11 @@
                 return false;
             }
 
+
+            if($("#controlinterno").val() <= 1){
+                message_alert("El campo <b>[Control Interno]</b> debe ser mayor que 0...");
+                return false;
+            }
             if($("#idprograma >option:selected").val() == ""){
                 message_alert("El campo de seleccion <b>[Programa]</b> es un dato obligatorio...");
                 return false;

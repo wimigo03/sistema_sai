@@ -13,6 +13,7 @@ use App\Models\Remitente2Model;
 use App\Models\UnidadModel;
 use App\Models\ArchivoCorrespModel;
 use App\Models\DerivCorrespModel;
+use App\Models\InstruccionvModel;
 
 use App\Models\AnioModel;
 use Illuminate\Support\Facades\Redirect;
@@ -515,8 +516,14 @@ class Recepcion2Controller extends Controller
             // ->orderBy('d.idderivacion', 'desc')
             ->get();
 
-        //dd($dervacionCorresp);
-        return view('correspondencia2.derivar', ["idrecepcion" => $idrecepcion, "area" => $area, "derivacionCorresp" => $derivacionCorresp]);
+            $instruccion = DB::table('instruccionv  as i')
+            ->select('i.idinstruccionv', 'i.nombreinstruccionv')
+            ->get();
+
+            //$instruccion = InstruccionvModel::all();
+
+       // dd($instruccion2);
+        return view('correspondencia2.derivar', ["instruccion" => $instruccion,"idrecepcion" => $idrecepcion, "area" => $area, "derivacionCorresp" => $derivacionCorresp]);
     }
 
     public function guardarderivacion(request $request)
