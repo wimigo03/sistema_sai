@@ -421,10 +421,14 @@ Route::get('Evento2/urlfile/{id}', 'ControllerEvent2@urlfile')->name('evento2.ur
 
 
 /////////////////////////--CANASTA--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-Route::get('canasta/index', 'CanastaBeneficiariosController@index')->name('canasta.index');
-Route::get('canasta/search', 'CanastaBeneficiariosController@search')->name('canasta.search');
 Route::get('almacen/detalle/{id}','AlmacenController@detalle')->name('almacen.detalle');
+
+Route::get('canasta/beneficiarios/index', 'Canasta\BeneficiariosController@index')->name('canasta.beneficiarios.index');
+Route::get('canasta/beneficiarios/search', 'Canasta\BeneficiariosController@search')->name('canasta.beneficiarios.search');
+Route::get('canasta/beneficiarios/excel', 'Canasta\BeneficiariosController@excel')->name('canasta.beneficiarios.excel');
+Route::get('canasta/barrios/index', 'Canasta\BarriosController@index')->name('canasta.barrios.index');
+Route::get('canasta/barrios/search', 'Canasta\BarriosController@search')->name('canasta.barrios.search');
+Route::get('canasta/barrios/excel', 'Canasta\BarriosController@excel')->name('canasta.barrios.excel');
 
 
 //Route::get('compras/pedido/index2', 'CompraController@index2')->name('compras.pedido.index2');

@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', 'pgsql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -93,17 +93,17 @@ return [
             'sslmode' => 'prefer',
         ],
 
-        'pgsql_activos' => [
-            'driver' => 'pgsql',
+        'mysql_canasta' => [
+            'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST_THIRD', '127.0.0.1'),
-            'port' => env('DB_PORT_THIRD', '5432'),
+            'port' => env('DB_PORT_THIRD', '3306'),
             'database' => env('DB_DATABASE_THIRD', 'forge'),
             'username' => env('DB_USERNAME_THIRD', 'forge'),
             'password' => env('DB_PASSWORD_THIRD', ''),
             'charset' => 'utf8',
             'prefix' => '',
-            'prefix_indexes' => false,
+            'prefix_indexes' => true,
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
@@ -116,6 +116,21 @@ return [
             'database' => env('DB_DATABASE_FOURTH', 'forge'),
             'username' => env('DB_USERNAME_FOURTH', 'forge'),
             'password' => env('DB_PASSWORD_FOURTH', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => false,
+            'schema' => 'public',
+            'sslmode' => 'prefer',
+        ],
+
+        'pgsql_activos' => [
+            'driver' => 'pgsql',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_HOST_FIVE', '127.0.0.1'),
+            'port' => env('DB_PORT_FIVE', '5432'),
+            'database' => env('DB_DATABASE_FIVE', 'forge'),
+            'username' => env('DB_USERNAME_FIVE', 'forge'),
+            'password' => env('DB_PASSWORD_FIVE', ''),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => false,
