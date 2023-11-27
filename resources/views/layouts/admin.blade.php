@@ -15,7 +15,8 @@
     <link rel="stylesheet" href="{{ asset('dataTable_1.10.22/css/responsive.dataTables.min.css') }}">
 
     <link rel="stylesheet" href="{{ asset('DataTables\Buttons-2.2.3\css\buttons.bootstrap4.min.css') }}">
- 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
+
 
 
     {{--<link rel="stylesheet" href="{{ asset('plugins2/datatables/dataTables.css') }}" />--}}
@@ -122,7 +123,9 @@
     <script src="{{ asset('DataTables/pdfmake-0.1.36/pdfmake.min.js') }}"></script>
     <script src="{{ asset('DataTables/pdfmake-0.1.36/vfs_fonts.js') }}"></script>
     <script src="{{ asset('DataTables/RowGroup-1.2.0/js/dataTables.rowGroup.min.js') }}"></script>
- 
+ <!-- Agrega esto en tu vista para incluir la librería pdfmake -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   
 

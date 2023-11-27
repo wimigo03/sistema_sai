@@ -42,13 +42,7 @@
         </div>
         @endif
 
-        <div class="col-md-4 text-right">
-            <a class="tts:left tts-slideIn tts-custom" aria-label="Ver Reportes Guardados" href="{{route('reportes.index')}}">
-                <button class="btn btn-sm btn-info font-verdana" type="button">
-                    &nbsp;<i class="fas fa-file-alt"></i>&nbsp;Mis Reportes
-                </button>
-            </a>
-        </div>
+      
         <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
         <div class="col-md-12">
             <hr class="hrr">
@@ -80,7 +74,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label for="fecha_inicio">Fecha Inicio</label>
                             <?php
@@ -91,21 +85,23 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label for="fecha_final">Fecha Final</label>
-                            <input type="date" id="fecha_final" name="fecha_final" value="{{ date('Y-m-d') }}" class="form-control" required>
+                            <input type="date" id="fecha_final" name="fecha_final" value="" class="form-control" required>
                         </div>
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-md-4">
 
                         <label for="fecha_final">Opciones</label>
                         <div class="form-group">
                             <div class="">
                                 <button class="btn btn-primary" id="verBtn">Ver</button>
+                                <!-- Botón para generar PDF -->
+                                <button class="btn btn-info" id="imprimirBtn" onclick="imprimir()">Imprimir</button>
+
                                 <!-- Botón para guardar -->
-                                <button class="btn btn-success" id="guardarBtn" disabled>Guardar</button>
                             </div>
                         </div>
                     </div>
@@ -143,14 +139,14 @@
 
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label for="fecha_inicio2">Fecha Inicio</label>
                             <input type="date" id="fecha_inicio2" name="fecha_inicio2" value="" class="form-control" required>
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label for="fecha_final2">Fecha Final</label>
                             <input type="date" id="fecha_final2" name="fecha_final2" value="" class="form-control" required>
@@ -158,14 +154,14 @@
                     </div>
 
 
-                    <div class="col-md-2">
+                    <div class="col-md-4">
 
-                        <label for="fecha_final">Opciones</label>
+                        <label for="opciones">Opciones</label>
                         <div class="form-group">
                             <div class="">
                                 <button class="btn btn-primary" id="verBtn2">Ver</button>
                                 <!-- Botón para guardar -->
-                                <button class="btn btn-success" id="guardarBtn" disabled>Guardar</button>
+                                <button class="btn btn-info" id="imprimirBtn" onclick="imprimir()">Imprimir</button>
                             </div>
                         </div>
                     </div>
@@ -185,7 +181,49 @@
 
         </div>
         <div class="tab-pane fade" id="tab3">
+            <div class="body-border ">
+                <div class="row">
 
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="fecha_inicio3">Fecha Inicio</label>
+                            <input type="date" id="fecha_inicio3" name="fecha_inicio3" value="" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="fecha_final3">Fecha Final</label>
+                            <input type="date" id="fecha_final3" name="fecha_final3" value="" class="form-control" required>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <label for="opciones">Opciones</label>
+                        <div class="form-group">
+
+                            <button class="btn btn-primary" id="verBtn3">Ver</button>
+                            <!-- Botón para guardar -->
+                            <button class="btn btn-info" id="imprimirBtn" onclick="imprimir()">Imprimir</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 table-responsive center">
+                <table class="table-bordered  hoverTable table display responsive" style="width:100%" id="all-personal-reportes-table">
+                    <thead>
+                        <tr class="text-center">
+                            <th>Nombres</th>
+                            <th>Minutos de Retraso</th>
+                            <th>Descuento Según Haber Básico</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -194,6 +232,16 @@
 
 
 @section('scripts')
+
+
+<script>
+    function imprimir() {
+        // Aquí puedes agregar lógica para imprimir
+        // Puedes utilizar window.print() o abrir una ventana nueva con el contenido que deseas imprimir
+        // Por ejemplo:
+        window.print();
+    }
+</script>
 <script id="details-template" type="text/x-handlebars-template">
     @verbatim
         <table class="display compact hoverTable" id="registros-{{idemp}}" style="width:100%">
@@ -213,6 +261,7 @@
         </table>
     @endverbatim
 </script>
+<!-- Agrega estas líneas en tu vista para incluir las bibliotecas -->
 
 <script>
     $(document).ready(function() {
@@ -226,7 +275,8 @@
 
         var dataTable = $('#personal-reportes-table').DataTable({
             processing: false,
-            serverSide: false, // Changed to false if you're not using server-side processing
+            serverSide: false,
+            dom: '<"top"Bf>lrtip', // Changed to false if you're not using server-side processing
             ajax: {
                 url: "{{ route('personalreportes.getReporte') }}",
                 type: "GET", // Change the request type to GET
@@ -255,7 +305,12 @@
                 {
                     data: "observaciones"
                 }
-            ]
+            ],
+            initComplete: function(settings, json) {
+                // Almacenar los datos en la variable global
+                tableDataTab1 = json.data;
+            },
+
         });
         $('#personal-reportes-table tbody').on('click', 'td.details-control', function() {
             var tr = $(this).closest('tr');
@@ -291,7 +346,7 @@
                         name: 'fecha',
                         class: 'text-justify p-1 font-verdana-sm'
                     },
-                   
+
                     {
                         data: 'horario',
                         name: 'horario',
@@ -363,7 +418,8 @@
 
         var dataTable2 = $('#area-personal-reportes-table').DataTable({
             processing: false,
-            serverSide: false, // Changed to false if you're not using server-side processing
+            serverSide: false, 
+            dom: '<"top"Bf>lrtip',// Changed to false if you're not using server-side processing
             ajax: {
                 url: "{{ route('areaGetReportes.getReporte') }}",
                 type: "GET", // Change the request type to GET
@@ -409,6 +465,66 @@
             $('#verBtn2').prop('disabled', false);
 
         });
+        $('#guardarBtn2').click(function() {
+            window.print();
+        });
+
+        verificarFechas3();
+
+        var dataTable3 = $('#all-personal-reportes-table').DataTable({
+            processing: false,
+            serverSide: false, // Changed to false if you're not using server-side processing
+            ajax: {
+                url: "{{ route('allGetReportes.getReporte') }}",
+                type: "GET", // Change the request type to GET
+                data: function(d) {
+                    // Append parameters to the URL
+
+                    d.fecha_inicio2 = $('#fecha_inicio3').val();
+                    d.fecha_final2 = $('#fecha_final3').val();
+                }
+            },
+            dom: '<"top"Bf>lrtip',
+            columns: [{
+                    data: 'empleado',
+                    name: 'empleado'
+                },
+                {
+                    data: 'total_retrasos',
+                    name: 'total_retrasos'
+                },
+                {
+                    data: 'observaciones',
+                    name: 'observaciones'
+                },
+            ]
+        });
+
+        function verificarFechas3() {
+            var fechaInicio3 = $('#fecha_inicio3').val();
+            var fechaFinal3 = $('#fecha_final3').val();
+            $('#verBtn3').prop('disabled', !fechaInicio3 || !fechaFinal3);
+        }
+        $('#fecha_inicio3, #fecha_final3', ).on('change', function() {
+            // Verificar si ambas fechas están seleccionadas
+            var fechaInicio = $('#fecha_inicio3').val();
+            var fechaFinal = $('#fecha_final3').val();
+
+            // Habilitar o deshabilitar el botón "Ver" según la presencia de fechas
+            $('#verBtn3').prop('disabled', !fechaInicio || !fechaFinal);
+        });
+        $('#verBtn3').on('click', function() {
+            // Reload the DataTable with new parameters
+            dataTable3.ajax.reload();
+            $('#guardarBtn3').prop('disabled', false);
+            $('#verBtn3').prop('disabled', false);
+
+        });
+        $('#guardarBtn3').click(function() {
+            window.print();
+        });
+
+
 
 
 

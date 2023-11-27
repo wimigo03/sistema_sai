@@ -36,7 +36,7 @@
 
         @can('horario_access')
         <div class="col-md-6 text-right">
-            <a href="{{ route('empleadoasistencias.index') }}" class="tts:left tts-slideIn tts-custom" aria-label="Ver Fechas">
+            <a href="{{ route('horarios.fechas') }}" class="tts:left tts-slideIn tts-custom" aria-label="Ver Fechas">
                 <button class="btn btn-sm btn-warning text-white font-verdana" type="button" aria-label="Ver Empleados ">
                     Fechas&nbsp;<i class="fa-sharp fa-solid fa-calendar"></i>&nbsp;
                 </button>
@@ -138,9 +138,40 @@
         </div>
     </div>
 </div>
+<!-- Modal de Confirmación -->
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmModalLabel">Confirmar Actualización de Estado</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro de que deseas cambiar el estado de este horario?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="confirmBtn">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 @section('scripts')
+<script>
+    function confirmUpdateState(form) {
+        $('#confirmModal').modal('show');
+        $('#confirmBtn').unbind().click(function () {
+            $('#confirmModal').modal('hide');
+            submitForm(form);
+        });
+    }
+</script>
+
 <script>
     $(document).ready(function() {
         $('#horarios-table').DataTable({

@@ -18,8 +18,12 @@ class HorarioModel extends Model
     {
         return $this->belongsToMany(EmpleadosModel::class,'empleado_horario','horario_id','empleado_id');
     }
-    public function registroAsistencias()
+    public function registrosAsistencia()
     {
-        return $this->hasMany(RegistroAsistencia::class,'horario_id');
+        return $this->hasMany(RegistroAsistencia::class, 'horario_id'); // Ajusta 'horario_id' según tu columna de clave foránea
+    }
+    public function asistencias()
+    {
+        return $this->belongsToMany(AsistenciaModel::class,'registro_asistencia','horario_id','asistencia_id');
     }
 }

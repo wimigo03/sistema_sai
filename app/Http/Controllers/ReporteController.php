@@ -11,8 +11,12 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Models\RegistroAsistencia;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\View;
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 class ReporteController extends Controller
 {
@@ -98,7 +102,7 @@ class ReporteController extends Controller
 
             $empleados = EmpleadosModel::whereHas('retrasos', function ($query) use ($request) {
                 $query->where('minutos_diario', '>', 0)
-                    ->whereRaw("DATE(created_at) BETWEEN ? AND ?", [$request->fecha_inicio, $request->fecha_final]);
+                ->whereBetween('created_at', [$request->fecha_inicio, $request->fecha_final]);
             })->get();
 
 
@@ -109,7 +113,7 @@ class ReporteController extends Controller
                 // Obtener la suma de retrasos diarios del empleado para el rango de fechas
                 // Convertir timestamps a DATE
                 $suma_retrasos = RetrasosEmpleado::where('empleado_id', $empleado->idemp)
-                    ->whereRaw("DATE(created_at) BETWEEN ? AND ?", [$request->fecha_inicio, $request->fecha_final])
+                    ->whereBetween('created_at', [$request->fecha_inicio, $request->fecha_final])
                     ->sum('minutos_diario');
                 $observacion = '';
 
@@ -151,7 +155,7 @@ class ReporteController extends Controller
 
                     ->where('estado', '=', 1)
                     ->where('minutos_retraso', '>', 0)
-                    ->whereRaw("DATE(created_at) BETWEEN ? AND ?", [$fechaInicio, $fechaFinal]);
+                    ->whereBetween('created_at', [$fechaInicio, $fechaFinal]);
             })
                 ->where('idarea', $area_id)
                 ->select('idemp', 'nombres', 'ap_mat', 'ap_pat')
@@ -165,7 +169,7 @@ class ReporteController extends Controller
 
             foreach ($empleados as $empleado) {
                 $suma_retrasos = RegistroAsistencia::where('empleado_id', $empleado->idemp)
-                    ->whereRaw("DATE(created_at) BETWEEN ? AND ?", [$fechaInicio, $fechaFinal])
+                    ->whereBetween('created_at', [$fechaInicio, $fechaFinal])
                     ->sum('minutos_retraso');
 
                 $observacion = $this->calculateObservation($suma_retrasos);
@@ -202,8 +206,9 @@ class ReporteController extends Controller
                     ->where('empleado_id', $empleado_id)
                     ->where('estado', '=', 1)
                     ->where('minutos_retraso', '>', 0)
-                    ->whereRaw("DATE(created_at) BETWEEN ? AND ?", [$fechaInicio, $fechaFinal]);
+                    ->whereBetween('created_at', [$fechaInicio, $fechaFinal]);
             });
+
 
             $totalRecords = $query->count();
 
@@ -215,7 +220,7 @@ class ReporteController extends Controller
             $empleadosData = [];
             foreach ($empleados as $empleado) {
                 $suma_retrasos = RegistroAsistencia::where('empleado_id', $empleado->idemp)
-                    ->whereRaw("DATE(created_at) BETWEEN ? AND ?", [$fechaInicio, $fechaFinal])
+                    ->whereBetween('created_at', [$fechaInicio, $fechaFinal])
                     ->where('estado', '=', 1)
                     ->sum('minutos_retraso');
 
@@ -226,7 +231,7 @@ class ReporteController extends Controller
                         return route('reportespersonales.detalle', ['id' => $empleado->idemp, 'fecha_i' => $fechaInicio, 'fecha_f' => $fechaFinal]);
                     })($empleado),
                     'idemp' => $empleado->idemp,
-                    'empleado' => $empleado->nombres.' '.$empleado->ap_pat.' '.$empleado->ap_mat,
+                    'empleado' => $empleado->nombres . ' ' . $empleado->ap_pat . ' ' . $empleado->ap_mat,
                     'total_retrasos' => $suma_retrasos,
                     'observaciones' => $observacion,
                 ];
@@ -261,20 +266,79 @@ class ReporteController extends Controller
 
     public function detalle($id, $fechaI, $fechaF)
     {
-        $retrasos = RegistroAsistencia::where('empleado_id', $id)->whereRaw("DATE(created_at) BETWEEN ? AND ?", [$fechaI, $fechaF])
+        $retrasos = RegistroAsistencia::where('empleado_id', $id)
+            ->whereBetween('created_at', [$fechaI, $fechaF])
             ->where('estado', '=', 1)
             ->get();
         return Datatables::of($retrasos)
             ->addColumn('fecha', function ($row) {
-                return $row->created_at ? Carbon::parse($row->created_at)->format('Y-m-d') : '-';
+                return $row->created_at ?: '-';
             })
             ->addColumn('horario', function ($row) {
                 $horario = $row->horario->Nombre;
                 return $horario;
             })
-            
+
             ->make(true);
     }
+
+    public function allGetReporte(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $fechaInicio = $request->input('fecha_inicio2');
+            $fechaFinal = $request->input('fecha_final2');
+            $area_id = $request->input('area_id');
+
+
+
+            $areasExcluidas = [33, 34]; // Lista de IDs de áreas que deseas excluir
+
+            $empleados = EmpleadosModel::whereHas('registrosAsistencia', function ($query) use ($fechaInicio, $fechaFinal) {
+                $query
+                    ->where('estado', '=', 1)
+                    ->where('minutos_retraso', '>', 0)
+                    ->whereBetween('created_at', [$fechaInicio, $fechaFinal]);
+            })
+            ->whereNotIn('idarea', $areasExcluidas)
+            ->select('idemp', 'nombres', 'ap_mat', 'ap_pat')
+            ->get();
+            
+
+
+
+            $totalRecords = $empleados->count();
+
+            $areaempleadosData = [];
+
+            foreach ($empleados as $empleado) {
+                $suma_retrasos = RegistroAsistencia::where('empleado_id', $empleado->idemp)
+                    ->whereBetween('created_at', [$fechaInicio, $fechaFinal])
+                    ->sum('minutos_retraso');
+
+                $observacion = $this->calculateObservation($suma_retrasos);
+
+                $areaempleadosData[] = [
+                    'empleado' => $empleado->nombres,
+                    'total_retrasos' => $suma_retrasos,
+                    'observaciones' => $observacion,
+                ];
+            }
+
+            $data = [
+                'draw' => $request->input('draw'),
+                'recordsTotal' => $totalRecords,
+                'recordsFiltered' => $totalRecords,
+                'data' => $areaempleadosData,
+            ];
+
+            return response()->json($data);
+        }
+
+        // For non-AJAX requests, return the view
+
+    }
+
 
 
 
@@ -315,6 +379,52 @@ class ReporteController extends Controller
         }
         return view('asistencias.reportes.show', compact('reporte', 'reportes'));
     }
+
+
+    public function generarPdf(Request $request)
+    {
+        try {
+            // Obtener los datos del request
+            $empleadoId = $request->input('empleadoId');
+            $fechaInicio = $request->input('fechaInicio');
+            $fechaFinal = $request->input('fechaFinal');
+
+            // Generar el PDF
+            $pdf = $this->previsualizarPdf($fechaInicio, $fechaFinal, $empleadoId);
+
+            // Devolver el PDF en formato base64
+            return $pdf->stream();
+        } catch (Exception $ex) {
+            return redirect()->route('asistencias.permisos.index')->with('message', $ex->getMessage());
+        }
+    }
+
+    public function previsualizarPdf($fechaInicio, $fechaFinal, $empleadoId)
+    {
+        try {
+            ini_set('memory_limit', '-1');
+            ini_set('max_execution_time', '-1');
+
+
+
+            // Renderizar la vista del PDF (puedes ajustar según tus necesidades)
+
+            $view = view('asistencias.reportes.pdf', compact('empleadoId', 'fechaInicio', 'fechaFinal'));
+
+            // Generar el PDF
+            $pdf = PDF::loadHtml($view);
+            $pdf->setPaper('LETTER', 'portrait'); //landscape
+
+            return $pdf;
+        } catch (Exception $ex) {
+            throw new Exception($ex->getMessage());
+        } finally {
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
+    }
+
+
 
     /**
      * Show the form for editing the specified resource.

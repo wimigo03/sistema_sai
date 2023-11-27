@@ -441,9 +441,16 @@ Route::get('descuentos/{descuento}/edit', 'DescuentosController@edit')->name('de
 Route::get('registroasistencia', 'RegistroAsistenciaController@index')->name('registroasistencia.index')->middleware('can:asistencias_access');
 Route::get('registroasistencia/create', 'RegistroAsistenciaController@create')->name('registroasistencia.create')->middleware('can:asistencias_access');
 Route::post('registroasistencia/store', 'RegistroAsistenciaController@store')->name('registroasistencia.store')->middleware('can:asistencias_access');
+
+
 /////////////
 Route::get('retrasosempleado', 'RetrasoController@index')->name('retrasos.index')->middleware('can:asistencias_access');
 Route::get('ausencias', 'AusenciasController@index')->name('ausencias.index')->middleware('can:asistencias_access');
+ 
+Route::get('regularizar-ausencia/{id}', 'AusenciasController@regularizar')->name('regularizar.ausencia');
+Route::put('regularizar-asistencia/{id}', 'AusenciasController@update')->name('regularizar_asistencia.update');
+Route::get('historial-cambios-asistencia', 'HistorialAsistenciasController@index')->name('historial_asistencia.index');
+
 
 Route::get('reportes', 'ReporteController@index')->name('reportes.index')->middleware('can:reporte_access');
 Route::get('reportes/create', 'ReporteController@create')->name('reportes.create')->middleware('can:reporte_access');
@@ -452,7 +459,18 @@ Route::get('reportes/show/{reporte}', 'ReporteController@show')->name('reportes.
 Route::get('reportes/getReporte', 'ReporteController@getReporte')->name('reportes.getReporte')->middleware('can:reporte_access');
 Route::get('reportes/personalgetReporte', 'ReporteController@personalgetReporte')->name('personalreportes.getReporte')->middleware('can:reporte_access');
 Route::get('reportes/areaGetReporte', 'ReporteController@areaGetReporte')->name('areaGetReportes.getReporte')->middleware('can:reporte_access');
+Route::get('reportes/allGetReporte', 'ReporteController@allGetReporte')->name('allGetReportes.getReporte')->middleware('can:reporte_access');
+
+
 Route::get('reportes/detalle/{id}/{fecha_i}/{fecha_f}', 'ReporteController@detalle')->name('reportespersonales.detalle');
+Route::get('reportes/pdf', 'ReporteController@generarPdf')->name('generarPdf')->middleware('can:reporte_access');
+Route::get('reportes/previsualizar-pdf', 'ReporteController@previsualizarPdf')->name('previsualizarPdf');
+
+Route::get('horarios/fechas', 'HorarioController@fechas') ->name('horarios.fechas');
+Route::get('asistencia/{id}', 'AsistenciaController@edit')->name('asistencia.edit')->middleware('can:asistencias_access');
+Route::post('asistencia/store', 'AsistenciaController@store')->name('asistencia.store')->middleware('can:asistencias_access');
+Route::get('asistencia/crear/{fecha}', 'AsistenciaController@crear')->name('asistencia.crear')->middleware('can:asistencias_access');
+Route::put('asistencia/update/{asistencia}', 'AsistenciaController@update')->name('asistencia.update')->middleware('can:asistencias_access');
 
 
 Route::get('permisos/id', 'PermisosPersonalesController@getID')->name('permisospersonales.getID')->middleware('can:reporte_access');

@@ -36,7 +36,7 @@
             @endif
             <hr class="hrr">
         </div>
-        <div class="col-md-12 table-responsive center font-verdana">
+        <div class="col-md-6 center font-verdana">
             <div class="body-border">
                 <form action="{{ route('horarios.guardar', $empleado->idemp) }}" method="POST">
                     @csrf
@@ -56,59 +56,61 @@
 
                     <div class="form-group row">
                         <label for="horarios" class="col-md-12 col-form-label">{{ __('HORARIOS') }}</label>
+                        <!-- ... (código anterior) ... -->
 
                         <div class="col-md-12" id="horarios-select">
-                            <select name="horarios[]" id="horarios" class="@error('horarios') is-invalid @enderror" class="form-control" required multiple>
+                            <select name="horarios[]" id="horarios" class="@error('horarios') is-invalid @enderror" class="form-control" required>
                                 @foreach ($horarios as $id => $horario)
                                 @php
                                 $horarioCompleto = $horariosCompletos->firstWhere('id', $id);
-                                 @endphp
-                                <option value="{{ $id }}"  {{ (in_array($id, old('horarios', [])) || $empleado->horarios->contains($id)) ? 'selected' : '' }}>
-                                     Mañana: {{ $horarioCompleto->hora_inicio ?? '-' }} - {{ $horarioCompleto->hora_salida ?? ' - ' }} - Tarde:{{ $horarioCompleto->hora_entrada ?? '-' }} - {{ $horarioCompleto->hora_final ?? 'N/A' }}
+                                @endphp
+                                <option value="{{ $id }}" data-horario-info="{{ json_encode($horarioCompleto) }}" {{ ($horarioCompleto->estado == 1 && (in_array($id, old('horarios', [])) || $empleado->horarios->contains($id))) ? 'selected' : '' }}>
+                                    @if($horarioCompleto->estado == 1)
+                                    <!-- Resaltar los horarios con estado 1 -->
+                                    <strong>
+                                        @endif
+                                        Mañana: {{ $horarioCompleto->hora_inicio ?? '-' }} - {{ $horarioCompleto->hora_salida ?? ' - ' }} - Tarde:{{ $horarioCompleto->hora_entrada ?? '-' }} - {{ $horarioCompleto->hora_final ?? 'N/A' }}
+                                        @if($horarioCompleto->estado == 1)
+                                        <!-- Cerrar la etiqueta strong -->
+                                    </strong>
+                                    @endif
                                 </option>
                                 @endforeach
                             </select>
-                            
-                            <a href="#" id="horario-deselect-all" class="btn btn-danger  btn-sm">Quitar Selección</a>
 
                             @error('horarios')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                             @enderror
-
                         </div>
+
+                        <!-- ... (código posterior) ... -->
+
                     </div>
 
-
-                    <!-- Campos para los horarios -->
-
-                    <!-- Fin de los Campos para los horarios -->
-
-                    <!-- Botón para actualizar -->
                     <button type="submit" class="btn btn-primary">Actualizar</button>
                 </form>
             </div>
         </div>
+        
+
     </div>
 
 
 
 </div>
-@endsection
 @section('scripts')
 <script>
     var horario_select = new SlimSelect({
         select: '#horarios-select select',
-        //showSearch: false,
         placeholder: 'Seleccionar Horarios',
         deselectLabel: '<span>&times;</span>',
-        hideSelectedOption: true,
-    })
-
-
-    $('#horarios-select #horario-deselect-all').click(function() {
-        horario_select.set([]);
-    })
+        hideSelectedOption: true
+    });
 </script>
+@endsection
+
+
+
 @endsection

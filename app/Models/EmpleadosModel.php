@@ -97,6 +97,14 @@ class EmpleadosModel extends Model
         return $this->belongsToMany(HorarioModel::class, 'empleado_horario', 'empleado_id', 'horario_id');
         //,'empleado_horario','empleado_id','horario_id'
     }
+
+    public function asistencia()
+    {
+        return $this->belongsToMany(AsistenciaModel::class, 'registro_asistencia', 'empleado_id', 'asistencia_id');
+
+     }
+  
+
     public function reportes()
     {
         return $this->belongsToMany(ReporteModel::class, 'empleado_reporte', 'empleado_id', 'reporte_id')

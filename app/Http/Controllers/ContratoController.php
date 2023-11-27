@@ -45,8 +45,9 @@ class ContratoController extends Controller
             })
             ->addColumn('btn2', function ($row) {
 
-                $btn2 = '<a href="' . route('contrato.lista', $row->idarea) . '" class="btn btn-outline-info btn-sm"  title="Editar">Acceder</a>';
-
+                $btn2 = '<a href="' . route('contrato.lista', $row->idarea) . '" class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle">
+                <i class="fa-solid fa-xl fa-right-to-bracket"></i>
+            </a>';
                 return $btn2;
             })
             ->rawColumns(['btn2'])->make(true);

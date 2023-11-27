@@ -419,7 +419,7 @@
                         @can('horario_access')
                         <li>
                             <a href="{{ route('ausencias.index') }}">
-                                <span class="nav-label mr-4">Gestionar Ausencias</span>
+                                <span class="nav-label mr-4">Regularizar Asistencias</span>
                             </a>
                         </li>
                         @endcan
@@ -432,16 +432,7 @@
                         </li>
                         @endcan
 
-
-                        @can('horario_access')
-                        <li>
-                            <a href="{{ route('retrasos.index') }}">
-
-
-                                <span class="nav-label mr-4">Lista de Retrasos</span>
-                            </a>
-                        </li>
-                        @endcan
+ 
                         @can('horario_access')
                         <li>
                             <a href="{{ route('notificacion.index') }}">
@@ -454,7 +445,7 @@
 
                         <li>
                             <a href="{{ route('reportes.create') }}">
-                                <span class="nav-label mr-4">Reportes</span>
+                                <span class="nav-label mr-4">Reportes de Retrasos</span>
                             </a>
                         </li>
                         @endcan

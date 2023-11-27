@@ -39,11 +39,11 @@
                         <th>Fecha</th>
                         <th>Nombres Apellidos</th>
                         <th>Horario</th>
-                        <th> Entrada</th>
-                        <th> Salida</th>
-                        <th> Entrada</th>
-                        <th> Salida</th>
-                        <th>Minutos Retraso</th>
+                        <th> Entrada<br> Mañana</th>
+                        <th> Salida<br> Mañana</th>
+                        <th> Entrada <br>Tarde</th>
+                        <th> Salida <br>Tarde</th>
+                        <th>Minutos <br> Retraso</th>
                     </tr>
                 </thead>
             </table>
@@ -170,8 +170,9 @@
                     data: 'horario',
                     name: 'horario',
                     class: 'text-center p-1 font-verdana-sm'
+                   
                 },
-                 {
+                {
                     data: 'registro_inicio',
                     name: 'registro_inicio',
                     class: 'text-center p-1 font-verdana-sm'
@@ -186,7 +187,7 @@
                     name: 'registro_entrada',
                     class: 'text-center p-1 font-verdana-sm'
                 },
-                
+
                 {
                     data: 'registro_final',
                     name: 'registro_final',

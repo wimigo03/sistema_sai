@@ -89,8 +89,8 @@
                     class: 'text-justify p-1 font-verdana-sm'
                 }, 
                 {
-                    data: 'pivot.usuario_creac',
-                    name: 'pivot.usuario_creac',
+                    data: 'pivot.usuario_creacion',
+                    name: 'pivot.usuario_creacion',
                     class: 'text-justify p-1 font-verdana-sm'
                 },
                 {
