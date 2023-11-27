@@ -24,20 +24,28 @@
                         <li class="font-verdana-bg">
                             <a href="" data-toggle="collapse" data-target="#dashboard_canasta"
                                 class="active collapsed" aria-expanded="false">
-                                <i class="fa-duotone fa-user" style="color:green"></i>
-                                <span class="nav-label mr-3">CANASTA</span>
+                                <i class="fa-solid fa-gift"></i>
+                                {{--<i class="fa-duotone fa-user" style="color:green"></i>--}}
+                                <span class="nav-label mr-3">Canasta Alimentaria</span>
                                 <span class="fa fa-arrow-circle-left float-right"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_canasta">
                                 @can('agenda_ejecutivo')
                                     <li>
-                                        <a href="{{ route('canasta.index') }}">
-                                            &nbsp; &nbsp; &nbsp;
-                                            <span class="nav-label mr-4">Acceso1</span>
+                                        <a href="{{ route('canasta.barrios.index') }}">  
+                                            <span class="nav-label mr-4">
+                                                <i class="fa-solid fa-house"></i>&nbsp;Barrios
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('canasta.beneficiarios.index') }}">
+                                            <span class="nav-label mr-4">
+                                                <i class="fa-solid fa-users"></i>&nbsp;Beneficiarios
+                                            </span>
                                         </a>
                                     </li>
                                 @endcan
-
                                 @can('agenda_institucional')
                                     <li>
                                         <a href="{{ asset('/Evento2/index/') }}">

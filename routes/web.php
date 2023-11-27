@@ -5,10 +5,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MedidaController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\PlantaController;
+
 /*use App\Http\Controllers\ProveedoresController;
 use App\Http\Controllers\PrartidaController;
 use App\Http\Controllers\ProdServController;
-use App\Http\Controllers\PlantaController;
 use App\Http\Controllers\DetalleCompraController;*/
 use App\Http\Controllers\Activo\ActivoArchivoController;
 use App\Http\Controllers\Activo\ActualController;
@@ -61,7 +62,11 @@ Route::middleware(['auth'])->group(function () {
     Route::put('admin/users/update', [UserController::class, 'update'])->name('admin.users.update');
     Route::get('admin/users/baja/{id}', [UserController::class, 'baja'])->name('admin.users.baja');
     Route::get('admin/users/alta/{id}', [UserController::class, 'alta'])->name('admin.users.alta');
+
     Route::get('/compras/medidas/create', [MedidaController::class, 'create'])->name('medidas.create');
+
+    Route::get('rechumanos/planta/lista2', [PlantaController::class, 'detallePlanta'])->name('planta.listageneral');
+    Route::get('rechumanos/planta/lista2/show/{id}', [PlantaController::class, 'detallePlantaShow'])->name('planta.listageneral.show');
 });
 
 Auth::routes();
@@ -191,7 +196,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
     Route::get('rechumanos/planta/edit/{id}', 'PlantaController@editarplanta')->name('planta.editar');
     Route::post('rechumanos/planta/guardarplanta', 'PlantaController@guardarplanta')->name('planta.guardar');
     Route::post('rechumanos/planta/actualizarplanta', 'PlantaController@actualizarPlanta')->name('planta.actualizar');
-    Route::get('rechumanos/planta/lista2', 'PlantaController@detallePlanta')->name('planta.listageneral');
+    //Route::get('rechumanos/planta/lista2', 'PlantaController@detallePlanta')->name('planta.listageneral');
     Route::get('rechumanos/planta/delete/{id}', 'PlantaController@editarplanta2')->name('planta.editar2');
     Route::post('rechumanos/planta/deletePlanta', 'PlantaController@deletePlanta')->name('planta.delete');
 
@@ -663,10 +668,14 @@ Route::get('Evento2/urlfile/{id}', 'ControllerEvent2@urlfile')->name('evento2.ur
 
 
 /////////////////////////--CANASTA--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-Route::get('canasta/index', 'CanastaBeneficiariosController@index')->name('canasta.index');
-Route::get('canasta/search', 'CanastaBeneficiariosController@search')->name('canasta.search');
 Route::get('almacen/detalle/{id}','AlmacenController@detalle')->name('almacen.detalle');
+
+Route::get('canasta/beneficiarios/index', 'Canasta\BeneficiariosController@index')->name('canasta.beneficiarios.index');
+Route::get('canasta/beneficiarios/search', 'Canasta\BeneficiariosController@search')->name('canasta.beneficiarios.search');
+Route::get('canasta/beneficiarios/excel', 'Canasta\BeneficiariosController@excel')->name('canasta.beneficiarios.excel');
+Route::get('canasta/barrios/index', 'Canasta\BarriosController@index')->name('canasta.barrios.index');
+Route::get('canasta/barrios/search', 'Canasta\BarriosController@search')->name('canasta.barrios.search');
+Route::get('canasta/barrios/excel', 'Canasta\BarriosController@excel')->name('canasta.barrios.excel');
 
 
 //Route::get('compras/pedido/index2', 'CompraController@index2')->name('compras.pedido.index2');

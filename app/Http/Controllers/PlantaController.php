@@ -52,20 +52,27 @@ class PlantaController extends Controller
         return Datatables::of($purchases)->make(true);
     }
 
-    public function detallePlanta()
-    {
-
+    public function detallePlanta(){
+        $empleadoss = EmpleadosModel::where('tipo','1')->orderBy('fechingreso','desc')->paginate(10);
+        
         $empleados = DB::table('empleados as e')
             ->join('areas as a', 'a.idarea', '=', 'e.idarea')
             ->join('file as f', 'f.idfile', '=', 'e.idfile')
-            ->select('a.nombrearea', 'f.numfile', 'e.idemp', 'e.nombres', 'e.ap_pat', 'e.ap_mat', 'f.cargo', 'f.nombrecargo', 'f.habbasico', 'f.categoria', 'f.niveladm', 'f.clase', 'f.nivelsal', 'e.fechingreso', 'e.natalicio', 'e.edad', 'e.ci', 'e.poai', 'e.exppoai', 'e.decjurada', 'e.expdecjurada', 'e.sippase', 'e.expsippase', 'e.servmilitar', 'e.idioma', 'e.induccion', 'e.expinduccion', 'e.progvacacion', 'e.expprogvacacion', 'e.vacganadas', 'e.vacpendientes', 'e.vacusasdas', 'e.segsalud', 'e.inamovilidad', 'e.aservicios', 'e.cvitae', 'e.telefono', 'e.biometrico', 'e.gradacademico', 'e.rae', 'e.regprofesional', 'e.evdesempenio')
-
+            ->select('a.nombrearea', 'f.numfile', 'e.idemp', 'e.nombres', 'e.ap_pat', 'e.ap_mat', 'f.cargo', 'f.nombrecargo', 'f.habbasico', 'f.categoria', 
+            'f.niveladm', 'f.clase', 'f.nivelsal', 'e.fechingreso', 'e.natalicio', 'e.edad', 'e.ci', 'e.poai', 'e.exppoai', 'e.decjurada', 'e.expdecjurada', 
+            'e.sippase', 'e.expsippase', 'e.servmilitar', 'e.idioma', 'e.induccion', 'e.expinduccion', 'e.progvacacion', 'e.expprogvacacion', 'e.vacganadas', 
+            'e.vacpendientes', 'e.vacusasdas', 'e.segsalud', 'e.inamovilidad', 'e.aservicios', 'e.cvitae', 'e.telefono', 'e.biometrico', 'e.gradacademico', 
+            'e.rae', 'e.regprofesional', 'e.evdesempenio')
             ->where('e.tipo', '=', 1)
+            ->orderBy('e.idemp','asc')
             ->get();
-        //$areas = AreasModel::find($idarea);
-        //$nombrearea=$areas->nombrearea;
 
-        return view('rechumanos.planta.lista2', ["empleados" => $empleados]);
+        return view('rechumanos.planta.lista2', compact('empleados','empleadoss'));
+    }
+
+    public function detallePlantaShow($id){
+        $empleado = EmpleadosModel::where('idemp',$id)->first();
+        return view('rechumanos.planta.lista2-show', compact('empleado'));
     }
 
     public function edit($id)
