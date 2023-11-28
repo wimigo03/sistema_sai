@@ -211,6 +211,86 @@
                         </li>
                     @endcanany
 
+
+                     {{-- COMPRAS combustible --}}
+                     @canany(['combustibles_access'])
+                     <li class="font-verdana-bg">
+                         <a href="" data-toggle="collapse" data-target="#dashboard_combustibles"
+                             class="active collapsed" aria-expanded="false">
+                             <i class="fa fa-shopping-cart" style="color:green"></i>
+                             <span class="nav-label mr-3">COMBUSTIBLES</span>
+                             <span class="fa fa-arrow-circle-left float-right"></span>
+                         </a>
+                         <ul class="sub-menu collapse" id="dashboard_combustibles">
+                              @can('compras_panel_access')
+                                 <li>
+                                     <a href="{{ route('combustibles.pedidoparcial.index') }}">
+                                         &nbsp; &nbsp; &nbsp;
+                                         <span class="nav-label mr-4">Solicitud de Combustible</span>
+                                     </a>
+                                 </li>
+                             @endcan 
+
+
+                              @can('compras_panel_access')
+                                 <li>
+                                     <a href="{{ route('combustibles.pedido.index') }}">
+                                         &nbsp; &nbsp; &nbsp;
+                                         <span class="nav-label mr-4">Combustible Solicitados</span>
+                                     </a>
+                                 </li>
+                             @endcan
+                         
+                             @can('partidas_access')
+                                 <li>
+                                     <a href="{{ route('partidacomb.index') }}">
+                                         &nbsp; &nbsp; &nbsp;
+                                         <span class="nav-label mr-4">Partidas</span>
+                                     </a>
+                                 </li>
+                             @endcan 
+                             @can('productocomb_access')
+                                 <li>
+                                     <a href="{{ route('producto.index') }}">
+                                         &nbsp; &nbsp; &nbsp;
+                                         <span class="nav-label mr-4">Productos-Items</span>
+                                     </a>
+                                 </li>
+                             @endcan
+
+                              @can('proveedorcomb_access')
+                                 <li>
+                                     <a href="{{ route('proveedor.index') }}">
+                                         &nbsp; &nbsp; &nbsp;
+                                         <span class="nav-label mr-4">Proveedores</span>
+                                     </a>
+                                 </li>
+                             @endcan
+
+
+                             @can('programacomb_access')
+                                 <li>
+                                     <a href="{{ route('programa.index') }}">
+                                         &nbsp; &nbsp; &nbsp;
+                                         <span class="nav-label mr-4">Programas</span>
+                                     </a>
+                                 </li>
+                             @endcan
+
+
+
+                             @can('catprog_access')
+                                 <li>
+                                     <a href="{{ route('catprogcomb.index') }}">
+                                         &nbsp; &nbsp; &nbsp;
+                                         <span class="nav-label mr-4">Categ. Programaticas</span>
+                                     </a>
+                                 </li>
+                             @endcan 
+                         </ul>
+                     </li>
+                 @endcanany
+
                     {{-- ALMACEN --}}
 
                     @canany(['archivos_access'])
@@ -242,8 +322,180 @@
                                     </li>
                                 @endcan
                             </ul>
+
+                            <ul class="sub-menu collapse" id="dashboard_almacen">
+                                @can('archivos_access')
+                                    <li>
+                                        <a href="{{ route('almacenes.ingreso.index') }}">
+                                            &nbsp; &nbsp; &nbsp;
+                                            <span class="nav-label mr-4">Ingreso.</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
+
+                            <ul class="sub-menu collapse" id="dashboard_almacen">
+                                @can('archivos_access')
+                                    <li>
+                                        <a href="{{ route('almacenes.ingreso.grafico') }}">
+                                            &nbsp; &nbsp; &nbsp;
+                                            <span class="nav-label mr-4">Grafico.</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
+
+                            <ul class="sub-menu collapse" id="dashboard_almacen">
+                                @can('archivos_access')
+                                    <li>
+                                        <a href="{{ route('almacenes.pedido.index') }}">
+                                            &nbsp; &nbsp; &nbsp;
+                                            <span class="nav-label mr-4">Solicitudes Pend.</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
+
+
+                            <ul class="sub-menu collapse" id="dashboard_almacen">
+                                @can('archivos_access')
+                                    <li>
+                                        <a href="{{ route('almacenes.pedido.index') }}">
+                                            &nbsp; &nbsp; &nbsp;
+                                            <span class="nav-label mr-4">Solicitudes Pend.</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
+
+                            <ul class="sub-menu collapse" id="dashboard_almacen">
+                                @can('archivos_access')
+                                    <li>
+                                        <a href="{{ route('localidad.index') }}">
+                                            &nbsp; &nbsp; &nbsp;
+                                            <span class="nav-label mr-4">Localidad</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
                         </li>
                     @endcanany
+
+
+                    {{--todo trasnporte --}}
+
+@canany(['transportes_access'])
+<li class="font-verdana-bg">
+    <a href="" data-toggle="collapse" data-target="#dashboard_transportes" class="active collapsed" aria-expanded="false">
+        <i class="fa fa-users"></i>
+        <span class="nav-label mr-3">transporte</span>
+        <span class="fa fa-chevron-left float-right"></span>
+    </a>
+    <ul class="sub-menu collapse" id="dashboard_transportes">
+
+        @can('vehiculo_access')
+        <li>
+            <a href="{{ route('transportes.pedidoparcial.index') }}">
+                &nbsp;<i class="fa fa-data base"></i>
+                <span class="nav-label mr-4">Solicitud</span>
+            </a>
+        </li>
+
+    @endcan
+
+    @can('vehiculo_access')
+    <li>
+        <a href="{{ route('transportes.pedido.index3') }}">
+            &nbsp;<i class="fa fa-data base"></i>
+            <span class="nav-label mr-4">Por aprovar</span>
+        </a>
+    </li>
+
+@endcan
+
+    @can('vehiculo_access')
+    <li>
+        <a href="{{ route('transportes.pedido.index') }}">
+            &nbsp;<i class="fa fa-data base"></i>
+            <span class="nav-label mr-4">Pendientes</span>
+        </a>
+    </li>
+
+@endcan
+
+
+
+
+        @can('vehiculo_access')
+            <li>
+                <a href="{{ route('transportes.uconsumo.index') }}">
+                    &nbsp;<i class="fa fa-data base"></i>
+                    <span class="nav-label mr-4">vehiculo</span>
+                </a>
+            </li>
+
+        @endcan
+
+        @can('tipomovilidad_access')
+        <li>
+            <a href="{{ route('tipo.index') }}">
+                &nbsp;<i class="fa fa-data base"></i>
+                <span class="nav-label mr-4">Tipo</span>
+            </a>
+        </li>
+
+    @endcan
+
+    {{-- @can('unidadconsumo_access')
+    <li>
+        <a href="{{ route('uconsumo.index') }}">
+            &nbsp;<i class="fa fa-data base"></i>
+            <span class="nav-label mr-4">Unidad De Consumo</span>
+        </a>
+    </li>
+
+@endcan --}}
+
+
+
+        {{-- @can('planta_access')
+            <li>
+                <a href="{{ route('planta.index') }}">
+                    &nbsp;<i class="fa fa-id-badge"></i>
+                    <span class="nav-label mr-4">Gestionar Personal-P</span>
+                </a>
+            </li>
+        @endcan
+        @can('planta_access')
+            <li>
+                <a href="{{ route('planta.listageneral') }}">
+                    &nbsp;<i class="fa fa-file"></i>
+                    <span class="nav-label mr-4">Lista Gral. Planta</span>
+                </a>
+            </li>
+        @endcan
+        @can('personal_contrato_access')
+            <li>
+                <a href="{{ route('contrato.index') }}">
+                    &nbsp;<i class="fa fa-user-circle"></i>
+                    <span class="nav-label mr-4">Personal Contrato</span>
+                </a>
+            </li>
+        @endcan
+        @can('personal_contrato_access')
+            <li>
+                <a href="{{ route('contrato.listageneral') }}">
+                    &nbsp;<i class="fa fa-file"></i>
+                    <span class="nav-label mr-4">Lista Gral. Contrato</span>
+                </a>
+            </li>
+        @endcan
+        --}}
+    </ul>
+</li>
+@endcanany 
+
+
 
                     {{-- CORRESPONDENCIA --}}
                     @canany(['ventanilla_access'])
