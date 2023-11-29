@@ -45,6 +45,20 @@
                                             </span>
                                         </a>
                                     </li>
+                                    <li>
+                                        <a href="{{ route('canasta.periodos.index') }}">
+                                            <span class="nav-label mr-4">
+                                                <i class="fa-brands fa-slack"></i>&nbsp;Periodos
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('canasta.entregas.index') }}">
+                                            <span class="nav-label mr-4">
+                                                <i class="fa-solid fa-list"></i>&nbsp;Entregas
+                                            </span>
+                                        </a>
+                                    </li>
                                 @endcan
                                 @can('agenda_institucional')
                                     <li>
