@@ -76,7 +76,7 @@
             <!-- footer -->
             <!-- ============================================================== -->
             <footer class="text-center">
-                © 2022 Gobierno Autonomo Regional del Gran Chaco <a href="https://granchaco.gob.bo/">Pagina Web</a>
+                © 2023 Gobierno Autonomo Regional del Gran Chaco <a href="https://granchaco.gob.bo/">Pagina Web</a>
             </footer>
             <!-- ============================================================== -->
             <!-- End footer -->

@@ -77,41 +77,138 @@
     <script src="{{ asset('datepicker/datepicker.min.js') }}"></script>
     <script src="{{ asset('datepicker/datepicker.es.js') }}"></script>
 
-
-
-
-    @yield('scripts')
     <script>
         var id = 2;
 
         function fetchdata() {
+    $.ajax({
+    url: "{{ route('pregunta2') }}",
+    type: 'POST',
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    dataType: 'JSON',
 
-            $.ajax({
-                url: "{{ route('pregunta') }}",
-                type: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
+    success: function(data) {
+        if (data.success == true) {
+            notifyMe();
+        } else {
+               }
+                             }
+});
+}
 
-                dataType: 'JSON',
-                success: function(data) {
-                   // console.log(data); //Try to log the data and check the response
-                    if (data.success == true) {
-                        //alert('success :  user logged in');
-                        // notifyMe();
-                    } else {
-                        //alert('Erreur login');
-                    }
-                }
+function fetchdata() {
+    $.ajax({
+    url: "{{ route('pregunta2') }}",
+    type: 'POST',
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    dataType: 'JSON',
+
+    success: function(data) {
+        if (data.success == true) {
+            notifyMe();
+        } else {
+               }
+                             }
+});
+}
+
+function fetchdata() {
+    $.ajax({
+    url: "{{ route('pregunta3') }}",
+    type: 'POST',
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    dataType: 'JSON',
+
+    success: function(data) {
+        if (data.success == true) {
+            notifyMe();
+        } else {
+               }
+                             }
+});
+}
 
 
+function fetchdata() {
+    $.ajax({
+    url: "{{ route('pregunta4') }}",
+    type: 'POST',
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    dataType: 'JSON',
 
-            });
+    success: function(data) {
+        if (data.success == true) {
+            notifyMe();
+        } else {
+               }
+                             }
+});
+}
 
-        }
+function fetchdata() {
+    $.ajax({
+    url: "{{ route('pregunta5') }}",
+    type: 'POST',
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    dataType: 'JSON',
+
+    success: function(data) {
+        if (data.success == true) {
+            notifyMe();
+        } else {
+               }
+                             }
+});
+}
+
+function fetchdata() {
+    $.ajax({
+    url: "{{ route('pregunta6') }}",
+    type: 'POST',
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    dataType: 'JSON',
+
+    success: function(data) {
+        if (data.success == true) {
+            notifyMe();
+        } else {
+               }
+                             }
+});
+}
+
+function fetchdata() {
+    $.ajax({
+    url: "{{ route('pregunta7') }}",
+    type: 'POST',
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    dataType: 'JSON',
+
+    success: function(data) {
+        if (data.success == true) {
+            notifyMe();
+        } else {
+               }
+                             }
+});
+}
 
         $(document).ready(function() {
-            setInterval(fetchdata, 8000);
+            setInterval(fetchdata, 4000);
         });
 
 
@@ -142,7 +239,7 @@
             }
         }
     </script>
-
+@yield('scripts')
 </body>
 {{--<footer class="text-center">
     © 2022 Gobierno Autonomo Regional del Gran Chaco <a href="https://granchaco.gob.bo/">Pagina Web</a>

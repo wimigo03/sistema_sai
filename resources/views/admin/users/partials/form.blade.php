@@ -11,12 +11,26 @@
                 @endforeach
             </select>
         </div>
+<<<<<<< HEAD
         <div class="col-md-5 pr-1 pl-1">
             <label for="idemp" class="d-inline"><b>Empleado</b></label><br>
             <select name="idemp" id="idemp" class="form-control form-control-sm select2">
                 <option value="">-</option>
                 @foreach ($empleados as $index => $value)
                     <option value="{{ $index }}" @if(request('idemp') == $index) selected @endif >{{ $value }}</option>
+=======
+    </div>
+    <div class="form-group row font-verdana-bg">
+        <label for="idemp" class="required col-md-4 col-form-label text-md-right">{{ __('Empleado') }}</label>
+        <div class="col-md-6" id="permissions-select2">
+         <select id="idemp" type="text" class="form-control @error('idemp') is-invalid @enderror select2"" name="idemp" required autocomplete="idemp" autofocus> 
+
+                <option value="" selected hidden>-</option>
+                @foreach ($empleados as $empleado)
+                    <option value="{{$empleado->idemp}}">
+                        {{$empleado->nombres}} {{$empleado->ap_pat}} {{$empleado->ap_mat}}
+                    </option>
+>>>>>>> master
                 @endforeach
             </select>
         </div>
