@@ -59,10 +59,10 @@ class ValeController extends Controller
 
                         return Datatables::of($vales)
                         ->addIndexColumn()
-                        ->addColumn('btn', 'almacenes.pedido.btn')
+                       
                         ->addColumn('btn2', 'almacenes.pedido.btn2')
                   
-                        ->rawColumns(['btn','btn2'])
+                        ->rawColumns(['btn2'])
                         ->make(true);
 
                     }
@@ -81,13 +81,13 @@ class ValeController extends Controller
             ->join('localidad as lo', 'lo.idlocalidad', '=', 'v.idlocalidad')
     
             ->join('areas as a', 'a.idarea', '=', 'v.idarea')
-            ->where('v.estadovale',2)
+            ->where('v.estado1',2)
                             ->select('v.estadovale','v.idvale','v.detallesouconsumo',
     
                             'v.usuarionombre','v.usuariocargo','v.codigoconsumo',
                             
                             'v.nombrelocalidad','v.marcaconsumo','v.placaconsumo',
-                            'v.estado2',
+                            'v.estado1',
                           
                             'a.nombrearea',
                             'u.codigoconsumo',
@@ -108,7 +108,43 @@ class ValeController extends Controller
            return view('almacenes.pedido.index2');
         }
     
-    
+        public function index3(Request $request)
+        {
+   
+            if ($request->ajax()) {
+               $vales = DB::table('vale as v')
+   
+               ->join('unidadconsumo as u', 'u.idunidadconsumo', '=', 'v.idunidad')
+               ->join('localidad as lo', 'lo.idlocalidad', '=', 'v.idlocalidad')
+       
+               ->join('areas as a', 'a.idarea', '=', 'v.idarea')
+               ->where('v.estado2',2)
+                               ->select('v.estadovale','v.idvale','v.detallesouconsumo',
+       
+                               'v.usuarionombre','v.usuariocargo','v.codigoconsumo',
+                               
+                               'v.nombrelocalidad','v.marcaconsumo','v.placaconsumo',
+                               'v.estado1',
+                             
+                               'a.nombrearea',
+                               'u.codigoconsumo',
+                               'lo.nombrelocalidad')
+                            
+                               ->orderBy('v.idvale', 'asc');
+                               
+       
+                               return Datatables::of($vales)
+                               ->addIndexColumn()
+                             
+                               ->addColumn('btn4', 'almacenes.pedido.btn4')
+                         
+                               ->rawColumns(['btn4'])
+                               ->make(true);
+       
+                           }
+              return view('almacenes.pedido.index3');
+           }
+       
     public function create(){
         $consumos = DB::table('unidadconsumo')
         ->select(DB::raw("concat(codconsumo,' : ',placaconsumo,' : ',marcaconsumo)
@@ -202,7 +238,25 @@ class ValeController extends Controller
           return redirect()->route('almacenes.detalle.index2');
      }
 
-
+     public function editabletres($idval){
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $detalle = Temporal2Model::find($id);
+        
+        if(is_null($detalle)){
+            $detalle = new Temporal2Model;
+            $detalle->idtemporal2=$id;
+            $detalle->idusuario=$id;
+            $detalle->idvale=$idval;
+            $detalle->save();
+        }else{
+            $detalle->idtemporal2 = $id;
+            $detalle->idusuario = $id;
+           $detalle->idvale = $idval;
+            $detalle->update();
+        }
+          return redirect()->route('almacenes.detalle.index3');
+     }
      
     public function editar($idvale){
 

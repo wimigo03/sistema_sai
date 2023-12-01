@@ -665,7 +665,14 @@ Route::get('transportes/uconsumo/aprovar/{id}', 'UnidaddConsumoController@aprova
     
     Route::get('transportes/pedidoparcial/index', 'SoluconsumoController2@index')
     ->name('transportes.pedidoparcial.index');
+
+    Route::get('transportes/pedidoparcial/index2', 'SoluconsumoController2@index2')
+    ->name('transportes.pedidoparcial.index2');
     
+    Route::get('transportes/pedidoparcial/index3', 'SoluconsumoController2@index3')
+    ->name('transportes.pedidoparcial.index3');
+    
+
     Route::get('transportes/pedidoparcial/create', 'SoluconsumoController2@create')
     ->name('transportes.pedidoparcial.create');
     
@@ -713,25 +720,33 @@ Route::POST('almacenes/localidad/store', 'LocalidadController@store')->name('loc
 
 Route::get('almacenes/pedido/index', 'ValeController@index')->name('almacenes.pedido.index');
 Route::get('almacenes/pedido/index2', 'ValeController@index2')->name('almacenes.pedido.index2');
+Route::get('almacenes/pedido/index3', 'ValeController@index3')->name('almacenes.pedido.index3');
+
 Route::get('almacenes/pedido/create', 'ValeController@create')->name('almacenes.pedido.create');
 Route::post('almacenes/pedido/store', 'ValeController@store')->name('almacenes.pedido.store');
 Route::get('almacenes/pedido/edit/{id}', 'ValeController@edit')->name('almacenes.pedido.edit');
  Route::get('almacenes/pedido/editar/{id}', 'ValeController@editar')->name('almacenes.pedido.editar');
 Route::post('almacenes/pedido/update', 'ValeController@update')->name('almacenes.pedido.update');
 Route::get('almacenes/pedido/editable/{id}', 'ValeController@editable')->name('almacenes.pedido.editable');
+Route::get('almacenes/pedido/editabletres/{id}', 'ValeController@editabletres')->name('almacenes.pedido.editabletres');
 
 
 Route::get('almacenes/detalle/index', 'DetalleValeController@index')->name('almacenes.detalle.index');
 Route::get('almacenes/detalle/index2', 'DetalleValeController@index2')->name('almacenes.detalle.index2');
+Route::get('almacenes/detalle/index3', 'DetalleValeController@index3')->name('almacenes.detalle.index3');
 
 Route::post('almacenes/detalle/store', 'DetalleValeController@store')->name('almacenes.detalle.store');
 Route::get('almacenes/detalle/principal/{id}', 'DetalleValeController@crearOrdenxxx')->name('almacenes.detalle.principal');
 Route::post('almacenes/detalle/principal/store', 'DetalleValeController@crearOrden')->name('almacenes.detalle.principal.store');
 //Route::post('combustibles/detalle/principalorden', 'DetalleValeController@crearOrdendoc')->name('DetalleValeController.crearOrdendoc');
 //Route::get('combustibles/detalle/{id}/destroyed2', 'DetalleValeController@destroyed2')->name('DetalleValeController.eliminar2');
-Route::get('almacenes/detalle/delete2/{id}', 'DetalleValeController@delete')->name('almacenes.detalle.delete');
 Route::get('almacenes/detalle/aprovar/{id}', 'DetalleValeController@aprovar')->name('almacenes.detalle.aprovar');
 Route::get('almacenes/detalle/solicitud/{id}', 'DetalleValeController@solicitud')->name('almacenes.detalle.solicitud');
+
+Route::get('almacenes/detalle/delete/{id}', 'DetalleValeController@delete')->name('almacenes.detalle.delete');
+Route::get('almacenes/detalle/editar/{id}', 'DetalleValeController@editar')->name('almacenes.detalle.editar');
+
+Route::POST('almacenes/detalle/update', 'DetalleValeController@update')->name('almacenes.detalle.update');
 
 });  
 
@@ -752,5 +767,9 @@ Route::group(['namespace' => 'App\Http\Controllers\Almacen\Ingreso'], function()
  Route::get('almacenes/ingreso/reporte', 'IngresoController@reporte')->name('almacenes.ingreso.reporte');
  Route::post('almacenes/ingreso/store2', 'IngresoController@store2')->name('almacenes.ingreso.store2');
  
-
+ Route::get('almacenes/reporte/index', 'ReporteAreasController@index')
+ ->name('almacenes.reporte.index');
+ 
+ Route::post('almacenes/reporte/store', 'ReporteAreasController@store')
+ ->name('almacenes.reporte.store');
 });  

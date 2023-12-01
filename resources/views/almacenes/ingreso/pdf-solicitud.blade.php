@@ -162,8 +162,17 @@ function colorChanger2(el) {
                     </tr>
                     @php
                     $num = 1;
+                    $numssss =0;
+                    //a
+                 
+                    $numd = $ingresos->cantidad;
+                      //b
+              
+                
+               
                     @endphp
                     @foreach($prodserv as $prod)
+                   
                     <tr style="text-align: center">
                         <td class="text-justify p-1">{{$num++}}</td>
                         <td class="text-center p-1">{{$prod ->idvale}}</td>
@@ -178,11 +187,16 @@ function colorChanger2(el) {
                         <td class="text-center p-1">{{$prod ->cantidadsol}}</td>
                         <td class="text-center p-1">{{$prod ->preciosol * $prod ->cantidadsol}}</td>
 
-                        <td class="text-center p-1">{{$prod ->cantidadresta}}</td>
-                        <td class="text-center p-1">{{$prod ->precio * $prod ->cantidadresta}}</td>
+                        {{-- <td class="text-center p-1">{{$prod ->subtotalsol=$numddd* $prod ->cantidadsol}}</td> --}}
+
+                        {{-- <td class="text-center p-1">{{$numd}}</td> --}}
+                        <td class="text-center p-1">{{$numd=$numd-$prod ->cantidadsol }}</td>
+
+                        <td class="text-center p-1">{{$prod ->preciosol * $numd}}</td>
                     
                      
                     </tr>
+                 
                     @endforeach
                    
          @if (count($prodserv) > 0)

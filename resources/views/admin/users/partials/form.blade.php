@@ -20,7 +20,8 @@
     <div class="form-group row font-verdana-bg">
         <label for="idemp" class="required col-md-4 col-form-label text-md-right">{{ __('Empleado') }}</label>
         <div class="col-md-6" id="permissions-select2">
-            <select id="idemp" type="text" class="form-control @error('idemp') is-invalid @enderror select2"" name="idemp" required autocomplete="idemp" autofocus>
+         <select id="idemp" type="text" class="form-control @error('idemp') is-invalid @enderror select2"" name="idemp" required autocomplete="idemp" autofocus> 
+
                 <option value="" selected hidden>-</option>
                 @foreach ($empleados as $empleado)
                     <option value="{{$empleado->idemp}}">

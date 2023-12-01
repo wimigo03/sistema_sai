@@ -11,7 +11,7 @@
 
     <div class="col-md-2 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-            <a href="{{ url('/almacenes/pedido/index') }}">
+            <a href="{{ url('/almacenes/pedido/index3') }}">
                 <span class="color-icon-1">
                     &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                 </span>
@@ -58,8 +58,6 @@
                         <td class="text-right p-1"><b>Precio</b></td>
                         <td class="text-right p-1"><b>Total</b></td>
                         <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
-                        <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
-
                     </tr>
                 </thead>
                 <tbody>
@@ -77,19 +75,7 @@
                             <td class="text-right p-1">{{$prod->cantidadsol}}</td>
                             <td class="text-right p-1">{{$prod->preciosol}}</td>
                             <td class="text-right p-1">{{$prod->subtotalsol}}</td>
-                            <td class="text-center p-1">
-
-
-                           
-                                <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Vale">
-                                    <a href="{{route('almacenes.detalle.editar',$prod->iddetallevale)}}">
-                                        <span class="text-warning">
-                                            <i class="fa-solid fa-2xl fa-square-pen"></i>
-                                        </span>
-                                    </a>
-                                </span>
-                         
-                            </td>                 
+                                                
                             <td class="text-center p-1">
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Imprimir Solicitud">
                                     <a href="{{route('almacenes.detalle.solicitud',$prod->iddetallevale)}}">

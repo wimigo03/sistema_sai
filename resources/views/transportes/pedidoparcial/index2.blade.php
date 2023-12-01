@@ -3,22 +3,22 @@
 <br>
 <div class="row font-verdana-bg">
     <div class="col-md-8 titulo">
-        <b>SOLICITUD DE UNIDAD -- </b><b style='color:red'>{{$idd->nombrearea}} </b>--
+        <b>--APROBADA POR DIR. ADMIN. -- </b><b style='color:red'>{{$idd->nombrearea}} </b>--
     </div>
     <div class="col-md-4 text-right titulo">
         
          @can('unidadconsumo_create') 
 
-        <a href="{{route('transportes.pedidoparcial.create')}}" class="tts:left tts-slideIn tts-custom" 
+        <a href="{{route('transportes.pedidoparcial.index')}}" class="tts:left tts-slideIn tts-custom" 
         aria-label="  Solicitud">
-            <button class="btn btn-sm btn-success font-verdana" type="button" >Agreg.Solic.
+            <button class="btn btn-sm btn-success font-verdana" type="button" >Volver Atras.
                 &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
             </button>
         </a>
 
-        <a href="{{route('transportes.pedidoparcial.index2')}}" class="tts:left tts-slideIn tts-custom" 
-        aria-label="  Aprobadas">
-            <button class="btn btn-sm btn-primary font-verdana" type="button" >Solic. Aprobadas
+        <a href="{{route('transportes.pedidoparcial.index3')}}" class="tts:left tts-slideIn tts-custom" 
+        aria-label="  Solicitud">
+            <button class="btn btn-sm btn-primary font-verdana" type="button" >Solicitudes Aprovadas.
                 &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
             </button>
         </a>
@@ -63,19 +63,16 @@
                             <td class="text-justify p-1">{{$sol->referencia}}</td>
                             <td class="text-justify p-1">{{$sol->nombrearea}}</td>
 
-                             <td style="padding: 0;" class="text-center p-1">
-                                 @can('combustibles_access') 
-                                    <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Solicitud">
-                                        <a href="{{route('transportes.pedidoparcial.editar',$sol->idsoluconsumo)}}">
-                                            <span class="text-warning">
-                                                <i class="fa-solid fa-2xl fa-square-pen"></i>
-                                            </span>
-                                        </a>
-                                    </span>
-                                 @endcan 
-
-                                </td>
-                              
+                        
+                                <td style="padding: 0;" class="text-center p-1">
+                                <span class="tts:left tts-slideIn tts-custom" aria-label="Imprimir Solicitud">
+                                    <a href="{{route('transportes.pedidoparcial.solicitud',$sol->idsoluconsumo)}}">
+                                        <span class="text-primary">
+                                            <i class=" fa-2xl fa-solid fa-print"></i>
+                                        </span>
+                                    </a>
+                                </span>
+                                </td> 
  
                         </tr>
                     @empty

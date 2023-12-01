@@ -37,8 +37,6 @@ class CompraCombController2 extends Controller
                         ->join('programacomb as prog', 'prog.idprogramacomb', '=', 'c.idprogramacomb')
                         ->join('areas as a', 'a.idarea', '=', 'c.idarea')
 
-                       
-                        
                         ->select('c.idcompracomb','c.estado1','c.controlinterno','a.nombrearea',
                         'c.objeto', 'c.justificacion','p.nombreproveedor','c.preventivo',
                         'c.numcompra','cat.codcatprogramatica','prog.nombreprograma')

@@ -43,7 +43,7 @@
 
 
 <div class="body-border" style="background-color: #FFFFFF;">
-    <form action="{{ route('combustibles.detalle.store') }}" method="post" id="form">
+    <form action="{{ route('almacenes.detalle.store') }}" method="post" id="form">
         @csrf
         <br>
 
@@ -88,7 +88,7 @@
             <div class="col-md-2 text-right">
                 <br>
             
-
+                @if($vales->estadotemp == 1)
 
                 <button class="btn btn-success font-verdana-bg" type="button" 
                 onclick="save();">
@@ -96,7 +96,9 @@
                     &nbsp;Adicionar
                 </button>
 
-             
+                @else
+
+                @endif
 
 
             </div>
@@ -121,7 +123,6 @@
                         <td class="text-right p-1"><b>Total</b></td>
                         <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
                         <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
-                        <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
                     </tr>
                 </thead>
                 <tbody>
@@ -139,20 +140,7 @@
                             <td class="text-right p-1">{{$prod->cantidadsol}}</td>
                             <td class="text-right p-1">{{$prod->preciosol}}</td>
                             <td class="text-right p-1">{{$prod->subtotalsol}}</td>
-                            <td class="text-center p-1">
-
-
-                           
-
-                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Eliminar">
-                                    <a href="{{route('almacenes.detalle.delete',$prod->iddetallevale)}}" 
-                                        onclick="return confirm('Se va a eliminar el Item...')">
-                                        <span class="text-danger">
-                                            <i class="fa-solid fa-xl fa-trash" aria-hidden="true"></i>
-                                        </span>
-                                    </a>
-                                </span> 
-                            </td>
+                            
 
                             <td class="text-center p-1">
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Aprovar">

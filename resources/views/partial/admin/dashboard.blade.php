@@ -301,7 +301,7 @@
                                 <span class="nav-label mr-3">ALMACEN</span>
                                 <span class="fa fa-arrow-circle-left float-right"></span>
                             </a>
-                            <ul class="sub-menu collapse" id="dashboard_almacen">
+                            {{-- <ul class="sub-menu collapse" id="dashboard_almacen">
                                 @can('archivos_access')
                                     <li>
                                         <a href="{{ route('almacen.index') }}">
@@ -310,9 +310,9 @@
                                         </a>
                                     </li>
                                 @endcan
-                            </ul>
+                            </ul> --}}
 
-                            <ul class="sub-menu collapse" id="dashboard_almacen">
+                            {{-- <ul class="sub-menu collapse" id="dashboard_almacen">
                                 @can('archivos_access')
                                     <li>
                                         <a href="{{ route('almacen.index') }}">
@@ -321,7 +321,7 @@
                                         </a>
                                     </li>
                                 @endcan
-                            </ul>
+                            </ul> --}}
 
                             <ul class="sub-menu collapse" id="dashboard_almacen">
                                 @can('archivos_access')
@@ -360,13 +360,24 @@
                             <ul class="sub-menu collapse" id="dashboard_almacen">
                                 @can('archivos_access')
                                     <li>
+                                        <a href="{{ route('almacenes.reporte.index') }}">
+                                            &nbsp; &nbsp; &nbsp;
+                                            <span class="nav-label mr-4">Reporte.</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
+
+                            {{-- <ul class="sub-menu collapse" id="dashboard_almacen">
+                                @can('archivos_access')
+                                    <li>
                                         <a href="{{ route('almacenes.pedido.index') }}">
                                             &nbsp; &nbsp; &nbsp;
                                             <span class="nav-label mr-4">Solicitudes Pend.</span>
                                         </a>
                                     </li>
                                 @endcan
-                            </ul>
+                            </ul> --}}
 
                             <ul class="sub-menu collapse" id="dashboard_almacen">
                                 @can('archivos_access')
@@ -384,15 +395,19 @@
 
                     {{--todo trasnporte --}}
 
+
+
 @canany(['transportes_access'])
 <li class="font-verdana-bg">
-    <a href="" data-toggle="collapse" data-target="#dashboard_transportes" class="active collapsed" aria-expanded="false">
-        <i class="fa fa-users"></i>
-        <span class="nav-label mr-3">transporte</span>
-        <span class="fa fa-chevron-left float-right"></span>
-    </a>
-    <ul class="sub-menu collapse" id="dashboard_transportes">
+    <a href="" data-toggle="collapse" data-target="#dashboard_transportes"
+    class="active collapsed" aria-expanded="false">
+    <i class="fa fa-th-list" style="color:green"></i>
+    <span class="nav-label mr-3">Transporte</span>
+    <span class="fa fa-arrow-circle-left float-right"></span>
+</a>
 
+
+    <ul class="sub-menu collapse" id="dashboard_transportes">
         @can('vehiculo_access')
         <li>
             <a href="{{ route('transportes.pedidoparcial.index') }}">

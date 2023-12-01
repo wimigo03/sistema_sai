@@ -8,7 +8,7 @@
             <div class="col-md-4 titulo">
 
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-                    <a href="{{ url('/combustibles/ingreso/index')}}">
+                    <a href="{{ url('/almacenes/ingreso/index')}}">
                         <span class="color-icon-1">
                             &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                         </span>

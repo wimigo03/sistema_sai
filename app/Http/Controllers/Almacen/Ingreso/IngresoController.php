@@ -9,10 +9,12 @@ use App\Models\User;
 
 use App\Models\EmpleadosModel;
 use App\Models\AreasModel;
+
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
+
 use DB;
 use DataTables;
 use PDF;
@@ -185,6 +187,7 @@ class IngresoController extends Controller
                    ->select(
                        'ing.cantidad',
                        'ing.subtotal',
+                
                        'ing.cantidadsalida',
                        'ing.subtotalsalida',
    
@@ -196,7 +199,7 @@ class IngresoController extends Controller
    
                $ingreso = IngresoModel::find($id);
                $Subtotalsalida=$ingreso -> subtotalsalida;
-   
+               $SPrecio=$ingreso -> precio;
                //modificacion aumentando dos columnas
                // $CantitadIngrs=$ingreso -> cantitad;
                // $SubtotalIngreso=$ingreso -> subtotal;
@@ -221,9 +224,14 @@ class IngresoController extends Controller
    
                    ->where('d.idingreso', '=', $id)->get();
    
-   
+                //    $r_total= $prodserv->preciosol;
+                //    $valor_total = $prodserv->sum('cantidadsol');
+                //    $valor_total2 = $prodserv->sum('subtotalsol');
+
+                  
+           
                $valor_total = $prodserv->sum('cantidadsol');
-               $valor_total2 = $prodserv->sum('subtotalsol');
+               $valor_total2 = $valor_total* $SPrecio;
    
                //modificacion para la parte decimal
                $parte_entera = floor($Subtotalsalida); 
@@ -260,6 +268,7 @@ class IngresoController extends Controller
                                                    'valor_total2' => $valor_total2,
                                                    'valor_total3' => $valor_total3,
                                                    'valor_total5' => $valor_total5,
+                                                   
                                                     
                                                    //nueva modificacion
                                                    'valor_total6' => $valor_total6,
@@ -302,7 +311,7 @@ class IngresoController extends Controller
             
          
            $ingresos = DB::table('ingreso')
-                           ->where('estadocompra',2)
+                           ->where('estadocompracomb',2)
                            ->select(DB::raw("concat(nombreproducto,
        
                            ' // PROGRA. ',nombreprograma,
@@ -315,7 +324,7 @@ class IngresoController extends Controller
                            ->where('estadoarea',1)
                            ->select(DB::raw("concat(nombrearea,
        
-                           ' // PROGRA. ',idnivel
+                           ' // IDa. ',idarea
                            ) as prodservicio"),'idarea')
                            ->pluck('prodservicio','idarea');   
        

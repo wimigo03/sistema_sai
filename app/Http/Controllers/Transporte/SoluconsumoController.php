@@ -47,7 +47,7 @@ class SoluconsumoController extends Controller
                             'lo.nombrelocalidad'
                             )
 
-                        ->orderBy('s.idsoluconsumo', 'asc');
+                        ->orderBy('s.cominterna', 'desc');
                      
 
                         return Datatables::of($soluconsumos)
@@ -76,7 +76,7 @@ class SoluconsumoController extends Controller
         
         
     
-            ->where('s.estadosoluconsumo',2)
+            ->where('s.estado2',2)
     
             ->select('s.estadosoluconsumo','s.idsoluconsumo','s.cominterna',
             's.referencia', 's.oficina',
@@ -85,7 +85,7 @@ class SoluconsumoController extends Controller
                                 'lo.nombrelocalidad'
                                 )
 
-                        ->orderBy('s.idsoluconsumo', 'asc');
+                        ->orderBy('s.cominterna', 'asc');
                      
 
                         return Datatables::of($soluconsumos)
@@ -344,7 +344,7 @@ $Nombreviacargo = $productocuatro->nombrecargo;
     public function aprovar($idsoluconsumo)
     {
         $detalle = SoluconsumoModel::find($idsoluconsumo);
-
+        $detalle->estadosoluconsumo =2;
         $detalle->estado1 =2;
         if($detalle->save()){
             session()->flash('message', 'Registro Procesado');

@@ -124,10 +124,15 @@ function colorChanger2(el) {
                     <thead>
                         <th style="font-size: 10px;" class="text-justify p-1">N</th>
                         <th style="font-size: 10px;" class="text-center p-1">Nro Pedido/Vale</th>
-                        <th style="font-size: 10px;" class="text-center p-1">Asolicitante</th>
+                        <th style="font-size: 10px;" class="text-center p-1">Area solicitante</th>
                         <th style="font-size: 10px;" class="text-center p-1">Entregado a</th>
                         <th style="font-size: 10px;" class="text-center p-1">Cargo</th>
                         <th style="font-size: 10px;" class="text-center p-1">PRECIO </th>
+
+
+                        
+                        <th style="font-size: 10px;" class="text-center p-1">INGRESO FISICO</th>
+                        <th style="font-size: 10px;" class="text-center p-1">INGRESO VALORADO </th>
 
                         <th style="font-size: 10px;" class="text-center p-1">EGRESO FISICO</th>
                         <th style="font-size: 10px;" class="text-center p-1">EGRESO VALORADO </th>
@@ -136,10 +141,38 @@ function colorChanger2(el) {
                         <th style="font-size: 10px;" class="text-center p-1">SALDO VALORADO </th>
 
                     </thead>
+
+                    <tr style="text-align: center">
+                        <td class="text-justify p-1">1/1/2023</td>
+                        <td class="text-center p-1"></td>
+                        <td class="text-center p-1"></td>
+                        <td class="text-center p-1"></td>
+                        <td class="text-center p-1"></td>
+                        <td class="text-center p-1">3.74</td>
+
+                        <td class="text-center p-1">{{$ingresos->cantidad}}</td>
+                        <td class="text-center p-1">{{$ingresos->subtotal}}</td>
+
+                        <td class="text-center p-1">0</td>
+                        <td class="text-center p-1">0</td>
+                        
+                        <td class="text-center p-1">{{$ingresos->cantidad}}</td>
+                        <td class="text-center p-1">{{$ingresos->subtotal}}</td>
+                      
+                    </tr>
                     @php
                     $num = 1;
+                    $numssss =0;
+                    //a
+                 
+                    $numd = $ingresos->cantidad;
+                      //b
+                
+                
+               
                     @endphp
                     @foreach($prodserv as $prod)
+                   
                     <tr style="text-align: center">
                         <td class="text-justify p-1">{{$num++}}</td>
                         <td class="text-center p-1">{{$prod ->idvale}}</td>
@@ -148,14 +181,22 @@ function colorChanger2(el) {
                         <td class="text-center p-1">{{$prod ->usuariocargo}}</td>
                         <td class="text-center p-1">{{$prod ->preciosol}}</td>
 
+                        <td class="text-center p-1">0</td>
+                        <td class="text-center p-1">0</td>
+
                         <td class="text-center p-1">{{$prod ->cantidadsol}}</td>
                         <td class="text-center p-1">{{$prod ->preciosol * $prod ->cantidadsol}}</td>
 
-                        <td class="text-center p-1">{{$prod ->cantidadresta}}</td>
-                        <td class="text-center p-1">{{$prod ->precio * $prod ->cantidadresta}}</td>
+                        {{-- <td class="text-center p-1">{{$numd}}</td> --}}
+                        <td class="text-center p-1">{{$numd=$numd-$prod ->cantidadsol }}</td>
 
+                        <td class="text-center p-1">{{$prod ->precio * $prod ->cantidadresta}}</td>
+                    
+                     
                     </tr>
+                 
                     @endforeach
+                   
          @if (count($prodserv) > 0)
             <tr>
                 <td>&nbsp;</td>
@@ -165,6 +206,12 @@ function colorChanger2(el) {
                 <td>&nbsp;</td>
                 <td class="text-center p-1">
                     <b>TOTAL:</b>
+                </td>
+                <td class="text-center p-1">
+                    <b>{{$ingresos->cantidad}}</b>
+                </td>
+                <td class="text-center p-1">
+                    <b>{{$ingresos->subtotal}}</b>
                 </td>
                 <td class="text-center p-1">
                     <b>{{$valor_total}}</b>

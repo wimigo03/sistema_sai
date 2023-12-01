@@ -287,7 +287,8 @@ $Nombreviacargo = $productocuatro->nombrecargo;
 
         
         $soluconsumo = SoluconsumoModel::find($Idsoluconsumo);
-        $soluconsumo->estadosoluconsumo = 2;
+        $soluconsumo->estado1 = 3;
+        $soluconsumo->estado2 = 2;
         $soluconsumo->save();
 
      
@@ -324,6 +325,8 @@ $Nombreviacargo = $productocuatro->nombrecargo;
         $vales->estadovale = 1;
         $vales->estado1 = 1;
         $vales->estado2 = 1;
+        $vales->estado3 = 1;
+        $vales->estadotemp = 1;
         $vales->save();
 
         return redirect()->route('transportes.detalle.index2');

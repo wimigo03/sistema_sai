@@ -16,6 +16,12 @@
 
             <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
 
+            <a href="{{route('almacenes.pedido.index3')}}" class="tts:left tts-slideIn tts-custom" 
+            aria-label="  Aprobadas">
+                <button class="btn btn-sm btn-primary font-verdana" type="button" >Solic. Aprobadas
+                    &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
+                </button>
+            </a>
          @endcan 
     </div>
 
@@ -34,14 +40,14 @@
                             <thead >
                                 <tr>
                                     <td class="text-justify p-1"><b>N°</b></td>
+                                    <td class="text-justify p-1"><b>ID VALE</b></td>
                                     <td class="text-justify p-1"><b>AREA PE.</b></td>
                                     <td class="text-justify p-1"><b>FUNCIONARIO</b></td>
                                     <td class="text-justify p-1"><b>CARGO</b></td>
                                     <td class="text-justify p-1"><b>UNIDAD</b></td>
                                     <td class="text-justify p-1"><b>PLACA</b></td>
                                     <td class="text-justify p-1"><b>DESTINO</b></td>
-                                    <td class="text-center p-1 font-weight-bold">
-                                        <i class="fa fa-bars" aria-hidden="true"></i></td>
+                                 
                                      <td class="text-center p-1 font-weight-bold">
                                         <i class="fa fa-bars" aria-hidden="true"></i></td> 
                                 </tr>
@@ -58,8 +64,8 @@
                                     <th></th>
                                     <th></th>
                                     <th></th>
+                                    
                                     <th></th>
-                                 
                                     <th></th>
         
                                 </tr>
@@ -88,6 +94,8 @@ $('#users-table').DataTable({
                     searchable: false,
                     class: 'text-justify p-1 font-verdana'
                 },
+                { data: 'idvale',name: 'v.idvale',class:'text-justify p-1 font-verdana'},
+
             { data: 'nombrearea',name: 'a.nombrearea',class:'text-justify p-1 font-verdana'},
 
             {data: 'usuarionombre',name: 'v.usuarionombre',class:'text-justify p-1 font-verdana'},
@@ -100,7 +108,6 @@ $('#users-table').DataTable({
 
             {data: 'nombrelocalidad',name: 'v.nombrelocalidad',class:'text-justify p-1 font-verdana'},
 
-            {data: 'btn', name: 'btn', orderable: false, searchable: false },
 
             {data: 'btn3', name: 'btn3', orderable: false, searchable: false }
 
@@ -111,7 +118,7 @@ $('#users-table').DataTable({
                 this.api().columns(1).every(function() {
                     var column = this;
                     var input = document.createElement("input");
-                    input.style.width = input.style.width = "150px";
+                    input.style.width = input.style.width = "50px";
                     $(input).appendTo($(column.footer()).empty())
                         .on('change', function() {
                             var val = $.fn.dataTable.util.escapeRegex($(this).val());
@@ -147,7 +154,7 @@ $('#users-table').DataTable({
                 this.api().columns(4).every(function() {
                     var column = this;
                     var input = document.createElement("input");
-                    input.style.width = input.style.width = "250px";
+                    input.style.width = input.style.width = "120px";
                     $(input).appendTo($(column.footer()).empty())
                         .on('change', function() {
                             var val = $.fn.dataTable.util.escapeRegex($(this).val());
@@ -158,7 +165,7 @@ $('#users-table').DataTable({
                 this.api().columns(5).every(function() {
                     var column = this;
                     var input = document.createElement("input");
-                    input.style.width = input.style.width = "150px";
+                    input.style.width = input.style.width = "80px";
                     $(input).appendTo($(column.footer()).empty())
                         .on('change', function() {
                             var val = $.fn.dataTable.util.escapeRegex($(this).val());

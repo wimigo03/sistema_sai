@@ -53,7 +53,7 @@ class DetalleValeController extends Controller
         $productos = DB::table('ingreso')
                         ->where('estadocompracomb',2)
                         ->select(DB::raw("concat(
-                        ' Codigo : ',codigoprodserv,
+                        ' Codigo : ',codigoprodcomb,
                         ' // Nombre : ',nombreproducto,
                         ' // Proyecto: ',nombrecatprogmai,
                         ' // Programa: ',nombreprograma,
@@ -73,13 +73,13 @@ class DetalleValeController extends Controller
 
         ->join('areas as a', 'a.idarea', '=', 'v.idarea')
 
-            ->select('v.idvale','v.estado1','v.aproxgas', 
+            ->select('v.idvale','v.estadotemp','v.aproxgas', 
 
                'a.nombrearea',
 
                'u.codigoconsumo','u.placaconsumo','u.marcaconsumo',
 
-            'lo.nombrelocalidad','lo.distancialocalidad')
+            'lo.nombrelocalidad','lo.distancialocalidad','v.estado2')
             ->where('v.idvale', '=', $id2)
             ->first();
 
@@ -116,7 +116,7 @@ class DetalleValeController extends Controller
         $productos = DB::table('ingreso')
                         ->where('estadocompracomb',2)
                         ->select(DB::raw("concat(
-                        ' Codigo : ',codigoprodserv,
+                        ' Codigo : ',codigoprodcomb,
                         ' // Nombre : ',nombreproducto,
                         ' // Proyecto: ',nombrecatprogmai,
                         ' // Programa: ',nombreprograma,
@@ -147,6 +147,69 @@ class DetalleValeController extends Controller
             ->first();
 
         return view('almacenes.detalle.index2',
+        ['prodserv'=>$prodserv,
+        'productos'=>$productos,
+        'valor_total2'=>$valor_total2,
+        'idvale'=>$id2,
+      
+        'vales'=>$vales]);
+    }
+
+    public function index3(){
+
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $detalle = Temporal2Model::find($id);
+        $id2 = $detalle->idvale;
+
+        $prodserv = DB::table('detallevale as d')
+
+                        ->join('ingreso as ing', 'ing.idingreso', '=', 'd.idingreso')
+                        ->join('vale as v', 'v.idvale', '=', 'd.idvale')
+
+                        ->select('d.iddetallevale', 'v.idvale','ing.nombrecatprogmai','ing.cantidadsalida' ,
+                        'ing.nombrepartida',
+                        'd.cantidadsol',
+                        'd.subtotalsol','d.preciosol')
+
+                        ->where('d.idvale', $id2)
+                        ->orderBy('d.iddetallevale', 'desc')
+                        ->get();
+
+        $productos = DB::table('ingreso')
+                        ->where('estadocompracomb',2)
+                        ->select(DB::raw("concat(
+                        ' Codigo : ',codigoprodcomb,
+                        ' // Nombre : ',nombreproducto,
+                        ' // Proyecto: ',nombrecatprogmai,
+                        ' // Programa: ',nombreprograma,
+                        ' // Disponible: ',cantidadsalida, '  Litros '
+                        
+                        
+                        ) as prodservicio"),'idingreso')
+                        ->pluck('prodservicio','idingreso');
+
+        $valor_total2 = $prodserv->sum('subtotalsol');
+
+
+        $vales = DB::table('vale as v')
+
+        ->join('unidadconsumo as u', 'u.idunidadconsumo', '=', 'v.idunidad')
+        ->join('localidad as lo', 'lo.idlocalidad', '=', 'v.idlocalidad')
+
+        ->join('areas as a', 'a.idarea', '=', 'v.idarea')
+
+            ->select('v.idvale','v.estado1','v.aproxgas', 
+
+               'a.nombrearea',
+
+               'u.codigoconsumo','u.placaconsumo','u.marcaconsumo',
+
+            'lo.nombrelocalidad','lo.distancialocalidad')
+            ->where('v.idvale', '=', $id2)
+            ->first();
+
+        return view('almacenes.detalle.index3',
         ['prodserv'=>$prodserv,
         'productos'=>$productos,
         'valor_total2'=>$valor_total2,
@@ -197,6 +260,9 @@ $SubTotalsolresu = number_format($SubTotalsol, 3, '.', '');
         $detalle->cantidadresta = $Cantidadrest;
         $detalle->sudtotalresta = $SubTotalresul;
 
+        $detalle->devolucionresta = 0;
+        $detalle->subtotaldevolucion = 0;
+
         $detallito = DB::table('detallevale as d')
 
                             ->join('ingreso as ing', 'ing.idingreso', 'd.idingreso')
@@ -215,6 +281,12 @@ $SubTotalsolresu = number_format($SubTotalsol, 3, '.', '');
             if ($Cantidadrest >= 0) {
                
                 $detalle->save();
+
+           
+            
+                $progrmi = ValeModel::find($id2);
+                $progrmi -> estadotemp=2;
+                $progrmi->save();  
 
                 $request->session()->flash('message', 'Registro Agregado',);
             } else {
@@ -337,23 +409,105 @@ $SubTotalsolresu = number_format($SubTotalsol, 3, '.', '');
         compact('prodserv', 'valor_total', 'compras'));
     }
 
-    public function delete($id)
+    public function editar($iddetallevale)
     {
+        $detalles = DetalleValeModel::find($iddetallevale);
+ 
+
+        return view('almacenes/detalle/editar',compact('detalles'));
+    }
+
+    public function update(Request $request )
+  {
+    
+         $detalle = DetalleValeModel::find($request->iddetallevale);
+
+         //cantidad de devolucion
+         $cantidadtres = $request->get('cantidad');
+         $cantidad = $cantidadtres;
+     //la cantidad que solicito
+         $CANtidaDsol = $detalle->cantidadsol;
+         $SUdtoalsol = $detalle->subtotalsol;
+
+         //el id del ingreso
+          $Idingreso = $detalle->idingreso;
+          $IdVale = $detalle->idvale;
+          $PReciosOL = $detalle->preciosol;
+     // sol 20 del 15  igual 5
+          $Cantidadsobra = $CANtidaDsol-$cantidad;
+
+
+          $SUdtotaldev = $cantidad*$PReciosOL;
+          // para detalle vale subtotaldevolucion
+          $Cantidaddev = number_format($SUdtotaldev, 5, '.', '');
+
+
+          $almacen = IngresoModel::find($Idingreso);
+          //pide la cantidad actual de almacen
+          $Cantidadsalida = $almacen->cantidadsalida;
+          $Cantidadsalidasuma = $Cantidadsalida+$Cantidadsobra;
+
+          $SubTotalsol = $Cantidadsalidasuma*$PReciosOL;
+          $SubTotalsolresu = number_format($SubTotalsol, 5, '.', '');
+
+         
+         
+
+
+       if ($CANtidaDsol > $cantidad) {
+
+
+        $detalle->cantidadsol = $request->get('cantidad');
+        $detalle->subtotalsol = $Cantidaddev;
+
+        $detalle->devolucionresta = $CANtidaDsol;
+        $detalle->subtotaldevolucion = $SUdtoalsol;
+            $detalle->save();
+            $almacend = IngresoModel::find($Idingreso);
+ 
+         
+
+            $almacend->cantidadsalida = $Cantidadsalidasuma;
+            $almacend->subtotalsalida = $SubTotalsolresu;
+            $almacend->save();
+
+            $almacendes = ValeModel::find($IdVale);
+            $almacendes->estado1 = 3;
+            $almacendes->estado2 = 2;
+            $almacendes->save();
+
+            $request->session()->flash('message', 'Registro Agregado uno la cantidad era menor');
+            return redirect()->route('almacenes.detalle.index3');
+            
+        
+    } else {
+
+        if ($CANtidaDsol == $cantidad) {
+
+
+           
+            $almacendes = ValeModel::find($IdVale);
+            $almacendes->estado1 = 3;
+            $almacendes->estado2 = 2;
+            $almacendes->save();
+        $request->session()->flash('message', 'la cantida era igual  que la solicitada corregido' );
+        return redirect()->route('almacenes.detalle.index3');
+    } else {
+        $request->session()->flash('message', 'La cantidad debe ser menor o igual que: la cantidad solicitada  corregido'  );
+        return redirect()->route('almacenes.detalle.index2');
+    }
+     
+    return redirect()->route('almacenes.detalle.index2');
+}
+}  
+
+
+    public function delete($id){
         $detalle = DetalleValeModel::find($id);
         $detalle->delete();
 
-        return redirect()->route('almacenes.detalle.index');
+        return redirect()->route('almacenes.detalle.index2');
     }
-
-    public function destroyed2($id)
-    {
-        $ordendoc = OrdenDocModel::find($id);
-        $ordendoc->delete();
-
-        return back();
-    }
-
-
     public function aprovar($id)
     {
 
@@ -397,6 +551,7 @@ $SubTotalsolresu = number_format($SubTotalsol, 3, '.', '');
 
             $vales = ValeModel::find($Idvale);
             $vales->estadovale = 2;
+            $vales->estado1 = 2;
             $vales->save();
 
         return redirect()->route('almacenes.detalle.index2');

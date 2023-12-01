@@ -1,25 +1,22 @@
 <?php
 
-namespace App\Models\Almacen;
+namespace App\Models\Almacen\Ingreso;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DetalleValeModel extends Model
+class Temporal6Model extends Model
 {
-    protected $table = 'detallevale';
+    protected $table = 'temporal6';
     
-    protected $primaryKey= 'iddetallevale';
+    protected $primaryKey= 'idtemporal6';
 
     public $timestamps = false;
 
     protected $fillable = [
         'idingreso',
-        'idvale',
-
-        'cantidadsol',
-        'preciosol',
-        'subtotalsol'
+        'idusuario',
+        'idarea'
     ];
 
     protected $guarded = [
@@ -27,4 +24,3 @@ class DetalleValeModel extends Model
         
     ];
 }
-

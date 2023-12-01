@@ -2,14 +2,14 @@
 @section('content')
 <div class="row font-verdana-bg">
     <div class="col-md-8 titulo">
-        <b>SOLICITUDES PENDIENTES</b>
+        <b>SOLICITUDES APROBADAS</b>
     </div>
     <div class="col-md-4 text-right">
          @can('unidadconsumo_create') 
 
              <a href="{{ route('almacenes.pedido.index2') }}" class="tts:left tts-slideIn tts-custom" 
-            aria-label="ir a solicitudes aprobadas">
-                <button class="btn btn-sm btn-success font-verdana" type="button" >SOLICITUDES APROBADAS
+            aria-label="ir a solicitudes pendientes">
+                <button class="btn btn-sm btn-success font-verdana" type="button" >VOLVER ATRAS
                     &nbsp;<i class="fa-solid fa-thumbs-up" style="font-size:14px"></i>&nbsp;
                 </button>
             </a> 
@@ -28,32 +28,29 @@
 </div>
 
 <div class="row">
-    <div class="col-md-12 ">
+    <div class="col-md-12 table-responsive">
         <center>
-            <table   class="table-bordered  hoverTable  responsive  font-verdana" id="users-table">
-                <thead >
+                        <table class="table-bordered  hoverTable  responsive  font-verdana" id="users-table">
+                            <thead >
                                 <tr>
                                     <td class="text-justify p-1"><b>N°</b></td>
-                                    <td class="text-justify p-1"><b>ID VALE</b></td>
+                                    <td class="text-justify p-1"><b>ID VALE.</b></td>
                                     <td class="text-justify p-1"><b>AREA PE.</b></td>
                                     <td class="text-justify p-1"><b>FUNCIONARIO</b></td>
                                     <td class="text-justify p-1"><b>CARGO</b></td>
                                     <td class="text-justify p-1"><b>UNIDAD</b></td>
                                     <td class="text-justify p-1"><b>PLACA</b></td>
-                                    <td class="text-justify p-1"><b>KLM ANTERIO</b></td>
-                                    <td class="text-justify p-1"><b>KLM ACTUAL</b></td>
                                     <td class="text-justify p-1"><b>DESTINO</b></td>
-                              
-                             
+                                 
                                      <td class="text-center p-1 font-weight-bold">
                                         <i class="fa fa-bars" aria-hidden="true"></i></td> 
                                 </tr>
                             </thead>
                             <tbody>
                             </tbody>
-
                             <tfoot>
                                 <tr>
+        
                                     <th></th>
                                     <th></th>
                                     <th></th>
@@ -61,12 +58,9 @@
                                     <th></th>
                                     <th></th>
                                     <th></th>
+                                    
                                     <th></th>
                                     <th></th>
-                                    <th></th>
-                                    <th></th>
-                                  
-                                 
         
                                 </tr>
         
@@ -86,11 +80,15 @@ $('#users-table').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
-        ajax: "{{ route('almacenes.pedido.index') }}",
+        ajax: "{{ route('almacenes.pedido.index3') }}",
         columns: [
-            {data: 'DT_RowIndex',orderable: false,searchable: false,class:'text-justify p-1 font-verdana'},
-
-            { data: 'idvale',name: 'v.idvale',class:'text-justify p-1 font-verdana'},
+            {
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false,
+                    class: 'text-justify p-1 font-verdana'
+                },
+                { data: 'idvale',name: 'v.idvale',class:'text-justify p-1 font-verdana'},
 
             { data: 'nombrearea',name: 'a.nombrearea',class:'text-justify p-1 font-verdana'},
 
@@ -98,18 +96,14 @@ $('#users-table').DataTable({
 
             {data: 'usuariocargo',name: 'v.usuariocargo',class:'text-justify p-1 font-verdana'},
 
-            {data: 'nombreuconsumo',name: 'u.nombreuconsumo',class:'text-justify p-1 font-verdana'},
+            {data: 'marcaconsumo',name: 'v.marcaconsumo',class:'text-justify p-1 font-verdana'},
+
             {data: 'placaconsumo',name: 'v.placaconsumo',class:'text-justify p-1 font-verdana'},
 
-            {data: 'kilometrajeinicialconsumo',name: 'u.kilometrajeinicialconsumo',class:'text-justify p-1 font-verdana'},
-
-            {data: 'kilometrajefinalconsumo',name: 'u.kilometrajefinalconsumo',class:'text-justify p-1 font-verdana'},
-
-    
-
             {data: 'nombrelocalidad',name: 'v.nombrelocalidad',class:'text-justify p-1 font-verdana'},
-            
-            {data: 'btn2', name: 'btn2', orderable: false, searchable: false }
+
+
+            {data: 'btn4', name: 'btn4', orderable: false, searchable: false }
 
         ],
 
@@ -131,7 +125,7 @@ $('#users-table').DataTable({
                 this.api().columns(2).every(function() {
                     var column = this;
                     var input = document.createElement("input");
-                    input.style.width = input.style.width = "150px";
+                    input.style.width = input.style.width = "110px";
                     $(input).appendTo($(column.footer()).empty())
                         .on('change', function() {
                             var val = $.fn.dataTable.util.escapeRegex($(this).val());
@@ -154,7 +148,7 @@ $('#users-table').DataTable({
                 this.api().columns(4).every(function() {
                     var column = this;
                     var input = document.createElement("input");
-                    input.style.width = input.style.width = "150px";
+                    input.style.width = input.style.width = "120px";
                     $(input).appendTo($(column.footer()).empty())
                         .on('change', function() {
                             var val = $.fn.dataTable.util.escapeRegex($(this).val());
@@ -165,7 +159,7 @@ $('#users-table').DataTable({
                 this.api().columns(5).every(function() {
                     var column = this;
                     var input = document.createElement("input");
-                    input.style.width = input.style.width = "110px";
+                    input.style.width = input.style.width = "80px";
                     $(input).appendTo($(column.footer()).empty())
                         .on('change', function() {
                             var val = $.fn.dataTable.util.escapeRegex($(this).val());
@@ -176,7 +170,7 @@ $('#users-table').DataTable({
                 this.api().columns(6).every(function() {
                     var column = this;
                     var input = document.createElement("input");
-                    input.style.width = input.style.width = "50px";
+                    input.style.width = input.style.width = "150px";
                     $(input).appendTo($(column.footer()).empty())
                         .on('change', function() {
                             var val = $.fn.dataTable.util.escapeRegex($(this).val());
@@ -184,11 +178,11 @@ $('#users-table').DataTable({
                             column.search(val ? val : '', true, false).draw();
                         });
                 });
-             
+            
 
             },
 
-            language: {
+language: {
 "decimal": "",
 "emptyTable": "No hay información",
 "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",

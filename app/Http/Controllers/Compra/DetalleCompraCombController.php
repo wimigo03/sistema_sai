@@ -190,7 +190,7 @@ class DetalleCompraCombController extends Controller
         $compras = CompraCombModel::find($id);
         $compras->estadocompracomb = 2;
         $compras->save();
-        return redirect()->route('combustibles.detalle.index');
+        return redirect()->route('combustibles.detalle.index2');
 
      
     }
@@ -292,7 +292,7 @@ $ingreso->save();
        
 
 
-                session()->flash('message', 'Registro Enviado a almacen');
+        session()->flash('message', 'Registro Enviado a almacen');
             }
         } else {
             session()->flash('message', 'no hay nada');  

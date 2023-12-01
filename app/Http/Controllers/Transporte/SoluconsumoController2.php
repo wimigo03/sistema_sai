@@ -49,7 +49,7 @@ class SoluconsumoController2 extends Controller
                         
 
                         ->where('a.idarea',$personalArea->idarea)
-                        
+                        ->where('s.estadosoluconsumo',1)
                         ->select('s.idsoluconsumo','s.estado1','s.cominterna', 's.referencia',
                         
                         'a.nombrearea',
@@ -68,6 +68,79 @@ class SoluconsumoController2 extends Controller
         return view('transportes.pedidoparcial.index',
         ['soluconsumos'=>$soluconsumos,'idd'=>$personalArea]);
     }
+
+    public function index2(){
+
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+
+
+         $soluconsumos = DB::table('soluconsumo as s')
+
+                        ->join('localidad as lo', 'lo.idlocalidad', '=', 's.idlocalidad')
+                        ->join('areas as a', 'a.idarea', '=', 's.idarea')
+                      
+                        
+
+                        ->where('a.idarea',$personalArea->idarea)
+                        ->where('s.estado1',2)
+                        ->select('s.idsoluconsumo','s.estado1','s.cominterna', 's.referencia',
+                        
+                        'a.nombrearea',
+                        'lo.nombrelocalidad')
+                        ->get();
+
+                    
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        
+
+  
+
+        return view('transportes.pedidoparcial.index2',
+        ['soluconsumos'=>$soluconsumos,'idd'=>$personalArea]);
+    }
+
+    public function index3(){
+
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+
+
+         $soluconsumos = DB::table('soluconsumo as s')
+
+                        ->join('localidad as lo', 'lo.idlocalidad', '=', 's.idlocalidad')
+                        ->join('areas as a', 'a.idarea', '=', 's.idarea')
+                      
+                        
+
+                        ->where('a.idarea',$personalArea->idarea)
+                        ->where('s.estado2',2)
+                        ->select('s.idsoluconsumo','s.estado1','s.cominterna', 's.referencia',
+                        
+                        'a.nombrearea',
+                        'lo.nombrelocalidad')
+                        ->get();
+
+                    
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        
+
+  
+
+        return view('transportes.pedidoparcial.index3',
+        ['soluconsumos'=>$soluconsumos,'idd'=>$personalArea]);
+    }
+
 
     public function create(){
 
