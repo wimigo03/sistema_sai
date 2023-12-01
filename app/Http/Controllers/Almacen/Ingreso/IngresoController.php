@@ -21,12 +21,14 @@ use PDF;
 use NumerosEnLetras;
 use App\Models\Almacen\Ingreso\DetalleValeModel;
 
-use App\Models\Almacen\Ingreso\IngresoModel;
+//use App\Models\Almacen\Ingreso\IngresoModel;
+use App\Models\IngresoModel;
 use App\Models\Almacen\Temporal4Model;
 
 use App\Models\DetalleCompraModel;
 
-use App\Models\Almacen\Ingreso\NotaIngresoModel;
+//use App\Models\Almacen\Ingreso\NotaIngresoModel;
+use App\Models\NotaIngresoModel;
 
 use App\Models\Almacen\Ingreso\Temporal6Model;
 
