@@ -14,9 +14,6 @@ use PDF;
 class EntregasController extends Controller
 {
     public function index(){
-        //$gestiones = CanastaPeriodosModel::select('gestion')->groupBy('gestion')->pluck('gestion','gestion');
-        //$meses = CanastaPeriodosModel::select('mes')->groupBy('mes')->pluck('mes','mes');
-        //$estados = CanastaPeriodosModel::ESTADOS;
         $entregas = CanastaEntregasModel::query()
                                         ->orderBy('idEntrega', 'desc')
                                         ->paginate(10);

@@ -1,10 +1,11 @@
 @extends('layouts.admin')
 @section('content')
-<div class="card">
-    <div class="card-header">
+<link rel="stylesheet" href="/css/font-verdana.css" rel="stylesheet">
+<div class="card card-custom">
+    <div class="card-header font-verdana-bgt">
         <div class="row">
             <div class="col-md-6">
-                <div class="card-title"><b>REGISTRO DE USUARIO</b></div>
+                <b>REGISTRO DE USUARIO</b>
             </div>
             <div class="col-md-6 text-right">
                 <span class="tts:left tts-slideIn tts-custom" aria-label="Ir atras">

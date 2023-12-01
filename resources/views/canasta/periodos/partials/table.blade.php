@@ -20,7 +20,7 @@
                             <td class="text-center p-1">{{ $datos->mes }}</td>
                             <td class="text-center p-1">{{ $datos->nro_entrega }}</td>
                             <td class="text-left p-1">{{ $datos->obs }}</td>
-                            <td class="text-center p-1">{{ $datos->estado }}</td>
+                            <td class="text-center p-1">{{ $datos->status }}</td>
                         </tr>
                     @endforeach
                 </tbody>

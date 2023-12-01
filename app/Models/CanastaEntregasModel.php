@@ -30,22 +30,25 @@ class CanastaEntregasModel extends Model
         'idRezagado'
     ];
 
-    /*const ESTADOS = [
-        'A' => 'A',
-        'F' => 'F',
-        'P' => 'P'
-    ];*/
+    const ESTADOS = [
+        '' => 'NO DEFINIDO',
+        'A' => 'NO DEFINIDO',
+        'Imprimido' => 'IMPRIMIDO',
+        'Asignado' => 'ASIGNADO'
+    ];
 
-    /*public function getStatusAttribute(){
+    public function getStatusAttribute(){
         switch ($this->estado) {
+            case '': 
+                return "NO DEFINIDO";
             case 'A': 
-                return "HABILITADO";
-            case 'B': 
-                return "NO HABILITADO";
-            case 'X': 
-                return "ELIMINADO";
+                return "NO DEFINIDO";
+            case 'Imprimido': 
+                return "IMPRIMIDO";
+            case 'Asignado': 
+                return "ASIGNADO";
         }
-    }*/
+    }
 
     public function usuario(){
         return $this->belongsTo(CanastaBeneficiariosModel::class,'idUsuario');

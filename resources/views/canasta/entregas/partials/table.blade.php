@@ -21,12 +21,12 @@
                         <tr class="font-verdana-sm">
                             <td class="text-center p-1">{{ $datos->idEntrega }}</td>
                             <td class="text-center p-1">
-                                <span class="tts:right tts-slideIn tts-custom" aria-label="{{ \Carbon\Carbon::parse($datos->_registrado)->format('H:i:s') }}" style="cursor: pointer;">
-                                    {{ \Carbon\Carbon::parse($datos->_registrado)->format('d/m/Y') }}
+                                <span class="tts:right tts-slideIn tts-custom" aria-label="{{ $datos->_registrado != null ? \Carbon\Carbon::parse($datos->_registrado)->format('H:i:s') : '#' }}" style="cursor: pointer;">
+                                    {{ $datos->_registrado != null ? \Carbon\Carbon::parse($datos->_registrado)->format('d/m/Y') : '#' }}
                                 </span>
                             </td>
                             <td class="text-left p-1">{{ $datos->ci }}</td>
-                            <td class="text-center p-1">{{ $datos->estado }}</td>
+                            <td class="text-center p-1">{{ $datos->status }}</td>
                             <td class="text-center p-1">{{ $datos->impresion }}</td>
                             <td class="text-center p-1">{{ $datos->codigo }}</td>
                             <td class="text-left p-1">{{ $datos->usuario->nombre_completo }}</td>

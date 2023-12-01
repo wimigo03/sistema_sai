@@ -435,6 +435,9 @@ Route::get('canasta/periodos/index', 'Canasta\PeriodosController@index')->name('
 Route::get('canasta/periodos/search', 'Canasta\PeriodosController@search')->name('canasta.periodos.search');
 Route::get('canasta/entregas/index', 'Canasta\EntregasController@index')->name('canasta.entregas.index');
 
+/**CANASTA V2*/
+Route::get('distritos/', 'Canasta_v2\DistritosV2Controller@index')->name('distritos.index');
+
 
 //Route::get('compras/pedido/index2', 'CompraController@index2')->name('compras.pedido.index2');
 //Route::get('compras/pedido/create', 'CompraController@create')->name('compras.pedido.create');

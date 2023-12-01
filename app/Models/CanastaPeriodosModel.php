@@ -21,21 +21,21 @@ class CanastaPeriodosModel extends Model
     ];
 
     const ESTADOS = [
-        'A' => 'A',
-        'F' => 'F',
-        'P' => 'P'
+        'A' => 'NO DEFINIDO',
+        'F' => 'FINALIZADO',
+        'P' => 'INICIO DE ENTREGA'
     ];
 
-    /*public function getStatusAttribute(){
+    public function getStatusAttribute(){
         switch ($this->estado) {
             case 'A': 
-                return "HABILITADO";
-            case 'B': 
-                return "NO HABILITADO";
-            case 'X': 
-                return "ELIMINADO";
+                return "NO DEFINIDO";
+            case 'F': 
+                return "FINALIZADO";
+            case 'P': 
+                return "INICIO DE ENTREGA";
         }
-    }*/
+    }
 
     public function scopeByPeriodo($query, $periodo){
         if($periodo){
