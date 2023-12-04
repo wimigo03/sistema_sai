@@ -21,12 +21,7 @@
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab" href="#tab1">Retrasos Personales</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#tab2">Retrasos Por Area</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#tab3">Retrasos Area</a>
-            </li>
+           
         </ul>
     </div>
     <div class="tab-content font-verdana">
@@ -81,67 +76,7 @@
                 </table>
             </div>
         </div>
-        <div class="tab-pane fade" id="tab2">
-            <div class="body-border ">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="area">Area de Personal</label>
-                            <div id="area-select2" class="col-md-12">
-
-                                <select name="area_id" id="area_id" aria-label="Selecion de Área" required>
-                                    <option value=""></option>
-                                    @foreach ($data as $index => $value)
-                                    <option value="{{ $value->idarea }}"> {{ $value->nombrearea }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="fecha_inicio2">Fecha Inicio</label>
-                            <input type="date" id="fecha_inicio2" name="fecha_inicio2" value="" class="form-control" required>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="fecha_final2">Fecha Final</label>
-                            <input type="date" id="fecha_final2" name="fecha_final2" value="" class="form-control" required>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-2">
-
-                        <label for="fecha_final">Opciones</label>
-                        <div class="form-group">
-                            <div class="">
-                                <button class="btn btn-primary" id="verBtn2">Ver</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-12 table-responsive center">
-                <table class="table-bordered  hoverTable table display responsive" style="width:100%" id="area-personal-reportes-table">
-                    <thead>
-                        <tr class="text-center">
-                            <th>Nombres</th>
-                            <th>Minutos de Retraso</th>
-                            <th>Observaciones</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-
-        </div>
-        <div class="tab-pane fade" id="tab3">
-
-        </div>
+        
     </div>
 </div>
 <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
@@ -203,37 +138,17 @@
         // Apply filter on button click
         $('#verBtn').on('click', function() {
             // Reload the DataTable with new parameters
-            dataTable.ajax.reload();
-
-
-
-        });
-
-
-
-    });
-</script>
-<script>
-    $(document).ready(function() {
-        var area_select = new SlimSelect({
-            select: '#area-select2 select',
-            //showSearch: false,
-            placeholder: 'Select ',
-            deselectLabel: '<span>&times;</span>',
-            hideSelectedOption: true,
-        });
-
-        var dataTable2 = $('#area-personal-reportes-table').DataTable({
+            var dataTable = $('#personal-reportes-table').DataTable({
             processing: false,
             serverSide: false, // Changed to false if you're not using server-side processing
             ajax: {
-                url: "{{ route('areapersonalreportes.getReporte') }}",
+                url: "{{ route('personalreportes.getReporte') }}",
                 type: "GET", // Change the request type to GET
                 data: function(d) {
                     // Append parameters to the URL
-                    d.area_id = $('#area_id').val();
-                    d.fecha_inicio2 = $('#fecha_inicio2').val();
-                    d.fecha_final2 = $('#fecha_final2').val();
+                    d.empleado = $('#empleado').val();
+                    d.fecha_inicio = $('#fecha_inicio').val();
+                    d.fecha_final = $('#fecha_final').val();
                 }
             },
             columns: [{
@@ -248,15 +163,17 @@
             ]
         });
 
-        $('#verBtn2').on('click', function() {
-            // Reload the DataTable with new parameters
-            dataTable2.ajax.reload();
+
+
 
 
         });
 
+
+
     });
 </script>
+ 
 
 @endsection
 @endsection

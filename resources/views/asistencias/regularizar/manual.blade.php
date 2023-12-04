@@ -18,21 +18,27 @@
         <div class="col-md-12">
             <hr class="hrr">
         </div>
+        @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @endif
+
     </div>
 
     <!-- Campos del formulario -->
     <div class="row font-verdana">
         <div class="col-md-12 table-responsive center">
             <div class="body-border">
-          
+
                 <form method="POST" action="{{ route('regularizar_asistencia.update', $registroAsistencia->id) }}">
                     @csrf
                     @method('PUT')
-               
+
                     <div class="form-group row font-verdana-bg">
                         <div class="form-group col-md-6">
                             <label for="descripcion">Nombres y Apellidos</label>
-                            <input type="text" name="descripcion" value="{{ $registroAsistencia->empleado->nombres }}" class="form-control" readonly required>
+                            <input type="text" name="descripcion" value="{{ $registroAsistencia->empleado->nombres }}{{$registroAsistencia->empleado->ap_pat}}" class="form-control" readonly required>
                         </div>
 
                         <div class="form-group col-md-6">
@@ -50,13 +56,13 @@
                         @else
                         <div class="form-group col-md-6">
                             <label for="registro_inicio">Hora de Inicio</label>
-                            <input type="time" id="registro_inicio" name="registro_inicio" class="form-control" value="{{ $registroAsistencia->horario->horario_inicio }}" readonly required>
+                            <input type="time" id="registro_inicio" name="registro_inicio" class="form-control" value="{{ $registroAsistencia->horario->hora_inicio }}" required>
                         </div>
                         @endif
                         @if($registroAsistencia->registro_final)
                         <div class="form-group col-md-6">
                             <label for="registro_final">Hora Final</label>
-                            <input type="time" id="registro_final" name="registro_final" class="form-control" value="{{ $registroAsistencia->registro_final }}" required>
+                            <input type="time" id="registro_final" name="registro_final" class="form-control" value="{{ $registroAsistencia->registro_final }}" readonly required>
                         </div>
                         @else
                         <div class="form-group col-md-6">
@@ -66,10 +72,10 @@
                         @endif
                     </div>
                     @if($registroAsistencia->horario->tipo == 0)
-               
+
 
                     <div class="form-group row font-verdana-bg">
-                        
+
                     </div>
 
                     <div class="form-group row font-verdana-bg">
@@ -107,7 +113,7 @@
                     @endif
                     <button type="submit" class="btn btn-primary">Regularizar</button>
                 </form>
-       
+
             </div>
         </div>
     </div>

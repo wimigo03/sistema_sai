@@ -29,6 +29,7 @@ class HoraEmpleadoRequest extends FormRequest
             'hora_inicio' => 'required',
             'hora_final' => 'required',
             'excepcion' => 'required',
+            'inicio_jornada' => 'required',
         ];
     }
 }

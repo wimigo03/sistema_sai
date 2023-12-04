@@ -98,11 +98,14 @@ class EmpleadosModel extends Model
         //,'empleado_horario','empleado_id','horario_id'
     }
 
-    public function asistencia()
+    public function asistencias()
     {
-        return $this->belongsToMany(AsistenciaModel::class, 'registro_asistencia', 'empleado_id', 'asistencia_id');
+        return $this->belongsToMany(AsistenciaModel::class, 'registro_asistencia', 'empleado_id', 'asistencia_id')
+        ->withPivot('tipo','horario_id', 'fecha');;
 
      }
+
+    
   
 
     public function reportes()
@@ -128,6 +131,11 @@ class EmpleadosModel extends Model
     public function movimientosCont()
     {
         return $this->hasMany(MovimientosContModel::class, 'idemp');
+    }
+
+    public function huellasDigitales()
+    {
+        return $this->hasMany(HuellasDigitalesModel::class,'idemp');
     }
 
 

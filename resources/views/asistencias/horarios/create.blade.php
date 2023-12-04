@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
-            <b>Agregar Horario</b>
+            <b>Agregar Nuevo Horario Laboral</b>
         </div>
 
         <div class="col-md-4 text-right">
@@ -22,13 +22,13 @@
     <div class="row font-verdana">
         <div class="col-md-12 table-responsive center font-verdana">
             <div class="body-border">
-                <form method="POST" action="{{ route('horarios.store') }}">
+                <form method="POST" action="{{ route('horarios.store') }}" id="crearForm">
                     @csrf
 
                     <div class="form-group row font-verdana-bg">
                         <!-- Campos del formulario -->
                         <div class="form-group col-md-6">
-                            <label for="nombre">Nombre</label>
+                            <label for="nombre">Nombre de Horario</label>
                             <input type="text" name="nombre" class="form-control" placeholder="Ingrese el nombre del Horario" required>
                         </div>
 
@@ -56,19 +56,35 @@
                         <div class="form-group col-md-6">
 
                             <label for="hora_salida">Hora de salida</label>
-                            <input type="time" id="hora_salida" name="hora_salida" class="form-control" >
+                            <input type="time" id="hora_salida" name="hora_salida" class="form-control">
                         </div>
 
                         <div class="form-group col-md-6">
                             <label for="hora_entrada">Hora de retorno</label>
-                            <input type="time" id="hora_entrada" name="hora_entrada" class="form-control" >
+                            <input type="time" id="hora_entrada" name="hora_entrada" class="form-control">
                         </div>
                     </div>
+                    <b>OPCIONES:</b>
+                    <div class="col-md-12">
+                        <hr class="hrr">
+                    </div>
                     <div class="form-group row font-verdana-bg">
-                        <div class="form-group col-md-6 form-check">
+                        <div class="form-group col-md-6">
+                            <label for="inicio_jornada">Inicio de Jornada</label>
+                            <input type="time" id="inicio_jornada" name="inicio_jornada" value="05:00" class="form-control" required>
+                        </div>
+
+                        <div class="form-group col-md-3 form-check">
+                            <label for="sumar_horas">Media Jornada</label>
+                            <input type="checkbox" name="sumar_horas" id="sumar_horas" class="form-control">
+                        </div>
+
+
+                        <div class="form-group col-md-3 form-check">
                             <label for="asignado">Asignar a Todos</label>
                             <input type="checkbox" name="asignado" value="1" class="form-control">
                         </div>
+
                     </div>
 
                     <!-- Botón para guardar -->
@@ -80,6 +96,28 @@
         </div>
     </div>
 </div>
+
+<!-- Modal de Confirmación para Creación -->
+<div class="modal fade" id="confirmarCrearModal" tabindex="-1" role="dialog" aria-labelledby="confirmarCrearModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmarCrearModalLabel">Confirmar Creación</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro de que deseas crear este nuevo horario?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="confirmarCrearBtn">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script>
     // Obtiene los elementos de entrada de hora inicio y hora final
@@ -155,6 +193,48 @@
             // Borra el campo de hora final si falta alguna de las horas
             horaFinalInput.value = '';
         }
+    });
+
+    document.getElementById('sumar_horas').addEventListener('change', function() {
+        if (this.checked) {
+            // Sumar 4 horas cuando el checkbox está marcado
+            sumarHoras(4);
+        } else {
+            // Restablecer las horas cuando el checkbox está desmarcado
+            sumarHoras(0);
+        }
+    });
+
+    // Función para sumar horas al horario
+    function sumarHoras(horasASumar) {
+        var horaInicio = horaInicioInput.value;
+        var fechaHoraInicio = new Date("1970-01-01T" + horaInicio);
+
+        // Suma las horas especificadas
+        fechaHoraInicio.setHours(fechaHoraInicio.getHours() + horasASumar);
+
+        // Formatea la nueva hora en HH:MM y colócala en el campo de hora final
+        var nuevaHoraFinal = fechaHoraInicio.toTimeString().substring(0, 5);
+        horaFinalInput.value = nuevaHoraFinal;
+    }
+</script>
+
+<!-- Agrega este script al final de tu vista Blade para creación de horarios -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var confirmarCrearBtn = document.getElementById('confirmarCrearBtn');
+        var confirmarCrearModal = new bootstrap.Modal(document.getElementById('confirmarCrearModal'));
+
+        confirmarCrearBtn.addEventListener('click', function() {
+            // Simplemente envía el formulario cuando el usuario confirma
+            document.forms['crearForm'].submit();
+        });
+
+        // Agrega un event listener al formulario para evitar el envío directo
+        document.forms['crearForm'].addEventListener('submit', function(event) {
+            event.preventDefault();
+            confirmarCrearModal.show();
+        });
     });
 </script>
 

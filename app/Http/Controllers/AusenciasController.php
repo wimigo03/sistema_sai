@@ -162,8 +162,11 @@ class AusenciasController extends Controller
         if (!$registroAsistencia) {
             abort(404); // o maneja de alguna manera el caso en que no se encuentre el registro
         }
-       
-        return view('asistencias.regularizar.manual', compact('registroAsistencia'));
+   
+
+  
+      
+       return view('asistencias.regularizar.manual', compact('registroAsistencia'));
 
      }
    
@@ -172,7 +175,7 @@ class AusenciasController extends Controller
   
  
 
-    public function update(Request $request, $id)
+     public function update(Request $request, $id)
     {
         try {
             $request->validate([
@@ -191,6 +194,7 @@ class AusenciasController extends Controller
             // Actualiza los datos del registro de asistencia
             $registro->update($request->all());
             $this->verificarMarcado($registro);
+            $this->calcularRetraso($registro);
  
             // Puedes redirigir a la vista de detalles o a donde desees
            return redirect()->route('ausencias.index');
@@ -199,9 +203,110 @@ class AusenciasController extends Controller
             return back()->withError('Error al actualizar el registro: ' . $e->getMessage());
         }
     }
+
+    
+    private function calcularRetraso(RegistroAsistencia $registro)
+    {
+        if ($registro->horario->tipo == 1) {
+
+            $horaEntrada = Carbon::parse($registro->horario->hora_entrada);
+            $horaInicio = Carbon::parse($registro->horario->hora_inicio);
+            $excepcion = Carbon::parse($registro->horario->excepcion);
+
+            if ($registro->registro_inicio && !$registro->registro_entrada) {
+
+                $horaexcepcion = $horaInicio->addHours($excepcion->hour)->addMinutes($excepcion->minute)->addSeconds($excepcion->second);
+                $horaInicio = $horaexcepcion->format('H:i:s');
+
+                $horaEntradaProgramada = Carbon::parse($horaInicio);
+                $horaEntradaReal = Carbon::parse($registro->registro_inicio);
+
+                if ($horaEntradaReal->greaterThan($horaEntradaProgramada)) {
+
+                    $retraso = $horaEntradaReal->diffInMinutes($horaEntradaProgramada);
+                    $registro->retraso1 = $retraso;
+                    $registro->minutos_retraso = $retraso;;
+                    $registro->save();
+                    $registro->save();
+                } else {
+                    $registro->retraso1 = 0;
+                    $registro->minutos_retraso = 0;
+                    $registro->save();
+                }
+            } else if ($registro->registro_entrada && !$registro->registro_inicio) {
+
+                $horaexcepcion = $horaEntrada->addHours($excepcion->hour)->addMinutes($excepcion->minute)->addSeconds($excepcion->second);
+                $horaEntrada = $horaexcepcion->format('H:i:s');
+
+                $horaEntradaProgramada = Carbon::parse($horaEntrada);
+                $horaEntradaReal = Carbon::parse($registro->registro_entrada);
+
+                if ($horaEntradaReal->greaterThan($horaEntradaProgramada)) {
+
+                    $retraso2 = $horaEntradaReal->diffInMinutes($horaEntradaProgramada);
+                    $registro->retraso2 = $retraso2;
+                    $registro->minutos_retraso = $retraso2;
+                    $registro->save();
+                } else {
+                    $registro->retraso2 = 0;
+                    $registro->minutos_retraso = 0;
+                    $registro->save();
+                }
+            } else if ($registro->registro_entrada && $registro->registro_inicio) {
+
+                $horaexcepcion = $horaEntrada->addHours($excepcion->hour)->addMinutes($excepcion->minute)->addSeconds($excepcion->second);
+                $horaEntrada = $horaexcepcion->format('H:i:s');
+
+                $horaEntradaProgramada = Carbon::parse($horaEntrada);
+                $horaEntradaReal = Carbon::parse($registro->registro_entrada);
+
+                if ($horaEntradaReal->greaterThan($horaEntradaProgramada)) {
+
+                    $retraso2 = $horaEntradaReal->diffInMinutes($horaEntradaProgramada);
+                    $registro->retraso2 = $retraso2;
+                    $registro->minutos_retraso = $registro->retraso2 + $registro->retraso1;
+                    $registro->save();
+                } else {
+                    $registro->retraso2 = 0;
+                    $registro->save();
+                    $registro->minutos_retraso = $registro->retraso2 + $registro->retraso1;
+                    $registro->save();
+                }
+            }
+        }
+        if ($registro->horario->tipo == 0) {
+
+            $horaEntrada = Carbon::parse($registro->horario->hora_entrada);
+            $horaInicio = Carbon::parse($registro->horario->hora_inicio);
+            $excepcion = Carbon::parse($registro->horario->excepcion);
+
+            if ($registro->registro_inicio) {
+
+                $horaexcepcion = $horaInicio->addHours($excepcion->hour)->addMinutes($excepcion->minute)->addSeconds($excepcion->second);
+                $horaInicio = $horaexcepcion->format('H:i:s');
+
+                $horaEntradaProgramada = Carbon::parse($horaInicio);
+                $horaEntradaReal = Carbon::parse($registro->registro_inicio);
+
+                if ($horaEntradaReal->greaterThan($horaEntradaProgramada)) {
+
+                    $retraso = $horaEntradaReal->diffInMinutes($horaEntradaProgramada);
+                    $registro->retraso1 = $retraso;
+                    $registro->minutos_retraso = $retraso;;
+                    $registro->save();
+                } else {
+                    $registro->retraso1 = 0;
+                    $registro->minutos_retraso = 0;
+                    $registro->save();
+                }
+            }
+        }
+    }
+
     
     private function verificarMarcado(RegistroAsistencia $registro)
     {
+        
         if ($registro->horario->tipo == 1) {
             if (
                 $registro->registro_inicio &&

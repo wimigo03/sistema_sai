@@ -11,6 +11,8 @@ class HorarioModel extends Model
     protected $fillable = [
         // Otras propiedades fillable aquí
         'estado',
+        'tipo',
+        'inicio_jornada',
     ];
     protected $table = 'horarios';
     

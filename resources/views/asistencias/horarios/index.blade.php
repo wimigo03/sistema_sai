@@ -31,7 +31,13 @@
     </div>
     <div class="row font-verdana-bg">
         <div class="col-md-6 titulo">
-            <b>Horario Activo :</b>
+            <b>Horario Activo:   </b> 
+            @if(isset($horarioActivo))
+            {{$horarioActivo->Nombre}}
+            @else
+            <span class="text-danger font-weight-bold">--Sin Horario--</span>
+            @endif<p>
+ 
         </div>
 
         @can('horario_access')
@@ -178,7 +184,7 @@
             serverSide: true,
             processing: true,
             lengthChange: false,
-            searching: false,
+            searching: true,
             language: {
                 info: "<span class='font-verdana'>Mostrando _START_ al _END_ de _TOTAL_</span>",
                 search: '',
@@ -202,6 +208,7 @@
                 infoFiltered: "<span class='font-verdana'>(filtrados de un total de _MAX_ registros)</span>"
             },
             ajax: "{{ route('horarios.index') }}",
+            
 
             columns: [{
                     className: 'text-center p-1 font-verdana',

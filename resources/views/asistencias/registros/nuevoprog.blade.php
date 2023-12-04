@@ -5,7 +5,7 @@
     <div class="row font-verdana-bg">
 
         <div class="col-md-3 offset-md-3 titulo">
-            <b>Modificar Registro</b>
+            <b>Agregar Horario Programado</b>
             <i class=aria-hidden="true"></i>
         </div>
         <div class="col-md-3 text-right">
@@ -37,12 +37,12 @@
                 <div class="alert alert-danger">
                     {{ session('error') }}
                 </div>
-                @endif 
-                <form action="{{ route('asistencia.store') }}" method="POST">
+                @endif
+                <form action="{{ route('asistencia.store') }}" method="POST" id="crearForm">
                     @csrf
 
                     <div class="row">
- 
+
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="fecha">Fecha:</label>
@@ -55,18 +55,49 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="area">Horario:</label>
-                                <div id="area-select2">
+                                <select name="horario_id" id="horarios" required class="form-control">
+                                    <option value=""></option>
 
-                                    <select name="horario_id" id="horarios" aria-label="Selecion de Horario" required>
-                                        <option value=""></option>
-                                        @foreach ($horarios as $index => $value)
-                                        <option value="{{ $value->id }}"> {{ $value->Nombre }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                                    @php
+                                    // Ordenar la colección de horarios por hora de inicio
+                                    $horarios = $horarios->sortBy('hora_inicio');
+                                    @endphp
+
+                                    @foreach ($horarios as $index => $value)
+                                    <option value="{{ $value->id }}">
+
+                                        @if ($value->hora_inicio)
+                                        {{ date('h:i A', strtotime($value->hora_inicio)) }} -
+                                        @else
+                                        -
+                                        @endif
+
+                                        @if ($value->hora_salida)
+                                        {{ date('h:i A', strtotime($value->hora_salida)) }} /
+                                        @else
+                                        /
+                                        @endif
+
+                                        @if ($value->hora_entrada)
+                                        {{ date('h:i A', strtotime($value->hora_entrada)) }} -
+                                        @else
+                                        -
+                                        @endif
+
+                                        @if ($value->hora_final)
+                                        {{ date('h:i A', strtotime($value->hora_final)) }}
+                                        @else
+                                        -
+                                        @endif
+                                        <span class="text-danger">{{ $value->Nombre }}</span>
+
+                                    </option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
+
 
 
                     <div class="row">
@@ -78,7 +109,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                    <button type="submit" class="btn btn-success">Crear</button>
                 </form>
             </div>
 
@@ -86,16 +117,57 @@
     </div>
 </div>
 
+
+<!-- Modal de Confirmación para Creación -->
+<div class="modal fade" id="confirmarCrearModal" tabindex="-1" role="dialog" aria-labelledby="confirmarCrearModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmarCrearModalLabel">Confirmar Creación</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro de que deseas crear este nuevo horario?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="confirmarCrearBtn">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section('scripts')
 <script>
-    var horario_select = new SlimSelect({
+    SlimSelect({
         select: '#horarios',
         placeholder: 'Seleccionar Horarios',
-        deselectLabel: '<span>&times;</span>',
-        hideSelectedOption: true
+
     });
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var confirmarCrearBtn = document.getElementById('confirmarCrearBtn');
+        var confirmarCrearModal = new bootstrap.Modal(document.getElementById('confirmarCrearModal'));
 
+        confirmarCrearBtn.addEventListener('click', function() {
+            // Simplemente envía el formulario cuando el usuario confirma
+            document.forms['crearForm'].submit();
+            // Cierra el modal después de confirmar
+            confirmarCrearModal.hide();
+
+        });
+
+        // Agrega un event listener al formulario para evitar el envío directo
+        document.forms['crearForm'].addEventListener('submit', function(event) {
+            event.preventDefault();
+            confirmarCrearModal.show();
+        });
+    });
+</script>
 
 @endsection
 @endsection

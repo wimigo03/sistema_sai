@@ -13,6 +13,7 @@ class AsistenciaModel extends Model
         'fecha',
         'descrip',
         'estado',
+        'horario_id',
     ];
     protected $table = 'asistencia';
     public $timestamps = false;

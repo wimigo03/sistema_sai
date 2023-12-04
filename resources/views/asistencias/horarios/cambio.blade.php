@@ -69,7 +69,7 @@
                                     <!-- Resaltar los horarios con estado 1 -->
                                     <strong>
                                         @endif
-                                        Mañana: {{ $horarioCompleto->hora_inicio ?? '-' }} - {{ $horarioCompleto->hora_salida ?? ' - ' }} - Tarde:{{ $horarioCompleto->hora_entrada ?? '-' }} - {{ $horarioCompleto->hora_final ?? 'N/A' }}
+                                        Mañana: {{ $horarioCompleto->hora_inicio ?? '-' }} - {{ $horarioCompleto->hora_salida ?? ' - ' }} - Tarde:{{ $horarioCompleto->hora_entrada ?? '-' }} - {{ $horarioCompleto->hora_final ?? '-' }}
                                         @if($horarioCompleto->estado == 1)
                                         <!-- Cerrar la etiqueta strong -->
                                     </strong>

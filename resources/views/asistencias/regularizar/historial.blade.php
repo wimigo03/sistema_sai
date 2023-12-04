@@ -60,9 +60,11 @@
 
                         // Selecciona y renombra los datos que deseas mostrar
                         var selectedData = {
-                            'Fecha de Asistencia': data.created_at,
-                            'Empleado ID': data.empleado_id,
-                            'Hora de Marcado Entrada': data.registro_inicio,
+                            'Fecha de Asistencia': data.fecha,
+                             ' Marcado Entrada': data.registro_inicio,
+                            '  Marcado Salida': data.registro_salida,
+                            'Marcado Retorno': data.registro_entrada,
+                            'Marcado salida': data.registro_final,
                             'Minutos de Retraso': data.minutos_retraso,
                             // Agrega más campos según sea necesario
                         };

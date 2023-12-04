@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AreasModel;
 use App\Models\DescuentoModel;
 use App\Models\ReporteModel;
 use App\Models\EmpleadosModel;
+use App\Models\FileModel;
+use App\Models\HorarioModel;
 use App\Models\RetrasosEmpleado;
 use App\Models\RetrasosModel;
 use Carbon\Carbon;
@@ -72,14 +75,15 @@ class ReporteController extends Controller
      */
     public function create()
     {
-        $data = DB::table('areas')->get();
+        $areas = DB::table('areas')
+            ->get();
 
         $empleados = EmpleadosModel::where('estadoemp1', 1)
             ->where('estadoemp2', 1)
             ->select('idemp', 'nombres', 'ap_mat', 'ap_pat')
             ->get();
 
-        return view('asistencias.reportes.create', compact('empleados', 'data'));
+        return view('asistencias.reportes.create', compact('empleados', 'areas'));
     }
 
     /**
@@ -102,7 +106,7 @@ class ReporteController extends Controller
 
             $empleados = EmpleadosModel::whereHas('retrasos', function ($query) use ($request) {
                 $query->where('minutos_diario', '>', 0)
-                ->whereBetween('created_at', [$request->fecha_inicio, $request->fecha_final]);
+                    ->whereBetween('fecha', [$request->fecha_inicio, $request->fecha_final]);
             })->get();
 
 
@@ -113,7 +117,7 @@ class ReporteController extends Controller
                 // Obtener la suma de retrasos diarios del empleado para el rango de fechas
                 // Convertir timestamps a DATE
                 $suma_retrasos = RetrasosEmpleado::where('empleado_id', $empleado->idemp)
-                    ->whereBetween('created_at', [$request->fecha_inicio, $request->fecha_final])
+                    ->whereBetween('fecha', [$request->fecha_inicio, $request->fecha_final])
                     ->sum('minutos_diario');
                 $observacion = '';
 
@@ -140,6 +144,8 @@ class ReporteController extends Controller
             return response()->json(['error' => 'Error al guardar datos']);
         }
     }
+
+
     public function areaGetReporte(Request $request)
     {
         if ($request->ajax()) {
@@ -169,7 +175,7 @@ class ReporteController extends Controller
 
             foreach ($empleados as $empleado) {
                 $suma_retrasos = RegistroAsistencia::where('empleado_id', $empleado->idemp)
-                    ->whereBetween('created_at', [$fechaInicio, $fechaFinal])
+                    ->whereBetween('fecha', [$fechaInicio, $fechaFinal])
                     ->sum('minutos_retraso');
 
                 $observacion = $this->calculateObservation($suma_retrasos);
@@ -218,9 +224,10 @@ class ReporteController extends Controller
             $empleados = $query->get();
 
             $empleadosData = [];
+
             foreach ($empleados as $empleado) {
                 $suma_retrasos = RegistroAsistencia::where('empleado_id', $empleado->idemp)
-                    ->whereBetween('created_at', [$fechaInicio, $fechaFinal])
+                    ->whereBetween('fecha', [$fechaInicio, $fechaFinal])
                     ->where('estado', '=', 1)
                     ->sum('minutos_retraso');
 
@@ -272,7 +279,7 @@ class ReporteController extends Controller
             ->get();
         return Datatables::of($retrasos)
             ->addColumn('fecha', function ($row) {
-                return $row->created_at ?: '-';
+                return $row->fecha ?: '-';
             })
             ->addColumn('horario', function ($row) {
                 $horario = $row->horario->Nombre;
@@ -288,7 +295,6 @@ class ReporteController extends Controller
 
             $fechaInicio = $request->input('fecha_inicio2');
             $fechaFinal = $request->input('fecha_final2');
-            $area_id = $request->input('area_id');
 
 
 
@@ -298,12 +304,12 @@ class ReporteController extends Controller
                 $query
                     ->where('estado', '=', 1)
                     ->where('minutos_retraso', '>', 0)
-                    ->whereBetween('created_at', [$fechaInicio, $fechaFinal]);
+                    ->whereBetween('fecha', [$fechaInicio, $fechaFinal]);
             })
-            ->whereNotIn('idarea', $areasExcluidas)
-            ->select('idemp', 'nombres', 'ap_mat', 'ap_pat')
-            ->get();
-            
+                ->whereNotIn('idarea', $areasExcluidas)
+                ->select('idemp', 'nombres', 'ap_mat', 'ap_pat')
+                ->get();
+
 
 
 
@@ -381,48 +387,213 @@ class ReporteController extends Controller
     }
 
 
-    public function generarPdf(Request $request)
+
+    public function previsualizarPdf(Request $request)
     {
         try {
-            // Obtener los datos del request
-            $empleadoId = $request->input('empleadoId');
-            $fechaInicio = $request->input('fechaInicio');
-            $fechaFinal = $request->input('fechaFinal');
+ 
 
-            // Generar el PDF
-            $pdf = $this->previsualizarPdf($fechaInicio, $fechaFinal, $empleadoId);
+            $empleado_id = request('empleadoId');
+            $fechaInicio = request('fechaInicio');
+            $fechaFinal = request('fechaFinal');
+            // $empleadoDatos = EmpleadosModel::where('idemp', $empleado_id)->select('nombres','ap_pat','ap_mat','ci')->with('empleadosareas')->first();
+            $empleadoDatos =  EmpleadosModel::where('idemp', $empleado_id)->with('empleadosareas')->first();
 
-            // Devolver el PDF en formato base64
-            return $pdf->stream();
-        } catch (Exception $ex) {
-            return redirect()->route('asistencias.permisos.index')->with('message', $ex->getMessage());
+            
+       
+            $query = EmpleadosModel::whereHas('registrosAsistencia', function ($query) use ($empleado_id, $fechaInicio, $fechaFinal) {
+                $query
+                    ->where('empleado_id', $empleado_id)
+                    ->where('estado', '=', 1)
+                    ->where('minutos_retraso', '>', 0)
+                    ->whereBetween('created_at', [$fechaInicio, $fechaFinal]);
+            });
+
+
+            $totalRecords = $query->count();
+
+            $query->skip($request->input('start'))
+                ->take($request->input('length'));
+
+            $empleados = $query->get();
+
+            $empleadosData = [];
+
+            foreach ($empleados as $empleado) {
+                $suma_retrasos = RegistroAsistencia::where('empleado_id', $empleado->idemp)
+                    ->whereBetween('fecha', [$fechaInicio, $fechaFinal])
+                    ->where('estado', '=', 1)
+                    ->sum('minutos_retraso');
+
+                $observacion = $this->calculateObservation($suma_retrasos);
+
+
+                $empleadosData[] = [
+                   
+                    'idemp' => $empleado->idemp,
+                    'empleado' => $empleado->nombres . ' ' . $empleado->ap_pat . ' ' . $empleado->ap_mat,
+                    'total_retrasos' => $suma_retrasos,
+                    'observaciones' => $observacion,
+                ];
+            }
+            $retrasos = RegistroAsistencia::where('empleado_id', $empleado_id)
+            ->whereBetween('fecha', [$fechaInicio, $fechaFinal])
+            ->where('estado', '=', 1)
+            ->get();
+
+            $data = [
+                'draw' => $request->input('draw'),
+                'recordsTotal' => $totalRecords,
+                'recordsFiltered' => $totalRecords,
+                'data' => $empleadosData,
+                 
+            ];
+
+
+
+
+ 
+            $pdf = PDF::loadView('asistencias.reportes.reporte-personal-pdf', compact(['retrasos','empleadoDatos','data','fechaInicio', 'fechaFinal']));
+            $pdf->setPaper('LETTER', 'landscape');
+           return $pdf->stream();
+        } catch (\Exception $e) {
+
+            Log::error('Error al generar el PDF: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
-    public function previsualizarPdf($fechaInicio, $fechaFinal, $empleadoId)
+    
+    public function areaprevisualizarPdf(Request $request)
     {
         try {
-            ini_set('memory_limit', '-1');
-            ini_set('max_execution_time', '-1');
+ 
+
+            $area_id= request('area_id');
+            $fechaInicio = request('fechaInicio');
+            $fechaFinal = request('fechaFinal');
+ 
+
+            $areasDatos =  AreasModel::where('idarea', $area_id)->first();
+
+            $empleados = EmpleadosModel::whereHas('registrosAsistencia', function ($query) use ($fechaInicio, $fechaFinal) {
+                $query
+
+                    ->where('estado', '=', 1)
+                    ->where('minutos_retraso', '>', 0)
+                    ->whereBetween('created_at', [$fechaInicio, $fechaFinal]);
+            })
+                ->where('idarea', $area_id)
+                ->select('idemp', 'nombres', 'ap_mat', 'ap_pat')
+                ->get();
 
 
 
-            // Renderizar la vista del PDF (puedes ajustar según tus necesidades)
+            $totalRecords = $empleados->count();
 
-            $view = view('asistencias.reportes.pdf', compact('empleadoId', 'fechaInicio', 'fechaFinal'));
+            $areaempleadosData = [];
 
-            // Generar el PDF
-            $pdf = PDF::loadHtml($view);
-            $pdf->setPaper('LETTER', 'portrait'); //landscape
+            foreach ($empleados as $empleado) {
+                $suma_retrasos = RegistroAsistencia::where('empleado_id', $empleado->idemp)
+                    ->whereBetween('fecha', [$fechaInicio, $fechaFinal])
+                    ->sum('minutos_retraso');
 
-            return $pdf;
-        } catch (Exception $ex) {
-            throw new Exception($ex->getMessage());
-        } finally {
-            ini_restore('memory_limit');
-            ini_restore('max_execution_time');
+                $observacion = $this->calculateObservation($suma_retrasos);
+
+                $areaempleadosData[] = [
+                    'empleado' => $empleado->nombres,
+                    'total_retrasos' => $suma_retrasos,
+                    'observaciones' => $observacion,
+                ];
+            }
+
+            $data = [
+                'draw' => $request->input('draw'),
+                'recordsTotal' => $totalRecords,
+                'recordsFiltered' => $totalRecords,
+                'data' => $areaempleadosData,
+            ];
+   
+
+
+
+
+ 
+            $pdf = PDF::loadView('asistencias.reportes.reporte-area-pdf', compact(['areasDatos','data','fechaInicio', 'fechaFinal']));
+            $pdf->setPaper('LETTER', 'landscape');
+           return $pdf->stream();
+        } catch (\Exception $e) {
+
+            Log::error('Error al generar el PDF: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+  
+    public function   generalReportePdf(Request $request)
+    {
+        try {
+ 
+
+    
+            $fechaInicio = request('fechaInicio');
+            $fechaFinal = request('fechaFinal');
+ 
+ 
+
+            $empleados = EmpleadosModel::whereHas('registrosAsistencia', function ($query) use ($fechaInicio, $fechaFinal) {
+                $query
+
+                    ->where('estado', '=', 1)
+                    ->where('minutos_retraso', '>', 0)
+                    ->whereBetween('created_at', [$fechaInicio, $fechaFinal]);
+            })
+                
+                ->select('idemp', 'nombres', 'ap_mat', 'ap_pat')
+                ->get();
+
+
+
+            $totalRecords = $empleados->count();
+
+            $areaempleadosData = [];
+
+            foreach ($empleados as $empleado) {
+                $suma_retrasos = RegistroAsistencia::where('empleado_id', $empleado->idemp)
+                    ->whereBetween('fecha', [$fechaInicio, $fechaFinal])
+                    ->sum('minutos_retraso');
+
+                $observacion = $this->calculateObservation($suma_retrasos);
+
+                $areaempleadosData[] = [
+                    'empleado' => $empleado->nombres,
+                    'total_retrasos' => $suma_retrasos,
+                    'observaciones' => $observacion,
+                ];
+            }
+
+            $data = [
+                'draw' => $request->input('draw'),
+                'recordsTotal' => $totalRecords,
+                'recordsFiltered' => $totalRecords,
+                'data' => $areaempleadosData,
+            ];
+   
+
+
+
+
+ 
+            $pdf = PDF::loadView('asistencias.reportes.reporte-general-pdf', compact(['data','fechaInicio', 'fechaFinal']));
+            $pdf->setPaper('LETTER', 'landscape');
+           return $pdf->stream();
+        } catch (\Exception $e) {
+
+            Log::error('Error al generar el PDF: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
 
 
 

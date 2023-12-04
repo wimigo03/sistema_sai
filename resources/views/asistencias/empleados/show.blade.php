@@ -19,20 +19,25 @@
         </div>
         <div class="col-md-12">
             <b>Nombres y Apellidos: {{$empleado->nombres}} {{$empleado->ap_pat}} {{$empleado->ap_pat}}</b>
-
+ 
             <hr class="hrr">
         </div>
     </div>
     <div class="row font-verdana">
         <div class="col-md-12">
+
             <table class="table-bordered yajra-datatable hoverTable font-verdana-sm" style="width:100%" id="registrosTable">
                 <thead class="table-light">
                     <tr>
                         <th>Fecha</th>
+                        <th>Nombres Apellidos</th>
                         <th>Horario</th>
-                        <th>Registro Entrada</th>
-                        <th>Registro Salida</th>
-                        <th>Minutos de Retraso</th>
+                        <th> Entrada<br> Mañana</th>
+                        <th> Salida<br> Mañana</th>
+                        <th> Entrada <br>Tarde</th>
+                        <th> Salida <br>Tarde</th>
+                        <th>Minutos <br> Retraso</th>
+                        <th>Observacion </th>
                     </tr>
                 </thead>
             </table>
@@ -43,6 +48,10 @@
 <script>
     $(document).ready(function() {
         $('#registrosTable').DataTable({
+            "dom": '<"top"Bf>lrtip',
+            responsive: true,
+            processing: true,
+            serverSide: true,
             language: {
                 info: "<span class='font-verdana'>Mostrando _START_ al _END_ de _TOTAL_</span>",
                 search: '',
@@ -65,41 +74,79 @@
                 infoEmpty: "<span class='font-verdana'>Ningun registro encontrado</span>",
                 infoFiltered: "<span class='font-verdana'>(filtrados de un total de _MAX_ registros)</span>"
             },
-            processing: true,
-            serverSide: true,
-            ajax: "{{ route('empleadoasistencias.show', $empleado->idemp) }}",
             orderFixed: [0, 'desc'],
-            rowGroup: {
-                dataSrc: 'fecha'
+
+            ajax: {
+                url: "{{ route('empleadoasistencias.show', $empleado->idemp) }}",
+                data: function(d) {
+                    // Agregar parámetro de filtro de fecha
+                    d.filtro = $('#filtro').val();
+                }
+
             },
+
             columns: [{
                     data: 'fecha',
                     name: 'fecha',
                     class: 'text-justify p-1 font-verdana-sm'
                 },
                 {
+                    data: 'nombres',
+                    name: 'nombres',
+                    class: 'text-justify p-1 font-verdana-sm'
+                },
+                {
                     data: 'horario',
                     name: 'horario',
-                    class: 'text-justify p-1 font-verdana-sm'
+                    class: 'text-center p-1 font-verdana-sm'
+
                 },
                 {
-                    data: 'hora_entrada',
-                    name: 'hora_entrada',
-                    class: 'text-justify p-1 font-verdana-sm'
+                    data: 'registro_inicio',
+                    name: 'registro_inicio',
+                    class: 'text-center p-1 font-verdana-sm'
                 },
                 {
-                    data: 'hora_salida',
-                    name: 'hora_salida',
-                    class: 'text-justify p-1 font-verdana-sm'
+                    data: 'registro_salida',
+                    name: 'registro_salida',
+                    class: 'text-center p-1 font-verdana-sm'
+                },
+                {
+                    data: 'registro_entrada',
+                    name: 'registro_entrada',
+                    class: 'text-center p-1 font-verdana-sm'
+                },
+
+                {
+                    data: 'registro_final',
+                    name: 'registro_final',
+                    class: 'text-center p-1 font-verdana-sm'
                 },
                 {
                     data: 'minutos_retraso',
                     name: 'minutos_retraso',
                     class: 'text-justify p-1 font-verdana-sm'
                 },
+                {
+                    data: 'observ',
+                    name: 'observ',
+                    class: 'text-justify p-1 font-verdana-sm'
+                },
+            ],
 
-            ]
+            buttons: [{
+                extend: 'colvis',
+                collectionLayout: 'fixed columns',
+                collectionTitle: 'Control de Visibilidad de Columnas',
+                className: 'btn btn-sm btn-info',
+            }],
+
+
+
         });
+        $('#myTable').on('draw.dt', function() {
+            $('ul.pagination').addClass('pagination-sm');
+        }).DataTable();
     });
 </script>
 @endsection

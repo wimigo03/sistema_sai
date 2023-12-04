@@ -144,9 +144,7 @@
                 infoFiltered: "<span class='font-verdana'>(filtrados de un total de _MAX_ registros)</span>"
             },
             orderFixed: [0, 'desc'],
-            rowGroup: {
-                dataSrc: 'fecha'
-            },
+            
             ajax: {
                 url: "{{ route('registroasistencia.index') }}",
                 data: function(d) {

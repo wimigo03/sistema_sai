@@ -16,8 +16,17 @@ use App\Models\RegistroAsistencia;
 class AsistenciaController extends Controller
 {
 
-    
- 
+
+
+
+    public function crear($fecha)
+    {
+
+        $horarios = HorarioModel::all();
+
+        return view('asistencias.registros.nuevoprog', compact('fecha', 'horarios'));
+    }
+
     public function edit($id)
     {
 
@@ -42,21 +51,32 @@ class AsistenciaController extends Controller
         if (!$asistenciaActual) {
             $asistenciaActual = AsistenciaModel::create([
                 'fecha' => $fecha,
-                'descrip' => "Personal",
+                'descrip' => "Programado",
                 'estado' => '1'
             ]);
-        }
-        $empleados = EmpleadosModel::all();
+            $empleados = EmpleadosModel::all();
 
-        foreach ($empleados as $empleado) {
-            $empleado->asistencia()->attach($asistenciaActual->id, [
-                'created_at' => $fecha,
-                'horario_id' => $horarioID
-            ]);
+            $tipo = HorarioModel::find($horarioID)->tipo;
+
+            $id = $asistenciaActual->id;
+            foreach ($empleados as $empleado) {
+                $empleado->asistencias()->attach([
+                    $id => [
+                        'created_at' => $fecha,
+                        'horario_id' => $horarioID,
+                        'asistencia_id' => $id,
+                        'fecha' => $fecha,
+                        'tipo' => $tipo
+                        // Agrega otros campos que necesitas actualizar
+                    ],
+                ]);
+            }
         }
 
-        return redirect()->route('horarios.fechas')->with('success', 'Asistencia modificada exitosamente.');
+
+        return redirect()->route('horarios.fechas')->with('success', 'Asistencia Creada exitosamente.' . $asistenciaActual);
     }
+
 
     public function update(Request $request, AsistenciaModel $asistencia)
     {
@@ -64,36 +84,49 @@ class AsistenciaController extends Controller
         $request->validate([
             'fecha' => 'required',
             'horario_id' => 'required',
+            'descrip' => 'required',
         ]);
-        $HiD = $request->input('horario_id');
-        $horario = HorarioModel::find($HiD);
-
 
         $fecha = $request->input('fecha');
-        $desc = $request->input('descrip');
+        $horarioID = $request->input('horario_id');
 
+        // Buscar la asistencia existente por su ID
+        $id = $asistencia->id;
 
-        $asistencia->fecha = $fecha;
-        $asistencia->descrip = $desc;
-        $asistencia->estado = 1;
-        $asistencia->save();
+        // Actualizar los campos necesarios
+        $asistencia->update([
+            'fecha' => $fecha,
+            'descrip' => $request->input('descrip'),
+            'estado' => '1'
+            // Agrega otros campos que necesitas actualizar
+        ]);
 
+        // Actualizar la relación muchos a muchos con los empleados
         $empleados = EmpleadosModel::all();
+        $tipo = HorarioModel::find($horarioID)->tipo;
+
 
         foreach ($empleados as $empleado) {
-            $empleado->asistencia()->attach($asistencia->id, ['horario_id' => $horario->id]); // Ajusta $valorDeHorario según tu lógica
+            $empleado->asistencias()->syncWithoutDetaching([
+                $id => [
+
+                    'horario_id' => $horarioID,
+                    'asistencia_id' => $id,
+                    'fecha' => $fecha,
+                    'tipo' => $tipo
+                    // Agrega otros campos que necesitas actualizar
+                ],
+            ]);
         }
+        $this->actualizarRegistro($id);
+
 
         return redirect()->route('horarios.fechas')->with('success', 'Asistencia modificada exitosamente.');
     }
 
-    public function crear($fecha)
-    {
 
-        $horarios = HorarioModel::all();
 
-        return view('asistencias.registros.nuevoprog', compact('fecha', 'horarios'));
-    }
+
 
     private function CrearAsistencia($fecha)
     {
@@ -102,7 +135,7 @@ class AsistenciaController extends Controller
             // Si es posterior, obtener o crear el permiso del mes actual
             $asistenciaActual = AsistenciaModel::where('fecha', $fecha)->select('id')->first();
             if (!$asistenciaActual) {
-                $asistenciaActual = AsistenciaModel::create(['fecha' => $fecha, 'descrip' => "Personal", 'estado' => '1']);
+                $asistenciaActual = AsistenciaModel::create(['fecha' => $fecha, 'descrip' => "Programado", 'estado' => '1']);
             }
 
             return $asistenciaActual;
@@ -119,7 +152,123 @@ class AsistenciaController extends Controller
             ]);
         }
 
+
+
         return $asistenciaActual;
+    }
+
+    private function actualizarRegistro($id)
+    {
+
+
+        $registros = RegistroAsistencia::where('asistencia_id', $id)->with('horario')->get();
+
+        foreach ($registros as $registro) {
+            if ($registro->horario->tipo == 1) {
+
+                $horaEntrada = Carbon::parse($registro->horario->hora_entrada);
+                $horaInicio = Carbon::parse($registro->horario->hora_inicio);
+                $excepcion = Carbon::parse($registro->horario->excepcion);
+
+                if ($registro->registro_inicio && !$registro->registro_entrada) {
+
+                    $horaexcepcion = $horaInicio->addHours($excepcion->hour)->addMinutes($excepcion->minute)->addSeconds($excepcion->second);
+                    $horaInicio = $horaexcepcion->format('H:i:s');
+
+                    $horaEntradaProgramada = Carbon::parse($horaInicio);
+                    $horaEntradaReal = Carbon::parse($registro->registro_inicio);
+
+                    if ($horaEntradaReal->greaterThan($horaEntradaProgramada)) {
+
+                        $retraso = $horaEntradaReal->diffInMinutes($horaEntradaProgramada);
+                        $registro->retraso1 = $retraso;
+                        $registro->minutos_retraso = $retraso;;
+                        $registro->save();
+                        $registro->save();
+                    } else {
+                        $registro->retraso1 = 0;
+                        $registro->minutos_retraso = 0;
+                        $registro->save();
+                    }
+                } else if ($registro->registro_entrada && !$registro->registro_inicio) {
+
+                    $horaexcepcion = $horaEntrada->addHours($excepcion->hour)->addMinutes($excepcion->minute)->addSeconds($excepcion->second);
+                    $horaEntrada = $horaexcepcion->format('H:i:s');
+
+                    $horaEntradaProgramada = Carbon::parse($horaEntrada);
+                    $horaEntradaReal = Carbon::parse($registro->registro_entrada);
+
+                    if ($horaEntradaReal->greaterThan($horaEntradaProgramada)) {
+
+                        $retraso2 = $horaEntradaReal->diffInMinutes($horaEntradaProgramada);
+                        $registro->retraso2 = $retraso2;
+                        $registro->minutos_retraso = $retraso2;
+                        $registro->save();
+                    } else {
+                        $registro->retraso2 = 0;
+                        $registro->minutos_retraso = 0;
+                        $registro->save();
+                    }
+                } else if ($registro->registro_entrada && $registro->registro_inicio) {
+
+                    $horaexcepcion = $horaEntrada->addHours($excepcion->hour)->addMinutes($excepcion->minute)->addSeconds($excepcion->second);
+                    $horaEntrada = $horaexcepcion->format('H:i:s');
+
+                    $horaEntradaProgramada = Carbon::parse($horaEntrada);
+                    $horaEntradaReal = Carbon::parse($registro->registro_entrada);
+
+                    if ($horaEntradaReal->greaterThan($horaEntradaProgramada)) {
+
+                        $retraso2 = $horaEntradaReal->diffInMinutes($horaEntradaProgramada);
+                        $registro->retraso2 = $retraso2;
+                        $registro->minutos_retraso = $registro->retraso2 + $registro->retraso1;
+                        $registro->save();
+                    } else {
+                        $registro->retraso2 = 0;
+                        $registro->save();
+                        $registro->minutos_retraso = $registro->retraso2 + $registro->retraso1;
+                        $registro->save();
+                    }
+                }
+            } else if ($registro->horario->tipo == 0 && $registro->registro_inicio) {
+
+                $horaEntrada = Carbon::parse($registro->horario->hora_entrada);
+                $horaInicio = Carbon::parse($registro->horario->hora_inicio);
+                $excepcion = Carbon::parse($registro->horario->excepcion);
+
+                //si registro inicio
+
+
+                //sumar minutos de excepcion a hora de inicio
+                $horaexcepcion = $horaInicio->addHours($excepcion->hour)->addMinutes($excepcion->minute)->addSeconds($excepcion->second);
+                $horaInicio = $horaexcepcion->format('H:i:s');
+
+                //hora programada de entrada
+                $horaEntradaProgramada = Carbon::parse($horaInicio);
+                //hora registrada de entrada  
+                $horaEntradaReal = Carbon::parse($registro->registro_inicio);
+
+                //hora registrada es mayor a hora programada
+                if ($horaEntradaReal->greaterThan($horaEntradaProgramada)) {
+
+                    $retraso = $horaEntradaProgramada->diffInMinutes($horaEntradaReal);
+                    $registro->retraso1 = $retraso;
+                    $registro->minutos_retraso = $retraso;
+                    $registro->save();
+                } else {
+                    $registro->retraso1 = 0;
+                    $registro->minutos_retraso = 0;
+                    $registro->save();
+                }
+            }
+        }
+    }
+
+
+
+
+    private function calcularRetraso(RegistroAsistencia $registro)
+    {
     }
     private function verificarMarcado(RegistroAsistencia $registro)
     {

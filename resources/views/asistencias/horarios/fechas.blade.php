@@ -6,11 +6,36 @@
         <div class="col-md-4 titulo">
             <b>Programar Horarios</b>
         </div>
+        <div class="col-md-12">
+            <hr>
+            @if(Session::has('pendiente'))
+            <div class="alert alert-danger font-verdana-bg">
+                {{ Session::get('pendiente') }}
+            </div>
+            <hr>
+
+            @endif
+
+            @if(Session::has('success'))
+            <div class="alert alert-success">
+                {{ Session::get('success') }}
+            </div>
+            <hr>
+
+            @endif
+            @if(Session::has('error'))
+            <div class="alert alert-danger font-verdana-bg">
+                {{ Session::get('error') }}
+            </div>
+            <hr>
+
+            @endif
+        </div>
 
 
         <div class="col-md-8 text-right">
             <div class="btn-group">
-                <input type="month" id="selectedMonth" name="selected_month" class="form-control" value="{{$selectedMonth}}">
+                <input type="month" id="selectedMonth" name="selected_month" class="form-control" value="{{$vistaselectedMonth}}">
 
             </div>
 
@@ -28,14 +53,17 @@
     </div>
     <div class="row font-verdana">
         <div class="col-md-12  center">
-            <table id="calendar" class="table-responsive">
+            <table id="calendar" class="table-bordered  table display responsive font-verdana">
                 <thead>
                     <tr>
                         <th>Semana</th>
-                        @for ($i = 0; $i < 7; $i++) <th>{{ now()->startOfWeek()->addDays($i)->formatLocalized('%a') }}</th>
-                            @endfor
-
-
+                        <th>Lunes</th>
+                        <th>Martes</th>
+                        <th>Miercoles</th>
+                        <th>Jueves</th>
+                        <th>Viernes</th>
+                        <th>Sabado</th>
+                        <th>Domingo</th>                      
                     </tr>
                 </thead>
             </table>
@@ -65,6 +93,8 @@
         dataTable = $('#calendar').DataTable({
             processing: true,
             serverSide: true,
+            lengthChange: false,
+            searching: false,
             ajax: {
                 url: "{{ route('horarios.fechas') }}",
                 data: function(d) {
@@ -134,16 +164,16 @@
         // Función para personalizar la visualización de la celda
         function renderCell(data, type, row) {
             // Verificar si hay datos y personalizar la visualización
-            if (data) {
+            if (data.actual) {
                 let additionalInfo = '';
 
                 // Verificar el tipo de additional_info
                 if (Array.isArray(data.additional_info)) {
                     // additional_info es un array
-                    additionalInfo = data.additional_info.map(item => createLink(item.id, item.descrip)).join('<br>');
+                    additionalInfo = data.additional_info.map(item => createLink(item.id, item.descrip, item.estado)).join('<br>');
                 } else if (typeof data.additional_info === 'object') {
                     // additional_info es un objeto
-                    additionalInfo = Object.values(data.additional_info).map(item => createLink(item.id, item.descrip)).join('<br>');
+                    additionalInfo = Object.values(data.additional_info).map(item => createLink(item.id, item.descrip, item.estado)).join('<br>');
                 }
                 if (!additionalInfo) {
                     var fecha = data.date;
@@ -156,7 +186,7 @@
             return null;
         }
 
-        function createLink(id, descrip) {
+        function createLink(id, descrip,estado) {
             // Reemplaza 'nombre-de-ruta' con el nombre real de tu ruta
 
             let routeUrl = "{{ route('asistencia.edit', ['id' => ':id']) }}";
@@ -165,12 +195,17 @@
             routeUrl = routeUrl.replace(':id', id);
 
             // Retorna el enlace
-            return `<a href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen text-warning"></i></a>`;
+            if (estado === 1) {
+                return `<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Horario Programado" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen text-warning"></i></a>`;
+            }else if (estado === 0) {
+                return `<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Horario Activo" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen text-success"></i></a>`;
+
+            }
         }
 
         function renderCell2(data, type, row) {
             // Verificar si hay datos y personalizar la visualización
-            if (data) {
+            if (data.actual) {
                 let additionalInfo = '';
 
 

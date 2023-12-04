@@ -29,20 +29,18 @@ Auth::routes();
 
 
 
-Route::group(['prefix'=>"admin",'as' => 'admin.','namespace' => 'App\Http\Controllers\Admin','middleware' => ['auth','AdminPanelAccess']], function () {
+Route::group(['prefix' => "admin", 'as' => 'admin.', 'namespace' => 'App\Http\Controllers\Admin', 'middleware' => ['auth', 'AdminPanelAccess']], function () {
 
     Route::get('/', 'HomeController@index')->name('home');
     Route::resource('/users', 'UserController');
     Route::resource('/roles', 'RoleController');
     Route::resource('/permissions', 'PermissionController')->except(['show']);
-
-
 });
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::group(['namespace' => 'App\Http\Controllers'], function() {
+Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('compras/medidas/index', 'MedidaController@index')->name('medidas.index')->middleware('can:medidas_access');
     Route::get('compras/medidas/list', 'MedidaController@listado')->name('medidas.list');
     Route::get('compras/medidas/{id}/edit', 'MedidaController@editar')->name('medidas.edit');
@@ -56,7 +54,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
     Route::get('admin/users//index', 'Admin\UserController@index')->name('users.index');
 
 
-/////////////////////////--COMPRAS PEDIDO--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////--COMPRAS PEDIDO--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     Route::get('compras/pedido/index', 'CompraController@index')->name('compras.pedido.index');
     Route::get('compras/pedido/index2', 'CompraController@index2')->name('compras.pedido.index2');
@@ -75,7 +73,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
     Route::post('compras/pedidoparcial/update', 'CompraController2@update')->name('compras.pedidoparcial.update');
     Route::get('compras/pedidoparcial/edit/{id}', 'CompraController2@edit')->name('compras.pedidoparcial.edit');
 
-///////////////////////////////--COMPRAS DETALLE--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////--COMPRAS DETALLE--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     Route::get('compras/detalle/index', 'DetalleCompraController@index')->name('compras.detalle.index');
     Route::post('compras/detalle/store', 'DetalleCompraController@store')->name('compras.detalle.store');
@@ -112,13 +110,13 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
     Route::get('compras/detalleparcial/adjudicacion/{id}', 'DetalleCompraController2@adjudicacion')->name('compras.detalleparcial.principal.adjudicacion');
     Route::get('compras/detalleparcial/orden/{id}', 'DetalleCompraController2@orden')->name('compras.detalleparcial.principal.orden');
 
-///////////////////////////--COMPRAS PARTIDA--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////--COMPRAS PARTIDA--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     Route::get('compras/partida/index', 'PartidaController@index')->name('partida.index');
     Route::get('compras/partida/listado', 'PartidaController@listado')->name('partida.list');
 
-////////////////////////////--COMPRAS PRODUCTO--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////--COMPRAS PRODUCTO--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     Route::get('compras/productos/index', 'ProdServController@index')->name('productos.index');
     Route::get('compras/productos/list', 'ProdServController@list')->name('producto.list');
@@ -127,7 +125,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
     Route::get('compras/productos/create', 'ProdServController@create')->name('productos.create');
     Route::POST('compras/productos/store', 'ProdServController@store')->name('productos.store');
 
-///////////////////////////--EMPLEADOS--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////--EMPLEADOS--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     Route::get('compras/empleados/index', 'EmpleadosController@index')->name('empleados.index');
     Route::get('compras/empleados/list', 'EmpleadosController@list')->name('empleados.list');
@@ -168,7 +166,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
     Route::POST('compras/proveedores/{id}/update', 'ProveedoresController@update')->name('proveedores.update')->middleware('can:proveedores_access');
     Route::get('compras/proveedores/create', 'ProveedoresController@create')->name('proveedores.create')->middleware('can:proveedores_access');
     Route::POST('compras/proveedores/store', 'ProveedoresController@store')->name('proveedores.store')->middleware('can:proveedores_access');
-    Route::get('compras/proveedores/{id}/editardoc', ['uses' => 'ProveedoresController@editardoc','as' => 'Proveedores.editdoc'])->middleware('can:proveedores_access');
+    Route::get('compras/proveedores/{id}/editardoc', ['uses' => 'ProveedoresController@editardoc', 'as' => 'Proveedores.editdoc'])->middleware('can:proveedores_access');
     Route::get('compras/proveedores/{id}/createdocproveedor', 'ProveedoresController@createdoc')->name('ProveedoresController.createdoc')->middleware('can:proveedores_access');
     Route::POST('compras/proveedores/insertar', 'ProveedoresController@insertar')->name('ProveedoresController.insertar')->middleware('can:proveedores_access');
 
@@ -190,7 +188,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
     Route::get('compras/areas/{id}/actualizarfile2', 'AreasController@editfile2')->name('file2.edit')->middleware('can:areas_access');
     Route::POST('compras/areas/updatefile2', 'AreasController@updatefile2')->name('file2.update')->middleware('can:areas_access');
 
-//////////////////////////////--COMPRAS PROGRAMAS--////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////--COMPRAS PROGRAMAS--////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     Route::get('compras/programas/index', 'ProgramaController@index')->name('programas.index')->middleware('can:programas_access');
     Route::get('compras/programas/list', 'ProgramaController@listado')->name('programas.list')->middleware('can:programas_access');
@@ -199,7 +197,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
     Route::get('compras/programas/create', 'ProgramaController@create')->name('programas.create')->middleware('can:programas_access');
     Route::POST('compras/programas/store', 'ProgramaController@store')->name('programas.store')->middleware('can:programas_access');
 
-////////////////////////////////--COMPRAS CATEGORIAS PROGRAMATICAS--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////--COMPRAS CATEGORIAS PROGRAMATICAS--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     Route::get('compras/catprog/index', 'CatProgController@index')->name('catprog.index')->middleware('can:catprog_access');
     Route::get('compras/catprog/list', 'CatProgController@listado')->name('catprog.list')->middleware('can:catprog_access');
@@ -209,304 +207,302 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
     Route::POST('compras/catprog/store', 'CatProgController@store')->name('catprog.store')->middleware('can:catprog_access');
 
 
-////////////////////////////////--ACTIVOS FIJOS--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////--ACTIVOS FIJOS--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     Route::get('activosFijos/activos', 'ActivosController@index')->name('activos.index');
 
-////////////////////////////////--DISCAPACIDAD--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////--DISCAPACIDAD--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    Route::get('canasta/entrega/index', 'CanastaEntregaController@index')->name('canasta.entrega.index');//->middleware('can:canasta.entrega.index');
-    Route::get('canasta/entrega/search', 'CanastaEntregaController@search')->name('canasta.entrega.search');//->middleware('can:canasta.entrega.index');
-    Route::get('canasta/pendientes/index', 'CanastaPendientesController@index')->name('canasta.pendientes.index');//->middleware('can:canasta.entrega.index');
-    Route::get('canasta/pendientes/search', 'CanastaPendientesController@search')->name('canasta.pendientes.search');//->middleware('can:canasta.entrega.index');
-    Route::get('canasta/pendientes/search-detalle', 'CanastaPendientesController@searchdetalle')->name('canasta.pendientes.search.detalle');//->middleware('can:canasta.entrega.index');
-    Route::get('canasta/pendientes/search-detalle-pdf', 'CanastaPendientesController@searchdetallepdf')->name('canasta.pendientes.search.detallepdf');//->middleware('can:canasta.entrega.index');
+    Route::get('canasta/entrega/index', 'CanastaEntregaController@index')->name('canasta.entrega.index'); //->middleware('can:canasta.entrega.index');
+    Route::get('canasta/entrega/search', 'CanastaEntregaController@search')->name('canasta.entrega.search'); //->middleware('can:canasta.entrega.index');
+    Route::get('canasta/pendientes/index', 'CanastaPendientesController@index')->name('canasta.pendientes.index'); //->middleware('can:canasta.entrega.index');
+    Route::get('canasta/pendientes/search', 'CanastaPendientesController@search')->name('canasta.pendientes.search'); //->middleware('can:canasta.entrega.index');
+    Route::get('canasta/pendientes/search-detalle', 'CanastaPendientesController@searchdetalle')->name('canasta.pendientes.search.detalle'); //->middleware('can:canasta.entrega.index');
+    Route::get('canasta/pendientes/search-detalle-pdf', 'CanastaPendientesController@searchdetallepdf')->name('canasta.pendientes.search.detallepdf'); //->middleware('can:canasta.entrega.index');
 
-    Route::get('activosvsiaf/index', 'ActivosVsiafController@index')->name('activos.vsiaf.index');//->middleware('can:canasta.entrega.index');
-    Route::get('activosvsiaf/search', 'ActivosVsiafController@search')->name('activos.vsiaf.search');//->middleware('can:canasta.entrega.index');
-
-/////////////////////////--ENCARGADOS--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-Route::get('compras/pedidoparcial/responsable', 'CompraController2@listadoResponsables')->name('compras.pedidoparcial.listadoResponsables');
-Route::get('compras/pedidoparcial/responsableCreate', 'CompraController2@crearEncargado')->name('compras.pedidoparcial.crearEncargado')->middleware('can:compras_encargados_create');
-Route::POST('compras/pedidoparcial/store2', 'CompraController2@storeEncargado')->name('compras.pedidoparcial.storeEncargado')->middleware('can:compras_encargados_create');
-Route::get('compras/pedidoparcial/responsableEdit/{id}', 'CompraController2@responsableEdit')->name('compras.pedidoparcial.responsableEdit')->middleware('can:compras_encargados_edit');
-Route::post('compras/pedidoparcial/responsableUpdate', 'CompraController2@UpdateResponsable')->name('compras.pedidoparcial.UpdateResponsable')->middleware('can:compras_encargados_edit');
+    Route::get('activosvsiaf/index', 'ActivosVsiafController@index')->name('activos.vsiaf.index'); //->middleware('can:canasta.entrega.index');
+    Route::get('activosvsiaf/search', 'ActivosVsiafController@search')->name('activos.vsiaf.search'); //->middleware('can:canasta.entrega.index');
+
+    /////////////////////////--ENCARGADOS--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    Route::get('compras/pedidoparcial/responsable', 'CompraController2@listadoResponsables')->name('compras.pedidoparcial.listadoResponsables');
+    Route::get('compras/pedidoparcial/responsableCreate', 'CompraController2@crearEncargado')->name('compras.pedidoparcial.crearEncargado')->middleware('can:compras_encargados_create');
+    Route::POST('compras/pedidoparcial/store2', 'CompraController2@storeEncargado')->name('compras.pedidoparcial.storeEncargado')->middleware('can:compras_encargados_create');
+    Route::get('compras/pedidoparcial/responsableEdit/{id}', 'CompraController2@responsableEdit')->name('compras.pedidoparcial.responsableEdit')->middleware('can:compras_encargados_edit');
+    Route::post('compras/pedidoparcial/responsableUpdate', 'CompraController2@UpdateResponsable')->name('compras.pedidoparcial.UpdateResponsable')->middleware('can:compras_encargados_edit');
 
 
-////////////////////////////--ARCHIVOS--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-Route::get('archivos/index', 'ArchivosController@index')->name('archivos.index');
-Route::get('archivos/createArchivo', 'ArchivosController@createArchivo')->name('archivos.create');
-Route::get('archivos/create', 'ArchivosController@create')->name('archivos.create');
-Route::POST('archivos/insertar', 'ArchivosController@insertar')->name('archivos.insertar');
-
-Route::get('archivos/{id}/edit', 'ArchivosController@editar')->name('archivos.edit');
-Route::POST('archivos/{id}/update', 'ArchivosController@update')->name('archivos.update');
-
-
-////////////////////////////--ARCHIVOS2--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-Route::get('archivos2/index', 'ArchivosController2@index')->name('archivos2.index');
-Route::get('archivos2/createArchivo', 'ArchivosController2@createArchivo')->name('archivos2.create');
-Route::get('archivos2/create', 'ArchivosController2@create')->name('archivos2.create');
-Route::POST('archivos2/insertar', 'ArchivosController2@insertar')->name('archivos2.insertar');
-
-Route::get('archivos2/{id}/edit', 'ArchivosController2@editar')->name('archivos2.edit');
-Route::POST('archivos2/{id}/update', 'ArchivosController2@update')->name('archivos2.update');
-
-Route::get('archivos2/index2', 'ArchivosController2@index2')->name('archivos2.index2');
-Route::get('/archivos2/datatable', 'ArchivosController2@index22')->name('archivos2.index22');
-Route::get('/archivos2/tipoarchivo', 'ArchivosController2@tipo')->name('archivos2.tipo');
-Route::POST('/archivos2/tipoarchivo', 'ArchivosController2@guardartipoarea')->name('archivos2.guardartipo');
-Route::get('/archivos2/delete{id}', 'ArchivosController2@delete')->name('archivos2.delete');
-
-
-Route::get('archivos2/createtipo', 'ArchivosController2@createtipoarchivo')->name('archivos2.createtipo');
-Route::POST('archivos2/createtipoarchivo', 'ArchivosController2@guardartipoarchivo')->name('archivos2.storecreatetipo');
-
-
-/////////////////////////--ALMACEN--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-Route::get('almacen/index', 'AlmacenController@index')->name('almacen.index');
-Route::get('almacen/detalle/{id}','AlmacenController@detalle')->name('almacen.detalle');
-//Route::get('compras/pedido/index2', 'CompraController@index2')->name('compras.pedido.index2');
-//oute::get('compras/pedido/create', 'CompraController@create')->name('compras.pedido.create');
-//Route::post('compras/pedido/store', 'CompraController@store')->name('compras.pedido.store');
-Route::get('almacen/temporal/{id}','AlmacenController@temporal')->name('almacen.temporal');
-//Route::get('compras/pedido/editar/{id}', 'CompraController@editar')->name('compras.pedido.editar');
-//Route::post('compras/pedido/update', 'CompraController@update')->name('compras.pedido.update');
-
-/////////////////////////--CORRESPONDENCIA--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-Route::get('correspondencia/index', 'RecepcionController@index')->name('recepcion.index');
-Route::get('correspondencia/createRecepcion', 'RecepcionController@create')->name('recepcion.create');
-Route::get('correspondencia/indexUnidad', 'RecepcionController@indexUnidad')->name('recepcion.unidadIndex');
-Route::get('correspondencia/indexRemitente', 'RecepcionController@indexRemitente')->name('recepcion.remitenteIndex');
-Route::get('correspondencia/createUnidad', 'RecepcionController@createLugar')->name('crear.lugar');
-Route::post('correspondencia/storeLugar', 'RecepcionController@storeLugar')->name('guardar.lugar');
-Route::get('correspondencia/createRemitente', 'RecepcionController@createRemitente')->name('crear.remitente');
-Route::post('correspondencia/storeRemitente', 'RecepcionController@storeRemitente')->name('guardar.remitente');
-Route::get('correspondencia/createRecepcion', 'RecepcionController@createRecepcion')->name('crear.recepcion');
-Route::post('correspondencia/storeRecepcion', 'RecepcionController@storeRecepcion')->name('guardar.recepcion');
-Route::get('correspondencia/{id}/edit', 'RecepcionController@editarCodigo')->name('correspondencia.edit');
-Route::POST('correspondencia/{id}/updateCodigo', 'RecepcionController@updateCodigo')->name('correspondencia.update');
-
-////////////////////////////--AGENDA--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-Route::get('agenda/index', 'AgendaController@index')->name('agenda.index');
-Route::get('archivos2/createArchivo', 'ArchivosController@createArchivo')->name('agenda.create');
-Route::get('agenda/create', 'AgendaController@create')->name('agenda.create');
-Route::POST('agenda/insertar', 'AgendaController@insertar')->name('agenda.insertar');
-
-Route::get('agenda/{id}/edit', 'AgendaController@editar')->name('agenda.edit');
-Route::POST('agenda/{id}/update', 'AgendaController@update')->name('agenda.update');
-
-Route::get('agenda/{id}/edit2', 'AgendaController@editar2')->name('agenda.edit2');
-Route::POST('agenda/{id}/update2', 'AgendaController@update2')->name('agenda.update2');
-
-Route::get('agenda/indexayer', 'AgendaController@indexayer')->name('agenda.indexayer');
-Route::get('agenda/indexhoy', 'AgendaController@indexhoy')->name('agenda.indexhoy');
-Route::get('agenda/indexmaniana', 'AgendaController@indexmaniana')->name('agenda.indexmaniana');
-Route::get('agenda/delete/{id}', 'AgendaController@delete')->name('agenda.delete');
-Route::get('agenda/indextotal', 'AgendaController@indextotal')->name('agenda.indextotal');
+    ////////////////////////////--ARCHIVOS--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    Route::get('archivos/index', 'ArchivosController@index')->name('archivos.index');
+    Route::get('archivos/createArchivo', 'ArchivosController@createArchivo')->name('archivos.create');
+    Route::get('archivos/create', 'ArchivosController@create')->name('archivos.create');
+    Route::POST('archivos/insertar', 'ArchivosController@insertar')->name('archivos.insertar');
+
+    Route::get('archivos/{id}/edit', 'ArchivosController@editar')->name('archivos.edit');
+    Route::POST('archivos/{id}/update', 'ArchivosController@update')->name('archivos.update');
+
+
+    ////////////////////////////--ARCHIVOS2--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    Route::get('archivos2/index', 'ArchivosController2@index')->name('archivos2.index');
+    Route::get('archivos2/createArchivo', 'ArchivosController2@createArchivo')->name('archivos2.create');
+    Route::get('archivos2/create', 'ArchivosController2@create')->name('archivos2.create');
+    Route::POST('archivos2/insertar', 'ArchivosController2@insertar')->name('archivos2.insertar');
+
+    Route::get('archivos2/{id}/edit', 'ArchivosController2@editar')->name('archivos2.edit');
+    Route::POST('archivos2/{id}/update', 'ArchivosController2@update')->name('archivos2.update');
+
+    Route::get('archivos2/index2', 'ArchivosController2@index2')->name('archivos2.index2');
+    Route::get('/archivos2/datatable', 'ArchivosController2@index22')->name('archivos2.index22');
+    Route::get('/archivos2/tipoarchivo', 'ArchivosController2@tipo')->name('archivos2.tipo');
+    Route::POST('/archivos2/tipoarchivo', 'ArchivosController2@guardartipoarea')->name('archivos2.guardartipo');
+    Route::get('/archivos2/delete{id}', 'ArchivosController2@delete')->name('archivos2.delete');
+
+
+    Route::get('archivos2/createtipo', 'ArchivosController2@createtipoarchivo')->name('archivos2.createtipo');
+    Route::POST('archivos2/createtipoarchivo', 'ArchivosController2@guardartipoarchivo')->name('archivos2.storecreatetipo');
+
+
+    /////////////////////////--ALMACEN--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    Route::get('almacen/index', 'AlmacenController@index')->name('almacen.index');
+    Route::get('almacen/detalle/{id}', 'AlmacenController@detalle')->name('almacen.detalle');
+    //Route::get('compras/pedido/index2', 'CompraController@index2')->name('compras.pedido.index2');
+    //oute::get('compras/pedido/create', 'CompraController@create')->name('compras.pedido.create');
+    //Route::post('compras/pedido/store', 'CompraController@store')->name('compras.pedido.store');
+    Route::get('almacen/temporal/{id}', 'AlmacenController@temporal')->name('almacen.temporal');
+    //Route::get('compras/pedido/editar/{id}', 'CompraController@editar')->name('compras.pedido.editar');
+    //Route::post('compras/pedido/update', 'CompraController@update')->name('compras.pedido.update');
+
+    /////////////////////////--CORRESPONDENCIA--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    Route::get('correspondencia/index', 'RecepcionController@index')->name('recepcion.index');
+    Route::get('correspondencia/createRecepcion', 'RecepcionController@create')->name('recepcion.create');
+    Route::get('correspondencia/indexUnidad', 'RecepcionController@indexUnidad')->name('recepcion.unidadIndex');
+    Route::get('correspondencia/indexRemitente', 'RecepcionController@indexRemitente')->name('recepcion.remitenteIndex');
+    Route::get('correspondencia/createUnidad', 'RecepcionController@createLugar')->name('crear.lugar');
+    Route::post('correspondencia/storeLugar', 'RecepcionController@storeLugar')->name('guardar.lugar');
+    Route::get('correspondencia/createRemitente', 'RecepcionController@createRemitente')->name('crear.remitente');
+    Route::post('correspondencia/storeRemitente', 'RecepcionController@storeRemitente')->name('guardar.remitente');
+    Route::get('correspondencia/createRecepcion', 'RecepcionController@createRecepcion')->name('crear.recepcion');
+    Route::post('correspondencia/storeRecepcion', 'RecepcionController@storeRecepcion')->name('guardar.recepcion');
+    Route::get('correspondencia/{id}/edit', 'RecepcionController@editarCodigo')->name('correspondencia.edit');
+    Route::POST('correspondencia/{id}/updateCodigo', 'RecepcionController@updateCodigo')->name('correspondencia.update');
+
+    ////////////////////////////--AGENDA--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    Route::get('agenda/index', 'AgendaController@index')->name('agenda.index');
+    Route::get('archivos2/createArchivo', 'ArchivosController@createArchivo')->name('agenda.create');
+    Route::get('agenda/create', 'AgendaController@create')->name('agenda.create');
+    Route::POST('agenda/insertar', 'AgendaController@insertar')->name('agenda.insertar');
+
+    Route::get('agenda/{id}/edit', 'AgendaController@editar')->name('agenda.edit');
+    Route::POST('agenda/{id}/update', 'AgendaController@update')->name('agenda.update');
+
+    Route::get('agenda/{id}/edit2', 'AgendaController@editar2')->name('agenda.edit2');
+    Route::POST('agenda/{id}/update2', 'AgendaController@update2')->name('agenda.update2');
+
+    Route::get('agenda/indexayer', 'AgendaController@indexayer')->name('agenda.indexayer');
+    Route::get('agenda/indexhoy', 'AgendaController@indexhoy')->name('agenda.indexhoy');
+    Route::get('agenda/indexmaniana', 'AgendaController@indexmaniana')->name('agenda.indexmaniana');
+    Route::get('agenda/delete/{id}', 'AgendaController@delete')->name('agenda.delete');
+    Route::get('agenda/indextotal', 'AgendaController@indextotal')->name('agenda.indextotal');
 
-////evento////
-Route::get('Calendar/event','ControllerCalendar@index');
-Route::get('Calendar/event/{mes}','ControllerCalendar@index_month');
+    ////evento////
+    Route::get('Calendar/event', 'ControllerCalendar@index');
+    Route::get('Calendar/event/{mes}', 'ControllerCalendar@index_month');
 
-// formulario
-Route::get('Evento/form/{mes}','ControllerEvent@form');
-Route::post('Evento/create','ControllerEvent@create');
-// Detalles de evento
-Route::get('Evento/details/{id},{id2},{id3}','ControllerEvent@details');
-Route::get('Evento/details2/{id}','ControllerEvent@details2');
-// Calendario
-Route::get('Evento/index','ControllerEvent@index');
-Route::get('Evento/index/{month}','ControllerEvent@index_month');
+    // formulario
+    Route::get('Evento/form/{mes}', 'ControllerEvent@form');
+    Route::post('Evento/create', 'ControllerEvent@create');
+    // Detalles de evento
+    Route::get('Evento/details/{id},{id2},{id3}', 'ControllerEvent@details');
+    Route::get('Evento/details2/{id}', 'ControllerEvent@details2');
+    // Calendario
+    Route::get('Evento/index', 'ControllerEvent@index');
+    Route::get('Evento/index/{month}', 'ControllerEvent@index_month');
 
-// editar
-Route::get('Evento/actualizar/{id}','ControllerEvent@editar');
-Route::post('Evento/actualizar2/{id}','ControllerEvent@actualizar');
+    // editar
+    Route::get('Evento/actualizar/{id}', 'ControllerEvent@editar');
+    Route::post('Evento/actualizar2/{id}', 'ControllerEvent@actualizar');
 
-/////////////////////////--CORRESPONDENCIA 2--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////--CORRESPONDENCIA 2--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('correspondencia2/index', 'Recepcion2Controller@index')->name('recepcion2.index');
-Route::get('correspondencia2/{id}/edit', 'Recepcion2Controller@editarCodigo')->name('correspondencia2.edit');
-Route::POST('correspondencia2/{id}/updateCodigo', 'Recepcion2Controller@updateCodigo')->name('correspondencia2.update');
-Route::get('correspondencia2/createRecepcion', 'Recepcion2Controller@createRecepcion')->name('crear2.recepcion');
-Route::post('correspondencia2/storeRecepcion', 'Recepcion2Controller@storeRecepcion')->name('guardar2.recepcion');
-Route::get('correspondencia2/indexUnidad', 'Recepcion2Controller@indexUnidad')->name('recepcion2.unidadIndex');
-Route::get('correspondencia2/createUnidad', 'Recepcion2Controller@createLugar')->name('crear2.lugar');
-Route::post('correspondencia2/storeLugar', 'Recepcion2Controller@storeLugar')->name('guardar2.lugar');
-Route::get('correspondencia2/indexRemitente', 'Recepcion2Controller@indexRemitente')->name('recepcion2.remitenteIndex');
-Route::get('correspondencia2/createRemitente', 'Recepcion2Controller@createRemitente')->name('crear2.remitente');
-Route::post('correspondencia2/storeRemitente', 'Recepcion2Controller@storeRemitente')->name('guardar2.remitente');
-Route::get('correspondencia2/createTipo', 'Recepcion2Controller@createTipo')->name('crear2.tipo');
-Route::post('correspondencia2/storeTipo', 'Recepcion2Controller@storeTipo')->name('guardar2.tipo');
-//////////////////
-Route::get('correspondencia2/{id}/gestionarCorrespondencia', 'Recepcion2Controller@gestionarCorrespondencia')->name('correspondencia2.gestionar');
-Route::get('correspondencia2/{id}/cargarpdf', 'Recepcion2Controller@cargarpdf')->name('correspondencia2.cargarpdf');
-Route::post('correspondencia2/storepdf', 'Recepcion2Controller@storepdf')->name('correspondencia2.storepdf');
-Route::get('correspondencia2/{id}/derivar', 'Recepcion2Controller@derivar')->name('correspondencia2.derivar');
-Route::get('correspondencia2/derivar2', 'Recepcion2Controller@guardarderivacion')->name('correspondencia2.guardarderivacion');
-Route::get('correspondencia2/delete{id}', 'Recepcion2Controller@delete')->name('correspondencia2.delete');
-Route::get('correspondencia2/urlfile/{id}', 'Recepcion2Controller@urlfile')->name('correspondencia2.urlfile');
-Route::get('correspondencia2/{id}/actualizarpdf', 'Recepcion2Controller@actualizarpdf')->name('correspondencia2.actualizarpdf');
-Route::post('correspondencia2/updatepdf', 'Recepcion2Controller@updatepdf')->name('correspondencia2.updatepdf');
-Route::get('correspondencia2/notificacion', 'Recepcion2Controller@notificacion')->name('correspondencia2.notificacion');
-///////////
-Route::get('derivacion/index', 'Recepcion2Controller@indexderivacion')->name('derivacion.index');
-Route::get('derivacion/{id}/gestionarCorrespondencia', 'Recepcion2Controller@gestionarCorrespondencia2')->name('derivacion.gestionar');
+    Route::get('correspondencia2/index', 'Recepcion2Controller@index')->name('recepcion2.index');
+    Route::get('correspondencia2/{id}/edit', 'Recepcion2Controller@editarCodigo')->name('correspondencia2.edit');
+    Route::POST('correspondencia2/{id}/updateCodigo', 'Recepcion2Controller@updateCodigo')->name('correspondencia2.update');
+    Route::get('correspondencia2/createRecepcion', 'Recepcion2Controller@createRecepcion')->name('crear2.recepcion');
+    Route::post('correspondencia2/storeRecepcion', 'Recepcion2Controller@storeRecepcion')->name('guardar2.recepcion');
+    Route::get('correspondencia2/indexUnidad', 'Recepcion2Controller@indexUnidad')->name('recepcion2.unidadIndex');
+    Route::get('correspondencia2/createUnidad', 'Recepcion2Controller@createLugar')->name('crear2.lugar');
+    Route::post('correspondencia2/storeLugar', 'Recepcion2Controller@storeLugar')->name('guardar2.lugar');
+    Route::get('correspondencia2/indexRemitente', 'Recepcion2Controller@indexRemitente')->name('recepcion2.remitenteIndex');
+    Route::get('correspondencia2/createRemitente', 'Recepcion2Controller@createRemitente')->name('crear2.remitente');
+    Route::post('correspondencia2/storeRemitente', 'Recepcion2Controller@storeRemitente')->name('guardar2.remitente');
+    Route::get('correspondencia2/createTipo', 'Recepcion2Controller@createTipo')->name('crear2.tipo');
+    Route::post('correspondencia2/storeTipo', 'Recepcion2Controller@storeTipo')->name('guardar2.tipo');
+    //////////////////
+    Route::get('correspondencia2/{id}/gestionarCorrespondencia', 'Recepcion2Controller@gestionarCorrespondencia')->name('correspondencia2.gestionar');
+    Route::get('correspondencia2/{id}/cargarpdf', 'Recepcion2Controller@cargarpdf')->name('correspondencia2.cargarpdf');
+    Route::post('correspondencia2/storepdf', 'Recepcion2Controller@storepdf')->name('correspondencia2.storepdf');
+    Route::get('correspondencia2/{id}/derivar', 'Recepcion2Controller@derivar')->name('correspondencia2.derivar');
+    Route::get('correspondencia2/derivar2', 'Recepcion2Controller@guardarderivacion')->name('correspondencia2.guardarderivacion');
+    Route::get('correspondencia2/delete{id}', 'Recepcion2Controller@delete')->name('correspondencia2.delete');
+    Route::get('correspondencia2/urlfile/{id}', 'Recepcion2Controller@urlfile')->name('correspondencia2.urlfile');
+    Route::get('correspondencia2/{id}/actualizarpdf', 'Recepcion2Controller@actualizarpdf')->name('correspondencia2.actualizarpdf');
+    Route::post('correspondencia2/updatepdf', 'Recepcion2Controller@updatepdf')->name('correspondencia2.updatepdf');
+    Route::get('correspondencia2/notificacion', 'Recepcion2Controller@notificacion')->name('correspondencia2.notificacion');
+    ///////////
+    Route::get('derivacion/index', 'Recepcion2Controller@indexderivacion')->name('derivacion.index');
+    Route::get('derivacion/{id}/gestionarCorrespondencia', 'Recepcion2Controller@gestionarCorrespondencia2')->name('derivacion.gestionar');
 
 
 
-////evento2////
+    ////evento2////
 
-// formulario
-Route::get('Evento2/form/{mes}','ControllerEvent2@form');
-Route::post('Evento2/create','ControllerEvent2@create');
-// Detalles de evento
-Route::get('Evento2/details/{id},{id2},{id3}','ControllerEvent2@details');
-Route::get('Evento2/details2/{id}','ControllerEvent2@details2');
-// Calendario
-Route::get('Evento2/index','ControllerEvent2@index');
-Route::get('Evento2/index/{month}','ControllerEvent2@index_month');
+    // formulario
+    Route::get('Evento2/form/{mes}', 'ControllerEvent2@form');
+    Route::post('Evento2/create', 'ControllerEvent2@create');
+    // Detalles de evento
+    Route::get('Evento2/details/{id},{id2},{id3}', 'ControllerEvent2@details');
+    Route::get('Evento2/details2/{id}', 'ControllerEvent2@details2');
+    // Calendario
+    Route::get('Evento2/index', 'ControllerEvent2@index');
+    Route::get('Evento2/index/{month}', 'ControllerEvent2@index_month');
 
-// editar
-Route::get('Evento2/actualizar/{id}','ControllerEvent2@editar');
-Route::post('Evento2/actualizar2/{id}','ControllerEvent2@actualizar');
+    // editar
+    Route::get('Evento2/actualizar/{id}', 'ControllerEvent2@editar');
+    Route::post('Evento2/actualizar2/{id}', 'ControllerEvent2@actualizar');
 
-Route::get('Evento2/{id}/cargarpdf', 'ControllerEvent2@cargarpdf')->name('evento2.cargarpdf');
-Route::post('Evento2/storepdf', 'ControllerEvent2@storepdf')->name('evento2.storepdf');
-Route::get('Evento2/{id}/actualizarpdf', 'ControllerEvent2@actualizarpdf')->name('evento2.actualizarpdf');
-Route::POST('Evento2/updatepdf', 'ControllerEvent2@updatepdf')->name('evento2.updatepdf');
-Route::get('Evento2/urlfile/{id}', 'ControllerEvent2@urlfile')->name('evento2.urlfile');
+    Route::get('Evento2/{id}/cargarpdf', 'ControllerEvent2@cargarpdf')->name('evento2.cargarpdf');
+    Route::post('Evento2/storepdf', 'ControllerEvent2@storepdf')->name('evento2.storepdf');
+    Route::get('Evento2/{id}/actualizarpdf', 'ControllerEvent2@actualizarpdf')->name('evento2.actualizarpdf');
+    Route::POST('Evento2/updatepdf', 'ControllerEvent2@updatepdf')->name('evento2.updatepdf');
+    Route::get('Evento2/urlfile/{id}', 'ControllerEvent2@urlfile')->name('evento2.urlfile');
 
 
 
 
-
-/////////////////////////--CANASTA--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('canasta/index', 'CanastaBeneficiariosController@index')->name('canasta.index');
-Route::get('canasta/search', 'CanastaBeneficiariosController@search')->name('canasta.search');
-Route::get('almacen/detalle/{id}','AlmacenController@detalle')->name('almacen.detalle');
-
-
-//Route::get('compras/pedido/index2', 'CompraController@index2')->name('compras.pedido.index2');
-//oute::get('compras/pedido/create', 'CompraController@create')->name('compras.pedido.create');
-//Route::post('compras/pedido/store', 'CompraController@store')->name('compras.pedido.store');
-//Route::get('almacen/temporal/{id}','AlmacenController@temporal')->name('almacen.temporal');
-//Route::get('compras/pedido/editar/{id}', 'CompraController@editar')->name('compras.pedido.editar');
-//Route::post('compras/pedido/update', 'CompraController@update')->name('compras.pedido.update');
-
-
-///////////////////REGISTRO DE ASISTENCIAS/////////////////
-
-Route::get('notificacion/index', 'NotifcacionController@index')->name('notificacion.index')->middleware('can:horario_access');
-
-
-
-Route::put('/horarios/{id}/updateEstado', 'HorarioController@updateEstado')->name('horarios.updateEstado')->middleware('can:horario_access');
-
-Route::get('horarios/cambio/{empleado}', 'HorarioController@cambio')->name('horarios.cambio')->middleware('can:horario_access');
-
-Route::put('/horarios/{horario}/updatehora', 'HorarioController@updatehora')->name('horarios.updatehora')->middleware('can:horario_access');
-
-
-Route::get('horarios/index', 'HorarioController@index')->name('horarios.index')->middleware('can:horario_access');
-Route::get('horarios/create', 'HorarioController@create')->name('horarios.create')->middleware('can:horario_access');
-Route::post('horarios/store', 'HorarioController@store')->name('horarios.store')->middleware('can:horario_access');
-Route::get('horarios/show/{horario}', 'HorarioController@show')->name('horarios.show')->middleware('can:horario_access');
-Route::get('horarios/destroy/{horario}', 'HorarioController@destroy')->name('horarios.destroy')->middleware('can:horario_access');
-Route::get('horarios/{horario}/edit', 'HorarioController@edit')->name('horarios.edit')->middleware('can:horario_access');
-Route::put('horarios/update/{horario}', 'HorarioController@update')->name('horarios.update')->middleware('can:horario_access');
-Route::put('horarios/guardar/{empleado}', 'HorarioController@guardar')->name('horarios.guardar')->middleware('can:horario_access');
-
-
-Route::get('empleadoasistencias/index', 'EmpleadoAsistenciasController@index')->name('empleadoasistencias.index')->middleware('can:asistencias_access');
-Route::get('empleadoasistencias/show/{id}', 'EmpleadoAsistenciasController@show')->name('empleadoasistencias.show')->middleware('can:asistencias_access');
-
-
-Route::get('descuentos/index', 'DescuentosController@index')->name('descuentos.index')->middleware('can:horario_access');
-Route::get('descuentos/create', 'DescuentosController@create')->name('descuentos.create')->middleware('can:horario_access');
-Route::post('descuentos/store', 'DescuentosController@store')->name('descuentos.store')->middleware('can:horario_access');
-Route::get('descuentos/show/{id}', 'DescuentosController@show')->name('descuentos.show')->middleware('can:horario_access');
-Route::put('descuentos/update/{descuento}', 'DescuentosController@update')->name('descuentos.update')->middleware('can:horario_access');
-Route::get('descuentos/{descuento}/edit', 'DescuentosController@edit')->name('descuentos.edit')->middleware('can:horario_access');
-
-
-Route::get('registroasistencia', 'RegistroAsistenciaController@index')->name('registroasistencia.index')->middleware('can:asistencias_access');
-Route::get('registroasistencia/create', 'RegistroAsistenciaController@create')->name('registroasistencia.create')->middleware('can:asistencias_access');
-Route::post('registroasistencia/store', 'RegistroAsistenciaController@store')->name('registroasistencia.store')->middleware('can:asistencias_access');
-
-
-/////////////
-Route::get('retrasosempleado', 'RetrasoController@index')->name('retrasos.index')->middleware('can:asistencias_access');
-Route::get('ausencias', 'AusenciasController@index')->name('ausencias.index')->middleware('can:asistencias_access');
- 
-Route::get('regularizar-ausencia/{id}', 'AusenciasController@regularizar')->name('regularizar.ausencia');
-Route::put('regularizar-asistencia/{id}', 'AusenciasController@update')->name('regularizar_asistencia.update');
-Route::get('historial-cambios-asistencia', 'HistorialAsistenciasController@index')->name('historial_asistencia.index');
-
-
-Route::get('reportes', 'ReporteController@index')->name('reportes.index')->middleware('can:reporte_access');
-Route::get('reportes/create', 'ReporteController@create')->name('reportes.create')->middleware('can:reporte_access');
-Route::post('reportes/store', 'ReporteController@store')->name('reportes.store')->middleware('can:reporte_access');
-Route::get('reportes/show/{reporte}', 'ReporteController@show')->name('reportes.show')->middleware('can:reporte_access');
-Route::get('reportes/getReporte', 'ReporteController@getReporte')->name('reportes.getReporte')->middleware('can:reporte_access');
-Route::get('reportes/personalgetReporte', 'ReporteController@personalgetReporte')->name('personalreportes.getReporte')->middleware('can:reporte_access');
-Route::get('reportes/areaGetReporte', 'ReporteController@areaGetReporte')->name('areaGetReportes.getReporte')->middleware('can:reporte_access');
-Route::get('reportes/allGetReporte', 'ReporteController@allGetReporte')->name('allGetReportes.getReporte')->middleware('can:reporte_access');
-
-
-Route::get('reportes/detalle/{id}/{fecha_i}/{fecha_f}', 'ReporteController@detalle')->name('reportespersonales.detalle');
-Route::get('reportes/pdf', 'ReporteController@generarPdf')->name('generarPdf')->middleware('can:reporte_access');
-Route::get('reportes/previsualizar-pdf', 'ReporteController@previsualizarPdf')->name('previsualizarPdf');
-
-Route::get('horarios/fechas', 'HorarioController@fechas') ->name('horarios.fechas');
-Route::get('asistencia/{id}', 'AsistenciaController@edit')->name('asistencia.edit')->middleware('can:asistencias_access');
-Route::post('asistencia/store', 'AsistenciaController@store')->name('asistencia.store')->middleware('can:asistencias_access');
-Route::get('asistencia/crear/{fecha}', 'AsistenciaController@crear')->name('asistencia.crear')->middleware('can:asistencias_access');
-Route::put('asistencia/update/{asistencia}', 'AsistenciaController@update')->name('asistencia.update')->middleware('can:asistencias_access');
-
-
-Route::get('permisos/id', 'PermisosPersonalesController@getID')->name('permisospersonales.getID')->middleware('can:reporte_access');
-Route::get('permisos', 'PermisosPersonalesController@index')->name('permisospersonales.index')->middleware('can:reporte_access');
- 
-Route::get('permisos/nuevo/{id}/{permiso_id}', 'PermisosPersonalesController@nuevo')->name('permisospersonales.nuevo')->middleware('can:reporte_access');
-Route::get('permisos/get', 'PermisosPersonalesController@getEmpleados')->name('permisosempleados.get')->middleware('can:reporte_access');
-Route::get('permisos/create/', 'PermisosPersonalesController@create')->name('permisospersonales.create')->middleware('can:reporte_access');
-Route::post('permisos/store/', 'PermisosPersonalesController@store')->name('permisospersonales.store')->middleware('can:reporte_access');
-Route::get('permisos/detalle/{id}/{permiso_id}', 'PermisosPersonalesController@detalle')->name('permisospersonales.detalle');
-Route::get('permisos/show', 'PermisosPersonalesController@show')->name('permisospersonales.show')->middleware('can:reporte_access');
-Route::get('editar-permiso/{id}', 'PermisosPersonalesController@editarPermiso')->name('editar.permiso');
-Route::put('actualizar-permiso/{id}', 'PermisosPersonalesController@actualizarPermiso')->name('update.permiso');
-Route::get('listar-permisos/{id}', 'PermisosPersonalesController@listarPermiso')->name('listar.permiso');
- 
-Route::get('licencias', 'LicenciasPersonalesController@index')->name('licenciaspersonales.index')->middleware('can:reporte_access');
-
-Route::get('licencias/id', 'LicenciasPersonalesController@getID')->name('licenciaspersonales.getID')->middleware('can:reporte_access'); 
-Route::get('licencias/nuevo/{id}/{licencia_id}', 'LicenciasPersonalesController@nuevo')->name('licenciaspersonales.nuevo')->middleware('can:reporte_access');
-Route::get('licencias/get', 'LicenciasPersonalesController@getEmpleados')->name('licenciasempleados.get')->middleware('can:reporte_access');
-Route::get('licencias/create/', 'LicenciasPersonalesController@create')->name('licenciaspersonales.create')->middleware('can:reporte_access');
-Route::post('licencias/store/', 'LicenciasPersonalesController@store')->name('licenciaspersonales.store')->middleware('can:reporte_access');
-Route::get('licencias/detalle/{id}/{licencia_id}', 'LicenciasPersonalesController@detalle')->name('licenciaspersonales.detalle');
-Route::get('licencias/show', 'LicenciasPersonalesController@show')->name('licenciaspersonales.show')->middleware('can:reporte_access');
-Route::get('editar-licencia/{id}', 'LicenciasPersonalesController@editarLicencias')->name('editar.licencia');
-Route::put('actualizar-licencia/{id}', 'LicenciasPersonalesController@actualizarLicencias')->name('update.licencia');
-Route::get('listar-licencia/{id}', 'LicenciasPersonalesController@listarLicencias')->name('listar.licencias');
- 
-Route::get('rechumanos/planta/movimientos/list', 'MovimientosPlantaController@index')->name('movimientosplanta.index');
-Route::get('rechumanos/contrato/movimientos/list', 'MovimientosContratoController@index')->name('movimientoscontrato.index');
-
-Route::get('lectordactilar', 'LectorDactilarController@index')->name('lectordactilar.index');
+    /////////////////////////--CANASTA--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    Route::get('canasta/index', 'CanastaBeneficiariosController@index')->name('canasta.index');
+    Route::get('canasta/search', 'CanastaBeneficiariosController@search')->name('canasta.search');
+    Route::get('almacen/detalle/{id}', 'AlmacenController@detalle')->name('almacen.detalle');
 
+
+    //Route::get('compras/pedido/index2', 'CompraController@index2')->name('compras.pedido.index2');
+    //oute::get('compras/pedido/create', 'CompraController@create')->name('compras.pedido.create');
+    //Route::post('compras/pedido/store', 'CompraController@store')->name('compras.pedido.store');
+    //Route::get('almacen/temporal/{id}','AlmacenController@temporal')->name('almacen.temporal');
+    //Route::get('compras/pedido/editar/{id}', 'CompraController@editar')->name('compras.pedido.editar');
+    //Route::post('compras/pedido/update', 'CompraController@update')->name('compras.pedido.update');
+
+
+    ///////////////////REGISTRO DE ASISTENCIAS/////////////////
+
+    Route::get('notificacion/index', 'NotifcacionController@index')->name('notificacion.index')->middleware('can:horario_access');
+
+
+
+    Route::put('/horarios/{id}/updateEstado', 'HorarioController@updateEstado')->name('horarios.updateEstado')->middleware('can:horario_access');
+
+    Route::get('horarios/cambio/{empleado}', 'HorarioController@cambio')->name('horarios.cambio')->middleware('can:horario_access');
+
+    Route::put('/horarios/{horario}/updatehora', 'HorarioController@updatehora')->name('horarios.updatehora')->middleware('can:horario_access');
+
+
+    Route::get('horarios/index', 'HorarioController@index')->name('horarios.index')->middleware('can:horario_access');
+    Route::get('horarios/create', 'HorarioController@create')->name('horarios.create')->middleware('can:horario_access');
+    Route::post('horarios/store', 'HorarioController@store')->name('horarios.store')->middleware('can:horario_access');
+    Route::get('horarios/show/{horario}', 'HorarioController@show')->name('horarios.show')->middleware('can:horario_access');
+    Route::get('horarios/destroy/{horario}', 'HorarioController@destroy')->name('horarios.destroy')->middleware('can:horario_access');
+    Route::get('horarios/{horario}/edit', 'HorarioController@edit')->name('horarios.edit')->middleware('can:horario_access');
+    Route::put('horarios/update/{horario}', 'HorarioController@update')->name('horarios.update')->middleware('can:horario_access');
+    Route::put('horarios/guardar/{empleado}', 'HorarioController@guardar')->name('horarios.guardar')->middleware('can:horario_access');
+
+
+    Route::get('empleadoasistencias/', 'EmpleadoAsistenciasController@index')->name('empleadoasistencias.index')->middleware('can:asistencias_access');
+    Route::get('empleadoasistencias/show/{id}', 'EmpleadoAsistenciasController@show')->name('empleadoasistencias.show')->middleware('can:asistencias_access');
+
+    Route::get('empleadoasistencias/lista', 'EmpleadoAsistenciasController@planta')->name('empleadoasistencias.planta')->middleware('can:asistencias_access');
+    Route::get('empleadoasistencias/lista2', 'EmpleadoAsistenciasController@contrato')->name('empleadoasistencias.contrato')->middleware('can:asistencias_access');
+
+
+    Route::get('descuentos/index', 'DescuentosController@index')->name('descuentos.index')->middleware('can:horario_access');
+    Route::get('descuentos/create', 'DescuentosController@create')->name('descuentos.create')->middleware('can:horario_access');
+    Route::post('descuentos/store', 'DescuentosController@store')->name('descuentos.store')->middleware('can:horario_access');
+    Route::get('descuentos/show/{id}', 'DescuentosController@show')->name('descuentos.show')->middleware('can:horario_access');
+    Route::put('descuentos/update/{descuento}', 'DescuentosController@update')->name('descuentos.update')->middleware('can:horario_access');
+    Route::get('descuentos/{descuento}/edit', 'DescuentosController@edit')->name('descuentos.edit')->middleware('can:horario_access');
+
+
+    Route::get('registroasistencia', 'RegistroAsistenciaController@index')->name('registroasistencia.index')->middleware('can:asistencias_access');
+    Route::get('registroasistencia/create', 'RegistroAsistenciaController@create')->name('registroasistencia.create')->middleware('can:asistencias_access');
+    Route::post('registroasistencia/store', 'RegistroAsistenciaController@store')->name('registroasistencia.store')->middleware('can:asistencias_access');
+
+
+    /////////////
+    Route::get('retrasosempleado', 'RetrasoController@index')->name('retrasos.index')->middleware('can:asistencias_access');
+    Route::get('ausencias', 'AusenciasController@index')->name('ausencias.index')->middleware('can:asistencias_access');
+
+    Route::get('regularizar-ausencia/{id}', 'AusenciasController@regularizar')->name('regularizar.ausencia');
+    Route::put('regularizar-asistencia/{id}', 'AusenciasController@update')->name('regularizar_asistencia.update');
+    Route::get('historial-cambios-asistencia', 'HistorialAsistenciasController@index')->name('historial_asistencia.index');
+
+
+    Route::get('reportes', 'ReporteController@index')->name('reportes.index')->middleware('can:reporte_access');
+    Route::get('reportes/create', 'ReporteController@create')->name('reportes.create')->middleware('can:reporte_access');
+    Route::post('reportes/store', 'ReporteController@store')->name('reportes.store')->middleware('can:reporte_access');
+    Route::get('reportes/show/{reporte}', 'ReporteController@show')->name('reportes.show')->middleware('can:reporte_access');
+    Route::get('reportes/getReporte', 'ReporteController@getReporte')->name('reportes.getReporte')->middleware('can:reporte_access');
+    Route::get('reportes/personalgetReporte', 'ReporteController@personalgetReporte')->name('personalreportes.getReporte')->middleware('can:reporte_access');
+    Route::get('reportes/areaGetReporte', 'ReporteController@areaGetReporte')->name('areaGetReportes.getReporte')->middleware('can:reporte_access');
+    Route::get('reportes/allGetReporte', 'ReporteController@allGetReporte')->name('allGetReportes.getReporte')->middleware('can:reporte_access');
+
+
+    Route::get('reportes/detalle/{id}/{fecha_i}/{fecha_f}', 'ReporteController@detalle')->name('reportespersonales.detalle');
+    Route::get('reportes/personalReporte-pdf', 'ReporteController@previsualizarPdf')->name('previsualizarPdf');
+    Route::get('reportes/areasReporte-pdf', 'ReporteController@areaprevisualizarPdf')->name('areaprevisualizarPdf');
+    Route::get('reportes/generalReporte-pdf', 'ReporteController@generalReportePdf')->name('generalReportePdf');
+
+    Route::get('horarios/fechas', 'HorarioController@fechas')->name('horarios.fechas');
+    Route::get('asistencia/{id}', 'AsistenciaController@edit')->name('asistencia.edit')->middleware('can:asistencias_access');
+    Route::post('asistencia/store', 'AsistenciaController@store')->name('asistencia.store')->middleware('can:asistencias_access');
+    Route::get('asistencia/crear/{fecha}', 'AsistenciaController@crear')->name('asistencia.crear')->middleware('can:asistencias_access');
+    Route::put('asistencia/update/{asistencia}', 'AsistenciaController@update')->name('asistencia.update')->middleware('can:asistencias_access');
+
+
+    Route::get('permisos/id', 'PermisosPersonalesController@getID')->name('permisospersonales.getID')->middleware('can:reporte_access');
+    Route::get('permisos', 'PermisosPersonalesController@index')->name('permisospersonales.index')->middleware('can:reporte_access');
+
+    Route::get('permisos/nuevo/{id}/{permiso_id}', 'PermisosPersonalesController@nuevo')->name('permisospersonales.nuevo')->middleware('can:reporte_access');
+    Route::get('permisos/get', 'PermisosPersonalesController@getEmpleados')->name('permisosempleados.get')->middleware('can:reporte_access');
+    Route::get('permisos/create/', 'PermisosPersonalesController@create')->name('permisospersonales.create')->middleware('can:reporte_access');
+    Route::post('permisos/store/', 'PermisosPersonalesController@store')->name('permisospersonales.store')->middleware('can:reporte_access');
+    Route::get('permisos/detalle/{id}/{permiso_id}', 'PermisosPersonalesController@detalle')->name('permisospersonales.detalle');
+    Route::get('permisos/show', 'PermisosPersonalesController@show')->name('permisospersonales.show')->middleware('can:reporte_access');
+    Route::get('editar-permiso/{id}', 'PermisosPersonalesController@editarPermiso')->name('editar.permiso');
+    Route::put('actualizar-permiso/{id}', 'PermisosPersonalesController@actualizarPermiso')->name('update.permiso');
+    Route::get('listar-permisos/{id}', 'PermisosPersonalesController@listarPermiso')->name('listar.permiso');
+
+    Route::get('licencias', 'LicenciasPersonalesController@index')->name('licenciaspersonales.index')->middleware('can:reporte_access');
+
+    Route::get('licencias/id', 'LicenciasPersonalesController@getID')->name('licenciaspersonales.getID')->middleware('can:reporte_access');
+    Route::get('licencias/nuevo/{id}/{licencia_id}', 'LicenciasPersonalesController@nuevo')->name('licenciaspersonales.nuevo')->middleware('can:reporte_access');
+    Route::get('licencias/get', 'LicenciasPersonalesController@getEmpleados')->name('licenciasempleados.get')->middleware('can:reporte_access');
+    Route::get('licencias/create/', 'LicenciasPersonalesController@create')->name('licenciaspersonales.create')->middleware('can:reporte_access');
+    Route::post('licencias/store/', 'LicenciasPersonalesController@store')->name('licenciaspersonales.store')->middleware('can:reporte_access');
+    Route::get('licencias/detalle/{id}/{licencia_id}', 'LicenciasPersonalesController@detalle')->name('licenciaspersonales.detalle');
+    Route::get('licencias/show', 'LicenciasPersonalesController@show')->name('licenciaspersonales.show')->middleware('can:reporte_access');
+    Route::get('editar-licencia/{id}', 'LicenciasPersonalesController@editarLicencias')->name('editar.licencia');
+    Route::put('actualizar-licencia/{id}', 'LicenciasPersonalesController@actualizarLicencias')->name('update.licencia');
+    Route::get('listar-licencia/{id}', 'LicenciasPersonalesController@listarLicencias')->name('listar.licencias');
+
+    Route::get('rechumanos/planta/movimientos/list', 'MovimientosPlantaController@index')->name('movimientosplanta.index');
+    Route::get('rechumanos/contrato/movimientos/list', 'MovimientosContratoController@index')->name('movimientoscontrato.index');
+
+    Route::get('lectordactilar', 'LectorDactilarController@index')->name('lectordactilar.index');
 });
-
-
-
-

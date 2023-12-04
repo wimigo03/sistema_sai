@@ -42,17 +42,17 @@
         </div>
         @endif
 
-      
+
         <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
         <div class="col-md-12">
             <hr class="hrr">
         </div>
         <ul class="nav nav-tabs" id="myTabs">
             <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="#tab1">Retrasos Personales</a>
+                <a class="nav-link active" data-toggle="tab" href="#tab1">Retrasos por Personal</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#tab2">Retrasos Por Unidad</a>
+                <a class="nav-link" data-toggle="tab" href="#tab2">Retrasos por Unidad</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#tab3">Retrasos en General</a>
@@ -62,14 +62,15 @@
     <div class="tab-content font-verdana">
         <div class="tab-pane fade show active" id="tab1">
             <div class="body-border ">
+
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="empleado">Nombre de Personal</label>
-                            <select name="empleado" id="empleado" aria-label="Seleciona Permiso" class="form-control form-control-sm" required>
+                            <select name="empleado" id="empleado" aria-label="Seleciona Personal" required class="form-control">
                                 <option value="">-</option>
                                 @foreach ($empleados as $index => $value)
-                                <option value="{{ $value->idemp }}" @if(request('empleado')==$value->idemp) selected @endif> {{ $value->nombres }} {{ $value->ap_pat }} {{ $value->ap_mat }}</option>
+                                <option value="{{ $value->idemp }}"> {{ $value->nombres }} {{ $value->ap_pat }} {{ $value->ap_mat }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -99,9 +100,14 @@
                             <div class="">
                                 <button class="btn btn-primary" id="verBtn">Ver</button>
                                 <!-- Botón para generar PDF -->
-                                <button class="btn btn-info" id="imprimirBtn" onclick="imprimir()">Imprimir</button>
 
-                                <!-- Botón para guardar -->
+                                <button class="btn btn-info" id="generarPdfBtn" type="button">
+                                    Imprimir Reporte
+                                </button>
+
+
+
+
                             </div>
                         </div>
                     </div>
@@ -130,7 +136,7 @@
 
                                 <select name="area_id" id="area_id" aria-label="Selecion de Área" required>
                                     <option value=""></option>
-                                    @foreach ($data as $index => $value)
+                                    @foreach ($areas as $index => $value)
                                     <option value="{{ $value->idarea }}"> {{ $value->nombrearea }}</option>
                                     @endforeach
                                 </select>
@@ -161,8 +167,11 @@
                             <div class="">
                                 <button class="btn btn-primary" id="verBtn2">Ver</button>
                                 <!-- Botón para guardar -->
-                                <button class="btn btn-info" id="imprimirBtn" onclick="imprimir()">Imprimir</button>
+                                <button class="btn btn-info" id="generarPdfBtn2" type="button">
+                                    Imprimir Reporte
+                                </button>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -206,8 +215,10 @@
                         <div class="form-group">
 
                             <button class="btn btn-primary" id="verBtn3">Ver</button>
-                            <!-- Botón para guardar -->
-                            <button class="btn btn-info" id="imprimirBtn" onclick="imprimir()">Imprimir</button>
+                            <!-- Botón para Imprimir -->
+                            <button class="btn btn-info" id="generarPdfBtn3" type="button">
+                                Imprimir Reporte
+                            </button>
 
                         </div>
                     </div>
@@ -233,15 +244,6 @@
 
 @section('scripts')
 
-
-<script>
-    function imprimir() {
-        // Aquí puedes agregar lógica para imprimir
-        // Puedes utilizar window.print() o abrir una ventana nueva con el contenido que deseas imprimir
-        // Por ejemplo:
-        window.print();
-    }
-</script>
 <script id="details-template" type="text/x-handlebars-template">
     @verbatim
         <table class="display compact hoverTable" id="registros-{{idemp}}" style="width:100%">
@@ -272,7 +274,6 @@
 
         verificarFechas();
         var template = Handlebars.compile($("#details-template").html());
-
         var dataTable = $('#personal-reportes-table').DataTable({
             processing: false,
             serverSide: false,
@@ -312,6 +313,8 @@
             },
 
         });
+
+
         $('#personal-reportes-table tbody').on('click', 'td.details-control', function() {
             var tr = $(this).closest('tr');
             var row = dataTable.row(tr);
@@ -387,15 +390,18 @@
             var fechaInicio = $('#fecha_inicio').val();
             var fechaFinal = $('#fecha_final').val();
             $('#verBtn').prop('disabled', !fechaInicio || !fechaFinal);
+            $('#generarPdfBtn').prop('disabled', !fechaInicio || !fechaFinal);
         }
 
         $('#fecha_inicio, #fecha_final', ).on('change', function() {
             // Verificar si ambas fechas están seleccionadas
             var fechaInicio = $('#fecha_inicio').val();
             var fechaFinal = $('#fecha_final').val();
+            var empleadoId = $('#empleado').val();
 
             // Habilitar o deshabilitar el botón "Ver" según la presencia de fechas
-            $('#verBtn').prop('disabled', !fechaInicio || !fechaFinal);
+            $('#verBtn').prop('disabled', !fechaInicio || !fechaFinal || !empleadoId);
+            $('#generarPdfBtn').prop('disabled', !fechaInicio || !fechaFinal || !empleadoId);
         });
 
 
@@ -407,6 +413,26 @@
             $('#verBtn').prop('disabled', false);
 
         });
+
+        $('#generarPdfBtn').on('click', function() {
+            // Obtener los datos necesarios para la generación del PDF
+            var empleadoId = $('#empleado').val();
+            var fechaInicio = $('#fecha_inicio').val();
+            var fechaFinal = $('#fecha_final').val();
+
+            // Construir la URL con los parámetros
+            var url = "{{ route('previsualizarPdf') }}?empleadoId=" + empleadoId + "&fechaInicio=" + fechaInicio + "&fechaFinal=" + fechaFinal;
+
+            // Redirigir el navegador a la URL
+            window.location.href = url;
+        });
+
+
+
+
+
+
+
         var area_select = new SlimSelect({
             select: '#area-select2 select',
             //showSearch: false,
@@ -418,8 +444,8 @@
 
         var dataTable2 = $('#area-personal-reportes-table').DataTable({
             processing: false,
-            serverSide: false, 
-            dom: '<"top"Bf>lrtip',// Changed to false if you're not using server-side processing
+            serverSide: false,
+            dom: '<"top"Bf>lrtip', // Changed to false if you're not using server-side processing
             ajax: {
                 url: "{{ route('areaGetReportes.getReporte') }}",
                 type: "GET", // Change the request type to GET
@@ -446,27 +472,43 @@
         });
 
         function verificarFechas2() {
+
+            var area_id = $('#area_id').val();
             var fechaInicio2 = $('#fecha_inicio2').val();
             var fechaFinal2 = $('#fecha_final2').val();
-            $('#verBtn2').prop('disabled', !fechaInicio2 || !fechaFinal2);
+            $('#verBtn2').prop('disabled', !fechaInicio2 || !fechaFinal2 || !area_id);
+            $('#generarPdfBtn2').prop('disabled', !fechaInicio2 || !fechaFinal2 || !area_id);
         }
         $('#fecha_inicio2, #fecha_final2', ).on('change', function() {
             // Verificar si ambas fechas están seleccionadas
+            var area_id = $('#area_id').val();
             var fechaInicio = $('#fecha_inicio2').val();
             var fechaFinal = $('#fecha_final2').val();
 
             // Habilitar o deshabilitar el botón "Ver" según la presencia de fechas
-            $('#verBtn2').prop('disabled', !fechaInicio || !fechaFinal);
+            $('#verBtn2').prop('disabled', !fechaInicio || !fechaFinal || !area_id);
+            $('#generarPdfBtn2').prop('disabled', !fechaInicio || !fechaFinal || !area_id);
+
         });
         $('#verBtn2').on('click', function() {
             // Reload the DataTable with new parameters
             dataTable2.ajax.reload();
-            $('#guardarBtn2').prop('disabled', false);
+            $('#generarPdfBtn2').prop('disabled', false);
             $('#verBtn2').prop('disabled', false);
 
         });
-        $('#guardarBtn2').click(function() {
-            window.print();
+        $('#generarPdfBtn2').click(function() {
+            // Obtener los datos necesarios para la generación del PDF
+            var area_id = $('#area_id').val();
+            var fechaInicio = $('#fecha_inicio2').val();
+            var fechaFinal = $('#fecha_final2').val();
+
+            // Construir la URL con los parámetros
+            var url = "{{ route('areaprevisualizarPdf') }}?area_id=" + area_id + "&fechaInicio=" + fechaInicio + "&fechaFinal=" + fechaFinal;
+
+            // Redirigir el navegador a la URL
+            window.location.href = url;
+
         });
 
         verificarFechas3();
@@ -516,12 +558,21 @@
         $('#verBtn3').on('click', function() {
             // Reload the DataTable with new parameters
             dataTable3.ajax.reload();
-            $('#guardarBtn3').prop('disabled', false);
+            $('#generarPdfBtn3').prop('disabled', false);
             $('#verBtn3').prop('disabled', false);
 
         });
-        $('#guardarBtn3').click(function() {
-            window.print();
+        $('#generarPdfBtn3').on('click', function() {
+            // Obtener los datos necesarios para la generación del PDF
+
+            var fechaInicio = $('#fecha_inicio3').val();
+            var fechaFinal = $('#fecha_final3').val();
+
+            // Construir la URL con los parámetros
+            var url = "{{ route('generalReportePdf') }}?fechaInicio=" + fechaInicio + "&fechaFinal=" + fechaFinal;
+
+            // Redirigir el navegador a la URL
+            window.location.href = url;
         });
 
 
