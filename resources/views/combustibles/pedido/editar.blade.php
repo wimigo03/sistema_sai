@@ -13,7 +13,7 @@
         </span>
     </div>
     <div class="col-md-8 text-right titulo">
-        <b>EDITAR FORMULARIO DE SOLICITUD</b>
+        <b>EDITAR FORMULARIO DE SOLICITUD EDITAR</b>
     </div>
     <div class="col-md-12">
         <hr class="hrr">
@@ -93,7 +93,7 @@
                 <label for="idprograma" class="d-inline font-verdana-bg">
                     <b>Programa</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <select name="idprograma" id="idprograma" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
+                <select  name="idprograma" id="idprograma" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
                     <option value="">-</option>
                     @foreach ($programas as $programa)
 
@@ -101,7 +101,7 @@
                                 <option value="{{$programa->idprogramacomb}}" selected>{{$programa->nombreprograma}}
                                 </option>
                                 @else
-                                <option value="{{$programa->idprogramacomb}}">{{$programa->nombreprograma}}</option>
+                                <option disabled value="{{$programa->idprogramacomb}}">{{$programa->nombreprograma}}</option>
                                 @endif
 
                                 @endforeach

@@ -7,7 +7,7 @@
     </div>
     <div class="col-md-4 text-right titulo">
         
-         @can('unidadconsumo_create') 
+         @can('solunidadconsumo_create') 
 
         <a href="{{route('transportes.pedidoparcial.create')}}" class="tts:left tts-slideIn tts-custom" 
         aria-label="  Solicitud">
@@ -50,6 +50,7 @@
                         <td class="text-justify p-1"><b>COM.INTERNA</b></td>
                         <td class="text-justify p-1"><b>referencia</b></td>
                         <td class="text-justify p-1"><b>AREA</b></td>
+                        <td class="text-justify p-1"><b>ESTADO</b></td>
                          <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td> 
                          
                    
@@ -63,8 +64,15 @@
                             <td class="text-justify p-1">{{$sol->referencia}}</td>
                             <td class="text-justify p-1">{{$sol->nombrearea}}</td>
 
+                            @if($sol->estadosoluconsumo == '1')
+                            <td class="text-justify p-1">
+                            <b style="color: green">Pendiente</b></td>
+                            @elseif($sol->estadosoluconsumo == '2')
+                            <td class="text-justify p-1">
+                            <b style="color: blue">Aprovada</b></td>
+                            @endif
                              <td style="padding: 0;" class="text-center p-1">
-                                 @can('combustibles_access') 
+                                 @can('solunidadconsumo_edit') 
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Solicitud">
                                         <a href="{{route('transportes.pedidoparcial.editar',$sol->idsoluconsumo)}}">
                                             <span class="text-warning">

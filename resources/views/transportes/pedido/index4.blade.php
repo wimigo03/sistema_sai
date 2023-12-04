@@ -7,7 +7,7 @@
     </div>
 
     <div class="col-md-4 text-right">
-        @can('unidadconsumo_create') 
+        @can('solunidadconsumo_aprovada') 
 
              <a href="{{ route('transportes.pedido.index3') }}" class="tts:left tts-slideIn tts-custom" 
            aria-label="ir a solicitudes pendientes">

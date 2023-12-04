@@ -32,8 +32,15 @@
 
       <a href="{{route('combustibles.detalle.aprovar',$compras->idcompracomb)}}" 
         onclick="return confirm('Se va a aprovar la compra..esta seguro ?..')">
-        <button class="btn btn-sm btn-info   font-verdana" type="button" >
-            &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;Aprovar Compra
+        <button class="btn btn-sm  btn-info   font-verdana" type="button" >
+            &nbsp;<i class="fa fa-lg fa-thumbs-up" aria-hidden="true"></i>&nbsp;Aprovar Compra
+        </button>
+    </a>
+
+    <a href="{{route('combustibles.detalle.rechazar',$compras->idcompracomb)}}" 
+        onclick="return confirm('Se va a rechazar la compra..esta seguro ?..')">
+        <button class="btn btn-sm btn-warning btn-info   font-verdana" type="button" >
+            &nbsp;<i class="fa fa-lg fa-thumbs-down" aria-hidden="true"></i>&nbsp;Rechazar Compra
         </button>
     </a>
 

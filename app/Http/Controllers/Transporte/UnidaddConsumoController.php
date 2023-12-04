@@ -106,6 +106,8 @@ $personal = User::find(Auth::user()->id);
 
     public function create(){
 
+
+
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
@@ -152,11 +154,11 @@ $personal = User::find(Auth::user()->id);
             $file = $request->file("documento");
             
             $file_name = $file->getClientOriginalName();
-            $nombre = "pdf_" . time() . "." . $file->guessExtension();
+            $nombre = "img_" . time() . "." . $file->guessExtension();
 
-            $ruta = public_path("/Documentos/" . $personalArea->nombrearea . '/' . $nombre);
+            $ruta = public_path("/Imagenes/" . $personalArea->nombrearea . '/' . $nombre);
 
-            if ($file->guessExtension() == "pdf") {
+            if (in_array($file->guessExtension(), ['jpg', 'jpeg', 'png', 'gif','WEBP'])) {
                 copy($file, $ruta);
             } else {
                 return back()->with(["error" => "File not available!"]);
@@ -232,15 +234,16 @@ $personal = User::find(Auth::user()->id);
 
 
         $consumos = UnidaddConsumoModel::find($request->idunidadconsumo);
+
         if ($request->file("documento") != null) {
             if ($request->hasFile("documento")) {
                 $file = $request->file("documento");
                 $file_name = $file->getClientOriginalName();
-                $nombre = "pdf_" . time() . "." . $file->guessExtension();
+                $nombre = "img_" . time() . "." . $file->guessExtension();
 
-                $ruta = public_path("/Documentos/" . $personalArea->nombrearea . '/' . $nombre);
+                $ruta = public_path("/Imagenes/" . $personalArea->nombrearea . '/' . $nombre);
 
-                if ($file->guessExtension() == "pdf") {
+                if (in_array($file->guessExtension(), ['jpg', 'jpeg', 'png', 'gif','WEBP'])) {
                     copy($file, $ruta);
                 } else {
                     return back()->with(["error" => "File not available!"]);

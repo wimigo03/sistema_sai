@@ -5,7 +5,7 @@
         <b>TIPO MOVIILIDAD</b>
     </div>
     <div class="col-md-4 text-right">
-        @can('tipomovilidad_create')
+        @can('unidadconsumotipo_create')
        
             <a href="{{route('tipo.create')}}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar">
                 <button class="btn btn-sm btn-primary font-verdana" type="button" >

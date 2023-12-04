@@ -8,7 +8,7 @@
 
 
      <div class="col-md-4 text-right">
-         @can('unidadconsumo_create') 
+         @can('solunidadconsumo_aprovada') 
 
               <a href="{{ route('transportes.pedido.index4') }}" class="tts:left tts-slideIn tts-custom" 
             aria-label="ir a solicitudes aprobadas">
@@ -43,6 +43,8 @@
                                         <i class="fa fa-bars" aria-hidden="true"></i></td>
                                         <td class="text-center p-1 font-weight-bold">
                                             <i class="fa fa-bars" aria-hidden="true"></i></td> 
+                                            <td class="text-center p-1 font-weight-bold">
+                                                <i class="fa fa-bars" aria-hidden="true"></i></td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -50,7 +52,7 @@
 
                             <tfoot>
                                 <tr>
-        
+                                    <th></th>
                                     <th></th>
                                     <th></th>
                                     <th></th>
@@ -94,7 +96,10 @@ $('#users-table').DataTable({
 
              {data: 'btn', name: 'btn', orderable: false, searchable: false },
 
-             {data: 'btn4', name: 'btn4', orderable: false, searchable: false }
+             {data: 'btn4', name: 'btn4', orderable: false, searchable: false },
+
+             {data: 'btn5', name: 'btn5', orderable: false, searchable: false }
+
 
         ],
 

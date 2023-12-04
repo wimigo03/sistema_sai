@@ -221,16 +221,16 @@
 
 
                      {{-- COMPRAS combustible --}}
-                     @canany(['combustibles_access'])
+                     @canany(['combustiblescomb_access'])
                      <li class="font-verdana-bg">
-                         <a href="" data-toggle="collapse" data-target="#dashboard_combustibles"
+                         <a href="" data-toggle="collapse" data-target="#dashboard_combustiblescomb"
                              class="active collapsed" aria-expanded="false">
                              <i class="fa fa-shopping-cart" style="color:green"></i>
                              <span class="nav-label mr-3">COMBUSTIBLES</span>
                              <span class="fa fa-arrow-circle-left float-right"></span>
                          </a>
-                         <ul class="sub-menu collapse" id="dashboard_combustibles">
-                              @can('compras_panel_access')
+                         <ul class="sub-menu collapse" id="dashboard_combustiblescomb">
+                              @can('comprascomb_panel_access')
                                  <li>
                                      <a href="{{ route('combustibles.pedidoparcial.index') }}">
                                          &nbsp; &nbsp; &nbsp;
@@ -240,7 +240,7 @@
                              @endcan 
 
 
-                              @can('compras_panel_access')
+                              @can('comprascomb_janeth_access')
                                  <li>
                                      <a href="{{ route('combustibles.pedido.index') }}">
                                          &nbsp; &nbsp; &nbsp;
@@ -249,7 +249,7 @@
                                  </li>
                              @endcan
                          
-                             @can('partidas_access')
+                             @can('comprascomb_janeth_access')
                                  <li>
                                      <a href="{{ route('partidacomb.index') }}">
                                          &nbsp; &nbsp; &nbsp;
@@ -257,7 +257,7 @@
                                      </a>
                                  </li>
                              @endcan 
-                             @can('productocomb_access')
+                             @can('comprascomb_janeth_access')
                                  <li>
                                      <a href="{{ route('producto.index') }}">
                                          &nbsp; &nbsp; &nbsp;
@@ -266,7 +266,7 @@
                                  </li>
                              @endcan
 
-                              @can('proveedorcomb_access')
+                              @can('comprascomb_janeth_access')
                                  <li>
                                      <a href="{{ route('proveedor.index') }}">
                                          &nbsp; &nbsp; &nbsp;
@@ -276,7 +276,7 @@
                              @endcan
 
 
-                             @can('programacomb_access')
+                             @can('comprascomb_janeth_access')
                                  <li>
                                      <a href="{{ route('programa.index') }}">
                                          &nbsp; &nbsp; &nbsp;
@@ -287,7 +287,7 @@
 
 
 
-                             @can('catprog_access')
+                             @can('comprascomb_janeth_access')
                                  <li>
                                      <a href="{{ route('catprogcomb.index') }}">
                                          &nbsp; &nbsp; &nbsp;
@@ -295,13 +295,22 @@
                                      </a>
                                  </li>
                              @endcan 
+
+                             @can('comprasalmacen_aprovadas_access')
+                             <li>
+                                 <a href="{{ route('combustibles.pedido.index2') }}">
+                                     &nbsp; &nbsp; &nbsp;
+                                     <span class="nav-label mr-4">Compras Aprovadas</span>
+                                 </a>
+                             </li>
+                         @endcan 
                          </ul>
                      </li>
                  @endcanany
 
                     {{-- ALMACEN --}}
 
-                    @canany(['archivos_access'])
+                    @canany(['almacen_access'])
                         <li class="font-verdana-bg">
                             <a href="" data-toggle="collapse" data-target="#dashboard_almacen"
                                 class="active collapsed" aria-expanded="false">
@@ -332,7 +341,7 @@
                             </ul> --}}
 
                             <ul class="sub-menu collapse" id="dashboard_almacen">
-                                @can('archivos_access')
+                                @can('almacen_ingreso_access')
                                     <li>
                                         <a href="{{ route('almacenes.ingreso.index') }}">
                                             &nbsp; &nbsp; &nbsp;
@@ -343,7 +352,7 @@
                             </ul>
 
                             <ul class="sub-menu collapse" id="dashboard_almacen">
-                                @can('archivos_access')
+                                @can('almacen_ingreso_access')
                                     <li>
                                         <a href="{{ route('almacenes.ingreso.grafico') }}">
                                             &nbsp; &nbsp; &nbsp;
@@ -354,7 +363,7 @@
                             </ul>
 
                             <ul class="sub-menu collapse" id="dashboard_almacen">
-                                @can('archivos_access')
+                                @can('almacen_ingreso_solcomb')
                                     <li>
                                         <a href="{{ route('almacenes.pedido.index') }}">
                                             &nbsp; &nbsp; &nbsp;
@@ -366,7 +375,7 @@
 
 
                             <ul class="sub-menu collapse" id="dashboard_almacen">
-                                @can('archivos_access')
+                                @can('almacen_ingreso_access')
                                     <li>
                                         <a href="{{ route('almacenes.reporte.index') }}">
                                             &nbsp; &nbsp; &nbsp;
@@ -388,7 +397,7 @@
                             </ul> --}}
 
                             <ul class="sub-menu collapse" id="dashboard_almacen">
-                                @can('archivos_access')
+                                @can('almacen_ingreso_access')
                                     <li>
                                         <a href="{{ route('localidad.index') }}">
                                             &nbsp; &nbsp; &nbsp;
@@ -405,7 +414,7 @@
 
 
 
-@canany(['transportes_access'])
+@canany(['transportescomb_access'])
 <li class="font-verdana-bg">
     <a href="" data-toggle="collapse" data-target="#dashboard_transportes"
     class="active collapsed" aria-expanded="false">
@@ -416,7 +425,7 @@
 
 
     <ul class="sub-menu collapse" id="dashboard_transportes">
-        @can('vehiculo_access')
+        @can('vehiculocomb_solicitud_access')
         <li>
             <a href="{{ route('transportes.pedidoparcial.index') }}">
                 &nbsp;<i class="fa fa-data base"></i>
@@ -426,7 +435,7 @@
 
     @endcan
 
-    @can('vehiculo_access')
+    @can('vehiculocomb_solicitud_janeth')
     <li>
         <a href="{{ route('transportes.pedido.index3') }}">
             &nbsp;<i class="fa fa-data base"></i>
@@ -436,7 +445,7 @@
 
 @endcan
 
-    @can('vehiculo_access')
+    @can('vehiculocombu_pendiente')
     <li>
         <a href="{{ route('transportes.pedido.index') }}">
             &nbsp;<i class="fa fa-data base"></i>
@@ -449,7 +458,7 @@
 
 
 
-        @can('vehiculo_access')
+        @can('transportescombvehiculo_access')
             <li>
                 <a href="{{ route('transportes.uconsumo.index') }}">
                     &nbsp;<i class="fa fa-data base"></i>
@@ -459,7 +468,7 @@
 
         @endcan
 
-        @can('tipomovilidad_access')
+        @can('transportescombtipo_access')
         <li>
             <a href="{{ route('tipo.index') }}">
                 &nbsp;<i class="fa fa-data base"></i>

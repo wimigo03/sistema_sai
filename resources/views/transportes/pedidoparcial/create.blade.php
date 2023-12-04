@@ -30,7 +30,7 @@
         <input type="hidden" name="cominterna2" id="cominterna2">
         <div class="form-group row">
 
-            <div class="col-md-5">
+            <div class="col-md-3">
                 <label for="oficina" class="d-inline font-verdana-bg">
                     <b>Oficina </b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
@@ -40,7 +40,7 @@
                 id="oficina">
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label for="cominterna" class="d-inline font-verdana-bg">
                     <b>Control Interno</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
@@ -53,44 +53,14 @@
             
             <div class="col-md-2">
                 <label for="fechasol" class="d-inline font-verdana-bg">
-                    <b> fechasol</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                    <b> fecha de solicitud</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <input type="text" name="fechasol" placeholder="dd/mm/aaaa"
-                value="{{request('fechasol')}}" 
+                <input type="text" disabled name="fechasol" placeholder="dd/mm/yyyy"
+                 value="{{$date->format('d/m/Y')}}" 
                 class="form-control form-control-sm font-verdana-bg" 
                 id="fechasol" data-language="es" autocomplete="off" >
             </div>
-
-            <div class="col-md-5">
-                <label for="dirigidoa" class="d-inline font-verdana-bg">
-                    <b>Dirigido A:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <select name="dirigidoa" id="dirigidoa" placeholder="--Seleccionar--" 
-                class="form-control form-control-sm select2">
-                    <option value="">-</option>
-                    @foreach ($empleados as $index => $value)
-                        <option value="{{ $index }}">{{ $value }}</option>
-                    @endforeach
-                </select>
-            </div>
-
             <div class="col-md-4">
-                <label for="viauno" class="d-inline font-verdana-bg">
-                    <b>VIA:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <select name="viauno" id="viauno" placeholder="--Seleccionar--" 
-                class="form-control form-control-sm select2">
-                    <option value="">-</option>
-                    @foreach ($empleados as $index => $value)
-                        <option value="{{ $index }}">{{ $value }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-          
-
-
-            <div class="col-md-2">
                 <label for="referencia" class="d-inline font-verdana-bg">
                     <b> referencia</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
@@ -99,6 +69,50 @@
                 class="form-control form-control-sm font-verdana-bg" 
                 id="referencia" >
             </div>
+
+            <div class="col-md-4">
+                <label for="dirigidoa" class="d-inline font-verdana-bg">
+                    <b>Dirigido A:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="text" disabled name="dirigidoa" 
+                value="{{$encargadotres->abrev}} {{$encargadotres->nombres}} {{$encargadotres->ap_pat}} {{$encargadotres->ap_mat}}" 
+               class="form-control form-control-sm font-verdana-bg" 
+               id="dirigidoa" data-language="es" autocomplete="off" >
+                <td colspan="8" width="564" style="font-size: 12px;">
+                    
+                </td>
+            </div>
+
+            <div class="col-md-4">
+                <label for="viauno" class="d-inline font-verdana-bg">
+                    <b>VIA:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="text" disabled name="viauno" 
+                value="{{$encargadodos->abrev}} {{$encargadodos->nombres}} {{$encargadodos->ap_pat}} {{$encargadodos->ap_mat}}" 
+               class="form-control form-control-sm font-verdana-bg" 
+               id="viauno" data-language="es" autocomplete="off" >
+                <td colspan="8" width="564" style="font-size: 12px;">
+                    
+                </td>
+            </div>
+
+                
+            <div class="col-md-4">
+                <label for="viauno" class="d-inline font-verdana-bg">
+                    <b>VIA:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="text" disabled name="viauno" 
+                value="{{$encargado->abrev}} {{$encargado->nombres}} {{$encargado->ap_pat}} {{$encargado->ap_mat}}" 
+               class="form-control form-control-sm font-verdana-bg" 
+               id="viauno" data-language="es" autocomplete="off" >
+                <td colspan="8" width="564" style="font-size: 12px;">
+                    
+                </td>
+            </div>
+
+
+
+        
 
 
             <div class="col-md-3">

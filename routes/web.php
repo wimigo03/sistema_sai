@@ -734,22 +734,22 @@ Route::group(['namespace' => 'App\Http\Controllers\Fexpo'], function() {
 
 Route::group(['namespace' => 'App\Http\Controllers\Compra'], function() {
 
-    Route::get('combustibles/producto/index', 'ProdCombController@index')->name('producto.index')->middleware('can:productocomb_access');
-    Route::get('combustibles/producto/create', 'ProdCombController@create')->name('producto.create');
-    Route::post('combustibles/producto/store', 'ProdCombController@store')->name('producto.store');
-    Route::get('combustibles/producto/list', 'ProdCombController@list')->name('producto.list');
-    Route::get('combustibles/producto/{id}/edit', 'ProdCombController@editar')->name('producto.edit');
-    Route::POST('combustibles/producto/{id}/update', 'ProdCombController@update')->name('producto.update');
+    Route::get('combustibles/producto/index', 'ProdCombController@index')->name('producto.index')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/producto/create', 'ProdCombController@create')->name('producto.create')->middleware('can:comprascomb_janeth_access');
+    Route::post('combustibles/producto/store', 'ProdCombController@store')->name('producto.store')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/producto/list', 'ProdCombController@list')->name('producto.list')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/producto/{id}/edit', 'ProdCombController@editar')->name('producto.edit')->middleware('can:comprascomb_janeth_access');
+    Route::POST('combustibles/producto/{id}/update', 'ProdCombController@update')->name('producto.update')->middleware('can:comprascomb_janeth_access');
 
     Route::post('/ruta3', 'ProdCombController@respuesta3')->name('pregunta3');
 
 
-    Route::get('combustibles/proveedor/index', 'ProveedorController@index')->name('proveedor.index')->middleware('can:proveedorcomb_access');
-    Route::get('combustibles/proveedor/create', 'ProveedorController@create')->name('proveedor.create');
-    Route::post('combustibles/proveedor/store', 'ProveedorController@store')->name('proveedor.store');
-    Route::get('combustibles/proveedor/list', 'ProveedorController@list')->name('proveedor.list');
-    Route::get('combustibles/proveedor/{id}/edit', 'ProveedorController@editar')->name('proveedor.edit');
-    Route::POST('combustibles/proveedor/{id}/update', 'ProveedorController@update')->name('proveedor.update');
+    Route::get('combustibles/proveedor/index', 'ProveedorController@index')->name('proveedor.index')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/proveedor/create', 'ProveedorController@create')->name('proveedor.create')->middleware('can:comprascomb_janeth_access');
+    Route::post('combustibles/proveedor/store', 'ProveedorController@store')->name('proveedor.store')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/proveedor/list', 'ProveedorController@list')->name('proveedor.list')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/proveedor/{id}/edit', 'ProveedorController@editar')->name('proveedor.edit')->middleware('can:comprascomb_janeth_access');
+    Route::POST('combustibles/proveedor/{id}/update', 'ProveedorController@update')->name('proveedor.update')->middleware('can:comprascomb_janeth_access');
 
 
     Route::get('combustibles/proveedor/{id}/editardoc', ['uses' => 'ProveedorController@editardoc','as' => 'proveedor.editdoc'])->middleware('can:proveedorcomb_access');
@@ -759,36 +759,37 @@ Route::group(['namespace' => 'App\Http\Controllers\Compra'], function() {
     Route::post('/ruta2', 'ProveedorController@respuesta2')->name('pregunta2');
 
 
-     Route::get('combustibles/programa/index', 'ProgramaCombController@index')->name('programa.index')->middleware('can:programacomb_access');
-     Route::get('combustibles/programa/list', 'ProgramaCombController@listado')->name('programa.list')->middleware('can:programacomb_access');
-     Route::get('combustibles/programa/{id}/edit', 'ProgramaCombController@edit')->name('programa.edit')->middleware('can:programacomb_access');
-    Route::POST('combustibles/programa/{id}/update', 'ProgramaCombController@update')->name('programa.update')->middleware('can:programacomb_access');
-     Route::get('combustibles/programa/create', 'ProgramaCombController@create')->name('programa.create')->middleware('can:programacomb_access');
-    Route::POST('combustibles/programa/store', 'ProgramaCombController@store')->name('programa.store')->middleware('can:programacomb_access');
+     Route::get('combustibles/programa/index', 'ProgramaCombController@index')->name('programa.index')->middleware('can:comprascomb_janeth_access');
+     Route::get('combustibles/programa/list', 'ProgramaCombController@listado')->name('programa.list')->middleware('can:comprascomb_janeth_access');
+     Route::get('combustibles/programa/{id}/edit', 'ProgramaCombController@edit')->name('programa.edit')->middleware('can:comprascomb_janeth_access');
+    Route::POST('combustibles/programa/{id}/update', 'ProgramaCombController@update')->name('programa.update')->middleware('can:comprascomb_janeth_access');
+     Route::get('combustibles/programa/create', 'ProgramaCombController@create')->name('programa.create')->middleware('can:comprascomb_janeth_access');
+    Route::POST('combustibles/programa/store', 'ProgramaCombController@store')->name('programa.store')->middleware('can:comprascomb_janeth_access');
 
-    Route::get('combustibles/partida/index', 'PartidaCombController@index')->name('partidacomb.index');
-    Route::get('combustibles/partida/listado', 'PartidaCombController@listado')->name('partidacomb.list');
-
-
-    Route::get('combustibles/catprog/index', 'CatProgController@index')->name('catprogcomb.index');
-    Route::get('combustibles/catprogc/list', 'CatProgController@listado')->name('catprogcomb.list');
-    Route::get('combustibles/catprog/{id}/edit', 'CatProgController@editar')->name('catprogcomb.edit');
-    Route::POST('combustibles/catprog/{id}/update', 'CatProgController@update')->name('catprogcomb.update');
-    Route::get('combustibles/catprog/create', 'CatProgController@create')->name('catprogcomb.create')->middleware('can:catprog_create');
-    Route::POST('combustibles/catprog/store', 'CatProgController@store')->name('catprogcomb.store');
+    Route::get('combustibles/partida/index', 'PartidaCombController@index')->name('partidacomb.index')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/partida/listado', 'PartidaCombController@listado')->name('partidacomb.list')->middleware('can:comprascomb_janeth_access');
 
 
-    Route::get('combustibles/pedido/index', 'CompraCombController@index')->name('combustibles.pedido.index');
-    Route::get('combustibles/pedido/index2', 'CompraCombController@index2')->name('combustibles.pedido.index2');
-    Route::get('combustibles/pedido/create', 'CompraCombController@create')->name('combustibles.pedido.create');
-    Route::post('combustibles/pedido/store', 'CompraCombController@store')->name('combustibles.pedido.store');
-    Route::get('combustibles/pedido/edit/{id}', 'CompraCombController@edit')->name('combustibles.pedido.edit');
-    Route::get('combustibles/pedido/editar/{id}', 'CompraCombController@editar')->name('combustibles.pedido.editar');
-    Route::post('combustibles/pedido/update', 'CompraCombController@update')->name('combustibles.pedido.update');
-    Route::get('combustibles/pedido/editable/{id}', 'CompraCombController@editable')->name('combustibles.pedido.editable');
+    Route::get('combustibles/catprog/index', 'CatProgController@index')->name('catprogcomb.index')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/catprogc/list', 'CatProgController@listado')->name('catprogcomb.list')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/catprog/{id}/edit', 'CatProgController@editar')->name('catprogcomb.edit')->middleware('can:comprascomb_janeth_access');
+    Route::POST('combustibles/catprog/{id}/update', 'CatProgController@update')->name('catprogcomb.update')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/catprog/create', 'CatProgController@create')->name('catprogcomb.create')->middleware('can:comprascomb_janeth_access');
+    Route::POST('combustibles/catprog/store', 'CatProgController@store')->name('catprogcomb.store')->middleware('can:comprascomb_janeth_access');
+
+
+    Route::get('combustibles/pedido/index', 'CompraCombController@index')->name('combustibles.pedido.index')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/pedido/index2', 'CompraCombController@index2')->name('combustibles.pedido.index2')->middleware('can:comprasalmacen_aprovadas_access');
+    Route::get('combustibles/pedido/create', 'CompraCombController@create')->name('combustibles.pedido.create')->middleware('can:comprascomb_janeth_access');
+    Route::post('combustibles/pedido/store', 'CompraCombController@store')->name('combustibles.pedido.store')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/pedido/edit/{id}', 'CompraCombController@edit')->name('combustibles.pedido.edit')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/pedido/editar/{id}', 'CompraCombController@editar')->name('combustibles.pedido.editar')->middleware('can:comprascomb_janeth_access');
+    Route::post('combustibles/pedido/update', 'CompraCombController@update')->name('combustibles.pedido.update')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/pedido/editable/{id}', 'CompraCombController@editable')->name('combustibles.pedido.editable')->middleware('can:comprasalmacen_aprovadas_access');
 
     Route::post('/ruta5', 'CompraCombController@respuesta5')->name('pregunta5');
     Route::post('/ruta6', 'CompraCombController@respuesta6')->name('pregunta6');
+    Route::get('combustibles/pedido/ver/{id}', 'CompraCombController@ver')->name('combustibles.pedido.ver')->middleware('can:comprascomb_janeth_access');
 
 
 
@@ -821,6 +822,13 @@ Route::group(['namespace' => 'App\Http\Controllers\Compra'], function() {
 
 
 
+
+    Route::get('combustibles/pedidoparcial/ver/{id}', 'CompraCombController2@ver')
+    ->name('combustibles.pedidoparcial.ver');
+
+    Route::get('combustibles/pedidoparcial/editrecha/{id}', 'CompraCombController2@editrecha')
+    ->name('combustibles.pedidoparcial.editrecha');
+
     Route::get('combustibles/detalle/index', 'DetalleCompraCombController@index')->name('combustibles.detalle.index');
     Route::get('combustibles/detalle/index2', 'DetalleCompraCombController@index2')->name('combustibles.detalle.index2');
     Route::post('combustibles/detalle/store', 'DetalleCompraCombController@store')->name('combustibles.detalle.store');
@@ -832,6 +840,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Compra'], function() {
     Route::get('combustibles/detalle/{id}/destroyed2', 'DetalleCompraCombController@destroyed2')->name('DetalleCompraCombController.eliminar2');
     Route::get('combustibles/delete/{id}', 'DetalleCompraCombController@delete')->name('combustibles.detalle.delete');
     Route::get('combustibles/aprovar/{id}', 'DetalleCompraCombController@aprovar')->name('combustibles.detalle.aprovar');
+    Route::get('combustibles/rechazar/{id}', 'DetalleCompraCombController@rechazar')->name('combustibles.detalle.rechazar');
 
     Route::get('combustibles/almacen/{id}', 'DetalleCompraCombController@almacen')->name('combustibles.detalle.almacen');
 
@@ -852,10 +861,14 @@ Route::group(['namespace' => 'App\Http\Controllers\Compra'], function() {
     Route::get('combustibles/detalleparcial/index2', 'DetalleCompraCombController2@index2')
     ->name('combustibles.detalleparcial.index2');
 
+    
+    Route::get('combustibles/detalleparcial/index3', 'DetalleCompraCombController2@index3')
+    ->name('combustibles.detalleparcial.index3');
+
     Route::post('combustibles/detalleparcial/store', 'DetalleCompraCombController2@store')
     ->name('combustibles.detalleparcial.store');
 
-    Route::get('combustibles/detalleparcial/show', 'DetalleCompraCombController2@show')
+    Route::get('combustibles/detalleparcial/show/{id}', 'DetalleCompraCombController2@show')
     ->name('combustibles.detalleparcial.show');
 
     Route::get('combustibles/detalleparcial/{id}/destroyed2', 'DetalleCompraCombController2@destroyed2')
@@ -886,12 +899,12 @@ Route::get('transportes/uconsumo/aprovar/{id}', 'UnidaddConsumoController@aprova
 
   
     
-    Route::get('transportes/tipo/index', 'TipomovilidadController@index')->name('tipo.index')->middleware('can:tipomovilidad_access');
-    Route::get('transportes/tipo/list', 'TipomovilidadController@listado')->name('tipo.list')->middleware('can:tipomovilidad_access');
-    Route::get('transportes/tipo/{id}/edit', 'TipomovilidadController@editar')->name('tipo.edit')->middleware('can:tipomovilidad_access');
-    Route::POST('transportes/tipo/{id}/update', 'TipomovilidadController@update')->name('tipo.update')->middleware('can:tipomovilidad_access');
-    Route::get('transportes/tipo/create', 'TipomovilidadController@create')->name('tipo.create')->middleware('can:tipomovilidad_access');
-    Route::POST('transportes/tipo/store', 'TipomovilidadController@store')->name('tipo.store')->middleware('can:tipomovilidad_access');
+    Route::get('transportes/tipo/index', 'TipomovilidadController@index')->name('tipo.index');
+    Route::get('transportes/tipo/list', 'TipomovilidadController@listado')->name('tipo.list');
+    Route::get('transportes/tipo/{id}/edit', 'TipomovilidadController@editar')->name('tipo.edit');
+    Route::POST('transportes/tipo/{id}/update', 'TipomovilidadController@update')->name('tipo.update');
+    Route::get('transportes/tipo/create', 'TipomovilidadController@create')->name('tipo.create');
+    Route::POST('transportes/tipo/store', 'TipomovilidadController@store')->name('tipo.store');
        
 
 
@@ -912,10 +925,16 @@ Route::get('transportes/uconsumo/aprovar/{id}', 'UnidaddConsumoController@aprova
     
     Route::get('transportes/pedido/aprovar/{id}', 'SoluconsumoController@aprovar')
     ->name('transportes.pedido.aprovar');
-
+    Route::get('transportes/pedido/rechazar/{id}', 'SoluconsumoController@rechazar')
+    ->name('transportes.pedido.rechazar');
     
+    Route::get('transportes/pedido/rechazartr/{id}', 'SoluconsumoController@rechazartr')
+    ->name('transportes.pedido.rechazartr');
+
+
     Route::get('transportes/pedidoparcial/index', 'SoluconsumoController2@index')
     ->name('transportes.pedidoparcial.index');
+
 
     Route::get('transportes/pedidoparcial/index2', 'SoluconsumoController2@index2')
     ->name('transportes.pedidoparcial.index2');
@@ -1010,7 +1029,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Almacen\Ingreso'], function()
  Route::get('almacenes/ingreso/{id}/editardoc', ['uses' => 'IngresoController@editardoc','as' => 'ingreso.editdoc']);
  Route::get('almacenes/ingreso/{id}/createdocuconsumo', 'IngresoController@createdoc')->name('IngresoController.createdoc');
  Route::POST('almacenes/ingreso/insertar', 'IngresoController@insertar')->name('IngresoController.insertar');
- Route::get('almacenes/ingreso/grafico', 'IngresoController@grafico')->name('almacenes.ingreso.grafico')->middleware('can:combustibles_access');
+ Route::get('almacenes/ingreso/grafico', 'IngresoController@grafico')->name('almacenes.ingreso.grafico');
  
  Route::get('almacenes/ingreso/detalle/{id}', 'IngresoController@detalle')->name('almacenes.ingreso.detalle');
  Route::get('almacenes/ingreso/solicitud/{id}', 'IngresoController@solicitud')->name('almacenes.ingreso.solicitud');

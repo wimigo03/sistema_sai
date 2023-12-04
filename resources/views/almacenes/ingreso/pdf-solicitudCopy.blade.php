@@ -116,18 +116,17 @@ function colorChanger2(el) {
 
 
         <tr>
-            <td colspan="10" width="707" style="font-size: 12px;">
+            <td colspan="10" width="707" >
+                <font size="2" face="Courier New" >
 
-
-                <table border="1"  cellspacing="0" cellpadding="0" width="100%" 
-                style=" border: 1px solid black;border-collapse: collapse;">
+                <table  style="font-size: 12px;"  border="1" cellspacing="0" cellpadding="0" width="100%"  style=" border: 1px solid black;border-collapse: collapse;font-size:11px">
                     <thead>
-                        <th style="font-size: 10px;" class="text-justify p-1">N</th>
-                        <th style="font-size: 10px;" class="text-center p-1">Nro Pedido/Vale</th>
-                        <th style="font-size: 10px;" class="text-center p-1">Area solicitante</th>
-                        <th style="font-size: 10px;" class="text-center p-1">Entregado a</th>
-                        <th style="font-size: 10px;" class="text-center p-1">Cargo</th>
-                        <th style="font-size: 10px;" class="text-center p-1">PRECIO </th>
+                        <th style="font-size: 10px;" >N</th>
+                        <th style="font-size: 10px;" >Nro Pedido/Vale</th>
+                        <th style="font-size: 10px;" >Area solicitante</th>
+                        <th style="font-size: 10px;" >Entregado a</th>
+                        <th style="font-size: 10px;" >Cargo</th>
+                        <th style="font-size: 10px;" >PRECIO </th>
 
 
                         
@@ -167,7 +166,7 @@ function colorChanger2(el) {
                  
                     $numd = $ingresos->cantidad;
                       //b
-                
+              
                 
                
                     @endphp
@@ -187,10 +186,12 @@ function colorChanger2(el) {
                         <td class="text-center p-1">{{$prod ->cantidadsol}}</td>
                         <td class="text-center p-1">{{$prod ->preciosol * $prod ->cantidadsol}}</td>
 
+                        {{-- <td class="text-center p-1">{{$prod ->subtotalsol=$numddd* $prod ->cantidadsol}}</td> --}}
+
                         {{-- <td class="text-center p-1">{{$numd}}</td> --}}
                         <td class="text-center p-1">{{$numd=$numd-$prod ->cantidadsol }}</td>
 
-                        <td class="text-center p-1">{{$prod ->precio * $prod ->cantidadresta}}</td>
+                        <td class="text-center p-1">{{$prod ->preciosol * $numd}}</td>
                     
                      
                     </tr>
@@ -333,7 +334,8 @@ function colorChanger2(el) {
      
       
     </tbody>
-</table>
 
+</table>
+</font>
 </div>
 

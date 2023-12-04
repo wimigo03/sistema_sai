@@ -5,7 +5,7 @@
         <b>CATEGORIAS PROGRAMATICAS</b>
     </div>
     <div class="col-md-4 text-right">
-        @can('catprog_create')
+        @can('catprogcomb_create')
        
             <a href="{{route('catprogcomb.create')}}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar">
                 <button class="btn btn-sm btn-primary font-verdana" type="button" >

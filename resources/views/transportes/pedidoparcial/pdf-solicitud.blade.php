@@ -67,6 +67,26 @@
                 <tr>
                     <td width="37" valign="top">
                         <p>
+                            <strong>VIA:</strong>
+
+                        </p>
+                    </td>
+                    <td width="500" valign="top">
+                        <p>
+                            {{$soluconsumos->viadosnombre}}<br>
+                            <strong> {{$soluconsumos->viadoscargo}}</strong>
+                        </p>
+                    </td>
+                </tr>
+              
+            </tbody>
+        </table>
+
+        <table border="0" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td width="37" valign="top">
+                        <p>
                             <strong>DE:</strong>
 
                         </p>
@@ -214,7 +234,7 @@
                     <td width="104" valign="top">
                         <p>
 
-                            <strong>TIPO</strong>
+                            <strong>{{$soluconsumos->tipo}}</strong>
                         <p>
                     </td>
                 </tr>

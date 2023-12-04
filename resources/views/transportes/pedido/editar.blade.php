@@ -20,16 +20,14 @@
     </div>
 </div>
 <div class="body-border" style="background-color: #FFFFFF;">
-    <form method="post" action="{{ route('transportes.pedido.update') }}" id="form">
-        @csrf
-        {{--@method('PUT')--}}
+  
         <input type="text" hidden name="idsoluconsumo" 
         value="{{$soluconsumos->idsoluconsumo}}">
    
 
         <div class="form-group row">
 
-            <div class="col-md-5">
+            <div class="col-md-3">
                 <label for="oficina" class="d-inline font-verdana-bg">
                     <b>oficina</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
@@ -37,7 +35,7 @@
                 id="oficina" >{{$soluconsumos->oficina}}</textarea>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label for="cominterna" class="d-inline font-verdana-bg">
                     <b>coninterna</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
@@ -54,54 +52,49 @@
                 class="form-control" value="{{$soluconsumos->fechasol}}"
                 >
             </div>
-
+            <div class="col-md-4">
+                <label for="referencia" class="d-inline font-verdana-bg">
+                    <b>referencia</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <textarea disabled name="referencia"  class="form-control form-control-sm font-verdana-bg" 
+                id="referencia" >{{$soluconsumos->referencia}}</textarea>
+            </div>
          
 
             
 
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <label for="dirigidoa" class="d-inline font-verdana-bg">
                     <b>Dirigido a:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <select disabled name="dirigidoa" id="dirigidoa" placeholder="--Seleccionar--" 
-                class="form-control form-control-sm select2">
-                    <option value="">-</option>
-                    @foreach ($empleados as $emp)
-
-                    @if ($emp->idemp==$soluconsumos->dirigidoa)
-                    <option value="{{$emp->idemp}}" selected>{{$emp->nombres}}--{{$emp->ap_pat}}--{{$emp->ap_mat}}</option>
-                    @else
-                    <option value="{{$emp->idemp}}">{{$emp->nombres}}--{{$emp->ap_pat}}--{{$emp->ap_mat}}</option>
-                    @endif
-
-                    @endforeach
-                </select>
+             
+                <input type="text" disabled name="dirigidoa" 
+                value="{{$soluconsumos->dirnombre}} " 
+               class="form-control form-control-sm font-verdana-bg" 
+               id="dirigidoa" data-language="es" autocomplete="off" >
+               
             </div>
             
             <div class="col-md-4">
                 <label for="viauno" class="d-inline font-verdana-bg">
                     <b>Via:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <select disabled name="viauno" id="viauno" placeholder="--Seleccionar--" 
-                class="form-control form-control-sm select2">
-                <option value="">-</option>
-                @foreach ($empleados as $emp)
-
-                @if ($emp->idemp==$soluconsumos->viauno)
-                <option value="{{$emp->idemp}}" selected>{{$emp->nombres}}--{{$emp->ap_pat}}--{{$emp->ap_mat}}</option>
-                @else
-                <option value="{{$emp->idemp}}">{{$emp->nombres}}--{{$emp->ap_pat}}--{{$emp->ap_mat}}</option>
-                @endif
-
-                @endforeach
-                </select>
+                <input type="text" disabled name="dirigidoa" 
+                value="{{$soluconsumos->viaunonombre}} " 
+               class="form-control form-control-sm font-verdana-bg" 
+               id="dirigidoa" data-language="es" autocomplete="off" >
             </div>
-            <div class="col-md-2">
-                <label for="referencia" class="d-inline font-verdana-bg">
-                    <b>referencia</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+         
+
+
+            <div class="col-md-4">
+                <label for="viados" class="d-inline font-verdana-bg">
+                    <b>Via:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <textarea disabled name="referencia"  class="form-control form-control-sm font-verdana-bg" 
-                id="referencia" >{{$soluconsumos->referencia}}</textarea>
+                <input type="text" disabled name="dirigidoa" 
+                value="{{$soluconsumos->viadosnombre}} " 
+               class="form-control form-control-sm font-verdana-bg" 
+               id="dirigidoa" data-language="es" autocomplete="off" >
             </div>
 
             <div class="col-md-3">
@@ -195,23 +188,29 @@
             </div> 
 
         </div>
-        <div class="form-group row">
+        {{-- <div class="form-group row">
             <div class="col-md-12 text-right">
+                <a href="{{route('transportes.pedido.aprovar',$soluconsumos->idsoluconsumo)}}" target="_blank">
+
                 <button class="btn color-icon-2 font-verdana-bg" type="button" onclick="save();">
                     <i class="fa-solid fa-paper-plane"></i>
-                    &nbsp;Actualizar
+                    &nbsp;Aprovar
                 </button>
-                <button class="btn btn-danger font-verdana-bg" type="button" >
+            </a>
+            <a href="{{route('transportes.pedido.rechazar',$soluconsumos->idsoluconsumo)}}" target="_blank">
 
-                    <a href="{{url()->previous()}}" style="color:white">Cancelar</a>
+                <button class="btn btn-danger font-verdana-bg" type="button" >
+                    <i class="fa-solid fa-paper-plane"></i>
+                    &nbsp;Rechazar
                 </button>
+            </a>
 
                 <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" 
                 style="display: none;"></i>
 
             </div>
-        </div>
-    </form>
+        </div> --}}
+   
 </div>
 @endsection
 @section('scripts')

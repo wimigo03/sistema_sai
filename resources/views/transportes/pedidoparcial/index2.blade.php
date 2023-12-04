@@ -7,7 +7,7 @@
     </div>
     <div class="col-md-4 text-right titulo">
         
-         @can('unidadconsumo_create') 
+         @can('solunidadconsumo_create') 
 
         <a href="{{route('transportes.pedidoparcial.index')}}" class="tts:left tts-slideIn tts-custom" 
         aria-label="  Solicitud">
@@ -50,9 +50,10 @@
                         <td class="text-justify p-1"><b>COM.INTERNA</b></td>
                         <td class="text-justify p-1"><b>referencia</b></td>
                         <td class="text-justify p-1"><b>AREA</b></td>
+                        <td class="text-justify p-1"><b>ESTADO</b></td>
+
                          <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td> 
                          
-                   
                     </tr>
                 </thead>
                 <tbody>
@@ -62,8 +63,10 @@
                             <td class="text-justify p-1">{{$sol->cominterna}}</td>
                             <td class="text-justify p-1">{{$sol->referencia}}</td>
                             <td class="text-justify p-1">{{$sol->nombrearea}}</td>
-
-                        
+                            @if($sol->estado1 == '2')
+                            <td class="text-justify p-1">
+                            <b style="color: green">Aprovado</b></td>
+                            @endif
                                 <td style="padding: 0;" class="text-center p-1">
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Imprimir Solicitud">
                                     <a href="{{route('transportes.pedidoparcial.solicitud',$sol->idsoluconsumo)}}">

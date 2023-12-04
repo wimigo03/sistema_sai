@@ -32,6 +32,7 @@
                         <td class="text-justify p-1"><b>CONT.INTERNO</b></td>
                         <td class="text-justify p-1"><b>OBJETO</b></td>
                         <td class="text-justify p-1"><b>AREA</b></td>
+                        <td class="text-justify p-1"><b>Estado</b></td>
                         <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
                          <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td> 
                     </tr>
@@ -43,6 +44,19 @@
                             <td class="text-justify p-1">{{$comp->controlinterno}}</td>
                             <td class="text-justify p-1">{{$comp->objeto}}</td>
                             <td class="text-justify p-1">{{$comp->nombrearea}}</td>
+
+                            @if($comp->estadocompracomb == '1')
+                            <td class="text-justify p-1">
+                            <b style="color: green">Sin repuesta</b></td>
+
+                            @elseif($comp->estadocompracomb == '2')
+                            <td class="text-justify p-1">
+                            <b style="color: blue">Aprovada</b></td>
+
+                            @elseif($comp->estadocompracomb == '3')
+                            <td class="text-justify p-1">
+                                <b style="color: red">Rechazada</b></td>
+                            @endif
 
                               <td style="padding: 0;" class="text-center p-1">
                                 @can('compras_detalle')

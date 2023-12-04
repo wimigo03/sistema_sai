@@ -194,6 +194,19 @@ class DetalleCompraCombController extends Controller
 
      
     }
+//estadorechazado
+    public function rechazar($id)
+    {
+       
+
+        $compras = CompraCombModel::find($id);
+        $compras->estadocompracomb = 10;
+        $compras->save();
+        return redirect()->route('combustibles.detalle.index2');
+
+     
+    }
+
 
     public function almacen($idcompracomb)
     {
@@ -299,7 +312,7 @@ $ingreso->save();
         }
 
         $comprass = CompraCombModel::find($idcompracomb);
-        $comprass->estadocompracomb=3;
+        $comprass->estadocompracomb=5;
         $comprass->save();
 
         return redirect()->route('combustibles.detalle.index2');

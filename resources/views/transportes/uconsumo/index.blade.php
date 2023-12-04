@@ -13,15 +13,13 @@
                 </button>
             </a>
             <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
-
+            @endcan
+            @can('unidadconsumo_ocupados')
             <a href="{{ route('transportes.uconsumo.index2') }}" class="tts:left tts-slideIn tts-custom" aria-label="CREAR NUEVO">
                 <button class="btn btn-sm btn-primary font-verdana" type="button" >Ocupados
                     &nbsp;<i class="fa-solid fa-xmark" style="font-size:14px"></i>&nbsp;
                 </button>
             </a>
-
-          
-
         @endcan
     </div>
 
@@ -52,7 +50,7 @@
                                     <td class="text-justify p-1"><b>PLACA</b></td>
                                     <td class="text-justify p-1"><b>TIPO</b></td>
                                     <td class="text-justify p-1"><b>AREA</b></td>
-                                    <td class="text-justify p-1"><b>PROGRAMA</b></td>
+                                    <td class="text-justify p-1"><b>DOCUMENTO</b></td>
                                     <td class="text-center p-1 font-weight-bold">
                                         <i class="fa fa-bars" aria-hidden="true"></i></td>
                                         <td class="text-center p-1 font-weight-bold">
@@ -109,7 +107,11 @@
     
                 {data: 'nombrearea',name: 'a.nombrearea',class:'text-justify p-1 font-verdana'},
     
-                {data: 'nombreprograma',name: 'prog.nombreprograma',class:'text-justify p-1 font-verdana'},
+                {data: 'documento',name: 'documento',  render: function (data, type, full, meta) {
+                    return '<img src="../../Imagenes/' + data + '" alt="Imagen" width="70" height="70">';
+                },
+                class: 'text-center' 
+            },
     
     
                 {data: 'btn', name: 'btn', orderable: false, searchable: false },

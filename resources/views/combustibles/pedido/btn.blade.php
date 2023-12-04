@@ -1,6 +1,6 @@
 
 <td style="padding: 0;" class="text-center p-1">
-    @can('medidas_access')
+    @can('comprascomb_pendientesedit')
         <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar">
             <a href="{{route('combustibles.pedido.editar',$idcompracomb)}}">
                 <span class="text-warning">

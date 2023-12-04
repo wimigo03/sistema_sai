@@ -5,7 +5,7 @@
         <b>SOLICITUDES APROBADAS</b>
     </div>
     <div class="col-md-4 text-right">
-         @can('unidadconsumo_create') 
+         @can('almacenes_aprovadas') 
 
              <a href="{{ route('almacenes.pedido.index') }}" class="tts:left tts-slideIn tts-custom" 
             aria-label="ir a solicitudes pendientes">

@@ -37,11 +37,14 @@ class CompraCombController2 extends Controller
                         ->join('programacomb as prog', 'prog.idprogramacomb', '=', 'c.idprogramacomb')
                         ->join('areas as a', 'a.idarea', '=', 'c.idarea')
 
-                        ->select('c.idcompracomb','c.estado1','c.controlinterno','a.nombrearea',
+                        ->select('c.idcompracomb','c.estado1','c.controlinterno','c.estadocompracomb',
+                        'a.nombrearea',
                         'c.objeto', 'c.justificacion','p.nombreproveedor','c.preventivo',
                         'c.numcompra','cat.codcatprogramatica','prog.nombreprograma')
                         ->where('a.idarea',$personalArea->idarea)
-                        ->where('c.estadocompracomb',1)
+                         //->where('c.estadocompracomb',1)
+                     
+
                         ->get();
 
 
@@ -72,7 +75,7 @@ class CompraCombController2 extends Controller
                         
                         ->select('c.idcompracomb','c.estado1','c.controlinterno','a.nombrearea',
                         'c.objeto', 'c.justificacion','p.nombreproveedor','c.preventivo',
-                        'c.numcompra','cat.codcatprogramatica','prog.nombreprograma')
+                        'c.numcompra','c.estadocompracomb','cat.codcatprogramatica','prog.nombreprograma')
                         ->where('a.idarea',$personalArea->idarea)
                         ->where('c.estadocompracomb',2)
                         ->get();
@@ -88,6 +91,8 @@ class CompraCombController2 extends Controller
         return view('combustibles.pedidoparcial.index2',
         ['compras'=>$compras,'idd'=>$personalArea]);
     }
+
+
 
 
     public function create(){
@@ -203,6 +208,7 @@ class CompraCombController2 extends Controller
     public function editar($idcompracomb){
         $compras = CompraCombModel::find($idcompracomb);
 
+
         $proveedores = DB::table('proveedor')->get();
         $areas = DB::table('areas')->get();
         $catprogramaticas = DB::table('catprogramaticacomb')->get();
@@ -215,6 +221,46 @@ class CompraCombController2 extends Controller
 
         compact('id','compras','proveedores','areas',
         'catprogramaticas','programas'));
+    }
+
+    public function ver($idcompracomb){
+        $compras = CompraCombModel::find($idcompracomb);
+
+
+        $proveedores = DB::table('proveedor')->get();
+        $areas = DB::table('areas')->get();
+        $catprogramaticas = DB::table('catprogramaticacomb')->get();
+        $programas = DB::table('programacomb')->get();
+
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+
+        return view('combustibles.pedidoparcial.ver',
+
+        compact('id','compras','proveedores','areas',
+        'catprogramaticas','programas'));
+    }
+
+    public function editrecha($idcompracomb){//dd($idcomp);
+        
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $detalle = TemporalModel::find($id);
+
+        if(is_null($detalle)){
+            $detalle = new TemporalModel;
+            $detalle->idtemporal=$id;
+            $detalle->idusuario=$id;
+            $detalle->idcompra=$idcompracomb;
+            $detalle->save();
+        }else{
+            $detalle->idtemporal = $id;
+            $detalle->idusuario = $id;
+            $detalle->idcompra = $idcompracomb;
+            $detalle->update();
+        }
+       //return Redirect::to('compras/detalle');
+       return redirect()->route('combustibles.detalleparcial.index3');
     }
 
     public function update(Request $request){

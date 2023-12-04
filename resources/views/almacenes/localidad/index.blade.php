@@ -5,7 +5,7 @@
         <b>LOCALIDADES</b>
     </div>
     <div class="col-md-4 text-right">
-        @can('localidad_create')
+        @can('almacenesloca_create')
        
             <a href="{{route('localidad.create')}}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar">
                 <button class="btn btn-sm btn-primary font-verdana" type="button" >

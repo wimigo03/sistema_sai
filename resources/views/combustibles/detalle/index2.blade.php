@@ -10,7 +10,7 @@
 <div class="row font-verdana-bg">
     <div class="col-md-2 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-            <a href="{{ url('/combustibles/pedido/index') }}">
+            <a href="{{ url('/combustibles/pedido/index2') }}">
                 <span class="color-icon-1">
                     &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                 </span>
@@ -29,14 +29,14 @@
         <b style="color: orange">--Para aprovar la compra seleccione un Proveedor--</b>
       @elseif ($compras->estadocompracomb == 2)
 
-
+      @can('comprascomb_aprovaralmacen')
       <a href="{{route('combustibles.detalle.almacen',$compras->idcompracomb)}}" 
         onclick="return confirm('Se va a enviar la compra a almace..esta seguro ?..')">
         <button class="btn btn-sm btn-info   font-verdana" type="button" >
             &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;Enviar a almacen
         </button>
     </a>
-
+    @endcan
     @elseif ($compras->estadocompracomb == 3)
     <b style="color: green">Enviado a Almacen</b>
 
@@ -46,22 +46,6 @@
         <input type="hidden" value="{{$compras->estadocompracomb}}" id="idcompra2">
         <input type="hidden" value="{{$compras->idproveedor}}" id="idcompra3">
 
-        @if ($compras->estadocompracomb == 1)
-        <b style="color: red">--No puede generar la orden de compra hasta que esta sea aprovada--</b>
-      @elseif ($estado == 1)
-      <a href="{{ route('combustibles.detalle.principalorden', $idcompracomb) }}" class="tts:left tts-slideIn tts-custom" aria-label="Ir a Orden de Compra">
-        <button class="btn btn-sm btn-success   font-verdana" type="button" >
-            &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;Acceder a la Orden de Compra
-        </button>
-    </a>
-    @elseif ($estado == 0)
-    <a href="{{ route('combustibles.detalle.principal', $idcompracomb) }}" class="tts:left tts-slideIn tts-custom" aria-label="Crear Orden de Compra">
-        <button class="btn btn-sm btn-warning   font-verdana" type="button" >
-            &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;Crear Orden de Compra
-        </button>
-    </a>
-      @endif
-        <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
     </div>
 </div>
 <div>

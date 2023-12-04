@@ -30,7 +30,7 @@
 
         <div class="form-group row">
 
-            <div class="col-md-5">
+            <div class="col-md-3">
                 <label for="oficina" class="d-inline font-verdana-bg">
                     <b>oficina</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
@@ -38,7 +38,7 @@
                 id="oficina" >{{$soluconsumos->oficina}}</textarea>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label for="cominterna" class="d-inline font-verdana-bg">
                     <b>coninterna</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
@@ -51,60 +51,57 @@
                 <label for="fechasol" class="d-inline font-verdana-bg">
                     <b> fechasol</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <input   type="text" name="fechasol" placeholder="dd/mm/aaaa" data-language="es"
+                <input   type="text" disabled name="fechasol" placeholder="dd/mm/aaaa" data-language="es"
             
-                class="form-control" id="fechasol" value="{{$soluconsumos->fechasol}}"
+                class="form-control" id="fechasol" value="{{$date->format('d/m/Y')}}" 
                 >
             </div>
 
-         
-
-            <div class="col-md-5">
-                <label for="dirigidoa" class="d-inline font-verdana-bg">
-                    <b>Dirigido a:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <select name="dirigidoa" id="dirigidoa" placeholder="--Seleccionar--" 
-                class="form-control form-control-sm select2">
-                    <option value="">-</option>
-                    @foreach ($empleados as $emp)
-
-                    @if ($emp->idemp==$soluconsumos->dirigidoa)
-                    <option value="{{$emp->idemp}}" selected>{{$emp->nombres}}--{{$emp->ap_pat}}--{{$emp->ap_mat}}</option>
-                    @else
-                    <option value="{{$emp->idemp}}">{{$emp->nombres}}--{{$emp->ap_pat}}--{{$emp->ap_mat}}</option>
-                    @endif
-
-                    @endforeach
-                </select>
-            </div>
-            
             <div class="col-md-4">
-                <label for="viauno" class="d-inline font-verdana-bg">
-                    <b>Via:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <select name="viauno" id="viauno" placeholder="--Seleccionar--" 
-                class="form-control form-control-sm select2">
-                <option value="">-</option>
-                @foreach ($empleados as $emp)
-
-                @if ($emp->idemp==$soluconsumos->viauno)
-                <option value="{{$emp->idemp}}" selected>{{$emp->nombres}}--{{$emp->ap_pat}}--{{$emp->ap_mat}}</option>
-                @else
-                <option value="{{$emp->idemp}}">{{$emp->nombres}}--{{$emp->ap_pat}}--{{$emp->ap_mat}}</option>
-                @endif
-
-                @endforeach
-                </select>
-            </div>
-
-
-            <div class="col-md-2">
                 <label for="referencia" class="d-inline font-verdana-bg">
                     <b>referencia</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <textarea name="referencia"  class="form-control form-control-sm font-verdana-bg" 
                 id="referencia" >{{$soluconsumos->referencia}}</textarea>
             </div>
+
+            <div class="col-md-4">
+                <label for="dirigidoa" class="d-inline font-verdana-bg">
+                    <b>Dirigido a:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="text" disabled name="dirigidoa" 
+                value="{{$encargadotres->abrev}} {{$encargadotres->nombres}} {{$encargadotres->ap_pat}} {{$encargadotres->ap_mat}}" 
+               class="form-control form-control-sm font-verdana-bg" 
+               id="dirigidoa" data-language="es" autocomplete="off" >
+                <td colspan="8" width="564" style="font-size: 12px;">
+            </div>
+            
+            <div class="col-md-4">
+                <label for="viauno" class="d-inline font-verdana-bg">
+                    <b>Via:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="text" disabled name="viauno" 
+                value="{{$encargadodos->abrev}} {{$encargadodos->nombres}} {{$encargadodos->ap_pat}} {{$encargadodos->ap_mat}}" 
+               class="form-control form-control-sm font-verdana-bg" 
+               id="viauno" data-language="es" autocomplete="off" >
+                <td colspan="8" width="564" style="font-size: 12px;">
+                    
+                </td>
+            </div>
+
+            <div class="col-md-4">
+                <label for="viauno" class="d-inline font-verdana-bg">
+                    <b>Via:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="text" disabled name="viauno" 
+                value="{{$encargado->abrev}} {{$encargado->nombres}} {{$encargado->ap_pat}} {{$encargado->ap_mat}}" 
+               class="form-control form-control-sm font-verdana-bg" 
+               id="viauno" data-language="es" autocomplete="off" >
+                <td colspan="8" width="564" style="font-size: 12px;">
+                    
+                </td>
+            </div>
+           
 
             <div class="col-md-3">
                 <label for="fechasalida" class="d-inline font-verdana-bg">

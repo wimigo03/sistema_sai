@@ -11,7 +11,7 @@
 
     <div class="col-md-2 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-            <a href="{{ url('/combustibles/pedidoparcial/index2') }}">
+            <a href="{{ url('/combustibles/pedidoparcial/index') }}">
                 <span class="color-icon-1">
                     &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                 </span>
@@ -34,10 +34,10 @@
 
         <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
 
-        @if($compras->estado1 == 2)
+        @if($consumos->estadocompracomb == 2)
         <b style="color:rgb(11, 170, 34);font-weight: bold;">SOLICITUD APROBADA</b>
 
-        <a href="{{ route('combustibles.detalleparcial.show') }}" class="tts:left tts-slideIn tts-custom" aria-label="Imprimir">
+        <a href="{{ route('combustibles.detalleparcial.show',$idcompracomb) }}" class="tts:left tts-slideIn tts-custom" aria-label="Imprimir">
             <button class="btn btn-sm btn-secondary   font-verdana" type="button" >
                 &nbsp;<i class="fa fa-print" aria-hidden="true"></i>&nbsp;Imprimir
             </button>

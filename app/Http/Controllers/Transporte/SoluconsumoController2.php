@@ -39,18 +39,14 @@ class SoluconsumoController2 extends Controller
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
         $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
-
-
          $soluconsumos = DB::table('soluconsumo as s')
 
                         ->join('localidad as lo', 'lo.idlocalidad', '=', 's.idlocalidad')
                         ->join('areas as a', 'a.idarea', '=', 's.idarea')
                       
-                        
-
                         ->where('a.idarea',$personalArea->idarea)
                         ->where('s.estadosoluconsumo',1)
-                        ->select('s.idsoluconsumo','s.estado1','s.cominterna', 's.referencia',
+                        ->select('s.idsoluconsumo','s.estadosoluconsumo','s.estado1','s.cominterna', 's.referencia',
                         
                         'a.nombrearea',
                         'lo.nombrelocalidad')
@@ -122,7 +118,7 @@ class SoluconsumoController2 extends Controller
 
                         ->where('a.idarea',$personalArea->idarea)
                         ->where('s.estado2',2)
-                        ->select('s.idsoluconsumo','s.estado1','s.cominterna', 's.referencia',
+                        ->select('s.idsoluconsumo','s.estado2','s.estado1','s.cominterna', 's.referencia',
                         
                         'a.nombrearea',
                         'lo.nombrelocalidad')
@@ -151,30 +147,47 @@ class SoluconsumoController2 extends Controller
         $userdate = User::find($id)->usuariosempleados; 
 
         $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
-
+        $id3 = $personalArea->idarea;
         
         $areas = DB::table('areas')->where('estadoarea',1)
         ->pluck('nombrearea','idarea');
 
-
         $localidades = DB::table('localidad')->where('estadolocalidad',1)
         ->pluck('nombrelocalidad','idlocalidad');
 
-
-       
         $empleados = DB::table('empleados')->where('estadoemp1',1)
         ->select(DB::raw("concat(nombres ,' ', ap_pat,' ',ap_mat,' ',
-                    ' // AREA. ',idarea
-                    
-                    
+                    ' // AREA. ',idarea   
                     ) as emplead"),'idemp')
                     ->pluck('emplead','idemp');
 
         
-    
+        $date = Carbon::now();
+
+    $encargado = DB::table('encargados as e')
+->join('areas as a', 'a.idarea', '=', 'e.idarea')
+->join('empleados as emp', 'e.idemp', '=', 'emp.idemp')
+-> where('a.idarea', $id3)
+->select('emp.nombres','emp.ap_pat','emp.ap_mat','e.abrev')
+->first();
+
+$encargadodos = DB::table('encargados as e')
+->join('areas as a', 'a.idarea', '=', 'e.idarea')
+->join('empleados as emp', 'e.idemp', '=', 'emp.idemp')
+-> where('a.idarea',11)
+->select('emp.nombres','emp.ap_pat','emp.ap_mat','e.abrev')
+->first();
+
+$encargadotres = DB::table('encargados as e')
+->join('areas as a', 'a.idarea', '=', 'e.idarea')
+->join('empleados as emp', 'e.idemp', '=', 'emp.idemp')
+-> where('a.idarea',19)
+->select('emp.nombres','emp.ap_pat','emp.ap_mat','e.abrev')
+->first();
+
 
         return view('transportes.pedidoparcial.create',
-        compact('areas','localidades','empleados','personalArea'));
+        compact('areas','localidades','empleados','personalArea','date','encargado','encargadodos','encargadotres'));
     }
 
     public function store(Request $request){
@@ -186,6 +199,7 @@ class SoluconsumoController2 extends Controller
 
         $userdate = User::find($id)->usuariosempleados;
         $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $id3 = $personalArea->idarea;
 
 
 // de parte de
@@ -204,7 +218,15 @@ $Nombreusuariocargo = $productoseis->nombrecargo;
 
 
 // dirigido a
-        $prod = $request->get('dirigidoa');
+$encargado = DB::table('encargados as e')
+->join('areas as a', 'a.idarea', '=', 'e.idarea')
+->join('empleados as emp', 'e.idemp', '=', 'emp.idemp')
+-> where('a.idarea', $id3)
+->select('emp.nombres','emp.idemp','emp.ap_pat','emp.ap_mat','e.abrev','e.cargo')
+->first();
+
+
+        $prod = 1435;
         $producto = EmpleadosModel::find($prod);
         $Nombredir = $producto->nombres;
         $Apellidopadir = $producto->ap_pat;
@@ -218,7 +240,7 @@ $Nombreusuariocargo = $productoseis->nombrecargo;
 
 // via uno
 
-$proddos = $request->get('viauno');
+$proddos = 1438;
 $productotres = EmpleadosModel::find($proddos);
 $Nombrevia = $productotres->nombres;
 $Apellidopavia = $productotres->ap_pat;
@@ -231,11 +253,28 @@ $Nombreviacargo = $productocuatro->nombrecargo;
 
 
 
+$IdEmp = $encargado->idemp;
+$CarGoviatress = $encargado->abrev;
+$Nombreviatress = $encargado->nombres;
+$Apellidopaviatress = $encargado->ap_pat;
+$Apellidomaviatress = $encargado->ap_mat;
+$Nombrecompviatress= $CarGoviatress . " " .  $Nombreviatress . " " .  $Apellidopaviatress. " " .$Apellidomaviatress ;
+
+$Nombreviacargotress = $encargado->cargo;
+
+
+
+
+
 $proddoss = $request->get('idlocalidad');
 $productoocho = LocalidadModel::find($proddoss);
 $Codlocalidad = $productoocho->codlocalidad;
 $Nombrelocalid = $productoocho->nombrelocalidad;
 $Distancialocalid = $productoocho->distancialocalidad;
+
+
+
+// $flechasol = substr($request->fechasol, 6, 4) . '-' . substr($request->fechasol, 3, 2) . '-' . substr($request->fechasol, 0, 2);
 
         $soluconsumos = new SoluconsumoModel();
 
@@ -243,14 +282,19 @@ $Distancialocalid = $productoocho->distancialocalidad;
         $soluconsumos->cominterna = $request->get('cominterna');
 
         
-        $soluconsumos->dirigidoa = $request->get('dirigidoa');  //dirigido a
+        $soluconsumos->dirigidoa = $prod;  //dirigido a
         $soluconsumos->dirnombre = $Nombrecompdir;
         $soluconsumos->diracargo = $Nombredircargo;
 
 
-        $soluconsumos->viauno = $request->get('viauno');  //via 
+        $soluconsumos->viauno = $proddos;  //via 
         $soluconsumos->viaunonombre = $Nombrecompvia;
         $soluconsumos->viaunocargo = $Nombreviacargo;
+
+        $soluconsumos->viados = $IdEmp;  //via 
+        $soluconsumos->viadosnombre = $Nombrecompviatress;
+        $soluconsumos->viadoscargo = $Nombreviacargotress;
+
 
         $soluconsumos->idlocalidad = $request->get('idlocalidad');
         $soluconsumos->codlocalidad = $Codlocalidad;
@@ -267,7 +311,8 @@ $Distancialocalid = $productoocho->distancialocalidad;
 
 
         $soluconsumos->referencia = $request->input('referencia');
-        $soluconsumos->fechasol = $request->input('fechasol');
+        $soluconsumos->fechasol = Carbon::now();
+
         $soluconsumos->detallesouconsumo = $request->input('detallesouconsumo');
 
         $soluconsumos->fechasalida = $request->input('fechasalida');
@@ -279,6 +324,7 @@ $Distancialocalid = $productoocho->distancialocalidad;
 
 
         $soluconsumos->estadosoluconsumo = 1;
+        $soluconsumos->tipo = "producto";
         $soluconsumos->estado1 = 1;
         $soluconsumos->estado2 = 1;
         $soluconsumos->estado3 = 1;
@@ -298,6 +344,8 @@ $Distancialocalid = $productoocho->distancialocalidad;
    
 
     public function editar($idsoluconsumo){
+
+
         $soluconsumos = SoluconsumoModel::find($idsoluconsumo);
 
         $areas = DB::table('areas')->get();
@@ -307,11 +355,38 @@ $Distancialocalid = $productoocho->distancialocalidad;
 
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados; 
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $id3 = $personalArea->idarea;
+
+        $date = Carbon::now();
+$encargado = DB::table('encargados as e')
+->join('areas as a', 'a.idarea', '=', 'e.idarea')
+->join('empleados as emp', 'e.idemp', '=', 'emp.idemp')
+-> where('a.idarea', $id3)
+->select('emp.nombres','emp.ap_pat','emp.ap_mat','e.abrev')
+->first();
+
+$encargadodos = DB::table('encargados as e')
+->join('areas as a', 'a.idarea', '=', 'e.idarea')
+->join('empleados as emp', 'e.idemp', '=', 'emp.idemp')
+-> where('a.idarea',11)
+->select('emp.nombres','emp.ap_pat','emp.ap_mat','e.abrev')
+->first();
+
+$encargadotres = DB::table('encargados as e')
+->join('areas as a', 'a.idarea', '=', 'e.idarea')
+->join('empleados as emp', 'e.idemp', '=', 'emp.idemp')
+-> where('a.idarea',19)
+->select('emp.nombres','emp.ap_pat','emp.ap_mat','e.abrev')
+->first();
+
 
         return view('transportes.pedidoparcial.editar',
 
         compact('id','soluconsumos','areas',
-        'empleados','localidades'));
+        'empleados','localidades','personalArea','date',
+        'encargado','encargadodos','encargadotres'));
     }
 
     public function update(Request $request){
@@ -321,7 +396,7 @@ $Distancialocalid = $productoocho->distancialocalidad;
 
         $userdate = User::find($id)->usuariosempleados;
         $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
-
+        $id3 = $personalArea->idarea;
 
 // de parte de
 
@@ -337,9 +412,16 @@ $productoseis = FileModel::find($IdFiletres);
 $Nombreusuariocargo = $productoseis->nombrecargo;
 
 
-
 // dirigido a
-        $prod = $request->get('dirigidoa');
+$encargado = DB::table('encargados as e')
+->join('areas as a', 'a.idarea', '=', 'e.idarea')
+->join('empleados as emp', 'e.idemp', '=', 'emp.idemp')
+-> where('a.idarea', $id3)
+->select('emp.nombres','emp.idemp','emp.ap_pat','emp.ap_mat','e.abrev','e.cargo')
+->first();
+// dirigido a
+
+$prod = 1435;
         $producto = EmpleadosModel::find($prod);
         $Nombredir = $producto->nombres;
         $Apellidopadir = $producto->ap_pat;
@@ -353,7 +435,7 @@ $Nombreusuariocargo = $productoseis->nombrecargo;
 
 // via uno
 
-$proddos = $request->get('viauno');
+$proddos = 1438;
 $productotres = EmpleadosModel::find($proddos);
 $Nombrevia = $productotres->nombres;
 $Apellidopavia = $productotres->ap_pat;
@@ -363,6 +445,22 @@ $Nombrecompvia= $Nombrevia . " " .  $Apellidopavia. " " .$Apellidomavia ;
 $IdFiledos = $productotres->idfile;
 $productocuatro = FileModel::find($IdFiledos);
 $Nombreviacargo = $productocuatro->nombrecargo;
+
+
+
+$IdEmp = $encargado->idemp;
+$CarGoviatress = $encargado->abrev;
+$Nombreviatress = $encargado->nombres;
+$Apellidopaviatress = $encargado->ap_pat;
+$Apellidomaviatress = $encargado->ap_mat;
+$Nombrecompviatress= $CarGoviatress . " " .  $Nombreviatress . " " .  $Apellidopaviatress. " " .$Apellidomaviatress ;
+
+$Nombreviacargotress = $encargado->cargo;
+
+
+
+
+
 
 
 $proddoss = $request->get('idlocalidad');
@@ -378,14 +476,18 @@ $Distancialocalid = $productoocho->distancialocalidad;
         $soluconsumos->cominterna = $request->get('cominterna');
 
         
-        $soluconsumos->dirigidoa = $request->get('dirigidoa');  //dirigido a
+        $soluconsumos->dirigidoa = $prod;  //dirigido a
         $soluconsumos->dirnombre = $Nombrecompdir;
         $soluconsumos->diracargo = $Nombredircargo;
 
 
-        $soluconsumos->viauno = $request->get('viauno');  //via 
+        $soluconsumos->viauno = $proddos;  //via 
         $soluconsumos->viaunonombre = $Nombrecompvia;
         $soluconsumos->viaunocargo = $Nombreviacargo;
+
+        $soluconsumos->viados = $IdEmp;  //via 
+        $soluconsumos->viadosnombre = $Nombrecompviatress;
+        $soluconsumos->viadoscargo = $Nombreviacargotress;
 
 
         $soluconsumos->idarea = $personalArea->idarea;  //de , nombre, cargo oficina
@@ -397,7 +499,7 @@ $Distancialocalid = $productoocho->distancialocalidad;
 
 
         $soluconsumos->referencia = $request->input('referencia');
-        $soluconsumos->fechasol = $request->input('fechasol');
+        $soluconsumos->fechasol = Carbon::now();
         $soluconsumos->detallesouconsumo = $request->input('detallesouconsumo');
 
         $soluconsumos->fechasalida = $request->input('fechasalida');
@@ -451,6 +553,9 @@ public function solicitud($id)
     //departe de 
     's.viaunonombre', //departe de 
     's.viaunocargo', //departe de 
+
+    's.viadosnombre', //departe de 
+    's.viadoscargo', //departe de 
     
     's.usuarionombre' ,  //de forma automatica del que tiene acceso
     's.usuariocargo' ,  //de forma automatica del que tiene acceso

@@ -69,7 +69,7 @@ class DetalleSoluconsumoController extends Controller
                                     ' // AREA: ',a.nombrearea,' ',' // Cargo: ',fi.nombrecargo
                                     ) as emplead"),'emp.idemp')
 
-                                    ->where('emp.estadoemp1',1)
+                                    ->where('fi.cargo',"CHOFER")
                                     ->pluck('emplead','emp.idemp');      
                                     
                                     $consumos = DB::table('soluconsumo as s')

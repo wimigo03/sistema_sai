@@ -105,19 +105,13 @@ class SoluconsumoController extends Controller
     {
 
         if ($request->ajax()) {
-
-
         $soluconsumos = DB::table('soluconsumo as s')
-
         ->join('localidad as lo', 'lo.idlocalidad', '=', 's.idlocalidad')
         ->join('areas as a', 'a.idarea', '=', 's.idarea')
-    
-    
-
         ->where('s.estado1',1)
-
-        ->select('s.estadosoluconsumo','s.idsoluconsumo','s.cominterna','s.referencia', 's.oficina',
-                            
+        ->select('s.estadosoluconsumo','s.idsoluconsumo','s.cominterna',
+        's.referencia', 's.oficina',
+                           
                             'a.nombrearea',
                             'lo.nombrelocalidad'
                             )
@@ -129,9 +123,9 @@ class SoluconsumoController extends Controller
                         ->addIndexColumn()
                          ->addColumn('btn', 'transportes.pedido.btn')
                          ->addColumn('btn4', 'transportes.pedido.btn4')
-                  
+                         ->addColumn('btn5', 'transportes.pedido.btn5')
                         // ->rawColumns(['btn','btn2'])
-                         ->rawColumns(['btn','btn4'])
+                         ->rawColumns(['btn','btn4','btn5'])
                         ->make(true);
 
                     }
@@ -346,6 +340,34 @@ $Nombreviacargo = $productocuatro->nombrecargo;
         $detalle = SoluconsumoModel::find($idsoluconsumo);
         $detalle->estadosoluconsumo =2;
         $detalle->estado1 =2;
+        if($detalle->save()){
+            session()->flash('message', 'Registro Procesado');
+        }else{
+            session()->flash('message', 'Error al Procesar Registro');
+        }
+        return redirect()->route('transportes.pedido.index3');
+
+    }
+
+    public function rechazar($idsoluconsumo)
+    {
+        $detalle = SoluconsumoModel::find($idsoluconsumo);
+        $detalle->estadosoluconsumo =2;
+        $detalle->estado1 =2;
+        if($detalle->save()){
+            session()->flash('message', 'Registro Procesado');
+        }else{
+            session()->flash('message', 'Error al Procesar Registro');
+        }
+        return redirect()->route('transportes.pedido.index3');
+
+    }
+
+    public function rechazartr($idsoluconsumo)
+    {
+        $detalle = SoluconsumoModel::find($idsoluconsumo);
+        $detalle->estadosoluconsumo =5;
+        $detalle->estado1 =5;
         if($detalle->save()){
             session()->flash('message', 'Registro Procesado');
         }else{
