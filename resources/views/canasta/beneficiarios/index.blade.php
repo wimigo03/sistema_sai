@@ -39,6 +39,13 @@
             });
         });
 
+        $('.search').on('keypress', function(event) {
+            if (event.which === 13) {
+                search();
+                event.preventDefault();
+            }
+        });
+
         function search(){
             var url = "{{ route('canasta.beneficiarios.search') }}";
             $("#form").attr('action', url);

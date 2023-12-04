@@ -1,14 +1,15 @@
 @extends('layouts.admin')
 @section('content')
-    <div class="card">
-        <div class="card-header">
-            <b>USUARIOS</b>
-        </div>
-        <div class="card-body">
-            @include('admin.users.partials.search')
-            @include('admin.users.partials.table')
-        </div>
+<link rel="stylesheet" href="/css/font-verdana.css" rel="stylesheet">
+<div class="card card-custom">
+    <div class="card-header font-verdana-bgt">
+        <b>USUARIOS</b>
     </div>
+    <div class="card-body">
+        @include('admin.users.partials.search')
+        @include('admin.users.partials.table')
+    </div>
+</div>
 @endsection
 @section('scripts')
     <script>
@@ -17,6 +18,14 @@
                 placeholder: "--Estado--"
             });
         });
+
+        $('.search').on('keypress', function(event) {
+            if (event.which === 13) {
+                search();
+                event.preventDefault();
+            }
+        });
+
         function create(){
             $(".btn").hide();
             $(".btn-importar").hide();
