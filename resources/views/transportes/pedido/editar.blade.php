@@ -21,20 +21,14 @@
 </div>
 <div class="body-border" style="background-color: #FFFFFF;">
   
-        <input type="text" hidden name="idsoluconsumo" 
-        value="{{$soluconsumos->idsoluconsumo}}">
-   
-
+        <input type="text" hidden name="idsoluconsumo" value="{{$soluconsumos->idsoluconsumo}}">
         <div class="form-group row">
-
             <div class="col-md-3">
                 <label for="oficina" class="d-inline font-verdana-bg">
                     <b>oficina</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <textarea disabled name="oficina"  class="form-control form-control-sm font-verdana-bg" 
-                id="oficina" >{{$soluconsumos->oficina}}</textarea>
+                <textarea disabled name="oficina"  class="form-control form-control-sm font-verdana-bg" id="oficina" >{{$soluconsumos->oficina}}</textarea>
             </div>
-
             <div class="col-md-3">
                 <label for="cominterna" class="d-inline font-verdana-bg">
                     <b>coninterna</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
@@ -42,15 +36,11 @@
                 <textarea disabled name="cominterna" class="form-control form-control-sm font-verdana-bg"
                  id="cominterna" >{{$soluconsumos->cominterna}}</textarea>
             </div>
-            
             <div class="col-md-2">
                 <label for="fechasol" class="d-inline font-verdana-bg">
                     <b> fechasol</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <input   type="text" disabled name="fechasol" id="fechasol" placeholder="dd/mm/aaaa" data-language="es"
-            
-                class="form-control" value="{{$soluconsumos->fechasol}}"
-                >
+                <input   type="text" disabled name="fechasol" id="fechasol" placeholder="dd/mm/aaaa" data-language="es" class="form-control" value="{{$soluconsumos->fechasol}}">
             </div>
             <div class="col-md-4">
                 <label for="referencia" class="d-inline font-verdana-bg">
@@ -59,10 +49,6 @@
                 <textarea disabled name="referencia"  class="form-control form-control-sm font-verdana-bg" 
                 id="referencia" >{{$soluconsumos->referencia}}</textarea>
             </div>
-         
-
-            
-
             <div class="col-md-4">
                 <label for="dirigidoa" class="d-inline font-verdana-bg">
                     <b>Dirigido a:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
@@ -84,9 +70,6 @@
                class="form-control form-control-sm font-verdana-bg" 
                id="dirigidoa" data-language="es" autocomplete="off" >
             </div>
-         
-
-
             <div class="col-md-4">
                 <label for="viados" class="d-inline font-verdana-bg">
                     <b>Via:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
@@ -96,7 +79,6 @@
                class="form-control form-control-sm font-verdana-bg" 
                id="dirigidoa" data-language="es" autocomplete="off" >
             </div>
-
             <div class="col-md-3">
                 <label for="fechasalida" class="d-inline font-verdana-bg">
                     <b> fechasalida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
@@ -106,7 +88,6 @@
                 class="form-control" value="{{$soluconsumos->fechasalida}}"
                 >
             </div>
-
             <div class="col-md-3">
                 <label for="fecharetorno" class="d-inline font-verdana-bg">
                     <b> fecharetorno</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
@@ -116,8 +97,6 @@
                 class="form-control" value="{{$soluconsumos->fecharetorno}}"
                 >
             </div>
-
-
             <div class="col-md-6">
                 <label for="detallesouconsumo" class="d-inline font-verdana-bg">
                     <b>detallesouconsumo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
@@ -125,8 +104,6 @@
                 <textarea disabled name="detallesouconsumo" cols="1" rows="5" class="form-control form-control-sm font-verdana-bg" 
                 id="detallesouconsumo" >{{$soluconsumos->detallesouconsumo}}</textarea>
             </div>
-
-
             <div class="col-md-3">
                 <label for="tsalida" class="d-inline font-verdana-bg">
                     <b>tsalida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
@@ -188,6 +165,22 @@
             </div> 
 
         </div>
+        @if ($soluconsumos->estadosoluconsumo == 1)
+            <div class="form-group row">
+                <div class="col-md-12 text-right">
+                    <a href="{{ route('transportes.pedido.aprovar',$soluconsumos->idsoluconsumo) }}">
+                        <button type="button" class="btn btn-success font-verdana-bg">
+                            <i class="fa fa-check" aria-hidden="true"></i>&nbsp;Aprobar&nbsp;
+                        </button>
+                    </a>
+                    <a href="{{ route('transportes.pedido.rechazar',$soluconsumos->idsoluconsumo) }}">
+                        <button type="button" class="btn btn-danger font-verdana-bg">
+                            <i class="fa fa-close" aria-hidden="true"></i>&nbsp;Rechazar&nbsp;
+                        </button>
+                    </a>
+                </div>
+            </div>
+        @endif
         {{-- <div class="form-group row">
             <div class="col-md-12 text-right">
                 <a href="{{route('transportes.pedido.aprovar',$soluconsumos->idsoluconsumo)}}" target="_blank">

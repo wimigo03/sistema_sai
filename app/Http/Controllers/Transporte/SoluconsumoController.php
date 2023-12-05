@@ -373,6 +373,7 @@ $Nombreviacargo = $productocuatro->nombrecargo;
   
     public function aprovar($idsoluconsumo)
     {
+        //dd($idsoluconsumo);
         $detalle = SoluconsumoModel::find($idsoluconsumo);
         $detalle->estadosoluconsumo =2;
         $detalle->estado1 =2;
