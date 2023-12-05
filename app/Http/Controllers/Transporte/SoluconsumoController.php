@@ -28,6 +28,10 @@ class SoluconsumoController extends Controller
 {
     public function index(Request $request)
     {
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
 
         if ($request->ajax()) {
 
@@ -60,11 +64,20 @@ class SoluconsumoController extends Controller
                         ->make(true);
 
                     }
-       return view('transportes.pedido.index');
+                    $personal = User::find(Auth::user()->id);
+                    $id = $personal->id;
+                    $userdate = User::find($id)->usuariosempleados;
+                    $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+            
+       return view('transportes.pedido.index', ['idd' => $personalArea]);
     }
 
     public function index2(Request $request)
     {
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
 
         if ($request->ajax()) {
 
@@ -98,11 +111,20 @@ class SoluconsumoController extends Controller
                         ->make(true);
 
                     }
-       return view('transportes.pedido.index2');
+                    $personal = User::find(Auth::user()->id);
+                    $id = $personal->id;
+                    $userdate = User::find($id)->usuariosempleados;
+                    $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+            
+       return view('transportes.pedido.index2', ['idd' => $personalArea]);
     }
 
     public function index3(Request $request)
     {
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
 
         if ($request->ajax()) {
         $soluconsumos = DB::table('soluconsumo as s')
@@ -129,11 +151,20 @@ class SoluconsumoController extends Controller
                         ->make(true);
 
                     }
-       return view('transportes.pedido.index3');
+                    $personal = User::find(Auth::user()->id);
+                    $id = $personal->id;
+                    $userdate = User::find($id)->usuariosempleados;
+                    $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+            
+       return view('transportes.pedido.index3', ['idd' => $personalArea]);
     }
 
     public function index4(Request $request)
     {
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
 
         if ($request->ajax()) {
 
@@ -165,7 +196,12 @@ class SoluconsumoController extends Controller
                          ->rawColumns(['btn'])
                         ->make(true);
                     }
-       return view('transportes.pedido.index4');
+                    $personal = User::find(Auth::user()->id);
+                    $id = $personal->id;
+                    $userdate = User::find($id)->usuariosempleados;
+                    $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+            
+       return view('transportes.pedido.index4', ['idd' => $personalArea]);
     }
  
 

@@ -28,6 +28,10 @@ class ValeController extends Controller
 {
     public function index(Request $request)
     {
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
 
         if ($request->ajax()) {
 
@@ -66,7 +70,12 @@ class ValeController extends Controller
                         ->make(true);
 
                     }
-       return view('almacenes.pedido.index');
+                    $personal = User::find(Auth::user()->id);
+                    $id = $personal->id;
+                    $userdate = User::find($id)->usuariosempleados;
+                    $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+            
+       return view('almacenes.pedido.index', ['idd' => $personalArea]);
     }
 
 
@@ -105,7 +114,7 @@ class ValeController extends Controller
                             ->make(true);
     
                         }
-           return view('almacenes.pedido.index2');
+           return view('almacenes.pedido.index2', ['idd' => $personalArea]);
         }
     
         public function index3(Request $request)
@@ -142,7 +151,7 @@ class ValeController extends Controller
                                ->make(true);
        
                            }
-              return view('almacenes.pedido.index3');
+              return view('almacenes.pedido.index3', ['idd' => $personalArea]);
            }
        
     public function create(){

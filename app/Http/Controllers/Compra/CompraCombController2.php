@@ -26,6 +26,7 @@ use DataTables;
 class CompraCombController2 extends Controller
 {
     public function index(){
+        
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;

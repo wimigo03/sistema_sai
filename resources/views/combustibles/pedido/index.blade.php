@@ -2,7 +2,7 @@
 @section('content')
 <div class="row font-verdana-bg">
     <div class="col-md-8 titulo">
-        <b>SOLICITUDES PENDIENTES</b>
+        <b>SOLICITUDES PENDIENTES--</b><b style='color:red'>{{$idd->nombrearea}} </b>--
     </div>
     <div class="col-md-4 text-right">
         @can('comprascomb_aprovadas')
@@ -26,9 +26,10 @@
 <div class="row">
     <div class="col-md-12">
         <center>
-                        <table id="horarios-table" class="table-bordered yajra-datatable hoverTable responsive font-verdana" style="width:100%;">
+                        <table  class="table-bordered yajra-datatable hoverTable responsive font-verdana" style="width:100%;">
                             <thead class="font-courier">
                                 <tr>
+                                    <td class="text-justify p-1"><b>N°</b></td>
                                     <td class="text-justify p-1"><b>OBJETO</b></td>
                                     <td class="text-justify p-1"><b>AREA</b></td>
                                     <td class="text-justify p-1"><b>PROVEEDOR</b></td>
@@ -49,12 +50,18 @@
 
 <script>
  $(document).ready(function() {
-        $('#horarios-table').DataTable({
-            serverSide: true,
-            processing: true,
+        $('.yajra-datatable').DataTable({
+            responsive: true,
+        processing: true,
+        serverSide: true,
+        autoWidth: false,
             ajax: "{{ route('combustibles.pedido.index') }}",
 
-            columns: [{
+            columns: [
+            
+            {data: 'DT_RowIndex',orderable: false,searchable: false,class:'text-justify p-1 font-verdana'},
+
+            {
                     className: 'text-center',
                     data: 'objeto',
                     name: 'objeto'

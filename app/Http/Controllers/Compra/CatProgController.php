@@ -15,8 +15,12 @@ class CatProgController extends Controller
 {
     public function index()
     {
-             
-     return view('combustibles.catprog.index');
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+     
+     return view('combustibles.catprog.index', ['idd' => $personalArea]);
 
     }
 

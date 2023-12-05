@@ -16,8 +16,12 @@ class ProgramaCombController extends Controller
 {
     public function index()
     {
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
 
-        return view('combustibles.programa.index');
+        return view('combustibles.programa.index', ['idd' => $personalArea]);
     }
 
 

@@ -67,6 +67,10 @@ $personal = User::find(Auth::user()->id);
     public function index2(Request $request){
 
   
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
 
         if ($request->ajax()) {
 
@@ -96,8 +100,12 @@ $personal = User::find(Auth::user()->id);
 
                     }     
 
-
-            return view('transportes.uconsumo.index2');
+                    $personal = User::find(Auth::user()->id);
+                    $id = $personal->id;
+                    $userdate = User::find($id)->usuariosempleados;
+                    $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+            
+            return view('transportes.uconsumo.index2', ['idd' => $personalArea]);
 
     }
 

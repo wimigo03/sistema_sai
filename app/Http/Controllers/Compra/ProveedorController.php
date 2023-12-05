@@ -24,8 +24,12 @@ class ProveedorController extends Controller
 {
     public function index()
     {
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
 
-        return view('combustibles.proveedor.index');
+        return view('combustibles.proveedor.index', ['idd' => $personalArea]);
     }
 
 

@@ -16,12 +16,17 @@ use Illuminate\Support\Facades\Redirect;
 
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
+use App\Models\EmpleadosModel;
 
 
 class CompraCombController extends Controller
 {
     public function index(Request $request)
     {
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
 
         if ($request->ajax()) {
         $compras = DB::table('compracomb as c')
@@ -42,16 +47,16 @@ class CompraCombController extends Controller
                         $compras = $compras->get();
 
                         return DataTables::of($compras)
-
+                        ->addIndexColumn()
                         ->addColumn('objeto', function ($compras) {
                             return $compras->objeto;
                         })
                         ->addColumn('nombrearea', function ($compras) {
                             return $compras->nombrearea;
                         })
-                        ->addColumn('nombreproveedor', function ($compras) {
-                            return $compras->nombreproveedor;
-                        
+                        ->addColumn('nombreproveedor', function ($compras) {                                
+                        return $compras->nombreproveedor;  
+
                         })
                         ->addColumn('preventivo', function ($compras) {
                             return $compras->preventivo;
@@ -143,13 +148,22 @@ class CompraCombController extends Controller
                 ->rawColumns(['actions', 'estadocompracomb'])
                 ->make(true);
         }
-       return view('combustibles.pedido.index');
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+   
+       return view('combustibles.pedido.index',['idd' => $personalArea]);
     }
 
 
 
     public function index2(Request $request)
     {
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
 
         if ($request->ajax()) {
         $compras = DB::table('compracomb as c')
@@ -171,7 +185,12 @@ class CompraCombController extends Controller
                         ->make(true);
 
                     }
-       return view('combustibles.pedido.index2');
+                    $personal = User::find(Auth::user()->id);
+                    $id = $personal->id;
+                    $userdate = User::find($id)->usuariosempleados;
+                    $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+            
+       return view('combustibles.pedido.index2', ['idd' => $personalArea]);
     }
 
 

@@ -2,7 +2,7 @@
 @section('content')
 <div class="row font-verdana-bg">
     <div class="col-md-8 titulo">
-        <b>PROGRAMAS</b>
+        <b>PROGRAMAS</b><b style='color:red'>{{$idd->nombrearea}} </b>--
     </div>
 
     <div class="col-md-4 text-right">

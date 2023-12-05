@@ -15,8 +15,12 @@ class TipoMovilidadController extends Controller
 {
     public function index()
     {
-             
-     return view('transportes.tipo.index');
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+   
+     return view('transportes.tipo.index', ['idd' => $personalArea]);
   
     }
   

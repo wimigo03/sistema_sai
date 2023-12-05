@@ -5,7 +5,7 @@
 
 <div class="row font-verdana-bg">
     <div class="col-md-10 titulo">
-        <b>LISTADO DE PARTIDAS</b>
+        <b>LISTADO DE PARTIDAS</b><b style='color:red'>{{$idd->nombrearea}} </b>--
     </div>
 
     <div class="col-md-12">

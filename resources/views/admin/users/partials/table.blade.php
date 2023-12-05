@@ -7,7 +7,7 @@
                     <th class="text-left p-1">NOMBRE</th>
                     <th class="text-left p-1">USUARIO</th>
                     <th class="text-left p-1">EMAIL</th>
-                    <th class="text-left p-1">ROL</th>
+                    {{-- <th class="text-left p-1">ROL</th> --}}
                     <th class="text-center p-1">ESTADO</th>
                     <th class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></th>
                 </tr>
@@ -20,10 +20,10 @@
                         <td class="text-left p-1" style="vertical-align: middle;">{{ $user->name }}</td>
                         <td class="text-left p-1" style="vertical-align: middle;">{{ $user->email }}</td>
                         {{-- <td class="text-left p-1" style="vertical-align: middle;">{{ $user->role->title }}</td> --}}
-                        <td class="text-left p-1" style="vertical-align: middle;">{{ strtoupper($user->nombre_completo) }}</td>
-                        <td class="text-left p-1" style="vertical-align: middle;">{{ strtoupper($user->name) }}</td>
-                        <td class="text-left p-1" style="vertical-align: middle;">{{ strtoupper($user->email) }}</td>
-                        <td class="text-left p-1" style="vertical-align: middle;">{{ strtoupper($user->role->title) }}</td>
+                        {{-- <td class="text-left p-1" style="vertical-align: middle;">{{ strtoupper($user->nombre_completo) }}</td> --}}
+                        {{-- <td class="text-left p-1" style="vertical-align: middle;">{{ strtoupper($user->name) }}</td> --}}
+                        {{-- <td class="text-left p-1" style="vertical-align: middle;">{{ strtoupper($user->email) }}</td> --}}
+                        {{-- <td class="text-left p-1" style="vertical-align: middle;">{{ strtoupper($user->role->title) }}</td> --}}
                         <td class="text-center p-1" style="vertical-align: middle;">
                             {{--<span class="badge {{ $user->icono_estado }} badge-with-padding">--}}
                                 {{ $user->status }}

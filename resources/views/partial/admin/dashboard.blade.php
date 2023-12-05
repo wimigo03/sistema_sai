@@ -500,59 +500,10 @@
         <a href="{{ route('transportes.pedido.index3') }}">
             &nbsp;<i class="fa fa-data base"></i>
             <span class="nav-label mr-4">Por aprovar</span>
-{{--@canany(['transportes_access'])--}}
-    <li class="font-verdana-bg">
-        <a href="" data-toggle="collapse" data-target="#dashboard_transportes"
-            class="active collapsed" aria-expanded="false">
-            <i class="fa fa-th-list" style="color:green"></i>
-            <span class="nav-label mr-3">Transporte</span>
-            <span class="fa fa-arrow-circle-left float-right"></span>
         </a>
-        <ul class="sub-menu collapse" id="dashboard_transportes">
-            {{--@can('vehiculo_access')--}}
-                <li>
-                    <a href="{{ route('transportes.pedidoparcial.index') }}">
-                        &nbsp;<i class="fa fa-data base"></i>
-                        <span class="nav-label mr-4">Solicitud</span>
-                    </a>
-                </li>
-            {{--@endcan--}}
-            {{--@can('vehiculo_access')--}}
-                <li>
-                    <a href="{{ route('transportes.pedido.index3') }}">
-                        &nbsp;<i class="fa fa-data base"></i>
-                        <span class="nav-label mr-4">Por aprovar</span>
-                    </a>
-                </li>
-            {{--@endcan--}}
-            {{--@can('vehiculo_access')--}}
-                <li>
-                    <a href="{{ route('transportes.pedido.index') }}">
-                        &nbsp;<i class="fa fa-data base"></i>
-                        <span class="nav-label mr-4">Pendientes</span>
-                    </a>
-                </li>
-            {{--@endcan--}}
-            {{--@can('vehiculo_access')--}}
-                <li>
-                    <a href="{{ route('transportes.uconsumo.index') }}">
-                        &nbsp;<i class="fa fa-data base"></i>
-                        <span class="nav-label mr-4">vehiculo</span>
-                    </a>
-                </li>
-            {{--@endcan--}}
-            {{--@can('tipomovilidad_access')--}}
-                <li>
-                    <a href="{{ route('tipo.index') }}">
-                        &nbsp;<i class="fa fa-data base"></i>
-                        <span class="nav-label mr-4">Tipo</span>
-                    </a>
-                </li>
-            {{--@endcan--}}
-        </ul>
     </li>
+            @endcan
 
-@endcan
 
     @can('vehiculocombu_pendiente')
     <li>

@@ -4,7 +4,7 @@
 <div class="row font-verdana-bg">
 
     <div class="col-md-8 titulo">
-        <b>PROVEEDORES</b>
+        <b>PROVEEDORES</b><b style='color:red'>{{$idd->nombrearea}} </b>--
     </div>
 
     <div class="col-md-4 text-right">

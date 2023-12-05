@@ -38,6 +38,10 @@ use Hamcrest\TypeSafeDiagnosingMatcher;
 class IngresoController extends Controller
 {
     public function index(Request $request){
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
 
         if ($request->ajax()) {
    
@@ -61,8 +65,12 @@ class IngresoController extends Controller
                             ->make(true);
    
                        }     
-   
-               return view('almacenes.ingreso.index');
+                       $personal = User::find(Auth::user()->id);
+                       $id = $personal->id;
+                       $userdate = User::find($id)->usuariosempleados;
+                       $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+               
+               return view('almacenes.ingreso.index', ['idd' => $personalArea]);
        }
      
        public function grafico(){

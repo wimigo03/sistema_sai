@@ -15,8 +15,12 @@ class LocalidadController extends Controller
 {
     public function index()
     {
-             
-     return view('almacenes.localidad.index');
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+ 
+     return view('almacenes.localidad.index', ['idd' => $personalArea]);
   
     }
   
