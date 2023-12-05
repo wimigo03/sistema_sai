@@ -3,7 +3,7 @@
     <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle ">
         <a href="{{ route('almacenes.ingreso.detalle', $idingreso) }}">
             <span class="text-primary">
-                <i class="fa-solid fa-2xl fa-square-info"></i>
+                <i class="fa-solid fa-2xl fa-edit"></i>
             </span>
         </a>
     </span>

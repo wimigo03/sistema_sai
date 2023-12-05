@@ -32,6 +32,7 @@ use PDF;
 
 use App\Models\Almacen\Ingreso\IngresoModel;
 use App\Models\Almacen\Ingreso\BorrarModel;
+use App\Models\Almacen\Ingreso\NotaIngresoModel;
 
 
 use App\Models\Compra\ProveedorModel;
@@ -243,6 +244,9 @@ class DetalleCompraCombController extends Controller
         $idPro = $compra->idprogramacomb;
         $idProov = $compra->idproveedor;
         $idEstadoCompra = $compra->estadocompracomb;
+        $NumeroCompra = $compra->numcompra;
+        $PreventiCompra = $compra->preventivo;
+        $IdareaCompra = $compra->idarea;
 
         //solo catprogramatica
         $catprogrami = CatProgModel::find($idCat);
@@ -302,8 +306,24 @@ $ingreso->estado1 = 1;
 $ingreso->estado2 = 1;
 $ingreso->save();
 
-       
+$obtenerId = $ingreso->idingreso;
 
+      $notaingreso = new NotaIngresoModel();
+      $notaingreso -> numcompra = $NumeroCompra;
+      $notaingreso -> numsolicitud =$PreventiCompra;
+      $notaingreso -> codigoproducto = $CodiGprodser ;
+      $notaingreso -> nombreproducto = $nombreprodser ;
+      $notaingreso -> ingreso = $CanTidad;
+      $notaingreso -> precio = $PreCios ;
+      $notaingreso -> subtotal = $CanTidad*$PreCios;
+      $notaingreso -> num_comprobante = 10 ;
+      $notaingreso -> factura_comprobante =11;
+      $notaingreso -> nombreprobeedor = $nmbprveri;
+      $notaingreso -> idingreso =$obtenerId;
+      $notaingreso -> idarea =$IdareaCompra;
+      $notaingreso -> idproveedor =$idProov;
+      $notaingreso -> fechaentra =Carbon::now();
+      $notaingreso->save();
 
         session()->flash('message', 'Registro Enviado a almacen');
             }

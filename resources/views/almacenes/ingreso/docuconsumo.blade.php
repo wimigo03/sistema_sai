@@ -61,9 +61,9 @@
                         @forelse ($notaingreso as $docprov)
                         <tr>
 
-                         <td >{{$docprov -> idnotaingreso}}</td>  
-                            <td>{{$docprov -> numcompra}}</td>
-                            <td s>{{$docprov -> numsolicitud}}</td>
+                         <td >{{$docprov ->idnotaingreso}}</td>  
+                            <td>{{$docprov ->numcompra}}</td>
+                            <td s>{{$docprov ->numsolicitud}}</td>
                     
 
 

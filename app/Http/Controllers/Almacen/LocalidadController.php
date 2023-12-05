@@ -11,6 +11,12 @@ use App\Http\Requests;
 use DB;
 use DataTables;
 
+use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use App\Models\EmpleadosModel;
+use App\Models\AreasModel;
+use App\Models\User;
 class LocalidadController extends Controller
 {
     public function index()

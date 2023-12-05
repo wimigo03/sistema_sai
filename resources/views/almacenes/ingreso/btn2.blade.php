@@ -3,7 +3,7 @@
     <span class="tts:left tts-slideIn tts-custom" aria-label="Crear Nota ">
         <a href="{{ route('ingreso.editdoc', $idingreso) }}">
             <span class="text-primary">
-                <i class="fa-solid fa-2xl fa-square-info"></i>
+                <i class="fa-solid fa-2xl fa-file" style="color:orange"></i>
             </span>
         </a>
     </span>
