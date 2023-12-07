@@ -4,6 +4,11 @@
 <div class="container ">
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
+        <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
+                <a href="{{url()->previous()}}" class="color-icon-1">
+                    <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
+                </a>
+            </span>
             <b>Lista de Registros de Permisos Personles Mensuales</b>
         </div>
 
@@ -18,6 +23,8 @@
             <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
         </div>
         <div class="col-md-12">
+        <hr class="hrr">
+
             <b>Nombres y Apellidos: {{$empleado->nombres}} {{$empleado->ap_pat}} {{$empleado->ap_pat}}</b>
 
             <hr class="hrr">

@@ -12,6 +12,7 @@ class HuellasDigitalesModel extends Model
         // Otras propiedades fillable aquí
         'id',
         'fid',
+        'empleado_id',
         'usuario_creac',
         'usuario_mod',
       

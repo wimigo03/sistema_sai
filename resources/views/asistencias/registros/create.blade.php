@@ -5,6 +5,11 @@
     <div class="row font-verdana-bg">
 
         <div class="col-md-3 offset-md-3 titulo">
+        <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
+                <a href="{{url()->previous()}}" class="color-icon-1">
+                    <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
+                </a>
+            </span>
             <b>Registrar Asistencia</b>
             <i class=aria-hidden="true"></i>
         </div>
@@ -24,19 +29,19 @@
 
     <div class="row font-verdana">
         <div class="col-md-6 offset-md-3">
-      
+
             <div class="body-border">
-            @if(session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
+                @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
                 @endif
 
                 <!-- Mostrar mensajes de error -->
                 @if(session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
-                    </div>
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
                 @endif
                 <form action="{{ route('registroasistencia.store') }}" method="POST">
                     @csrf

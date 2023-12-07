@@ -4,20 +4,19 @@
 <div class="container-xl">
     <br>
     <div class="row font-verdana-bg">
-        <div class="col-md-6 titulo">
-            <b> Regularizar Asistencias </b>
+        <div class="col-md-8 titulo">
+        <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
+                <a href="{{url()->previous()}}" class="color-icon-1">
+                    <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
+                </a>
+            </span>
+            <b> Regularizar de Asistencia </b>
         </div>
-        <div class="col-md-6 text-right">
-            <a href="{{ route('historial_asistencia.index') }}" class="tts:left tts-slideIn tts-custom" aria-label="Restaurar Regularizacion">
+        <div class="col-md-4 text-right">
+            <a href="{{ route('historial_asistencia.index') }}" class="tts:left tts-slideIn tts-custom" aria-label="Ver Historial de Rgularizaciones">
                 <button class="btn btn-sm btn-primary font-verdana" type="button">
-                    <i class="fa fa-clock" aria-hidden="true"></i>
-                    &nbsp; Historial de Regularizaciones
-                </button>
-            </a>
-             <a href="{{ route('empleadoasistencias.index') }}" class="tts:left tts-slideIn tts-custom" aria-label="Ver Historial de Rgularizaciones">
-                <button class="btn btn-sm btn-success font-verdana" type="button">
                 <i class="fa-regular fa-address-card"></i>
-                    &nbsp; Empleados
+                    &nbsp; Agregar Regulacion
                 </button>
             </a>
             <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
@@ -25,9 +24,8 @@
                     &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
                 </button>
             </a>
+       
          </div>
-    
-        <div class="col-md-12">
         @if(session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
@@ -40,6 +38,7 @@
             {{ session('error') }}
         </div>
         @endif
+        <div class="col-md-12">
             <hr class="hrr">
         </div>
     </div>

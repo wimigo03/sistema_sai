@@ -19,13 +19,13 @@
 
             </div>
 
-            <a class="tts:left tts-slideIn tts-custom" aria-label="Registrar Asistencia" href="{{route('registroasistencia.create')}}">
-                <button class="btn btn-sm btn-primary font-verdana" type="button">
-                    &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
+
+
+            <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
+                <button class="btn btn-sm btn-danger font-verdana" type="button">
+                    &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
                 </button>
             </a>
-
-            <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
         </div>
         <div class="col-md-12">
             <hr class="hrr">
@@ -117,7 +117,6 @@
 <script>
     $(document).ready(function() {
         $('#myTable').DataTable({
-            "dom": '<"top"Bf>lrtip',
             responsive: true,
             processing: true,
             serverSide: true,
@@ -144,7 +143,7 @@
                 infoFiltered: "<span class='font-verdana'>(filtrados de un total de _MAX_ registros)</span>"
             },
             orderFixed: [0, 'desc'],
-            
+
             ajax: {
                 url: "{{ route('registroasistencia.index') }}",
                 data: function(d) {
@@ -168,7 +167,7 @@
                     data: 'horario',
                     name: 'horario',
                     class: 'text-center p-1 font-verdana-sm'
-                   
+
                 },
                 {
                     data: 'registro_inicio',

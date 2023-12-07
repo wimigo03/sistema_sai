@@ -4,11 +4,16 @@
 <div class="container">
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
+        <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
+                <a href="{{url()->previous()}}" class="color-icon-1">
+                    <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
+                </a>
+            </span>
             <b>Agregar Nuevo Horario Laboral</b>
         </div>
 
         <div class="col-md-4 text-right">
-            <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('horarios.index')}}">
+            <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
                 <button class="btn btn-sm btn-danger font-verdana" type="button" aria-label="Cerrar">
                     &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
                 </button>

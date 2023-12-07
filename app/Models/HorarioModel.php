@@ -13,6 +13,10 @@ class HorarioModel extends Model
         'estado',
         'tipo',
         'inicio_jornada',
+        'hora_inicio',
+        'hora_entrada',
+        'hora_salida',
+        'hora_final'
     ];
     protected $table = 'horarios';
     

@@ -1,44 +1,18 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="container">
-    <div class="row font-verdana-bg">
-
-
-        <div class="col-md-12">
-            <!-- Dentro de tu vista -->
-            @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-            @endif
-
-            @if(session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-            @endif
-
-            @if(session('message'))
-            <div class="alert alert-info">
-                {{ session('message') }}
-            </div>
-            @endif
-        </div>
-    </div>
+<div class="container-xl font-verdana-bg">
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
-        <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
-                <a href="{{url()->previous()}}" class="color-icon-1">
-                    <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
-                </a>
-            </span>
             <b>Lista de Personal Activo</b>
         </div>
         <div class="col-md-4 text-right">
-      
-          
-          
+            <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('ausencias.index')}}">
+                <button class="btn btn-sm btn-info font-verdana" type="button">
+
+                    &nbsp; <i class="fa-regular fa-address-card"> &nbsp; </i>Lista General de Expiraciones</i>&nbsp;
+                </button>
+            </a>
             <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
                 <button class="btn btn-sm btn-danger font-verdana" type="button">
                     &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
@@ -46,7 +20,7 @@
             </a>
 
         </div>
-         <div class="col-md-12">
+        <div class="col-md-12">
             <hr class="hrr">
         </div>
         <ul class="nav nav-tabs" id="myTabs">
@@ -69,11 +43,15 @@
                     <table class="table-bordered yajra-datatable hoverTable table display responsive font-verdana" id="empleados-table" style="width:100%">
                         <thead class="table-light">
                             <tr>
-                                <th>ID</th>
-                                <th>Nombres</th>
-                                <th>Apellidos</th>
-                                <th>Horarios</th>
-                                <th>Acciones</th>
+                            <th>ID</th>
+                <th>Nombre</th>
+                <th>Exp. Inducción</th>
+                <th>Exp. Declaración Jurada</th>
+                <th>Exp. Sippase</th>
+                <th>Rejap</th>
+                <th>Exp. Poai</th>
+                <th>Exp. Programa Vacación</th>
+                <th>Acciones</th>
                             </tr>
                         </thead>
                     </table>
@@ -100,11 +78,13 @@
 
         </div>
 
+
+    </div>
+    <div class="row  ">
+
     </div>
 
-
 </div>
-
 @section('scripts')
 <script>
     $(document).ready(function() {
@@ -135,37 +115,19 @@
                 infoEmpty: "<span class='font-verdana'>Ningun registro encontrado</span>",
                 infoFiltered: "<span class='font-verdana'>(filtrados de un total de _MAX_ registros)</span>"
             },
-            ajax: "{{ route('empleadoasistencias.planta') }}",
+            ajax: "{{ route('planta') }}",
 
-            columns: [{
-                    data: 'id',
-                    name: 'id',
-                    class: 'text-justify p-1 font-verdana-sm'
-                },
-                {
-                    data: 'nombres',
-                    name: 'nombres',
-                    class: 'text-justify p-1 font-verdana-sm'
-                },
-                {
-                    data: 'apellidos',
-                    name: 'apellidos',
-                    class: 'text-justify p-1 font-verdana-sm'
-                },
-                {
-                    data: 'horario',
-                    name: 'horario',
-                    class: 'text-justify p-1 font-verdana-sm'
-                },
-
-                {
-                    data: 'actions',
-                    name: 'actions',
-                    orderable: false,
-                    searchable: false,
-                    class: 'text-justify p-1 font-verdana-sm'
-                }
-            ]
+            columns: [
+                    { data: 'id', name: 'id' },
+                    { data: 'nomb_aps', name: 'nomb_aps' },
+                    { data: 'expinduccion', name: 'expinduccion' },
+                    { data: 'expdecjurada', name: 'expdecjurada' },
+                    { data: 'expsippase', name: 'expsippase' },
+                    { data: 'rejap', name: 'rejap' },
+                    { data: 'exppoai', name: 'exppoai' },
+                    { data: 'expprogvacacion', name: 'expprogvacacion' },
+                    { data: 'actions', name: 'actions', orderable: false, searchable: false }
+                ]
 
         });
         $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
@@ -201,34 +163,45 @@
                             infoEmpty: "<span class='font-verdana'>Ningun registro encontrado</span>",
                             infoFiltered: "<span class='font-verdana'>(filtrados de un total de _MAX_ registros)</span>"
                         },
-                        ajax: "{{ route('empleadoasistencias.contrato') }}",
+                        ajax: "{{ route('contrato') }}",
 
                         columns: [{
                                 data: 'id',
-                                name: 'id',
-                                class: 'text-justify p-1 font-verdana-sm'
+                                name: 'id'
                             },
                             {
-                                data: 'nombres',
-                                name: 'nombres',
-                                class: 'text-justify p-1 font-verdana-sm'
+                                data: 'nomb_aps',
+                                name: 'nomb_aps'
                             },
                             {
-                                data: 'apellidos',
-                                name: 'apellidos',
-                                class: 'text-justify p-1 font-verdana-sm'
+                                data: 'expinduccion',
+                                name: 'expinduccion'
                             },
                             {
-                                data: 'horario',
-                                name: 'horario',
-                                class: 'text-justify p-1 font-verdana-sm'
+                                data: 'expdecjurada',
+                                name: 'expdecjurada'
+                            },
+                            {
+                                data: 'expsippase',
+                                name: 'expsippase'
+                            },
+                            {
+                                data: 'rejap',
+                                name: 'rejap'
+                            },
+                            {
+                                data: 'exppoai',
+                                name: 'exppoai'
+                            },
+                            {
+                                data: 'expprogvacacion',
+                                name: 'expprogvacacion'
                             },
                             {
                                 data: 'actions',
                                 name: 'actions',
                                 orderable: false,
-                                searchable: false,
-                                class: 'text-justify p-1 font-verdana-sm'
+                                searchable: false
                             }
                         ]
 

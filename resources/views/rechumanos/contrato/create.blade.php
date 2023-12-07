@@ -5,10 +5,15 @@
 
 
 <div class="row font-verdana-bg">
-    <div class="row">
-        <a href="{{url()->previous()}}" class="btn blue darken-4 text-black "><i style="color:#55CE63;font-weight: bold;" class="fa fa-plus-square"></i> Volver atras</a>
+     
+    <div class="col-md-3 titulo">
+        <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
+            <a href="{{url()->previous()}}" class="color-icon-1">
+                <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
+            </a>
+        </span>
     </div>
-    <div class="col-md-12 text-center titulo">
+    <div class="col-md-9 text-center titulo">
         <b>GESTIONAR PERSONAL-C//REGISTRAR</b>
     </div>
     
@@ -97,6 +102,7 @@
 
                     <option value="1">PREVISION AFP</option>
                     <option value="2">FUTURO DE BOLIVIA</option>
+                    <option value="3">GESTORA PUBLICA</option>
 
                 </select>
             </div>

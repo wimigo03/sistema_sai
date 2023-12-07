@@ -1,46 +1,50 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="container ">
+<div class="container">
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
-        <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
+            <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
                 <a href="{{url()->previous()}}" class="color-icon-1">
                     <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
                 </a>
             </span>
-            <b>Lista de Registros de Licencias Cargo RIP</b>
-        </div>
+            <b>Lista de Expiracion de {{$descripcion}} del Personal</b>
 
+        </div>
         <div class="col-md-4 text-right">
-            <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('licenciaspersonales.index')}}">
+
+            <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
                 <button class="btn btn-sm btn-danger font-verdana" type="button">
                     &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
                 </button>
             </a>
 
-
-            <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
         </div>
-        <div class="col-md-12">
-            <b>Nombres y Apellidos: {{$empleado->nombres}} {{$empleado->ap_pat}} {{$empleado->ap_pat}}</b>
 
+
+        <div class="col-md-12">
             <hr class="hrr">
         </div>
     </div>
+
     <div class="row font-verdana">
-        <div class="col-md-12">
-            <table class="table-bordered yajra-datatable hoverTable font-verdana-sm" style="width:100%" id="registrosTable">
-                <thead class="table-light">
+        <div class="col-md-12 center">
+            <table id="registrosTable" class="table-bordered yajra-datatable hoverTable table display responsive font-verdana" style="width:100%; margin: 0 auto;">
+                <thead>
                     <tr>
-                        <th>Año</th>
-                        <th>Fecha Solicitud</th>
-                        <th>Asunto</th>
-                        <th>Registrado por Usuario</th>
-                        <th>Horas Utilizadas</th>
+                         <th>Nombres y Apellidos</th>
+                         <th>Fecha Específica</th> <!-- Nombre genérico para la cuarta columna -->
+                        <th>Descripcion</th> <!-- Nombre genérico para la cuarta columna -->
                     </tr>
                 </thead>
+
             </table>
+            <div class="row font-verdana-bg">
+                <div class="col-md-12">
+                    <hr class="hrr">
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -48,6 +52,9 @@
 <script>
     $(document).ready(function() {
         $('#registrosTable').DataTable({
+             responsive: true,
+            processing: true,
+            serverSide: true,
             language: {
                 info: "<span class='font-verdana'>Mostrando _START_ al _END_ de _TOTAL_</span>",
                 search: '',
@@ -70,43 +77,49 @@
                 infoEmpty: "<span class='font-verdana'>Ningun registro encontrado</span>",
                 infoFiltered: "<span class='font-verdana'>(filtrados de un total de _MAX_ registros)</span>"
             },
-            processing: true,
-            serverSide: true,
-            ajax: "{{ route('listar.licencias', $empleado->idemp) }}",
             orderFixed: [0, 'desc'],
-            rowGroup: {
-                dataSrc: 'licencia'
-            },
-            columns: [{
-                    data: 'licencia',
-                    name: 'licencia',
-                    class: 'text-justify p-1 font-verdana-sm'
-                },
 
-                {
-                    data: 'pivot.fecha_solicitud',
-                    name: 'pivot.fecha_solicitud',
-                    class: 'text-justify p-1 font-verdana-sm'
-                },
-                {
-                    data: 'pivot.asunto',
-                    name: 'pivot.asunto',
-                    class: 'text-justify p-1 font-verdana-sm'
-                }, 
-                {
-                    data: 'pivot.usuario_creacion',
-                    name: 'pivot.usuario_creacion',
-                    class: 'text-justify p-1 font-verdana-sm'
-                },
-                {
-                    data: 'dias_utilizados',
-                    name: 'dias_utilizados',
-                    class: 'text-justify p-1 font-verdana-sm'
+            ajax: {
+                url: "{{ route('lista.index', $id) }}",
+                data: function(d) {
+                    // Agregar parámetro de filtro de fecha
+                    d.filtro = $('#filtro').val();
                 }
 
-            ]
+            },
+
+            columns: [{
+                    data: 'nombre_completo',
+                    name: 'nombre_completo',
+                    class: 'text-justify p-1 font-verdana-sm'
+                },{
+                    data: 'fecha',
+                    name: 'fecha',
+                    class: 'text-justify p-1 font-verdana-sm'
+                },
+                {
+                    data: 'ColumnaPersonalizada',
+                    name: 'ColumnaPersonalizada',
+                    class: 'text-justify p-1 font-verdana-sm'
+                }
+                
+            ],
+
+            buttons: [{
+                extend: 'colvis',
+                collectionLayout: 'fixed columns',
+                collectionTitle: 'Control de Visibilidad de Columnas',
+                className: 'btn btn-sm btn-info',
+            }],
+
+
+
         });
+        $('#myTable').on('draw.dt', function() {
+            $('ul.pagination').addClass('pagination-sm');
+        }).DataTable();
     });
 </script>
+
 @endsection
 @endsection

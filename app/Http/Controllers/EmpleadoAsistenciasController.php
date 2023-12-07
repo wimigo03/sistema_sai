@@ -24,10 +24,14 @@ class EmpleadoAsistenciasController extends Controller
 
     public function planta()
     {
+        $areasExcluidas = [33, 34];
+
+
 
         $data = EmpleadosModel::with(['horarios' => function ($query) {
             $query->where('estado', 1); // Filtrar los horarios con estado activo (estado = 1)
         }])->where('tipo', 1)
+            ->whereNotIn('idarea', $areasExcluidas)
             ->select(['idemp', 'nombres', 'ap_pat', 'ap_mat']);
 
         $data = $data->get();
@@ -53,21 +57,25 @@ class EmpleadoAsistenciasController extends Controller
                 }
             })
             ->addColumn('actions', function ($row) {
-                return '<a class="tts:left tts-slideIn tts-custom" aria-label="Ver Registros de Asistencia" href="' . route('empleadoasistencias.show', ['id' => $row->idemp]) . '">
+                return '<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Horarios Asignados" href="' . route('horarios.cambio', $row->idemp) . '">
+                <i class="fa-solid fa-2xl fa-clock text-primary"></i>
+                
+            </a>' . '' . ' <a class="tts:left tts-slideIn tts-custom" aria-label="Ver Registros de Asistencia" href="' . route('empleadoasistencias.show', ['id' => $row->idemp]) . '">
                 <i class="fa-solid fa-2xl fa-list text-success" aria-hidden="true"></i>
                  
-              </a>' . '       ' . '<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Horarios Asignados" href="' . route('horarios.cambio', $row->idemp) . '">
-              <i class="fa-solid fa-2xl fa-clock text-primary"></i>
-              
-          </a>';
+              </a>' .   '' . '<a class="tts:left tts-slideIn tts-custom" aria-label="Agregar Regulacion" href="' . route('agregar.regulacion', $row->idemp) . '">
+
+              <i class="fa-solid fa-2xl  fa-calendar-days text-secondary"></i>       
+      </a>';
             })->rawColumns(['actions'])->make(true);
     }
     public function contrato()
     {
-
+        $areasExcluidas = [33, 34];
         $data = EmpleadosModel::with(['horarios' => function ($query) {
             $query->where('estado', 1); // Filtrar los horarios con estado activo (estado = 1)
         }])->where('tipo', 2)
+            ->whereNotIn('idarea', $areasExcluidas)
             ->select(['idemp', 'nombres', 'ap_pat', 'ap_mat']);
 
         $data = $data->get();
@@ -99,7 +107,10 @@ class EmpleadoAsistenciasController extends Controller
                         </a>' . '       ' . '<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Horarios Asignados" href="' . route('horarios.cambio', $row->idemp) . '">
                         <i class="fa-solid fa-2xl fa-clock text-primary"></i>
                         
-                    </a>';
+                    </a>' .   '' . '<a class="tts:left tts-slideIn tts-custom" aria-label="Agregar Regulacion" href="' . route('agregar.regulacion', $row->idemp) . '">
+
+                    <i class="fa-solid fa-2xl  fa-calendar-days text-secondary"></i>         
+            </a>';
             })->rawColumns(['actions'])->make(true);
     }
 
@@ -132,17 +143,17 @@ class EmpleadoAsistenciasController extends Controller
      * @return \Illuminate\Http\Response
      */
 
- 
+
     public function show($id, Request $request)
     {
         //$empleado = EmpleadosModel::findOrFail($id)->select('idemp', 'nombres', 'ap_pat')->first();
-        $empleado = EmpleadosModel::where('idemp', $id)->select('idemp', 'nombres', 'ap_pat','ap_mat')->first();
+        $empleado = EmpleadosModel::where('idemp', $id)->select('idemp', 'nombres', 'ap_pat', 'ap_mat')->first();
 
         if (!$empleado) {
             abort(404); // o maneja de alguna manera el caso en que no se encuentre el registro
         }
         if ($request->ajax()) {
-           
+
             $data = RegistroAsistencia::where('empleado_id', $id)
                 ->with([
                     'horario' => function ($query) {
@@ -185,5 +196,14 @@ class EmpleadoAsistenciasController extends Controller
             }
         }
         return view('asistencias.empleados.show', compact('empleado'));
+    }
+
+
+    public function agregarRegulacion($id)
+    {
+        $empleado = EmpleadosModel::where('idemp', $id)->select('idemp', 'nombres', 'ap_pat', 'ap_mat')->first();
+        $vistaselectedMonth = Carbon::now()->format('Y-m');
+
+        return view('asistencias.registros.fechas', compact('vistaselectedMonth', 'empleado'));
     }
 }

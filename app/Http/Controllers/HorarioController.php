@@ -8,6 +8,7 @@ use App\Http\Requests\HoraEmpleadoRequest;
 use App\Models\AsistenciaModel;
 use App\Models\EmpleadosModel;
 use App\Models\HorarioModel;
+use App\Models\HuellasDigitalesModel;
 use App\Models\RegistroAsistencia;
 
 use Illuminate\Support\Facades\Auth;
@@ -139,24 +140,24 @@ class HorarioController extends Controller
     public function updateEstado($id)
     {
         $horario = HorarioModel::findOrFail($id);
-    
+
         // Obtener el nombre del usuario actual
         $nombreUsuario = Auth::user()->name; // Ajusta según la estructura de tu tabla de usuarios
-    
+
         // Actualizar el valor del estado según la lógica deseada
         if ($horario->estado == 0) {
             $horario->update([
                 'estado' => 1,
-                'usuario_modificacion'=> $nombreUsuario
-        ]);
-    
+                'usuario_modificacion' => $nombreUsuario
+            ]);
+
             return redirect()->route('horarios.index')->with('success', 'Estado de horario actualizado a activo por ' . $nombreUsuario . '.');
         } else if ($horario->estado == 1) {
             $horario->update([
                 'estado' => 0,
-                'usuario_modificacion'=>$nombreUsuario
+                'usuario_modificacion' => $nombreUsuario
             ]);
-    
+
             return redirect()->route('horarios.index')->with('pendiente', 'Estado de horario actualizado a inactivo por ' . $nombreUsuario . '.');
         } else {
             Session::flash('error', 'No se asignó el horario.');
@@ -245,6 +246,34 @@ class HorarioController extends Controller
     }
 
 
+    public function pinguardar(Request $request, EmpleadosModel $empleado)
+    {
+        $request->validate([]);
+        $pin = $request->input('pin');
+
+        try {
+            if ($pin) {
+                $emp = EmpleadosModel::where('pin', $pin)
+                    ->first();
+                if ($emp) {
+                    return redirect()->back()->with('error', 'No se pudo crear el PIN');
+                }
+                $empleado->pin = $pin;
+                $empleado->save();
+                return redirect()->route('empleadoasistencias.index')->with('success', 'PIN de Empleado creado exitosamente');
+            }
+
+
+
+
+            return redirect()->route('empleadoasistencias.index');
+        } catch (\Exception $e) {
+            // Captura cualquier excepción que pueda ocurrir y muestra un mensaje de error
+            return redirect()->back()->with('error', 'No se pudo crear el permiso: ' . $e->getMessage());
+        }
+    }
+
+
 
 
     public function cambio(EmpleadosModel $empleado)
@@ -252,8 +281,11 @@ class HorarioController extends Controller
         $horarios = HorarioModel::all()->pluck('Nombre', 'id');
         $horariosCompletos = HorarioModel::all(['id', 'Nombre', 'hora_inicio', 'hora_final', 'hora_entrada', 'hora_salida', 'estado']);
 
+      
+        $cantidadHuellas = HuellasDigitalesModel::where('empleado_id', $empleado->idemp)
+    ->count();
         if ($empleado) {
-            return view('asistencias.horarios.cambio', compact('empleado', 'horarios', 'horariosCompletos'));
+            return view('asistencias.horarios.cambio', compact('cantidadHuellas','empleado', 'horarios', 'horariosCompletos'));
         } else {
             // Manejar el caso en el que el empleado no se encuentra en la base de datos
             abort(404); // Otra respuesta apropiada
@@ -311,163 +343,28 @@ class HorarioController extends Controller
 
             //$this->CrearAsistencia($fecha);
 
-             
-            
-           // if ($asistencia) {
-           //     $asistencia->update(['estado' => 0,'descrip'=>'Activo']);
+
+
+            // if ($asistencia) {
+            //     $asistencia->update(['estado' => 0,'descrip'=>'Activo']);
             //    $this->actualizarRegistro($asistencia);
-           // }
-           
+            // }
+
 
         } else {
             $horario->empleados()->detach();
             $horario->estado = 2;
             $horario->save();
         }
-    
+
 
         return redirect()->route('horarios.index')->with('success', 'Horario modificado exitosamente.');
     }
 
 
-    private function CrearAsistencia($fecha)
-    {
-        // Verificar si el fecha es posterior al fecha actual
-        if (Carbon::now()->format('Y-m-d') < $fecha) {
-            // Si es posterior, obtener o crear el permiso del mes actual
-            $asistenciaActual = AsistenciaModel::where('fecha', $fecha)->select('id')->first();          
-            
-            if (!$asistenciaActual) {
-                $asistenciaActual = AsistenciaModel::create(['fecha' => $fecha, 'descrip' => "Activo", 'estado' => '0']);
-            }
-
-            return $asistenciaActual;
-        }
-
-        // Si no es posterior, obtener o crear el permiso del mes proporcionado
-        $asistenciaActual = AsistenciaModel::where('fecha', $fecha)->select('id')->first();
-
-        if (!$asistenciaActual) {
-            $asistenciaActual = AsistenciaModel::create([
-                'fecha' => $fecha,
-                'descrip' => 'Activo',
-                'estado' => '0'
-            ]);
-        }
 
 
 
-        return $asistenciaActual;
-    }
-
-    private function actualizarRegistro($asistencia)
-    {
-
-
-        $registros = RegistroAsistencia::where('asistencia_id', $asistencia->id)->get();
-       
-        foreach ($registros as $registro) {
-             $this->calcularRetraso($registro);
-        }
-    }
-
-    private function calcularRetraso(RegistroAsistencia $registro)
-    {
-        if ($registro->horario->tipo == 1) {
-
-            $horaEntrada = Carbon::parse($registro->horario->hora_entrada);
-            $horaInicio = Carbon::parse($registro->horario->hora_inicio);
-            $excepcion = Carbon::parse($registro->horario->excepcion);
-
-            if ($registro->registro_inicio && !$registro->registro_entrada) {
-
-                $horaexcepcion = $horaInicio->addHours($excepcion->hour)->addMinutes($excepcion->minute)->addSeconds($excepcion->second);
-                $horaInicio = $horaexcepcion->format('H:i:s');
-
-                $horaEntradaProgramada = Carbon::parse($horaInicio);
-                $horaEntradaReal = Carbon::parse($registro->registro_inicio);
-
-                if ($horaEntradaReal->greaterThan($horaEntradaProgramada)) {
-
-                    $retraso = $horaEntradaReal->diffInMinutes($horaEntradaProgramada);
-                    $registro->retraso1 = $retraso;
-                    $registro->minutos_retraso = $retraso;;
-                    $registro->save();
-                    $registro->save();
-                } else {
-                    $registro->retraso1 = 0;
-                    $registro->minutos_retraso = 0;
-                    $registro->save();
-                }
-            } else if ($registro->registro_entrada && !$registro->registro_inicio) {
-
-                $horaexcepcion = $horaEntrada->addHours($excepcion->hour)->addMinutes($excepcion->minute)->addSeconds($excepcion->second);
-                $horaEntrada = $horaexcepcion->format('H:i:s');
-
-                $horaEntradaProgramada = Carbon::parse($horaEntrada);
-                $horaEntradaReal = Carbon::parse($registro->registro_entrada);
-
-                if ($horaEntradaReal->greaterThan($horaEntradaProgramada)) {
-
-                    $retraso2 = $horaEntradaReal->diffInMinutes($horaEntradaProgramada);
-                    $registro->retraso2 = $retraso2;
-                    $registro->minutos_retraso = $retraso2;
-                    $registro->save();
-                } else {
-                    $registro->retraso2 = 0;
-                    $registro->minutos_retraso = 0;
-                    $registro->save();
-                }
-            } else if ($registro->registro_entrada && $registro->registro_inicio) {
-
-                $horaexcepcion = $horaEntrada->addHours($excepcion->hour)->addMinutes($excepcion->minute)->addSeconds($excepcion->second);
-                $horaEntrada = $horaexcepcion->format('H:i:s');
-
-                $horaEntradaProgramada = Carbon::parse($horaEntrada);
-                $horaEntradaReal = Carbon::parse($registro->registro_entrada);
-
-                if ($horaEntradaReal->greaterThan($horaEntradaProgramada)) {
-
-                    $retraso2 = $horaEntradaReal->diffInMinutes($horaEntradaProgramada);
-                    $registro->retraso2 = $retraso2;
-                    $registro->minutos_retraso = $registro->retraso2 + $registro->retraso1;
-                    $registro->save();
-                } else {
-                    $registro->retraso2 = 0;
-                    $registro->save();
-                    $registro->minutos_retraso = $registro->retraso2 + $registro->retraso1;
-                    $registro->save();
-                }
-            }
-        }
-        if ($registro->horario->tipo == 0) {
-
-            $horaEntrada = Carbon::parse($registro->horario->hora_entrada);
-            $horaInicio = Carbon::parse($registro->horario->hora_inicio);
-            $excepcion = Carbon::parse($registro->horario->excepcion);
-
-            if ($registro->registro_inicio) {
-
-                $horaexcepcion = $horaInicio->addHours($excepcion->hour)->addMinutes($excepcion->minute)->addSeconds($excepcion->second);
-                $horaInicio = $horaexcepcion->format('H:i:s');
-
-                $horaEntradaProgramada = Carbon::parse($horaInicio);
-                $horaEntradaReal = Carbon::parse($registro->registro_inicio);
-
-                if ($horaEntradaReal->greaterThan($horaEntradaProgramada)) {
-
-                    $retraso = $horaEntradaReal->diffInMinutes($horaEntradaProgramada);
-                    $registro->retraso1 = $retraso;
-                    $registro->minutos_retraso = $retraso;;
-                    $registro->save();
-                } else {
-                    $registro->retraso1 = 0;
-                    $registro->minutos_retraso = 0;
-                    $registro->save();
-                }
-            }
-        }
-    }
 
 
 
@@ -478,18 +375,18 @@ class HorarioController extends Controller
         $vistaselectedMonth = Carbon::now()->format('Y-m');
 
 
-       if ($request->ajax()) {
+        if ($request->ajax()) {
             // Obtener la fecha seleccionada desde el input de tipo month
             $selectedMonth = $request->input('selected_month');
             $formattedDate = $selectedMonth . '-01'; // Añade el primer día del mes
- 
+
 
 
             // Verificar si no se proporcionó una fecha seleccionada y usar el mes actual
             if (!$selectedMonth) {
                 $selectedMonth = Carbon::now()->format('Y-m');
                 $formattedDate = $selectedMonth . '-01'; // Añade el primer día del mes
-             }
+            }
             $firstDay = Carbon::createFromFormat('Y-m-d', $formattedDate)->startOfMonth();
             $lastDay = Carbon::createFromFormat('Y-m-d', $formattedDate)->endOfMonth();
 
@@ -502,7 +399,7 @@ class HorarioController extends Controller
             $data = $this->transformDataForDataTables($weeksInMonth, $selectedMonth);
 
             return DataTables::of($data)->make(true);
-      }
+        }
 
         return view('asistencias.horarios.fechas', compact('vistaselectedMonth'));
     }
@@ -568,7 +465,7 @@ class HorarioController extends Controller
                     'additional_info' => $this->getDataForDate($day, $allData),
                     'date' => $day ? $day->format('Y-m-d') : null,
                     'actual' => $day && Carbon::parse($day)->format('m') == Carbon::parse($selectedMonth)->format('m') ? true : false,
-                    'horario'=>$this->getDataForDate2($day, $allData)
+                    'horario' => $this->getDataForDate2($day, $allData)
                     // Agrega más información según sea necesario
                 ];
                 $rowData[] = $cellData;
@@ -610,13 +507,12 @@ class HorarioController extends Controller
     }
     private function getDataHorariosForMonth($start, $end)
     {
-         // Realizar una sola consulta para obtener todos los datos del mes
-          
-         return HorarioModel::whereHas('registrosAsistencia', function ($query) use ($start, $end) {
+        // Realizar una sola consulta para obtener todos los datos del mes
+
+        return HorarioModel::whereHas('registrosAsistencia', function ($query) use ($start, $end) {
             $query->whereBetween('fecha', [$start, $end]);
         })->select('tipo', 'Nombre', 'hora_inicio', 'hora_final', 'hora_entrada', 'hora_salida')
-          ->get();
-                  
+            ->get();
     }
 
 

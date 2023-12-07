@@ -3,27 +3,27 @@
 @section('content')
 <div class="container ">
     <div class="row font-verdana-bg">
-        <div class="col-md-4 titulo">
-            <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
+        <div class="col-md-8 titulo">
+        <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
                 <a href="{{url()->previous()}}" class="color-icon-1">
                     <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
                 </a>
             </span>
-            <b>Programar Horarios</b>
+            <b>Regularizar Marcado de Asistencia por Orden de Servicio</b>
         </div>
-
-        <div class="col-md-8 text-right">
+        <div class="col-md-4 text-right">
             <div class="btn-group">
+                <input type="hidden" id="id" name="id" class="form-control" value="{{$empleado->idemp}}">
                 <input type="month" id="selectedMonth" name="selected_month" class="form-control" value="{{$vistaselectedMonth}}">
-
             </div>
-
             <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
                 <button class="btn btn-sm btn-danger font-verdana" type="button">
                     &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
                 </button>
             </a>
+
         </div>
+        
         <div class="col-md-12">
             <hr>
             @if(Session::has('pendiente'))
@@ -49,27 +49,31 @@
 
             @endif
         </div>
-
-
+        <div class="col-md-8  text-left">
+        <div class="btn-group">
+            <b>Empleado:</b>  {{$empleado->nombres}} {{$empleado->ap_pat}} {{$empleado->ap_mat}}
+        </div>
+        </div>
+      
 
     </div>
     <div class="col-md-12">
 
         <hr class="hrr">
     </div>
-    <div class="row font-verdana">
+    <div class="row font-verdana-sm">
         <div class="col-md-12  center">
-            <table id="calendar" class="table-bordered  table display responsive font-verdana">
+            <table id="calendar" class="table-bordered  table display font-verdana" style="width:100%">
                 <thead>
                     <tr>
-                        <th>Semana</th>
-                        <th>Lunes</th>
-                        <th>Martes</th>
-                        <th>Miercoles</th>
-                        <th>Jueves</th>
-                        <th>Viernes</th>
-                        <th>Sabado</th>
-                        <th>Domingo</th>
+                        <th>Sem.</th>
+                        <th>Lun</th>
+                        <th>Mar</th>
+                        <th>Mier</th>
+                        <th>Jue</th>
+                        <th>Vie</th>
+                        <th>Sab</th>
+                        <th>Dom</th>
                     </tr>
                 </thead>
             </table>
@@ -101,11 +105,13 @@
             serverSide: true,
             lengthChange: false,
             searching: false,
+            ordering: false,
             ajax: {
-                url: "{{ route('horarios.fechas') }}",
+                url: "{{ route('regularizarCrear') }}",
                 data: function(d) {
                     // Enviar la fecha seleccionada al servidor
                     d.selected_month = $('#selectedMonth').val();
+                    d.id = $('#id').val();
                 }
             },
             columns: [{
@@ -171,21 +177,66 @@
         function renderCell(data, type, row) {
             // Verificar si hay datos y personalizar la visualización
             if (data.actual) {
+                console.log(data);
                 let additionalInfo = '';
 
                 // Verificar el tipo de additional_info
+                // Verificar el tipo de additional_info
                 if (Array.isArray(data.additional_info)) {
                     // additional_info es un array
-                    additionalInfo = data.additional_info.map(item => createLink(item.id, item.descrip, item.estado)).join('<br>');
+                    additionalInfo = data.additional_info.map(item => {
+                        // Verificar si la fecha actual es igual a la fecha en additional_info
+                        const isFechaIgual = data.date === item.fecha;
+
+                        // Hacer algo si las fechas son iguales
+                        if (isFechaIgual) {
+                            let routeUrl = "{{ route('regularizar.ausencia', ['id' => ':id']) }}";
+                            // Reemplaza ':id' y ':otro_parametro' con los valores correspondientes
+                            routeUrl = routeUrl.replace(':id', item.id);
+                            const link = `<a class="tts:left tts-slideIn tts-custom" aria-label="Regularizar Asistencia" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen  text-warning"></i></a>`;
+
+
+                            // ... tu lógica aquí ...
+                             
+                            return `${link}<br>${item.observ}`;
+                        }
+
+                        // Crear el enlace normal
+                        return createLink(item.id, item.descrip, item.estado);
+                    }).join('<br>');
                 } else if (typeof data.additional_info === 'object') {
                     // additional_info es un objeto
-                    additionalInfo = Object.values(data.additional_info).map(item => createLink(item.id, item.descrip, item.estado)).join('<br>');
+                    additionalInfo = Object.values(data.additional_info).map(item => {
+                        // Verificar si la fecha actual es igual a la fecha en additional_info
+                        const estadoDiferenteDeUno = item.estado !== 1;
+
+                        // Hacer algo si el estado es diferente de 1
+                        if (estadoDiferenteDeUno) {
+                            let routeUrl = "{{ route('regularizar.ausencia', ['id' => ':id']) }}";
+                            // Reemplaza ':id' y ':otro_parametro' con los valores correspondientes
+                            routeUrl = routeUrl.replace(':id', item.id);
+                            const link = `<a class="tts:left tts-slideIn tts-custom" aria-label="Regularizar Asistencia" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen  text-warning"></i></a>`;
+
+
+                            // ... tu lógica aquí ...
+                            return `${link}`;
+                        }
+
+                        // Crear el enlace normal
+                        return createLink(item.id, item.descrip, item.estado);
+                    }).join('<br>');
                 }
+
                 if (!additionalInfo) {
                     var fecha = data.date;
-                    var link = '<a aria-label="Asignar Horario" href="' + " {{ route('asistencia.crear', ['fecha' => ':fecha']) }}".replace(':fecha', fecha) + '"><i class="fa fa-lg fa-plus text-success"></i></a>'; // Devolver el enlace personalizado 
-                    return data.day + '<br>' + link;
+                    var empleado_id = data.empleado_id;
 
+                    let routeUrl = "{{ route('fecha.crear', ['fecha' => ':fecha', 'id' => ':id']) }}";
+                    // Reemplaza ':id' y ':otro_parametro' con los valores correspondientes
+                    routeUrl = routeUrl.replace(':fecha', fecha).replace(':id', empleado_id);
+                    var link = `<a class="tts:left tts-slideIn tts-custom" aria-label="Regularizar Asistencia" href="${routeUrl}"><i class="fa-solid fa-2xl fa-plus text-primary"></i></a>`;
+
+                    return data.day + '<br>' + link;
                 }
                 return data.day + '<br>' + additionalInfo;
             }
@@ -195,16 +246,16 @@
         function createLink(id, descrip, estado) {
             // Reemplaza 'nombre-de-ruta' con el nombre real de tu ruta
 
-            let routeUrl = "{{ route('asistencia.edit', ['id' => ':id']) }}";
+            let routeUrl = "{{ route('regularizar.ausencia', ['id' => ':id']) }}";
 
             // Reemplaza ':id' con el ID correspondiente
             routeUrl = routeUrl.replace(':id', id);
 
             // Retorna el enlace
             if (estado === 1) {
-                return `<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Horario Programado" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen text-warning"></i></a>`;
+                return `<a class="tts:left tts-slideIn tts-custom" aria-label="Asistencia Registrada" ><i class="fa-solid fa-2xl fa-square-check text-success"></i></a>`;
             } else if (estado === 0) {
-                return `<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Horario Activo" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen text-success"></i></a>`;
+                return `<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Horario Activo" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen text-warning"></i></a>`;
 
             }
         }

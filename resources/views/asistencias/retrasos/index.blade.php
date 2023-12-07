@@ -5,15 +5,20 @@
     <br>
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
+        <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
+                <a href="{{url()->previous()}}" class="color-icon-1">
+                    <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
+                </a>
+            </span>
             <b> Lista de Retrasos </b>
         </div>
         <div class="col-md-4 text-right">
-            <a href="{{ route('retrasos.index') }}" class="tts:left tts-slideIn tts-custom" aria-label="Crear Nuevo Horario">
-                <button class="btn btn-sm btn-primary font-verdana" type="button">
-                    &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
+
+            <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
+                <button class="btn btn-sm btn-danger font-verdana" type="button">
+                    &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
                 </button>
             </a>
-            <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
         </div>
         <div class="col-md-12">
             <hr class="hrr">

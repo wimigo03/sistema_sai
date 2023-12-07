@@ -59,8 +59,12 @@
                     Agregar Nuevo Horario&nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
                 </button>
             </a>
-            <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
-        </div>
+            <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
+                <button class="btn btn-sm btn-danger font-verdana" type="button">
+                    &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
+                </button>
+            </a>
+         </div>
         @endcan
     </div>
     <div class="body-border ">

@@ -6,6 +6,20 @@
         <div class="col-md-8 titulo">
             <b>Reporte de Retrasos</b>
         </div>
+        <div class="col-md-4  text-right">
+        <a href="{{ route('retrasos.index') }}" class="tts:left tts-slideIn tts-custom" aria-label="Ver Historial de Rgularizaciones">
+                <button class="btn btn-sm btn-success font-verdana" type="button">
+                <i class="fa-regular fa-address-card"></i>
+                    &nbsp; Historial de retrasos General
+                </button>
+            </a>
+        
+            <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
+                <button class="btn btn-sm btn-danger font-verdana" type="button">
+                    &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
+                </button>
+            </a>
+        </div>
         <!-- Vista de retorno (por ejemplo, index.blade.php) -->
         @if($errors->any())
         <div class="alert alert-danger">

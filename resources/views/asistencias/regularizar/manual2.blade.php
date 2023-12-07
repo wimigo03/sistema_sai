@@ -5,40 +5,35 @@
 
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
-            <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
+        <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
                 <a href="{{url()->previous()}}" class="color-icon-1">
                     <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
                 </a>
             </span>
-
             <b>Regularizar Registro de Asistencia</b>
-
         </div>
-
-
         <div class="col-md-4 text-right">
-            <a class="tts:left tts-slideIn tts-custom" aria-label="Recargar">
-                <button class="btn btn-sm btn-primary font-verdana" onclick="recargarPagina()">
-                    &nbsp; <i class="fa-solid fa-rotate-right"></i>&nbsp;
+            <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
+                <button class="btn btn-sm btn-danger font-verdana" type="button">
+                    &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
                 </button>
             </a>
+
         </div>
         <div class="col-md-12">
             <hr class="hrr">
-            @if(session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-            @endif
         </div>
+        @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @endif
+
     </div>
 
     @if($registroAsistencia->horario->tipo == 0)
     <div class="body-border ">
         <div class="row">
-            <div class="form-group col-md-4 form-check">
-                <label for="asignado"><b>Turno Mañana :</b></label>
-            </div>
             <div class="form-group col-md-4 form-check">
                 <label for="asignado" id="label1">Biometrico</label>
                 <input type="checkbox" name="asignado" id="asignado1" class="form-control" onclick="toggleLabel('label1', 'asignado1', 'registroH_inicio', 'registro_inicio')">
@@ -55,11 +50,9 @@
         @else
         <div class="row font-verdana">
             <div class=" col-md-6 ">
-            <hr class="hr">
-
                 <div class="row">
                     <div class="form-group col-md-4 form-check">
-                        <label for="asignado"><b>Turno Mañana :</b></label>
+                        <label for="asignado">Turno Mañana</label>
                     </div>
 
                     <div class="form-group col-md-4 form-check">
@@ -68,7 +61,6 @@
                         <input type="time" id="registroH_inicio" name="registro_entrada" class="form-control" value="{{ $registroAsistencia->horario->hora_inicio }}" required>
 
                     </div>
-                    
 
                     <div class="form-group col-md-4 form-check">
                         <label for="asignado" id="label2">Biometrico</label>
@@ -80,11 +72,9 @@
                 </div>
             </div>
             <div class="col-md-6 ">
-            <hr class="hr">
-
                 <div class="row">
                     <div class="form-group col-md-4 form-check">
-                        <label for="asignado"><b>Turno Tarde :</b></label>
+                        <label for="asignado">Turno Mañana</label>
                     </div>
                     <div class="form-group col-md-4 form-check">
                         <label for="asignado" id="label3">Biometrico</label>
@@ -114,40 +104,40 @@
 
                         <div class="form-group row font-verdana-bg">
                             <div class="form-group col-md-6">
-                                <label for="descripcion"><b>Nombres y Apellidos :</b></label>
-                                <input type="text" name="descripcion" value="{{ $registroAsistencia->empleado->nombres }} {{$registroAsistencia->empleado->ap_pat}} {{$registroAsistencia->empleado->ap_mat}}" class="form-control" readonly>
+                                <label for="descripcion">Nombres y Apellidos</label>
+                                <input type="text" name="descripcion" value="{{ $registroAsistencia->empleado->nombres }}{{$registroAsistencia->empleado->ap_pat}}" class="form-control" readonly required>
                                 <input type="hidden" name="observ" value="Regularizado" class="form-control" readonly>
                                 <input type="hidden" name="estado" value="0" class="form-control" readonly>
 
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label for="fecha"><b>Fecha :</b></label>
-                                <input type="date" name="fecha" class="form-control" value="{{ $registroAsistencia->asistencia->fecha }}" readonly>
+                                <label for="fecha">Fecha</label>
+                                <input type="date" name="fecha" class="form-control" value="{{ $registroAsistencia->asistencia->fecha }}" readonly >
                             </div>
                         </div>
 
                         <div class="form-group row font-verdana-bg">
                             @if($registroAsistencia->registro_inicio)
                             <div class="form-group col-md-6">
-                                <label for="registro_inicio"><b>Hora de Inicio</b></label>
-                                <input type="time" id="registro_inicio" name="registro_inicio" class="form-control" value="{{ $registroAsistencia->registro_inicio }}" readonly>
+                                <label for="registro_inicio">Hora de Inicio</label>
+                                <input type="time" id="registro_inicio" name="registro_inicio"   class="form-control" value="" readonly >
                             </div>
                             @else
                             <div class="form-group col-md-6">
-                                <label for="registro_inicio"><b>Hora de Inicio</b></label>
-                                <input type="time" id="registro_inicio" name="registro_inicio" class="form-control" value="">
+                                <label for="registro_inicio">Hora de Inicio</label>
+                                <input type="time" id="registro_inicio" name="registro_inicio"  class="form-control"  value="" >
                             </div>
                             @endif
                             @if($registroAsistencia->registro_final)
                             <div class="form-group col-md-6">
-                                <label for="registro_final"><b>Salida Finalizada</b> </label>
-                                <input type="time" id="registro_final" name="registro_final" class="form-control" value="{{ $registroAsistencia->registro_final }}" readonly>
+                                <label for="registro_final">Hora Final</label>
+                                <input type="time" id="registro_final" name="registro_final"  class="form-control"  value="" readonly >
                             </div>
                             @else
                             <div class="form-group col-md-6">
-                                <label for="registro_final"><b>Salida Finalizada</b> </label>
-                                <input type="time" id="registro_final" name="registro_final" class="form-control" value="">
+                                <label for="registro_final">Hora Final</label>
+                                <input type="time" id="registro_final" name="registro_final" class="form-control" value="" >
                             </div>
                             @endif
                         </div>
@@ -170,23 +160,23 @@
                             @if($registroAsistencia->registro_salida)
                             <div class="form-group col-md-6">
                                 <label for="registro_salida">Hora de salida</label>
-                                <input type="time" id="registro_salida" name="registro_salida" class="form-control" value="{{ $registroAsistencia->registro_salida }}" readonly required>
+                                <input type="time" id="registro_salida" name="registro_salida"  class="form-control" value="" readonly >
                             </div>
                             @else
                             <div class="form-group col-md-6">
                                 <label for="registro_salida">Hora de salida</label>
-                                <input type="time" id="registro_salida" name="registro_salida" class="form-control" value="">
+                                <input type="time" id="registro_salida" name="registro_salida"  class="form-control" value="" >
                             </div>
                             @endif
                             @if($registroAsistencia->registro_entrada)
                             <div class="form-group col-md-6">
                                 <label for="registro_entrada">Hora de retorno</label>
-                                <input type="time" id="registro_entrada" name="registro_entrada" class="form-control" value="{{ $registroAsistencia->registro_entrada }}" readonly required>
+                                <input type="time" id="registro_entrada" name="registro_entrada"  class="form-control" value="" readonly >
                             </div>
                             @else
                             <div class="form-group col-md-6">
                                 <label for="registro_entrada">Hora de retorno</label>
-                                <input type="time" id="registro_entrada" name="registro_entrada" class="form-control" value="">
+                                <input type="time" id="registro_entrada" name="registro_entrada"  class="form-control" value="" >
                             </div>
                             @endif
                         </div>
@@ -264,11 +254,6 @@
                 confirmarModal.show();
             });
         });
-    </script>
-    <script>
-        function recargarPagina() {
-            location.reload(true); // El parámetro true fuerza la recarga desde el servidor y no desde la caché
-        }
     </script>
 
     @endsection

@@ -403,7 +403,11 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
     ///////////////////REGISTRO DE ASISTENCIAS/////////////////
 
-    Route::get('notificacion/index', 'NotifcacionController@index')->name('notificacion.index')->middleware('can:horario_access');
+    Route::get('/estado-expiraciones/index', 'EstadoExpiracionesController@index')->name('notificacion.index')->middleware('can:horario_access');
+    Route::get('/estado-expiraciones/{id}', 'EstadoExpiracionesController@show')->name('lista.index')->middleware('can:horario_access');
+    Route::get('estado-expiraciones-exp/', 'EstadoExpiracionesController@expira')->name('lista2.exp')->middleware('can:horario_access');
+    Route::get('estado-expiraciones-exp/lista', 'EstadoExpiracionesController@planta')->name('planta')->middleware('can:horario_access');
+    Route::get('estado-expiraciones-exp/lista2', 'EstadoExpiracionesController@contrato')->name('contrato')->middleware('can:horario_access');
 
 
 
@@ -422,6 +426,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('horarios/{horario}/edit', 'HorarioController@edit')->name('horarios.edit')->middleware('can:horario_access');
     Route::put('horarios/update/{horario}', 'HorarioController@update')->name('horarios.update')->middleware('can:horario_access');
     Route::put('horarios/guardar/{empleado}', 'HorarioController@guardar')->name('horarios.guardar')->middleware('can:horario_access');
+    Route::put('horarios/pin/{empleado}', 'HorarioController@pinguardar')->name('pin.guardar')->middleware('can:horario_access');
 
 
     Route::get('empleadoasistencias/', 'EmpleadoAsistenciasController@index')->name('empleadoasistencias.index')->middleware('can:asistencias_access');
@@ -447,10 +452,15 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     /////////////
     Route::get('retrasosempleado', 'RetrasoController@index')->name('retrasos.index')->middleware('can:asistencias_access');
     Route::get('ausencias', 'AusenciasController@index')->name('ausencias.index')->middleware('can:asistencias_access');
+   
+    Route::get('agregar-regulacion/{id}', 'EmpleadoAsistenciasController@agregarRegulacion')->name('agregar.regulacion');
+    Route::get('regularizar-nuevo', 'AusenciasController@regularizar2')->name('regularizarCrear');
+    Route::get('regularizar-fecha/{fecha}/{id}', 'AusenciasController@crear')->name('fecha.crear')->middleware('can:asistencias_access');
 
     Route::get('regularizar-ausencia/{id}', 'AusenciasController@regularizar')->name('regularizar.ausencia');
     Route::put('regularizar-asistencia/{id}', 'AusenciasController@update')->name('regularizar_asistencia.update');
     Route::get('historial-cambios-asistencia', 'HistorialAsistenciasController@index')->name('historial_asistencia.index');
+    Route::get('restaurar-datos/{id}', 'HistorialAsistenciasController@restore')->name('restaurar-datos.restore');
 
 
     Route::get('reportes', 'ReporteController@index')->name('reportes.index')->middleware('can:reporte_access');

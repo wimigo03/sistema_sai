@@ -255,6 +255,7 @@
                                 style="color:black;font-weight: bold;">Aportes.Afp:</span>
                             <div class="col-md-2">
                                 <select name="aportesafp" class="form-control" value="{{$empleados->aportesafp}}">
+                                <option {{ ($empleados->aportesafp) == 'GESTORA PUBLICA' ? 'selected' : '' }} value="GESTORA PUBLICA">GESTORA PUBLICA</option>
 
                                 <option {{ ($empleados->aportesafp) == 'PREVISION AFP' ? 'selected' : '' }} value="PREVISION AFP">PREVISION AFP</option>
                                 <option {{ ($empleados->aportesafp) == 'FUTURO DE BOLIVIA' ? 'selected' : '' }} value="FUTURO DE BOLIVIA">FUTURO DE BOLIVIA</option>
