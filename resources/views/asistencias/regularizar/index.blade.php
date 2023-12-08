@@ -5,6 +5,11 @@
     <br>
     <div class="row font-verdana-bg">
         <div class="col-md-6 titulo">
+        <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
+                <a href="{{route('empleadoasistencias.index')}}" class="color-icon-1">
+                    <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
+                </a>
+            </span>
             <b> Regularizar Asistencias </b>
         </div>
         <div class="col-md-6 text-right">
@@ -14,12 +19,7 @@
                     &nbsp; Historial de Regularizaciones
                 </button>
             </a>
-             <a href="{{ route('empleadoasistencias.index') }}" class="tts:left tts-slideIn tts-custom" aria-label="Ver Historial de Rgularizaciones">
-                <button class="btn btn-sm btn-success font-verdana" type="button">
-                <i class="fa-regular fa-address-card"></i>
-                    &nbsp; Empleados
-                </button>
-            </a>
+         
             <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
                 <button class="btn btn-sm btn-danger font-verdana" type="button">
                     &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
@@ -131,7 +131,12 @@
             ],
             rowGroup: {
                 dataSrc: 'fecha'
-            }
+            },
+             // cambiar lenguaje a español
+
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+        }
         });
     });
 </script>

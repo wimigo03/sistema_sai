@@ -9,9 +9,9 @@ class MovimientosContModel extends Model
 {
     protected $table = 'movimientoscontrato';
     
-    protected $primaryKey= 'idmovcont';
+    protected $primaryKey= 'idactivos';
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         

@@ -3,391 +3,210 @@
 @section('content')
 
 <div class="row justify-content-center">
-    <div class="col-md-10">
+    <div class="col-md-12">
         <div class="card">
-        <div class="card-header bg-gradient-secondary text-white rounded d-flex flex-row-reverse" style="color:black;font-weight: bold;font-size: 16px;"><font >{{$areaactual->nombrearea}}</font></div>
-
-            <div class="row">
-
-
-                <a href="{{url()->previous()}}" class="btn blue darken-4 text-black "><i
-                        style="color:#55CE63;font-weight: bold;" class="fa fa-plus-square"></i> Volver atras</a>
-
-
-            </div>
-
             <div class="card-body">
-                <font size="2" face="Courier New">
-                    <form method="POST" action="{{ route('planta.actualizar') }}">
-                        @csrf
-                        @method('POST')
-                        <input name="idemp" hidden value="{{$empleados->idemp}}"></input>
-                        <input name="idareaoriginal" hidden value="{{$empleados->idarea}}"></input>
-                        <input name="idfileoriginal" hidden value="{{$empleados->idfile}}"></input>
-                        <input name="nombreareaactual" hidden value="{{$areaactual->nombrearea}}"></input>
+                <div class="form-group row font-verdana-bg">
+                 
+                    <div class="col-md-4 titulo text-left">
+                    <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
+                        <a href="{{url()->previous()}}" class="color-icon-1">
+                            <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
+                        </a>
+                    </span>
+                    </div>
+                    <div class="col-md-8 titulo text-right">
+                        <b>GESTIONAR PERSONAL-P/{{strtoupper($areaactual->nombrearea)}}/REGISTRAR</b>
+                    </div>
+                </div>
+                <hr class="hrr">
 
-                        <div class="form-group row">
-                            <span class="input-group col-md-1" style="color:#0186C2;font-weight: bold;">Nombres:</span>
-
-                            <div class="col-md-2 ">
-                                <input required type="text" name="nombres" class="form-control"
-                                onchange="javascript:this.value=this.value.toUpperCase();"
-                                    value="{{$empleados->nombres}}"></input>
+                <form method="POST" action="{{ route('planta.actualizar') }}">
+                    @csrf
+                    @method('POST')
+                    <input name="idemp" hidden value="{{$empleados->idemp}}"></input>
+                    <input name="idareaoriginal" hidden value="{{$empleados->idarea}}"></input>
+                    <input name="idfileoriginal" hidden value="{{$empleados->idfile}}"></input>
+                    <input name="nombreareaactual" hidden value="{{$areaactual->nombrearea}}"></input>
+                    <div class="form-group row font-verdana-bg">
+                        <div class="col-md-2">
+                            <label for="nombres"><b>Nombre(s)</b></label>
+                            <input required type="text" name="nombres" class="form-control" onchange="javascript:this.value=this.value.toUpperCase();" value="{{$empleados->nombres}}"></input>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="ap_paterno"><b>Ap. Paterno</b></label>
+                            <input required type="text" name="ap_pat" class="form-control " onchange="javascript:this.value=this.value.toUpperCase();" value="{{$empleados->ap_pat}}"></input>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="ap_materno"><b>Ap. Materno</b></label>
+                            <input type="text" name="ap_mat" class="form-control form-control-sm font-verdana-bg" onchange="javascript:this.value=this.value.toUpperCase();">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="nro_carnet"><b>N° Carnet</b></label>
+                            <input type="text" name="ci" class="form-control" value="{{$empleados->ci}}">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="procedencia"><b>Procedencia</b></label><br>
+                            <select name="procedencia" id="procedencia" class="form-control form-control-sm" required>
+                                <option value="">-</option>
+                                <option value="TJ" @if(request('procedencia')=='TJ' ) selected @endif>TARIJA</option>
+                                <option value="CH" @if(request('procedencia')=='CH' ) selected @endif>CHUQUISACA</option>
+                                <option value="LP" @if(request('procedencia')=='LP' ) selected @endif>LA PAZ</option>
+                                <option value="CB" @if(request('procedencia')=='CB' ) selected @endif>COCHABAMBA</option>
+                                <option value="OR" @if(request('procedencia')=='OR' ) selected @endif>ORURO</option>
+                                <option value="PT" @if(request('procedencia')=='PT' ) selected @endif>POTOSI</option>
+                                <option value="SC" @if(request('procedencia')=='SC' ) selected @endif>SANTA CRUZ</option>
+                                <option value="BE" @if(request('procedencia')=='BE' ) selected @endif>BENI</option>
+                                <option value="PD" @if(request('procedencia')=='PD' ) selected @endif>PANDO</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="date"><b>Fecha Ingreso</b></label>
+                            <input type="date" class="form-control" name="fechingreso" value="{{$empleados->fechingreso}}">
+                        </div>
+                    </div>
+                    <div class="form-group row font-verdana-bg">
+                        <div class="col-md-2">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="factura"><b>POAI</b></label>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <span class="tts:right tts-slideIn tts-custom" aria-label="Seleccionar solo si tiene">
+                                        <input type="checkbox" name="poai" {{--class="form-check-input"--}} id="poai" onclick="checkPoai();">
+                                    </span>
+                                </div>
                             </div>
-
-
-
-                            <span class="input-group offset-md-1 col-md-1"
-                                style="color:#0186C2;font-weight: bold;">Ap.Paterno:</span>
-                            <div class="col-md-2 ">
-                                <input required type="text" name="ap_pat" class="form-control "
-                                onchange="javascript:this.value=this.value.toUpperCase();"
-                                    value="{{$empleados->ap_pat}}"></input>
-                            </div>
-
-
-                            <span class="input-group offset-md-1 col-md-1"
-                                style="color:#0186C2;font-weight: bold;">Ap.Materno:</span>
-                            <div class="col-md-2 ">
-                                <input required type="text" name="ap_mat" class="form-control"
-                                onchange="javascript:this.value=this.value.toUpperCase();"
-                                    value="{{$empleados->ap_mat}}"></input>
-                            </div>
-
-
-
+                            <input type="date" class="form-control" name="exppoai" value="{{$empleados->exppoai}}">
                         </div>
 
 
-
-                        <div class="form-group row">
-
-
-                            <span class="input-group col-md-1"
-                                style="color:#0186C2;font-weight: bold;">F.Ingreso:</span>
-                            <div class="col-md-2 ">
-                                <input type="date" class="form-control" name="fechingreso"
-                                    value="{{$empleados->fechingreso}}">
-                            </div>
-
-                            <span class="input-group offset-md-1 col-md-1"
-                                style="color:#0186C2;font-weight: bold;">F.Nacimien:</span>
-
-                            <div class="col-md-2 ">
-                                <input type="date" class="form-control" name="natalicio"
-                                    value="{{$empleados->natalicio}}">
-                            </div>
-
-
-
-
-
+                        <div class="col-md-2">
+                            <label for="poai"><b>POAI</b></label>
+                            <input type="text" name="poai" class="form-control" value="{{$empleados->poai}}">
                         </div>
-
-
-
-                        <div class="form-group row">
-
-                            <span class="input-group col-md-1 " style="color:#0186C2;font-weight: bold;">Ci:</span>
-                            <div class="col-md-2 ">
-                                <input type="text" name="ci" class="form-control" value="{{$empleados->ci}}">
-                            </div>
-
-                            <span class="input-group col-md-1 offset-md-1"
-                                style="color:#0186C2;font-weight: bold;">Poai:</span>
-                            <div class="col-md-2">
-                                <input type="text" name="poai" class="form-control" value="{{$empleados->poai}}">
-                            </div>
-
-
-                            <span class="input-group col-md-1 offset-md-1"
-                                style="color:#0186C2;font-weight: bold;">Exp.Poai:</span>
-                            <div class="col-md-2">
-                                <input type="date" class="form-control" name="exppoai" value="{{$empleados->exppoai}}">
-
-                            </div>
-
-
+                        <div class="col-md-2">
+                            <label for="exp_poai"><b>Exp. POAI</b></label>
+                            <input type="date" class="form-control" name="exppoai" value="{{$empleados->exppoai}}">
                         </div>
-
-
-
-                        <div class="form-group row">
-
-                            <span class="input-group col-md-1 " style="color:#0186C2;font-weight: bold;">Dec.Jur:</span>
-                            <div class="col-md-2 ">
-                                <input type="text" name="decjurada" class="form-control"
-                                    value="{{$empleados->decjurada}}">
-
-                            </div>
-
-
-                            <span class="input-group col-md-1 offset-md-1"
-                                style="color:#0186C2;font-weight: bold;">Exp.Dec.Jur.:</span>
-                            <div class="col-md-2">
-                                <input type="date" class="form-control" name="expdecjurada"
-                                    value="{{$empleados->expdecjurada}}">
-
-                            </div>
-
-
-                            <span class="input-group col-md-1 offset-md-1"
-                                style="color:#0186C2;font-weight: bold;">Sippase:</span>
-                            <div class="col-md-2">
-                                <input type="text" name="sippase" class="form-control" value="{{$empleados->sippase}}">
-
-                            </div>
-
-
+                        <div class="col-md-2">
+                            <label for="decjurada"><b>Dec. Jurada</b></label>
+                            <input type="text" name="decjurada" class="form-control" value="{{$empleados->decjurada}}">
                         </div>
-
-
-
-                        <div class="form-group row">
-                            <span class="input-group col-md-1 "
-                                style="color:#0186C2;font-weight: bold;">Exp.Sipp:</span>
-                            <div class="col-md-2">
-                                <input type="date" class="form-control" name="expsippase"
-                                    value="{{$empleados->expsippase}}">
-
-                            </div>
-
-                            <span class="input-group col-md-1 offset-md-1"
-                                style="color:#0186C2;font-weight: bold;">Serv.Militar:</span>
-
-                            <div class="col-md-2">
-                                <input type="text" name="servmilitar" class="form-control"
-                                    value="{{$empleados->servmilitar}}">
-
-                            </div>
-
-                            <span class="input-group col-md-1 offset-md-1"
-                                style="color:#0186C2;font-weight: bold;">Idioma:</span>
-
-                            <div class="col-md-2">
-                                <input type="text" name="idioma" class="form-control" value="{{$empleados->idioma}}">
-
-                            </div>
-
-
+                        <div class="col-md-2">
+                            <label for="exp_dec_jurada"><b>Exp. Dec. Jurada</b></label>
+                            <input type="date" class="form-control" name="expdecjurada" value="{{$empleados->expdecjurada}}">
                         </div>
-
-
-
-                        <div class="form-group row">
-                            <span class="input-group col-md-1 " style="color:#0186C2;font-weight: bold;">Inducc:</span>
-
-                            <div class="col-md-2">
-                                <input type="text" name="induccion" class="form-control"
-                                    value="{{$empleados->induccion}}">
-
-                            </div>
-
-                            <span class="input-group col-md-1 offset-md-1"
-                                style="color:#0186C2;font-weight: bold;">Exp.Inducc.:</span>
-
-                            <div class="col-md-2">
-                                <input type="date" class="form-control" name="expinduccion"
-                                    value="{{$empleados->expinduccion}}">
-
-                            </div>
-
-
-                            <span class="input-group col-md-1 offset-md-1"
-                                style="color:#0186C2;font-weight: bold;">Prog.Vacac.:</span>
-
-                            <div class="col-md-2">
-                                <input type="text" name="progvacacion" class="form-control"
-                                    value="{{$empleados->progvacacion}}">
-
-                            </div>
-
-
+                        <div class="col-md-2">
+                            <label for="rejap"><b>REJAP</b></label>
+                            <input type="date" class="form-control" name="rejap" value="{{$empleados->rejap}}">
                         </div>
-
-
-
-
-                        <div class="form-group row">
-                            <span class="input-group col-md-1 "
-                                style="color:#0186C2;font-weight: bold;">Exp.P.Vac:</span>
-
-                            <div class="col-md-2">
-                                <input type="date" class="form-control" name="expprogvacacion"
-                                    value="{{$empleados->expprogvacacion}}">
-
-                            </div>
-
-                            <span class="input-group col-md-1 offset-md-1"
-                                style="color:#0186C2;font-weight: bold;">Vac.Ganadas:</span>
-
-                            <div class="col-md-2">
-                                <input required type="number" placeholder="0" name="vacganadas" class="form-control"
-                                    placeholder="Ap.Pat...." value="{{$empleados->vacganadas}}"></input>
-                            </div>
-
-                            <span class="input-group col-md-1 offset-md-1"
-                                style="color:#0186C2;font-weight: bold;">Vac.Pend.:</span>
-
-                            <div class="col-md-2">
-                                <input type="text" name="vacpendientes" class="form-control"
-                                    value="{{$empleados->vacpendientes}}">
-
-                            </div>
-
+                    </div>
+                    <div class="form-group row font-verdana-bg">
+                        <div class="col-md-2">
+                            <label for="sippase"><b>SIPPASE</b></label>
+                            <input type="text" name="sippase" class="form-control" value="{{$empleados->sippase}}">
                         </div>
-
-
-
-
-
-                        <div class="form-group row">
-
-                            <span class="input-group col-md-1 "
-                                style="color:#0186C2;font-weight: bold;">Vac.Usadas:</span>
-
-                            <div class="col-md-2">
-                                <input type="text" name="vacusasdas" class="form-control"
-                                    value="{{$empleados->vacusasdas}}">
-
-                            </div>
-
-                            <span class="input-group col-md-1 offset-md-1"
-                                style="color:#0186C2;font-weight: bold;">Seg.Salud:</span>
-
-                            <div class="col-md-2">
-                                <input type="text" name="segsalud" class="form-control"
-                                    value="{{$empleados->segsalud}}">
-
-                            </div>
-
-                            <span class="input-group col-md-1 offset-md-1"
-                                style="color:#0186C2;font-weight: bold;">Inamovilidad:</span>
-
-                            <div class="col-md-2">
-                                <input type="text" name="inamovilidad" class="form-control"
-                                    value="{{$empleados->inamovilidad}}">
-
-                            </div>
-
-
+                        <div class="col-md-2">
+                            <label for="exp_dec_jurada"><b>Exp. SIPPASE</b></label>
+                            <input type="date" class="form-control" name="expsippase" value="{{$empleados->expsippase}}">
                         </div>
-
-
-
-
-
-                        <div class="form-group row">
-
-                            <span class="input-group col-md-1 " style="color:#0186C2;font-weight: bold;">Años
-                                Serv.:</span>
-
-                            <div class="col-md-2">
-                                <input type="text" name="aservicios" class="form-control"
-                                    value="{{$empleados->aservicios}}">
-
-                            </div>
-
-                            <span class="input-group col-md-1 offset-md-1"
-                                style="color:#0186C2;font-weight: bold;">Curr.Vitae:</span>
-
-                            <div class="col-md-2">
-                                <input type="text" name="cvitae" class="form-control" value="{{$empleados->cvitae}}">
-
-                            </div>
-
-                            <span class="input-group col-md-1 offset-md-1"
-                                style="color:#0186C2;font-weight: bold;">Telefono:</span>
-
-                            <div class="col-md-2">
-                                <input type="text" name="telefono" class="form-control"
-                                    value="{{$empleados->telefono}}">
-
-                            </div>
-
-
+                        <div class="col-md-2">
+                            <label for="ser_militar"><b>Serv. Militar</b></label>
+                            <input type="text" name="servmilitar" class="form-control" value="{{$empleados->servmilitar}}">
                         </div>
-
-
-
-                        <div class="form-group row">
-
-                            <span class="input-group col-md-1 "
-                                style="color:#0186C2;font-weight: bold;">Biometrico:</span>
-
-                            <div class="col-md-2">
-                                <input type="text" name="biometrico" class="form-control"
-                                    value="{{$empleados->biometrico}}">
-
-                            </div>
-
-                            <span class="input-group col-md-1 offset-md-1"
-                                style="color:#0186C2;font-weight: bold;">Grad.Acad.:</span>
-
-                            <div class="col-md-2">
-                                <input type="text" name="gradacademico" class="form-control"
-                                    value="{{$empleados->gradacademico}}">
-
-                            </div>
-
-                            <span class="input-group col-md-1 offset-md-1"
-                                style="color:#0186C2;font-weight: bold;">Rae:</span>
-
-                            <div class="col-md-2">
-                                <input type="text" name="rae" class="form-control" value="{{$empleados->rae}}">
-
-                            </div>
-
-
+                        <div class="col-md-2">
+                            <label for="idioma"><b>Idioma</b></label>
+                            <input type="text" name="idioma" class="form-control" value="{{$empleados->idioma}}">
                         </div>
-
-                        <div class="form-group row">
-
-                            <span class="input-group col-md-1 "
-                                style="color:#0186C2;font-weight: bold;">Reg.Prof:</span>
-
-                            <div class="col-md-2">
-                                <input type="text" name="regprofesional" class="form-control"
-                                    value="{{$empleados->regprofesional}}">
-
-                            </div>
-
-                            <span class="input-group col-md-1 offset-md-1"
-                                style="color:#0186C2;font-weight: bold;">Ev.Desemp.:</span>
-
-                            <div class="col-md-2">
-                                <input type="number" placeholder="0" name="evdesempenio" class="form-control"
-                                    value="{{$empleados->evdesempenio}}">
-
-                            </div>
-
-                            <span class="input-group col-md-1 offset-md-1"
-                                style="color:#0186C2;font-weight: bold;">Rejap:</span>
-
-                            <div class="col-md-2 ">
-                                <input type="date" class="form-control" name="rejap" value="{{$empleados->rejap}}">
-                            </div>
-
-
+                        <div class="col-md-2">
+                            <label for="induccion"><b>Induccion</b></label>
+                            <input type="text" name="induccion" class="form-control" value="{{$empleados->induccion}}">
                         </div>
-                        </br>
-
-                        <div class="form-group " style="align:center">
-
-
-                            <label class="col-md-1" style="color:#0186C2;font-weight: bold;">File:</label>
+                        <div class="col-md-2">
+                            <label for="exp_induccion"><b>Exp. Induccion</b></label>
+                            <input type="date" class="form-control" name="expinduccion" value="{{$empleados->expinduccion}}">
+                        </div>
+                    </div>
+                    <div class="form-group row font-verdana-bg">
+                        <div class="col-md-2">
+                            <label for="progvacacion"><b>Prog. Vacacion</b></label>
+                            <input type="text" name="progvacacion" class="form-control" value="{{$empleados->progvacacion}}">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="expprogvacacion"><b>Exp. Prog. Vacacion</b></label>
+                            <input type="date" class="form-control" name="expprogvacacion" value="{{$empleados->expprogvacacion}}">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="vacganadas"><b>Vac. Ganadas</b></label>
+                            <input required type="number" placeholder="0" name="vacganadas" class="form-control" placeholder="Ap.Pat...." value="{{$empleados->vacganadas}}"></input>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="vacpendientes"><b>Vac. Pendientes</b></label>
+                            <input type="text" name="vacpendientes" class="form-control" value="{{$empleados->vacpendientes}}">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="vacusasdas"><b>Vac. Usadas</b></label>
+                            <input type="text" name="vacusasdas" class="form-control" value="{{$empleados->vacusasdas}}">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="segsalud"><b>Seg. Salud</b></label>
+                            <input type="text" name="segsalud" class="form-control" value="{{$empleados->segsalud}}">
+                        </div>
+                    </div>
+                    <div class="form-group row font-verdana-bg">
+                        <div class="col-md-2">
+                            <label for="inamovilidad"><b>Inamovilidad</b></label>
+                            <input type="text" name="inamovilidad" class="form-control" value="{{$empleados->inamovilidad}}">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="aservicios"><b>Años de Servicio</b></label>
+                            <input type="text" name="aservicios" class="form-control" value="{{$empleados->aservicios}}">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="cvitae"><b>C.V.</b></label>
+                            <input type="text" name="cvitae" class="form-control" value="{{$empleados->cvitae}}">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="telefono"><b>Telefono</b></label>
+                            <input type="text" name="telefono" class="form-control" value="{{$empleados->telefono}}">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="biometrico"><b>Biometrico</b></label>
+                            <input type="text" name="biometrico" class="form-control" value="{{$empleados->biometrico}}">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="gradacademico"><b>Grado Acad.</b></label>
+                            <input type="text" name="gradacademico" class="form-control" value="{{$empleados->gradacademico}}">
+                        </div>
+                    </div>
+                    <div class="form-group row font-verdana-bg">
+                        <div class="col-md-2">
+                            <label for="rae"><b>RAE</b></label>
+                            <input type="text" name="rae" class="form-control" value="{{$empleados->rae}}">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="regprofesional"><b>Reg. Profesional</b></label>
+                            <input type="text" name="regprofesional" class="form-control" value="{{$empleados->regprofesional}}">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="evdesempenio"><b>Eval. Desempeño</b></label>
+                            <input type="number" placeholder="0" name="evdesempenio" class="form-control" value="{{$empleados->evdesempenio}}">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="idfile"><b>File</b></label><br>
                             <div id="permissions-select2">
 
-                                <select name="idfile" id="permissions2" class="col-md-6">
+                                <select name="idfile" id="permissions2" class=" form-control"">
 
-                                    @foreach($area as $areas)
-                                    <option disabled>
-                                        <h1 color:blue;>{{$areas->nombrearea}}</H1>
-                                    </option>
-                                    @foreach($areas->iPais_all as $destino)
-                                    @if ($destino->idfile==$empleados->idfile)
-                                    <option value="{{$destino->idfile}}" selected>
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-FILE-{{$destino->numfile}}-{{$destino->cargo}}-{{$destino->nombrecargo}}-{{$destino->habbasico}}-{{$destino->categoria}}-{{$destino->niveladm}}-{{$destino->clase}}-{{$destino->nivelsal}}
+                                        @foreach($area as $areas)
+                                        <option disabled>
+                                            <h1 color:blue;>{{$areas->nombrearea}}</H1>
+                                        </option>
+                                        @foreach($areas->iPais_all as $destino)
+                                        @if ($destino->idfile==$empleados->idfile)
+                                        <option value=" {{$destino->idfile}}" selected>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-FILE-{{$destino->numfile}}-{{$destino->cargo}}-{{$destino->nombrecargo}}-{{$destino->habbasico}}-{{$destino->categoria}}-{{$destino->niveladm}}-{{$destino->clase}}-{{$destino->nivelsal}}
                                     </option>
                                     @else
 
@@ -409,17 +228,12 @@
                         </div>
 
 
+                        <div class="col-md-2">
+                            <label for="idfile"><b>Area</b></label><br>
 
-
-                        <div class="form-group " style="align:center">
-
-
-                            <label class="col-md-1" style="color:#0186C2;font-weight: bold;">Area:</label>
                             <div id="permissions-select">
 
-                                <select name="idarea" class="col-md-6">
-
-
+                                <select name="idarea">
 
                                     @foreach($area as $areas)
                                     @if ($areas->idarea==$empleados->idarea)
@@ -430,53 +244,42 @@
                                     <option style="color:blue;" value="{{$areas->idarea}}">{{$areas->nombrearea}}
                                     </option>
 
-
-
                                     @endif
-
 
                                     @endforeach
 
                                 </select>
                             </div>
                         </div>
-
-
-
-
-
-
-                        </br>
-
-
-
-
-
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-outline-success">
-                                    {{ __('Guardar') }}
-                                </button>
-                            </div>
+                    </div>
+                    <div class="form-group ">
+                        <div class="col-md-12 text-right">
+                            <button type="submit" class="btn btn-outline-success font-verdana-bg" type="submit">
+                                <i class="fa-solid fa-paper-plane"></i>&nbsp; {{ __('Guardar') }}
+                            </button>
+                            <a href="{{route('planta.lista',$empleados->idarea)}}" class="btn btn-outline-danger font-verdana-bg">
+                                <i class="fa fa-lg fa-reply" aria-hidden="true"></i>&nbsp;Cancelar
+                            </a>
                         </div>
-                    </form>
-                </font>
-
-
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
+</div>
 @section('scripts')
 <script>
-var permission_select = new SlimSelect({
-    select: '#permissions-select select',
-    //showSearch: false,
-    placeholder: 'Select Permissions',
-    deselectLabel: '<span>&times;</span>',
-    hideSelectedOption: true,
-});
+    var permission_select = new SlimSelect({
+        select: '#permissions-select select',
+        //showSearch: false,
+        placeholder: 'Select Permissions',
+        deselectLabel: '<span>&times;</span>',
+        hideSelectedOption: true,
+    });
+    $('#permissions2').select2({
+        placeholder: "--Seleccionar--"
+    });
 </script>
 @endsection
 @endsection

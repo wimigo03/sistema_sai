@@ -4,15 +4,15 @@
 <div class="container-xl font-verdana-bg">
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
+        <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
+                <a href="{{url()->previous()}}" class="color-icon-1">
+                    <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
+                </a>
+            </span>
             <b>Lista de Personal Activo</b>
         </div>
         <div class="col-md-4 text-right">
-            <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('ausencias.index')}}">
-                <button class="btn btn-sm btn-info font-verdana" type="button">
 
-                    &nbsp; <i class="fa-regular fa-address-card"> &nbsp; </i>Lista General de Expiraciones</i>&nbsp;
-                </button>
-            </a>
             <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
                 <button class="btn btn-sm btn-danger font-verdana" type="button">
                     &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
@@ -43,15 +43,15 @@
                     <table class="table-bordered yajra-datatable hoverTable table display responsive font-verdana" id="empleados-table" style="width:100%">
                         <thead class="table-light">
                             <tr>
-                            <th>ID</th>
-                <th>Nombre</th>
-                <th>Exp. Inducción</th>
-                <th>Exp. Declaración Jurada</th>
-                <th>Exp. Sippase</th>
-                <th>Rejap</th>
-                <th>Exp. Poai</th>
-                <th>Exp. Programa Vacación</th>
-                <th>Acciones</th>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Exp. Inducción</th>
+                                <th>Exp. Declaración Jurada</th>
+                                <th>Exp. Sippase</th>
+                                <th>Exp. Rejap</th>
+                                <th>Exp. Poai</th>
+                                <th>Exp. Programa Vacación</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                     </table>
@@ -66,9 +66,9 @@
                         <thead class="table-light">
                             <tr>
                                 <th>ID</th>
-                                <th>Nombres</th>
-                                <th>Apellidos</th>
-                                <th>Horarios</th>
+                                <th>Nombres y Apellidos/th>
+                                <th>Expiracion de SIPPASE</th>
+                                <th>Expiracion de REJAP</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -117,17 +117,45 @@
             },
             ajax: "{{ route('planta') }}",
 
-            columns: [
-                    { data: 'id', name: 'id' },
-                    { data: 'nomb_aps', name: 'nomb_aps' },
-                    { data: 'expinduccion', name: 'expinduccion' },
-                    { data: 'expdecjurada', name: 'expdecjurada' },
-                    { data: 'expsippase', name: 'expsippase' },
-                    { data: 'rejap', name: 'rejap' },
-                    { data: 'exppoai', name: 'exppoai' },
-                    { data: 'expprogvacacion', name: 'expprogvacacion' },
-                    { data: 'actions', name: 'actions', orderable: false, searchable: false }
-                ]
+            columns: [{
+                    data: 'id',
+                    name: 'id'
+                },
+                {
+                    data: 'nomb_aps',
+                    name: 'nomb_aps'
+                },
+                {
+                    data: 'expinduccion',
+                    name: 'expinduccion'
+                },
+                {
+                    data: 'expdecjurada',
+                    name: 'expdecjurada'
+                },
+                {
+                    data: 'expsippase',
+                    name: 'expsippase'
+                },
+                {
+                    data: 'rejap',
+                    name: 'rejap'
+                },
+                {
+                    data: 'exppoai',
+                    name: 'exppoai'
+                },
+                {
+                    data: 'expprogvacacion',
+                    name: 'expprogvacacion'
+                },
+                {
+                    data: 'actions',
+                    name: 'actions',
+                    orderable: false,
+                    searchable: false
+                }
+            ]
 
         });
         $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
@@ -166,21 +194,14 @@
                         ajax: "{{ route('contrato') }}",
 
                         columns: [{
-                                data: 'id',
-                                name: 'id'
+                                data: 'idemp',
+                                name: 'idemp'
                             },
                             {
                                 data: 'nomb_aps',
                                 name: 'nomb_aps'
                             },
-                            {
-                                data: 'expinduccion',
-                                name: 'expinduccion'
-                            },
-                            {
-                                data: 'expdecjurada',
-                                name: 'expdecjurada'
-                            },
+
                             {
                                 data: 'expsippase',
                                 name: 'expsippase'
@@ -188,14 +209,6 @@
                             {
                                 data: 'rejap',
                                 name: 'rejap'
-                            },
-                            {
-                                data: 'exppoai',
-                                name: 'exppoai'
-                            },
-                            {
-                                data: 'expprogvacacion',
-                                name: 'expprogvacacion'
                             },
                             {
                                 data: 'actions',

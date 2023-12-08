@@ -4,10 +4,11 @@
 <div class="container ">
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
-        <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
-                <a href="{{url()->previous()}}" class="color-icon-1">
+            <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
+                <a href="{{route('empleadoasistencias.index')}}" class="color-icon-1">
                     <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
                 </a>
+            
             </span>
             <b>Regularizar Marcado de Asistencia por Orden de Servicio</b>
         </div>
@@ -23,7 +24,7 @@
             </a>
 
         </div>
-        
+
         <div class="col-md-12">
             <hr>
             @if(Session::has('pendiente'))
@@ -50,11 +51,11 @@
             @endif
         </div>
         <div class="col-md-8  text-left">
-        <div class="btn-group">
-            <b>Empleado:</b>  {{$empleado->nombres}} {{$empleado->ap_pat}} {{$empleado->ap_mat}}
+            <div class="btn-group">
+                <b>Nombres y Apellidos :</b> {{$empleado->nombres}} {{$empleado->ap_pat}} {{$empleado->ap_mat}}
+            </div>
         </div>
-        </div>
-      
+
 
     </div>
     <div class="col-md-12">
@@ -190,14 +191,21 @@
 
                         // Hacer algo si las fechas son iguales
                         if (isFechaIgual) {
+
+
+
+                            if (item.estado === 1) {
+                                return `<a class="tts:left tts-slideIn tts-custom" aria-label="Asistencia Registrada" ><i class="fa-solid fa-2xl fa-square-check text-success"></i></a>`;
+
+                            }
                             let routeUrl = "{{ route('regularizar.ausencia', ['id' => ':id']) }}";
                             // Reemplaza ':id' y ':otro_parametro' con los valores correspondientes
                             routeUrl = routeUrl.replace(':id', item.id);
-                            const link = `<a class="tts:left tts-slideIn tts-custom" aria-label="Regularizar Asistencia" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen  text-warning"></i></a>`;
+                            const link = `<a class="tts:left tts-slideIn tts-custom" aria-label="Regularizarsdfsd Asistencia" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen  text-warning"></i></a>`;
 
 
                             // ... tu lógica aquí ...
-                             
+
                             return `${link}<br>${item.observ}`;
                         }
 

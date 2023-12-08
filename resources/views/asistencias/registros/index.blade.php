@@ -203,7 +203,11 @@
                 collectionTitle: 'Control de Visibilidad de Columnas',
                 className: 'btn btn-sm btn-info',
             }],
+ // cambiar lenguaje a español
 
+ "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+        }
 
 
         });

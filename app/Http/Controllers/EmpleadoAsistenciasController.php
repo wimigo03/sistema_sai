@@ -56,18 +56,23 @@ class EmpleadoAsistenciasController extends Controller
                     return '-';
                 }
             })
-            ->addColumn('actions', function ($row) {
+            ->addColumn('actions1', function ($row) {
                 return '<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Horarios Asignados" href="' . route('horarios.cambio', $row->idemp) . '">
-                <i class="fa-solid fa-2xl fa-clock text-primary"></i>
+                <ifa-clock text-primary"></i><i  class="fa-solid fa-2xl  fa-circle-info"></i>
                 
-            </a>' . '' . ' <a class="tts:left tts-slideIn tts-custom" aria-label="Ver Registros de Asistencia" href="' . route('empleadoasistencias.show', ['id' => $row->idemp]) . '">
+            </a>';
+            })->addColumn('actions2', function ($row) {
+                return '<a class="tts:left tts-slideIn tts-custom" aria-label="Regular Asistencia" href="' . route('agregar.regulacion', $row->idemp) . '">
+
+              <i class="fa-solid fa-2xl  fa-calendar-days text-warning"></i>       
+      </a>';
+            })->addColumn('actions3', function ($row) {
+                return ' <a class="tts:left tts-slideIn tts-custom" aria-label="Ver lista de Registros de Asistencia" href="' . route('empleadoasistencias.show', ['id' => $row->idemp]) . '">
                 <i class="fa-solid fa-2xl fa-list text-success" aria-hidden="true"></i>
                  
-              </a>' .   '' . '<a class="tts:left tts-slideIn tts-custom" aria-label="Agregar Regulacion" href="' . route('agregar.regulacion', $row->idemp) . '">
-
-              <i class="fa-solid fa-2xl  fa-calendar-days text-secondary"></i>       
-      </a>';
-            })->rawColumns(['actions'])->make(true);
+              </a>';
+            })
+            ->rawColumns(['actions1', 'actions2', 'actions3'])->make(true);
     }
     public function contrato()
     {
@@ -148,11 +153,12 @@ class EmpleadoAsistenciasController extends Controller
     {
         //$empleado = EmpleadosModel::findOrFail($id)->select('idemp', 'nombres', 'ap_pat')->first();
         $empleado = EmpleadosModel::where('idemp', $id)->select('idemp', 'nombres', 'ap_pat', 'ap_mat')->first();
-
         if (!$empleado) {
             abort(404); // o maneja de alguna manera el caso en que no se encuentre el registro
         }
         if ($request->ajax()) {
+
+            $filtro = $request->input('filtro', 'actual');
 
             $data = RegistroAsistencia::where('empleado_id', $id)
                 ->with([
@@ -161,41 +167,47 @@ class EmpleadoAsistenciasController extends Controller
                     }
                 ])->select('fecha', 'registro_inicio', 'registro_salida', 'registro_entrada', 'registro_final', 'horario_id', 'minutos_retraso', 'observ')
                 ->get();
-
+            // Aplicar el filtro de fecha según el valor seleccionado
             $nombre_completo = $empleado->nombres . ' ' . $empleado->ap_pat . ' ' . $empleado->ap_mat;
+            $filtro = $request->input('filtro');
 
-
-            if (request()->ajax()) {
-                return DataTables::of($data)
-
-                    ->addColumn('fecha', function ($registro) {
-                        return $registro->fecha ?: '-';
-                    })
-                    ->addColumn('nombres', function () use ($nombre_completo) {
-                        return $nombre_completo ?: '-';
-                    })
-                    ->addColumn('horario', function ($row) {
-                        $nombre = $row->horario->Nombre;
-                        $final = $row->horario->hora_final ? Carbon::parse($row->horario->hora_final)->format('H:i') : '-';
-                        $inicio = $row->horario->hora_inicio ? Carbon::parse($row->horario->hora_inicio)->format('H:i') : '-';
-
-                        if ($row->horario->tipo == 1) {
-
-                            $salida = $row->horario->hora_salida ? Carbon::parse($row->horario->hora_salida)->format('H:i') : '-';
-                            $entrada = $row->horario->hora_entrada ? Carbon::parse($row->horario->hora_entrada)->format('H:i') : '-';
-                            $html = '<span>' . $nombre . '</span><br><span>' . $inicio . '-' . $salida . '</span><br><span>' . $entrada . '-' . $final . '</span>';
-                        } else if ($row->horario->tipo == 0) {
-
-                            $html = '<span>' . $nombre . '</span><br><span>' . $inicio . '</span><br><span>' . $final . '</span>';
-                        }
-                        return $html;
-                    })
-
-
-                    ->rawColumns(['horario'])->toJson();
+            if ($filtro == 'actual') {
+                $data = $data->where('fecha', Carbon::today());
+            } elseif ($filtro == 'mensual') {
+                $data = $data->whereMonth('fecha', Carbon::now()->month);
             }
+
+             return DataTables::of($data)
+
+                ->addColumn('fecha', function ($registro) {
+                    return $registro->fecha ?: '-';
+                })
+                ->addColumn('nombres', function () use ($nombre_completo) {
+                    return $nombre_completo ?: '-';
+                })
+                ->addColumn('horario', function ($row) {
+                    $nombre = $row->horario->Nombre;
+                    $final = $row->horario->hora_final ? Carbon::parse($row->horario->hora_final)->format('H:i') : '-';
+                    $inicio = $row->horario->hora_inicio ? Carbon::parse($row->horario->hora_inicio)->format('H:i') : '-';
+
+                    if ($row->horario->tipo == 1) {
+
+                        $salida = $row->horario->hora_salida ? Carbon::parse($row->horario->hora_salida)->format('H:i') : '-';
+                        $entrada = $row->horario->hora_entrada ? Carbon::parse($row->horario->hora_entrada)->format('H:i') : '-';
+                        $html = '<span>' . $nombre . '</span><br><span>' . $inicio . '-' . $salida . '</span><br><span>' . $entrada . '-' . $final . '</span>';
+                    } else if ($row->horario->tipo == 0) {
+
+                        $html = '<span>' . $nombre . '</span><br><span>' . $inicio . '</span><br><span>' . $final . '</span>';
+                    }
+                    return $html;
+                })
+
+
+                ->rawColumns(['horario'])->toJson();
         }
-        return view('asistencias.empleados.show', compact('empleado'));
+        // Pasar el valor del filtro a la vista
+        $filtro = $request->input('filtro', 'actual');
+        return view('asistencias.empleados.show', compact('empleado', 'filtro'));
     }
 
 

@@ -382,6 +382,14 @@
                             </a>
                         </li>
                         @endcan
+                        @can('horario_access')
+                        <li>
+                            <a href="{{ route('notificacion.index') }}">
+                            &nbsp; &nbsp; 
+                                <span class="nav-label mr-4">Estado De Documentos</span>
+                            </a>
+                        </li>
+                        @endcan
                     </ul>
                 </li>
                 @endcanany
@@ -401,8 +409,9 @@
                         @can('horario_access')
                         <li>
                             <a href="{{ route('horarios.index') }}">
-
+                            &nbsp; &nbsp; &nbsp;
                                 <span class="nav-label mr-4">Gestionar Horarios</span>
+
                             </a>
 
                         </li>
@@ -410,7 +419,7 @@
                         @can('horario_access')
                         <li class="sub-menu collapse" id="dashboard_asistencia">
                             <a href="{{ route('descuentos.index') }}">
-
+                            &nbsp; &nbsp; 
                                 <span class="nav-label mr-4">Configurar Retrasos</span>
                             </a>
                         </li>
@@ -418,7 +427,7 @@
                         @can('horario_access')
                         <li>
                             <a href="{{ route('registroasistencia.index') }}">
-
+                            &nbsp; &nbsp;
                                 <span class="nav-label mr-4">Registros de Asistencias</span>
                             </a>
                         </li>
@@ -427,7 +436,8 @@
 
                         @can('horario_access')
                         <li>
-                            <a href="{{ route('ausencias.index') }}">
+                            <a href="{{ route('empleadoasistencias.index') }}">
+                            &nbsp; &nbsp;
                                 <span class="nav-label mr-4">Regularizar Asistencias</span>
                             </a>
                         </li>
@@ -436,23 +446,19 @@
 
                         <li>
                             <a href="{{ route('reportes.create') }}">
+                            &nbsp; &nbsp;
                                 <span class="nav-label mr-4">Reportes de Retrasos</span>
                             </a>
                         </li>
                         @endcan
 
-                        @can('horario_access')
-                        <li>
-                            <a href="{{ route('notificacion.index') }}">
-                                <span class="nav-label mr-4">Notificaciones</span>
-                            </a>
-                        </li>
-                        @endcan
+                      
 
 
                         @can('reporte_access')
                         <li>
                             <a href="{{ route('permisospersonales.index') }}">
+                            &nbsp; &nbsp; 
                                 <span class="nav-label mr-4">Permisos Mensuales</span>
                             </a>
                         </li>
@@ -460,6 +466,7 @@
                         @can('licencias_access')
                         <li>
                             <a href="{{ route('licenciaspersonales.index') }}">
+                            &nbsp; &nbsp; 
                                 <span class="nav-label mr-4">Licencias Cargo RIP</span>
                             </a>
                         </li>

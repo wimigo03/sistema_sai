@@ -24,9 +24,7 @@
                     <tr>
                         <th>Fecha</th>
                         <th>Nombres Apellidos</th>
-                        <th>Motivo</th>
-                        <th>Area Anterior</th>
-                        <th>Cargo Anterior</th>
+                         <th>Cargo Anterior</th>
                         <th>Nombre Cargo</th>
                         <th>Haber Basico</th>
                       
@@ -84,18 +82,9 @@
                     data: 'nombres_apellidos',
                     name: 'nombres_apellidos',
                     class: 'text-justify p-1 font-verdana-sm'
-                },
-                {
-                    data: 'motivo',
-                    name: 'motivo',
-                    class: 'text-justify p-1 font-verdana-sm'
                 }
                 ,
-                {
-                    data: 'areactual',
-                    name: 'areactual',
-                    class: 'text-justify p-1 font-verdana-sm'
-                },
+                
                 {
                     data: 'cargoactual',
                     name: 'cargoactual',
@@ -103,37 +92,37 @@
                 }
                 ,
                 {
-                    data: 'nombrecargoactualpt',
-                    name: 'nombrecargoactualpt',
+                    data: 'nombrecargoactualcont',
+                    name: 'nombrecargoactualcont',
                     class: 'text-justify p-1 font-verdana-sm'
                 },{
-                    data: 'haberbasicoactualpt',
-                    name: 'haberbasicoactualpt',
+                    data: 'haberbasicoactualcont',
+                    name: 'haberbasicoactualcont',
                     class: 'text-justify p-1 font-verdana-sm'
                 }
                 ,{
-                    data: 'nombreareanuevopt',
-                    name: 'haberbasicoactualpt',
+                    data: 'nombreareanuevocont',
+                    name: 'nombreareanuevocont',
                     class: 'text-justify p-1 font-verdana-sm'
                 },
                 
                 {
-                    data: 'cargonuevopt',
-                    name: 'cargonuevopt',
+                    data: 'cargonuevocont',
+                    name: 'cargonuevocont',
                     class: 'text-justify p-1 font-verdana-sm'
                 }
                 ,
                 
                 {
-                    data: 'nombrecargonuevopt',
-                    name: 'nombrecargonuevopt',
+                    data: 'nombrecargonuevocont',
+                    name: 'nombrecargonuevocont',
                     class: 'text-justify p-1 font-verdana-sm'
                 }
                 ,
                 
                 {
-                    data: 'haberbasiconuevopt',
-                    name: 'haberbasiconuevopt',
+                    data: 'haberbasiconuevocont',
+                    name: 'haberbasiconuevocont',
                     class: 'text-justify p-1 font-verdana-sm'
                 }
             ],

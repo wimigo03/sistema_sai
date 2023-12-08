@@ -33,7 +33,7 @@
     </div>
     <div class="col-md-2">
         <label for="date"><b>Fecha Ingreso</b></label>
-        <input type="date" name="natalicio" class="form-control form-control-sm font-verdana-bg">
+        <input type="date" name="natalicio" class="form-control form-control-sm font-verdana-bg" required>
     </div>
 </div>
 <div class="form-group row font-verdana-bg">
@@ -54,7 +54,7 @@
 
     <div class="col-md-2">
         <label for="poai"><b>POAI</b></label>
-        <input type="text" name="poai" class="form-control form-control-sm font-verdana-bg">
+        <input type="text" name="poai" class="form-control form-control-sm font-verdana-bg" >
     </div>
     <div class="col-md-2">
         <label for="exp_poai"><b>Exp. POAI</b></label>
@@ -62,7 +62,7 @@
     </div>
     <div class="col-md-2">
         <label for="decjurada"><b>Dec. Jurada</b></label>
-        <input type="text" name="decjurada" class="form-control form-control-sm font-verdana-bg">
+        <input type="text" name="decjurada" class="form-control form-control-sm font-verdana-bg" >
     </div>
     <div class="col-md-2">
         <label for="exp_dec_jurada"><b>Exp. Dec. Jurada</b></label>
@@ -84,7 +84,7 @@
     </div>
     <div class="col-md-2">
         <label for="idioma"><b>Idioma</b></label>
-        <input type="text" name="idioma" class="form-control form-control-sm font-verdana-bg">
+        <input type="text" name="idioma" class="form-control form-control-sm font-verdana-bg" required>
     </div>
     <div class="col-md-2">
         <label for="induccion"><b>Induccion</b></label>
@@ -136,7 +136,7 @@
     </div>
     <div class="col-md-2">
         <label for="telefono"><b>Telefono</b></label>
-        <input type="text" name="telefono" class="form-control form-control-sm font-verdana-bg">
+        <input type="text" name="telefono" class="form-control form-control-sm font-verdana-bg" >
     </div>
     <div class="col-md-2">
         <label for="biometrico"><b>Biometrico</b></label>

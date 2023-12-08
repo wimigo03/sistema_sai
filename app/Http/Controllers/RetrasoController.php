@@ -15,8 +15,15 @@ class RetrasoController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
+            $filtro = $request->input('filtro', 'actual');
+
             $data = RegistroAsistencia::with('empleado')->where('minutos_retraso','>',0);
-            
+            $filtro = $request->input('filtro');
+            if ($filtro == 'actual') {
+                $data = $data->whereDate('fecha', Carbon::today());
+            } elseif ($filtro == 'mensual') {
+                $data = $data->whereMonth('fecha', Carbon::now()->month);
+            }
             $data = $data->get();
 
             return DataTables::of($data)
@@ -37,7 +44,8 @@ class RetrasoController extends Controller
                 })
                 ->make(true);
         }
+        $filtro = $request->input('filtro', 'actual');
 
-        return view('asistencias.retrasos.index');
+        return view('asistencias.retrasos.index',compact('filtro'));
     }
 }

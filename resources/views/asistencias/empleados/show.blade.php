@@ -13,6 +13,13 @@
         </div>
 
         <div class="col-md-4 text-right">
+            <div class="btn-group">
+                <select id="filtro" aria-label="Seleciona los registros" class="form-control">
+                    <option value="todos" {{ $filtro == 'todos' ? 'selected' : '' }}>Todos</option>
+                    <option value="actual" {{ $filtro == 'actual' ? 'selected' : '' }}>Hoy</option>
+                    <option value="mensual" {{ $filtro == 'mensual' ? 'selected' : '' }}>Mensual</option>
+                </select>
+            </div>
             <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('empleadoasistencias.index')}}">
                 <button class="btn btn-sm btn-danger font-verdana" type="button">
                     &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
@@ -21,7 +28,10 @@
 
 
         </div>
+    
+
         <div class="col-md-12">
+        <hr class="hrr">
             <b>Nombres y Apellidos: {{$empleado->nombres}} {{$empleado->ap_pat}} {{$empleado->ap_pat}}</b>
 
             <hr class="hrr">
@@ -52,7 +62,6 @@
 <script>
     $(document).ready(function() {
         $('#registrosTable').DataTable({
-            "dom": '<"top"Bf>lrtip',
             responsive: true,
             processing: true,
             serverSide: true,
@@ -148,9 +157,11 @@
 
 
         });
-        $('#myTable').on('draw.dt', function() {
-            $('ul.pagination').addClass('pagination-sm');
-        }).DataTable();
+
+        $('#filtro').on('change', function() {
+            $('#registrosTable').DataTable().ajax.reload();
+
+        });
     });
 </script>
 @endsection

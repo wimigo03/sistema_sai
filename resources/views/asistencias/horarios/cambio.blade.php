@@ -4,6 +4,11 @@
 <div class="container">
     <div class="row  font-verdana">
         <div class="col-md-8 titulo ">
+        <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
+                <a href="{{url()->previous()}}" class="color-icon-1">
+                    <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
+                </a>
+            </span>
          Cambios de Horarios Personal
         </div>
         <div class="col-md-4 text-right">

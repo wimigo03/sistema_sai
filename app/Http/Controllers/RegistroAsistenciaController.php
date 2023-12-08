@@ -41,6 +41,7 @@ class RegistroAsistenciaController extends Controller
 
             // Aplicar el filtro de fecha según el valor seleccionado
             $filtro = $request->input('filtro');
+            
             if ($filtro == 'actual') {
                 $data = $data->whereDate('fecha', Carbon::today());
             } elseif ($filtro == 'mensual') {

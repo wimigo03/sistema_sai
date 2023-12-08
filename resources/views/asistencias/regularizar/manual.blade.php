@@ -191,7 +191,11 @@
                             @endif
                         </div>
                         @endif
-                        <button type="submit" class="btn btn-primary">Regularizar</button>
+                        <div class="col-md-12 text-right">
+                            <hr class="hrr">
+                            <button type="submit" class="btn btn-primary">Regularizar</button>
+                        </div>
+                       
                     </form>
 
                 </div>

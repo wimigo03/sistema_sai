@@ -215,13 +215,10 @@ class EstadoExpiracionesController extends Controller
     {
 
         $fecha30DiasFuturos = now()->addDays(30)->toDateString();
+        $areasExcluidas = [33, 34];
+        $data = EmpleadosModel::where('tipo', 1)
+            ->whereNotIn('idarea', $areasExcluidas)
 
-        $data = EmpleadosModel::where('expinduccion', '<', $fecha30DiasFuturos)
-            ->orWhere('expdecjurada', '<', $fecha30DiasFuturos)
-            ->orWhere('expsippase', '<', $fecha30DiasFuturos)
-            ->orWhere('rejap', '<', $fecha30DiasFuturos)
-            ->orWhere('exppoai', '<', $fecha30DiasFuturos)
-            ->orWhere('expprogvacacion', '<', $fecha30DiasFuturos)
             ->get([
                 'idemp',
                 'nombres',
@@ -246,92 +243,144 @@ class EstadoExpiracionesController extends Controller
             })
             ->addColumn('expinduccion', function ($row) {
                 if (empty($row->expinduccion)) {
-                    return '<span style="color: red;">NO TIENE</span>';
+                    return '<span style="color: black;">NO TIENE</span>';
                 }
-                return Carbon::parse($row->expinduccion)->diffForHumans();
+                $carbonDate = Carbon::parse($row->expinduccion);
+
+                return $carbonDate->isPast()
+                    ? '<span style="color: red;">' . $carbonDate->diffForHumans() . '</span>'
+                    : ($carbonDate->isFuture()
+                        ? '<span style="color: green;">' . $carbonDate->diffForHumans() . '</span>'
+                        : $carbonDate->diffForHumans());
             })
             ->addColumn('expdecjurada', function ($row) {
                 if (empty($row->expdecjurada)) {
-                    return '<span style="color: red;">NO TIENE</span>';
+                    return '<span style="color: black;">NO TIENE</span>';
                 }
-                return Carbon::parse($row->expdecjurada)->diffForHumans();
+                $carbonDate = Carbon::parse($row->expdecjurada);
 
-         
+                return $carbonDate->isPast()
+                    ? '<span style="color: red;">' . $carbonDate->diffForHumans() . '</span>'
+                    : ($carbonDate->isFuture()
+                        ? '<span style="color: green;">' . $carbonDate->diffForHumans() . '</span>'
+                        : $carbonDate->diffForHumans());
             })
             ->addColumn('expsippase', function ($row) {
                 if (empty($row->expsippase)) {
-                    return '<span style="color: red;">NO TIENE</span>';
+                    return '<span style="color: black;">NO TIENE</span>';
                 }
-                return Carbon::parse($row->expsippase)->diffForHumans();
- 
+                $carbonDate = Carbon::parse($row->expsippase);
+
+                return $carbonDate->isPast()
+                    ? '<span style="color: red;">' . $carbonDate->diffForHumans() . '</span>'
+                    : ($carbonDate->isFuture()
+                        ? '<span style="color: green;">' . $carbonDate->diffForHumans() . '</span>'
+                        : $carbonDate->diffForHumans());
             })
             ->addColumn('rejap', function ($row) {
 
-                 if (empty($row->rejap)) {
-                    return '<span style="color: red;">NO TIENE</span>';
+                if (empty($row->rejap)) {
+                    return '<span style="color: black;">NO TIENE</span>';
                 }
-                return Carbon::parse($row->rejap)->diffForHumans();
- 
+                $carbonDate = Carbon::parse($row->rejap);
+
+                return $carbonDate->isPast()
+                    ? '<span style="color: red;">' . $carbonDate->diffForHumans() . '</span>'
+                    : ($carbonDate->isFuture()
+                        ? '<span style="color: green;">' . $carbonDate->diffForHumans() . '</span>'
+                        : $carbonDate->diffForHumans());
             })
             ->addColumn('exppoai', function ($row) {
                 if (empty($row->exppoai)) {
-                    return '<span style="color: red;">NO TIENE</span>';
+                    return '<span style="color: black;">NO TIENE</span>';
                 }
-                return Carbon::parse($row->exppoai)->diffForHumans();
-  
+                $carbonDate = Carbon::parse($row->exppoai);
+
+                return $carbonDate->isPast()
+                    ? '<span style="color: red;">' . $carbonDate->diffForHumans() . '</span>'
+                    : ($carbonDate->isFuture()
+                        ? '<span style="color: green;">' . $carbonDate->diffForHumans() . '</span>'
+                        : $carbonDate->diffForHumans());
             })
             ->addColumn('expprogvacacion', function ($row) {
                 if (empty($row->expprogvacacion)) {
-                    return '<span style="color: red;">NO TIENE</span>';
+                    return '<span style="color: black;">NO TIENE</span>';
                 }
-                return Carbon::parse($row->expprogvacacion)->diffForHumans();
-  
-             })
+                $carbonDate = Carbon::parse($row->expprogvacacion);
+
+                return $carbonDate->isPast()
+                    ? '<span style="color: red;">' . $carbonDate->diffForHumans() . '</span>'
+                    : ($carbonDate->isFuture()
+                        ? '<span style="color: green;">' . $carbonDate->diffForHumans() . '</span>'
+                        : $carbonDate->diffForHumans());
+            })
 
             ->addColumn('actions', function ($row) {
                 return '<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Horarios Asignados" href="' . route('planta.editar', $row->idemp) . '">
                 <i class="fa-solid fa-2xl fa-clock text-primary"></i>
                 
             </a>';
-            })->rawColumns(['actions','expprogvacacion','exppoai','rejap','expsippase','expdecjurada','expinduccion'])->make(true);
+            })->rawColumns(['actions', 'expprogvacacion', 'exppoai', 'rejap', 'expsippase', 'expdecjurada', 'expinduccion'])->make(true);
     }
     public function contrato()
     {
         $areasExcluidas = [33, 34];
-        $data = EmpleadosModel::with(['horarios' => function ($query) {
-            $query->where('estado', 1); // Filtrar los horarios con estado activo (estado = 1)
-        }])->where('tipo', 2)
-            ->whereNotIn('idarea', $areasExcluidas)
-            ->select(['idemp', 'nombres', 'ap_pat', 'ap_mat']);
 
-        $data = $data->get();
+        $fecha30DiasFuturos = now()->addDays(30)->toDateString();
+
+        $data = EmpleadosModel::whereNotIn('idarea', $areasExcluidas)
+            ->where('tipo', 2)
+            ->get([
+                'idemp',
+                'nombres',
+                'ap_pat',
+                'ap_mat',
+
+                'expsippase',
+                'rejap',
+
+            ]);
         return DataTables::of($data)
-            ->addColumn('id', function ($row) {
+            ->addColumn('idemp', function ($row) {
                 return $row->idemp;
             })
-            ->addColumn('nombres', function ($row) {
-                return $row->nombres;
+            ->addColumn('nomb_aps', function ($row) {
+                $nomb = $row->nombres ?? '';
+                $ap_pat = $row->ap_pat ?? '';
+                $ap_mat = $row->ap_mat ?? '';
+                return $nomb . ' ' . $ap_pat . ' ' . $ap_mat;
             })
-            ->addColumn('apellidos', function ($row) {
-                $ap_pat = $row->ap_pat ?? '-';
-                $ap_mat = $row->ap_mat ?? '-';
-                return $ap_pat . ' ' . $ap_mat;
-            })
-            ->addColumn('horario', function ($row) {
 
-                if ($row->horarios->count() > 0) {
-                    $horariosAsignados = $row->horarios->pluck('Nombre')->implode(' - ');
-                    return $horariosAsignados;
-                } else {
-                    return '-';
+            ->addColumn('expsippase', function ($row) {
+                if (empty($row->expsippase)) {
+                    return '<span style="color: red;">NO TIENE</span>';
                 }
+                $carbonDate = Carbon::parse($row->expsippase);
+
+                return $carbonDate->isPast()
+                    ? '<span style="color: red;">' . $carbonDate->diffForHumans() . '</span>'
+                    : ($carbonDate->isFuture()
+                        ? '<span style="color: green;">' . $carbonDate->diffForHumans() . '</span>'
+                        : $carbonDate->diffForHumans());
             })
+            ->addColumn('rejap', function ($row) {
+
+                if (empty($row->rejap)) {
+                    return '<span style="color: black;">NO TIENE</span>';
+                }
+                $carbonDate = Carbon::parse($row->rejap);
+
+                return $carbonDate->isPast()
+                    ? '<span style="color: red;">' . $carbonDate->diffForHumans() . '</span>'
+                    : ($carbonDate->isFuture()
+                        ? '<span style="color: green;">' . $carbonDate->diffForHumans() . '</span>'
+                        : $carbonDate->diffForHumans());
+            })
+
+
             ->addColumn('actions', function ($row) {
-                return '<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Horarios Asignados" href="' . route('contrato.editar', $row->idemp) . '">
-                        <i class="fa-solid fa-2xl fa-clock text-primary"></i>
-                        
-                    </a>';
-            })->rawColumns(['actions'])->make(true);
+                return '<a href="' . route('contrato.editar', ['id' => $row->idemp]) . '" class="btn btn-outline-info btn-sm">Editar</a>';
+            })->rawColumns(['actions', 'expprogvacacion', 'exppoai', 'rejap', 'expsippase', 'expdecjurada', 'expinduccion'])->make(true);
     }
 
 

@@ -76,18 +76,26 @@
                         // Selecciona y renombra los datos que deseas mostrar
                         var selectedData = {
                             'Fecha de Asistencia': data.fecha,
-                            'Marcado Entrada': data.registro_inicio,
-                            'Marcado Salida': data.registro_salida,
-                            'Marcado Retorno': data.registro_entrada,
-                            'Marcado salida': data.registro_final,
-                            'Minutos de Retraso': data.minutos_retraso,
+                            'Entrada': data.registro_inicio,
+                            'Salida': data.registro_salida,
+                            'Minutos de retraso': data.retraso1,
+                            'Retorno': data.registro_entrada,
+                            'Salida': data.registro_final,
+                            'Minutos de retraso': data.retraso2,
+                            'Suma de minutos': data.minutos_retraso,
                             'Observacion': data.observ,
                             // Agrega más campos según sea necesario
                         };
 
                         // Muestra cada clave y valor en líneas separadas
                         for (var key in selectedData) {
-                            formattedData += '<b>' + key + ':</b> ' + selectedData[key] + '<br>';
+                            var value = selectedData[key];
+
+                            // Verifica si el valor es nulo o vacío y muestra un guion en su lugar
+                            value = (value === null || value === '') ? '-' : value;
+
+                            formattedData += '<b>' + key + ':</b> ' + value + '<br>';
+
                         }
 
                         return formattedData;
@@ -106,7 +114,11 @@
                     searchable: false,
 
                 }
-            ]
+            ], // cambiar lenguaje a español
+
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+            }
         });
     });
 </script>

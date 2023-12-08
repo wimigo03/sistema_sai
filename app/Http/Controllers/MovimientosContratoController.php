@@ -21,7 +21,7 @@ class MovimientosContratoController extends Controller
             return DataTables::of($data)
 
                 ->addColumn('fecha', function ($row) {
-                    return $row->fechamovpt ? Carbon::parse($row->fechamovpt)->format('Y-m-d') : '-';
+                    return $row->updated_at ? Carbon::parse($row->updated_at)->format('Y-m-d') : '-';
                 })
                 ->addColumn('nombres_apellidos', function ($row) {
                     $nomb = $row->empleado->nombres ?? '-';
@@ -29,24 +29,20 @@ class MovimientosContratoController extends Controller
                     $ap_mat = $row->empleado->ap_mat ?? ' ';
                     return $nomb . ' ' . $ap_pat . ' ' . $ap_mat;
                 })
-                ->addColumn('motivo', function ($row) {
-                    return $row->motivopt;
-                })
+           
                 ->addColumn('areactual', function ($row) {
-                    return $row->nombreareaactualpt;
+                    return $row->nombreareaactual;
                 })
                 ->addColumn('cargoactual', function ($row) {
-                    return $row->cargoactualpt;
+                    return $row->nombrecargoactualcont;
                 })
                 ->addColumn('nombrecargoactualpt', function ($row) {
-                    return $row->nombrecargoactualpt;
+                    return $row->nombrecargoactualcont;
                 })
             
          
                 
-                
-                ->rawColumns(['opciones'])
-
+             
                 ->make(true);
         }
 

@@ -10,7 +10,7 @@ use App\Models\FileModel;
 use App\Models\MovimientosPtModel;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Datatables;
 use Carbon\Carbon;
 use NumerosEnLetras;

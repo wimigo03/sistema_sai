@@ -9,9 +9,10 @@ use App\Models\Customer;
 use App\Models\FileModel;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests;
-use DB;
+use App\Models\MovimientosContModel;
 use Yajra\Datatables\Datatables;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use NumerosEnLetras;
 
 
@@ -292,6 +293,37 @@ class ContratoController extends Controller
             $file2->estadofile = 1;
             $file->save();
             $file2->save();
+            $fileactual = DB::table('file as f')
+            ->select('f.numfile', 'f.cargo', 'f.habbasico', 'f.nombrecargo')
+            ->where('f.idfile', '=', $request->input('idfileoriginal'))->first();
+
+        // $fileactual = FileModel::find($request->input('idfile'))->first();
+        $filenuevo = DB::table('file as f')
+            ->select('f.numfile', 'f.cargo', 'f.habbasico', 'f.nombrecargo')
+            ->where('f.idfile', '=', $request->input('idfile'))->first();
+
+        //$areaactual = AreasModel::find($request->input('idarea'))->first();
+        $areaactual = DB::table('areas as a')
+            ->select('a.nombrearea')
+            ->where('a.idarea', '=', $request->input('idarea'))->first();
+
+
+            $movimientosplanta = new MovimientosContModel();
+            $movimientosplanta->idemp = $request->input('idemp');
+            $movimientosplanta->fechamovcont = $request->input('fechainactivo');
+            $movimientosplanta->motivomovcont = $request->input('motivo');
+
+            $movimientosplanta->fileactualcont = $fileactual->numfile;
+            $movimientosplanta->cargoactualcont = $fileactual->cargo;
+            $movimientosplanta->nombrecargoactualcont = $fileactual->nombrecargo;
+            $movimientosplanta->haberbasicoactualcont = $fileactual->habbasico;
+            $movimientosplanta->nombreareaactual = $request->input('nombreareaactual');
+             $movimientosplanta->filenuevocont = $filenuevo->numfile;
+            $movimientosplanta->cargonuevocont = $filenuevo->cargo;
+            $movimientosplanta->nombrecargonuevocont = $filenuevo->nombrecargo;
+            $movimientosplanta->haberbasiconuevocont = $filenuevo->habbasico;
+            $movimientosplanta->nombreareanuevocont = $areaactual->nombrearea;
+            $movimientosplanta->save();
         } else {
         }
 

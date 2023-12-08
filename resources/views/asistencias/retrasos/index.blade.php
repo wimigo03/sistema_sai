@@ -13,6 +13,13 @@
             <b> Lista de Retrasos </b>
         </div>
         <div class="col-md-4 text-right">
+        <div class="btn-group">
+                <select id="filtro" aria-label="Seleciona los registros" class="form-control">
+                    <option value="todos" {{ $filtro == 'todos' ? 'selected' : '' }}>Todos</option>
+                    <option value="actual" {{ $filtro == 'actual' ? 'selected' : '' }}>Hoy</option>
+                    <option value="mensual" {{ $filtro == 'mensual' ? 'selected' : '' }}>Mensual</option>
+                </select>
+            </div>
 
             <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
                 <button class="btn btn-sm btn-danger font-verdana" type="button">
@@ -73,7 +80,15 @@
                 infoEmpty: "<span class='font-verdana'>Ningun registro encontrado</span>",
                 infoFiltered: "<span class='font-verdana'>(filtrados de un total de _MAX_ registros)</span>"
             },
-            ajax: "{{ route('retrasos.index') }}",
+         
+            ajax: {
+                url: "{{ route('retrasos.index') }}",
+                data: function(d) {
+                    // Agregar parámetro de filtro de fecha
+                    d.filtro = $('#filtro').val();
+                }
+
+            },
             columns: [{
                     data: 'fecha',
                     name: 'fecha',
@@ -105,6 +120,12 @@
         $('#retrasos-table').on('draw.dt', function() {
             $('ul.pagination').addClass('pagination-sm');
         }).DataTable();
+        $('#filtro').on('change', function() {
+        $('#retrasos-table').DataTable().ajax.reload();
+        $('#retrasos-table').on('draw.dt', function() {
+            $('ul.pagination').addClass('pagination-sm');
+        }).DataTable();
+    });
     });
 </script>
 @endsection

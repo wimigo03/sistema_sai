@@ -66,7 +66,7 @@ class AusenciasController extends Controller
                     $url = route('regularizar.ausencia', ['id' => $row->id]);
 
                     return '<a class="tts:left tts-slideIn tts-custom" aria-label="Regularizar Ausencia" href="' . $url . '">
-                                <i class="fa-solid fa-2xl fa-square-pen text-warning"></i>
+                    <i class="fa-solid fa-2xl fa fa-clock" aria-hidden="true"></i>
                             </a>';
                 })
 
@@ -346,6 +346,7 @@ class AusenciasController extends Controller
                 $usuario_creacion = Auth::user()->name; // Obtener el nombre del usuario actualmente autenticado
             }
             $id = $registro->id;
+            $fecha  = request('fecha');
             $historial = HistorialAsistenciasCambios::where('registro_asistencia_id', $id);
             // Guarda los datos anteriores en el historial
 
@@ -365,13 +366,16 @@ class AusenciasController extends Controller
             $registros = RegistroAsistencia::where('id', $id)->get();
             foreach ($registros as $registro) {
                 $this->verificarMarcado($registro);
+            }
+            foreach ($registros as $registro) {
                 $this->calcularRetraso($registro);
             }
-
+            $f2 = Carbon::parse($fecha);
+             $f=$f2->isoFormat('dddd D [de] MMMM'); 
 
             // Puedes redirigir a la vista de detalles o a donde desees
             // Puedes redirigir a la vista de detalles o a donde desees
-            return redirect()->route('ausencias.index')->with('success', 'Regularizado correctamentpijpijpe', $historial . $registro);
+            return redirect()->route('agregar.regulacion', ['id' => $registro->empleado_id])->with('success', 'Regularizado correctamente la asistencia del dia : ' . $f);
         } catch (\Exception $e) {
             // Manejo de errores aquí
             return back()->withError('Error al actualizar el registro: ' . $e->getMessage());
@@ -568,7 +572,6 @@ class AusenciasController extends Controller
                     $registro->retraso2 = 0;
                     $registro->minutos_retraso = 0;
                     $registro->save();
-                    
                 }
             } else if ($registro->registro_entrada && !$registro->registro_inicio) {
 

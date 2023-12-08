@@ -5,7 +5,7 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header bg-gradient-secondary text-white rounded d-flex flex-row-reverse">
-                LISTA GENERAL EMPLEADOS CONTRATO
+                LISTA GENERAL: PERSONAL DE CONTRATO
             </div>
             <div class="card-body">
                 <div class="table-responsive font-verdana-sm">

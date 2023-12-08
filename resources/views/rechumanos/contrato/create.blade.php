@@ -5,7 +5,7 @@
 
 
 <div class="row font-verdana-bg">
-     
+
     <div class="col-md-3 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
             <a href="{{url()->previous()}}" class="color-icon-1">
@@ -16,7 +16,7 @@
     <div class="col-md-9 text-center titulo">
         <b>GESTIONAR PERSONAL-C//REGISTRAR</b>
     </div>
-    
+
     <div class="col-md-12">
         <hr class="hrr">
     </div>
@@ -180,12 +180,11 @@
 
 
         </br>
-
-        <div class="form-group " style="align:center">
-            <label class="col-md-1" style="color:black;font-weight: bold;">File:</label>
+        <div class="form-group row font-verdana-bg">
+        <label class="col-md-1" style="color:black;font-weight: bold;">File:</label>
             <div id="permissions-select2">
 
-                <select name="idfile" id="permissions2" class="col-md-6" required>
+                <select name="idfile" id="permissions2" class="form-control" required>
                     <option value="">== Seleccione un File ==</option>
                     @foreach($area as $areas)
                     <option disabled>
@@ -207,20 +206,30 @@
                 </select>
             </div>
         </div>
+       
 
         </br>
-
-        <div class="form-group row mb-0">
-            <div class="col-md-6 offset-md-4">
-                <button type="submit" class="btn btn-outline-success">
-                    {{ __('Guardar') }}
+        <div class="form-group row">
+            <div class="col-md-12 text-right">
+                <button type="submit" class="btn btn-outline-success font-verdana-bg" type="submit">
+                    <i class="fa-solid fa-paper-plane"></i>&nbsp;Guardar
                 </button>
+
             </div>
         </div>
+         
     </form>
 
 </div>
 
+@section('scripts')
+    <script>
+  
 
+        $('#permissions2').select2({
+            placeholder: "--Seleccionar--"
+        });
+    </script>
+    @endsection
 
 @endsection
