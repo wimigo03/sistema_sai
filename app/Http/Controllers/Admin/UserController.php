@@ -8,6 +8,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exportar\UsuariosExcel;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\EmpleadosModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Response;
@@ -68,12 +69,15 @@ class UserController extends Controller
 
     public function create(){
         abort_if(Gate::denies('user_create'), Response::HTTP_FORBIDDEN, 'Forbidden');
-        $roles = DB::table('roles')->get();
-        $empleados = DB::table('empleados')->get();
+        //$roles = DB::table('roles')->get();
+        $roles = Role::pluck('title','id');
+        //$empleados = DB::table('empleados')->get();
+        $empleados = EmpleadosModel::select(DB::raw("concat(nombres,' ',ap_pat,' ',ap_mat) as nombre_completo"),'idemp as id')->pluck('nombre_completo','id');
+        //dd($empleados);
         return view('admin.users.create', compact('roles', 'empleados'));
     }
 
-    public function store(StoreUserRequest $request){
+    public function store(StoreUserRequest $request){dd($request->all());
         User::create($request->validated());
         return redirect()->route('admin.users.index')->with(['status-success' => "New User Created"]);
     }

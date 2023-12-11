@@ -7,8 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class AreasModel extends Model
 {
+    use HasFactory;
+    
     protected $table = 'areas';
-
+    
     protected $primaryKey= 'idarea';
 
     public $timestamps = false;
@@ -21,7 +23,7 @@ class AreasModel extends Model
 
     protected $guarded = [
 
-
+        
     ];
 
     public function purchases()
@@ -30,5 +32,13 @@ class AreasModel extends Model
     }
     public function iPais_all(){
         return $this->hasMany('App\Models\FileModel', 'idarea', 'idarea');
+    }
+    public function actuals()
+    {
+        return $this->hasMany(ActualModel::class, 'idarea');
+    }
+    public function empleados()
+    {
+        return $this->hasMany(EmpleadosModel::class, 'idarea');
     }
 }
