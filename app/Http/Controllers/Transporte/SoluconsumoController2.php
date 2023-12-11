@@ -25,8 +25,8 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
-use DB;
-use DataTables;
+use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
 use PDF;
 use App\Http\Requests;
 
@@ -45,11 +45,12 @@ class SoluconsumoController2 extends Controller
                         ->join('areas as a', 'a.idarea', '=', 's.idarea')
                       
                         ->where('a.idarea',$personalArea->idarea)
-                        ->where('s.estadosoluconsumo',1)
-                        ->select('s.idsoluconsumo','s.estadosoluconsumo','s.estado1','s.cominterna', 's.referencia',
+                        ->where('s.estadosoluconsumo', '!=',2)
+                        ->select('s.idsoluconsumo','s.estadosoluconsumo','s.fechasol','s.estado1','s.cominterna', 's.referencia',
                         
                         'a.nombrearea',
                         'lo.nombrelocalidad')
+                        ->orderBy('s.idsoluconsumo','asc')
                         ->get();
 
                     
@@ -185,9 +186,13 @@ $encargadotres = DB::table('encargados as e')
 ->select('emp.nombres','emp.ap_pat','emp.ap_mat','e.abrev')
 ->first();
 
+$Areanm = AreasModel::find($id3);
+$NmBr =$Areanm ->nombrearea;
+$oFICI="OFICINA DE";
+$NomFci= $oFICI . " " .  $NmBr;
 
         return view('transportes.pedidoparcial.create',
-        compact('areas','localidades','empleados','personalArea','date','encargado','encargadodos','encargadotres'));
+        compact('areas','localidades','empleados','personalArea','date','encargado','encargadodos','encargadotres','NomFci'));
     }
 
     public function store(Request $request){
@@ -202,7 +207,10 @@ $encargadotres = DB::table('encargados as e')
         $id3 = $personalArea->idarea;
 
 
-// de parte de
+        $Areanm = AreasModel::find($id3);
+        $NmBr =$Areanm ->nombrearea;
+        $oFICI="OFICINA DE";
+        $NomFci= $oFICI . " " .  $NmBr;
 
 
 $productocinco = EmpleadosModel::find($userdate->idemp);
@@ -278,7 +286,7 @@ $Distancialocalid = $productoocho->distancialocalidad;
 
         $soluconsumos = new SoluconsumoModel();
 
-        $soluconsumos->oficina = $request->input('oficina');
+        $soluconsumos->oficina = $NomFci;
         $soluconsumos->cominterna = $request->get('cominterna');
 
         
@@ -347,7 +355,7 @@ $Distancialocalid = $productoocho->distancialocalidad;
 
 
         $soluconsumos = SoluconsumoModel::find($idsoluconsumo);
-
+        $FEchasol= $soluconsumos->fechasol;
         $areas = DB::table('areas')->get();
         $localidades = DB::table('localidad')->get();
         $empleados = DB::table('empleados')->get();
@@ -382,11 +390,16 @@ $encargadotres = DB::table('encargados as e')
 ->first();
 
 
+$Areanm = AreasModel::find($id3);
+$NmBr =$Areanm ->nombrearea;
+$oFICI="OFICINA DE";
+$NomFci= $oFICI . " " .  $NmBr;
+
         return view('transportes.pedidoparcial.editar',
 
         compact('id','soluconsumos','areas',
-        'empleados','localidades','personalArea','date',
-        'encargado','encargadodos','encargadotres'));
+        'empleados','localidades','personalArea',
+        'encargado','encargadodos','encargadotres','NomFci','FEchasol'));
     }
 
     public function update(Request $request){
@@ -399,7 +412,10 @@ $encargadotres = DB::table('encargados as e')
         $id3 = $personalArea->idarea;
 
 // de parte de
-
+$Areanm = AreasModel::find($id3);
+$NmBr =$Areanm ->nombrearea;
+$oFICI="OFICINA DE";
+$NomFci= $oFICI . " " .  $NmBr;
 
 $productocinco = EmpleadosModel::find($userdate->idemp);
 $Nombreusuario = $productocinco->nombres;
@@ -472,7 +488,7 @@ $Distancialocalid = $productoocho->distancialocalidad;
         $soluconsumos = SoluconsumoModel::find($request->idsoluconsumo);
 
         
-        $soluconsumos->oficina = $request->input('oficina');
+        $soluconsumos->oficina = $NomFci;
         $soluconsumos->cominterna = $request->get('cominterna');
 
         
@@ -522,6 +538,58 @@ $Distancialocalid = $productoocho->distancialocalidad;
         return redirect()->route('transportes.pedidoparcial.index');
     }
 
+    public function editrechazado($idsoluconsumo){
+
+
+        $soluconsumos = SoluconsumoModel::find($idsoluconsumo);
+
+        $areas = DB::table('areas')->get();
+        $localidades = DB::table('localidad')->get();
+        $empleados = DB::table('empleados')->get();
+   
+
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados; 
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $id3 = $personalArea->idarea;
+
+        $date = Carbon::now();
+$encargado = DB::table('encargados as e')
+->join('areas as a', 'a.idarea', '=', 'e.idarea')
+->join('empleados as emp', 'e.idemp', '=', 'emp.idemp')
+-> where('a.idarea', $id3)
+->select('emp.nombres','emp.ap_pat','emp.ap_mat','e.abrev')
+->first();
+
+$encargadodos = DB::table('encargados as e')
+->join('areas as a', 'a.idarea', '=', 'e.idarea')
+->join('empleados as emp', 'e.idemp', '=', 'emp.idemp')
+-> where('a.idarea',11)
+->select('emp.nombres','emp.ap_pat','emp.ap_mat','e.abrev')
+->first();
+
+$encargadotres = DB::table('encargados as e')
+->join('areas as a', 'a.idarea', '=', 'e.idarea')
+->join('empleados as emp', 'e.idemp', '=', 'emp.idemp')
+-> where('a.idarea',19)
+->select('emp.nombres','emp.ap_pat','emp.ap_mat','e.abrev')
+->first();
+
+
+$Areanm = AreasModel::find($id3);
+$NmBr =$Areanm ->nombrearea;
+$oFICI="OFICINA DE";
+$NomFci= $oFICI . " " .  $NmBr;
+
+        return view('transportes.pedidoparcial.editrechazado',
+
+        compact('id','soluconsumos','areas',
+        'empleados','localidades','personalArea','date',
+        'encargado','encargadodos','encargadotres','NomFci'));
+    }
+
+ 
 
     public function pdf()
 {

@@ -18,9 +18,8 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
-use DB;
-
-use DataTables;
+use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
 
 
 
@@ -42,32 +41,106 @@ class ValeController extends Controller
         ->join('localidad as lo', 'lo.idlocalidad', '=', 'v.idlocalidad')
 
                         ->join('areas as a', 'a.idarea', '=', 'v.idarea')
-
-                        ->where('v.estadovale',1)
-
                         ->select('v.estadovale','v.idvale','v.detallesouconsumo',
 
                         'v.usuarionombre','v.usuariocargo',
                         
-                        'v.nombrelocalidad','v.marcaconsumo','v.placaconsumo',
+                        'v.nombrelocalidad','v.marcaconsumo','v.placaconsumo','v.fechasolicitud',
                         'v.estado2',
                       
                         'a.nombrearea',
                         'u.nombreuconsumo',
-                        'u.kilometrajeinicialconsumo',
-                        'u.kilometrajefinalconsumo',
+                        // 'u.kilometrajeinicialconsumo',
+                        // 'u.kilometrajefinalconsumo',
                         'lo.nombrelocalidad')
 
-                        ->orderBy('v.idvale', 'asc');
+                        ->orderBy('v.idvale', 'desc');
                      
-
+                        $vales = $vales->get();
                         return Datatables::of($vales)
                         ->addIndexColumn()
-                       
-                        ->addColumn('btn2', 'almacenes.pedido.btn2')
-                  
-                        ->rawColumns(['btn2'])
-                        ->make(true);
+                        ->addColumn('fechasolicitud', function ($vales) {
+                            return $vales->fechasolicitud;
+                        })
+                        ->addColumn('idvale', function ($vales) {
+                            return $vales->idvale;
+                        })
+                        ->addColumn('nombrearea', function ($vales) {
+                            return $vales->nombrearea;
+                        })
+                        ->addColumn('usuarionombre', function ($vales) {
+                            return $vales->usuarionombre;
+                        })
+                        ->addColumn('usuariocargo', function ($vales) {
+                            return $vales->usuariocargo;
+                        })
+                        ->addColumn('nombreuconsumo', function ($vales) {                                
+                        return $vales->nombreuconsumo;  
+
+                        })
+                        ->addColumn('placaconsumo', function ($vales) {
+                            return $vales->placaconsumo;
+                        })
+                        ->addColumn('nombrelocalidad', function ($vales) {
+                            return $vales->nombrelocalidad;
+                        })
+
+                        ->addColumn('estadovale', function ($vales) {
+
+                            switch ($vales->estadovale ) {
+                                case '1':
+                                    return '<b style="color: green">Pendiente</b>';
+                                case '2':
+                                    return '<b style="color: blue">Aprobada</b>';
+                                case '3':
+                                    return '<b style="color: purple">Almacen</b>';
+                                default:
+                                
+                                    break;
+                }   }                  
+                        )
+
+                            ->addColumn('actions', function ($vales) {
+                                // $buttonHtml = '';
+                                if ($vales->estadovale == 1) {
+                                        return '<a class="tts:left tts-slideIn tts-custom" aria-label=" Ir a detalle" href="' . route('almacenes.pedido.edit', $vales->idvale) . '">
+                                        <button class="tts:left tts-slideIn tts-custom" aria-label="Detalle" style="border: none;">
+                                        <span class="text-warning" >
+                                        <i class="fa-solid fa-2xl fa-square-pen" ></i>
+                                            </span>
+                                            </button>
+                                        </a>';
+                                } else {
+                                    if ($vales->estadovale == 2) {
+                                        return '<a class="tts:left tts-slideIn tts-custom" aria-label=" Ir a detalle" href="' . route('almacenes.pedido.editable', $vales->idvale) . '">
+                                        <button class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle" style="border: none;">
+                                        <span class="text-primary" >
+                                        <i class="fa-solid fa-2xl fa-list" ></i>
+                                            </span>
+                                            </button>
+                                    </a>';
+                                } else {
+                                    if ($vales->estadovale == 3) {
+            
+                                        return '<a class="tts:left tts-slideIn tts-custom" aria-label=" boton uno" href="' . route('almacenes.pedido.editabletres', $vales->idvale) . '">
+                                        <button class="tts:left tts-slideIn tts-custom" aria-label="Detalle" style="border: none;">
+                                        <span class="text-primary" >
+                                        <i class="fa-solid fa-2xl fa-square-pen" ></i>
+                                            </span>
+                                            </button>
+                                    </a>';
+                                }
+                             
+                                 
+                                }}}   )
+
+                        
+
+                                ->rawColumns(['actions', 'estadovale'])
+                                ->make(true);
+                        
+
+                     
 
                     }
                     $personal = User::find(Auth::user()->id);
@@ -82,7 +155,11 @@ class ValeController extends Controller
 
      public function index2(Request $request)
      {
-
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        
          if ($request->ajax()) {
             $vales = DB::table('vale as v')
 
@@ -105,7 +182,7 @@ class ValeController extends Controller
                             ->orderBy('v.idvale', 'asc');
                             
     
-                            return Datatables::of($vales)
+                            return DataTables::of($vales)
                             ->addIndexColumn()
                             ->addColumn('btn', 'almacenes.pedido.btn')
                             ->addColumn('btn3', 'almacenes.pedido.btn3')
@@ -119,7 +196,10 @@ class ValeController extends Controller
     
         public function index3(Request $request)
         {
-   
+            $personal = User::find(Auth::user()->id);
+            $id = $personal->id;
+            $userdate = User::find($id)->usuariosempleados;
+            $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
             if ($request->ajax()) {
                $vales = DB::table('vale as v')
    

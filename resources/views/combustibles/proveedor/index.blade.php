@@ -4,7 +4,7 @@
 <div class="row font-verdana-bg">
 
     <div class="col-md-8 titulo">
-        <b>PROVEEDORES</b><b style='color:red'>{{$idd->nombrearea}} </b>--
+        <b>PROVEEDORES--</b><b style='color:red'>{{$idd->nombrearea}} </b>
     </div>
 
     <div class="col-md-4 text-right">
@@ -44,7 +44,9 @@
                                     <td class="text-center p-1 font-weight-bold">
                                         <i class="fa fa-bars" aria-hidden="true"></i>
                                     </td>
-
+                                    <td class="text-center p-1 font-weight-bold">
+                                        <i class="fa fa-bars" aria-hidden="true"></i>
+                                    </td>
 
                                 </tr>
                             </thead>
@@ -86,11 +88,11 @@ $(function() {
                 data: 'telefonoproveedor',name: 'telefonoproveedor',class:'text-justify p-1 font-verdana'},
 
             {
-                data: 'btn',
-                name: 'btn',
-                orderable: true,
-                searchable: true
+                data: 'btn', name: 'btn', orderable: true, searchable: true
             },
+            {
+                data: 'btn2', name: 'btn2', orderable: true, searchable: true
+            }
         ],
 
 

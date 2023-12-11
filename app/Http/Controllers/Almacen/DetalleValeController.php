@@ -551,7 +551,7 @@ $SubTotalsolresu = number_format($SubTotalsol, 3, '.', '');
 
             $vales = ValeModel::find($Idvale);
             $vales->estadovale = 2;
-            $vales->estado1 = 2;
+            $vales->fechaaprob =  Carbon::now();
             $vales->save();
 
         return redirect()->route('almacenes.detalle.index2');

@@ -54,7 +54,7 @@ class DetalleCompraCombController extends Controller
             ->join('prodcomb as ps', 'ps.idprodcomb', '=', 'd.idprodcomb')
             ->join('compracomb as c', 'c.idcompracomb', '=', 'd.idcompracomb')
 
-            ->select('d.iddetallecompracomb', 'c.idcompracomb', 'ps.nombreprodcomb',
+            ->select('d.iddetallecompracomb','d.idcompracomb', 'c.idcompracomb', 'ps.nombreprodcomb',
              'd.cantidad', 'd.subtotal', 'd.precio')
 
             ->where('d.idcompracomb', $id2)
@@ -78,7 +78,15 @@ class DetalleCompraCombController extends Controller
         $ordencompra = DB::table('ordencompracomb as o')
             ->select('o.nombrecompra', 'o.solicitante', 'o.proveedor')
             ->where('o.compra_idcompra', '=', $id2)->first();
-        $resultado = $ordencompra;
+
+            $prodservdos = DB::table('detallecompracomb as d')
+            ->select('d.iddetallecompracomb','d.idcompracomb',
+             'd.cantidad', 'd.subtotal', 'd.precio')
+
+            ->where('d.idcompracomb', '=', $id2)->first();
+           
+
+        $resultado = $prodservdos;
         $estado = 1;
         if (is_null($resultado)) {
             $estado = 0;
@@ -143,6 +151,105 @@ class DetalleCompraCombController extends Controller
             'compras' => $compras]);
     }
 
+    public function index3()
+    {
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $detalle = TemporalModel::find($id);
+        $id2 = $detalle->idcompra;
+
+        $prodserv = DB::table('detallecompracomb as d')
+            ->join('prodcomb as ps', 'ps.idprodcomb', '=', 'd.idprodcomb')
+            ->join('compracomb as c', 'c.idcompracomb', '=', 'd.idcompracomb')
+
+            ->select('d.iddetallecompracomb', 'c.idcompracomb', 'ps.nombreprodcomb',
+             'd.cantidad', 'd.subtotal', 'd.precio')
+
+            ->where('d.idcompracomb', $id2)
+            ->orderBy('d.iddetallecompracomb', 'desc')
+            ->get();
+
+        $productos = DB::table('prodcomb')
+            ->where('estadoprodcomb', 1)
+            ->select(DB::raw("concat(codigoprodcomb,' // ',nombreprodcomb,' // PRECIO BS. ',precioprodcomb)
+             as prodservicio"), 'idprodcomb')
+            ->pluck('prodservicio', 'idprodcomb');
+
+            $compras = DB::table('compracomb as c')
+            ->join('proveedor as p', 'p.idproveedor', '=', 'c.idproveedor')
+            ->where('c.idcompracomb', $id2)
+            ->select('c.idcompracomb','c.estado1','c.estadocompracomb','p.idproveedor',
+            'p.nombreproveedor')
+            ->first();
+        $valor_total = $prodserv->sum('subtotal');
+        $valor_total = $prodserv->sum('subtotal');
+        $ordencompra = DB::table('ordencompracomb as o')
+            ->select('o.nombrecompra', 'o.solicitante', 'o.proveedor')
+            ->where('o.compra_idcompra', '=', $id2)->first();
+        $resultado = $ordencompra;
+        $estado = 1;
+        if (is_null($resultado)) {
+            $estado = 0;
+        }
+
+        return view('combustibles.detalle.index3', [
+            'prodserv' => $prodserv, 
+            'productos' => $productos, 
+            'valor_total' => $valor_total, 
+            'idcompracomb' => $id2, 
+            'estado' => $estado, 
+            'compras' => $compras]);
+    }
+
+    public function index5()
+    {
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $detalle = TemporalModel::find($id);
+        $id2 = $detalle->idcompra;
+
+        $prodserv = DB::table('detallecompracomb as d')
+            ->join('prodcomb as ps', 'ps.idprodcomb', '=', 'd.idprodcomb')
+            ->join('compracomb as c', 'c.idcompracomb', '=', 'd.idcompracomb')
+
+            ->select('d.iddetallecompracomb', 'c.idcompracomb', 'ps.nombreprodcomb',
+             'd.cantidad', 'd.subtotal', 'd.precio')
+
+            ->where('d.idcompracomb', $id2)
+            ->orderBy('d.iddetallecompracomb', 'desc')
+            ->get();
+
+        $productos = DB::table('prodcomb')
+            ->where('estadoprodcomb', 1)
+            ->select(DB::raw("concat(codigoprodcomb,' // ',nombreprodcomb,' // PRECIO BS. ',precioprodcomb)
+             as prodservicio"), 'idprodcomb')
+            ->pluck('prodservicio', 'idprodcomb');
+
+            $compras = DB::table('compracomb as c')
+            ->join('proveedor as p', 'p.idproveedor', '=', 'c.idproveedor')
+            ->where('c.idcompracomb', $id2)
+            ->select('c.idcompracomb','c.estado1','c.estadocompracomb','p.idproveedor',
+            'p.nombreproveedor')
+            ->first();
+        $valor_total = $prodserv->sum('subtotal');
+        $valor_total = $prodserv->sum('subtotal');
+        $ordencompra = DB::table('ordencompracomb as o')
+            ->select('o.nombrecompra', 'o.solicitante', 'o.proveedor')
+            ->where('o.compra_idcompra', '=', $id2)->first();
+        $resultado = $ordencompra;
+        $estado = 1;
+        if (is_null($resultado)) {
+            $estado = 0;
+        }
+
+        return view('combustibles.detalle.index5', [
+            'prodserv' => $prodserv, 
+            'productos' => $productos, 
+            'valor_total' => $valor_total, 
+            'idcompracomb' => $id2, 
+            'estado' => $estado, 
+            'compras' => $compras]);
+    }
 
     public function store(Request $request)
     {
@@ -186,24 +293,20 @@ class DetalleCompraCombController extends Controller
 
     public function aprovar($id)
     {
-       
-
         $compras = CompraCombModel::find($id);
         $compras->estadocompracomb = 2;
+        $compras->fechaaprob =Carbon::now();
         $compras->save();
         return redirect()->route('combustibles.detalle.index2');
-
-     
     }
 //estadorechazado
     public function rechazar($id)
     {
-       
-
         $compras = CompraCombModel::find($id);
         $compras->estadocompracomb = 10;
+        $compras->fechaaprob =Carbon::now();
         $compras->save();
-        return redirect()->route('combustibles.detalle.index2');
+        return redirect()->route('combustibles.detalle.index5');
 
      
     }
@@ -325,15 +428,15 @@ $obtenerId = $ingreso->idingreso;
       $notaingreso -> fechaentra =Carbon::now();
       $notaingreso->save();
 
+      $comprass = CompraCombModel::find($idcompracomb);
+      $comprass->estadocompracomb=5;
+      $comprass->save();
+
         session()->flash('message', 'Registro Enviado a almacen');
             }
         } else {
             session()->flash('message', 'no hay nada');  
         }
-
-        $comprass = CompraCombModel::find($idcompracomb);
-        $comprass->estadocompracomb=5;
-        $comprass->save();
 
         return redirect()->route('combustibles.detalle.index2');
     }

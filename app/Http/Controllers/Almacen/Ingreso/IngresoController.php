@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 
-use DB;
-use DataTables;
+use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
 use PDF;
 use NumerosEnLetras;
 use App\Models\Almacen\Ingreso\DetalleValeModel;
@@ -28,12 +28,13 @@ use App\Models\Almacen\Temporal4Model;
 use App\Models\DetalleCompraModel;
 
 //use App\Models\Almacen\Ingreso\NotaIngresoModel;
-use App\Models\NotaIngresoModel;
+
 
 use App\Models\Almacen\Ingreso\Temporal6Model;
-
+use App\Models\Almacen\Ingreso\NotaIngresoModel;
 use Hamcrest\TypeSafeDiagnosingMatcher;
 
+use App\Models\Almacen\Temporal2Model;
 
 class IngresoController extends Controller
 {
@@ -88,27 +89,82 @@ class IngresoController extends Controller
    
        public function detalle($idingreso){
    
-           $id2 = $idingreso;
+           $id = $idingreso;
+           $ingresos = DB::table('ingreso as ing')
+           ->select(
+               'ing.cantidad',
+               'ing.subtotal',
+        
+               'ing.cantidadsalida',
+               'ing.subtotalsalida',
+
+               'ing.codigocatprogramai',
+               'ing.nombrecatprogmai'
+           )
+           ->where('ing.idingreso', '=', $id)->first();
+
+           $ingreso = IngresoModel::find($id);
+           $Subtotalsalida=$ingreso -> subtotalsalida;
+           $SPrecio=$ingreso -> precio;
+
+
            $detalle = DB::table('detallevale as d')
    
-           ->join('ingreso as ing', 'ing.idingreso', '=', 'd.idingreso') 
-           ->join('vale as v', 'v.idvale', '=', 'd.idvale')     
-           ->select('d.idvale','d.cantidadsol','d.preciosol',
-           'd.subtotalsol','d.cantidadresta','d.sudtotalresta','v.idarea','v.usuarionombre','v.usuariocargo',
+                   ->join('ingreso as ing', 'ing.idingreso', '=', 'd.idingreso') 
+                   ->join('vale as v', 'v.idvale', '=', 'd.idvale')
    
-           'ing.cantidadsalida'
-           
-           ) ->orderBy('d.cantidadresta', 'desc')
-           ->where('d.idingreso',$id2)
-           
-           ->get();
+                   ->join('areas as a', 'a.idarea', '=', 'v.idarea')
    
-        
+                   ->select('d.idvale','d.cantidadsol','d.preciosol','d.subtotalsol','d.cantidadresta',
+                   
+                   'v.usuarionombre','v.usuariocargo','v.estadovale','v.fechaaprob',
+   
+                   'a.nombrearea',
+                   
+                   'ing.precio','ing.subtotalsalida') 
+   
+                   ->where('d.idingreso', '=', $id)->get();
+   
+                   $valor_total = $detalle->sum('cantidadsol');
+                   $valor_total2 = $valor_total* $SPrecio;
+       
+                   //modificacion para la parte decimal
+                   $parte_entera = floor($Subtotalsalida); 
+                   $parte_decimal = ($Subtotalsalida - $parte_entera) * 100;
+       
+                   $parte_entera_en_letras = NumerosEnLetras::convertir($parte_entera, 'Bolivianos', false);
+                   $parte_decimal_en_letras = NumerosEnLetras::convertir($parte_decimal, 'Centavos', false);
+       
+                   $valor_total5 = $parte_entera_en_letras . ' con ' . $parte_decimal_en_letras;
+       
+               
+       $parte_entera_formateada = number_format($Subtotalsalida, 0, '', '.');
+       
+       $parte_decimaldos = floor($parte_decimal);
+       $valor_total6 = $parte_entera_formateada . ',' . $parte_decimaldos;
+       
+       
+  
+                    $valor_total3 = NumerosEnLetras::convertir($valor_total2, 'Bolivianos', true);
+               
            
            return view('almacenes/ingreso/detalle',
-           ['detalle'=>$detalle,
+           [
+            'valor_total' => $valor_total,
+            'valor_total2' => $valor_total2,
+            'valor_total3' => $valor_total3,
+            'valor_total5' => $valor_total5,
+            'valor_total6' => $valor_total6,
+         
+            'parte_entera' => $parte_entera,
+            'parte_decimal' => $parte_decimal,
+            'Subtotalsalida' => $Subtotalsalida,
+            'parte_entera_formateada' => $parte_entera_formateada,
+          
+            'ingresos' => $ingresos,
+            'detalle'=>$detalle,
         
-           'idingreso'=>$id2]);
+           'idingreso'=>$id]);
            }
            
            
@@ -121,7 +177,7 @@ class IngresoController extends Controller
    
            ->join('ingreso as ing', 'ing.idingreso', '=', 'n.idingreso')
    
-           ->select('n.numcompra','n.numsolicitud','n.idnotaingreso')
+           ->select('n.numcompra','n.numsolicitud','n.idnotaingreso','n.documento')
    
            // ya le da el id de unidadconsumo a docunidadconsumo con el where
            -> where('ing.idingreso','=', $idingreso)-> get();
@@ -226,7 +282,7 @@ class IngresoController extends Controller
    
                    ->select('d.idvale','d.cantidadsol','d.preciosol','d.subtotalsol','d.cantidadresta',
                    
-                   'v.usuarionombre','v.usuariocargo',
+                   'v.usuarionombre','v.usuariocargo','v.fechaaprob',
    
                    'a.nombrearea',
                    
@@ -376,6 +432,103 @@ class IngresoController extends Controller
    
    }
    
+
+   public function delete($idval)
+   {
+    $personal = User::find(Auth::user()->id);
+    $id = $personal->id;
+    $detalle = Temporal2Model::find($id);
+    
+    if(is_null($detalle)){
+        $detalle = new Temporal2Model;
+        $detalle->idtemporal2=$id;
+        $detalle->idusuario=$id;
+        $detalle->idvale=$idval;
+        $detalle->save();
+    }else{
+        $detalle->idtemporal2 = $id;
+        $detalle->idusuario = $id;
+       $detalle->idvale = $idval;
+        $detalle->update();
+    }
+      return redirect()->route('almacenes.detalle.index2');
+ }
+
+ public function deletedos($idval){
+    $personal = User::find(Auth::user()->id);
+    $id = $personal->id;
+    $detalle = Temporal2Model::find($id);
+    
+    if(is_null($detalle)){
+        $detalle = new Temporal2Model;
+        $detalle->idtemporal2=$id;
+        $detalle->idusuario=$id;
+        $detalle->idvale=$idval;
+        $detalle->save();
+    }else{
+        $detalle->idtemporal2 = $id;
+        $detalle->idusuario = $id;
+       $detalle->idvale = $idval;
+        $detalle->update();
+    }
+      return redirect()->route('almacenes.detalle.index3');
+ }
+
+
+ public function editararchivo($idnotaingreso)
+ {
+     $docproveedor = NotaIngresoModel::find($idnotaingreso);
+    
+     $areas = DB::table('areas')
+     ->where('estadoarea',1)
+     ->select(DB::raw("concat(nombrearea,
+
+     ' // IDa. ',idarea
+     ) as prodservicio"),'idarea')
+     ->pluck('prodservicio','idarea');  
+
+     return view('almacenes.ingreso.editarnota', ["docproveedor" => $docproveedor,"areas" => $areas]);  
+ }
+
+ public function updatearchivonota(Request $request, $idnotaingreso)
+    {
+
+
+
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+
+        $docproveedordos = NotaIngresoModel::find($idnotaingreso);
+        $Idingr = $docproveedordos->idingreso; 
+        $docproveedor = NotaIngresoModel::find($idnotaingreso);
+       
+        if ($request->file("documento") != null) {
+            if ($request->hasFile("documento")) {
+                $file = $request->file("documento");
+                $file_name = $file->getClientOriginalName();
+                $nombre = "pdf_" . time() . "." . $file->guessExtension();
+
+                $ruta = public_path("/Documentos/" . $personalArea->nombrearea . '/' . $nombre);
+
+                if ($file->guessExtension() == "pdf") {
+                    copy($file, $ruta);
+                } else {
+                    return back()->with(["error" => "File not available!"]);
+                }
+            }
+            $docproveedor->detalleingreso = $request->input('detalleingreso');
+            $docproveedor->documento = $personalArea->nombrearea . '/' . $nombre;
+            $docproveedor->save();
+
+        } else {
+            $docproveedor->detalleingreso = $request->input('detalleingreso');
+            $docproveedor->save();
+        }
+        return redirect()->action('App\Http\Controllers\Almacen\Ingreso\IngresoController@editardoc', [$Idingr]);
+    }
+
    }
    
    

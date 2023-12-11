@@ -25,9 +25,20 @@
         @csrf
         <input type="hidden" name="controlinterno2" id="controlinterno2">
 
+
         <div class="form-group row">
 
-            <div class="col-md-6">
+            <div class="col-md-2">
+                <label for="fechasoli" class="d-inline font-verdana-bg">
+                    <b> fecha de solicitud</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="text" disabled name="fechasoli" placeholder="dd/mm/yyyy"
+                 value="{{$date->format('d/m/Y')}}" 
+                class="form-control form-control-sm font-verdana-bg" 
+                id="fechasoli" data-language="es" autocomplete="off" >
+            </div>
+
+            <div class="col-md-4">
                 <label for="objeto" class="d-inline font-verdana-bg">
                     <b>Objeto</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
@@ -48,12 +59,10 @@
                 <label for="tipo" class="d-inline font-verdana-bg">
                     <b>Tipo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <select name="tipo" id="tipo" placeholder="--Seleccionar--" 
-                class="form-control form-control-sm select2">
-                    <option value="">-</option>
-                    <option value="1" >Producto</option>
-                    <option value="2">Servicio</option>
-                </select>
+               
+                <input type="text" disabled name="tipo" 
+                value="{{$Tipos}}" 
+                class="form-control form-control-sm font-verdana-bg" id="tipo">
             </div>
 
             <div class="col-md-2">
@@ -75,17 +84,15 @@
 
             </div>
             
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <label for="idprograma" class="d-inline font-verdana-bg">
                     <b>Programa</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <select name="idprograma" id="idprograma" placeholder="--Seleccionar--" 
-                class="form-control form-control-sm select2">
-                    <option value="">-</option>
-                    @foreach ($programas as $index => $value)
-                        <option value="{{ $index }}">{{ $value }}</option>
-                    @endforeach
-                </select>
+               
+                <input type="text" disabled name="idprograma" 
+                value="{{$nombrePro}}" 
+                class="form-control form-control-sm font-verdana-bg" id="idprograma">
+            
             </div>
             <div class="col-md-5">
                 <label for="idcatprogramatica" class="d-inline font-verdana-bg">

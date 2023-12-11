@@ -30,12 +30,15 @@
                             <thead class="font-courier">
                                 <tr>
                                     <td class="text-justify p-1"><b>N°</b></td>
+                                    <td class="text-justify p-1"><b>FECHA SOL.</b></td>
+                                    <td class="text-justify p-1"><b>N° CONTROL</b></td>
                                     <td class="text-justify p-1"><b>OBJETO</b></td>
                                     <td class="text-justify p-1"><b>AREA</b></td>
                                     <td class="text-justify p-1"><b>PROVEEDOR</b></td>
                                     <td class="text-justify p-1"><b>PREVENTIVO</b></td>
                                     <td class="text-justify p-1"><b>NRO.COMPRA</b></td>
-                                 <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td> 
+                                    <td class="text-justify p-1"><b>ESTADO</b></td>
+                                    <td class="text-justify p-1"><b>ACCIONES</b></td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -59,18 +62,28 @@ $(function() {
         ajax: "{{ route('combustibles.pedido.index2') }}",
         columns: [
             {data: 'DT_RowIndex',orderable: false,searchable: false,class:'text-justify p-1 font-verdana'},
+            { data: 'fechasoli',name: 'fechasoli',class:'text-justify p-1 font-verdana'},
+            { data: 'controlinterno',name: 'controlinterno',class:'text-justify p-1 font-verdana'},
+            { data: 'objeto',name: 'objeto',class:'text-justify p-1 font-verdana'},
 
-            { data: 'objeto',name: 'c.objeto',class:'text-justify p-1 font-verdana'},
+            {data: 'nombrearea',name: 'nombrearea',class:'text-justify p-1 font-verdana'},
 
-            {data: 'nombrearea',name: 'a.nombrearea',class:'text-justify p-1 font-verdana'},
+            {data: 'nombreproveedor',name: 'nombreproveedor',class:'text-justify p-1 font-verdana'},
 
-            {data: 'nombreproveedor',name: 'p.nombreproveedor',class:'text-justify p-1 font-verdana'},
+            {data: 'preventivo',name: 'preventivo',class:'text-justify p-1 font-verdana'},
 
-            {data: 'preventivo',name: 'c.preventivo',class:'text-justify p-1 font-verdana'},
+            {data: 'numcompra',name: 'numcompra',class:'text-justify p-1 font-verdana'},
 
-            {data: 'numcompra',name: 'c.numcompra',class:'text-justify p-1 font-verdana'},
+            {data: 'estadocompracomb',name: 'estadocompracomb',class:'text-justify p-1 font-verdana'},
+         
 
-             {data: 'btn3', name: 'btn3', orderable: false, searchable: false },
+          {
+                     className: 'text-center',
+                     data: 'actions',
+                     name: 'actions',
+                     orderable: false,
+                     searchable: false
+                 }
 
         ],
 

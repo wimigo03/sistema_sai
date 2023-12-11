@@ -33,7 +33,7 @@
                 </label>
                 <textarea type="text" name="codigoc" cols="1" rows="3" 
                 class="form-control form-control-sm font-verdana-bg" 
-                 id="codigoc"></textarea>
+                 id="codigoc"  onkeypress="return valideNumber(event);"></textarea>
             </div>
 
 
@@ -43,7 +43,7 @@
                 </label>
                 <textarea name="nombreuconsumo" cols="1" rows="3" 
                 class="form-control form-control-sm font-verdana-bg" 
-                id="nombreuconsumo">{{request('nombreuconsumo')}}</textarea>
+                id="nombreuconsumo" onkeyup="javascript:this.value=this.value.toUpperCase();">{{request('nombreuconsumo')}}</textarea>
             </div>
 
 
@@ -52,7 +52,7 @@
                 <b>Descripcion</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <textarea name="desconsumo" cols="1" rows="3" 
-                class="form-control form-control-sm font-verdana-bg" id="desconsumo">{{request('desconsumo')}}</textarea>
+                class="form-control form-control-sm font-verdana-bg" id="desconsumo" onkeyup="javascript:this.value=this.value.toUpperCase();">{{request('desconsumo')}}</textarea>
             </div>
 
 
@@ -61,7 +61,7 @@
                     <b>Modelo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="modeloc" value="{{request('modeloc')}}" 
-                class="form-control form-control-sm font-verdana-bg" id="modeloc">
+                class="form-control form-control-sm font-verdana-bg" id="modeloc" onkeyup="javascript:this.value=this.value.toUpperCase();">
             </div>
 
             <div class="col-md-2">
@@ -77,7 +77,7 @@
                     <b>Placa</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="placac" value="{{request('placac')}}" 
-                class="form-control form-control-sm font-verdana-bg" id="placac">
+                class="form-control form-control-sm font-verdana-bg" id="placac" onkeyup="javascript:this.value=this.value.toUpperCase();" onkeypress="return validarPlaca(placa);">
             </div>
 
             <div class="col-md-2">
@@ -85,7 +85,7 @@
                     <b>Marca</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="marcac" value="{{request('marcac')}}" 
-                class="form-control form-control-sm font-verdana-bg" id="marcac">
+                class="form-control form-control-sm font-verdana-bg" id="marcac" onkeyup="javascript:this.value=this.value.toUpperCase();">
             </div>
 
             <div class="col-md-2">
@@ -244,6 +244,12 @@ window.location.href = "{{ url('transporte/uconsumo/index') }}";
                 message_alert("El campo <b>[PLACA]</b> es un dato obligatorio...");
                 return false;
             }
+            if(!validarPlaca($("#placac").val())){
+
+               message_alert("El campo <b>[PLACA]</b> no es una placa valida...");
+               return false;
+               }
+
             if($("#marcac").val() == ""){
                 message_alert("El campo <b>[MARCA]</b> es un dato obligatorio...");
                 return false;
@@ -326,5 +332,20 @@ window.location.href = "{{ url('transporte/uconsumo/index') }}";
 
         }
     
+        function valideNumber(evt){
+            var code = (evt.which) ? evt.which : evt.keyCode;
+            if(code>=48 && code<=57){
+                return true;
+            }else{
+                return false;
+            }
+        } 
+
+        function validarPlaca(placa) {
+
+var regex =  /^[A-Z]{4}-\d{4}$/;
+return regex.test(placa);
+
+}
     </script>
 @endsection

@@ -2,9 +2,9 @@
 @section('content')
 <div class="row font-verdana-bg">
     <div class="col-md-8 titulo">
-        <b>CATEGORIAS PROGRAMATICAS</b><b style='color:red'>{{$idd->nombrearea}} </b>--
+        <b>CATEGORIAS PROGRAMATICAS--</b><b style='color:red'>{{$idd->nombrearea}} </b>
     </div>
-    <div class="col-md-4 text-right">
+    <div class="col-md-4 text-right titulo">
         @can('catprogcomb_create')
        
             <a href="{{route('catprogcomb.create')}}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar">
@@ -27,7 +27,7 @@
 <div class="row">
     <div class="col-md-12">
         <center>
-                <table id="dataTable"  class=" yajra-datatable table-bordered responsive hoverTable font-verdana" style="width:80%;">
+                <table  class="table hoverTable yajra-datatable table-bordered responsive font-verdana" style="width:100%;">
                     <thead class="font-courier">
                             <tr>
                                     <td class="text-center p-1 font-weight-bold"><b>N°</b></td>
@@ -49,9 +49,11 @@
 </div>                 
 
 @section('scripts')
-<script>
-    $(document).ready(function() {
-        $('#dataTable').DataTable({
+
+<script type="text/javascript">
+$(function() {
+
+    var table = $('.yajra-datatable').DataTable({
         responsive: true,
         processing: true,
         serverSide: true,

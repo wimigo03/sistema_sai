@@ -40,7 +40,7 @@
 
                         <div class="col-md-6">
                             <input type="text" required name="nombre" id="nombre" class="form-control" placeholder="Nombre..."
-                            onchange="javascript:this.value=this.value.toUpperCase();">
+                            onkeyup="javascript:this.value=this.value.toUpperCase();">
                         </div>
                     </div>
 
@@ -51,7 +51,7 @@
                         <div class="col-md-6">
                             <input type="text" required name="representante" id="representante" class="form-control"
                                 placeholder="representante..."
-                                onchange="javascript:this.value=this.value.toUpperCase();">
+                                onkeyup="javascript:this.value=this.value.toUpperCase();" onkeypress="return valideNumbertres(event);">
                         </div>
                     </div>
 
@@ -60,7 +60,7 @@
                             class="required col-md-4 col-form-label text-md-right">Cedula:</label>
 
                         <div class="col-md-4">
-                            <input type="text"  required name="cedula" id="cedula" onchange="myFunction()" class="form-control" placeholder="cedula...">
+                            <input type="number"  required name="cedula" id="cedula" onchange="myFunction()"  class="form-control" placeholder="cedula...">
                         </div>
                     </div>
 
@@ -77,7 +77,7 @@
                             class="required col-md-4 col-form-label text-md-right">Nit/Ci:</label>
 
                         <div class="col-md-4">
-                            <input type="text" required name="nitci" id="nitci" class="form-control" placeholder="Nit/Ci...">
+                            <input type="text" required name="nitci" id="nitci" class="form-control" placeholder="Nit/Ci..." onkeypress="return valideNumberdos(event);">
                         </div>
                     </div>
 
@@ -226,9 +226,24 @@ $(document).ready(function() {
             var code = (evt.which) ? evt.which : evt.keyCode;
             if(code>=48 && code<=57){
                 return true;
-            }else{
-                return false;
             }
+            return false;
+        }
+
+        function valideNumberdos(evt){
+            var code = (evt.which) ? evt.which : evt.keyCode;
+            if(code>=48 && code<=57){
+                return true;
+            }
+            return false;
+        }
+
+        function valideNumbertres(evt){
+            var code = (evt.which) ? evt.which : evt.keyCode;
+            if ((code >= 65 && code <= 90) || (code >= 97 && code <= 122) || code == 8 || (code >= 37 && code <= 40)) {
+        return true;
+    }
+            return false;
         }
 
     </script>

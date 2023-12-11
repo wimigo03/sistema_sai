@@ -9,8 +9,13 @@ use App\Models\Compra\ProgramaCombModel;
 
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests;
-use DB;
+
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
+
+use App\Models\User;
+use App\Models\EmpleadosModel;
+use Illuminate\Support\Facades\Auth;
 
 class ProgramaCombController extends Controller
 {
@@ -31,7 +36,7 @@ class ProgramaCombController extends Controller
             ->where('estadoprograma', '=', 1);
        
 
-        return Datatables::of($data)
+        return DataTables::of($data)
             ->addIndexColumn()
         
             ->addIndexColumn()

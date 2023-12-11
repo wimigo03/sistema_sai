@@ -142,7 +142,7 @@ class DetalleSoluconsumoController extends Controller
         $Codigoconsumo = $producto->codigoconsumo;
         $Marcaconsumo = $producto->marcaconsumo;
         $Placaconsumo = $producto->placaconsumo;
-     
+     //todo klm anterior 
         $Klmactual = $producto->kilometrajefinalconsumo;
         $Gaxklm = $producto->gasporklm;
 
@@ -162,12 +162,10 @@ $IdFiledos = $productotres->idfile;
 $productocuatro = FileModel::find($IdFiledos);
 $Nombreviacargo = $productocuatro->nombrecargo;
       
-
+//todo klm actual 
+$KLMactual = $request->get('cantidad');
 
         $detalle = new DetalleSoluconsumoModel;
-
-
-
         $detalle->idunidadconsumo = $request->get('producto');
         $detalle->idsoluconsumo = $id2;
         $detalle->kilometrajeactual = $request->get('cantidad');
@@ -202,6 +200,8 @@ $Nombreviacargo = $productocuatro->nombrecargo;
                         
 
         if($detallito->isEmpty()){
+
+            if ($KLMactual > $Klmactual) {
             $detalle->save();          
             $idDetalle=$detalle->idsoluconsumo;
             
@@ -209,17 +209,29 @@ $Nombreviacargo = $productocuatro->nombrecargo;
             $progrmi -> estado3=2;
             $progrmi->save();  
             
-            $request->session()->flash('message', 'Registro Agregado');
+            $request->session()->flash('message', 'Registro Agregado',);
         }else{
-            $request->session()->flash('message', 'El Item Ya existe en la Planilla');
+            $request->session()->flash('message', 'El kilometraje esta mal');
         }
-        return redirect()->route('transportes.detalle.index');
+    }else{
+        $request->session()->flash('message', 'El Item Ya existe en la Planilla');
+
     }
-
+    return redirect()->route('transportes.detalle.index');
+}
     public function delete($id){
-        $detalle = DetalleSoluconsumoModel::find($id);
-        $detalle->delete();
 
+        $detalles = DetalleSoluconsumoModel::find($id);
+        $IDdetal = $detalles ->idsoluconsumo;
+        $progrmi = SoluconsumoModel::find($IDdetal);
+        $progrmi -> estado3=1;
+        $progrmi->save();
+        
+        $detalle = DetalleSoluconsumoModel::find($id);
+       
+
+         
+        $detalle->delete();
         return redirect()->route('transportes.detalle.index');
     }
 
@@ -287,11 +299,12 @@ $Nombreviacargo = $productocuatro->nombrecargo;
 
         
         $soluconsumo = SoluconsumoModel::find($Idsoluconsumo);
-        $soluconsumo->estado1 = 3;
-        $soluconsumo->estado2 = 2;
+        $soluconsumo->estadosoluconsumo = 3;
+      
         $soluconsumo->save();
 
-     
+        $soluconsumodoss = SoluconsumoModel::find($Idsoluconsumo);
+        $FecHAsol=$soluconsumodoss->fechasol;
         
         $vales = new ValeModel();
 
@@ -321,7 +334,8 @@ $Nombreviacargo = $productocuatro->nombrecargo;
 
 
         $vales->detallesouconsumo = $Detallesouconsumo;
-      
+        
+        $vales->fechasolicitud = $FecHAsol;
         $vales->estadovale = 1;
         $vales->estado1 = 1;
         $vales->estado2 = 1;

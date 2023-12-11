@@ -445,6 +445,17 @@
                                 @endcan
                             </ul>
 
+                            <ul class="sub-menu collapse" id="dashboard_almacen">
+                                @can('almacen_ingreso_access')
+                                    <li>
+                                        <a href="{{ route('almacenes.reporte.index2') }}">
+                                            &nbsp; &nbsp; &nbsp;
+                                            <span class="nav-label mr-4">Reporte por fecha.</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
+
                             {{-- <ul class="sub-menu collapse" id="dashboard_almacen">
                                 @can('archivos_access')
                                     <li>

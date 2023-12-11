@@ -2,7 +2,7 @@
 @section('content')
 <div class="row font-verdana-bg">
     <div class="col-md-8 titulo">
-        <b>PROGRAMAS</b><b style='color:red'>{{$idd->nombrearea}} </b>--
+        <b>PROGRAMAS--</b><b style='color:red'>{{$idd->nombrearea}} </b>
     </div>
 
     <div class="col-md-4 text-right">
@@ -30,7 +30,7 @@
 
                   <center>
 
-                        <table class="table hoverTable yajra-datatable table-bordered responsive font-verdana" style="width:80%;">
+                        <table class="table hoverTable yajra-datatable table-bordered responsive font-verdana" style="width:100%;">
                             <thead class="font-courier">
                                 <tr>
                                     <td class="text-center p-1 font-weight-bold"><b>N°</b></td>

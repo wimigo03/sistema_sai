@@ -11,7 +11,7 @@
 
     <div class="col-md-2 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-            <a href="{{ url('/almacenes/pedido/index3') }}">
+            <a href="{{ url('/almacenes/pedido/index') }}">
                 <span class="color-icon-1">
                     &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                 </span>
