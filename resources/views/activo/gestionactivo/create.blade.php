@@ -127,7 +127,12 @@
                                     </span>
                                 @enderror
                             </div>
-
+                            <label style="color:black;font-weight: bold;">AMBIENTE:</label>
+                            <select class="form-control" id="ambiente" name="ambiente_id">
+                                @foreach ($ambientes as $ambiente)
+                                    <option value="{{ $ambiente->id }}">{{ $ambiente->nombre }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="col-md-7 mb-3">
                             <label for="observ" style="color:black;font-weight: bold;">DESCRIPCIÓN :</label>
@@ -422,12 +427,32 @@
             </div>
         </div>
     </div>
-
+@section('styles')
+    <link rel="stylesheet" href="{{ asset('admin_assets/plugins/select2/css/select2.min.css') }}">
+    <style>
+        .select2-search__field:focus {
+            outline: none;
+            border: none;
+        }
+    </style>
+@endsection
 @section('scripts')
+    <script src="{{ asset('admin_assets/plugins/select2/js/select2.min.js') }}"></script>
+
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD73WmrwkgvJi5CLHprURygkrcTJerWGIk&callback=initMap" async
         defer></script>
     </script>
     <script>
+        $(document).ready(function() {
+            $('#ambiente').select2({
+                tags: true,
+                language: {
+                    noResults: function() {
+                        return "No se encontraron resultados";
+                    }
+                }
+            });
+        });
         $(document).ready(function() {
             // $(window).on('beforeunload', function() {
             //     sessionStorage.clear();

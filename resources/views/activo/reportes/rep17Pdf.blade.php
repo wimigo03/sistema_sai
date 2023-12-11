@@ -34,9 +34,6 @@
                             <th>COSTO ACTUAL FINAL</th>
                             <th>VALOR NETO FINAL</th>
                             <th>ORGANIZMO FINANCIADOR</th>
-                            <th>ID BIEN</th>
-                            <th>N CONVENIO</th>
-                            <th>INCORPORACION ESPECIAL</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,12 +42,9 @@
                                 <td style="height: 6%">{{ $activo['codigo'] }}</td>
                                 <td></td>
                                 <td>{{ $activo['descrip'] }}</td>
-                                <td>{{ $activo['costo'] }}</td>
-                                <td>{{ $activo['valor_neto'] }}</td>
-                                <td>{{ $activo['org_fin'] }}</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td align="center">{{ $activo['costo'] }}</td>
+                                <td align="center">{{ $activo['valor_neto'] }}</td>
+                                <td align="center">{{ $activo['org_fin'] }}</td>
                             </tr>
                         @endforeach
                     </tbody>

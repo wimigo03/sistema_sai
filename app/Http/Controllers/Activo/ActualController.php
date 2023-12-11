@@ -5,17 +5,18 @@ namespace App\Http\Controllers\Activo;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ActualStoreRequest;
 use App\Http\Requests\ActualUpdateRequest;
-use App\Models\Model_Activos\ActualModel;
+use App\Models\Ambiente;
 use App\Models\AreasModel;
 use App\Models\Model_Activos\UnidadadminModel;
 use App\Models\Model_Activos\CodcontModel;
-use App\Models\Model_Activos\AuxiliarModel;
 use App\Models\EmpleadosModel;
-use App\Models\Model_Activos\ImagenActivo;
+use App\Models\Model_Activos\ActualModel;
+use App\Models\Model_Activos\AuxiliarModel;
 use App\Models\Model_Activos\EntidadesModel;
+use App\Models\Model_Activos\ImagenActivo;
 use App\Models\Model_Activos\OrganismofinModel;
 use App\Models\Model_Activos\UbicacionactivoModel;
-use App\Models\Model_Activos\ResponsablesModel;
+use App\Models\Model_Activos\Ufv;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
@@ -37,6 +38,7 @@ class ActualController extends Controller
             ->where('entidad', 4601)
             ->where('unidad', $unidad->unidad)
             ->orderBy('id', 'desc');
+
         return DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('btn', 'activo.gestionactivo.btn')
@@ -56,11 +58,11 @@ class ActualController extends Controller
             })
             ->addColumn('auxiliars', function (ActualModel $activo) use ($unidad) {
                 $auxiliar = DB::table('auxiliar')
-                ->select('nomaux')
-                ->where('codcont', $activo->codcont)
-                ->where('codaux', $activo->codaux)
-                ->where('unidad', $unidad->unidad)
-                ->first();
+                    ->select('nomaux')
+                    ->where('codcont', $activo->codcont)
+                    ->where('codaux', $activo->codaux)
+                    ->where('unidad', $unidad->unidad)
+                    ->first();
                 return optional($auxiliar)->nomaux;
             })
             ->addColumn('areas', function (ActualModel $activo) {
@@ -84,10 +86,11 @@ class ActualController extends Controller
         $codcont = CodcontModel::all();
         $auxiliars  = [];
         $areas = AreasModel::all();
+        $ambientes = Ambiente::where('unidad', $unidad->unidad)->get();
         $empleados  = [];
         // $organismofins = OrganismofinModel::all();
 
-        return view('activo.gestionactivo.create', compact('organismofins', 'auxiliars', 'entidad', 'unidad', 'codcont', 'empleados', 'areas'));
+        return view('activo.gestionactivo.create', compact('organismofins', 'ambientes', 'auxiliars', 'entidad', 'unidad', 'codcont', 'empleados', 'areas'));
     }
 
     public function getAuxiliar(Request $request)
@@ -166,7 +169,6 @@ class ActualController extends Controller
         DB::beginTransaction();
         try {
             $actual = new ActualModel();
-
             $this->fillActualModel($actual, $request);
             $fechaActual = now();
 
@@ -201,6 +203,14 @@ class ActualController extends Controller
             $actual->cod_rube = 0;
             $actual->codigosec = 0;
             $actual->banderas = 0;
+            if (!is_numeric($actual->ambiente_id)) {
+                $ambiente = Ambiente::create([
+                    'unidad' => $actual->unidad,
+                    'nombre' => $actual->ambiente_id
+                ]);
+                $actual->ambiente_id = $ambiente->id;
+            }
+
             $actual->save();
             if ($request->file('fotografia')) {
                 $file = $request->file('fotografia');
@@ -244,7 +254,7 @@ class ActualController extends Controller
 
     public function show($id)
     {
-        $actual = ActualModel::find($id);
+        $actual = ActualModel::with(['codconts', 'auxiliars', 'unidadadmin', 'entidades', 'empleados.file', 'organismofins', 'ubicaciones'])->find($id);
         $entidad = EntidadesModel::where('entidad', 4601)->first();
         $unidad = UnidadadminModel::where('estadouni', 1)->first();
         $auxiliar = AuxiliarModel::where('codcont', $actual->codcont)
@@ -252,11 +262,30 @@ class ActualController extends Controller
             ->where('unidad', $unidad->unidad)
             ->first();
         $organismoFin = OrganismofinModel::where('idorganismofin', $actual->org_fin)->first();
+        
+            if($actual->ano > 2022){
+                $ufInicial =  Ufv::query()
+                ->orderBy('id', 'DESC')
+                ->first();
+            }else{
+                $ufInicial = Ufv::query()
+                    ->where('dia', $actual->dia)
+                    ->where('mes', $actual->mes)
+                    ->where('ano', $actual->ano)
+                    ->first();
+            }
+            $ufActual = Ufv::query()
+            ->orderBy('id', 'DESC')
+            ->first();
+
+        $empleado = EmpleadosModel::where('idemp', $actual->codemp)->first();
         return view('activo.gestionactivo.show', [
-            'actual' => $actual->load('codconts', 'auxiliars', 'unidadadmin', 'entidades', 'empleados.file', 'organismofins' ,'ubicaciones'),
+            'actual' => $actual,
             'auxiliar' => $auxiliar,
             'organismoFin' => $organismoFin,
-            'entidad' => $entidad
+            'entidad' => $entidad,
+            'ufInicial' => $ufInicial->indice_ufv,
+            'ufActual' => $ufActual->indice_ufv,
         ]);
     }
 
@@ -264,7 +293,7 @@ class ActualController extends Controller
     {
         $entidad = EntidadesModel::where('entidad', 4601)->first();
         $unidad = UnidadadminModel::where('estadouni', 1)->first();
-
+        $ambientes = Ambiente::where('unidad', $unidad->unidad)->get();
         $actual = ActualModel::with('ultimaImagen', 'empleados', 'areas', 'unidadadmin', 'auxiliars', 'codconts', 'entidades', 'organismofins')->find($id);
         $organismofins = OrganismofinModel::all();
         $codcont = CodcontModel::all();
@@ -272,11 +301,23 @@ class ActualController extends Controller
             ->where('unidad', $unidad->unidad)
             ->where('codcont', $actual->codcont)
             ->get();
+            if($actual->ano > 2022){
+                $ufInicial =  Ufv::query()
+                ->orderBy('id', 'DESC')
+                ->first()->indice_ufv;
+            }else{
+                $ufInicial = Ufv::query()
+                    ->where('dia', $actual->dia)
+                    ->where('mes', $actual->mes)
+                    ->where('ano', $actual->ano)
+                    ->first()->indice_ufv;
+            }
+        $ufActual = Ufv::query()
+            ->orderBy('id', 'DESC')
+            ->first()->indice_ufv;
         $areas = AreasModel::all();
-        $empleados  = EmpleadosModel::where('idarea', $actual->codarea)->get();
-
         // $organismofins = OrganismofinModel::all();
-        return view('activo.gestionactivo.edit',  compact('actual', 'organismofins', 'auxiliars', 'entidad', 'unidad', 'codcont', 'empleados', 'areas'));
+        return view('activo.gestionactivo.edit',  compact('actual', 'ufInicial', 'ufActual', 'ambientes', 'organismofins', 'auxiliars', 'entidad', 'unidad', 'codcont', 'areas'));
     }
 
     public function update(ActualUpdateRequest $request, $id)
@@ -339,7 +380,7 @@ class ActualController extends Controller
     {
         // Asignar los valores del formulario a las propiedades del modelo
         $actual->codigo = $request->input('codigo');
-
+        $actual->ambiente_id = $request->input('ambiente_id');
         $actual->vidautil = $request->input('vidautil');
         $actual->descrip = $request->input('descrip');
         $actual->costo = $request->input('costo');

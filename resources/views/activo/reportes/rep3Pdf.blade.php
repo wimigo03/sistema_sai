@@ -58,7 +58,7 @@
                                 <td>{{ $activo['descrip'] }}</td>
                                 <td>{{ $activo['costo'] }}</td>
                                 <td>{{ $activo['costo'] }}</td>
-                                <td>{{ $activo['feul'] }}</td>
+                                <td>{{ $activo['ano'] }}-{{ $activo['mes'] }}-{{ $activo['dia'] }}</td>
                                 <td>{{ $activo['costo'] }}</td>
                                 <td>{{ $activo['depreciacion_gestion'] }}</td>
                                 <td>{{ $activo['depreciacion'] }}</td>
@@ -71,7 +71,6 @@
                                         {{ $activo['empleados']['nombres'] }} {{ $activo['empleados']['ap_pat'] }}
                                         {{ $activo['empleados']['ap_mat'] }}
                                     @else
-                                        No asignado
                                     @endif
                                 </td>
                             </tr>

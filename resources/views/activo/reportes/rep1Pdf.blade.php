@@ -6,7 +6,6 @@
     <link rel="icon" type="image/png" sizes="18x18" href="{{ asset('logos/logo2.png') }}">
     @include('activo.reportes._styles')
 </head>
-
 <body>
     <main>
         @foreach ($activosPorPagina as $index => $productosPagina)
@@ -45,7 +44,6 @@
                             <th>AUX. DE GRUPO</th>
                             <th>OFICINA</th>
                             <th>RESPONSABLE</th>
-                            <th>ID BIEN</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -53,8 +51,8 @@
                             <tr>
                                 <td style="height: 14%;">{{ $activo['codigo'] }}</td>
                                 <td>{{ $activo['descrip'] }}</td>
+                                <td>{{ number_format($activo['costo_ant'], 2, '.', '') }}</td>
                                 <td>{{ $activo['costo'] }}</td>
-                                <td>00.00</td>
                                 <td>{{ $activo['ano'] }}-{{ $activo['mes'] }}-{{ $activo['dia'] }}</td>
                                 <td>{{ $activo['costo'] }}</td>
                                 <td>{{ $activo['depreciacion_gestion'] }}</td>
@@ -69,7 +67,6 @@
                                         {{ $activo['empleados']['ap_mat'] }}
                                     @endif
                                 </td>
-                                <td></td>
                             </tr>
                         @endforeach
                     </tbody>

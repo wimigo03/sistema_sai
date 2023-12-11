@@ -125,10 +125,20 @@
                                             {{ optional($organismofin)->des }}
                                         </option>
                                     @endforeach
-
                                 </select>
                             </div>
-
+                            <div class="form-group mt-2">
+                                <label style="color:black;font-weight: bold;">AMBIENTE:</label>
+                                <select class="form-control js-example-basic-multiple" id="ambiente" name="ambiente_id"
+                                    disabled>
+                                    <option value="">Seleccione un ambiente</option>
+                                    @foreach ($ambientes as $ambiente)
+                                        <option value="{{ $ambiente->id }}"
+                                            @if ($ambiente->id == $actual->ambiente_id) selected @endif>{{ $ambiente->nombre }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
 
                         </div>
                         <div class="col-md-7 mb-3">
@@ -248,12 +258,9 @@
                                     <span class="input-group-text"></span>
                                 </div>
                                 <select name="codemp" id="empleado" class="form-control" disabled>
-                                    @foreach ($empleados as $empleado)
-                                        <option value="{{ $empleado->idemp }}"
-                                            {{ $empleado->idemp == $actual->codemp ? 'selected' : '' }}>
-                                            {{ $empleado->nombres . ' ' . $empleado->ap_pat . ' ' . $empleado->ap_mat }}
-                                        </option>
-                                    @endforeach
+                                    <option value="{{ $actual->codemp }}" selected>
+                                        {{ $actual->empleados->full_name }}
+                                    </option>
                                 </select>
                             </div>
                             @error('codemp')
@@ -383,7 +390,8 @@
                                             <span class="input-group-text">%</span>
                                         </div>
                                         <input type="text" readonly id="porcentaje_depreciacion" class="form-control"
-                                            value="{{ number_format((1 / $actual->vidautil) * 100, 2) }}" required>
+                                            value="{{ $actual->vidautil != 0 ? number_format((1 / $actual->vidautil) * 100, 2) : 0 }}"
+                                            required>
                                     </div>
                                 </div>
                                 <div class="col-md-2 form-group">
@@ -433,13 +441,23 @@
                                             </div>
                                         </div>
                                         <div class="col-md-2 form-group">
-                                            <label style="color:black;font-weight: bold;">UFV:</label>
+                                            <label style="color:black;font-weight: bold;">Ufv Inicial:</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text">Bs </span>
                                                 </div>
-                                                <input type="text" readonly class="form-control" value="2.35998"
-                                                    required>
+                                                <input type="text" readonly class="form-control"
+                                                    value="{{ $ufInicial }}" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 form-group">
+                                            <label style="color:black;font-weight: bold;">Ufv Actual:</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">Bs </span>
+                                                </div>
+                                                <input type="text" readonly class="form-control"
+                                                    value="{{ $ufActual }}" required>
                                             </div>
                                         </div>
                                     </div>
@@ -456,92 +474,32 @@
             </div>
         </div>
     </div>
-
+@section('styles')
+    <link rel="stylesheet" href="{{ asset('admin_assets/plugins/select2/css/select2.min.css') }}">
+    <style>
+        .select2-search__field:focus {
+            outline: none;
+            border: none;
+        }
+    </style>
+@endsection
 @section('scripts')
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD73WmrwkgvJi5CLHprURygkrcTJerWGIk&callback=initMap" async
         defer></script>
+    <script src="{{ asset('admin_assets/plugins/select2/js/select2.min.js') }}"></script>
     <script src="{{ asset('js/depreciar.js') }}"></script>
     <script>
         $(document).ready(function() {
-            $('#codcont').change(function() {
-                var codigo = $(this).val();
-                $.ajax({
-                    url: '/gestionactivo/getAuxiliar',
-                    type: 'GET',
-                    data: {
-                        codigo: codigo
-                    },
-                    success: function(data) {
-                        var auxiliares = data.auxiliars;
-                        var años = data.vidaUtil;
-
-                        var $codauxselect = $('#codaux');
-                        var $Textarea = $('#vida');
-
-                        // Limpiar el selector de empleados y agregar las nuevas opciones
-                        $codauxselect.empty();
-                        $codauxselect.append(
-                            '<option value="">Seleccione Auxiliar</option>'); // Opción inicial
-
-                        $.each(auxiliares, function(index, auxiliar) {
-                            $codauxselect.append('<option value="' + auxiliar
-                                .idauxiliar + '">' + auxiliar.nomaux + '</option>');
-                        });
-                        $Textarea.val(años);
-
+            $('#ambiente').select2({
+                tags: true,
+                language: {
+                    noResults: function() {
+                        return "No se encontraron resultados";
                     }
-                });
+                }
             });
-            $('#area').change(function() {
-                var areaId = $(this).val();
-                $.ajax({
-                    url: '/gestionactivo/getResponsables',
-                    type: 'GET',
-                    data: {
-                        area_id: areaId
-                    },
-                    success: function(data) {
-                        var empleados = data.empleados;
-                        var $empleadosSelect = $('#empleado');
-
-                        // Limpiar el selector de empleados y agregar las nuevas opciones
-                        $empleadosSelect.empty();
-                        $empleadosSelect.append(
-                            '<option value="">Elige un responsable</option>'); // Opción inicial
-
-                        $.each(empleados, function(index, empleado) {
-                            $empleadosSelect.append('<option value="' + empleado.idemp +
-                                '">' +
-                                empleado.nombres +
-                                (empleado.ap_pat ? " " + empleado.ap_pat : "") +
-                                (empleado.ap_mat ? " " + empleado.ap_mat : "") +
-                                '</option>');
-                        });
-                    }
-                });
-            });
-            $('#empleado').change(function() {
-                var empId = $(this).val();
-                $.ajax({
-                    url: '/gestionactivo/getCargo',
-                    type: 'GET',
-                    data: {
-                        emp_id: empId
-                    },
-                    success: function(data) {
-                        var cargo = data.files;
-                        var $cargoSelect = $('#cargo');
-
-                        // Limpiar el selector de empleados y agregar las nuevas opciones
-                        $cargoSelect.empty();
-
-                        $.each(cargo, function(index, cargo) {
-                            $cargoSelect.append('<option value="' + cargo.idfile +
-                                '">' + cargo.nombrecargo + '</option>');
-                        });
-                    }
-                });
-            });
+        });
+        $(document).ready(function() {
             var vidaUtil = parseFloat($('#vida').val());
             var costoInicial = parseFloat($('#costoInicial').val());
             var fechaInicial = new Date(
@@ -549,22 +507,26 @@
                 '{{ $actual->mes - 1 }}',
                 '{{ $actual->dia }}'
             );
+            var ufInicial = '{{ $ufInicial }}';
+            var ufActual = '{{ $ufActual }}';
+
             var formattedDate = fechaInicial.toISOString().split('T')[0];
             $('#feul').val(formattedDate);
             $('#factor_actual').val(
-                factorActual(costoInicial, vidaUtil).toFixed(2)
+                factorActual(ufInicial, ufActual).toFixed(2)
             );
             $('#depre_acumulada').val(
-                depreciacionAcumulada(costoInicial, vidaUtil, fechaInicial).toFixed(2)
+                depreciacionAcumulada(costoInicial, vidaUtil, fechaInicial, ufInicial, ufActual).toFixed(2)
             );
             $('#valor_actual').val(
-                valorActual(costoInicial, vidaUtil, fechaInicial).toFixed(2)
+                valorActual(costoInicial, vidaUtil, fechaInicial, ufInicial, ufActual).toFixed(2)
             );
             $('#depre_gestion').val(
-                depreciacionAcumuladaGestion(costoInicial, vidaUtil).toFixed(2)
+                depreciacionAcumuladaGestion(costoInicial, vidaUtil, ufInicial, ufActual).toFixed(2)
             );
             $('#depre_acumulada_inicial').val(
-                depreciacionAcumuladaInicial(costoInicial, vidaUtil, fechaInicial).toFixed(2)
+                depreciacionAcumuladaInicial(costoInicial, vidaUtil, fechaInicial, ufInicial, ufActual).toFixed(
+                    2)
             );
         });
 

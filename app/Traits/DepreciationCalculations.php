@@ -9,106 +9,97 @@ trait DepreciationCalculations
     public function diasDesdeDiciembre()
     {
         $fechaUltimoDiciembre = $this->fechaUltimoDiciembre();
-        return floor((now()->timestamp - $fechaUltimoDiciembre->timestamp) / (60 * 60 * 24));
-    }
-
-    public function depreciacionAnual($costoInicial, $vidaUtil)
-    {
-        return $costoInicial / $vidaUtil;
-    }
-
-    public function depreciacionDiaria($costoInicial, $vidaUtil)
-    {
-        return $costoInicial / $vidaUtil / 365;
+        return floor(
+            (time() - $fechaUltimoDiciembre->getTimestamp()) / (60 * 60 * 24)
+        );
     }
 
     public function diasTranscurridos($fechaInicial)
     {
         if ($fechaInicial) {
-            return floor(now()->diffInDays($fechaInicial));
+            return floor((time() - strtotime($fechaInicial)) / (60 * 60 * 24));
         } else {
             return 0;
         }
     }
 
-    public function depreciacionAcumulada($costoInicial, $vidaUtil, $fechaInicial)
+    public function fechaUltimoCorte($fechaInicial)
     {
-        if ($fechaInicial) {
-            return $this->depreciacionDiaria($costoInicial, $vidaUtil) * $this->diasTranscurridos($fechaInicial);
-        } else {
-            return null;
-        }
+        return floor(
+            ($this->fechaUltimoDiciembre()->getTimestamp() - strtotime($fechaInicial)) / (60 * 60 * 24)
+        );
     }
 
-    public function valorActual($costoInicial, $vidaUtil, $fechaInicial)
+    public function fechaUltimoDiciembre()
     {
-        $depreciacionAcumulada = $this->depreciacionAcumulada($costoInicial, $vidaUtil, $fechaInicial);
+        return new DateTime(date('Y') - 1 . '-12-31');
+    }
 
-        $resultado = $costoInicial - $depreciacionAcumulada;
+    public function factorActual($ufInicial, $ufActual)
+    {
+        return $ufActual / $ufInicial;
+    }
+
+    public function coeficienteDep($vidaUtil)
+    {
+        return (1 / $vidaUtil) * 100;
+    }
+
+    public function costoInicialActualizado($costoInicial, $ufInicial, $ufActual)
+    {
+        return $costoInicial * $this->factorActual($ufInicial, $ufActual);
+    }
+
+    public function depreciacionDiaria($costoInicial, $vidaUtil, $ufInicial, $ufActual)
+    {
+        $factor = $this->factorActual($ufInicial, $ufActual);
+        $depreciacionDiaria = $costoInicial / $vidaUtil / 365;
+        return $depreciacionDiaria * $factor;
+    }
+
+    public function depreciacionAcumulada($costoInicial, $vidaUtil, $fechaInicial, $ufInicial, $ufActual)
+    {
+        if ($vidaUtil == 0) {
+            return 0;
+        }
+
+        return $this->depreciacionDiaria($costoInicial, $vidaUtil, $ufInicial, $ufActual) * $this->diasTranscurridos($fechaInicial);
+    }
+
+    public function depreciacionAcumuladaGestion($costoInicial, $vidaUtil, $ufInicial, $ufActual)
+    {
+        if ($vidaUtil == 0) {
+            return 0;
+        }
+
+        return $this->depreciacionDiaria($costoInicial, $vidaUtil, $ufInicial, $ufActual) * $this->diasDesdeDiciembre();
+    }
+
+    public function depreciacionAcumuladaInicial($costoInicial, $vidaUtil, $fechaInicial, $ufInicial, $ufActual)
+    {
+        if ($vidaUtil == 0) {
+            return 0;
+        }
+
+        if ($fechaInicial <= $this->fechaUltimoDiciembre()) {
+            return $this->depreciacionDiaria($costoInicial, $vidaUtil, $ufInicial, $ufActual) * $this->fechaUltimoCorte($fechaInicial);
+        }
+
+        return 0;
+    }
+
+    public function valorActual($costoInicial, $vidaUtil, $fechaInicial, $ufInicial, $ufActual)
+    {
+        if ($vidaUtil == 0) {
+            return $this->costoInicialActualizado($costoInicial, $ufInicial, $ufActual);
+        }
+
+        $resultado = $costoInicial - $this->depreciacionAcumulada($costoInicial, $vidaUtil, $fechaInicial, $ufInicial, $ufActual);
 
         if ($resultado < 0) {
             return 1;
         }
 
-        return $resultado; // Devuelve el resultado si es mayor o igual a 0
-    }
-
-    public function fechaUltimoDiciembre()
-    {
-        return now()->subYear()->month(12)->day(31);
-    }
-
-    public function vidaRestante($fechaInicial, $vidaUtil)
-    {
-        $fechaActual = new DateTime();
-        $fechaInicial = new DateTime($fechaInicial);
-
-        $diferenciaAnios = $fechaActual->diff($fechaInicial)->y;
-
-        // Calcular la vida restante
-        $vidaRestante = $vidaUtil - $diferenciaAnios;
-
-        // Asegurarse de que la vida restante no sea negativa
-        $vidaRestante = max(0, $vidaRestante);
-
-        return $vidaRestante;
-    }
-
-    public function fechaDepreciacion($fechaInicial)
-    {
-        $fechaUltimoDiciembre = $this->fechaUltimoDiciembre();
-
-        $fechaInicialCarbon = \Carbon\Carbon::parse($fechaInicial);
-        $fechaUltimoDiciembreCarbon = \Carbon\Carbon::parse($fechaUltimoDiciembre);
-
-        if ($fechaInicialCarbon->gt($fechaUltimoDiciembreCarbon)) {
-            return null;
-        } else {
-            return $fechaUltimoDiciembre;
-        }
-    }
-
-
-    public function factorActual($costoInicial, $vidaUtil)
-    {
-        return $costoInicial / $vidaUtil / 365;
-    }
-
-    public function depreciacionAcumuladaGestion($costoInicial, $vidaUtil)
-    {
-        return $this->depreciacionDiaria($costoInicial, $vidaUtil) * $this->diasDesdeDiciembre();
-    }
-
-    public function depreciacionAcumuladaInicial($costoInicial, $vidaUtil, $fechaInicial)
-    {
-        if ($fechaInicial <= $this->fechaUltimoDiciembre()) {
-            return $this->depreciacionDiaria($costoInicial, $vidaUtil) * $this->fechaUltimoCorte($fechaInicial);
-        }
-        return 0;
-    }
-
-    public function fechaUltimoCorte($fechaInicial)
-    {
-        return floor(($this->fechaUltimoDiciembre()->timestamp - $fechaInicial->timestamp) / (60 * 60 * 24));
+        return $resultado;
     }
 }
