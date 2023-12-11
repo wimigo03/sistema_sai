@@ -16,7 +16,7 @@
                 </span>
             </div>
             <div class="col-md-8 text-right titulo">
-                <b>CREAR REGISTRO</b>
+                <b>CREAR REGISTROS</b>
             </div>
             <div class="col-md-12">
                 <hr color="red">

@@ -325,6 +325,53 @@ return regex.test(correo);
 
 }
 
+borrar de abajo
+function valideNumber(evt) {
+    var code = (evt.which) ? evt.which : evt.keyCode;
 
+    // Permitir solo dígitos y teclas de control
+    if ((code >= 48 && code <= 57) || (code >= 37 && code <= 40) || code == 8 || code == 9) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function validarValor() {
+    var inputElement = document.getElementById("tuInput"); // Reemplaza "tuInput" con el ID de tu input
+    var valor = parseInt(inputElement.value);
+
+    // Verificar si el valor es mayor o igual a 1
+    if (valor >= 1) {
+        console.log("Número válido: " + valor);
+        // Aquí puedes realizar otras acciones si el número es válido
+    } else {
+        console.log("Número inválido");
+        // Aquí puedes realizar otras acciones si el número es inválido
+    }
+}
+
+
+if($detallito->isEmpty()){
+
+
+if ($Cantidadrest >= 0) {
+   
+    $detalle->save();
+
+    $request->session()->flash('message', 'Registro Agregado',);
+} else {
+    
+    $request->session()->flash('message', 'La cantidad debe ser menor o igual que: '.$Cantidadsalidados.' Litros'  );
+}       
+// $request->session()->flash('message', 'Registro Agregado',);
+}else{
+$request->session()->flash('message', 'El Item Ya existe en la Planilla');
+}
+return redirect()->route('combustibles.detalle.index');
+}
+
+
+hasta aqui
 </script>
 @endsection

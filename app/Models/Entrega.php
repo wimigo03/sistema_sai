@@ -22,11 +22,11 @@ class Entrega extends Model{
 
     public $timestamps = false;
 
+    //const ESTA
     public function afiliado(){
         return $this->belongsTo('App\Models\Afiliado','codigo');
     }
 
-    //SCOPES
     public function scopeByNroCarnet($query, $nro_carnet){
         if ($nro_carnet) {
                 return $query

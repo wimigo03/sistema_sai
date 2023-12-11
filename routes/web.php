@@ -673,9 +673,17 @@ Route::get('almacen/detalle/{id}','AlmacenController@detalle')->name('almacen.de
 Route::get('canasta/beneficiarios/index', 'Canasta\BeneficiariosController@index')->name('canasta.beneficiarios.index');
 Route::get('canasta/beneficiarios/search', 'Canasta\BeneficiariosController@search')->name('canasta.beneficiarios.search');
 Route::get('canasta/beneficiarios/excel', 'Canasta\BeneficiariosController@excel')->name('canasta.beneficiarios.excel');
+Route::get('canasta/beneficiarios/show/{usuario_id}', 'Canasta\BeneficiariosController@show')->name('canasta.beneficiarios.show');
+Route::get('canasta/beneficiarios/show/pdf/{usuario_id}', 'Canasta\BeneficiariosController@show_pdf')->name('canasta.beneficiarios.show.pdf');
 Route::get('canasta/barrios/index', 'Canasta\BarriosController@index')->name('canasta.barrios.index');
 Route::get('canasta/barrios/search', 'Canasta\BarriosController@search')->name('canasta.barrios.search');
 Route::get('canasta/barrios/excel', 'Canasta\BarriosController@excel')->name('canasta.barrios.excel');
+Route::get('canasta/periodos/index', 'Canasta\PeriodosController@index')->name('canasta.periodos.index');
+Route::get('canasta/periodos/search', 'Canasta\PeriodosController@search')->name('canasta.periodos.search');
+Route::get('canasta/entregas/index', 'Canasta\EntregasController@index')->name('canasta.entregas.index');
+
+/**CANASTA V2*/
+Route::get('distritos/', 'Canasta_v2\DistritosV2Controller@index')->name('distritos.index');
 
 
 //Route::get('compras/pedido/index2', 'CompraController@index2')->name('compras.pedido.index2');
@@ -730,3 +738,316 @@ Route::group(['namespace' => 'App\Http\Controllers\Fexpo'], function() {
     ->name('expochaco.aprovar');
 });
 
+
+
+Route::group(['namespace' => 'App\Http\Controllers\Compra'], function() {
+
+    Route::get('combustibles/producto/index', 'ProdCombController@index')->name('producto.index')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/producto/create', 'ProdCombController@create')->name('producto.create')->middleware('can:comprascomb_janeth_access');
+    Route::post('combustibles/producto/store', 'ProdCombController@store')->name('producto.store')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/producto/list', 'ProdCombController@list')->name('producto.list')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/producto/{id}/edit', 'ProdCombController@editar')->name('producto.edit')->middleware('can:comprascomb_janeth_access');
+    Route::POST('combustibles/producto/{id}/update', 'ProdCombController@update')->name('producto.update')->middleware('can:comprascomb_janeth_access');
+
+    Route::post('/ruta3', 'ProdCombController@respuesta3')->name('pregunta3');
+
+
+    Route::get('combustibles/proveedor/index', 'ProveedorController@index')->name('proveedor.index')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/proveedor/create', 'ProveedorController@create')->name('proveedor.create')->middleware('can:comprascomb_janeth_access');
+    Route::post('combustibles/proveedor/store', 'ProveedorController@store')->name('proveedor.store')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/proveedor/list', 'ProveedorController@list')->name('proveedor.list')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/proveedor/{id}/edit', 'ProveedorController@editar')->name('proveedor.edit')->middleware('can:comprascomb_janeth_access');
+    Route::POST('combustibles/proveedor/{id}/update', 'ProveedorController@update')->name('proveedor.update')->middleware('can:comprascomb_janeth_access');
+
+
+    Route::get('combustibles/proveedor/{id}/editardoc', ['uses' => 'ProveedorController@editardoc','as' => 'proveedor.editdoc'])->middleware('can:proveedorcomb_access');
+    Route::get('combustibles/proveedor/{id}/createdocproveedor', 'ProveedorController@createdoc')->name('ProveedorController.createdoc')->middleware('can:proveedores_access');
+    Route::POST('combustibles/proveedor/insertar', 'ProveedorController@insertar')->name('ProveedorController.insertar')->middleware('can:proveedores_access');
+
+    Route::post('/ruta2', 'ProveedorController@respuesta2')->name('pregunta2');
+
+
+     Route::get('combustibles/programa/index', 'ProgramaCombController@index')->name('programa.index')->middleware('can:comprascomb_janeth_access');
+     Route::get('combustibles/programa/list', 'ProgramaCombController@listado')->name('programa.list')->middleware('can:comprascomb_janeth_access');
+     Route::get('combustibles/programa/{id}/edit', 'ProgramaCombController@edit')->name('programa.edit')->middleware('can:comprascomb_janeth_access');
+    Route::POST('combustibles/programa/{id}/update', 'ProgramaCombController@update')->name('programa.update')->middleware('can:comprascomb_janeth_access');
+     Route::get('combustibles/programa/create', 'ProgramaCombController@create')->name('programa.create')->middleware('can:comprascomb_janeth_access');
+    Route::POST('combustibles/programa/store', 'ProgramaCombController@store')->name('programa.store')->middleware('can:comprascomb_janeth_access');
+
+    Route::get('combustibles/partida/index', 'PartidaCombController@index')->name('partidacomb.index')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/partida/listado', 'PartidaCombController@listado')->name('partidacomb.list')->middleware('can:comprascomb_janeth_access');
+
+
+    Route::get('combustibles/catprog/index', 'CatProgController@index')->name('catprogcomb.index')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/catprogc/list', 'CatProgController@listado')->name('catprogcomb.list')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/catprog/{id}/edit', 'CatProgController@editar')->name('catprogcomb.edit')->middleware('can:comprascomb_janeth_access');
+    Route::POST('combustibles/catprog/{id}/update', 'CatProgController@update')->name('catprogcomb.update')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/catprog/create', 'CatProgController@create')->name('catprogcomb.create')->middleware('can:comprascomb_janeth_access');
+    Route::POST('combustibles/catprog/store', 'CatProgController@store')->name('catprogcomb.store')->middleware('can:comprascomb_janeth_access');
+
+
+    Route::get('combustibles/pedido/index', 'CompraCombController@index')->name('combustibles.pedido.index')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/pedido/index2', 'CompraCombController@index2')->name('combustibles.pedido.index2')->middleware('can:comprasalmacen_aprovadas_access');
+    Route::get('combustibles/pedido/create', 'CompraCombController@create')->name('combustibles.pedido.create')->middleware('can:comprascomb_janeth_access');
+    Route::post('combustibles/pedido/store', 'CompraCombController@store')->name('combustibles.pedido.store')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/pedido/edit/{id}', 'CompraCombController@edit')->name('combustibles.pedido.edit')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/pedido/editar/{id}', 'CompraCombController@editar')->name('combustibles.pedido.editar')->middleware('can:comprascomb_janeth_access');
+    Route::post('combustibles/pedido/update', 'CompraCombController@update')->name('combustibles.pedido.update')->middleware('can:comprascomb_janeth_access');
+    Route::get('combustibles/pedido/editable/{id}', 'CompraCombController@editable')->name('combustibles.pedido.editable')->middleware('can:comprasalmacen_aprovadas_access');
+
+    Route::post('/ruta5', 'CompraCombController@respuesta5')->name('pregunta5');
+    Route::post('/ruta6', 'CompraCombController@respuesta6')->name('pregunta6');
+    Route::get('combustibles/pedido/ver/{id}', 'CompraCombController@ver')->name('combustibles.pedido.ver')->middleware('can:comprascomb_janeth_access');
+
+
+
+    Route::get('combustibles/pedidoparcial/index', 'CompraCombController2@index')
+    ->name('combustibles.pedidoparcial.index');
+
+    Route::get('combustibles/pedidoparcial/index2', 'CompraCombController2@index2')
+    ->name('combustibles.pedidoparcial.index2');
+
+    Route::get('combustibles/pedidoparcial/create', 'CompraCombController2@create')
+    ->name('combustibles.pedidoparcial.create');
+
+    Route::post('combustibles/pedidoparcial/store', 'CompraCombController2@store')
+    ->name('combustibles.pedidoparcial.store');
+
+    
+    Route::post('combustibles/pedidoparcial/update', 'CompraCombController2@update')
+    ->name('combustibles.pedidoparcial.update');
+    
+    Route::get('combustibles/pedidoparcial/editar/{id}', 'CompraCombController2@editar')
+    ->name('combustibles.pedidoparcial.editar');
+
+    Route::get('combustibles/pedidoparcial/editable/{id}', 'CompraCombController2@editable')
+    ->name('combustibles.pedidoparcial.editable');
+
+     Route::get('combustibles/pedidoparcial/edit/{id}', 'CompraCombController2@edit')
+     ->name('combustibles.pedidoparcial.edit');
+
+    Route::post('/ruta4', 'CompraCombController2@respuesta4')->name('pregunta4');
+
+
+
+
+    Route::get('combustibles/pedidoparcial/ver/{id}', 'CompraCombController2@ver')
+    ->name('combustibles.pedidoparcial.ver');
+
+    Route::get('combustibles/pedidoparcial/editrecha/{id}', 'CompraCombController2@editrecha')
+    ->name('combustibles.pedidoparcial.editrecha');
+
+    Route::get('combustibles/detalle/index', 'DetalleCompraCombController@index')->name('combustibles.detalle.index');
+    Route::get('combustibles/detalle/index2', 'DetalleCompraCombController@index2')->name('combustibles.detalle.index2');
+    Route::post('combustibles/detalle/store', 'DetalleCompraCombController@store')->name('combustibles.detalle.store');
+    Route::get('combustibles/detalle/principal/{id}', 'DetalleCompraCombController@crearOrdenxxx')->name('combustibles.detalle.principal');
+    Route::post('combustibles/detalle/principal/store', 'DetalleCompraCombController@crearOrden')->name('combustibles.detalle.principal.store');
+    Route::get('combustibles/detalle/{id}/principalorden', 'DetalleCompraCombController@crearOrdendocxx')->name('combustibles.detalle.principalorden');
+    Route::get('combustibles/detalle/show', 'DetalleCompraCombController@show')->name('combustibles.detalle.show');
+    Route::post('combustibles/detalle/principalorden', 'DetalleCompraCombController@crearOrdendoc')->name('DetalleCompraCombController.crearOrdendoc');
+    Route::get('combustibles/detalle/{id}/destroyed2', 'DetalleCompraCombController@destroyed2')->name('DetalleCompraCombController.eliminar2');
+    Route::get('combustibles/delete/{id}', 'DetalleCompraCombController@delete')->name('combustibles.detalle.delete');
+    Route::get('combustibles/aprovar/{id}', 'DetalleCompraCombController@aprovar')->name('combustibles.detalle.aprovar');
+    Route::get('combustibles/rechazar/{id}', 'DetalleCompraCombController@rechazar')->name('combustibles.detalle.rechazar');
+
+    Route::get('combustibles/almacen/{id}', 'DetalleCompraCombController@almacen')->name('combustibles.detalle.almacen');
+
+    Route::get('combustibles/detalle/invitacion/{id}', 'DetalleCompraCombController@invitacion')->name('combustibles.detalle.principal.invitacion');
+    Route::get('combustibles/detalle/aceptacion/{id}', 'DetalleCompraCombController@aceptacion')->name('combustibles.detalle.principal.aceptacion');
+    Route::get('combustibles/detalle/cotizacion/{id}', 'DetalleCompraCombController@cotizacion')->name('combustibles.detalle.principal.cotizacion');
+    Route::get('combustibles/detalle/adjudicacion/{id}', 'DetalleCompraCombController@adjudicacion')->name('combustibles.detalle.principal.adjudicacion');
+    Route::get('combustibles/detalle/orden/{id}', 'DetalleCompraCombController@orden')->name('combustibles.detalle.principal.orden');
+
+
+
+
+    
+
+    Route::get('combustibles/detalleparcial/index', 'DetalleCompraCombController2@index')
+    ->name('combustibles.detalleparcial.index');
+
+    Route::get('combustibles/detalleparcial/index2', 'DetalleCompraCombController2@index2')
+    ->name('combustibles.detalleparcial.index2');
+
+    
+    Route::get('combustibles/detalleparcial/index3', 'DetalleCompraCombController2@index3')
+    ->name('combustibles.detalleparcial.index3');
+
+    Route::post('combustibles/detalleparcial/store', 'DetalleCompraCombController2@store')
+    ->name('combustibles.detalleparcial.store');
+
+    Route::get('combustibles/detalleparcial/show/{id}', 'DetalleCompraCombController2@show')
+    ->name('combustibles.detalleparcial.show');
+
+    Route::get('combustibles/detalleparcial/{id}/destroyed2', 'DetalleCompraCombController2@destroyed2')
+    ->name('DetalleCompraController2.eliminar2');
+
+    Route::get('combustibles/delete2/{id}', 'DetalleCompraCombController2@delete')
+    ->name('combustibles.detalleparcial.delete');
+
+
+
+});   
+
+Route::group(['namespace' => 'App\Http\Controllers\Transporte'], function() {
+
+    Route::get('transportes/uconsumo/index', 'UnidaddConsumoController@index')->name('transportes.uconsumo.index');
+Route::get('transportes/uconsumo/index2', 'UnidaddConsumoController@index2')->name('transportes.uconsumo.index2');
+Route::get('transportes/uconsumo/editar/{id}', 'UnidaddConsumoController@editar')->name('transportes.uconsumo.editar');
+
+Route::POST('transportes/uconsumo/update', 'UnidaddConsumoController@update')->name('transportes.uconsumo.update');
+Route::get('transportes/uconsumo/create', 'UnidaddConsumoController@create')->name('transportes.uconsumo.create');
+Route::POST('transportes/uconsumo/store', 'UnidaddConsumoController@store')->name('transportes.uconsumo.store');
+
+Route::get('transportes/uconsumo/{id}/editardoc', ['uses' => 'UnidaddConsumoController@editardoc','as' => 'uconsumo.editdoc']);
+Route::get('transportes/uconsumo/{id}/createdocuconsumo', 'UnidaddConsumoController@createdoc')->name('UnidaddConsumoController.createdoc');
+Route::POST('transportes/uconsumo/insertar', 'UnidaddConsumoController@insertar')->name('UnidaddConsumoController.insertar');
+Route::get('transportes/uconsumo/aprovar/{id}', 'UnidaddConsumoController@aprovar')
+    ->name('transportes.uconsumo.aprovar');
+
+  
+    
+    Route::get('transportes/tipo/index', 'TipomovilidadController@index')->name('tipo.index');
+    Route::get('transportes/tipo/list', 'TipomovilidadController@listado')->name('tipo.list');
+    Route::get('transportes/tipo/{id}/edit', 'TipomovilidadController@editar')->name('tipo.edit');
+    Route::POST('transportes/tipo/{id}/update', 'TipomovilidadController@update')->name('tipo.update');
+    Route::get('transportes/tipo/create', 'TipomovilidadController@create')->name('tipo.create');
+    Route::POST('transportes/tipo/store', 'TipomovilidadController@store')->name('tipo.store');
+       
+
+
+    Route::get('transportes/pedido/index', 'SoluconsumoController@index')
+    ->name('transportes.pedido.index');
+    Route::get('transportes/pedido/index2', 'SoluconsumoController@index2')
+    ->name('transportes.pedido.index2');
+    Route::get('transportes/pedido/index3', 'SoluconsumoController@index3')
+    ->name('transportes.pedido.index3');
+
+    Route::get('transportes/pedido/index4', 'SoluconsumoController@index4')
+    ->name('transportes.pedido.index4');
+
+    Route::get('transportes/pedido/editar/{id}', 'SoluconsumoController@editar')->name('transportes.pedido.editar');
+    Route::POST('transportes/pedido/update', 'SoluconsumoController@update')->name('transportes.pedido.update');
+    Route::get('transportes/pedido/edit/{id}', 'SoluconsumoController@edit')->name('transportes.pedido.edit');
+    Route::get('transportes/pedido/editable/{id}', 'SoluconsumoController@editable')->name('transportes.pedido.editable');
+    
+    Route::get('transportes/pedido/aprovar/{id}', 'SoluconsumoController@aprovar')
+    ->name('transportes.pedido.aprovar');
+    Route::get('transportes/pedido/rechazar/{id}', 'SoluconsumoController@rechazar')
+    ->name('transportes.pedido.rechazar');
+    
+    Route::get('transportes/pedido/rechazartr/{id}', 'SoluconsumoController@rechazartr')
+    ->name('transportes.pedido.rechazartr');
+
+
+    Route::get('transportes/pedidoparcial/index', 'SoluconsumoController2@index')
+    ->name('transportes.pedidoparcial.index');
+
+
+    Route::get('transportes/pedidoparcial/index2', 'SoluconsumoController2@index2')
+    ->name('transportes.pedidoparcial.index2');
+    
+    Route::get('transportes/pedidoparcial/index3', 'SoluconsumoController2@index3')
+    ->name('transportes.pedidoparcial.index3');
+    
+
+    Route::get('transportes/pedidoparcial/create', 'SoluconsumoController2@create')
+    ->name('transportes.pedidoparcial.create');
+    
+    Route::post('transportes/pedidoparcial/store', 'SoluconsumoController2@store')
+    ->name('transportes.pedidoparcial.store');
+    
+    Route::get('transportes/pedidoparcial/editar/{id}', 'SoluconsumoController2@editar')->name('transportes.pedidoparcial.editar');
+    Route::POST('transportes/pedidoparcial/update', 'SoluconsumoController2@update')->name('transportes.pedidoparcial.update');
+    
+    Route::GET('transportes/pedidoparcial/pdf', 'SoluconsumoController2@pdf')->name('transportes.pedidoparcial.pdf');
+    
+    Route::get('transportes/pedidoparcial/solicitud/{id}', 'SoluconsumoController2@solicitud')->name('transportes.pedidoparcial.solicitud');
+    
+    
+    Route::post('/ruta7', 'SoluconsumoController2@respuesta7')->name('pregunta7');
+    
+    
+    Route::get('transportes/detalle/index', 'DetalleSoluconsumoController@index')
+    ->name('transportes.detalle.index');
+    
+    Route::get('transportes/detalle/index2', 'DetalleSoluconsumoController@index2')
+    ->name('transportes.detalle.index2');
+    
+    Route::post('transportes/detalle/store', 'DetalleSoluconsumoController@store')
+    ->name('transportes.detalle.store');
+    
+    Route::get('transportes/delete2/{id}', 'DetalleSoluconsumoController@delete')
+        ->name('transportes.detalle.delete');
+    
+    Route::get('transportes/detalle/aprovar/{id}', 'DetalleSoluconsumoController@aprovar')
+        ->name('transportes.detalle.aprovar');
+    
+
+});   
+
+
+Route::group(['namespace' => 'App\Http\Controllers\Almacen'], function() {
+Route::get('almacenes/localidad/index', 'LocalidadController@index')->name('localidad.index');
+Route::get('almacenes/localidad/list', 'LocalidadController@listado')->name('localidad.list');
+Route::get('almacenes/localidad/{id}/edit', 'LocalidadController@editar')->name('localidad.edit');
+Route::POST('almacenes/localidad/{id}/update', 'LocalidadController@update')->name('localidad.update');
+Route::get('almacenes/localidad/create', 'LocalidadController@create')->name('localidad.create');
+Route::POST('almacenes/localidad/store', 'LocalidadController@store')->name('localidad.store');
+
+
+Route::get('almacenes/pedido/index', 'ValeController@index')->name('almacenes.pedido.index');
+Route::get('almacenes/pedido/index2', 'ValeController@index2')->name('almacenes.pedido.index2');
+Route::get('almacenes/pedido/index3', 'ValeController@index3')->name('almacenes.pedido.index3');
+
+Route::get('almacenes/pedido/create', 'ValeController@create')->name('almacenes.pedido.create');
+Route::post('almacenes/pedido/store', 'ValeController@store')->name('almacenes.pedido.store');
+Route::get('almacenes/pedido/edit/{id}', 'ValeController@edit')->name('almacenes.pedido.edit');
+ Route::get('almacenes/pedido/editar/{id}', 'ValeController@editar')->name('almacenes.pedido.editar');
+Route::post('almacenes/pedido/update', 'ValeController@update')->name('almacenes.pedido.update');
+Route::get('almacenes/pedido/editable/{id}', 'ValeController@editable')->name('almacenes.pedido.editable');
+Route::get('almacenes/pedido/editabletres/{id}', 'ValeController@editabletres')->name('almacenes.pedido.editabletres');
+
+
+Route::get('almacenes/detalle/index', 'DetalleValeController@index')->name('almacenes.detalle.index');
+Route::get('almacenes/detalle/index2', 'DetalleValeController@index2')->name('almacenes.detalle.index2');
+Route::get('almacenes/detalle/index3', 'DetalleValeController@index3')->name('almacenes.detalle.index3');
+
+Route::post('almacenes/detalle/store', 'DetalleValeController@store')->name('almacenes.detalle.store');
+Route::get('almacenes/detalle/principal/{id}', 'DetalleValeController@crearOrdenxxx')->name('almacenes.detalle.principal');
+Route::post('almacenes/detalle/principal/store', 'DetalleValeController@crearOrden')->name('almacenes.detalle.principal.store');
+//Route::post('combustibles/detalle/principalorden', 'DetalleValeController@crearOrdendoc')->name('DetalleValeController.crearOrdendoc');
+//Route::get('combustibles/detalle/{id}/destroyed2', 'DetalleValeController@destroyed2')->name('DetalleValeController.eliminar2');
+Route::get('almacenes/detalle/aprovar/{id}', 'DetalleValeController@aprovar')->name('almacenes.detalle.aprovar');
+Route::get('almacenes/detalle/solicitud/{id}', 'DetalleValeController@solicitud')->name('almacenes.detalle.solicitud');
+
+Route::get('almacenes/detalle/delete/{id}', 'DetalleValeController@delete')->name('almacenes.detalle.delete');
+Route::get('almacenes/detalle/editar/{id}', 'DetalleValeController@editar')->name('almacenes.detalle.editar');
+
+Route::POST('almacenes/detalle/update', 'DetalleValeController@update')->name('almacenes.detalle.update');
+
+});  
+
+Route::group(['namespace' => 'App\Http\Controllers\Almacen\Ingreso'], function() {
+
+    
+ Route::get('almacenes/ingreso/index', 'IngresoController@index')
+ ->name('almacenes.ingreso.index');
+ 
+ Route::get('almacenes/ingreso/{id}/editardoc', ['uses' => 'IngresoController@editardoc','as' => 'ingreso.editdoc']);
+ Route::get('almacenes/ingreso/{id}/createdocuconsumo', 'IngresoController@createdoc')->name('IngresoController.createdoc');
+ Route::POST('almacenes/ingreso/insertar', 'IngresoController@insertar')->name('IngresoController.insertar');
+ Route::get('almacenes/ingreso/grafico', 'IngresoController@grafico')->name('almacenes.ingreso.grafico');
+ 
+ Route::get('almacenes/ingreso/detalle/{id}', 'IngresoController@detalle')->name('almacenes.ingreso.detalle');
+ Route::get('almacenes/ingreso/solicitud/{id}', 'IngresoController@solicitud')->name('almacenes.ingreso.solicitud');
+ 
+ Route::get('almacenes/ingreso/reporte', 'IngresoController@reporte')->name('almacenes.ingreso.reporte');
+ Route::post('almacenes/ingreso/store2', 'IngresoController@store2')->name('almacenes.ingreso.store2');
+ 
+ Route::get('almacenes/reporte/index', 'ReporteAreasController@index')
+ ->name('almacenes.reporte.index');
+ 
+ Route::post('almacenes/reporte/store', 'ReporteAreasController@store')
+ ->name('almacenes.reporte.store');
+});  

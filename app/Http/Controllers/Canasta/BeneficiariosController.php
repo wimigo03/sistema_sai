@@ -9,6 +9,8 @@ use App\Models\CanastaBeneficiariosModel;
 use Illuminate\Support\Facades\Redirect;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exportar\BeneficiariosExcel;
+use App\Models\CanastaHistorialBajaModel;
+use App\Models\CanastaHistorialModModel;
 use App\Http\Requests;
 use DB;
 use PDF;
@@ -72,6 +74,31 @@ class BeneficiariosController extends Controller
             return Excel::download(new BeneficiariosExcel($beneficiarios),'beneficiarios.xlsx');
         } catch (\Throwable $th) {
             return view('errors.500');
+        }finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
+    }
+
+    public function show($usuario_id){
+        $beneficiario = CanastaBeneficiariosModel::where('idUsuario',$usuario_id)->first();
+        $historial_bajas = CanastaHistorialBajaModel::where('idUsuario',$usuario_id)->get();
+        $historial_mod = CanastaHistorialModModel::where('idUsuario',$usuario_id)->get();
+        return view('canasta.beneficiarios.show', compact('beneficiario','historial_bajas','historial_mod'));
+    }
+
+    public function show_pdf($usuario_id){
+        try {
+            ini_set('memory_limit', '-1');
+            ini_set('max_execution_time', '-1');
+            $beneficiario = CanastaBeneficiariosModel::where('idUsuario',$usuario_id)->first();
+            $historial_bajas = CanastaHistorialBajaModel::where('idUsuario',$usuario_id)->get();
+            $historial_mod = CanastaHistorialModModel::where('idUsuario',$usuario_id)->get();
+            $pdf = PDF::loadView('canasta.beneficiarios.partials.show-pdf', compact('beneficiario','historial_bajas','historial_mod'));
+            $pdf->setPaper('LETTER', 'portrait');
+            return $pdf->stream();
+        } catch (\Throwable $th){
+            return '[ERROR_500]';
         }finally{
             ini_restore('memory_limit');
             ini_restore('max_execution_time');

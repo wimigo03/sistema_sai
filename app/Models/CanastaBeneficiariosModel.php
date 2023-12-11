@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\CanastaBarriosModel;
+use App\Models\CanastaAdminModel;
+use App\Models\CanastaOcupacionModel;
+
 class CanastaBeneficiariosModel extends Model
 {
     protected $connection = 'mysql_canasta';
@@ -57,6 +60,14 @@ class CanastaBeneficiariosModel extends Model
 
     public function barrios(){
         return $this->belongsTo(CanastaBarriosModel::class,'idBarrio');
+    }
+
+    public function admin(){
+        return $this->belongsTo(CanastaAdminModel::class,'idAdmin');
+    }
+
+    public function ocupacion(){
+        return $this->belongsTo(CanastaOcupacionModel::class,'idOcupacion');
     }
 
     public function scopeByCodigo($query, $codigo){
@@ -145,5 +156,10 @@ class CanastaBeneficiariosModel extends Model
             $edad = floor($dif_segundos / (365 * 24 * 60 * 60));
             return $edad;
         }
+    }
+
+    public function getNombreCompletoAttribute(){
+        $nombre_completo = $this->nombres . ' ' . $this->ap . ' ' . $this->am;
+        return $nombre_completo;
     }
 }

@@ -7,7 +7,7 @@
                     <th class="text-left p-1">NOMBRE</th>
                     <th class="text-left p-1">USUARIO</th>
                     <th class="text-left p-1">EMAIL</th>
-                    <th class="text-left p-1">ROL</th>
+                    {{-- <th class="text-left p-1">ROL</th> --}}
                     <th class="text-center p-1">ESTADO</th>
                     <th class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></th>
                 </tr>
@@ -19,16 +19,20 @@
                         <td class="text-left p-1" style="vertical-align: middle;">{{ $user->nombre_completo }}</td>
                         <td class="text-left p-1" style="vertical-align: middle;">{{ $user->name }}</td>
                         <td class="text-left p-1" style="vertical-align: middle;">{{ $user->email }}</td>
-                        <td class="text-left p-1" style="vertical-align: middle;">{{ $user->role->title }}</td>
+                        {{-- <td class="text-left p-1" style="vertical-align: middle;">{{ $user->role->title }}</td> --}}
+                        {{-- <td class="text-left p-1" style="vertical-align: middle;">{{ strtoupper($user->nombre_completo) }}</td> --}}
+                        {{-- <td class="text-left p-1" style="vertical-align: middle;">{{ strtoupper($user->name) }}</td> --}}
+                        {{-- <td class="text-left p-1" style="vertical-align: middle;">{{ strtoupper($user->email) }}</td> --}}
+                        {{-- <td class="text-left p-1" style="vertical-align: middle;">{{ strtoupper($user->role->title) }}</td> --}}
                         <td class="text-center p-1" style="vertical-align: middle;">
-                            <span class="badge {{ $user->icono_estado }} badge-with-padding">
+                            {{--<span class="badge {{ $user->icono_estado }} badge-with-padding">--}}
                                 {{ $user->status }}
-                            </span>
+                            {{--</span>--}}
                         </td>
                         <td class="text-center p-1">
                             @can('user_edit')
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar">
-                                    <a href="{{ route('admin.users.edit',$user->id) }}" class="btn btn-xs btn-outline-primary">
+                                    <a href="{{ route('admin.users.edit',$user->id) }}" class="btn btn-xs btn-warning">
                                         <i class="fa fa-lg fa-edit" aria-hidden="true"></i>
                                     </a>
                                 </span>
@@ -38,7 +42,7 @@
                                     <form action="{{ route('admin.users.baja',$user->id) }}" class="d-inline-block" method="get">
                                             @csrf
                                             <span class="tts:left tts-slideIn tts-custom" aria-label="Deshabilitar">
-                                                <button type="submit" onclick="return confirm('Se dará de baja al Usuario. ¿Esta Ud. seguro...?')" class="btn btn-xs btn-outline-success">
+                                                <button type="submit" onclick="return confirm('Se dará de baja al Usuario. ¿Esta Ud. seguro...?')" class="btn btn-xs btn-success">
                                                     <i class="fa fa-lg fa-arrow-down" aria-hidden="true"></i>
                                                 </button>
                                             </span>
@@ -47,7 +51,7 @@
                                     <form action="{{ route('admin.users.alta', $user->id) }}" class="d-inline-block" method="get">
                                         @csrf
                                         <span class="tts:left tts-slideIn tts-custom" aria-label="Habilitar">
-                                            <button type="submit" onclick="return confirm('Se dará de alta al Usuario. ¿Esta Ud. seguro...?')" class="btn btn-xs btn-outline-danger">
+                                            <button type="submit" onclick="return confirm('Se dará de alta al Usuario. ¿Esta Ud. seguro...?')" class="btn btn-xs btn-danger">
                                                 <i class="fa fa-lg fa-arrow-up" aria-hidden="true"></i>
                                             </button>
                                         </span>

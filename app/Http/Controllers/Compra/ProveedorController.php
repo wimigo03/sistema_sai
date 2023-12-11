@@ -1,0 +1,185 @@
+<?php
+
+namespace App\Http\Controllers\Compra;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
+
+use App\Models\Compra\ProveedorModel;
+use App\Models\Compra\DocProveedoresModel;
+
+
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Requests;
+use DB;
+use Yajra\DataTables\DataTables;
+
+use App\Models\User;
+use App\Models\EmpleadosModel;
+use Illuminate\Support\Facades\Auth;
+
+
+class ProveedorController extends Controller
+{
+    public function index()
+    {
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+
+        return view('combustibles.proveedor.index', ['idd' => $personalArea]);
+    }
+
+
+
+    public function list()
+    {
+        $data = DB::table('proveedor')
+            ->where('idproveedor', '!=', 1)
+            ->where('estadoproveedor', '=', 1);
+      
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('btn', 'combustibles.proveedor.btn')
+            ->rawColumns(['btn'])
+            ->make(true);
+    }
+
+    public function create()
+    {
+
+        return view('combustibles.proveedor.create');
+    }
+    public function store(Request $request)
+    {
+        $proveedores = new ProveedorModel();
+        $proveedores->nombreproveedor = $request->input('nombre');
+        $proveedores->representanteproveedor = $request->input('representante');
+        $proveedores->cedulaproveedor = $request->input('cedula');
+        $proveedores->validezciproveedor = $request->input('Ciexpiracion');
+        $proveedores->nitciproveedor = $request->input('nitci');
+        $proveedores->telefonoproveedor = $request->input('telefono');
+
+        $proveedores->estadoproveedor = 1;
+
+
+        if ($proveedores->save()) {
+            $request->session()->flash('message', 'Registro Procesado Exitosamente');
+            //echo 'Cliente salvo com sucesso';
+        } else {
+            $request->session()->flash('message', 'Error al procesar el registro');
+            //echo 'Houve um erro ao salvar';
+        }
+        return redirect()->route('proveedor.index');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    public function editar($idproveedor)
+    {
+        $proveedores = ProveedorModel::find($idproveedor);
+
+        return view('combustibles/proveedor/edit')->with('proveedores', $proveedores);
+    }
+
+    public function update(Request $request, $idproveedor)
+    {
+
+        $proveedores = ProveedorModel::find($idproveedor);
+        $proveedores->nombreproveedor = $request->input('nombre');
+        $proveedores->representanteproveedor = $request->input('representante');
+        $proveedores->cedulaproveedor = $request->input('cedula');
+        $proveedores->validezciproveedor = $request->input('Ciexpiracion');
+        $proveedores->nitciproveedor = $request->input('nitci');
+        $proveedores->telefonoproveedor = $request->input('telefono');
+        //$medida->update();
+        if ($proveedores->save()) {
+            $request->session()->flash('message', 'Registro Procesado');
+        } else {
+            $request->session()->flash('message', 'Error al Procesar Registro');
+        }
+        return redirect('combustibles/proveedor/index');
+    }
+
+
+    public function editardoc($idproveedor)
+    {
+        //obtener las categorias
+        $docproveedor = DB::table('docproveedores as d')
+            ->join('proveedor as p', 'p.idproveedor', '=', 'd.idproveedor')
+            ->select('d.nombredocumento', 'd.iddocproveedores', 'd.documento')
+            ->where('d.idproveedor', '=', $idproveedor)->get();
+        // dd($docproveedor);
+        return view('combustibles.proveedor.docproveedor', ["docproveedor" => $docproveedor, "idproveedor" => $idproveedor]);
+    }
+  
+    public function createdoc($idproveedor)
+    {
+       
+        return view('combustibles.proveedor.createdocproveedor', ["idproveedor" => $idproveedor]);
+    }
+
+    public function insertar(Request $request)
+    {
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+     
+        $idproveedor = $request->input('proveedor');
+      
+        if ($request->hasFile("documento")) {
+            $file = $request->file("documento");
+            $file_name = $file->getClientOriginalName();
+            $nombre = "pdf_" . time() . "." . $file->guessExtension();
+
+            $ruta = public_path("/Documentos/" . $personalArea->nombrearea . '/' . $nombre);
+
+            if ($file->guessExtension() == "pdf") {
+                copy($file, $ruta);
+            } else {
+                return back()->with(["error" => "File not available!"]);
+            }
+   
+        }
+
+        $docproveedor = new DocProveedoresModel();
+        $docproveedor->nombredocumento = $request->input('nombredocumento');
+        $docproveedor->documento = $personalArea->nombrearea . '/' . $nombre;
+        $docproveedor->idproveedor = $idproveedor;
+        $docproveedor->estadodocproveedores = 1;
+
+
+        $docproveedor->save();
+
+
+        return redirect()->action('App\Http\Controllers\Compra\ProveedorController@editardoc', [$idproveedor]);
+    }  
+    
+    
+    public function respuesta2(Request $request)    {
+        $ot_antigua=$_POST['ot_antigua'];
+            $data = "hola";
+            $data2 = "holaSSSS";
+            $validarci = DB::table('proveedor as s')
+            ->select('s.cedulaproveedor')
+           ->where('s.cedulaproveedor', $ot_antigua)
+            ->get();
+               if($validarci->count()>0){
+            return ['success' => true, 'data' => $data];
+        } else  return ['success' => false, 'data' => $data2];
+    }
+ }
+
+

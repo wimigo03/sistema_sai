@@ -45,4 +45,4 @@
             <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
         </div>
     </div>
-</div>
+</form>

@@ -1,0 +1,14 @@
+<td style="padding: 0;" class="text-center p-1">
+    @can('solunidadconsumo_rechazadaedit')
+    <span class="tts:left tts-slideIn tts-custom" aria-label="Rechazar">
+        <a href="{{route('transportes.pedido.rechazartr',$idsoluconsumo)}}"
+            onclick="return confirm('Se va a Rechazar la solicitud...')">
+            <span class="text-success">
+                <i class="fa-solid fa-xl fa-thumbs-down" aria-hidden="true"></i>
+            </span>
+        </a>
+    </span>
+    @endcan
+</td>
+
+
