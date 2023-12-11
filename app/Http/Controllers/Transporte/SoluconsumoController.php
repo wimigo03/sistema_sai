@@ -20,8 +20,10 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
-use DB;
-use DataTables;
+
+use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
+
 
 
 class SoluconsumoController extends Controller
@@ -34,33 +36,96 @@ class SoluconsumoController extends Controller
         $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
 
         if ($request->ajax()) {
-
-
         $soluconsumos = DB::table('soluconsumo as s')
-
         ->join('localidad as lo', 'lo.idlocalidad', '=', 's.idlocalidad')
         ->join('areas as a', 'a.idarea', '=', 's.idarea')
     
-    
-
-        ->where('s.estado1',2)
-
-        ->select('s.estadosoluconsumo','s.idsoluconsumo','s.cominterna','s.referencia', 's.oficina',
-                            
+        ->select(['s.estadosoluconsumo','s.idsoluconsumo','s.cominterna','s.referencia', 's.oficina', 's.fechasol', 
                             'a.nombrearea',
-                            'lo.nombrelocalidad'
+                            'lo.nombrelocalidad']
                             )
+                        ->orderBy('s.idsoluconsumo', 'desc')
+                        ->where('s.estadosoluconsumo', '!=',10)
+                         ->where('s.estadosoluconsumo', '!=',1);
+                        $soluconsumos = $soluconsumos->get();
+                        return DataTables::of($soluconsumos)
 
-                        ->orderBy('s.cominterna', 'desc');
-                     
-
-                        return Datatables::of($soluconsumos)
                         ->addIndexColumn()
-                         ->addColumn('btn', 'transportes.pedido.btn')
-                         ->addColumn('btn2', 'transportes.pedido.btn2')
-                  
-                        // ->rawColumns(['btn','btn2'])
-                         ->rawColumns(['btn','btn2'])
+
+                         ->addColumn('fechasol', function ($soluconsumos) {
+                             return $soluconsumos->fechasol;
+                         })
+                         ->addColumn('referencia', function ($soluconsumos) {
+                             return $soluconsumos->referencia;
+                         })
+                        ->addColumn('nombrearea', function ($soluconsumos) {
+                            return $soluconsumos->nombrearea;
+                        })
+                        ->addColumn('oficina', function ($soluconsumos) {
+                            return $soluconsumos->oficina;
+                        })
+                        ->addColumn('cominterna', function ($soluconsumos) {
+                            return $soluconsumos->cominterna;
+                        })
+
+                        ->addColumn('nombrelocalidad', function ($soluconsumos) {
+                            return $soluconsumos->nombrelocalidad;
+                        })
+
+                        ->addColumn('estadosoluconsumo', function ($soluconsumos) {
+
+                            switch ($soluconsumos->estadosoluconsumo ) {
+                               
+                               
+                                case '2':
+                                    return '<b style="color: red">Pendiente</b>';
+                               
+                                 case '3':
+                                     return '<b style="color: green">Aprobado</b>';
+                                default:
+                                
+                                    break;
+                }   }                  
+                        )
+                        ->addColumn('actions', function ($soluconsumos) {
+
+                            if ($soluconsumos->estadosoluconsumo == 2) {
+                                $buttonHtml = '<form action="' . route('transportes.pedido.edit', $soluconsumos->idsoluconsumo) . '" method="GET" style="display: inline">' .
+                                   csrf_field() .
+                                   method_field('GET') .
+                                   '<button class="tts:left tts-slideIn tts-custom" aria-label="Detalle" style="border: none;">
+                                   <span class="text-warning" >
+                                   <i class="fa-solid fa-2xl fa-square-pen" ></i>
+                                       </span>
+                                       </button>
+                                       </form>';
+                           } else {
+                               if ($soluconsumos->estadosoluconsumo == 3) {
+                                $buttonHtml = '<form action="' . route('transportes.pedido.editable', $soluconsumos->idsoluconsumo) . '" method="GET" style="display: inline">' .
+                                   csrf_field() .
+                                   method_field('GET') .
+                                   '<button class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle" style="border: none;">
+                                   <span class="text-primary" >
+                                   <i class="fa-solid fa-2xl fa-list" ></i>
+                                       </span>
+                                       </button>
+                                       </form>';
+                           } else {
+                        }  }  
+
+                            return 
+
+                            '<a class="tts:left tts-slideIn tts-custom" aria-label=" Visualizar" href="' . route('transportes.pedido.editar', $soluconsumos->idsoluconsumo) . '">
+                            <span class="text-primary" >
+                   <i class="fa fa-eye fa-lg" style="color:rgb(87, 58, 231)"></i>
+               </span>
+                        </a>'. ' ' .$buttonHtml;
+
+
+            })
+
+                          
+                        ->rawColumns(['actions', 'estadosoluconsumo'])
                         ->make(true);
 
                     }
@@ -130,24 +195,66 @@ class SoluconsumoController extends Controller
         $soluconsumos = DB::table('soluconsumo as s')
         ->join('localidad as lo', 'lo.idlocalidad', '=', 's.idlocalidad')
         ->join('areas as a', 'a.idarea', '=', 's.idarea')
-        ->where('s.estado1',1)
-        ->select('s.estadosoluconsumo','s.idsoluconsumo','s.cominterna',
-        's.referencia', 's.oficina',
+        ->where('s.estadosoluconsumo', '!=',3)
+        ->select(['s.estadosoluconsumo','s.idsoluconsumo','s.cominterna','s.fechasol',
+        // 's.referencia', 's.oficina',
                            
                             'a.nombrearea',
-                            'lo.nombrelocalidad'
+                            'lo.nombrelocalidad']
                             )
-
-                        ->orderBy('s.idsoluconsumo', 'asc');
+                        ->orderBy('s.idsoluconsumo', 'desc');
                      
-
-                        return Datatables::of($soluconsumos)
+                        $soluconsumos = $soluconsumos->get();
+                        return DataTables::of($soluconsumos)
                         ->addIndexColumn()
-                         ->addColumn('btn', 'transportes.pedido.btn')
-                         ->addColumn('btn4', 'transportes.pedido.btn4')
-                         ->addColumn('btn5', 'transportes.pedido.btn5')
-                        // ->rawColumns(['btn','btn2'])
-                         ->rawColumns(['btn','btn4','btn5'])
+                        ->addColumn('fechasol', function ($soluconsumos) {
+                            return $soluconsumos->fechasol;
+                        })
+                        // ->addColumn('referencia', function ($soluconsumos) {
+                        //     return $soluconsumos->referencia;
+                        // })
+                        ->addColumn('nombrearea', function ($soluconsumos) {
+                            return $soluconsumos->nombrearea;
+                        })
+                        // ->addColumn('oficina', function ($soluconsumos) {
+                        //     return $soluconsumos->oficina;
+                        // })
+                        ->addColumn('cominterna', function ($soluconsumos) {
+                            return $soluconsumos->cominterna;
+                        })
+
+                        ->addColumn('nombrelocalidad', function ($soluconsumos) {
+                            return $soluconsumos->nombrelocalidad;
+                        })
+
+                        ->addColumn('estadosoluconsumo', function ($soluconsumos) {
+
+                            switch ($soluconsumos->estadosoluconsumo ) {
+                               
+                                case '1':
+                                    return '<b style="color: green">Pendiente</b>';
+                                case '2':
+                                    return '<b style="color: blue">Aprobada</b>';
+                                case '5':
+                                    return '<b style="color: purple">Almacen</b>';
+                                case '10':
+                                    return '<b style="color: red">Rechazado</b>';
+                                default:
+                                
+                                    break;
+                }   }                  
+                        )
+                        ->addColumn('actions', function ($soluconsumos) {
+
+                            return '<a class="tts:left tts-slideIn tts-custom" aria-label=" boton uno" href="' . route('transportes.pedido.editar', $soluconsumos->idsoluconsumo) . '">
+                            <button class="btn btn-sm btn-primary font-verdana" type="button">
+                                <i class="fa fa-pencil fa-fw"></i>
+                            </button>
+                        </a>';
+            })
+
+                          
+                        ->rawColumns(['actions', 'estadosoluconsumo'])
                         ->make(true);
 
                     }
@@ -178,7 +285,7 @@ class SoluconsumoController extends Controller
 
         ->where('s.estado1',2)
 
-        ->select('s.estadosoluconsumo','s.idsoluconsumo','s.cominterna','s.referencia', 's.oficina',
+        ->select('s.estadosoluconsumo','s.idsoluconsumo','s.cominterna', 's.oficina',
                             
                             'a.nombrearea',
                             'lo.nombrelocalidad'
@@ -375,7 +482,7 @@ $Nombreviacargo = $productocuatro->nombrecargo;
     {
         $detalle = SoluconsumoModel::find($idsoluconsumo);
         $detalle->estadosoluconsumo =2;
-        $detalle->estado1 =2;
+    
         if($detalle->save()){
             session()->flash('message', 'Registro Procesado');
         }else{
@@ -388,8 +495,8 @@ $Nombreviacargo = $productocuatro->nombrecargo;
     public function rechazar($idsoluconsumo)
     {
         $detalle = SoluconsumoModel::find($idsoluconsumo);
-        $detalle->estadosoluconsumo =2;
-        $detalle->estado1 =2;
+        $detalle->estadosoluconsumo =10;
+    
         if($detalle->save()){
             session()->flash('message', 'Registro Procesado');
         }else{

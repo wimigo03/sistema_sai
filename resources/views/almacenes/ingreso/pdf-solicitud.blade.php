@@ -111,7 +111,8 @@ function colorChanger2(el) {
 
                 <table  style="font-size: 12px;"  border="1" cellspacing="0" cellpadding="0" width="100%"  style=" border: 1px solid black;border-collapse: collapse;font-size:11px">
                     <thead>
-                        <th style="font-size: 10px;" >N</th>
+                        <th style="font-size: 10px;" >N°</th>
+                        <th style="font-size: 10px;" >FECHA</th>
                         <th style="font-size: 10px;" >Nro Pedido/Vale</th>
                         <th style="font-size: 10px;" >Area solicitante</th>
                         <th style="font-size: 10px;" >Entregado a</th>
@@ -133,6 +134,7 @@ function colorChanger2(el) {
 
                     <tr style="text-align: center">
                         <td class="text-justify p-1">1/1/2023</td>
+                        <td class="text-center p-1"></td>
                         <td class="text-center p-1"></td>
                         <td class="text-center p-1"></td>
                         <td class="text-center p-1"></td>
@@ -164,6 +166,7 @@ function colorChanger2(el) {
                    
                     <tr style="text-align: center">
                         <td class="text-justify p-1">{{$num++}}</td>
+                        <td class="text-center p-1">{{$prod ->fechaaprob}}</td>
                         <td class="text-center p-1">{{$prod ->idvale}}</td>
                         <td class="text-center p-1">{{$prod ->nombrearea}}</td>
                         <td class="text-center p-1">{{$prod ->usuarionombre}}</td>
@@ -190,6 +193,7 @@ function colorChanger2(el) {
                    
          @if (count($prodserv) > 0)
             <tr>
+                <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>

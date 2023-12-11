@@ -51,6 +51,7 @@
                             <th>NOMBRE DEL DOCUMENTO</th>
                             <th>DOCUMENO</th>
                             <th style="color:black ;width:10px;"><i class="fa fa-bars" aria-hidden="true"></i></th>
+                            <th style="color:black ;width:10px;"><i class="fa fa-bars" aria-hidden="true"></i></th>
 
                         </tr>
                         @forelse ($docproveedor as $docprov)
@@ -68,9 +69,20 @@
                                 class="fa fa-eye fa-lg " ></a>
 
                             </span>
-                                @endcan
+
+                           
 
                             </td>
+                            <td>
+                            <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Archivo">
+                                <a href="{{route('ProveedorController.editararchivo',$docprov ->iddocproveedores)}}">
+                                    <span class="text-warning">
+                                        <i class="fas fa-xl fa-edit" style="color:rgb(26, 162, 16)"></i>
+                                    </span>
+                                </a>
+                            </span>
+
+                                @endcan
                         </tr>
                         @empty
                         <tr>

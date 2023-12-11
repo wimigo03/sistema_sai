@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\Almacen\LocalidadModel;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests;
-use DB;
-use DataTables;
+use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;

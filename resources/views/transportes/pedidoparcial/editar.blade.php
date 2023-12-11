@@ -32,38 +32,42 @@
 
             <div class="col-md-3">
                 <label for="oficina" class="d-inline font-verdana-bg">
-                    <b>oficina</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                    <b>Oficina</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <textarea name="oficina"  class="form-control form-control-sm font-verdana-bg" 
-                id="oficina" >{{$soluconsumos->oficina}}</textarea>
-            </div>
-
-            <div class="col-md-3">
-                <label for="cominterna" class="d-inline font-verdana-bg">
-                    <b>coninterna</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input type="text" name="cominterna" class="form-control form-control-sm font-verdana-bg"
-                  id="cominterna" onchange="myFunction()"  
-                 onkeypress="return valideNumber(event);" value="{{$soluconsumos->cominterna}}">
-            </div>
-            
-            <div class="col-md-2">
-                <label for="fechasol" class="d-inline font-verdana-bg">
-                    <b> fechasol</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input   type="text" disabled name="fechasol" placeholder="dd/mm/aaaa" data-language="es"
-            
-                class="form-control" id="fechasol" value="{{$date->format('d/m/Y')}}" 
-                >
-            </div>
+                <input type="text" disabled name="oficina" 
+                value="{{$NomFci}}" 
+                class="form-control form-control-sm font-verdana-bg" 
+                id="oficina">
+                </div>
+                <div class="col-md-3">
+                    <label for="cominterna" class="d-inline font-verdana-bg">
+                        <b>Control Interno</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                    </label>
+                    <input type="number" name="cominterna" class="form-control form-control-sm font-verdana-bg"
+                      id="cominterna" onchange="myFunction()" value="{{$soluconsumos->cominterna}}"  >
+                </div>
 
             <div class="col-md-4">
                 <label for="referencia" class="d-inline font-verdana-bg">
-                    <b>referencia</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                    <b>Referencia</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <textarea name="referencia"  class="form-control form-control-sm font-verdana-bg" 
                 id="referencia" >{{$soluconsumos->referencia}}</textarea>
             </div>
+
+
+          
+            
+            <div class="col-md-2">
+                <label for="fechasol" class="d-inline font-verdana-bg">
+                    <b> Fecha de solicitud</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input   type="date" disabled name="fechasol" placeholder="dd/mm/aaaa" data-language="es"
+            
+                class="form-control" id="fechasol" value="{{$soluconsumos->fechasol}}">
+            </div>
+
+              
 
             <div class="col-md-4">
                 <label for="dirigidoa" class="d-inline font-verdana-bg">
@@ -105,28 +109,26 @@
 
             <div class="col-md-3">
                 <label for="fechasalida" class="d-inline font-verdana-bg">
-                    <b> fechasalida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                    <b> Fecha de salida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <input   type="text" name="fechasalida" id="fechasalida" placeholder="dd/mm/aaaa"data-language="es"
-            
-                class="form-control" value="{{$soluconsumos->fechasalida}}"
-                >
+                <input   type="text" name="fechasalida" id="fechasalida" placeholder="dd/mm/aaaa" data-language="es"
+                class="form-control" value="{{date('d/m/Y', strtotime($soluconsumos->fechasalida))}}">
             </div>
 
             <div class="col-md-3">
                 <label for="fecharetorno" class="d-inline font-verdana-bg">
-                    <b> fecharetorno</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                    <b> Fecha de retorno</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <input   type="text" name="fecharetorno" id="fecharetorno" placeholder="dd/mm/aaaa" data-language="es"
+                <input   type="text" name="fecharetorno" id="fecharetorno" placeholder="dd/mm/aaaa" data-language="es" autocomplete="off"
             
-                class="form-control" value="{{$soluconsumos->fecharetorno}}"
+                class="form-control " value="{{date('d/m/Y', strtotime($soluconsumos->fecharetorno))}}"
                 >
             </div>
 
 
             <div class="col-md-6">
                 <label for="detallesouconsumo" class="d-inline font-verdana-bg">
-                    <b>detallesouconsumo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                    <b>Detalle de solicitud</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <textarea name="detallesouconsumo" cols="1" rows="5" class="form-control form-control-sm font-verdana-bg" 
                 id="detallesouconsumo" >{{$soluconsumos->detallesouconsumo}}</textarea>
@@ -135,7 +137,7 @@
 
             <div class="col-md-3">
                 <label for="tsalida" class="d-inline font-verdana-bg">
-                    <b>tsalida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                    <b>Salida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="tsalida" id="tsalida" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
 
@@ -147,7 +149,7 @@
 
             <div class="col-md-3">
                 <label for="tllegada" class="d-inline font-verdana-bg">
-                    <b>tllegada</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                    <b>Llegada</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="tllegada" id="tllegada" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
 
@@ -180,9 +182,9 @@
 
             <div class="col-md-7">
                 <label for="idarea" class="d-inline font-verdana-bg">
-                    <b>idarea</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                    <b>Area</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <select name="idarea" id="idarea" class="col-md-10 form-control select2 ">
+                <select  disabled name="idarea" id="idarea" class="form-control form-control-sm select2">
                     @foreach ($areas as $ar)
                     @if ($ar->idarea==$soluconsumos->idarea)
                     <option value="{{$ar->idarea}}" selected>{{$ar->idarea}} - {{$ar->nombrearea}}</option>
@@ -243,7 +245,7 @@
 
         function validar_formulario(){
             
-            if($("#oficina").val() == ""){
+            if($("#referencia").val() == ""){
                 message_alert("El campo <b>[OFICINA]</b> es un dato obligatorio...");
                 return false;
             }
@@ -255,7 +257,7 @@
             if ($("#cominterna3").val() == "comunicacion") {
                 $("#cominterna3").val('');
                 $("#cominterna").val('');
-                $("#oficina").val('');
+                $("#referencia").val('');
 
                 message_alert("El numero de <b>[Control Interno]</b> ya existe en nuestros registros...");
                 return false;
@@ -275,16 +277,20 @@
                 return false;
             }
 
-            if($("#referencia").val() == ""){
-                message_alert("El campo <b>[OFICINA]</b> es un dato obligatorio...");
-                return false;
-            }
+           
             if($("#fechasalida").val() == ""){
                 message_alert("El campo <b>[CONTROL INTERNO]</b> es un dato obligatorio...");
                 return false;
             }
             if($("#fecharetorno").val() == ""){
                 message_alert("El campo <b>[CONTROL INTERNO]</b> es un dato obligatorio...");
+                return false;
+            }
+
+            if($("#fechasalida").val() > $("#fecharetorno").val() ){
+                message_alert("El campo <b>[Fecha retorno]</b> es un dato incorrecto...");
+          
+                $("#fecharetorno").val('');
                 return false;
             }
             if($("#detallesouconsumo").val() == ""){
@@ -329,7 +335,7 @@
         var ot_antigua = $("#cominterna").val();
 
         $.ajax({
-            url: "{{ route('pregunta2') }}",
+            url: "{{ route('pregunta7') }}",
 
             data: 'ot_antigua=' + ot_antigua,
          

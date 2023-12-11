@@ -11,6 +11,11 @@ use App\Http\Requests;
 use DB;
 use DataTables;
 
+use App\Models\User;
+use App\Models\EmpleadosModel;
+use App\Models\AreasModel;
+use Illuminate\Support\Facades\Auth;
+
 class TipoMovilidadController extends Controller
 {
     public function index()

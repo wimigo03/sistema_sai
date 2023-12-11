@@ -188,6 +188,24 @@
             </div> 
 
         </div>
+
+        @if ($soluconsumos->estadosoluconsumo == 1)
+            <div class="form-group row">
+                <div class="col-md-12 text-right">
+                    <a href="{{ route('transportes.pedido.aprovar',$soluconsumos->idsoluconsumo) }}">
+                        <button type="button" class="btn btn-success font-verdana-bg">
+                            <i class="fa fa-check" aria-hidden="true"></i>&nbsp;Aprobar&nbsp;
+                        </button>
+                    </a>
+                    <a href="{{ route('transportes.pedido.rechazar',$soluconsumos->idsoluconsumo) }}">
+                        <button type="button" class="btn btn-danger font-verdana-bg">
+                            <i class="fa fa-close" aria-hidden="true"></i>&nbsp;Rechazar&nbsp;
+                        </button>
+                    </a>
+                </div>
+            </div>
+        @endif
+        
         {{-- <div class="form-group row">
             <div class="col-md-12 text-right">
                 <a href="{{route('transportes.pedido.aprovar',$soluconsumos->idsoluconsumo)}}" target="_blank">

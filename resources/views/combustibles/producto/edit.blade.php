@@ -30,28 +30,27 @@
                 <form method="POST" id="form" action="{{ route('producto.update', $productos->idprodcomb) }}">
                     @csrf
                     @method('POST')
-                    <input type="hidden" name="nombreprodcomb2" id="nombreprodcomb2">
+                    <input type="hidden" name="codigoprodcomb2" id="codigoprodcomb2">
 
                     <div class="form-group row">
                         <label style="color:black;font-weight: bold;" for="name"
                             class="required col-md-4 col-form-label text-md-right">{{ __('Codigo') }}</label>
                         <div class="col-md-7">
-                            <textarea id="codigoprodcomb" required type="text" name="codigoprodcomb" placeholder="Codigo del producto..." cols="50"
-                                rows="2" class="form-control"
-                                onkeyup="javascript:this.value=this.value.toUpperCase();">{{$productos->codigoprodcomb}}</textarea>
-                        </div>
+                             <input type="text" name="codigoprodcomb" value="{{$productos->codigoprodcomb}}" class="form-control form-control-sm font-verdana-bg" id="codigoprodcomb" onchange="myFunction()">
+
+                            </div>
                     </div>
 
                     <div class="form-group row">
                         <label style="color:black;font-weight: bold;" for="name"
                             class="required col-md-4 col-form-label text-md-right">{{ __('Nombre') }}</label>
                         <div class="col-md-7">
-                            <input type="text" name="nombre" id="nombreprodcomb" class="form-control" 
-                            onchange="myFunction()"   placeholder="Nombre..."
+                            <input type="text" name="nombre" id="nombreprodcomb" class="form-control"
+                               placeholder="Nombre..."
                             onkeyup="javascript:this.value=this.value.toUpperCase();" value="{{$productos->nombreprodcomb}}">
                         </div>
                     </div>
-            
+
             <div class="form-group row">
                 <label style="color:black;font-weight: bold;" for="detalle"
                     class="required col-md-4 col-form-label text-md-right">{{ __('Detalle') }}</label>
@@ -70,7 +69,7 @@
                 </div>
             </div>
 
-          
+
             <div class="form-group row">
                 <label style="color:black;font-weight: bold;"
                     class="required col-md-4 col-form-label text-md-right">{{ __('Partida') }}</label>
@@ -85,11 +84,11 @@
                         @endforeach
                     </select>
                 </div>
-            </div>  
+            </div>
 
-            
 
-           
+
+
 
             <div align='center'>
                 <button class="btn color-icon-2 font-verdana-bg" type="button" onclick="save();">
@@ -100,10 +99,10 @@
 
                     <a href="{{url()->previous()}}" style="color:white">Cancelar</a>
                 </button>
-                <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" 
+                <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send"
                 style="display: none;"></i>
             </div>
-            
+
             </form>
 
         </font>
@@ -141,25 +140,26 @@ $(document).ready(function() {
 
         function validar_formulario(){
 
-
+            if($("#nombreprodcomb").val() == ""){
+                message_alert("El campo <b>[Nombre]</b> es un dato obligatorio...");
+                return false;
+            }
             if($("#codigoprodcomb").val() == ""){
                 message_alert("El campo <b>[Codigo]</b> es un dato obligatorio...");
                 return false;
             }
-            if($("#nombreprodcomb").val() == ""){
-                message_alert("El campo <b>[Nombre]</b> es un dato obligatorio...");
-                return false; 
-            }
-     
-         
-      
-            if ($("#nombreprodcomb2").val() == "comunicacion") {
-                $("#nombreprodcomb2").val('');
+
+            if ($("#codigoprodcomb2").val() == "comunicacion") {
+                $("#codigoprodcomb2").val('');
                 $("#nombreprodcomb").val('');
                 $("#codigoprodcomb").val('');
-                message_alert("El <b>[Nombre Producto]</b> ya existe en nuestros registros...");
+                message_alert("El <b>[CODIGO DEL PRODUCTO]</b> ya existe en nuestros registros...");
                 return false;
             }
+
+          
+     
+         
             
           
             if($("#detalleprodcomb").val() == ""){
@@ -176,14 +176,13 @@ $(document).ready(function() {
                 message_alert("El campo de seleccion <b>[Partida]</b> es un dato obligatorio...");
                 return false;
             }
-
             return true;
         }
         function myFunction() {
             respuesta();
         }
         function respuesta() {
-            var ot_antigua = $("#nombreprodcomb").val();
+            var ot_antigua = $("#codigoprodcomb").val();
             $.ajax({
                 url: "{{ route('pregunta3') }}",
                 data: 'ot_antigua=' + ot_antigua,
@@ -197,10 +196,19 @@ $(document).ready(function() {
                 success: function(data) {
                   
                     if (data.success == true) {
-                        $("#nombreprodcomb2").val('comunicacion');
+                        $("#codigoprodcomb2").val('comunicacion');
                     }
                 }
             });
+        }
+
+        function valideNumber(evt){
+            var code = (evt.which) ? evt.which : evt.keyCode;
+            if(code>=48 && code<=57){
+                return true;
+            }else{
+                return false;
+            }
         }
 </script>
 @endsection

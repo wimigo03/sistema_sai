@@ -2,9 +2,9 @@
 @section('content')
 <div class="row font-verdana-bg">
     <div class="col-md-8 titulo">
-        <b>SOLICITUDES PENDIENTES</b><b style='color:red'>{{$idd->nombrearea}} </b>--
+        <b>SOLICITUDES PENDIENTES--</b><b style='color:red'>{{$idd->nombrearea}} </b>--
     </div>
-    <div class="col-md-4 text-right">
+    {{-- <div class="col-md-4 text-right">
          @can('almacenes_aprovadas') 
 
              <a href="{{ route('almacenes.pedido.index2') }}" class="tts:left tts-slideIn tts-custom" 
@@ -17,7 +17,7 @@
             <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
 
          @endcan 
-    </div>
+    </div> --}}
 
   
 
@@ -34,19 +34,18 @@
                 <thead >
                                 <tr>
                                     <td class="text-justify p-1"><b>N°</b></td>
+                                    <td class="text-justify p-1"><b>FECHA SOL.</b></td>
                                     <td class="text-justify p-1"><b>ID VALE</b></td>
                                     <td class="text-justify p-1"><b>AREA PE.</b></td>
                                     <td class="text-justify p-1"><b>FUNCIONARIO</b></td>
                                     <td class="text-justify p-1"><b>CARGO</b></td>
                                     <td class="text-justify p-1"><b>UNIDAD</b></td>
                                     <td class="text-justify p-1"><b>PLACA</b></td>
-                                    <td class="text-justify p-1"><b>KLM ANTERIO</b></td>
-                                    <td class="text-justify p-1"><b>KLM ACTUAL</b></td>
                                     <td class="text-justify p-1"><b>DESTINO</b></td>
+                                    <td class="text-justify p-1"><b>ESTADO</b></td>
+                                    <td class="text-justify p-1"><b>ACCIONES</b></td>
                               
-                             
-                                     <td class="text-center p-1 font-weight-bold">
-                                        <i class="fa fa-bars" aria-hidden="true"></i></td> 
+                        
                                 </tr>
                             </thead>
                             <tbody>
@@ -65,6 +64,7 @@
                                     <th></th>
                                     <th></th>
                                     <th></th>
+                                   
                                   
                                  
         
@@ -89,27 +89,33 @@ $('#users-table').DataTable({
         ajax: "{{ route('almacenes.pedido.index') }}",
         columns: [
             {data: 'DT_RowIndex',orderable: false,searchable: false,class:'text-justify p-1 font-verdana'},
+            { data: 'fechasolicitud',name: 'fechasolicitud',class:'text-justify p-1 font-verdana'},
 
-            { data: 'idvale',name: 'v.idvale',class:'text-justify p-1 font-verdana'},
+            { data: 'idvale',name: 'idvale',class:'text-justify p-1 font-verdana'},
 
-            { data: 'nombrearea',name: 'a.nombrearea',class:'text-justify p-1 font-verdana'},
+            { data: 'nombrearea',name: 'nombrearea',class:'text-justify p-1 font-verdana'},
 
-            {data: 'usuarionombre',name: 'v.usuarionombre',class:'text-justify p-1 font-verdana'},
+            {data: 'usuarionombre',name: 'usuarionombre',class:'text-justify p-1 font-verdana'},
 
-            {data: 'usuariocargo',name: 'v.usuariocargo',class:'text-justify p-1 font-verdana'},
+            {data: 'usuariocargo',name: 'usuariocargo',class:'text-justify p-1 font-verdana'},
 
-            {data: 'nombreuconsumo',name: 'u.nombreuconsumo',class:'text-justify p-1 font-verdana'},
-            {data: 'placaconsumo',name: 'v.placaconsumo',class:'text-justify p-1 font-verdana'},
+            {data: 'nombreuconsumo',name: 'nombreuconsumo',class:'text-justify p-1 font-verdana'},
+            {data: 'placaconsumo',name: 'placaconsumo',class:'text-justify p-1 font-verdana'},
 
-            {data: 'kilometrajeinicialconsumo',name: 'u.kilometrajeinicialconsumo',class:'text-justify p-1 font-verdana'},
 
-            {data: 'kilometrajefinalconsumo',name: 'u.kilometrajefinalconsumo',class:'text-justify p-1 font-verdana'},
 
-    
-
-            {data: 'nombrelocalidad',name: 'v.nombrelocalidad',class:'text-justify p-1 font-verdana'},
+            {data: 'nombrelocalidad',name: 'nombrelocalidad',class:'text-justify p-1 font-verdana'},
             
-            {data: 'btn2', name: 'btn2', orderable: false, searchable: false }
+            {data: 'estadovale',name: 'estadovale',class:'text-justify p-1 font-verdana'},
+         
+
+         {
+                    className: 'text-center',
+                    data: 'actions',
+                    name: 'actions',
+                    orderable: false,
+                    searchable: false
+                }
 
         ],
 
@@ -118,7 +124,7 @@ $('#users-table').DataTable({
                 this.api().columns(1).every(function() {
                     var column = this;
                     var input = document.createElement("input");
-                    input.style.width = input.style.width = "50px";
+                    input.style.width = input.style.width = "30px";
                     $(input).appendTo($(column.footer()).empty())
                         .on('change', function() {
                             var val = $.fn.dataTable.util.escapeRegex($(this).val());
@@ -151,17 +157,17 @@ $('#users-table').DataTable({
                             column.search(val ? val : '', true, false).draw();
                         });
                 });
-                this.api().columns(4).every(function() {
-                    var column = this;
-                    var input = document.createElement("input");
-                    input.style.width = input.style.width = "150px";
-                    $(input).appendTo($(column.footer()).empty())
-                        .on('change', function() {
-                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                // this.api().columns(4).every(function() {
+                //     var column = this;
+                //     var input = document.createElement("input");
+                //     input.style.width = input.style.width = "150px";
+                //     $(input).appendTo($(column.footer()).empty())
+                //         .on('change', function() {
+                //             var val = $.fn.dataTable.util.escapeRegex($(this).val());
 
-                            column.search(val ? val : '', true, false).draw();
-                        });
-                });
+                //             column.search(val ? val : '', true, false).draw();
+                //         });
+                // });
                 this.api().columns(5).every(function() {
                     var column = this;
                     var input = document.createElement("input");
@@ -185,7 +191,17 @@ $('#users-table').DataTable({
                         });
                 });
              
+                this.api().columns(8).every(function() {
+                    var column = this;
+                    var input = document.createElement("input");
+                    input.style.width = input.style.width = "80px";
+                    $(input).appendTo($(column.footer()).empty())
+                        .on('change', function() {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
 
+                            column.search(val ? val : '', true, false).draw();
+                        });
+                });
             },
 
             language: {

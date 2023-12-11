@@ -236,6 +236,73 @@ class DetalleCompraCombController2 extends Controller
         'compras'=>$compras]);
     }
 
+    public function index4(){
+
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $detalle = TemporalModel::find($id);
+        $id2 = $detalle->idcompra;
+
+        $prodserv = DB::table('detallecompracomb as d')
+
+                        ->join('prodcomb as ps', 'ps.idprodcomb', '=', 'd.idprodcomb')
+                        ->join('compracomb as c', 'c.idcompracomb', '=', 'd.idcompracomb')
+
+                        ->select('d.iddetallecompracomb', 'c.idcompracomb','ps.nombreprodcomb','d.cantidad',
+                        'd.subtotal','d.precio')
+
+                        ->where('d.idcompracomb', $id2)
+                        ->orderBy('d.iddetallecompracomb', 'desc')
+                        ->get();
+
+
+        $productos = DB::table('prodcomb')
+                        ->where('estadoprodcomb',1)
+                        ->select(DB::raw("concat(codigoprodcomb,' // ',nombreprodcomb,' // ',detalleprodcomb,' 
+                        // PRECIO BS. ',precioprodcomb) as prodservicio"),'idprodcomb')
+                        ->pluck('prodservicio','idprodcomb');
+
+        $valor_total2 = $prodserv->sum('subtotal');
+
+        $ordencompra = DB::table('ordencompracomb as o')
+                            ->select('o.nombrecompra','o.solicitante','o.proveedor')
+                            -> where('o.compra_idcompra','=', $id2)->first();
+        $resultado = $ordencompra;
+
+        $estado = 1;
+
+        if(is_null($resultado)){
+            $estado = 0;
+        }
+
+        $compras = DB::table('compracomb as c')
+            ->join('proveedor as p', 'p.idproveedor', 'c.idproveedor')
+            ->join('catprogramaticacomb as cat', 'cat.idcatprogramaticacomb', 'c.idcatprogramaticacomb')
+            ->join('programacomb as prog', 'prog.idprogramacomb', 'c.idprogramacomb')
+            ->join('areas as a', 'a.idarea', 'c.idarea')
+
+            ->select('c.idcompracomb','c.estado1', 'a.nombrearea', 'c.objeto',
+             'c.justificacion', 'c.preventivo', 'p.nombreproveedor',
+              'p.representanteproveedor', 'p.cedulaproveedor', 'p.nitciproveedor', 'p.telefonoproveedor',
+               'c.preventivo', 'c.numcompra', 'cat.codcatprogramatica',
+                'prog.nombreprograma')
+            ->where('c.idcompracomb', '=', $id2)
+            ->first();
+            $consumos = DB::table('compracomb as s')
+                     
+            ->where('s.idcompracomb', $id2)
+            ->select('s.idcompracomb','s.estadocompracomb')
+            ->first();
+
+        return view('combustibles.detalleparcial.index4',
+        ['prodserv'=>$prodserv,
+        'productos'=>$productos,
+        'valor_total2'=>$valor_total2,
+        'idcompracomb'=>$id2,
+        'estado'=>$estado,
+        'consumos'=>$consumos,
+        'compras'=>$compras]);
+    }
 
     public function store (Request $request){
 

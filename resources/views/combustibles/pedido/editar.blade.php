@@ -53,12 +53,12 @@
                 <label for="tipo" class="d-inline font-verdana-bg">
                     <b>Tipo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <select name="tipo" id="tipo" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
-                   
-                    <option {{old('tipo',$compras->tipo)=="1"? 'selected':''}}  value="1">PRODUCTO</option>
-                    <option {{old('tipo',$compras->tipo)=="2"? 'selected':''}} value="2">SERVICIO</option>
-                                                           
-                </select>
+    <input type="text" disabled name="tipo" 
+    value="{{$compras->tipo}}" 
+   class="form-control form-control-sm font-verdana-bg" 
+   id="tipo" data-language="es" autocomplete="off" >
+    
+
             </div>
             <div class="col-md-2">
                 <label for="numcompra" class="d-inline font-verdana-bg">
@@ -72,7 +72,7 @@
                 </label>
                 <input type="text" name="controlinterno" value="{{$compras->controlinterno}}" class="form-control form-control-sm font-verdana-bg" id="controlinterno" onkeypress="return valideNumber(event);">
             </div>
-            <div class="col-md-7">
+            <div class="col-md-5">
                 <label for="idarea" class="d-inline font-verdana-bg">
                     <b>Area</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
@@ -81,15 +81,16 @@
                     @foreach ($areas as $area)
 
                     @if ($area->idarea==$compras->idarea)
-                    <option value="{{$area->idarea}}" selected>{{$area->nombrearea}}</option>
+                    <option  value="{{$area->idarea}}" selected>{{$area->nombrearea}}</option>
                     @else
                     <option disabled value="{{$area->idarea}}">{{$area->nombrearea}}</option>
                     @endif
 
                     @endforeach
                 </select>
+
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <label for="idprograma" class="d-inline font-verdana-bg">
                     <b>Programa</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
