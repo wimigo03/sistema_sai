@@ -63,7 +63,9 @@
                     @csrf
                 </form>
             </div>
-        {{--</div>--}}
+        {{--</div>
+             //url: "{{ route('pregunta/id') }}",
+            --}}
     </main>
     <script src="{{ asset('admin_assets/plugins/slim-select/slimselect.min.js') }}"></script>
     <script src="{{ asset('admin_assets/js/handlebars.js') }}"></script>
@@ -87,7 +89,8 @@
         function fetchdata() {
 
             $.ajax({
-                url: "{{ route('pregunta/id') }}",
+
+                url: "",
                 type: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
