@@ -3,19 +3,27 @@
 <link rel="stylesheet" href="/css/font-verdana.css" rel="stylesheet">
 <div class="card card-custom">
     <div class="card-header font-verdana-bgt">
-        <b>DISTRITOS</b>
+        <b>BARRIOS</b>
     </div>
     <div class="card-body">
-        @include('canasta_v2.distrito.partials.search')
-        @include('canasta_v2.distrito.partials.table')
+        @include('canasta_v2.barrio.partials.search')
+        @include('canasta_v2.barrio.partials.table')
     </div>
 </div>
 @endsection
 @section('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
+            $('#tipo').select2({
+                placeholder: "--Tipo--"
+            });
+
             $('#dea').select2({
                 placeholder: "--DEA--"
+            });
+
+            $('#distrito').select2({
+                placeholder: "--Distrito--"
             });
 
             $('#estado').select2({
@@ -24,7 +32,7 @@
         });
 
         function procesar(){
-            var url = "{{ route('distritos.search') }}";
+            var url = "{{ route('barrios.search') }}";
             $("#form").attr('action', url);
             $(".btn").hide();
             $(".spinner-btn-send").show();
@@ -32,7 +40,7 @@
         }
 
         function excel(){
-            var url = "{{ route('distritos.excel') }}";
+            var url = "{{ route('barrios.excel') }}";
             $("#form").attr('action', url);
             $("#form").submit();
         }
@@ -40,13 +48,13 @@
         function limpiar(){
             $(".btn").hide();
             $(".spinner-btn-send").show();
-            window.location.href = "{{ route('distritos.index') }}";
+            window.location.href = "{{ route('barrios.index') }}";
         }
 
         function create(){
             $(".btn").hide();
             $(".spinner-btn-send").show();
-            window.location.href = "{{ route('distritos.create') }}";
+            window.location.href = "{{ route('barrios.create') }}";
         }
     </script>
 @endsection

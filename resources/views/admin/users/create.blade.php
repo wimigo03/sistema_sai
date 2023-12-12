@@ -9,7 +9,7 @@
             </div>
             <div class="col-md-6 text-right">
                 <span class="tts:left tts-slideIn tts-custom" aria-label="Ir atras">
-                    <a href="{{ url('admin/users/index') }}" class="text-black">
+                    <a href="{{ url('admin/users/index') }}" class="text-dark">
                         <i class="fa fa-reply"></i>
                     </a>
                 </span>
@@ -28,13 +28,19 @@
             placeholder: "--Seleccionar--"
         });
     });
-    function store(){
+    function procesar(){
         var url = "{{ route('admin.users.store') }}";
         $("#form").attr('action', url);
         $(".btn").hide();
         $(".btn-importar").hide();
         $(".spinner-btn").show();
         $("#form").submit();
+    }
+    function cancelar(){
+        $(".btn").hide();
+        $(".btn-importar").hide();
+        $(".spinner-btn").show();
+        window.location.href = "{{ route('admin.users.index') }}";
     }
 </script>
 @endsection

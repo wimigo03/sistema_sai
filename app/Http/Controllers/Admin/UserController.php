@@ -24,13 +24,13 @@ use App\Http\Requests;
 class UserController extends Controller
 {
     public function index(){
-        abort_if(Gate::denies('users_access'), Response::HTTP_FORBIDDEN, 'Forbidden');
+        //abort_if(Gate::denies('users_access'), Response::HTTP_FORBIDDEN, 'Forbidden');
         $users = User::orderBy('id', 'desc')->paginate(10);
         return view('admin.users.index', compact('users'));
     }
 
     public function search(Request $request){
-        abort_if(Gate::denies('users_access'), Response::HTTP_FORBIDDEN, 'Forbidden');
+        //abort_if(Gate::denies('users_access'), Response::HTTP_FORBIDDEN, 'Forbidden');
         $users = User::query()
                         ->byNombre(strtoupper($request->nombre))
                         ->byApPaterno(strtoupper($request->ap_pat))
@@ -68,18 +68,16 @@ class UserController extends Controller
     }
 
     public function create(){
-        abort_if(Gate::denies('user_create'), Response::HTTP_FORBIDDEN, 'Forbidden');
-        //$roles = DB::table('roles')->get();
+        //abort_if(Gate::denies('user_create'), Response::HTTP_FORBIDDEN, 'Forbidden');
         $roles = Role::pluck('title','id');
-        //$empleados = DB::table('empleados')->get();
         $empleados = EmpleadosModel::select(DB::raw("concat(nombres,' ',ap_pat,' ',ap_mat) as nombre_completo"),'idemp as id')->pluck('nombre_completo','id');
-        //dd($empleados);
         return view('admin.users.create', compact('roles', 'empleados'));
     }
 
-    public function store(StoreUserRequest $request){dd($request->all());
+    public function store(StoreUserRequest $request){
+        //dd($request->all());
         User::create($request->validated());
-        return redirect()->route('admin.users.index')->with(['status-success' => "New User Created"]);
+        return redirect()->route('admin.users.index')->with(['status-success' => "Usuario registrado con exito."]);
     }
 
     public function show(User $user){

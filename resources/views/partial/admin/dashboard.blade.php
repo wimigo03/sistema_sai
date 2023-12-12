@@ -68,15 +68,20 @@
                             <span class="fa fa-arrow-circle-left float-right"></span>
                         </a>
                         <ul class="sub-menu collapse" id="dashboard_canasta_v2">
-                            @can('agenda_ejecutivo')
-                                <li>
-                                    <a href="{{ route('canasta.barrios.index') }}">  
-                                        <span class="nav-label mr-4">
-                                            <i class="fa-solid fa-house"></i>&nbsp;Barrios
-                                        </span>
-                                    </a>
-                                </li>
-                            @endcan
+                            <li>
+                                <a href="{{ route('distritos.index') }}">  
+                                    <span class="nav-label mr-4">
+                                        <i class="fa-solid fa-house"></i>&nbsp;Distritos
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('barrios.index') }}">  
+                                    <span class="nav-label mr-4">
+                                        <i class="fa-solid fa-house"></i>&nbsp;Barrios
+                                    </span>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     {{-- USUARIOS --}}

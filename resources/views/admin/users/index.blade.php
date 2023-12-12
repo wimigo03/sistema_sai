@@ -19,20 +19,13 @@
             });
         });
 
-        $('.search').on('keypress', function(event) {
-            if (event.which === 13) {
-                search();
-                event.preventDefault();
-            }
-        });
-
         function create(){
             $(".btn").hide();
             $(".btn-importar").hide();
             $(".spinner-btn").show();
             window.location.href = "{{ route('admin.users.create') }}";
         }
-        function search(){
+        function procesar(){
             var url = "{{ route('admin.users.search') }}";
             $("#form").attr('action', url);
             $(".btn").hide();

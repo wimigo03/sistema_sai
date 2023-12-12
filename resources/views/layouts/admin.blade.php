@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{{ asset('admin_assets/plugins/slim-select/slimselect.min.css') }}">
     <link rel="stylesheet" href="{{ asset('dataTable_1.10.22/css/jquery.dataTables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('dataTable_1.10.22/css/responsive.dataTables.min.css') }}">
+    <link href="{{ asset('dashboard/css/select2.min.css') }}" rel="stylesheet">
     {{--<link rel="stylesheet" href="{{ asset('plugins2/datatables/dataTables.css') }}" />--}}
     <link href="{{ asset('dashboard/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('dashboard/css/fonts/roboto.css') }}" rel="stylesheet">
@@ -21,9 +22,10 @@
     <link href="{{ asset('dashboard/css/owl.carousel.min.css') }}" rel="stylesheet">
     <link href="{{ asset('dashboard/css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('font-awesome_6.0/css/all.css') }}" rel="stylesheet">
-    <link href="{{ asset('dashboard/css/select2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('datepicker/datepicker.min.css') }}" rel="stylesheet">
     <link href="{{ asset('dashboard/css/tooltips.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/notificaciones/Lobibox.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/notificaciones/notifications.css') }}" rel="stylesheet">
     <style>
         #customers-table tbody td.details-control {
             background-image: url('{{ asset('admin_assets/images/details_open.png') }}');
@@ -48,6 +50,8 @@
             padding: 0px;
         }
     </style>
+    @include('layouts.modal.alerta')
+    @include('layouts.modal.confirmar')
     @yield('styles')
 </head>
 <body style="background-color: #fafafa;" {{--onLoad="document.getElementById('alx').click();"--}}>
@@ -58,6 +62,7 @@
             <div class="container-xl">
                 <br>
                 <br>
+                {{--@include('components.flash_alerts')--}}
                 @yield('content')
                 <form action="{{ route('logout') }}" method="POST" id="logout-form">
                     @csrf
@@ -70,12 +75,17 @@
     <script src="{{ asset('dataTable_1.10.22/js/jquery-3.5.1.js') }}"></script>
     <script src="{{ asset('dataTable_1.10.22/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('dataTable_1.10.22/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('dashboard/js/select2.min.js') }}"></script>
     <script src="{{ asset('dashboard/js/popper.min.js') }}"></script>
     <script src="{{ asset('dashboard/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('dashboard/js/main.js') }}"></script>
-    <script src="{{ asset('dashboard/js/select2.min.js') }}"></script>
     <script src="{{ asset('datepicker/datepicker.min.js') }}"></script>
     <script src="{{ asset('datepicker/datepicker.es.js') }}"></script>
+    <script src="{{ asset('js/notificaciones/Lobibox.js') }}"></script>
+    <script src="{{ asset('js/notificaciones/notification-active.js') }}"></script>
+    <script src="{{ asset('js/auxiliares.js') }}"></script>
+
+    @include('layouts.modal.notificaciones')
 
     <script>
         var id = 2;
@@ -207,9 +217,9 @@ function fetchdata() {
 });
 }
 
-        $(document).ready(function() {
+        /*$(document).ready(function() {
             setInterval(fetchdata, 4000);
-        });
+        });*/
 
 
         function notifyMe() {

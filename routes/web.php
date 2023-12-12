@@ -121,7 +121,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
     Route::get('compras/enviar/{id}', 'CompraController@enviar')->name('compras.pedido.enviar');
 
     /////////////////////////--COMPRAS PEDIDO PARCIAL--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    Route::get('compras/pedidoparcial/index', 'CompraController2@index')->name('compras.pedidoparcial.index');
+    Route::get('compras/pedidoparcial/index', 'CompraController2@index')->name('compras.pedidoparcial.index')->middleware('can:compras_panel_access');
     Route::get('compras/pedidoparcial/create', 'CompraController2@create')->name('compras.pedidoparcial.create');
     Route::post('compras/pedidoparcial/store', 'CompraController2@store')->name('compras.pedidoparcial.store');
     Route::get('compras/pedidoparcial/editar/{id}', 'CompraController2@editar')->name('compras.pedidoparcial.editar');
@@ -682,8 +682,27 @@ Route::get('canasta/periodos/index', 'Canasta\PeriodosController@index')->name('
 Route::get('canasta/periodos/search', 'Canasta\PeriodosController@search')->name('canasta.periodos.search');
 Route::get('canasta/entregas/index', 'Canasta\EntregasController@index')->name('canasta.entregas.index');
 
-/**CANASTA V2*/
+/**CANASTA V2 DISTRITOS*/
 Route::get('distritos/', 'Canasta_v2\DistritosV2Controller@index')->name('distritos.index');
+Route::get('distritos/search', 'Canasta_v2\DistritosV2Controller@search')->name('distritos.search');
+Route::get('distritos/excel', 'Canasta_v2\DistritosV2Controller@excel')->name('distritos.excel');
+Route::get('distritos/create', 'Canasta_v2\DistritosV2Controller@create')->name('distritos.create');
+Route::post('distritos/store', 'Canasta_v2\DistritosV2Controller@store')->name('distritos.store');
+Route::get('distritos/editar/{id}', 'Canasta_v2\DistritosV2Controller@editar')->name('distritos.editar');
+Route::post('distritos/update', 'Canasta_v2\DistritosV2Controller@update')->name('distritos.update');
+Route::get('distritos/habilitar/{id}', 'Canasta_v2\DistritosV2Controller@habilitar')->name('distritos.habilitar');
+Route::get('distritos/deshabilitar/{id}', 'Canasta_v2\DistritosV2Controller@deshabilitar')->name('distritos.deshabilitar');
+
+/**CANASTA V2 BARRIOS*/
+Route::get('barrios/', 'Canasta_v2\BarriosV2Controller@index')->name('barrios.index');
+Route::get('barrios/search', 'Canasta_v2\BarriosV2Controller@search')->name('barrios.search');
+Route::get('barrios/excel', 'Canasta_v2\BarriosV2Controller@excel')->name('barrios.excel');
+Route::get('barrios/create', 'Canasta_v2\BarriosV2Controller@create')->name('barrios.create');
+Route::post('barrios/store', 'Canasta_v2\BarriosV2Controller@store')->name('barrios.store');
+Route::get('barrios/editar/{id}', 'Canasta_v2\BarriosV2Controller@editar')->name('barrios.editar');
+Route::post('barrios/update', 'Canasta_v2\BarriosV2Controller@update')->name('barrios.update');
+Route::get('barrios/habilitar/{id}', 'Canasta_v2\BarriosV2Controller@habilitar')->name('barrios.habilitar');
+Route::get('barrios/deshabilitar/{id}', 'Canasta_v2\BarriosV2Controller@deshabilitar')->name('barrios.deshabilitar');
 
 
 //Route::get('compras/pedido/index2', 'CompraController@index2')->name('compras.pedido.index2');

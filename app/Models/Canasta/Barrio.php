@@ -5,12 +5,15 @@ namespace App\Models\Canasta;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Canasta\Dea;
+use App\Models\Canasta\Distrito;
 
-class Distrito extends Model
+class Barrio extends Model
 {
-    protected $table = 'distritos';
+    protected $table = 'barrios';
     protected $fillable = [
+        'tipo',
         'nombre',
+        'distrito_id',
         'user_id',
         'dea_id',
         'estado'
@@ -19,6 +22,11 @@ class Distrito extends Model
     const ESTADOS = [
         '1' => 'HABILITADO',
         '2' => 'NO HABILITADO'
+    ];
+
+    const TIPOS = [
+        '1' => 'BARRIO',
+        '2' => 'LOCALIDAD'
     ];
 
     public function getStatusAttribute(){
@@ -30,6 +38,15 @@ class Distrito extends Model
         }
     }
 
+    public function getTipoBAttribute(){
+        switch ($this->tipo) {
+            case '1': 
+                return "BARRIO";
+            case '2': 
+                return "LOCALIDAD";
+        }
+    }
+
     public function user(){
         return $this->belongsTo(User::class,'user_id','id');
     }
@@ -38,16 +55,37 @@ class Distrito extends Model
         return $this->belongsTo(Dea::class,'dea_id','id');
     }
 
+    public function distrito(){
+        return $this->belongsTo(Distrito::class,'distrito_id','id');
+    }
+
     public function scopeByCodigo($query, $codigo){
         if($codigo){
             return $query->where('id', $codigo);
+        }
+    }
+
+    public function scopeByTipo($query, $tipo){
+        if($tipo){
+            return $query->where('tipo', $tipo);
         }
     }
     
     public function scopeByNombre($query, $nombre){
         if($nombre){
             return $query->whereRaw('upper(nombre) like ?', ['%'.strtoupper($nombre).'%']);
+        }
+    }
 
+    public function scopeByDea($query, $dea_id){
+        if($dea_id){
+            return $query->where('dea_id',$dea_id);
+        }
+    }
+
+    public function scopeByDistrito($query, $distrito_id){
+        if($distrito_id){
+            return $query->where('distrito_id',$distrito_id);
         }
     }
 
@@ -59,12 +97,6 @@ class Distrito extends Model
                             ->from('users')
                             ->whereRaw('upper(name) like ?', [strtoupper($usuario)]);
                     });
-        }
-    }
-
-    public function scopeByDea($query, $dea_id){
-        if($dea_id){
-            return $query->where('dea_id',$dea_id);
         }
     }
 

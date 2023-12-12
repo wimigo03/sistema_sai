@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Canasta\Dea;
 
 class User extends Authenticatable
 {
@@ -20,6 +21,7 @@ class User extends Authenticatable
         'role_id',
         'idemp',
         'estadouser',
+        'dea_id'
     ];
 
     protected $hidden = [
@@ -58,6 +60,10 @@ class User extends Authenticatable
        return $this->belongsTo(EmpleadosModel::class, 'idemp', 'idemp');
     }
 
+    public function dea(){
+        return $this->belongsTo(Dea::class, 'dea_id', 'id');
+     }
+
     public function getNombreCompletoAttribute(){
         if($this->idemp != null){
             $empleado = EmpleadosModel::where('idemp',$this->idemp)->first();
@@ -84,7 +90,7 @@ class User extends Authenticatable
                     ->whereIn('idemp', function ($subquery) use($nombre) {
                         $subquery->select('idemp')
                             ->from('empleados')
-                            ->where('nombres','like','%'.$nombre.'%');
+                            ->whereRaw('upper(nombres) like ?', ['%'.strtoupper($nombre).'%']);
                     });
         }
     }
@@ -95,7 +101,7 @@ class User extends Authenticatable
                     ->whereIn('idemp', function ($subquery) use($ap_pat) {
                         $subquery->select('idemp')
                             ->from('empleados')
-                            ->where('ap_pat',$ap_pat);
+                            ->whereRaw('upper(ap_pat) like ?', ['%'.strtoupper($ap_pat).'%']);
                     });
         }
     }
@@ -106,20 +112,20 @@ class User extends Authenticatable
                     ->whereIn('idemp', function ($subquery) use($ap_mat) {
                         $subquery->select('idemp')
                             ->from('empleados')
-                            ->where('ap_mat',$ap_mat);
+                            ->whereRaw('upper(ap_mat) like ?', ['%'.strtoupper($ap_mat).'%']);
                     });
         }
     }
 
     public function scopeByUsername($query, $username){
         if($username != null){
-            return $query->where('name','like','%'.$username.'%');
+            return $query->whereRaw('upper(name) like ?', ['%'.strtoupper($username).'%']);
         }
     }
 
     public function scopeByEmail($query, $email){
         if($email != null){
-            return $query->where('email','like','%'.$email.'%');
+            return $query->whereRaw('upper(email) like ?', ['%'.strtoupper($email).'%']);
         }
     }
 
