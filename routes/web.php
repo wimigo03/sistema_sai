@@ -71,7 +71,7 @@ Route::get('/', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::get('admin/users/index', [UserController::class, 'index'])->name('admin.users.index');
+    /*Route::get('admin/users/index', [UserController::class, 'index'])->name('admin.users.index');
     Route::get('admin/users/search', [UserController::class, 'search'])->name('admin.users.search');
     Route::get('admin/users/excel', [UserController::class, 'excel'])->name('admin.users.excel');
     Route::get('admin/users/create', [UserController::class, 'create'])->name('admin.users.create');
@@ -79,7 +79,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin/users/edit/{id}', [UserController::class, 'edit'])->name('admin.users.edit');
     Route::put('admin/users/update', [UserController::class, 'update'])->name('admin.users.update');
     Route::get('admin/users/baja/{id}', [UserController::class, 'baja'])->name('admin.users.baja');
-    Route::get('admin/users/alta/{id}', [UserController::class, 'alta'])->name('admin.users.alta');
+    Route::get('admin/users/alta/{id}', [UserController::class, 'alta'])->name('admin.users.alta');*/
 
     Route::get('/compras/medidas/create', [MedidaController::class, 'create'])->name('medidas.create');
 

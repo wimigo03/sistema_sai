@@ -24,13 +24,11 @@ use App\Http\Requests;
 class UserController extends Controller
 {
     public function index(){
-        //abort_if(Gate::denies('users_access'), Response::HTTP_FORBIDDEN, 'Forbidden');
         $users = User::orderBy('id', 'desc')->paginate(10);
         return view('admin.users.index', compact('users'));
     }
 
     public function search(Request $request){
-        //abort_if(Gate::denies('users_access'), Response::HTTP_FORBIDDEN, 'Forbidden');
         $users = User::query()
                         ->byNombre(strtoupper($request->nombre))
                         ->byApPaterno(strtoupper($request->ap_pat))
@@ -68,16 +66,14 @@ class UserController extends Controller
     }
 
     public function create(){
-        //abort_if(Gate::denies('user_create'), Response::HTTP_FORBIDDEN, 'Forbidden');
         $roles = Role::pluck('title','id');
         $empleados = EmpleadosModel::select(DB::raw("concat(nombres,' ',ap_pat,' ',ap_mat) as nombre_completo"),'idemp as id')->pluck('nombre_completo','id');
         return view('admin.users.create', compact('roles', 'empleados'));
     }
 
     public function store(StoreUserRequest $request){
-        //dd($request->all());
         User::create($request->validated());
-        return redirect()->route('admin.users.index')->with(['status-success' => "Usuario registrado con exito."]);
+        return redirect()->route('users.index')->with(['status-success' => "Usuario registrado con exito."]);
     }
 
     public function show(User $user){
@@ -94,24 +90,20 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, User $user){
         $user->update(array_filter($request->validated()));
-        return redirect()->route('admin.users.index')->with(['status-success' => "User Updated"]);
+        return redirect()->route('users.index')->with(['status-success' => "User Updated"]);
     }
 
     public function destroy(User $user){
-        abort_if(Gate::denies('user_delete'), Response::HTTP_FORBIDDEN, 'Forbidden');
-
         $user->delete();
         return redirect()->back()->with(['status-success' => "User Deleted"]);
     }
 
     public function altaUser(User $user){
-        abort_if(Gate::denies('user_delete'), Response::HTTP_FORBIDDEN, 'Forbidden');
         $user->delete();
         return redirect()->back()->with(['status-success' => "User Deleted"]);
     }
 
     public function bajaUser(User $user){
-        abort_if(Gate::denies('user_delete'), Response::HTTP_FORBIDDEN, 'Forbidden');
         $user->delete();
         return redirect()->back()->with(['status-success' => "User Deleted"]);
     }
@@ -120,13 +112,13 @@ class UserController extends Controller
         $Users = User::find($id);
         $Users->estadouser = 0;
         $Users->save();
-        return redirect()->route('admin.users.index');
+        return redirect()->route('users.index');
     }
 
     public function alta($id){
         $Users = User::find($id);
         $Users->estadouser = 1;
         $Users->save();
-        return redirect()->route('admin.users.index');
+        return redirect()->route('users.index');
     }
 }

@@ -651,7 +651,7 @@
                                 <span class="fa fa-arrow-circle-left float-right"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_personeria"
-                                @if (request()->is('admin/users') || request()->is('admin/users/*')) in @endif>
+                                @if (request()->is('users') || request()->is('users/*')) in @endif>
                                 @can('areas_access')
                                     <li>
                                         <a href="{{ route('activos.index') }}">
@@ -672,7 +672,7 @@
                                 <span class="fa fa-arrow-circle-left float-right"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_activos_fijos"
-                                @if (request()->is('admin/users') || request()->is('admin/users/*')) in @endif>
+                                @if (request()->is('users') || request()->is('users/*')) in @endif>
                                     @can('areas_access')
                                         <li>
                                             <a href="{{ route('activos.index') }}">
@@ -775,7 +775,7 @@
                                 <span class="fa fa-arrow-circle-left float-right"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_activos_fijos"
-                                @if (request()->is('admin/users') || request()->is('admin/users/*')) in @endif>
+                                @if (request()->is('users') || request()->is('users/*')) in @endif>
                                 @can('unidadadmin_access')
                                     <li>
                                         <a href="{{ route('activo.unidadadmin.index') }}">

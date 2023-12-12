@@ -23,10 +23,10 @@
             $(".btn").hide();
             $(".btn-importar").hide();
             $(".spinner-btn").show();
-            window.location.href = "{{ route('admin.users.create') }}";
+            window.location.href = "{{ route('users.create') }}";
         }
         function procesar(){
-            var url = "{{ route('admin.users.search') }}";
+            var url = "{{ route('users.search') }}";
             $("#form").attr('action', url);
             $(".btn").hide();
             $(".btn-importar").hide();
@@ -37,10 +37,10 @@
             $(".btn").hide();
             $(".btn-importar").hide();
             $(".spinner-btn").show();
-            window.location.href = "{{ route('admin.users.index') }}";
+            window.location.href = "{{ route('users.index') }}";
         }
         function excel(){
-            var url = "{{ route('admin.users.excel') }}";
+            var url = "{{ route('users.excel') }}";
             $("#form").attr('action', url);
             $("#form").submit();
         }
