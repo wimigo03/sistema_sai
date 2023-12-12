@@ -28,6 +28,8 @@ class SolicitudController extends Controller
 {
 
     public function index(Request $request){
+
+       //
         if ($request->ajax()) {
 
         $solicitud = DB::table('solicitud as s')
