@@ -62,18 +62,7 @@ use App\Http\Controllers\Activo\ResponsableArchivoController;
 use App\Http\Controllers\Activo\ResponsableController;
 use App\Http\Controllers\Activo\ResponsableImagenController;
 use App\Http\Controllers\Activo\UbicacionesController;
-
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+use App\Http\Controllers\Canasta_v2\BarriosV2Controller;
 
 Route::get('/', function () {
     //return view('welcome');
@@ -98,24 +87,19 @@ Route::middleware(['auth'])->group(function () {
     Route::get('rechumanos/planta/lista2/show/{id}', [PlantaController::class, 'detallePlantaShow'])->name('planta.listageneral.show');
 });
 
+    
+
 Auth::routes();
 
-
-
 Route::group(['prefix'=>"admin",'as' => 'admin.','namespace' => 'App\Http\Controllers\Admin','middleware' => ['auth','AdminPanelAccess']], function () {
-
     Route::get('/', 'HomeController@index')->name('home');
     Route::resource('/users', 'UserController');
     Route::resource('/roles', 'RoleController');
     Route::resource('/permissions', 'PermissionController')->except(['show']);
-
-
 });
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
-
-//////////////////////////////////////  MEDIDAS  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     Route::get('compras/medidas/index', [MedidaController::class,'index'])->name('medidas.index')->middleware('can:medidas_access');
     Route::get('compras/medidas/list', [MedidaController::class,'listado'])->name('medidas.list');
@@ -129,40 +113,41 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin/users/alta/{id}', [Admin\UserController::class,'alta'])->name('users.alta');
     Route::get('admin/users//index', [Admin\UserController::class,'index'])->name('users.index');
 
-/////////////////////////--COMPRAS PEDIDO--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////--COMPRAS PEDIDO--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('compras/pedido/index', [CompraController::class,'index'])->name('compras.pedido.index');
-Route::get('compras/pedido/index2', [CompraController::class,'index2'])->name('compras.pedido.index2');
-Route::get('compras/pedido/create', [CompraController::class,'create'])->name('compras.pedido.create');
-Route::post('compras/pedido/store', [CompraController::class,'store'])->name('compras.pedido.store');
-Route::get('compras/pedido/edit/{id}', [CompraController::class,'edit'])->name('compras.pedido.edit');
-Route::get('compras/pedido/editar/{id}', [CompraController::class,'editar'])->name('compras.pedido.editar');
-Route::post('compras/pedido/update', [CompraController::class,'update'])->name('compras.pedido.update');
+    Route::get('compras/pedido/index', [CompraController::class,'index'])->name('compras.pedido.index');
+    Route::get('compras/pedido/index2', [CompraController::class,'index2'])->name('compras.pedido.index2');
+    Route::get('compras/pedido/create', [CompraController::class,'create'])->name('compras.pedido.create');
+    Route::post('compras/pedido/store', [CompraController::class,'store'])->name('compras.pedido.store');
+    Route::get('compras/pedido/edit/{id}', [CompraController::class,'edit'])->name('compras.pedido.edit');
+    Route::get('compras/pedido/editar/{id}', [CompraController::class,'editar'])->name('compras.pedido.editar');
+    Route::post('compras/pedido/update', [CompraController::class,'update'])->name('compras.pedido.update');
+
     /////////////////////////--COMPRAS PEDIDO PARCIAL--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    Route::get('compras/pedidoparcial/index', 'CompraController2@index')->name('compras.pedidoparcial.index')->middleware('can:compras_panel_access');
-    Route::get('compras/pedidoparcial/create', 'CompraController2@create')->name('compras.pedidoparcial.create');
-    Route::post('compras/pedidoparcial/store', 'CompraController2@store')->name('compras.pedidoparcial.store');
-    Route::get('compras/pedidoparcial/editar/{id}', 'CompraController2@editar')->name('compras.pedidoparcial.editar');
-    Route::post('compras/pedidoparcial/update', 'CompraController2@update')->name('compras.pedidoparcial.update');
-    Route::get('compras/pedidoparcial/edit/{id}', 'CompraController2@edit')->name('compras.pedidoparcial.edit');
+    Route::get('compras/pedidoparcial/index', [CompraController2::class,'index'])->name('compras.pedidoparcial.index');
+    Route::get('compras/pedidoparcial/create', [CompraController2::class,'create'])->name('compras.pedidoparcial.create');
+    Route::post('compras/pedidoparcial/store', [CompraController2::class,'store'])->name('compras.pedidoparcial.store');
+    Route::get('compras/pedidoparcial/editar/{id}', [CompraController2::class,'editar'])->name('compras.pedidoparcial.editar');
+    Route::post('compras/pedidoparcial/update', [CompraController2::class,'update'])->name('compras.pedidoparcial.update');
+    Route::get('compras/pedidoparcial/edit/{id}', [CompraController2::class,'edit'])->name('compras.pedidoparcial.edit');
 
-///////////////////////////////--COMPRAS DETALLE--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-Route::get('compras/detalle/index', [DetalleCompraController::class,'index'])->name('compras.detalle.index');
-Route::post('compras/detalle/store', [DetalleCompraController::class,'store'])->name('compras.detalle.store');
-Route::get('compras/detalle/principal/{id}', [DetalleCompraController::class,'crearOrdenxxx'])->name('compras.detalle.principal');
-Route::post('compras/detalle/principal/store', [DetalleCompraController::class,'crearOrden'])->name('compras.detalle.principal.store');
-Route::get('compras/detalle/{id}/principalorden', [DetalleCompraController::class,'crearOrdendocxx'])->name('compras.detalle.principalorden');
-Route::get('compras/detalle/show', [DetalleCompraController::class,'show'])->name('compras.detalle.show');
-Route::post('compras/detalle/principalorden', [DetalleCompraController::class,'crearOrdendoc'])->name('DetalleCompraController.crearOrdendoc');
-Route::get('compras/detalle/{id}/destroyed2', [DetalleCompraController::class,'destroyed2'])->name('DetalleCompraController.eliminar2');
-Route::get('compras/delete/{id}', [DetalleCompraController::class,'delete'])->name('compras.detalle.delete');
-Route::get('compras/aprovar/{id}', [DetalleCompraController::class,'aprovar'])->name('compras.detalle.aprovar');
+    ///////////////////////////////--COMPRAS DETALLE--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    Route::get('compras/detalle/index', [DetalleCompraController::class,'index'])->name('compras.detalle.index');
+    Route::post('compras/detalle/store', [DetalleCompraController::class,'store'])->name('compras.detalle.store');
+    Route::get('compras/detalle/principal/{id}', [DetalleCompraController::class,'crearOrdenxxx'])->name('compras.detalle.principal');
+    Route::post('compras/detalle/principal/store', [DetalleCompraController::class,'crearOrden'])->name('compras.detalle.principal.store');
+    Route::get('compras/detalle/{id}/principalorden', [DetalleCompraController::class,'crearOrdendocxx'])->name('compras.detalle.principalorden');
+    Route::get('compras/detalle/show', [DetalleCompraController::class,'show'])->name('compras.detalle.show');
+    Route::post('compras/detalle/principalorden', [DetalleCompraController::class,'crearOrdendoc'])->name('DetalleCompraController.crearOrdendoc');
+    Route::get('compras/detalle/{id}/destroyed2', [DetalleCompraController::class,'destroyed2'])->name('DetalleCompraController.eliminar2');
+    Route::get('compras/delete/{id}', [DetalleCompraController::class,'delete'])->name('compras.detalle.delete');
+    Route::get('compras/aprovar/{id}', [DetalleCompraController::class,'aprovar'])->name('compras.detalle.aprovar');
 
-Route::get('compras/detalle/invitacion/{id}', [DetalleCompraController::class,'invitacion'])->name('compras.detalle.principal.invitacion');
-Route::get('compras/detalle/aceptacion/{id}', [DetalleCompraController::class,'aceptacion'])->name('compras.detalle.principal.aceptacion');
-Route::get('compras/detalle/cotizacion/{id}', [DetalleCompraController::class,'cotizacion'])->name('compras.detalle.principal.cotizacion');
-Route::get('compras/detalle/adjudicacion/{id}', [DetalleCompraController::class,'adjudicacion'])->name('compras.detalle.principal.adjudicacion');
-Route::get('compras/detalle/orden/{id}', [DetalleCompraController::class,'orden'])->name('compras.detalle.principal.orden');
+    Route::get('compras/detalle/invitacion/{id}', [DetalleCompraController::class,'invitacion'])->name('compras.detalle.principal.invitacion');
+    Route::get('compras/detalle/aceptacion/{id}', [DetalleCompraController::class,'aceptacion'])->name('compras.detalle.principal.aceptacion');
+    Route::get('compras/detalle/cotizacion/{id}', [DetalleCompraController::class,'cotizacion'])->name('compras.detalle.principal.cotizacion');
+    Route::get('compras/detalle/adjudicacion/{id}', [DetalleCompraController::class,'adjudicacion'])->name('compras.detalle.principal.adjudicacion');
+    Route::get('compras/detalle/orden/{id}', [DetalleCompraController::class,'orden'])->name('compras.detalle.principal.orden');
 
 
 
@@ -184,24 +169,24 @@ Route::get('compras/detalle/orden/{id}', [DetalleCompraController::class,'orden'
     Route::get('compras/detalleparcial/adjudicacion/{id}', [DetalleCompraController2::class,'adjudicacion'])->name('compras.detalleparcial.principal.adjudicacion');
     Route::get('compras/detalleparcial/orden/{id}', [DetalleCompraController2::class,'orden'])->name('compras.detalleparcial.principal.orden');
 
-///////////////////////////--COMPRAS PARTIDA--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////--COMPRAS PARTIDA--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('compras/partida/index', [PartidaController::class,'index'])->name('partida.index');
-Route::get('compras/partida/listado', [PartidaController::class,'listado'])->name('partida.list');
+    Route::get('compras/partida/index', [PartidaController::class,'index'])->name('partida.index');
+    Route::get('compras/partida/listado', [PartidaController::class,'listado'])->name('partida.list');
 
-////////////////////////////--COMPRAS PRODUCTO--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////--COMPRAS PRODUCTO--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('compras/productos/index', [ProdServController::class,'index'])->name('productos.index');
-Route::get('compras/productos/list', [ProdServController::class,'list'])->name('producto.list');
-Route::get('compras/productos/{id}/edit', [ProdServController::class,'editar'])->name('productos.edit');
-Route::POST('compras/productos/{id}/update', [ProdServController::class,'update'])->name('productos.update');
-Route::get('compras/productos/create', [ProdServController::class,'create'])->name('productos.create');
-Route::POST('compras/productos/store', [ProdServController::class,'store'])->name('productos.store');
+    Route::get('compras/productos/index', [ProdServController::class,'index'])->name('productos.index');
+    Route::get('compras/productos/list', [ProdServController::class,'list'])->name('producto.list');
+    Route::get('compras/productos/{id}/edit', [ProdServController::class,'editar'])->name('productos.edit');
+    Route::POST('compras/productos/{id}/update', [ProdServController::class,'update'])->name('productos.update');
+    Route::get('compras/productos/create', [ProdServController::class,'create'])->name('productos.create');
+    Route::POST('compras/productos/store', [ProdServController::class,'store'])->name('productos.store');
 
-///////////////////////////--EMPLEADOS--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////--EMPLEADOS--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('compras/empleados/index', [EmpleadosController::class,'index'])->name('empleados.index');
-Route::get('compras/empleados/list', [EmpleadosController::class,'list'])->name('empleados.list');
+    Route::get('compras/empleados/index', [EmpleadosController::class,'index'])->name('empleados.index');
+    Route::get('compras/empleados/list', [EmpleadosController::class,'list'])->name('empleados.list');
 
 
     /*RECURSOS HUMANOS PLANTA*/
@@ -244,26 +229,26 @@ Route::get('compras/empleados/list', [EmpleadosController::class,'list'])->name(
     Route::get('compras/proveedores/{id}/createdocproveedor', [ProveedoresController::class,'createdoc'])->name('ProveedoresController.createdoc')->middleware('can:proveedores_access');
     Route::POST('compras/proveedores/insertar', [ProveedoresController::class,'insertar'])->name('ProveedoresController.insertar')->middleware('can:proveedores_access');
 
-        /*COMPRAS AREAS*/
-        Route::get('compras/areas/index', [AreasController::class,'index'])->name('areas.index')->middleware('can:areas_access');
-        Route::get('compras/areas/list', [AreasController::class,'listado'])->name('areas.list')->middleware('can:areas_access');
-        Route::get('compras/areas/create', [AreasController::class,'create'])->name('areas.create')->middleware('can:areas_access');
-        Route::get('compras/areas/{id}/edit', [AreasController::class,'edit'])->name('areas.edit')->middleware('can:areas_access');
-        Route::POST('compras/areas/{id}/update', [AreasController::class,'update'])->name('areas.update')->middleware('can:areas_access');
-        Route::POST('compras/areas/store', [AreasController::class,'store'])->name('areas.store')->middleware('can:areas_access');
-        Route::get('compras/areas/{id}/file', [AreasController::class,'file'])->name('areas.file')->middleware('can:areas_access');
-        Route::get('compras/areas/{id}/crearFile', [AreasController::class,'crearFile'])->name('areas.crearFile')->middleware('can:areas_access');
-        Route::POST('compras/areas/guardarfile', [AreasController::class,'guardarfile'])->name('areas.guardarfile')->middleware('can:areas_access');
-        Route::get('compras/areas/{id}/actualizarfile', [AreasController::class,'editfile'])->name('file.edit')->middleware('can:areas_access');
-        Route::POST('compras/areas/updatefile', [AreasController::class,'updatefile'])->name('file.update')->middleware('can:areas_access');
-        Route::get('compras/areas/{id}/file2', [AreasController::class,'file2'])->name('areas.file2')->middleware('can:areas_access');
-        Route::get('compras/areas/{id}/crearFile2', [AreasController::class,'crearFile2'])->name('areas.crearFile2')->middleware('can:areas_access');
-        Route::POST('compras/areas/guardarfile2', [AreasController::class,'guardarfile2'])->name('areas.guardarfile2')->middleware('can:areas_access');
-        Route::get('compras/areas/{id}/actualizarfile2', [AreasController::class,'editfile2'])->name('file2.edit')->middleware('can:areas_access');
-        Route::POST('compras/areas/updatefile2', [AreasController::class,'updatefile2'])->name('file2.update')->middleware('can:areas_access');
+    /*COMPRAS AREAS*/
+    Route::get('compras/areas/index', [AreasController::class,'index'])->name('areas.index')->middleware('can:areas_access');
+    Route::get('compras/areas/list', [AreasController::class,'listado'])->name('areas.list')->middleware('can:areas_access');
+    Route::get('compras/areas/create', [AreasController::class,'create'])->name('areas.create')->middleware('can:areas_access');
+    Route::get('compras/areas/{id}/edit', [AreasController::class,'edit'])->name('areas.edit')->middleware('can:areas_access');
+    Route::POST('compras/areas/{id}/update', [AreasController::class,'update'])->name('areas.update')->middleware('can:areas_access');
+    Route::POST('compras/areas/store', [AreasController::class,'store'])->name('areas.store')->middleware('can:areas_access');
+    Route::get('compras/areas/{id}/file', [AreasController::class,'file'])->name('areas.file')->middleware('can:areas_access');
+    Route::get('compras/areas/{id}/crearFile', [AreasController::class,'crearFile'])->name('areas.crearFile')->middleware('can:areas_access');
+    Route::POST('compras/areas/guardarfile', [AreasController::class,'guardarfile'])->name('areas.guardarfile')->middleware('can:areas_access');
+    Route::get('compras/areas/{id}/actualizarfile', [AreasController::class,'editfile'])->name('file.edit')->middleware('can:areas_access');
+    Route::POST('compras/areas/updatefile', [AreasController::class,'updatefile'])->name('file.update')->middleware('can:areas_access');
+    Route::get('compras/areas/{id}/file2', [AreasController::class,'file2'])->name('areas.file2')->middleware('can:areas_access');
+    Route::get('compras/areas/{id}/crearFile2', [AreasController::class,'crearFile2'])->name('areas.crearFile2')->middleware('can:areas_access');
+    Route::POST('compras/areas/guardarfile2', [AreasController::class,'guardarfile2'])->name('areas.guardarfile2')->middleware('can:areas_access');
+    Route::get('compras/areas/{id}/actualizarfile2', [AreasController::class,'editfile2'])->name('file2.edit')->middleware('can:areas_access');
+    Route::POST('compras/areas/updatefile2', [AreasController::class,'updatefile2'])->name('file2.update')->middleware('can:areas_access');
 
 
-        //////////////////////////////--COMPRAS PROGRAMAS--////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////--COMPRAS PROGRAMAS--////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     Route::get('compras/programas/index', [ProgramaController::class,'index'])->name('programas.index')->middleware('can:programas_access');
     Route::get('compras/programas/list', [ProgramaController::class,'listado'])->name('programas.list')->middleware('can:programas_access');
@@ -274,21 +259,21 @@ Route::get('compras/empleados/list', [EmpleadosController::class,'list'])->name(
 
 
 
-////////////////////////////////--COMPRAS CATEGORIAS PROGRAMATICAS--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////--COMPRAS CATEGORIAS PROGRAMATICAS--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('compras/catprog/index', [CatProgController::class,'index'])->name('catprog.index')->middleware('can:catprog_access');
-Route::get('compras/catprog/list', [CatProgController::class,'listado'])->name('catprog.list')->middleware('can:catprog_access');
-Route::get('compras/catprog/{id}/edit', [CatProgController::class,'editar'])->name('catprog.edit')->middleware('can:catprog_access');
-Route::POST('compras/catprog/{id}/update', [CatProgController::class,'update'])->name('catprog.update')->middleware('can:catprog_access');
-Route::get('compras/catprog/create', [CatProgController::class,'create'])->name('catprog.create')->middleware('can:catprog_access');
-Route::POST('compras/catprog/store', [CatProgController::class,'store'])->name('catprog.store')->middleware('can:catprog_access');
+    Route::get('compras/catprog/index', [CatProgController::class,'index'])->name('catprog.index')->middleware('can:catprog_access');
+    Route::get('compras/catprog/list', [CatProgController::class,'listado'])->name('catprog.list')->middleware('can:catprog_access');
+    Route::get('compras/catprog/{id}/edit', [CatProgController::class,'editar'])->name('catprog.edit')->middleware('can:catprog_access');
+    Route::POST('compras/catprog/{id}/update', [CatProgController::class,'update'])->name('catprog.update')->middleware('can:catprog_access');
+    Route::get('compras/catprog/create', [CatProgController::class,'create'])->name('catprog.create')->middleware('can:catprog_access');
+    Route::POST('compras/catprog/store', [CatProgController::class,'store'])->name('catprog.store')->middleware('can:catprog_access');
 
-////////////////////////////////--ACTIVOS FIJOS--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////--ACTIVOS FIJOS--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('activosFijos/activos', [ActivosController::class,'index'])->name('activos.index');
+    Route::get('activosFijos/activos', [ActivosController::class,'index'])->name('activos.index');
 
-  //  Route::get('activosFijos/activos', 'ActivosController@index')->name('activos.index');
-  Route::group(['namespace' => 'App\Http\Controllers\Activo'], function () {
+    //  Route::get('activosFijos/activos', 'ActivosController@index')->name('activos.index');
+    Route::group(['namespace' => 'App\Http\Controllers\Activo'], function () {
 
     Route::get('Activo/organismo/index', [OrganismofinController::class, 'index'])->name('activo.organismo.index')->middleware('can:organismo_access');
     Route::get('Activo/organismo/list', [OrganismofinController::class, 'listado'])->name('activo.organismo.list')->middleware('can:organismo_access');
@@ -506,7 +491,7 @@ Route::get('activosFijos/activos', [ActivosController::class,'index'])->name('ac
     Route::get('Activo/configuracion', [ConfiguracionController::class, 'index'])->name('activo.configuracion.index');
     Route::post('Activo/configuracion/general', [ConfiguracionController::class, 'guardarConfiguracionGeneral'])->name('configuracion.general.guardar');
     Route::get('Activo/configuracion/usuarios', [ConfiguracionController::class, 'usuarios'])->name('configuracion.usuarios');
-
+//Fin de Auth
 });
     Route::get('activosFijos/activos', 'ActivosController@index')->name('activos.index');
 
@@ -698,27 +683,8 @@ Route::get('canasta/periodos/index', 'Canasta\PeriodosController@index')->name('
 Route::get('canasta/periodos/search', 'Canasta\PeriodosController@search')->name('canasta.periodos.search');
 Route::get('canasta/entregas/index', 'Canasta\EntregasController@index')->name('canasta.entregas.index');
 
-/**CANASTA V2 DISTRITOS*/
+/**CANASTA V2*/
 Route::get('distritos/', 'Canasta_v2\DistritosV2Controller@index')->name('distritos.index');
-Route::get('distritos/search', 'Canasta_v2\DistritosV2Controller@search')->name('distritos.search');
-Route::get('distritos/excel', 'Canasta_v2\DistritosV2Controller@excel')->name('distritos.excel');
-Route::get('distritos/create', 'Canasta_v2\DistritosV2Controller@create')->name('distritos.create');
-Route::post('distritos/store', 'Canasta_v2\DistritosV2Controller@store')->name('distritos.store');
-Route::get('distritos/editar/{id}', 'Canasta_v2\DistritosV2Controller@editar')->name('distritos.editar');
-Route::post('distritos/update', 'Canasta_v2\DistritosV2Controller@update')->name('distritos.update');
-Route::get('distritos/habilitar/{id}', 'Canasta_v2\DistritosV2Controller@habilitar')->name('distritos.habilitar');
-Route::get('distritos/deshabilitar/{id}', 'Canasta_v2\DistritosV2Controller@deshabilitar')->name('distritos.deshabilitar');
-
-/**CANASTA V2 BARRIOS*/
-Route::get('barrios/', 'Canasta_v2\BarriosV2Controller@index')->name('barrios.index');
-Route::get('barrios/search', 'Canasta_v2\BarriosV2Controller@search')->name('barrios.search');
-Route::get('barrios/excel', 'Canasta_v2\BarriosV2Controller@excel')->name('barrios.excel');
-Route::get('barrios/create', 'Canasta_v2\BarriosV2Controller@create')->name('barrios.create');
-Route::post('barrios/store', 'Canasta_v2\BarriosV2Controller@store')->name('barrios.store');
-Route::get('barrios/editar/{id}', 'Canasta_v2\BarriosV2Controller@editar')->name('barrios.editar');
-Route::post('barrios/update', 'Canasta_v2\BarriosV2Controller@update')->name('barrios.update');
-Route::get('barrios/habilitar/{id}', 'Canasta_v2\BarriosV2Controller@habilitar')->name('barrios.habilitar');
-Route::get('barrios/deshabilitar/{id}', 'Canasta_v2\BarriosV2Controller@deshabilitar')->name('barrios.deshabilitar');
 
 
 //Route::get('compras/pedido/index2', 'CompraController@index2')->name('compras.pedido.index2');
@@ -1175,5 +1141,81 @@ Route::group(['namespace' => 'App\Http\Controllers\Almacen\Ingreso'], function()
 
  Route::get('almacenes/reporte/solicituddos/{id}', 'ReporteAreasController@solicituddos')->name('almacenes.reporte.solicituddos')->middleware('can:almacen_ingreso_access');
 
+
+});
+
+
+Route::group(['namespace' => 'App\Http\Controllers\Fexpo'], function() {
+
+
+    Route::get('expochaco/pdf-reporte', 'SolicitudController@reporte')
+    ->name('expochaco.reporte');
+
+    Route::get('expochaco/index', 'SolicitudController@index')
+    ->name('expochaco.index');
+
+    Route::get('expochaco/index2', 'SolicitudController@index2')
+    ->name('expochaco.index2');
+
+    Route::get('expochaco/create', 'SolicitudController@create')
+    ->name('expochaco.create');
+
+    Route::post('expochaco/store', 'SolicitudController@store')
+    ->name('expochaco.store');
+
+    Route::get('expochaco/{id}/editar', 'SolicitudController@editar')
+    ->name('expochaco.editar');
+
+
+    Route::get('expochaco/imprimir/{id}', 'SolicitudController@imprimirboleta')
+    ->name('expochaco.imprimir');
+
+    Route::post('expochaco/update', 'SolicitudController@update')
+    ->name('expochaco.update');
+
+    Route::get('expochaco/delete2/{id}', 'SolicitudController@delete')
+    ->name('expochaco.delete');
+
+    Route::get('expochaco/aprovar/{id}', 'SolicitudController@aprovar')
+    ->name('expochaco.aprovar');
+
+    Route::get('expochaco/credenciales/{id}', 'SolicitudController@credencial')
+    ->name('expochaco.credencial');
+
+    Route::get('expochaco/credenciales/{id}', 'SolicitudController@credencial')
+    ->name('expochaco.credencial');
+
+
+    Route::get('expochaco/createcredencial/{id}', 'SolicitudController@createcredencial')->name('credencial.create');
+    Route::POST('expochaco/insertarcredencial', 'SolicitudController@insertarcredencial')->name('credencial.insertarcredencial');
+
+    Route::get('expochaco/generarqr/{id}', 'SolicitudController@codigoqr')
+    ->name('expochaco.generarqr');
+
+
+    Route::post('/ruta2', 'SolicitudController@respuesta2')->name('pregunta2');
+
+    //Route::get('qrcode', function () {
+       // return QrCode::size(300)->generate('A basic example of QR code!');
+   // })->name('qrr');
+
+
+
+   Route::get('expochaco3/index', 'SolicitudController2@index')
+   ->name('expochaco3.index');
+
+   Route::post('expochaco3/index2/{id}', 'SolicitudController2@update')
+   ->name('employees.update');
+
+   Route::get('expochaco3/index3/{id}', 'SolicitudController2@borrar')
+   ->name('employees.destroy');
+
+///////////
+Route::get('derivacion/index', 'Recepcion2Controller@indexderivacion')->name('derivacion.index');
+Route::get('derivacion/{id}/gestionarCorrespondencia', 'Recepcion2Controller@gestionarCorrespondencia2')->name('derivacion.gestionar');
+Route::get('correspondencia2/urlfilederivacion/{id}', 'Recepcion2Controller@urlfile')->name('derivacion.urlfilederivacion');
+Route::get('correspondencia2/pregunta', 'Recepcion2Controller@pregunta2')->name('derivacion.pregunta');
+Route::get('/get-users', 'Recepcion2Controller@getUsers')->name('get-users');
+Route::post('/ruta', 'Recepcion2Controller@respuesta')->name('pregunta');
 
 });
