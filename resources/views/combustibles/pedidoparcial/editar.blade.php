@@ -54,12 +54,9 @@
                 <label for="tipo" class="d-inline font-verdana-bg">
                     <b>Tipo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <select name="tipo" id="tipo" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
-
-                    <option {{old('tipo',$compras->tipo)=="1"? 'selected':''}}  value="1">PRODUCTO</option>
-                    <option {{old('tipo',$compras->tipo)=="2"? 'selected':''}} value="2">SERVICIO</option>
-
-                </select>
+                <input type="text" disabled name="tipo" 
+                value="{{$Tipos}}" 
+                class="form-control form-control-sm font-verdana-bg" id="tipo">
             </div>
 
 
@@ -67,36 +64,17 @@
                 <label for="idarea" class="d-inline font-verdana-bg">
                     <b>Area</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <select name="idarea" id="idarea" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
-                    <option value="">-</option>
-                    @foreach ($areas as $area)
-
-                    @if ($area->idarea==$compras->idarea)
-                    <option value="{{$area->idarea}}" selected>{{$area->nombrearea}}</option>
-                    @else
-                    <option disabled value="{{$area->idarea}}">{{$area->nombrearea}}</option>
-                    @endif
-
-                    @endforeach
-                </select>
+                <input type="text" disabled name="idarea" 
+                value="{{$personalArea->nombrearea}}" 
+                class="form-control form-control-sm font-verdana-bg" id="idarea">
             </div>
             <div class="col-md-4">
                 <label for="idprograma" class="d-inline font-verdana-bg">
                     <b>Programa</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <select name="idprograma" id="idprograma" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
-                    <option value="">-</option>
-                    @foreach ($programas as $programa)
-
-                                @if ($programa->idprogramacomb==$compras->idprogramacomb)
-                                <option value="{{$programa->idprogramacomb}}" selected>{{$programa->nombreprograma}}
-                                </option>
-                                @else
-                                <option value="{{$programa->idprogramacomb}}">{{$programa->nombreprograma}}</option>
-                                @endif
-
-                                @endforeach
-                </select>
+                <input type="text" disabled name="idprograma" 
+                value="{{$nombrePro}}" 
+                class="form-control form-control-sm font-verdana-bg" id="idprograma">
             </div>
             <div class="col-md-5">
                 <label for="idcatprogramatica" class="d-inline font-verdana-bg">

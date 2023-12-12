@@ -2,22 +2,27 @@
 @section('content')
     @include('layouts.message_alert')
 
-    <div class="row font-verdana-bg"  >
+    <div class="row font-verdana-bg">
 
         <div class="col-md-12 text-right titulo">
-            <b>CREAR NUEVA SOLICITUD DE PABELLON</b>
+            <b style="color: green">SOLICITUD DE STAND PABELLON GRAN CHACO</b>
+            <hr class="hrr">
         </div>
 
     </div>
+
     <form action="{{ route('expochaco.store') }}" method="post" id="form">
         @csrf
 
-        <input type="hidden" name="pabellon"  id="pabellon" value="GRAN CHACO">
+        <input type="hidden" name="pabellon" id="pabellon" value="GRAN CHACO">
 
-        <input type="hidden" name="superficie"  id="superficie" value="3x3">
+        <input type="hidden" name="superficie" id="superficie" value="3x3">
 
         <input type="hidden" name="precio" id="precio" value="250">
-
+        <input type="hidden" name="ci2" id="ci2">
+        <label for="representante" class="d-inline font-verdana-bg">
+            <b style="color: green">DATOS DEL PABELLON</b>
+        </label>
         <div class="body-border" style="background-color: #FFFFFF;">
 
             <div class="form-group row">
@@ -31,15 +36,15 @@
 
                 <div class="col-md-4">
                     <label for="superficie2" class="d-inline font-verdana-bg">
-                        <b>SUPERFICIE</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                        <b>SUPERFICIE POR STAND</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                     </label>
                     <input type="text" name="superficie2" disabled class="form-control form-control-sm font-verdana-bg"
                         id="superficie2" value="3x3">
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-4">
                     <label for="superficie" class="d-inline font-verdana-bg">
-                        <b>PRECIO EN Bs.</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                        <b>PRECIO POR STAND (En Bs.)</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                     </label>
                     <input type="text" name="precio2" disabled class="form-control form-control-sm font-verdana-bg"
                         id="precio2" value="250">
@@ -48,20 +53,29 @@
             </div>
         </div>
         <label for="representante" class="d-inline font-verdana-bg">
-            <b>DATOS DEL SOLICITANTE</b>&nbsp;<span style="font-size:10px; color: red;"></span>
+            <b style="color: green">DATOS DEL SOLICITANTE</b>
         </label>
         <div class="body-border" style="background-color: #FFFFFF;">
 
             <div class="form-group row">
 
 
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label for="nombresolicitud" class="d-inline font-verdana-bg">
                         <b>NOMBRES Y APELLIDOS DEL SOLICITANTE</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                     </label>
-                    <textarea name="nombresolicitud" cols="1" rows="2" class="form-control form-control-sm font-verdana-bg"
-                        id="nombresolicitud" onchange="javascript:this.value=this.value.toUpperCase();"></textarea>
+                    <input type="text" name="nombresolicitud" cols="1" rows="1" class="form-control form-control-sm font-verdana-bg"
+                        id="nombresolicitud" onchange="javascript:this.value=this.value.toUpperCase();">
                 </div>
+
+                <div class="col-md-4">
+                    <label for="ci" class="d-inline font-verdana-bg">
+                        <b>N° C.I.</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                    </label>
+                    <input type="text" name="ci" class="form-control form-control-sm font-verdana-bg" id="ci"
+                        onchange="myFunction()">
+                </div>
+
 
 
                 <div class="col-md-4">
@@ -71,30 +85,45 @@
                     <select name="asociacionsol" id="asociacionsol" placeholder="--Seleccionar--"
                         class="form-control form-control-sm select">
                         <option value="">-</option>
-                        <option value="FEREMIPE">FEREMIPE</option>
-                        <option value="CAPIA">CAPIA</option>
+                        <option value="FEREMYPE">FEREMYPE</option>
+                        <option value="CAPPIA">CAPPIA</option>
                         <option value="COORDINADORA FERIAS">COORDINADORA FERIAS</option>
                         <option value="APICULTORES">APICULTORES</option>
                         <option value="ARTESANOS">ARTESANOS</option>
+                        <option value="ASOVIT">ASOVIT</option>
+                        <option value="OTROS">OTROS(Especifique el campo siguiente..)</option>
 
                     </select>
                 </div>
 
-
-                <div class="col-md-2">
-                    <label for="ci" class="d-inline font-verdana-bg">
-                        <b>N° C.I.</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                <div class="col-md-6">
+                    <label for="cirepresentante" class="d-inline font-verdana-bg">
+                        <b>OTROS ASOCIACION/ FEDERACION(En caso que selecciono otros en el campo anterior)</b>&nbsp;<span
+                            style="font-size:10px; color: red;">*</span>
                     </label>
-                    <input type="text" name="ci" class="form-control form-control-sm font-verdana-bg" id="ci"
-                        onchange="javascript:this.value=this.value.toUpperCase();">
+                    <input type="text" name="otros" class="form-control form-control-sm font-verdana-bg"
+                        id="otros" onchange="javascript:this.value=this.value.toUpperCase();">
                 </div>
+
+
+
+
 
                 <div class="col-md-6">
                     <label for="direccionsol" class="d-inline font-verdana-bg">
-                        <b>DIRECCION DEL TALLER/NEGOCIO</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                        <b>DIRECCION DEL TALLER/NEGOCIO O EMPRENDIMIENTO</b>&nbsp;<span
+                            style="font-size:10px; color: red;">*</span>
                     </label>
                     <textarea name="direccionsol" cols="1" rows="3" class="form-control form-control-sm font-verdana-bg"
                         id="direccionsol" onchange="javascript:this.value=this.value.toUpperCase();"></textarea>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="ciudad" class="d-inline font-verdana-bg">
+                        <b>DISTRITO/CIUDAD</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                    </label>
+                    <textarea name="ciudad" cols="1" rows="2" class="form-control form-control-sm font-verdana-bg"
+                        id="ciudad" onchange="javascript:this.value=this.value.toUpperCase();"></textarea>
                 </div>
 
 
@@ -115,18 +144,15 @@
 
 
 
-                        <input id="correosol" type="text"
-                        class="form-control form-control-sm font-verdana-bg"
-                            name="correosol" value="{{ old('correosol') }}"
-                            required autocomplete="correosol"
-                             onkeypress="return validarCorreo(correo);">
+                    <input id="correosol" type="text" class="form-control form-control-sm font-verdana-bg"
+                        name="correosol">
 
 
 
 
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label for="idrubro" class="d-inline font-verdana-bg">
                         <b>RUBRO:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                     </label>
@@ -176,14 +202,14 @@
 
         </div>
         <label for="representante" class="d-inline font-verdana-bg">
-            <b>DATOS DEL REPRESENTANTE</b>&nbsp;<span style="font-size:10px; color: red;"></span>
+            <b style="color: green">DATOS DEL REPRESENTANTE</b>
         </label>
         <div class="body-border" style="background-color: #FFFFFF;">
 
             <div class="form-group row">
                 <div class="col-md-6">
                     <label for="representante" class="d-inline font-verdana-bg">
-                        <b>REPRESENTANTE LEGAL ASOCIACION O INSTITUCION</b>&nbsp;<span
+                        <b>NOMBRE DEL REPRESENTANTE LEGAL ASOCIACION O INSTITUCION</b>&nbsp;<span
                             style="font-size:10px; color: red;">*</span>
                     </label>
                     <textarea name="representante" cols="1" rows="2" class="form-control form-control-sm font-verdana-bg"
@@ -197,18 +223,20 @@
                     <input type="text" name="cirepresentante" class="form-control form-control-sm font-verdana-bg"
                         id="cirepresentante" onchange="javascript:this.value=this.value.toUpperCase();">
                 </div>
+
+
             </div>
         </div>
 
         <div align='center'>
 
-            <div class="body-border col-md-3" style="background-color: #FFFFFF;">
+            <div class="body-border col-md-4" style="background-color: #FFFFFF;">
 
                 <div class="form-group row">
-                    <div class="col-md-12 text-right">
+                    <div class="col-md-12    text-right">
                         <button class="btn btn-danger font-verdana-bg" type="button" onclick="cancelar();">
 
-                            <a  style="color:white">Cancelar</a>
+                            <a style="color:white">Cancelar</a>
                         </button>
                         <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send"
                             style="display: none;"></i>
@@ -256,79 +284,146 @@
             window.location.href = "{{ url('https://granchaco.gob.bo/') }}";
         }
 
-        function validar_formulario(){
+        function validar_formulario() {
 
 
-if($("#nombresol").val() == ""){
-    message_alert("El campo <b>[NOMBRES Y APELLIDOS]</b> es un dato obligatorio...");
-    return false;
-}
-if($("#asociacionsol>option:selected").val() == ""){
-    message_alert("El campo <b>[ASOCIACION]</b> es un dato obligatorio...");
-    return false;
-}
+            if ($("#nombresolicitud").val() == "") {
+                message_alert("El campo <b>[NOMBRES Y APELLIDOS]</b> es un dato obligatorio...");
+                return false;
+            }
 
-if($("#ci").val() == ""){
-    message_alert("El campo <b>[C.I No]</b> es un dato obligatorio...");
-    return false;
-}
-
-if($("#direccionsol").val() == ""){
-    message_alert("El campo <b>[DIRECCION]</b> es un dato obligatorio...");
-    return false;
-}
-
-if($("#telefonosol").val() == ""){
-    message_alert("El campo <b>[TELEFONO]</b> es un dato obligatorio...");
-    return false;
-}
-
-     if($("#correosol").val() == "" ){
-       message_alert("El campo <b>[CORREO]</b> es un dato obligatorio...");
-       return false;
-   }
-
-if(!validarCorreo($("#correosol").val())){
-
-      message_alert("El campo <b>[CORREO]</b> no es un correo valido...");
-      return false;
-  }
+            if ($("#ci").val() == "") {
+                message_alert("El campo <b>[C.I No]</b> es un dato obligatorio...");
+                return false;
+            }
 
 
+            if ($("#ci2").val() == "alexis") {
+                $("#ci2").val('');
+                $("#ci").val('');
+                $("#nombresolicitud").val('');
 
-if($("#idrubro >option:selected").val() == ""){
-    message_alert("El campo de seleccion <b>[RUBRO]</b> es un dato obligatorio...");
-    return false;
-}
+                message_alert("La persona con este <b>[CI]</b> ya existe en nuestros registros...");
+                return false;
+
+            }
+
+            if ($("#asociacionsol>option:selected").val() == "") {
+                message_alert("El campo <b>[ASOCIACION/FEDERACION]</b> es un dato obligatorio...");
+                return false;
+            }
+
+            if ($("#asociacionsol>option:selected").val() == "OTROS") {
+
+
+                if ($("#otros").val() == "") {
+                    message_alert("Especifique en <b>[OTROS ASOCIACION/ FEDERACION]</b> a la cual pertenece...");
+                    return false;
+                }
+
+            }
 
 
 
-if($("#representante").val() == ""){
-    message_alert("El campo <b>[REPRESENTANTE LEGAL ASOCIACION O INSTITUCION]</b> es un dato obligatorio...");
-    return false;
-}
 
 
 
-if($("#cirepresentante").val() == ""){
-    message_alert("El campo <b>[CI REPRESENTANTE]</b> es un dato obligatorio...");
-    return false;
-}
-return true;
-}
+
+            if ($("#direccionsol").val() == "") {
+                message_alert("El campo <b>[DIRECCION]</b> es un dato obligatorio...");
+                return false;
+            }
+            if ($("#ciudad").val() == "") {
+                message_alert("El campo <b>[DISTRITO/CIUDAD]</b> es un dato obligatorio...");
+                return false;
+            }
 
 
-function validarCorreo(correo) {
 
-var regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[c-o-m]{3,}$/;
-return regex.test(correo);
+            if ($("#telefonosol").val() == "") {
+                message_alert("El campo <b>[TELEFONO]</b> es un dato obligatorio...");
+                return false;
+            }
 
-}
+
 
 borrar de abajo
 function valideNumber(evt) {
     var code = (evt.which) ? evt.which : evt.keyCode;
 
+
+            if ($("#idrubro >option:selected").val() == "") {
+                message_alert("El campo de seleccion <b>[RUBRO]</b> es un dato obligatorio...");
+                return false;
+            }
+
+
+
+            if ($("#representante").val() == "") {
+                message_alert("El campo <b>[REPRESENTANTE LEGAL ASOCIACION O INSTITUCION]</b> es un dato obligatorio...");
+                return false;
+            }
+
+
+
+
+            return true;
+        }
+
+
+
+
+        function myFunction() {
+            respuesta();
+        }
+
+        function respuesta() {
+            var ot_antigua = $("#ci").val();
+
+            $.ajax({
+                url: "{{ route('pregunta2') }}",
+
+                data: 'ot_antigua=' + ot_antigua,
+                //url:"{{ route('pregunta2') }}/"+id,
+                //url: '/ruta2/' + id,
+                dataType: "html",
+                asycn: false,
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+
+                dataType: 'JSON',
+                success: function(data) {
+                    // console.log(data); //Try to log the data and check the response
+                    if (data.success == true) {
+
+                        // iiii='345';
+
+                        // hola();
+                        //respuesta = 1;
+                        $("#ci2").val('alexis');
+                        //console.log(alex2);
+                        //respuesta(iii);
+                        //return (data.success);
+                        // return alex2;
+                        //return regex.test(data)
+                        //alert('success :  user logged in');
+                        //notifyMe();
+                        //return true;
+
+                    }
+
+                }
+
+
+
+            });
+
+
+
+        }
+    </script>
     // Permitir solo dígitos y teclas de control
     if ((code >= 48 && code <= 57) || (code >= 37 && code <= 40) || code == 8 || code == 9) {
         return true;
@@ -356,14 +451,14 @@ if($detallito->isEmpty()){
 
 
 if ($Cantidadrest >= 0) {
-   
+
     $detalle->save();
 
     $request->session()->flash('message', 'Registro Agregado',);
 } else {
-    
+
     $request->session()->flash('message', 'La cantidad debe ser menor o igual que: '.$Cantidadsalidados.' Litros'  );
-}       
+}
 // $request->session()->flash('message', 'Registro Agregado',);
 }else{
 $request->session()->flash('message', 'El Item Ya existe en la Planilla');

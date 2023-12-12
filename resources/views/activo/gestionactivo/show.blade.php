@@ -38,7 +38,7 @@
         </div>
         <div class="col-md-3">
             <b>FEUL:</b>
-            <h6>{{ $actual->feul }}</h6>
+            <h6>{{ $actual->ano }}-{{ $actual->mes }}-{{ $actual->dia }}</h6>
         </div>
         <div class="col-md-3">
             <b>USUARIO:</b>
@@ -82,6 +82,10 @@
             <b>OBSERVACIONES</b>
             <h6>{{ $actual->observaciones }}</h6>
         </div>
+        <div class="col-md-3">
+            <b>AMBIENTE</b>
+            <h6>{{ optional($actual->ambiente)->nombre }}</h6>
+        </div>
     </div>
     <div class="row">
         <div class="col-md-3">
@@ -104,7 +108,14 @@
         </div>
         <div class="col-md-2">
             <b>% DEPRECIACION:</b>
-            <h6>{{ number_format((1 / $actual->vidautil) * 100, 2) }}</h6>
+            <h6>
+                @if($actual->vidautil != 0)
+                    {{ number_format((1 / $actual->vidautil) * 100, 2) }}
+                @else
+                    0
+                @endif
+            </h6>
+            
         </div>
         <div class="col-md-2">
             <b>DEPRE GESTION:</b>
@@ -123,8 +134,12 @@
             <h6>{{ date('d-m-Y') }}</h6>
         </div>
         <div class="col-md-3">
-            <b>UFV:</b>
-            <h6>2.35998</h6>
+            <b>Ufv Inicial:</b>
+            <h6>{{ $ufInicial }}</h6>
+        </div>
+        <div class="col-md-3">
+            <b>Ufv Actual:</b>
+            <h6>{{ $ufActual }}</h6>
         </div>
     </div>
     <div class="row">
@@ -170,21 +185,22 @@
                     '{{ $actual->mes - 1 }}',
                     '{{ $actual->dia }}'
                 );
-
+                var ufInicial = '{{ $ufInicial }}';
+                var ufActual = '{{ $ufActual }}';
                 $('#factor_actual').html(
-                    factorActual(costoInicial, vidaUtil).toFixed(2)
+                    factorActual(ufInicial, ufActual).toFixed(2)
                 );
                 $('#depre_acumulada').html(
-                    depreciacionAcumulada(costoInicial, vidaUtil, fechaInicial).toFixed(2)
+                    depreciacionAcumulada(costoInicial, vidaUtil, fechaInicial, ufInicial, ufActual).toFixed(2)
                 );
                 $('#valor_actual').html(
-                    valorActual(costoInicial, vidaUtil, fechaInicial).toFixed(2)
+                    valorActual(costoInicial, vidaUtil, fechaInicial, ufInicial,ufActual).toFixed(2)
                 );
                 $('#depre_gestion').html(
-                    depreciacionAcumuladaGestion(costoInicial, vidaUtil).toFixed(2)
+                    depreciacionAcumuladaGestion(costoInicial, vidaUtil, ufInicial,ufActual).toFixed(2)
                 );
                 $('#depre_acumulada_inicial').html(
-                    depreciacionAcumuladaInicial(costoInicial, vidaUtil, fechaInicial).toFixed(2)
+                    depreciacionAcumuladaInicial(costoInicial, vidaUtil, fechaInicial, ufInicial,ufActual).toFixed(2)
                 );
             });
         </script>

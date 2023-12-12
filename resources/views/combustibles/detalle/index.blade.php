@@ -25,28 +25,25 @@
     </div>
     <div class="col-md-12 text-right">
 
-        @if ($compras->idproveedor== 1)
-        <b style="color: orange">--Para aprovar la compra seleccione un Proveedor--</b>
-      @elseif ($compras->estadocompracomb == 1)
-
-
-      <a href="{{route('combustibles.detalle.aprovar',$compras->idcompracomb)}}" 
-        onclick="return confirm('Se va a aprovar la compra..esta seguro ?..')">
-        <button class="btn btn-sm  btn-info   font-verdana" type="button" >
-            &nbsp;<i class="fa fa-lg fa-thumbs-up" aria-hidden="true"></i>&nbsp;Aprovar Compra
-        </button>
-    </a>
-
-    <a href="{{route('combustibles.detalle.rechazar',$compras->idcompracomb)}}" 
+        @if ($estado == 1)
+        <a href="{{route('combustibles.detalle.aprovar',$compras->idcompracomb)}}" 
+          onclick="return confirm('Se va a aprovar la compra..esta seguro ?..')">
+          <button class="btn btn-sm  btn-info   font-verdana" type="button" >
+              &nbsp;<i class="fa fa-lg fa-thumbs-up" aria-hidden="true"></i>&nbsp;Aprobar Comprasss
+          </button>
+      </a>
+      <a href="{{route('combustibles.detalle.rechazar',$compras->idcompracomb)}}" 
         onclick="return confirm('Se va a rechazar la compra..esta seguro ?..')">
         <button class="btn btn-sm btn-warning btn-info   font-verdana" type="button" >
             &nbsp;<i class="fa fa-lg fa-thumbs-down" aria-hidden="true"></i>&nbsp;Rechazar Compra
         </button>
     </a>
+      @endif
 
-    @elseif ($compras->estadocompracomb == 2)
-    <b style="color: green">Compra Aprovada</b>
-
+        @if ($compras->idproveedor== 1)
+        <b style="color: orange">--Para aprovar la compra seleccione un Proveedor--</b>
+    
+  
       @endif
 
         <input type="hidden" value="{{$idcompracomb}}" id="idcompra">
@@ -55,20 +52,13 @@
 
         @if ($compras->estadocompracomb == 1)
         <b style="color: red">--No puede generar la orden de compra hasta que esta sea aprovada--</b>
-      @elseif ($estado == 1)
-      <a href="{{ route('combustibles.detalle.principalorden', $idcompracomb) }}" class="tts:left tts-slideIn tts-custom" aria-label="Ir a Orden de Compra">
-        <button class="btn btn-sm btn-success   font-verdana" type="button" >
-            &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;Acceder a la Orden de Compra
-        </button>
-    </a>
-    @elseif ($estado == 0)
-    <a href="{{ route('combustibles.detalle.principal', $idcompracomb) }}" class="tts:left tts-slideIn tts-custom" aria-label="Crear Orden de Compra">
-        <button class="btn btn-sm btn-warning   font-verdana" type="button" >
-            &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;Crear Orden de Compra
-        </button>
-    </a>
-      @endif
-        <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
+    <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
+    @endif
+
+    @if ($estado == 0)
+    <b style="color: rgb(162, 0, 255)">--No hay registro del detalle--</b>
+<i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
+@endif
     </div>
 </div>
 <div>

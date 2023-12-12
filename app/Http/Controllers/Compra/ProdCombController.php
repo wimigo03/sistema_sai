@@ -12,8 +12,8 @@ use App\Models\Compra\PartidaCombModel;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests;
 
-use DB;
-use DataTables;
+use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\User;
 use App\Models\EmpleadosModel;
@@ -62,7 +62,11 @@ class ProdCombController extends Controller
     public function store(Request $request)
     {
 
-     
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+
         $productos = new ProdcombModel();
         $productos -> codigoprodcomb = $request->input('codigoprodcomb');
         $productos -> nombreprodcomb = $request->input('nombre');
@@ -71,7 +75,8 @@ class ProdCombController extends Controller
             $productos -> idpartidacomb = $request->input('idpartidacomb');
 
         $productos -> estadoprodcomb = 1;
-
+        $productos ->idusuario =$id;
+        $productos ->idarea =$personalArea->idarea;
 
         if($productos->save()){
             $request->session()->flash('message', 'Registro Procesado');
@@ -120,8 +125,8 @@ class ProdCombController extends Controller
             $data = "hola";
             $data2 = "holaSSSS";
             $validarci = DB::table('prodcomb as s')
-            ->select('s.nombreprodcomb')
-           ->where('s.nombreprodcomb', $ot_antigua)
+            ->select('s.codigoprodcomb')
+           ->where('s.codigoprodcomb', $ot_antigua)
             ->get();
                if($validarci->count()>0){
             return ['success' => true, 'data' => $data];

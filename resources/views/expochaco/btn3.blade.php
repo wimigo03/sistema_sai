@@ -2,7 +2,7 @@
     <span class="tts:left tts-slideIn tts-custom" aria-label="Aprobar">
         <a href="{{ route('expochaco.aprovar', $idsolicitud) }}">
             <span class="text-primary">
-                <i class="fa-solid fa-2xl fa-square-info"></i>
+                <i class="fa-solid fa-xl fa-check" style="color: green"></i>
             </span>
         </a>
     </span>

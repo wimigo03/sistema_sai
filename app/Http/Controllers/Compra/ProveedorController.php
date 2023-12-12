@@ -12,7 +12,8 @@ use App\Models\Compra\DocProveedoresModel;
 
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests;
-use DB;
+
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 
 use App\Models\User;
@@ -43,7 +44,8 @@ class ProveedorController extends Controller
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('btn', 'combustibles.proveedor.btn')
-            ->rawColumns(['btn'])
+            ->addColumn('btn2', 'combustibles.proveedor.btn2')
+            ->rawColumns(['btn','btn2'])
             ->make(true);
     }
 
@@ -132,6 +134,10 @@ class ProveedorController extends Controller
 
     public function insertar(Request $request)
     {
+        try{
+            ini_set('memory_limit','-1');
+           ini_set('max_execution_time','-1');
+
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
@@ -149,7 +155,7 @@ class ProveedorController extends Controller
             if ($file->guessExtension() == "pdf") {
                 copy($file, $ruta);
             } else {
-                return back()->with(["error" => "File not available!"]);
+             return back()->with(["error" => "File not available!"]);
             }
    
         }
@@ -159,15 +165,16 @@ class ProveedorController extends Controller
         $docproveedor->documento = $personalArea->nombrearea . '/' . $nombre;
         $docproveedor->idproveedor = $idproveedor;
         $docproveedor->estadodocproveedores = 1;
-
-
         $docproveedor->save();
-
-
         return redirect()->action('App\Http\Controllers\Compra\ProveedorController@editardoc', [$idproveedor]);
-    }  
-    
-    
+    } catch (\Throwable $th){
+        return '[ERROR_500]';
+       }finally{
+       ini_restore('memory_limit');
+       ini_restore('max_execution_time');
+        }
+   }
+     
     public function respuesta2(Request $request)    {
         $ot_antigua=$_POST['ot_antigua'];
             $data = "hola";
@@ -180,6 +187,54 @@ class ProveedorController extends Controller
             return ['success' => true, 'data' => $data];
         } else  return ['success' => false, 'data' => $data2];
     }
+
+  
+    public function editararchivo($iddocproveedores)
+    {
+        $docproveedor = DocProveedoresModel::find($iddocproveedores);
+       
+        return view('combustibles.proveedor.editardocproveedor', ["docproveedor" => $docproveedor]);
+    
+        
+    }
+    public function updatearchivoproveedor(Request $request, $iddocproveedores)
+    {
+
+
+
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+
+        $docproveedor = DocProveedoresModel::find($iddocproveedores);
+        $idproveedor =  $docproveedor->idproveedor;
+        if ($request->file("documento") != null) {
+            if ($request->hasFile("documento")) {
+                $file = $request->file("documento");
+                $file_name = $file->getClientOriginalName();
+                $nombre = "pdf_" . time() . "." . $file->guessExtension();
+
+                $ruta = public_path("/Documentos/" . $personalArea->nombrearea . '/' . $nombre);
+
+                if ($file->guessExtension() == "pdf") {
+                    copy($file, $ruta);
+                } else {
+                    return back()->with(["error" => "File not available!"]);
+                }
+            }
+            $docproveedor->nombredocumento = $request->input('nombredocumento');
+            $docproveedor->documento = $personalArea->nombrearea . '/' . $nombre;
+            $docproveedor->save();
+
+        } else {
+            $docproveedor->nombredocumento = $request->input('nombredocumento');
+            $docproveedor->save();
+        }
+        return redirect()->action('App\Http\Controllers\Compra\ProveedorController@editardoc', [$idproveedor]);
+    }
+
+
  }
 
 

@@ -28,41 +28,36 @@
         @csrf
 
         <input type="hidden" name="cominterna2" id="cominterna2">
+
         <div class="form-group row">
 
             <div class="col-md-3">
                 <label for="oficina" class="d-inline font-verdana-bg">
                     <b>Oficina </b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <input type="text" name="oficina" 
-                value="{{request('oficina')}}" 
+                <input type="text" disabled name="oficina" 
+                value="{{$NomFci}}" 
                 class="form-control form-control-sm font-verdana-bg" 
                 id="oficina">
             </div>
 
+
+           
+            
             <div class="col-md-3">
                 <label for="cominterna" class="d-inline font-verdana-bg">
                     <b>Control Interno</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="number" name="cominterna"
                 class="form-control form-control-sm font-verdana-bg" 
-                id="cominterna"  onchange="myFunction()" onkeypress="return valideNumber(event);" onkeypress="return ceropositvo(evennt);" >
+                id="cominterna"  onchange="myFunction()">
                 {{-- onkeypress="return valideNumber(event);" --}}
             </div>
 
-            
-            <div class="col-md-2">
-                <label for="fechasol" class="d-inline font-verdana-bg">
-                    <b> fecha de solicitud</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input type="text" disabled name="fechasol" placeholder="dd/mm/yyyy"
-                 value="{{$date->format('d/m/Y')}}" 
-                class="form-control form-control-sm font-verdana-bg" 
-                id="fechasol" data-language="es" autocomplete="off" >
-            </div>
+            {{-- <input type="hidden" name="cominterna2" id="cominterna2"> --}}
             <div class="col-md-4">
                 <label for="referencia" class="d-inline font-verdana-bg">
-                    <b> referencia</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                    <b> Referencia</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="referencia" 
                 value="{{request('referencia')}}" 
@@ -70,6 +65,17 @@
                 id="referencia" >
             </div>
 
+            <div class="col-md-2">
+                <label for="fechasol" class="d-inline font-verdana-bg">
+                    <b> Fecha de solicitud</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="text" disabled name="fechasol" placeholder="dd/mm/yyyy"
+                 value="{{$date->format('d/m/Y')}}" 
+                class="form-control form-control-sm font-verdana-bg" 
+                id="fechasol" data-language="es" autocomplete="off" >
+            </div>
+           
+           
             <div class="col-md-4">
                 <label for="dirigidoa" class="d-inline font-verdana-bg">
                     <b>Dirigido A:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
@@ -117,17 +123,18 @@
 
             <div class="col-md-3">
                 <label for="fechasalida" class="d-inline font-verdana-bg">
-                    <b> fechasalida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                    <b> Fechasa de salida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="fechasalida" placeholder="dd/mm/aaaa"
                 value="{{request('fechasalida')}}" 
                 class="form-control form-control-sm font-verdana-bg" 
                 id="fechasalida" data-language="es" autocomplete="off" >
+                
             </div>
 
             <div class="col-md-3">
                 <label for="fecharetorno" class="d-inline font-verdana-bg" cols="2" rows="3">
-                    <b> fecharetorno</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                    <b> Fecha de retorno</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="fecharetorno" placeholder="dd/mm/aaaa"
                 value="{{request('fecharetorno')}}" 
@@ -141,7 +148,7 @@
 
             <div class="col-md-6">
                 <label for="detallesouconsumo" class="d-inline font-verdana-bg">
-                    <b>detallesouconsumo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                    <b>Detalle de solicitud</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
 
                 <textarea name="detallesouconsumo" cols="1" rows="5" 
@@ -153,7 +160,7 @@
             
             <div class="col-md-3">
                 <label for="tsalida" class="d-inline font-verdana-bg">
-                    <b> tsalida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                    <b> Salida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select type="text" id="tsalida" name="tsalida" placeholder="--Seleccionar--" 
                  
@@ -167,7 +174,7 @@
 
             <div class="col-md-3">
                 <label for="tllegada" class="d-inline font-verdana-bg">
-                    <b> t llegada</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                    <b> Llegada</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select type="text" name="tllegada"  id="tllegada"  placeholder="--Seleccionar--" 
                 
@@ -182,7 +189,7 @@
 
             <div class="col-md-4">
                 <label for="idlocalidad" class="d-inline font-verdana-bg">
-                    <b>localidad::</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                    <b>Localidad::</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="idlocalidad" id="idlocalidad" placeholder="--Seleccionar--" 
                 class="form-control form-control-sm select2">
@@ -198,13 +205,10 @@
                     <b>Area</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
 
-                <select name="idarea" id="idarea" placeholder="--Seleccionar--" 
-                class="form-control form-control-sm select2">
-                    <option value="">-</option>
-                    @foreach ($areas as $index => $value)
-                        <option value="{{ $index }}">{{ $value }}</option>
-                    @endforeach
-                </select>
+                <input type="text" disabled name="idarea" 
+                value="{{$personalArea->nombrearea}}" 
+                class="form-control form-control-sm font-verdana-bg" id="idarea">            
+         
             </div>
 
            
@@ -262,21 +266,18 @@
 
         function validar_formulario(){
 
-
-            if($("#oficina").val() == ""){
-                message_alert("El campo <b>[OFICINA]</b> es un dato obligatorio...");
+            if($("#referencia").val() == ""){
+                message_alert("El campo <b>[Referencia]</b> es un dato obligatorio...");
                 return false;
             }
             if($("#cominterna").val() == ""){
                 message_alert("El campo <b>[CONTROL INTERNO]</b> es un dato obligatorio...");
                 return false;
             }
-     
-         
             if ($("#cominterna2").val() == "comunicacion") {
                 $("#cominterna2").val('');
                 $("#cominterna").val('');
-                $("#oficina").val('');
+                $("#referencia").val('');
                 message_alert("El numero de <b>[Control Interno]</b> ya existe en nuestros registros...");
                 return false;
             }
@@ -296,10 +297,7 @@
                 return false;
             }
 
-            if($("#referencia").val() == ""){
-                message_alert("El campo <b>[Referencia]</b> es un dato obligatorio...");
-                return false;
-            }
+         
             if($("#fechasalida").val() == ""){
                 message_alert("El campo <b>[Fecha salida]</b> es un dato obligatorio...");
                 return false;
@@ -308,6 +306,14 @@
                 message_alert("El campo <b>[Fecha retorno]</b> es un dato obligatorio...");
                 return false;
             }
+
+            if($("#fechasalida").val() > $("#fecharetorno").val() ){
+                message_alert("El campo <b>[Fecha retorno]</b> es un dato incorrecto...");
+          
+                $("#fecharetorno").val('');
+                return false;
+            }
+
             if($("#detallesouconsumo").val() == ""){
                 message_alert("El campo <b>[Detalle]</b> es un dato obligatorio...");
                 return false;
@@ -336,7 +342,9 @@
           
             return true;
         }
-
+        
+        var fechaSalida = new Date($("#fechasalida").val());
+        var fechaRetorno = new Date($("#fecharetorno").val());
 
         function myFunction() {
             respuesta();
@@ -411,6 +419,8 @@
             dateFormat: "dd/mm/yyyy",
             autoClose: true
         });
-    
+  
+     
+
     </script>
 @endsection

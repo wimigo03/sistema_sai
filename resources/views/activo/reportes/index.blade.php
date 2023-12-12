@@ -148,7 +148,7 @@
                     <div class="row mb-2">
                         <label style="color:black;font-weight: bold;" class="col-md-3">DE: AÑO:</label>
                         <div class="input-group col-md-3">
-                            <input type="text" name="sigla" readonly class="form-control" value="2004">
+                            <input type="number" id="anio_ini" class="form-control" min="2004" value="2004">
                         </div>
                         <label style="color:black;font-weight: bold;" class="col-md-6">Año Inicial De Los Reportes A
                             Generar:</label>
@@ -156,7 +156,8 @@
                     <div class="row">
                         <label style="color:black;font-weight: bold;" class="col-md-3">A: AÑO:</label>
                         <div class="input-group col-md-3">
-                            <input type="text" name="sigla" readonly class="form-control" value="2023">
+                            <input type="number" max="{{ date('Y') }}" id="anio_fin" class="form-control"
+                                value="2023">
                         </div>
                         <label style="color:black;font-weight: bold;" class="col-md-6">Año Final De Los Reportes A
                             Generar:</label>
@@ -485,7 +486,8 @@
         var getActivos = null
         var activosSeleccionados = null
         var activos_ids = null
-
+        var anio_ini = null;
+        var anio_fin = null;
         $(document).ready(function() {
             // UNIDADES ADMINISTRATIVAS
             $('#unidad_admin').change(function() {
@@ -778,7 +780,9 @@
                 activosSeleccionados = getActivos.filter(function(activo) {
                     return activo.checked;
                 });
-                console.log(activosSeleccionados);
+                activos_ids = activosSeleccionados.map(function(activo) {
+                    return activo.id;
+                });
                 mostrarCantidadActivos(activosSeleccionados)
             });
 
@@ -808,6 +812,8 @@
 
             $('#abrirReportesModal').click(function() {
                 $('#reportesModal').modal('show');
+                anio_ini = $('#anio_ini').val();
+                anio_fin = $('#anio_fin').val();
             });
         });
 
@@ -850,7 +856,8 @@
             try {
                 errorActivos(activosSeleccionados);
                 const activosSeleccionadosJSON = JSON.stringify(activos_ids);
-                const url = `/reportes/rep1-pdf?unidad=${unidad}&activos=${activosSeleccionadosJSON}`;
+                const url =
+                    `/reportes/rep1-pdf?unidad=${unidad}&anio_ini=${anio_ini}&anio_fin=${anio_fin}&activos=${activosSeleccionadosJSON}`;
                 window.open(url, '_blank');
             } catch (error) {
                 console.error(error);
@@ -863,7 +870,7 @@
                 errorGrupo(grupo_id)
                 const activosSeleccionadosJSON = JSON.stringify(activos_ids);
                 const url =
-                    `/reportes/rep2-pdf?unidad=${unidad}&grupo_id=${grupo_id}&activos=${activosSeleccionadosJSON}`;
+                    `/reportes/rep2-pdf?unidad=${unidad}&anio_ini=${anio_ini}&anio_fin=${anio_fin}&grupo_id=${grupo_id}&activos=${activosSeleccionadosJSON}`;
                 window.open(url, '_blank');
             } catch (error) {
                 console.error(error);
@@ -876,7 +883,7 @@
                 errorGrupo(auxiliar_id)
                 const activosSeleccionadosJSON = JSON.stringify(activos_ids);
                 const url =
-                    `/reportes/rep3-pdf?unidad=${unidad}&grupo_id=${grupo_id}&auxiliar_id=${auxiliar_id}&activos=${activosSeleccionadosJSON}`;
+                    `/reportes/rep3-pdf?unidad=${unidad}&anio_ini=${anio_ini}&anio_fin=${anio_fin}&grupo_id=${grupo_id}&auxiliar_id=${auxiliar_id}&activos=${activosSeleccionadosJSON}`;
                 window.open(url, '_blank');
             } catch (error) {
                 console.error(error);
@@ -888,7 +895,7 @@
                 errorOficina(oficina_id)
                 const activosSeleccionadosJSON = JSON.stringify(activos_ids);
                 const url =
-                    `/reportes/rep4-pdf?unidad=${unidad}&oficina_id=${oficina_id}&activos=${activosSeleccionadosJSON}`;
+                    `/reportes/rep4-pdf?unidad=${unidad}&anio_ini=${anio_ini}&anio_fin=${anio_fin}&oficina_id=${oficina_id}&activos=${activosSeleccionadosJSON}`;
                 window.open(url, '_blank');
             } catch (error) {
                 console.error(error);
@@ -901,7 +908,7 @@
                 errorEmpleado(empleado_id)
                 const activosSeleccionadosJSON = JSON.stringify(activos_ids);
                 const url =
-                    `/reportes/rep5-pdf?unidad=${unidad}&oficina_id=${oficina_id}&empleado_id=${empleado_id}&activos=${activosSeleccionadosJSON}`;
+                    `/reportes/rep5-pdf?unidad=${unidad}&anio_ini=${anio_ini}&anio_fin=${anio_fin}&oficina_id=${oficina_id}&empleado_id=${empleado_id}&activos=${activosSeleccionadosJSON}`;
                 window.open(url, '_blank');
             } catch (error) {
                 console.error(error);
@@ -910,8 +917,9 @@
         const generarReportePdf6 = () => {
             try {
                 errorActivos(activosSeleccionados)
+                const activosSeleccionadosJSON = JSON.stringify(activos_ids);
                 const url =
-                    `/reportes/rep6-pdf?unidad=${unidad}`;
+                    `/reportes/rep6-pdf?unidad=${unidad}&anio_ini=${anio_ini}&anio_fin=${anio_fin}&activos=${activosSeleccionadosJSON}`;
                 window.open(url, '_blank');
             } catch (error) {
                 console.error(error);
@@ -922,7 +930,7 @@
                 errorOficina(oficina_id)
                 errorEmpleado(empleado_id)
                 const url =
-                    `/reportes/rep7-pdf?unidad=${unidad}&oficina_id=${oficina_id}&empleado_id=${empleado_id}`;
+                    `/reportes/rep7-pdf?unidad=${unidad}&anio_ini=${anio_ini}&anio_fin=${anio_fin}&oficina_id=${oficina_id}&empleado_id=${empleado_id}`;
                 window.open(url, '_blank');
             } catch (error) {
                 console.error(error);
@@ -933,7 +941,7 @@
                 errorActivos(activosSeleccionados)
                 const activosSeleccionadosJSON = JSON.stringify(activos_ids);
                 const url =
-                    `/reportes/rep8-pdf?unidad=${unidad}&activos=${activosSeleccionadosJSON}`;
+                    `/reportes/rep8-pdf?unidad=${unidad}&anio_ini=${anio_ini}&anio_fin=${anio_fin}&activos=${activosSeleccionadosJSON}`;
                 window.open(url, '_blank');
             } catch (error) {
                 console.error(error);
@@ -945,7 +953,7 @@
                 errorGrupo(grupo_id)
                 const activosSeleccionadosJSON = JSON.stringify(activos_ids);
                 const url =
-                    `/reportes/rep10-pdf?unidad=${unidad}&grupo_id=${grupo_id}&activos=${activosSeleccionadosJSON}`;
+                    `/reportes/rep10-pdf?unidad=${unidad}&anio_ini=${anio_ini}&anio_fin=${anio_fin}&grupo_id=${grupo_id}&activos=${activosSeleccionadosJSON}`;
                 window.open(url, '_blank');
             } catch (error) {
                 console.error(error);
@@ -957,7 +965,7 @@
                 errorEmpleado(empleado_id)
                 const activosSeleccionadosJSON = JSON.stringify(activos_ids);
                 const url =
-                    `/reportes/rep13-pdf?unidad=${unidad}&empleado_id=${empleado_id}&activos=${activosSeleccionadosJSON}`;
+                    `/reportes/rep13-pdf?unidad=${unidad}&anio_ini=${anio_ini}&anio_fin=${anio_fin}&empleado_id=${empleado_id}&activos=${activosSeleccionadosJSON}`;
                 window.open(url, '_blank');
             } catch (error) {
                 console.error(error);
@@ -968,7 +976,7 @@
                 errorActivos(activosSeleccionados)
                 const activosSeleccionadosJSON = JSON.stringify(activos_ids);
                 const url =
-                    `/reportes/rep15-pdf?unidad=${unidad}&activos=${activosSeleccionadosJSON}`;
+                    `/reportes/rep15-pdf?unidad=${unidad}&anio_ini=${anio_ini}&anio_fin=${anio_fin}&activos=${activosSeleccionadosJSON}`;
                 window.open(url, '_blank');
             } catch (error) {
                 console.error(error);
@@ -980,7 +988,7 @@
                 errorEmpleado(empleado_id)
                 const activosSeleccionadosJSON = JSON.stringify(activos_ids);
                 const url =
-                    `/reportes/rep16-pdf?unidad=${unidad}&empleado_id=${empleado_id}&activos=${activosSeleccionadosJSON}`;
+                    `/reportes/rep16-pdf?unidad=${unidad}&anio_ini=${anio_ini}&anio_fin=${anio_fin}&empleado_id=${empleado_id}&activos=${activosSeleccionadosJSON}`;
                 window.open(url, '_blank');
             } catch (error) {
                 console.error(error);
@@ -992,7 +1000,7 @@
                 errorGrupo(grupo_id)
                 const activosSeleccionadosJSON = JSON.stringify(activos_ids);
                 const url =
-                    `/reportes/rep17-pdf?unidad=${unidad}&grupo_id=${grupo_id}&activos=${activosSeleccionadosJSON}`;
+                    `/reportes/rep17-pdf?unidad=${unidad}&anio_ini=${anio_ini}&anio_fin=${anio_fin}&grupo_id=${grupo_id}&activos=${activosSeleccionadosJSON}`;
                 window.open(url, '_blank');
             } catch (error) {
                 console.error(error);
@@ -1005,7 +1013,7 @@
                 errorEmpleado(empleado_id)
                 const activosSeleccionadosJSON = JSON.stringify(activos_ids);
                 const url =
-                    `/reportes/rep18-pdf?unidad=${unidad}&grupo_id=${grupo_id}&empleado_id=${empleado_id}&activos=${activosSeleccionadosJSON}`;
+                    `/reportes/rep18-pdf?unidad=${unidad}&anio_ini=${anio_ini}&anio_fin=${anio_fin}&grupo_id=${grupo_id}&empleado_id=${empleado_id}&activos=${activosSeleccionadosJSON}`;
                 window.open(url, '_blank');
             } catch (error) {
                 console.error(error);

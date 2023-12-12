@@ -4,9 +4,14 @@ namespace App\Models\Fexpo;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class SolicitudModel extends Model
 {
+
+    use HasFactory, Notifiable;
+
+
     protected $table = 'solicitud';
 
     protected $primaryKey= 'idsolicitud';
@@ -14,13 +19,13 @@ class SolicitudModel extends Model
     public $timestamps =false;
 
     protected $fillable = [
-       
+
         // 'idarea',
         // 'idunidadingreso',
 
         'nombresolicitud',
         'asociacionsol',
-       
+
         'ci',
         'direccionsol',
         'telefonosol',
@@ -33,4 +38,11 @@ class SolicitudModel extends Model
 
 
     ];
+
+
+
+
+    public function schedules(){
+        return $this->belongsTo('App\Models\Fexpo\RubroModel','idrubro');
+    }
 }

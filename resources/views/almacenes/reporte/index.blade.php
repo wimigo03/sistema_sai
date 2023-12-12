@@ -10,13 +10,13 @@
 <div class="row font-verdana-bg">
 
     <div class="col-md-2 titulo">
-        <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
+        {{-- <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
             <a href="{{ url('/almacenes/reporte/index') }}">
                 <span class="color-icon-1">
                     &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                 </span>
             </a>
-        </span>
+        </span> --}}
     </div>
 
     <div class="col-md-10 text-right titulo">
@@ -38,8 +38,6 @@
         <br>
 
         <div class="form-group row">
-
-
             <div class="col-md-8">
                 <label for="ingreso" class="d-inline font-verdana-bg">
                     <b>Ingreso-Item</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
@@ -90,6 +88,19 @@
         </div>
     </form>
 </div>
+
+
+<div class="col-md-2 text-right">
+    <br>
+    <span class="tts:left tts-slideIn tts-custom" aria-label="imprimir ">
+        <a href="{{ route('almacenes.reporte.solicitud', $id) }}">
+            <span class="text-primary">
+                <i class="fa-2xl fa-solid fa-print"></i>
+            </span>
+        </a>
+    </span>
+</div>
+
 <div class="row">
     <div class="col-md-12 table-responsive">
         <center>
@@ -166,10 +177,6 @@
             $("#modal-alert .modal-body").html(mensaje);
             $('#modal-alert').modal({keyboard: false});
         }
-
-       
-
-     
 
         function save(){
             if(validar_formulario() == true){

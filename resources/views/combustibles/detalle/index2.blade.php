@@ -8,6 +8,7 @@
 @endif
 <br>
 <div class="row font-verdana-bg">
+    @can('comprasalmacen_aprovadas_access')
     <div class="col-md-2 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
             <a href="{{ url('/combustibles/pedido/index2') }}">
@@ -17,6 +18,19 @@
             </a>
         </span>
     </div>
+    @endcan
+
+    @can('comprascomb_janeth_access')
+    <div class="col-md-2 titulo">
+        <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
+            <a href="{{ url('/combustibles/pedido/index') }}">
+                <span class="color-icon-1">
+                    &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
+                </span>
+            </a>
+        </span>
+    </div>
+    @endcan
     <div class="col-md-10 text-right titulo">
         <b>DETALLE DE LA COMPRA</b>
     </div>
@@ -33,11 +47,11 @@
       <a href="{{route('combustibles.detalle.almacen',$compras->idcompracomb)}}" 
         onclick="return confirm('Se va a enviar la compra a almace..esta seguro ?..')">
         <button class="btn btn-sm btn-info   font-verdana" type="button" >
-            &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;Enviar a almacen
+            &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;Ingresar a almacen
         </button>
     </a>
     @endcan
-    @elseif ($compras->estadocompracomb == 3)
+    @elseif ($compras->estadocompracomb == 5)
     <b style="color: green">Enviado a Almacen</b>
 
       @endif

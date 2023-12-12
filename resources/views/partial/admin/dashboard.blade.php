@@ -29,7 +29,7 @@
                             <ul class="sub-menu collapse" id="dashboard_canasta_v1">
                                 @can('agenda_ejecutivo')
                                     <li>
-                                        <a href="{{ route('canasta.barrios.index') }}">  
+                                        <a href="{{ route('canasta.barrios.index') }}">
                                             <span class="nav-label mr-4">
                                                 <i class="fa-solid fa-house"></i>&nbsp;Barrios
                                             </span>
@@ -124,28 +124,78 @@
                             </ul>
                         </li>
                     @endcanany
-       {{-- EXPOCHACO --}}
-       @canany(['agenda_access'])
-       <li class="font-verdana-bg">
-           <a href="" data-toggle="collapse" data-target="#dashboard_expochaco"
-               class="active collapsed" aria-expanded="false">
-               <i class="fa-duotone fa-user" style="color:green"></i>
-               <span class="nav-label mr-3">EXPOCHACO</span>
-               <span class="fa fa-arrow-circle-left float-right"></span>
-           </a>
-           <ul class="sub-menu collapse" id="dashboard_expochaco">
-               @can('agenda_ejecutivo')
-                   <li>
-                       <a href="{{ route('expochaco.index') }}">
-                           &nbsp; &nbsp; &nbsp;
-                           <span class="nav-label mr-4">Ingresar</span>
-                       </a>
-                   </li>
-               @endcan
 
-           </ul>
-       </li>
-   @endcanany
+
+                    {{-- EXPOCHACO --}}
+                    @canany(['expochaco_access'])
+                        <li class="font-verdana-bg">
+                            <a href="" data-toggle="collapse" data-target="#dashboard_expochaco"
+                                class="active collapsed" aria-expanded="false">
+                                <i class="fa-duotone fa-user" style="color:green"></i>
+                                <span class="nav-label mr-3">EXPOCHACO</span>
+                                <span class="fa fa-arrow-circle-left float-right"></span>
+                            </a>
+                            <ul class="sub-menu collapse" id="dashboard_expochaco">
+                                @can('expochaco_access')
+                                    <li>
+                                        <a href="{{ route('expochaco.index') }}">
+                                            &nbsp; &nbsp; &nbsp;
+                                            <span class="nav-label mr-4">Ingresar</span>
+                                        </a>
+                                    </li>
+                                @endcan
+
+                            </ul>
+                        </li>
+                    @endcanany
+
+                    {{-- EXPOCHACO3 --}}
+                    @canany(['expochaco_access'])
+                        <li class="font-verdana-bg">
+                            <a href="" data-toggle="collapse" data-target="#dashboard_expochaco3"
+                                class="active collapsed" aria-expanded="false">
+                                <i class="fa-duotone fa-user" style="color:green"></i>
+                                <span class="nav-label mr-3">EXPOCHACO3</span>
+                                <span class="fa fa-arrow-circle-left float-right"></span>
+                            </a>
+                            <ul class="sub-menu collapse" id="dashboard_expochaco3">
+                                @can('expochaco_access')
+                                    <li>
+                                        <a href="{{ route('expochaco3.index') }}">
+                                            &nbsp; &nbsp; &nbsp;
+                                            <span class="nav-label mr-4">Ingresar</span>
+                                        </a>
+                                    </li>
+                                @endcan
+
+                            </ul>
+                        </li>
+                    @endcanany
+
+
+                    {{-- PERSONALIDADES JURIDICAS --}}
+                    @canany(['personeria_access'])
+                        <li class="font-verdana-bg">
+                            <a href="" data-toggle="collapse" data-target="#dashboard_personerias"
+                                class="active collapsed" aria-expanded="false">
+                                <i class="fa-duotone fa-book-user" style="color:green"></i>
+                                <span class="nav-label mr-3">SI.RE.PE.JU.</span>
+                                <span class="fa fa-arrow-circle-left float-right"></span>
+                            </a>
+                            <ul class="sub-menu collapse" id="dashboard_personerias">
+                                @can('personeria_access')
+                                    <li>
+                                        <a href="{{ route('personerias.index') }}">
+                                            &nbsp; &nbsp; &nbsp;
+                                            <span class="nav-label mr-4">Ingresar</span>
+                                        </a>
+                                    </li>
+                                @endcan
+
+                            </ul>
+                        </li>
+                    @endcanany
+
 
 
                     {{-- EVENTO --}}
@@ -302,7 +352,7 @@
                                          <span class="nav-label mr-4">Solicitud de Combustible</span>
                                      </a>
                                  </li>
-                             @endcan 
+                             @endcan
 
 
                               @can('comprascomb_janeth_access')
@@ -313,7 +363,7 @@
                                      </a>
                                  </li>
                              @endcan
-                         
+
                              @can('comprascomb_janeth_access')
                                  <li>
                                      <a href="{{ route('partidacomb.index') }}">
@@ -321,7 +371,7 @@
                                          <span class="nav-label mr-4">Partidas</span>
                                      </a>
                                  </li>
-                             @endcan 
+                             @endcan
                              @can('comprascomb_janeth_access')
                                  <li>
                                      <a href="{{ route('producto.index') }}">
@@ -359,7 +409,7 @@
                                          <span class="nav-label mr-4">Categ. Programaticas</span>
                                      </a>
                                  </li>
-                             @endcan 
+                             @endcan
 
                              @can('comprasalmacen_aprovadas_access')
                              <li>
@@ -368,7 +418,7 @@
                                      <span class="nav-label mr-4">Compras Aprovadas</span>
                                  </a>
                              </li>
-                         @endcan 
+                         @endcan
                          </ul>
                      </li>
                  @endcanany
@@ -445,6 +495,17 @@
                                         <a href="{{ route('almacenes.reporte.index') }}">
                                             &nbsp; &nbsp; &nbsp;
                                             <span class="nav-label mr-4">Reporte.</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
+
+                            <ul class="sub-menu collapse" id="dashboard_almacen">
+                                @can('almacen_ingreso_access')
+                                    <li>
+                                        <a href="{{ route('almacenes.reporte.index2') }}">
+                                            &nbsp; &nbsp; &nbsp;
+                                            <span class="nav-label mr-4">Reporte por fecha.</span>
                                         </a>
                                     </li>
                                 @endcan
@@ -590,7 +651,7 @@
         --}}
     </ul>
 </li>
-@endcanany 
+@endcanany
 {{--@endcanany --}}
 
 
@@ -782,41 +843,102 @@
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_activos_fijos"
                                 @if (request()->is('admin/users') || request()->is('admin/users/*')) in @endif ">
-                                        @can('areas_access')
+                                                @can('areas_access')
         <li>
-                                                        <a href="{{ route('activos.index') }}">
-                                                            &nbsp; &nbsp; &nbsp;
-                                                            <span class="nav-label mr-4">Activos</span>
-                                                        </a>
-                                                    </li>
+                                                                        <a href="{{ route('activos.index') }}">
+                                                                            &nbsp; &nbsp; &nbsp;
+                                                                            <span class="nav-label mr-4">Activos</span>
+                                                                        </a>
+                                                                    </li>
     @endcan
-                                    </ul>
-                                </li>
+                                            </ul>
+                                        </li>
+                    @endcanany
+                    {{-- Usuarios --}}
+                    @canany(['users_access', 'roles_access', 'permissions_access'])
+                                        <li class="font-verdana-bg">
+                                            <a href="" data-toggle="collapse" data-target="#dashboard_users"
+                                                class="active collapsed" aria-expanded="false">
+                                                <i class="fa fa-users" style="color:green"></i>
+                                                <span class="nav-label mr-3">USUARIOS</span>
+                                                <span class="fa fa-arrow-circle-left float-right"></span>
+                                            </a>
+                                            <ul class="sub-menu collapse" id="dashboard_users">
+                                                @can('users_access')
+        <li>
+                                                                        <a href="{{ route('admin.users.index') }}">
+                                                                            &nbsp; &nbsp; &nbsp;
+                                                                            <span class="nav-label mr-4">Usuarios</span>
+                                                                        </a>
+                                                                    </li>
+    @endcan
+                                                @can('roles_access')
+        <li>
+                                                                        <a href="{{ route('admin.roles.index') }}">
+                                                                            &nbsp; &nbsp; &nbsp;
+                                                                            <span class="nav-label mr-4">Roles</span>
+                                                                        </a>
+                                                                    </li>
+    @endcan
+                                                @can('permissions_access')
+        <li>
+                                                                        <a href="{{ route('admin.permissions.index') }}">
+                                                                            &nbsp; &nbsp; &nbsp;
+                                                                            <span class="nav-label mr-4">Permisos</span>
+                                                                        </a>
+                                                                    </li>
+    @endcan
+                                            </ul>
+                                        </li>
                     @endcanany
                     {{-- Discapacidad --}}
                     @canany(['discapacidad_panel_acess'])
-                                <li class="font-verdana-bg">
-                                    <a href="" data-toggle="collapse" data-target="#dashboard_discapacidad"
-                                        class="active collapsed" aria-expanded="false">
-                                        <i class="fa fa-users" style="color:green"></i>
-                                        <span class="nav-label mr-3">DISCAPACIDAD</span>
-                                        <span class="fa fa-arrow-circle-left float-right"></span>
-                                    </a>
-                                    <ul class="sub-menu collapse" id="dashboard_discapacidad">
-                                        @can('entregas_acess')
+                                        <li class="font-verdana-bg">
+                                            <a href="" data-toggle="collapse" data-target="#dashboard_discapacidad"
+                                                class="active collapsed" aria-expanded="false">
+                                                <i class="fa fa-users" style="color:green"></i>
+                                                <span class="nav-label mr-3">DISCAPACIDAD</span>
+                                                <span class="fa fa-arrow-circle-left float-right"></span>
+                                            </a>
+                                            <ul class="sub-menu collapse" id="dashboard_discapacidad">
+                                                @can('entregas_acess')
         <li>
-                                                        <a href="{{ route('canasta.entrega.index') }}">
-                                                            &nbsp;
-                                                            <span class="nav-label mr-4"></span>Listar Entregas
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="{{ route('canasta.pendientes.index') }}">
-                                                            &nbsp;
-                                                            <span class="nav-label mr-4"></span>Pendientes
-                                                        </a>
-                                                    </li>
+                                                                        <a href="{{ route('canasta.entrega.index') }}">
+                                                                            &nbsp;
+                                                                            <span class="nav-label mr-4"></span>Listar Entregas
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="{{ route('canasta.pendientes.index') }}">
+                                                                            &nbsp;
+                                                                            <span class="nav-label mr-4"></span>Pendientes
+                                                                        </a>
+                                                                    </li>
     @endcan
+                                            </ul>
+                                        </li>
+                    @endcanany
+                    {{-- Activos --}}
+                    @canany(['activos_panel_access'])
+                                        <li class="font-verdana-bg">
+                                            <a href="" data-toggle="collapse" data-target="#dashboard_activosvsiaf"
+                                                class="active collapsed" aria-expanded="false">
+                                                <i class="fa fa-users" style="color:green"></i>
+                                                <span class="nav-label mr-3">ACTIVOS</span>
+                                                <span class="fa fa-arrow-circle-left float-right"></span>
+                                            </a>
+                                            <ul class="sub-menu collapse" id="dashboard_activosvsiaf">
+                                                @can('activos_listar')
+        <li>
+                                                                        <a href="{{ route('activos.vsiaf.index') }}">
+                                                                            &nbsp;
+                                                                            <span class="nav-label mr-4"></span>Listar
+                                                                        </a>
+                                                                    </li>
+    @endcan
+                                            </ul>
+                                        </li>
+                    @endcanany
                                     </ul>
                                 </li>
                                 @endcanany
@@ -830,14 +952,14 @@
                                         </a>
                                         <ul class="sub-menu collapse" id="dashboard_activos_fijos"
                                             @if (request()->is('admin/users') || request()->is('admin/users/*')) in @endif>
-                                           
+
                                             @can('unidadadmin_access')
                                                 <li>
                                                     <a href="{{ route('activo.unidadadmin.index') }}">
                                                         &nbsp;<i class="fa fa-building"></i>
                                                         <span class="nav-label mr-4"> unidad administrativa</span>
                                                     </a>
-            
+
                                                 </li>
                                             @endcan
                                             @can('organismo_access')
@@ -846,18 +968,18 @@
                                                         &nbsp;<i class="fa fa-building"></i>
                                                         <span class="nav-label mr-4"> Organismo Financiero</span>
                                                     </a>
-            
+
                                                 </li>
                                             @endcan
-            
+
                                             <li>
                                                 <a href="{{ route('activo.codcont.index') }}">
                                                     &nbsp;<i class="fas fa-money-check-alt"></i>
                                                     <span class="nav-label mr-4"> Grupo Contable</span>
                                                 </a>
-            
+
                                             </li>
-            
+
                                             <li>
                                                 {{-- Gestión de Activos Fijos--}}
                                             <li>
@@ -865,13 +987,13 @@
                                                     &nbsp;<i class="fa fa-database"></i>
                                                     <span class="nav-label mr-4"> Gestión de Activos Fijos</span>
                                                 </a>
-                                            </li>   
+                                            </li>
                                             <li>
                                                 <a href="{{ route('oficina.index') }}">
                                                     &nbsp; <i class="fa fa-building"></i>
                                                     <span class="nav-label mr-4"> Oficinas y Responsables</span>
                                                 </a>
-            
+
                                             </li>
                                             <li>
                                                 <a href="{{ route('activo.reportes.index') }}">

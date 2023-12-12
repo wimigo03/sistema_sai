@@ -365,7 +365,7 @@ class ArchivosController2 extends Controller
         return redirect()->route('archivos2.tipo');
     }
 
-    
+
     public function delete($idtipoarea)
     {
         $tipoarea =TipoAreaModel::find($idtipoarea);

@@ -68,7 +68,9 @@
                     @csrf
                 </form>
             </div>
-        {{--</div>--}}
+        {{--</div>
+             //url: "{{ route('pregunta/id') }}",
+            --}}
     </main>
     <script src="{{ asset('admin_assets/plugins/slim-select/slimselect.min.js') }}"></script>
     <script src="{{ asset('admin_assets/js/handlebars.js') }}"></script>
@@ -99,6 +101,25 @@
     },
     dataType: 'JSON',
 
+            $.ajax({
+
+                url: "",
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+
+                dataType: 'JSON',
+                success: function(data) {
+                   // console.log(data); //Try to log the data and check the response
+                    if (data.success == true) {
+                        //alert('success :  user logged in');
+                       // console.log(data);
+                        //notifyMe();
+                    } else {
+                        //alert('Erreur login');
+                    }
+                }
     success: function(data) {
         if (data.success == true) {
             notifyMe();
@@ -216,10 +237,9 @@ function fetchdata() {
                              }
 });
 }
-
-        /*$(document).ready(function() {
-            setInterval(fetchdata, 4000);
-        });*/
+//$(document).ready(function() {
+//    setInterval(fetchdata, 8000);
+// });
 
 
         function notifyMe() {

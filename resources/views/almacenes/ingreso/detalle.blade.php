@@ -51,59 +51,87 @@
             <table id="dataTable" class="table display table-bordered responsive font-verdana" style="width:100%">
                 <thead>
                     <tr>
-                        <td class="text-justify p-1"><b>Nro</b></td>
-                        <td class="text-justify p-1"><b>ID VALE</b></td>
-                        <td class="text-right p-1"><b>Area</b></td>
-                        <td class="text-right p-1"><b>Entregado a</b></td>
-                        <td class="text-right p-1"><b>Cargo</b></td>
-                        <td class="text-right p-1"><b>Precio</b></td>
-                        <td class="text-right p-1"><b>Egreso fisico</b></td>
-                        <td class="text-right p-1"><b>Egreso Valorado</b></td>
-                        <td class="text-right p-1"><b>Saldo fisico</b></td>
-                        <td class="text-right p-1"><b>Saldo Valorado</b></td>
+                        <th style="font-size: 10px;" >N°</th>
+                        <th style="font-size: 10px;" >FECHA</th>
+                        <th style="font-size: 10px;" >Nro Vale</th>
+                        <th style="font-size: 10px;" >Area solicitante</th>
+                        <th style="font-size: 10px;" >Entregado a</th>
+                        <th style="font-size: 10px;" >Cargo</th>
+                        <th style="font-size: 10px;" >PRECIO </th>
+                        <th style="font-size: 10px;" class="text-center p-1">INGRESO FISICO</th>
+                        <th style="font-size: 10px;" class="text-center p-1">INGRESO VALORADO </th>
+                        <th style="font-size: 10px;" class="text-center p-1">EGRESO FISICO</th>
+                        <th style="font-size: 10px;" class="text-center p-1">EGRESO VALORADO </th>
+                        <th style="font-size: 10px;" class="text-center p-1">SALDO FISICO</th>
+                        <th style="font-size: 10px;" class="text-center p-1">SALDO VALORADO </th>
+                        <th style="font-size: 10px;" class="text-center p-1">ESTADO </th>
                         <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
                     </tr>
                 </thead>
                 <tbody>
                     @php
                    
-                        $num = 1;
+                   $num = 1;
+                    $numssss =0;               
+                    $numd = $ingresos->cantidad;
                     @endphp
-                     @forelse ($detalle as $key => $prod)
-                        <tr>
-                            <td class="text-justify p-1">{{$key+1}}</td>
-                            <td class="text-justify p-1">{{$prod->idvale}}</td>
-                            <td class="text-right p-1">{{$prod->idarea}}</td>
-                            <td class="text-right p-1">{{$prod->usuarionombre}}</td>
-                            <td class="text-right p-1">{{$prod->usuariocargo}}</td>
-                            <td class="text-right p-1">{{$prod->preciosol}}</td>
+                     @forelse ($detalle as $prod)
+                        <tr style="text-align: center">
+                            <td class="text-justify p-1">{{$num++}}</td>
+                            <td class="text-center p-1">{{$prod ->fechaaprob}}</td>
+                            <td class="text-center p-1">{{$prod ->idvale}}</td>
+                            <td class="text-center p-1">{{$prod ->nombrearea}}</td>
+                            <td class="text-center p-1">{{$prod ->usuarionombre}}</td>
+                            <td class="text-center p-1">{{$prod ->usuariocargo}}</td>
+                            <td class="text-center p-1">{{$prod ->preciosol}}</td>
+    
+                            <td class="text-center p-1">0</td>
+                            <td class="text-center p-1">0</td>
+    
+                            <td class="text-center p-1">{{$prod ->cantidadsol}}</td>
+                            <td class="text-center p-1">{{$prod ->preciosol * $prod ->cantidadsol}}</td>
+    
+                            <td class="text-center p-1">{{$numd=$numd-$prod ->cantidadsol }}</td>
+    
+                            <td class="text-center p-1">{{$prod ->preciosol * $numd}}</td>
 
-                            <td class="text-right p-1">{{$prod->cantidadsol}}</td>
-                            <td class="text-right p-1">{{$prod->subtotalsol}}</td>
-                          
-                            <td class="text-right p-1">{{$prod->cantidadresta}}</td>
-                            <td class="text-right p-1">{{$prod->sudtotalresta}}</td>
-
-                            <td class="text-center p-1">
-
-                            
+                             @if($prod->estadovale == '2')
+                            <td class="text-justify p-1">
+                            <b style="color: blue">Aprobada</b></td>
+                            @elseif($prod->estadovale == '3')
+                            <td class="text-justify p-1">
+                                <b style="color: red">Almacen</b></td>
+                            @endif
 
 
-                           
+                            @if($prod->estadovale == '2')
+                            <td style="padding: 0;" class="text-center p-1">
+                                {{-- @can('solunidadconsumo_edit') --}}
+                                    <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Solicitud">
+                                        <a href="{{route('almacenes.ingreso.delete',$prod->idvale)}}">
+                                            <span class="text-warning">
+                                                <i class="fa-solid fa-2xl fa-square-pen"></i>
+                                            </span>
+                                        </a>
+                                    </span>
+                                {{-- @endcan --}}
+                                </td>
 
-                                {{-- <span class="tts:left tts-slideIn tts-custom" aria-label="Eliminar">
-                                    <a href="{{route('transportes.detalle.delete',$prod->iddetallesoluconsumo)}}" 
-                                        onclick="return confirm('Se va a eliminar el Item...')">
-                                        <span class="text-danger">
-                                            <i class="fa-solid fa-xl fa-trash" aria-hidden="true"></i>
+
+                                @elseif($prod->estadovale == '3')
+
+                                <td style="padding: 0;" class="text-center p-1">
+                                    {{-- @can('solunidadconsumo_edit') --}}
+                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Compra">
+                                            <a href="{{route('almacenes.ingreso.deletedos',$prod->idvale)}}">
+                                                <span class="text-primary">
+                                                    <i class="fa-solid fa-2xl fa-print"></i>
+                                                </span>
+                                            </a>
                                         </span>
-                                    </a>
-                                </span> --}}
-
-                              
-                              
-
-                            </td>
+                                    {{-- @endcan --}}
+                                    </td>
+                                    @endif 
                         </tr>
                     @endforeach
                 </tbody>

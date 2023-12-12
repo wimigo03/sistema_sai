@@ -56,7 +56,7 @@
                 </label>
                 <select name="chofer" id="chofer" placeholder="--Seleccionar--" 
                 class="form-control form-control-sm select2">
-                    <option value="">-</option>
+                    <option value="">--</option>
 
                     @foreach ($empleados as $index => $value)
                         <option value="{{ $index }}">{{ $value }}</option>
@@ -70,14 +70,14 @@
                 <label for="producto" class="d-inline font-verdana-bg">
                     <b>Unidad o Vehiculo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <select name="producto" id="producto" placeholder="--Seleccionar--" 
-                class="form-control form-control-sm select2">
-                    <option value="">-</option>
+                <select name="producto" id="producto"  placeholder="--Seleccionar--" 
+                class="form-control form-control-sm select2" >
+                <option value="">--</option>
 
-                    @foreach ($productos as $index => $value)
-                        <option value="{{ $index }}">{{ $value }}</option>
-                    @endforeach
-                </select>
+                @foreach ($productos as $index => $value)
+                    <option value="{{ $index }}">{{ $value }}</option>
+                @endforeach
+            </select>
             </div>
 
 
@@ -155,9 +155,9 @@
                                 </span>
                             </td>
                                 <td class="text-center p-1">
-                                <span class="tts:left tts-slideIn tts-custom" aria-label="Aprovar">
+                                <span class="tts:left tts-slideIn tts-custom" aria-label="Aprobar">
                                     <a href="{{route('transportes.detalle.aprovar',$prod->iddetallesoluconsumo)}}" 
-                                        onclick="return confirm('Se va a Aprovar la solicitud...')">
+                                        onclick="return confirm('Se va a Aprobar la solicitud...')">
                                         <span class="text-success">
                                             <i class="fa-solid fa-xl fa-cart-plus" aria-hidden="true"></i>
                                         </span>
@@ -176,12 +176,18 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
+
+            $('.select2').select2({
+                placeholder: "--Seleccionar--"
+            });
+        });
+
             $('#dataTable').DataTable({
                 language: {
 "decimal": "",
 "emptyTable": "No hay información",
 "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
-"infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+"infoEmpty": "Mostrando 0 de 0 de 0 Entradas",
 "infoFiltered": "(Filtrado de _MAX_ total entradas)",
 "infoPostFix": "",
 "thousands": ",",
@@ -200,19 +206,14 @@
                 order: [[ 0, "asc" ]]
             });
 
-            $('.select2').select2({
-                placeholder: "--Seleccionar--"
-            });
-        });
+         
+
+
 
         function message_alert(mensaje){
             $("#modal-alert .modal-body").html(mensaje);
             $('#modal-alert').modal({keyboard: false});
         }
-
-      
-
-       
 
         function save(){
             if(validar_formulario() == true){

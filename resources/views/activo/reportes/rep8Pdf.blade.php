@@ -40,12 +40,12 @@
                     <tbody class="align-top">
                         @foreach ($productosPagina as $activo)
                             <tr>
-                                <td style="height: 24%;">{{ $activo['codigo'] }}</td>
+                                <td style="height: 30%;">{{ $activo['codigo'] }}</td>
                                 <td colspan="6">
                                     {{ $activo['descrip'] }}
                                 </td>
                             </tr>
-                            @foreach ($activo['transferencias'] as $transferencia)
+                            @forelse ($activo['transferencias'] as $transferencia)
                                 <tr align="center">
                                     <td colspan="2"></td>
                                     <td>OFICINA Y RESPONSABLE ANTERIOR</td>
@@ -58,7 +58,18 @@
                                     <td>{{ $activo['unidad'] }}</td>
                                     <td>{{ $transferencia['created_at'] }}</td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr>
+                                    <td colspan="2"></td>
+                                    <td>
+                                        @if ($activo['empleados'])
+                                            {{ $activo['empleados']['nombres'] }} {{ $activo['empleados']['ap_pat'] }}
+                                            {{ $activo['empleados']['ap_mat'] }}
+                                        @else
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforelse
                         @endforeach
                     </tbody>
                 </table>

@@ -44,7 +44,6 @@
                             <th>AUX. DE GRUPO</th>
                             <th>OFICINA</th>
                             <th>RESPONSABLE</th>
-                            <th>ID BIEN</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -54,7 +53,7 @@
                                 <td>{{ $activo['descrip'] }}</td>
                                 <td>{{ $activo['costo'] }}</td>
                                 <td>{{ $activo['costo'] }}</td>
-                                <td>{{ $activo['feul'] }}</td>
+                                <td>{{ $activo['ano'] }}-{{ $activo['mes'] }}-{{ $activo['dia'] }}</td>
                                 <td>{{ $activo['costo'] }}</td>
                                 <td>{{ $activo['depreciacion_gestion'] }}</td>
                                 <td>{{ $activo['depreciacion'] }}</td>
@@ -67,10 +66,8 @@
                                         {{ $activo['empleados']['nombres'] }} {{ $activo['empleados']['ap_pat'] }}
                                         {{ $activo['empleados']['ap_mat'] }}
                                     @else
-                                        No asignado
                                     @endif
                                 </td>
-                                <td></td>
                             </tr>
                         @endforeach
                     </tbody>

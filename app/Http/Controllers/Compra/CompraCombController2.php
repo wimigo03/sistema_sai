@@ -12,6 +12,7 @@ use App\Models\TemporalModel;
 
 
 use App\Models\Compra\CompraCombModel;
+use App\Models\Compra\ProgramaCombModel;
 
 
 
@@ -19,9 +20,10 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
-use DB;
-use DataTables;
+use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
 
+use Carbon\Carbon;
 
 class CompraCombController2 extends Controller
 {
@@ -38,23 +40,20 @@ class CompraCombController2 extends Controller
                         ->join('programacomb as prog', 'prog.idprogramacomb', '=', 'c.idprogramacomb')
                         ->join('areas as a', 'a.idarea', '=', 'c.idarea')
 
-                        ->select('c.idcompracomb','c.estado1','c.controlinterno','c.estadocompracomb',
-                        'a.nombrearea',
-                        'c.objeto', 'c.justificacion','p.nombreproveedor','c.preventivo',
+                        ->select('c.idcompracomb','c.estado1','c.controlinterno','c.estadocompracomb','c.fechasoli'
+                        ,'c.fechaaprob','a.nombrearea',
+                        'c.objeto', 'c.justificacion','p.nombreproveedor','c.preventivo','c.tipo',
                         'c.numcompra','cat.codcatprogramatica','prog.nombreprograma')
                         ->where('a.idarea',$personalArea->idarea)
-                         //->where('c.estadocompracomb',1)
-                     
-
+                        ->orderBy('c.idcompracomb', 'desc')
                         ->get();
-
-
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
         $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
 
-     
+       
+
 
         return view('combustibles.pedidoparcial.index',
         ['compras'=>$compras,'idd'=>$personalArea]);
@@ -103,6 +102,9 @@ class CompraCombController2 extends Controller
         $userdate = User::find($id)->usuariosempleados;
         $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
 
+        $produc ="PRODUCTO";
+        $Tipos=$produc;
+
         $proveedores = DB::table('proveedor')->where('estadoproveedor',1)
         ->pluck('nombreproveedor','idproveedor');
 
@@ -115,11 +117,14 @@ class CompraCombController2 extends Controller
         ->where('estadocatprogramatica',1)
         ->pluck('programatica','idcatprogramaticacomb');
 
-        $programas = DB::table('programacomb')->where('estadoprograma',1)
-        ->pluck('nombreprograma','idprogramacomb');
+        $IdProg=13;
+        $programas = ProgramaCombModel::find($IdProg);
+        $nombrePro=$programas->nombreprograma;
+
+        $date = Carbon::now();
 
         return view('combustibles.pedidoparcial.create',
-        compact('proveedores','areas','catprogramaticas','programas','personalArea'));
+        compact('proveedores','areas','catprogramaticas','personalArea','Tipos','nombrePro','date'));
     }
 
     public function store(Request $request){
@@ -132,24 +137,32 @@ class CompraCombController2 extends Controller
         $userdate = User::find($id)->usuariosempleados;
         $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
 
+        $produc ="PRODUCTO";
+        $Tipos=$produc;
+
+        $IdProg=13;
+        $programas = ProgramaCombModel::find($IdProg);
+        $nombrePro=$programas->idprogramacomb;
 
         $compras = new CompraCombModel();
         $compras->objeto = $request->input('objeto');
         $compras->justificacion = $request->input('justificacion');
         $compras->preventivo = 0;
-        $compras->tipo = $request->input('tipo');
+        $compras->tipo =$Tipos;
         $compras->numcompra =0;
         $compras->controlinterno = $request->input('controlinterno');
         $compras->idproveedor = 1;
         $compras->idarea = $personalArea->idarea;
         $compras->idcatprogramaticacomb = $request->input('idcatprogramatica');
-        $compras->idprogramacomb = $request->input('idprograma');
+        $compras->idprogramacomb = $nombrePro;
         $compras->idproveedor = 1;
         $compras->idusuario =$id;
         $compras->estadocompracomb = 1;
         $compras->estado1 = 1;
         $compras->estado2 = 1;
         $compras->estado3 = 1;
+        $compras->fechasoli = Carbon::now();
+        $compras->fechaaprob =Carbon::now();
         if($compras->save()){
             $request->session()->flash('message', 'Registro Procesado');
         }else{
@@ -217,11 +230,20 @@ class CompraCombController2 extends Controller
 
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+ 
+        $produc ="PRODUCTO";
+        $Tipos=$produc;
+
+        $IdProg=13;
+        $programas = ProgramaCombModel::find($IdProg);
+        $nombrePro=$programas->nombreprograma;
 
         return view('combustibles.pedidoparcial.editar',
 
         compact('id','compras','proveedores','areas',
-        'catprogramaticas','programas'));
+        'catprogramaticas','programas','Tipos','nombrePro','personalArea'));
     }
 
     public function ver($idcompracomb){
@@ -264,6 +286,29 @@ class CompraCombController2 extends Controller
        return redirect()->route('combustibles.detalleparcial.index3');
     }
 
+    public function editalma($idcompracomb){//dd($idcomp);
+        
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $detalle = TemporalModel::find($id);
+
+        if(is_null($detalle)){
+            $detalle = new TemporalModel;
+            $detalle->idtemporal=$id;
+            $detalle->idusuario=$id;
+            $detalle->idcompra=$idcompracomb;
+            $detalle->save();
+        }else{
+            $detalle->idtemporal = $id;
+            $detalle->idusuario = $id;
+            $detalle->idcompra = $idcompracomb;
+            $detalle->update();
+        }
+       //return Redirect::to('compras/detalle');
+       return redirect()->route('combustibles.detalleparcial.index4');
+    }
+
+
     public function update(Request $request){
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
@@ -272,17 +317,13 @@ class CompraCombController2 extends Controller
         $compras->objeto = $request->input('objeto');
         $compras->justificacion = $request->input('justificacion');
 
-        
-        $compras->tipo = $request->input('tipo');
-        
+               
         $compras->idproveedor = $request->input('idproveedor');
         $compras->numcompra =$request->input('numcompra');
         $compras->preventivo = $request->input('preventivo');
 
         $compras->controlinterno = $request->input('controlinterno');
-        $compras->idarea = $request->input('idarea');
         $compras->idcatprogramaticacomb = $request->input('idcatprogramatica');
-        $compras->idprogramacomb = $request->input('idprograma');
         $compras->idusuario = $id;
         if($compras->save()){
             $request->session()->flash('message', 'Registro Procesado');

@@ -45,7 +45,7 @@
                                 <td>{{ $activo['descrip'] }}</td>
                                 <td>{{ $activo['costo'] }}</td>
                                 <td>{{ $activo['costo'] }}</td>
-                                <td>{{ $activo['feul'] }}</td>
+                                <td>{{ $activo['ano'] }}-{{ $activo['mes'] }}-{{ $activo['dia'] }}</td>
                                 <td>{{ $activo['costo'] }}</td>
                                 <td>{{ $activo['depreciacion'] }}</td>
                                 <td>{{ $activo['valor_neto'] }}</td>

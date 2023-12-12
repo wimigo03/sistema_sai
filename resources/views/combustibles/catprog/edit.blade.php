@@ -41,7 +41,7 @@
                         <div class="col-md-6">
                             <input type="text" required class="form-control" name="codigo" id="codigo" placeholder=""
                                 value="{{$catprogs->codcatprogramatica}}"
-                                onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                onkeypress="return valideNumber(event);">
                         </div>
                     </div>
 
@@ -121,5 +121,13 @@
             }
             return true;
         }
+        function valideNumber(evt){
+            var code = (evt.which) ? evt.which : evt.keyCode;
+            if(code>=48 && code<=57){
+                return true;
+            }else{
+                return false;
+            }
+        } 
     </script>
 @endsection

@@ -37,4 +37,40 @@ class ExpoController extends Controller
 
         return view('expochaco/rubro', ["rubros" => $rubros]);
     }
+
+    public function createrubro(){
+
+
+
+        return view('expochaco.createrubro');
+
+       // return view('expochaco.create');
+    }
+
+
+    public function storerubro(Request $request){
+
+
+
+        $newestUser = RubroModel::orderBy('idrubro', 'desc')->first();
+        $maxId = $newestUser->idrubro;
+
+        $rubro = new RubroModel();
+        $rubro->idrubro = $maxId + 1;
+
+        $rubro->nombrerubro = $request->input('nombrerubro');
+        $rubro->estadorubro = 1;
+
+
+
+
+        if($rubro->save()){
+            $request->flash('message', 'Registro Procesado');
+            return redirect()->action('App\Http\Controllers\ExpoController@rubro');
+        }else{
+            $request->flash('message', 'Error al Procesar Registro');
+        }
+
+    }
+
 }
