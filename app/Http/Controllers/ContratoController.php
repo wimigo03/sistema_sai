@@ -133,6 +133,12 @@ class ContratoController extends Controller
 
     public function guardarcontrato(Request $request)
     {
+        $ci = $request->input('ci');
+        $ci = EmpleadosModel::where('ci', $ci)
+            ->where('tipo', 2);
+        if ($ci) {
+            return redirect()->back()->with('error', 'Ya se encuentra Registrado como Personal de contrato');
+         }
 
         $empleados = new EmpleadosModel();
         $empleados->nombres = $request->input('nombres');
@@ -294,18 +300,18 @@ class ContratoController extends Controller
             $file->save();
             $file2->save();
             $fileactual = DB::table('file as f')
-            ->select('f.numfile', 'f.cargo', 'f.habbasico', 'f.nombrecargo')
-            ->where('f.idfile', '=', $request->input('idfileoriginal'))->first();
+                ->select('f.numfile', 'f.cargo', 'f.habbasico', 'f.nombrecargo')
+                ->where('f.idfile', '=', $request->input('idfileoriginal'))->first();
 
-        // $fileactual = FileModel::find($request->input('idfile'))->first();
-        $filenuevo = DB::table('file as f')
-            ->select('f.numfile', 'f.cargo', 'f.habbasico', 'f.nombrecargo')
-            ->where('f.idfile', '=', $request->input('idfile'))->first();
+            // $fileactual = FileModel::find($request->input('idfile'))->first();
+            $filenuevo = DB::table('file as f')
+                ->select('f.numfile', 'f.cargo', 'f.habbasico', 'f.nombrecargo')
+                ->where('f.idfile', '=', $request->input('idfile'))->first();
 
-        //$areaactual = AreasModel::find($request->input('idarea'))->first();
-        $areaactual = DB::table('areas as a')
-            ->select('a.nombrearea')
-            ->where('a.idarea', '=', $request->input('idarea'))->first();
+            //$areaactual = AreasModel::find($request->input('idarea'))->first();
+            $areaactual = DB::table('areas as a')
+                ->select('a.nombrearea')
+                ->where('a.idarea', '=', $request->input('idarea'))->first();
 
 
             $movimientosplanta = new MovimientosContModel();
@@ -318,7 +324,7 @@ class ContratoController extends Controller
             $movimientosplanta->nombrecargoactualcont = $fileactual->nombrecargo;
             $movimientosplanta->haberbasicoactualcont = $fileactual->habbasico;
             $movimientosplanta->nombreareaactual = $request->input('nombreareaactual');
-             $movimientosplanta->filenuevocont = $filenuevo->numfile;
+            $movimientosplanta->filenuevocont = $filenuevo->numfile;
             $movimientosplanta->cargonuevocont = $filenuevo->cargo;
             $movimientosplanta->nombrecargonuevocont = $filenuevo->nombrecargo;
             $movimientosplanta->haberbasiconuevocont = $filenuevo->habbasico;

@@ -105,7 +105,7 @@
                         <div class="form-group row font-verdana-bg">
                             <div class="form-group col-md-6">
                                 <label for="descripcion">Nombres y Apellidos</label>
-                                <input type="text" name="descripcion" value="{{ $registroAsistencia->empleado->nombres }}{{$registroAsistencia->empleado->ap_pat}}" class="form-control" readonly required>
+                                <input type="text" name="descripcion" value="{{ $registroAsistencia->empleado->nombres }} {{$registroAsistencia->empleado->ap_pat}} {{$registroAsistencia->empleado->ap_mat}}" class="form-control" readonly required>
                                 <input type="hidden" name="observ" value="Regularizado" class="form-control" readonly>
                                 <input type="hidden" name="estado" value="0" class="form-control" readonly>
 
@@ -226,7 +226,7 @@
             var isChecked = $("#" + checkboxId).prop("checked");
 
             // Cambiar el texto del label según el estado del checkbox
-            $("#" + labelId).text(isChecked ? originalText + " (Activado)" : originalText.replace(" (Activado)", ""));
+            $("#" + labelId).text(isChecked ? originalText + " (MANUAL)" : originalText.replace(" (MANUAL)", ""));
 
             // Obtener el valor del input fuente
             var sourceValue = $("#" + sourceInputId).val();

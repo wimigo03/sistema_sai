@@ -107,6 +107,13 @@ class PlantaController extends Controller
 
     public function guardarplanta(Request $request)
     {
+        $ci = $request->input('ci');
+        $ci = EmpleadosModel::where('ci',$ci)
+        ->where('tipo',1);
+        if ($ci) {
+            return redirect()->back()->with('error', 'Ya se encuentra Registrado como Personal de Planta');
+
+        }
         $empleados = new EmpleadosModel();
         $empleados->nombres = $request->input('nombres');
         $empleados->ap_pat = $request->input('ap_pat');

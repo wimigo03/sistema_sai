@@ -51,8 +51,7 @@
                                 <th>Exp. Rejap</th>
                                 <th>Exp. Poai</th>
                                 <th>Exp. Programa Vacación</th>
-                                <th>Acciones</th>
-                            </tr>
+                             </tr>
                         </thead>
                     </table>
                 </div>
@@ -69,8 +68,7 @@
                                 <th>Nombres y Apellidos/th>
                                 <th>Expiracion de SIPPASE</th>
                                 <th>Expiracion de REJAP</th>
-                                <th>Acciones</th>
-                            </tr>
+                             </tr>
                         </thead>
                     </table>
                 </div>
@@ -148,12 +146,6 @@
                 {
                     data: 'expprogvacacion',
                     name: 'expprogvacacion'
-                },
-                {
-                    data: 'actions',
-                    name: 'actions',
-                    orderable: false,
-                    searchable: false
                 }
             ]
 
@@ -209,13 +201,7 @@
                             {
                                 data: 'rejap',
                                 name: 'rejap'
-                            },
-                            {
-                                data: 'actions',
-                                name: 'actions',
-                                orderable: false,
-                                searchable: false
-                            }
+                            } 
                         ]
 
                     });

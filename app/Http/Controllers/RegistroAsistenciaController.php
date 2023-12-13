@@ -41,7 +41,7 @@ class RegistroAsistenciaController extends Controller
 
             // Aplicar el filtro de fecha según el valor seleccionado
             $filtro = $request->input('filtro');
-            
+
             if ($filtro == 'actual') {
                 $data = $data->whereDate('fecha', Carbon::today());
             } elseif ($filtro == 'mensual') {
@@ -673,20 +673,12 @@ class RegistroAsistenciaController extends Controller
                 return $response;
             }
 
-            // Lógica para buscar el empleado
-            if ($pin !== null ){
-                $emp = $this->buscarPersonal($pin);
-            } else if($id !== null) {
-                    // Lógica para buscar el empleado
-                $emp = $this->buscarPersonalID($id);
-            } else if ($pin == null && $id == null){
-                // Manejar el caso en que ambas variables son nulas
-                return response()->json(['error' => 'La Entrada no es Valida']);
-            }
 
-    
+            // Lógica para buscar el empleado
+            $emp = $this->buscarPersonal($pin, $id);
+
             if (!$emp) {
-                return response()->json(['error' => 'El PIN o ID ingresado no corresponde a ningún empleado.']);
+                return response()->json(['error' => 'El PIN NO CORRESPONDE A NINGÚN PERSONAL ACTIVO.']);
             }
 
             // Lógica para verificar el horario activo
@@ -705,7 +697,8 @@ class RegistroAsistenciaController extends Controller
             $horaInicioJornada = Carbon::parse($horario->inicio_jornada);
             $HoraInicioJornada = $horaInicioJornada->format('H:i:s');
 
-            //verificar marcado en dia Sabado
+
+
             if ($fechaObtenida->dayOfWeek === Carbon::SATURDAY && $horaActual >= $HoraInicioJornada) {
                 return response()->json(['info' => 'SÁBADO. DÍA NO LABORAL.']);
             }
@@ -763,7 +756,7 @@ class RegistroAsistenciaController extends Controller
 
 
             // Obtén la fecha y hora actual
-            $now = Carbon::now();
+            $now = Carbon::parse($fecha);
             // Obtiene la hora de inicio del día en formato h:i:s
             $inicioDelDia = $now->startOfDay()->format('H:i:s');
             // Obtiene la hora de final del día en formato h:i:s
@@ -800,10 +793,11 @@ class RegistroAsistenciaController extends Controller
                     $registro = new RegistroAsistencia();
                     $registro->empleado_id = $emp->idemp;
                     $registro->horario_id = $horario->id;
-                    $registro->registro_final = $horaActual;
-
-                    $registro->estado = 0;
                     $registro->asistencia_id = $asistencia->id;
+
+                    $registro->registro_final = $horaActual;
+                    $registro->estado = 0;
+
                     $registro->fecha = $asistencia->fecha;
                     $registro->tipo = $asistencia->tipo;
 
@@ -844,7 +838,7 @@ class RegistroAsistenciaController extends Controller
 
 
                 if ($horario->tipo == 1) {
-                    $mensaje = 'ppppp' . $asistencia . $fecha;
+
                     //return response()->json(['success' => 'SIN REGISTRO HORARIO TIPO ' . $horario->tipo]);
                     if ($horaActual  >= $horario->hora_inicio && $horaActual  <= $sumaInicioFormateada) {
                         $registro = new RegistroAsistencia();
@@ -914,7 +908,7 @@ class RegistroAsistenciaController extends Controller
                         // $this->sumarRetrasos($registroactual);
                         $registro->save();
                         $this->verificarMarcado($registro);
-                        return response()->json(['success' => 'SE CREÓ REGISTRO DE ENTRADA:']);
+                        return response()->json(['success' => 'SE CREÓ REGISTRO DE SALIDA:']);
                     } else if ($horaActual >= $horario->hora_entrada && $horaActual <= $sumaEntradaFormateada) {
                         $registro = new RegistroAsistencia();
                         $registro->empleado_id = $emp->idemp;
@@ -1002,7 +996,7 @@ class RegistroAsistenciaController extends Controller
                         $registro->save();
                         $this->verificarMarcado($registro);
                         return response()->json(['success' => 'SE CREÓ REGISTRO DE ENTRADA. RETRASO: ' . $registro->retraso1]);
-                    } else if ($horaActual >= $horario->hora_final && $horaActual <= $horaMaximaFinal) {
+                    } else if ($horaActual >= $horario->hora_final && $horaActual <= $finalDelDia) {
                         $registro = new RegistroAsistencia();
                         $registro->empleado_id = $emp->idemp;
                         $registro->horario_id = $horario->id;
@@ -1017,8 +1011,6 @@ class RegistroAsistenciaController extends Controller
                         return response()->json(['success' => 'SE CREÓ REGISTRO DE SALIDA.']);
 
                         // $this->sumarRetrasos($registroactual);
-                    } else if ($horaActual > $horaMaximaFinal || $horaActual < $horaMinimaInicio) {
-                        return response()->json(['success' => 'FUERA DE HORARIO LABORAL:' . $fecha]);
                     }
                 }
             } else if ($registro->asistencia->id == $asistenciaID) {
@@ -1059,8 +1051,8 @@ class RegistroAsistenciaController extends Controller
                             $registro->minutos_retraso = 0;
                             $registro->save();
                             $this->verificarMarcado($registro);
-                            $this->calcularRetraso($registro);
-                            return response()->json(['success' => 'SE CREÓ REGISTRO DE ENTRADA.']);
+                            Session::flash('success', 'SE GUARDÓ REGISTRO DE ENTRADA: ' . $registro->retraso1 . $horaActual  . $horario->Nombre);
+                            return redirect()->back();
                         } else {
                             return response()->json(['success' => 'YA EXISTE REGISTRO DE ENTRADA.']);
                         }
@@ -1131,7 +1123,6 @@ class RegistroAsistenciaController extends Controller
                         } else {
                             return response()->json(['success' => 'YA EXISTE REGISTRO DE SALIDA.']);
                         }
-                    } else if ($horaActual < $HoraInicioJornada && $horaActual >= $inicioDelDia) {
                     }
                 } else if ($horario->tipo == 0) {
                     //return response()->json(['success' => 'CON REGISTRO HORARIO TIPO :' . $horario->tipo]);
@@ -1171,7 +1162,7 @@ class RegistroAsistenciaController extends Controller
                         } else {
                             return response()->json(['info' => 'YA EXISTE REGISTRO DE ENTRADA.']);
                         }
-                    } else if ($horaActual >= $horario->hora_final && $horaActual <= $horaMaximaFinal) {
+                    } else if ($horaActual >= $horario->hora_final && $horaActual <= $finalDelDia) {
                         if (!$registro->registro_final) {
                             $registro->registro_final = $horaActual;
                             $registro->estado = 0;
@@ -1183,8 +1174,6 @@ class RegistroAsistenciaController extends Controller
                         } else {
                             return response()->json(['info' => 'YA EXISTE REGISTRO DE SALIDA.']);
                         }
-                    } else if ($horaActual > $horaMaximaFinal || $horaActual < $HoraInicioJornada) {
-                        return response()->json(['success' => 'FUERA DE HORARIO LABORAL:']);
                     }
                 }
             }
@@ -1224,7 +1213,7 @@ class RegistroAsistenciaController extends Controller
             // Si es posterior, obtener o crear el permiso del mes actual
             $asistenciaActual = AsistenciaModel::where('fecha', $fecha)->select('id', 'fecha')->first();
             if (!$asistenciaActual) {
-                $asistenciaActual = AsistenciaModel::create(['fecha' => $fecha, 'descrip' => "Activo", 'estado' => '1']);
+                $asistenciaActual = AsistenciaModel::create(['fecha' => $fecha, 'descrip' => "Activo", 'estado' => '0']);
             }
 
             return $asistenciaActual;
@@ -1237,7 +1226,7 @@ class RegistroAsistenciaController extends Controller
             $asistenciaActual = AsistenciaModel::create([
                 'fecha' => $fecha,
                 'descrip' => 'Activo',
-                'estado' => '1'
+                'estado' => '0'
             ]);
         }
 
@@ -1389,6 +1378,7 @@ class RegistroAsistenciaController extends Controller
                 $registro->registro_entrada &&
                 $registro->registro_final
             ) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 4;
                 $registro->save();
             } else if (
@@ -1397,6 +1387,7 @@ class RegistroAsistenciaController extends Controller
                 $registro->registro_entrada &&
                 $registro->registro_final
             ) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 4;
                 $registro->save();
             } else if (
@@ -1405,6 +1396,7 @@ class RegistroAsistenciaController extends Controller
                 !$registro->registro_entrada &&
                 !$registro->registro_final
             ) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 3;
                 $registro->save();
             } else if (
@@ -1414,6 +1406,7 @@ class RegistroAsistenciaController extends Controller
                 $registro->registro_final
             ) {
                 $registro->estado = 5;
+                $registro->observ = 'Pendiente';
                 $registro->save();
             } else if (
                 !$registro->registro_inicio &&
@@ -1421,6 +1414,7 @@ class RegistroAsistenciaController extends Controller
                 $registro->registro_entrada &&
                 !$registro->registro_final
             ) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 5;
                 $registro->save();
             } else if (
@@ -1429,6 +1423,7 @@ class RegistroAsistenciaController extends Controller
                 $registro->registro_entrada &&
                 !$registro->registro_final
             ) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 3;
                 $registro->save();
             } else if (
@@ -1437,6 +1432,7 @@ class RegistroAsistenciaController extends Controller
                 !$registro->registro_entrada &&
                 $registro->registro_final
             ) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 3;
                 $registro->save();
             } else if (
@@ -1445,6 +1441,7 @@ class RegistroAsistenciaController extends Controller
                 !$registro->registro_entrada &&
                 !$registro->registro_final
             ) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 5;
                 $registro->save();
             } else if (
@@ -1453,6 +1450,7 @@ class RegistroAsistenciaController extends Controller
                 !$registro->registro_entrada &&
                 $registro->registro_final
             ) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 5;
                 $registro->save();
             } else if (
@@ -1461,6 +1459,7 @@ class RegistroAsistenciaController extends Controller
                 !$registro->registro_entrada &&
                 $registro->registro_final
             ) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 3;
                 $registro->save();
             } else if (
@@ -1469,6 +1468,7 @@ class RegistroAsistenciaController extends Controller
                 $registro->registro_entrada &&
                 !$registro->registro_final
             ) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 5;
                 $registro->save();
             } else if (
@@ -1477,21 +1477,27 @@ class RegistroAsistenciaController extends Controller
                 $registro->registro_entrada &&
                 !$registro->registro_final
             ) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 5;
                 $registro->save();
             }
         }
         if ($registro->horario->tipo == 0) {
             if ($registro->registro_final && $registro->registro_inicio) {
+                $registro->observ = 'Dia Trabajado';
+
                 $registro->estado = 1;
                 $registro->save();
             } else if (!$registro->registro_final && $registro->registro_inicio) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 3;
                 $registro->save();
             } else if ($registro->registro_final && !$registro->registro_inicio) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 4;
                 $registro->save();
             } else {
+                $registro->observ = 'Falta';
                 $registro->estado = 0;
                 $registro->save();
             }
@@ -1507,25 +1513,26 @@ class RegistroAsistenciaController extends Controller
             return response()->json(['error' => 'DOMINGO. DÍA NO LABORAL.']);
         }
     }
-    public function buscarPersonal($pin){
+    public function buscarPersonal($pin)
+    {
 
         $areasExcluidas = [33, 34];
         $emp = EmpleadosModel::where('pin', $pin)
-        ->whereNotIn('idarea', $areasExcluidas)
+            ->whereNotIn('idarea', $areasExcluidas)
 
-        ->first();
+            ->first();
         return $emp;
     }
-    
-    
-    public function buscarPersonalID($id){
+
+
+    public function buscarPersonalID($id)
+    {
 
         $areasExcluidas = [33, 34];
         $emp = EmpleadosModel::where('idemp', $id)
-        ->whereNotIn('idarea', $areasExcluidas)
-        ->first();
+            ->whereNotIn('idarea', $areasExcluidas)
+            ->first();
 
         return $emp;
-
     }
 }

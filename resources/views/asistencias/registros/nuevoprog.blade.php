@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row font-verdana-bg">
 
-        <div class="col-md-3 offset-md-3 titulo">
+        <div class="col-md-4 offset-md-3 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
                 <a href="{{url()->previous()}}" class="color-icon-1">
                     <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
@@ -13,12 +13,8 @@
             <b>Agregar Horario Programado</b>
             <i class=aria-hidden="true"></i>
         </div>
-        <div class="col-md-3 text-right">
-            <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('horarios.fechas')}}">
-                <button class="btn btn-sm btn-danger font-verdana" type="button" aria-label="Cerrar">
-                    &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
-                </button>
-            </a>
+        <div class="col-md-2 text-right">
+             
             <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
                 <button class="btn btn-sm btn-danger font-verdana" type="button">
                     &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
@@ -66,7 +62,7 @@
                             <div class="form-group">
                                 <label for="area">Horario:</label>
                                 <select name="horario_id" id="horarios" required class="form-control">
-                                    <option value=""></option>
+                                    <option value="">Seleccionar Horario</option>
 
                                     @php
                                     // Ordenar la colección de horarios por hora de inicio

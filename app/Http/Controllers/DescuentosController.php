@@ -17,14 +17,12 @@ class DescuentosController extends Controller
     public function index(Request $request)
     {
         //
-        if ($request->ajax()) {
             $descuentos = DescuentoModel::select(['id', 'descripcion','retraso_max', 'cantidad_dia']);
 
-
+            if ($request->ajax()) {
+$descuentos  =$descuentos->get();
             return DataTables::of($descuentos)
-                ->addColumn('id', function ($descuento) {
-                    return $descuento->id ? : '-';
-                })
+              
                 ->addColumn('descripcion', function ($descuento) {
                     return $descuento->descripcion ? : '-';
                 })

@@ -21,20 +21,15 @@ class AusenciasController extends Controller
 
     public function index(Request $request)
     {
-        $registros = RegistroAsistencia::all(); // Asumiendo que quieres obtener los resultados
-
-        foreach ($registros as $registro) {
-            $this->verificarMarcado($registro);
-        }
+       
         if ($request->ajax()) {
 
             $data = RegistroAsistencia::with(['empleado' => function ($query) {
                 $query->select('idemp', 'nombres', 'ap_pat', 'ap_mat');
-            }])
-                ->whereNotIn('estado', [0, 1])
-
+            }])->whereNotIn('estado', [0, 1])
                 ->with('asistencia')
                 ->get();
+              
 
             return DataTables::of($data)
 
@@ -80,72 +75,7 @@ class AusenciasController extends Controller
 
 
 
-    public function nueva(Request $request)
-    {
-        $registros = RegistroAsistencia::all(); // Asumiendo que quieres obtener los resultados
-
-        foreach ($registros as $registro) {
-            $this->verificarMarcado($registro);
-        }
-        if ($request->ajax()) {
-
-
-
-            $data = RegistroAsistencia::with(['empleado' => function ($query) {
-                $query->select('idemp', 'nombres', 'ap_pat', 'ap_mat');
-            }])
-                ->whereNotIn('estado', [0, 1])
-                ->with('asistencia')
-                ->get();
-
-
-
-
-            return DataTables::of($data)
-
-                ->addColumn('fecha', function ($row) {
-                    return $row->asistencia->fecha ? Carbon::parse($row->asistencia->fecha)->format('Y-m-d') : '-';
-                })
-                ->addColumn('nombres_apellidos', function ($row) {
-                    $nomb = $row->empleado->nombres ?? '-';
-                    $ap_pat = $row->empleado->ap_pat ?? ' ';
-                    $ap_mat = $row->empleado->ap_mat ?? ' ';
-                    return $nomb . ' ' . $ap_pat . ' ' . $ap_mat;
-                })
-                ->addColumn('estado', function ($row) {
-                    if ($row->estado == 0) {
-                        return 'FALTA';
-                    } else if ($row->estado == 2) {
-                        return 'Regularizar Registro de Salida';
-                    } else if ($row->estado == 4) {
-                        return 'Regularizar Registro de la mañana';
-                    } else if ($row->estado == 3) {
-                        return 'Regularizar Registro de la tarde';
-                    } else if ($row->estado == 5) {
-                        return 'Regularizar Registro de Mañana y Tarde';
-                    } else {
-                        return '-'; // You can customize this message as needed
-                    }
-                })
-                ->addColumn('opciones', function ($row) {
-                    $url = route('regularizar.ausencia', ['id' => $row->id]);
-
-                    return '<a class="tts:left tts-slideIn tts-custom" aria-label="Regularizar Ausencia" href="' . $url . '">
-                                <i class="fa-solid fa-2xl fa-square-pen text-warning"></i>
-                            </a>';
-                })
-
-
-
-
-                ->rawColumns(['opciones'])
-
-                ->make(true);
-        }
-
-        return view('asistencias.regularizar.index');
-    }
-
+  
     public function regularizar($id)
     {
         $registroAsistencia = RegistroAsistencia::with([
@@ -207,34 +137,34 @@ class AusenciasController extends Controller
         $vistaselectedMonth = Carbon::now()->format('Y-m');
 
 
-        //     if ($request->ajax()) {
-        $id = $request->input('id');
-        $empleado = EmpleadosModel::where('idemp', $id)->select('idemp', 'nombres', 'ap_pat', 'ap_mat')->first();
-        $id = $empleado->idemp;
-        // Obtener la fecha seleccionada desde el input de tipo month
-        $selectedMonth = $request->input('selected_month');
-        $formattedDate = $selectedMonth . '-01'; // Añade el primer día del mes
-
-
-
-        // Verificar si no se proporcionó una fecha seleccionada y usar el mes actual
-        if (!$selectedMonth) {
-            $selectedMonth = Carbon::now()->format('Y-m');
+        if ($request->ajax()) {
+            $id = $request->input('id');
+            $empleado = EmpleadosModel::where('idemp', $id)->select('idemp', 'nombres', 'ap_pat', 'ap_mat')->first();
+            $id = $empleado->idemp;
+            // Obtener la fecha seleccionada desde el input de tipo month
+            $selectedMonth = $request->input('selected_month');
             $formattedDate = $selectedMonth . '-01'; // Añade el primer día del mes
+
+
+
+            // Verificar si no se proporcionó una fecha seleccionada y usar el mes actual
+            if (!$selectedMonth) {
+                $selectedMonth = Carbon::now()->format('Y-m');
+                $formattedDate = $selectedMonth . '-01'; // Añade el primer día del mes
+            }
+            $firstDay = Carbon::createFromFormat('Y-m-d', $formattedDate)->startOfMonth();
+            $lastDay = Carbon::createFromFormat('Y-m-d', $formattedDate)->endOfMonth();
+
+
+
+            // Obtener todos los días del mes actual organizados por semanas
+            $weeksInMonth = $this->getWeeksInMonth($firstDay, $lastDay, $selectedMonth);
+
+            // Transformar los datos en un formato compatible con DataTables
+            $data = $this->transformDataForDataTables($weeksInMonth, $selectedMonth, $id);
+
+            return DataTables::of($data)->make(true);
         }
-        $firstDay = Carbon::createFromFormat('Y-m-d', $formattedDate)->startOfMonth();
-        $lastDay = Carbon::createFromFormat('Y-m-d', $formattedDate)->endOfMonth();
-
-
-
-        // Obtener todos los días del mes actual organizados por semanas
-        $weeksInMonth = $this->getWeeksInMonth($firstDay, $lastDay, $selectedMonth);
-
-        // Transformar los datos en un formato compatible con DataTables
-        $data = $this->transformDataForDataTables($weeksInMonth, $selectedMonth, $id);
-
-        return DataTables::of($data)->make(true);
-        //     }
         return view('asistencias.registros.fechas', compact('vistaselectedMonth', 'empleado'));
     }
 
@@ -371,7 +301,7 @@ class AusenciasController extends Controller
                 $this->calcularRetraso($registro);
             }
             $f2 = Carbon::parse($fecha);
-             $f=$f2->isoFormat('dddd D [de] MMMM'); 
+            $f = $f2->isoFormat('dddd D [de] MMMM');
 
             // Puedes redirigir a la vista de detalles o a donde desees
             // Puedes redirigir a la vista de detalles o a donde desees
@@ -384,7 +314,6 @@ class AusenciasController extends Controller
 
     private function verificarMarcado(RegistroAsistencia $registro)
     {
-
         if ($registro->horario->tipo == 1) {
             if (
                 $registro->registro_inicio &&
@@ -393,8 +322,8 @@ class AusenciasController extends Controller
                 $registro->registro_final
             ) {
                 $registro->estado = 1;
-                $registro->observ = 'Dia Trabajado Regularizado';
-                $registro->tipo = 0;
+                $registro->observ = 'Dia Trabajado';
+                $registro->tipo = 1;
                 $registro->save();
             } else if (
                 !$registro->registro_inicio &&
@@ -402,6 +331,7 @@ class AusenciasController extends Controller
                 $registro->registro_entrada &&
                 $registro->registro_final
             ) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 4;
                 $registro->save();
             } else if (
@@ -410,6 +340,7 @@ class AusenciasController extends Controller
                 $registro->registro_entrada &&
                 $registro->registro_final
             ) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 4;
                 $registro->save();
             } else if (
@@ -418,6 +349,7 @@ class AusenciasController extends Controller
                 !$registro->registro_entrada &&
                 !$registro->registro_final
             ) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 3;
                 $registro->save();
             } else if (
@@ -427,6 +359,7 @@ class AusenciasController extends Controller
                 $registro->registro_final
             ) {
                 $registro->estado = 5;
+                $registro->observ = 'Pendiente';
                 $registro->save();
             } else if (
                 !$registro->registro_inicio &&
@@ -434,6 +367,7 @@ class AusenciasController extends Controller
                 $registro->registro_entrada &&
                 !$registro->registro_final
             ) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 5;
                 $registro->save();
             } else if (
@@ -442,6 +376,7 @@ class AusenciasController extends Controller
                 $registro->registro_entrada &&
                 !$registro->registro_final
             ) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 3;
                 $registro->save();
             } else if (
@@ -450,6 +385,7 @@ class AusenciasController extends Controller
                 !$registro->registro_entrada &&
                 $registro->registro_final
             ) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 3;
                 $registro->save();
             } else if (
@@ -458,6 +394,7 @@ class AusenciasController extends Controller
                 !$registro->registro_entrada &&
                 !$registro->registro_final
             ) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 5;
                 $registro->save();
             } else if (
@@ -466,6 +403,7 @@ class AusenciasController extends Controller
                 !$registro->registro_entrada &&
                 $registro->registro_final
             ) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 5;
                 $registro->save();
             } else if (
@@ -474,6 +412,7 @@ class AusenciasController extends Controller
                 !$registro->registro_entrada &&
                 $registro->registro_final
             ) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 3;
                 $registro->save();
             } else if (
@@ -482,6 +421,7 @@ class AusenciasController extends Controller
                 $registro->registro_entrada &&
                 !$registro->registro_final
             ) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 5;
                 $registro->save();
             } else if (
@@ -490,23 +430,36 @@ class AusenciasController extends Controller
                 $registro->registro_entrada &&
                 !$registro->registro_final
             ) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 5;
+                $registro->save();
+            } else if (
+                !$registro->registro_inicio &&
+                !$registro->registro_salida &&
+                !$registro->registro_entrada &&
+                !$registro->registro_final
+            ) {
+                $registro->observ = 'Falta';
+                $registro->estado = 0;
                 $registro->save();
             }
         }
         if ($registro->horario->tipo == 0) {
             if ($registro->registro_final && $registro->registro_inicio) {
+                $registro->observ = 'Dia Trabajado';
+
                 $registro->estado = 1;
-                $registro->observ = 'Dia Trabajado Regularizado';
-                $registro->tipo = 0;
                 $registro->save();
             } else if (!$registro->registro_final && $registro->registro_inicio) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 3;
                 $registro->save();
             } else if ($registro->registro_final && !$registro->registro_inicio) {
+                $registro->observ = 'Pendiente';
                 $registro->estado = 4;
                 $registro->save();
             } else {
+                $registro->observ = 'Falta';
                 $registro->estado = 0;
                 $registro->save();
             }

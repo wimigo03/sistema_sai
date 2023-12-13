@@ -22,18 +22,18 @@
     <!-- Contenido de tu vista -->
 
     <div class="page-header" align="center">
-        <img src="{{ asset('logos/header.jpg') }}" width="900px" height="70px" />
+        <img src="{{ asset('logos/header.jpg') }}" width="700px" height="70px" />
     </div>
 
     <h3>
-        Reporte Personal de Retrasos
+        Reporte de Retrasos Personal
     </h3>
     <table border="1" cellspacing="0" cellpadding="0" width="100%">
         <tbody>
             <tr>
                 <td width="34%" valign="top">
                     <p>
-                        Reporte de Retrasos Personales:
+                        Reporte de Retrasos Personal:
                     </p>
                 </td>
                 <td width="33%" valign="top">

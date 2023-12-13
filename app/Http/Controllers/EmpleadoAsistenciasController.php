@@ -105,18 +105,23 @@ class EmpleadoAsistenciasController extends Controller
                     return '-';
                 }
             })
-            ->addColumn('actions', function ($row) {
-                return '<a class="tts:left tts-slideIn tts-custom" aria-label="Ver Registros de Asistencia" href="' . route('empleadoasistencias.show', ['id' => $row->idemp]) . '">
-                          <i class="fa-solid fa-2xl fa-list text-success" aria-hidden="true"></i>
-                           
-                        </a>' . '       ' . '<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Horarios Asignados" href="' . route('horarios.cambio', $row->idemp) . '">
-                        <i class="fa-solid fa-2xl fa-clock text-primary"></i>
-                        
-                    </a>' .   '' . '<a class="tts:left tts-slideIn tts-custom" aria-label="Agregar Regulacion" href="' . route('agregar.regulacion', $row->idemp) . '">
-
-                    <i class="fa-solid fa-2xl  fa-calendar-days text-secondary"></i>         
+            ->addColumn('actions1', function ($row) {
+                return '<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Horarios Asignados" href="' . route('horarios.cambio', $row->idemp) . '">
+                <ifa-clock text-primary"></i><i  class="fa-solid fa-2xl  fa-circle-info"></i>
+                
             </a>';
-            })->rawColumns(['actions'])->make(true);
+            })->addColumn('actions2', function ($row) {
+                return '<a class="tts:left tts-slideIn tts-custom" aria-label="Regular Asistencia" href="' . route('agregar.regulacion', $row->idemp) . '">
+
+              <i class="fa-solid fa-2xl  fa-calendar-days text-warning"></i>       
+      </a>';
+            })->addColumn('actions3', function ($row) {
+                return ' <a class="tts:left tts-slideIn tts-custom" aria-label="Ver lista de Registros de Asistencia" href="' . route('empleadoasistencias.show', ['id' => $row->idemp]) . '">
+                <i class="fa-solid fa-2xl fa-list text-success" aria-hidden="true"></i>
+                 
+              </a>';
+            })
+            ->rawColumns(['actions1', 'actions2', 'actions3'])->make(true);
     }
 
 
@@ -172,10 +177,12 @@ class EmpleadoAsistenciasController extends Controller
             $filtro = $request->input('filtro');
 
             if ($filtro == 'actual') {
-                $data = $data->where('fecha', Carbon::today());
+                $data = $data->where('fecha', Carbon::today()->format('Y-m-d'));
             } elseif ($filtro == 'mensual') {
-                $data = $data->whereMonth('fecha', Carbon::now()->month);
-            }
+                $data = $data->filter(function ($item) {
+                    return Carbon::parse($item->fecha)->month == Carbon::now()->month;
+                });
+           }
 
              return DataTables::of($data)
 

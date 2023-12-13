@@ -30,7 +30,8 @@ class HistorialAsistenciasController extends Controller
                 $item->datos_anteriores = json_decode(html_entity_decode($item->datos_anteriores), true);
                 // Agregar el botón con el ID
                 $item->enlace_html = '<a href="' . route('restaurar-datos.restore', ['id' => $item->id]) . '"> <i class="fa-solid fa-2x fa-trash-can-arrow-up"></i></a>';
-                $empleado = EmpleadosModel::find($item->empleado_id);
+                
+                $empleado = EmpleadosModel::where('idemp',$item->empleado_id)->select('nombres','ap_pat','ap_mat')->first();
                 $item->nombre_empleado = $empleado ? $empleado->nombres : 'Desconocido';
                 $item->apellidos_empleado = $empleado ? $empleado->ap_pat : '';
                 $item->apellidos_empleado2 = $empleado ? $empleado->ap_mat : '';
@@ -46,7 +47,7 @@ class HistorialAsistenciasController extends Controller
                 })
                 ->rawColumns(['boton_html'])
                 ->toJson();
-        }
+      }
 
 
         return view('asistencias.regularizar.historial');
@@ -77,15 +78,20 @@ class HistorialAsistenciasController extends Controller
 
         // Ahora, $datosAnterioresArray contiene los valores originales como un array asociativo
         // Puedes utilizar estos valores según tus necesidades
-        $historial->empleado_id;
-        $empleado = EmpleadosModel::where('idemp',$historial->empleado_id)->select('nombres','ap_pat','ap_mat')->first();
-
+      
         // Por ejemplo, podrías restaurar los datos en el modelo original
         // Supongamos que el modelo original es Usuario y el ID del usuario está en $datosAnterioresArray['usuario_id']
         RegistroAsistencia::find($datosAnterioresArray['id'])->update($datosAnterioresArray);
         // Elimina el historial restaurado
+        $historial->empleado_id;
+        $empleado = EmpleadosModel::where('idemp',$historial->empleado_id)->select('idemp','nombres','ap_pat','ap_mat')->first();
+
         $historial->delete();
-        return redirect()->route('ausencias.index')->with('success', 'Se restauro con éxito el Regitro del personal :'.$empleado->nombres.' '.$empleado->ap_pat.' '.$empleado->ap_pat);
+       //  return view('asistencias.registros.fechas', compact('vistaselectedMonth', 'empleado'));
+       $vistaselectedMonth = Carbon::now()->format('Y-m');
+       return view('asistencias.registros.fechas',compact('vistaselectedMonth', 'empleado'))->with('success', 'Se restauro con éxito el Regitro del personal :'.$empleado->nombres.' '.$empleado->ap_pat.' '.$empleado->ap_pat);
+
+
 
     }
 }

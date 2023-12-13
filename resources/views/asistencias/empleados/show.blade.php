@@ -20,7 +20,7 @@
                     <option value="mensual" {{ $filtro == 'mensual' ? 'selected' : '' }}>Mensual</option>
                 </select>
             </div>
-            <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('empleadoasistencias.index')}}">
+            <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
                 <button class="btn btn-sm btn-danger font-verdana" type="button">
                     &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
                 </button>
@@ -65,6 +65,7 @@
             responsive: true,
             processing: true,
             serverSide: true,
+            pageLength: 5,
             language: {
                 info: "<span class='font-verdana'>Mostrando _START_ al _END_ de _TOTAL_</span>",
                 search: '',

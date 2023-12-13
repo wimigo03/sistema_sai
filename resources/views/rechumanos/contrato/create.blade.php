@@ -13,10 +13,40 @@
             </a>
         </span>
     </div>
-    <div class="col-md-9 text-center titulo">
+    <div class="col-md-9 text-right titulo">
         <b>GESTIONAR PERSONAL-C//REGISTRAR</b>
+            
+        <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
+                <button class="btn btn-sm btn-danger font-verdana" type="button">
+                    &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
+                </button>
+            </a>
     </div>
+    <div class="col-md-12">
+            <hr>
+            @if(Session::has('pendiente'))
+            <div class="alert alert-danger font-verdana-bg">
+                {{ Session::get('pendiente') }}
+            </div>
+            <hr>
 
+            @endif
+
+            @if(Session::has('success'))
+            <div class="alert alert-success">
+                {{ Session::get('success') }}
+            </div>
+            <hr>
+
+            @endif
+            @if(Session::has('error'))
+            <div class="alert alert-danger font-verdana-bg">
+                {{ Session::get('error') }}
+            </div>
+            <hr>
+
+            @endif
+        </div>
     <div class="col-md-12">
         <hr class="hrr">
     </div>

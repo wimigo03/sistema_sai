@@ -455,7 +455,7 @@
                       
 
 
-                        @can('reporte_access')
+                        @can('permisos_access')
                         <li>
                             <a href="{{ route('permisospersonales.index') }}">
                             &nbsp; &nbsp; 

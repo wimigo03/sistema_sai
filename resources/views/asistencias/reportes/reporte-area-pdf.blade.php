@@ -22,7 +22,7 @@
     <!-- Contenido de tu vista -->
 
     <div class="page-header" align="center">
-        <img src="{{ asset('logos/header.jpg') }}" width="900px" height="70px" />
+        <img src="{{ asset('logos/header.jpg') }}" width="700px" height="70px" />
     </div>
 
     <h3>

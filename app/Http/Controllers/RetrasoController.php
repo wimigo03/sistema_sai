@@ -17,19 +17,21 @@ class RetrasoController extends Controller
         if ($request->ajax()) {
             $filtro = $request->input('filtro', 'actual');
 
-            $data = RegistroAsistencia::with('empleado')->where('minutos_retraso','>',0);
+            $data = RegistroAsistencia::with('empleado')->where('minutos_retraso', '>', 0);
             $filtro = $request->input('filtro');
             if ($filtro == 'actual') {
-                $data = $data->whereDate('fecha', Carbon::today());
+                $data = $data->where('fecha', Carbon::today()->format('Y-m-d'));
             } elseif ($filtro == 'mensual') {
-                $data = $data->whereMonth('fecha', Carbon::now()->month);
+                $data = $data->where(function ($query) {
+                    $query->whereMonth('fecha', Carbon::now()->month);
+                });
             }
             $data = $data->get();
 
             return DataTables::of($data)
 
                 ->addColumn('fecha', function ($row) {
-                    return $row->created_at ? Carbon::parse($row->created_at)->format('Y-m-d'): '-';
+                    return $row->fecha ?: '-';
                 })
                 ->addColumn('nombres', function ($row) {
                     return $row->empleado->nombres ?? '-';
@@ -46,6 +48,6 @@ class RetrasoController extends Controller
         }
         $filtro = $request->input('filtro', 'actual');
 
-        return view('asistencias.retrasos.index',compact('filtro'));
+        return view('asistencias.retrasos.index', compact('filtro'));
     }
 }

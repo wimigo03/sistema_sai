@@ -19,6 +19,8 @@
                     &nbsp; Historial de Regularizaciones
                 </button>
             </a>
+            <b> MES: </b>
+        
          
             <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
                 <button class="btn btn-sm btn-danger font-verdana" type="button">

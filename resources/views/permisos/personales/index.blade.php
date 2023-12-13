@@ -4,16 +4,18 @@
 <div class="container-xl">
     <br>
     <div class="row font-verdana-bg">
-        <div class="col-md-8 titulo">
+        <div class="col-8 text-left titulo">
             <b> Registro de Permisos Personales </b>
         </div>
-        <div class="col-md-4 text-right">
+        <div class="col-4 text-right titulo">
+            <b> MES: </b>
             <div class="btn-group">
+
                 <input type="month" name="fecha" id="fecha" class="form-control" value="{{ $añoMesActual }}">
                 <input type="hidden" id="permiso" value="{{ $permiso->id }}">
 
             </div>
-            
+
             <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
                 <button class="btn btn-sm btn-danger font-verdana" type="button">
                     &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
@@ -103,9 +105,7 @@
                 permisoInput.value = permisoId;
                 fechaInput.value = permisoMes;
                 table.ajax.url("{{ route('permisosempleados.get') }}?permiso_id=" + permisoId).load();
-
-                //$.each(cargo, function(index, cargo) {
-                //});
+ 
             }
         });
     });
@@ -196,7 +196,6 @@
             // Open this row
             row.child(template(row.data())).show();
             initTable(tableId, row.data());
-            console.log(row.data());
             tr.addClass('shown');
             tr.next().find('td').addClass('no-padding bg-gray');
         }

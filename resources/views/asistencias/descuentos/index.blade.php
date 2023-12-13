@@ -24,10 +24,10 @@
 
                 <thead>
                     <tr>
-                        <th>ID</th>
+                
                         <th>Descripción</th>
-                        <th>Tiempo Mínimo de Retraso</th>
-                        <th>Días Descuento</th>
+                        <th>Tiempo Acumulado (Minutos) </th>
+                        <th>Días Descuento (Haber Básico)</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -69,12 +69,7 @@
                 infoFiltered: "<span class='font-verdana'>(filtrados de un total de _MAX_ registros)</span>"
             },
             ajax: "{{ route('descuentos.index') }}",
-            columns: [{
-                    className: 'text-center p-1 ',
-                    data: 'id',
-                    name: 'id',
-
-                },
+            columns: [
                 {
 
                     data: 'descripcion',
@@ -99,14 +94,15 @@
                     className: 'text-center p-1 ',
                     data: 'actions',
                     name: 'actions',
-                    orderable: false,
-                    searchable: false
+                   
                 }
-            ],
-            columnDefs: [{
-                targets: [0], // El índice de la columna que quieres ocultar (en este caso, la columna 'id')
-                visible: false,
-            }]
+            ], 
+            order: [
+            [3, 'asc'] // Ordenar por la primera columna ('created_at') de manera ascendente
+        ],
+       // Ordenar por la primera columna ('created_at') de manera ascendente
+        
+          
 
         });
         $('#descuentos-table').on('draw.dt', function() {

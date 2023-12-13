@@ -5,7 +5,7 @@
     <br>
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
-        <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
+            <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
                 <a href="{{url()->previous()}}" class="color-icon-1">
                     <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
                 </a>
@@ -13,7 +13,7 @@
             <b> Lista de Retrasos </b>
         </div>
         <div class="col-md-4 text-right">
-        <div class="btn-group">
+            <div class="btn-group">
                 <select id="filtro" aria-label="Seleciona los registros" class="form-control">
                     <option value="todos" {{ $filtro == 'todos' ? 'selected' : '' }}>Todos</option>
                     <option value="actual" {{ $filtro == 'actual' ? 'selected' : '' }}>Hoy</option>
@@ -80,7 +80,7 @@
                 infoEmpty: "<span class='font-verdana'>Ningun registro encontrado</span>",
                 infoFiltered: "<span class='font-verdana'>(filtrados de un total de _MAX_ registros)</span>"
             },
-         
+
             ajax: {
                 url: "{{ route('retrasos.index') }}",
                 data: function(d) {
@@ -121,11 +121,9 @@
             $('ul.pagination').addClass('pagination-sm');
         }).DataTable();
         $('#filtro').on('change', function() {
-        $('#retrasos-table').DataTable().ajax.reload();
-        $('#retrasos-table').on('draw.dt', function() {
-            $('ul.pagination').addClass('pagination-sm');
-        }).DataTable();
-    });
+            $('#retrasos-table').DataTable().ajax.reload();
+            
+        });
     });
 </script>
 @endsection

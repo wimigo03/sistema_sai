@@ -28,11 +28,7 @@
     </div>
     <div class="row font-verdana-bg">
         <div class="col-md-6 titulo">
-            <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
-                <a href="{{url()->previous()}}" class="color-icon-1">
-                    <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
-                </a>
-            </span>
+
             <b>Lista de Personal Activo</b>
         </div>
         <div class="col-md-6 text-right">
@@ -75,7 +71,7 @@
 
             <div class="row font-verdana">
                 <hr class="hr">
-                <div class="col-md-12 table-responsive center">
+                <div class="col-md-12 ">
                     <table class="table-bordered yajra-datatable hoverTable table display responsive font-verdana" id="empleados-table" style="width:100%">
                         <thead class="table-light">
                             <tr>
@@ -83,9 +79,9 @@
                                 <th>Nombres</th>
                                 <th>Apellidos</th>
                                 <th>Horarios</th>
-                                <th>Acciones</th>
-                                <th>Acciones</th>
-                                <th>Acciones</th>
+                                <th class="text-justify p-1 font-verdana-sm">Información de<br>Control </th>
+                                <th class="text-justify p-1 font-verdana-sm">Regularizar<br>Asistencias</th>
+                                <th class="text-justify p-1 font-verdana-sm"> Registros de <br>Asistencias</th>
                             </tr>
                         </thead>
                     </table>
@@ -103,7 +99,9 @@
                                 <th>Nombres</th>
                                 <th>Apellidos</th>
                                 <th>Horarios</th>
-                                <th>Acciones</th>
+                                <th class="text-justify p-1 font-verdana-sm">Información de<br>Control </th>
+                                <th class="text-justify p-1 font-verdana-sm">Regularizar<br>Asistencias</th>
+                                <th class="text-justify p-1 font-verdana-sm"> Registros de <br>Asistencias</th>
                             </tr>
                         </thead>
                     </table>
@@ -250,9 +248,25 @@
                                 name: 'horario',
                                 class: 'text-justify p-1 font-verdana-sm'
                             },
+
                             {
-                                data: 'actions',
-                                name: 'actions',
+                                data: 'actions1',
+                                name: 'actions1',
+                                orderable: false,
+                                searchable: false,
+                                class: 'text-justify p-1 font-verdana-sm'
+                            },
+
+                            {
+                                data: 'actions2',
+                                name: 'actions2',
+                                orderable: false,
+                                searchable: false,
+                                class: 'text-justify p-1 font-verdana-sm'
+                            },
+                            {
+                                data: 'actions3',
+                                name: 'actions3',
                                 orderable: false,
                                 searchable: false,
                                 class: 'text-justify p-1 font-verdana-sm'

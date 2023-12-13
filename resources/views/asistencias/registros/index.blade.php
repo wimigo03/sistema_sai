@@ -12,7 +12,7 @@
                 <select id="filtro" aria-label="Seleciona los registros" class="form-control">
                     <option value="todos" {{ $filtro == 'todos' ? 'selected' : '' }}>Todos</option>
                     <option value="actual" {{ $filtro == 'actual' ? 'selected' : '' }}>Hoy</option>
-                    <option value="mensual" {{ $filtro == 'mensual' ? 'selected' : '' }}>Mensual</option>
+                    <option value="mensual" {{ $filtro == 'mensual' ? 'selected' : '' }}>Mes Actual</option>
                 </select>
             </div>
             <div class="btn-group">
@@ -203,11 +203,11 @@
                 collectionTitle: 'Control de Visibilidad de Columnas',
                 className: 'btn btn-sm btn-info',
             }],
- // cambiar lenguaje a español
+            // cambiar lenguaje a español
 
- "language": {
-            "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-        }
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+            }
 
 
         });

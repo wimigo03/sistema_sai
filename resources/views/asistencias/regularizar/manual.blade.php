@@ -32,9 +32,12 @@
             @endif
         </div>
     </div>
+    <!-- Campos del formulario -->
+    <div class="row font-verdana">
+        <div class="col-md-12 table-responsive center">
+        <div class="body-border ">
+        @if($registroAsistencia->horario->tipo == 0)
 
-    @if($registroAsistencia->horario->tipo == 0)
-    <div class="body-border ">
         <div class="row">
             <div class="form-group col-md-4 form-check">
                 <label for="asignado"><b>Turno Mañana :</b></label>
@@ -55,7 +58,7 @@
         @else
         <div class="row font-verdana">
             <div class=" col-md-6 ">
-            <hr class="hr">
+                <hr class="hr">
 
                 <div class="row">
                     <div class="form-group col-md-4 form-check">
@@ -68,7 +71,7 @@
                         <input type="time" id="registroH_inicio" name="registro_entrada" class="form-control" value="{{ $registroAsistencia->horario->hora_inicio }}" required>
 
                     </div>
-                    
+
 
                     <div class="form-group col-md-4 form-check">
                         <label for="asignado" id="label2">Biometrico</label>
@@ -80,7 +83,7 @@
                 </div>
             </div>
             <div class="col-md-6 ">
-            <hr class="hr">
+                <hr class="hr">
 
                 <div class="row">
                     <div class="form-group col-md-4 form-check">
@@ -102,108 +105,105 @@
             </div>
         </div>
         @endif
+    </div>
+            <div class="body-border">
 
-        <!-- Campos del formulario -->
-        <div class="row font-verdana">
-            <div class="col-md-12 table-responsive center">
-                <div class="body-border">
+                <form method="POST" action="{{ route('regularizar_asistencia.update', $registroAsistencia->id) }} " id="actualizarForm">
+                    @csrf
+                    @method('PUT')
 
-                    <form method="POST" action="{{ route('regularizar_asistencia.update', $registroAsistencia->id) }} " id="actualizarForm">
-                        @csrf
-                        @method('PUT')
-
-                        <div class="form-group row font-verdana-bg">
-                            <div class="form-group col-md-6">
-                                <label for="descripcion"><b>Nombres y Apellidos :</b></label>
-                                <input type="text" name="descripcion" value="{{ $registroAsistencia->empleado->nombres }} {{$registroAsistencia->empleado->ap_pat}} {{$registroAsistencia->empleado->ap_mat}}" class="form-control" readonly>
-                                <input type="hidden" name="observ" value="Regularizado" class="form-control" readonly>
-                                <input type="hidden" name="estado" value="0" class="form-control" readonly>
-
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label for="fecha"><b>Fecha :</b></label>
-                                <input type="date" name="fecha" class="form-control" value="{{ $registroAsistencia->asistencia->fecha }}" readonly>
-                            </div>
-                        </div>
-
-                        <div class="form-group row font-verdana-bg">
-                            @if($registroAsistencia->registro_inicio)
-                            <div class="form-group col-md-6">
-                                <label for="registro_inicio"><b>Hora de Inicio</b></label>
-                                <input type="time" id="registro_inicio" name="registro_inicio" class="form-control" value="{{ $registroAsistencia->registro_inicio }}" readonly>
-                            </div>
-                            @else
-                            <div class="form-group col-md-6">
-                                <label for="registro_inicio"><b>Hora de Inicio</b></label>
-                                <input type="time" id="registro_inicio" name="registro_inicio" class="form-control" value="">
-                            </div>
-                            @endif
-                            @if($registroAsistencia->registro_final)
-                            <div class="form-group col-md-6">
-                                <label for="registro_final"><b>Salida Finalizada</b> </label>
-                                <input type="time" id="registro_final" name="registro_final" class="form-control" value="{{ $registroAsistencia->registro_final }}" readonly>
-                            </div>
-                            @else
-                            <div class="form-group col-md-6">
-                                <label for="registro_final"><b>Salida Finalizada</b> </label>
-                                <input type="time" id="registro_final" name="registro_final" class="form-control" value="">
-                            </div>
-                            @endif
-                        </div>
-                        @if($registroAsistencia->horario->tipo == 0)
-
-
-                        <div class="form-group row font-verdana-bg">
+                    <div class="form-group row font-verdana-bg">
+                        <div class="form-group col-md-6">
+                            <label for="descripcion"><b>Nombres y Apellidos :</b></label>
+                            <input type="text" name="descripcion" value="{{ $registroAsistencia->empleado->nombres }} {{$registroAsistencia->empleado->ap_pat}} {{$registroAsistencia->empleado->ap_mat}}" class="form-control" readonly>
+                            <input type="hidden" name="observ" value="Regularizado" class="form-control" readonly>
+                            <input type="hidden" name="estado" value="0" class="form-control" readonly>
 
                         </div>
 
-                        <div class="form-group row font-verdana-bg">
-                            <!-- Otros campos del formulario si los hay -->
+                        <div class="form-group col-md-6">
+                            <label for="fecha"><b>Fecha :</b></label>
+                            <input type="date" name="fecha" class="form-control" value="{{ $registroAsistencia->asistencia->fecha }}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group row font-verdana-bg">
+                        @if($registroAsistencia->registro_inicio)
+                        <div class="form-group col-md-6">
+                            <label for="registro_inicio"><b>Hora de Inicio</b></label>
+                            <input type="time" id="registro_inicio" name="registro_inicio" class="form-control" value="{{ $registroAsistencia->registro_inicio }}" readonly>
                         </div>
                         @else
-                        <b>DESCANSO:</b>
-                        <div class="col-md-12">
-                            <hr class="hrr">
-                        </div>
-                        <div class="form-group row font-verdana-bg">
-                            @if($registroAsistencia->registro_salida)
-                            <div class="form-group col-md-6">
-                                <label for="registro_salida">Hora de salida</label>
-                                <input type="time" id="registro_salida" name="registro_salida" class="form-control" value="{{ $registroAsistencia->registro_salida }}" readonly required>
-                            </div>
-                            @else
-                            <div class="form-group col-md-6">
-                                <label for="registro_salida">Hora de salida</label>
-                                <input type="time" id="registro_salida" name="registro_salida" class="form-control" value="">
-                            </div>
-                            @endif
-                            @if($registroAsistencia->registro_entrada)
-                            <div class="form-group col-md-6">
-                                <label for="registro_entrada">Hora de retorno</label>
-                                <input type="time" id="registro_entrada" name="registro_entrada" class="form-control" value="{{ $registroAsistencia->registro_entrada }}" readonly required>
-                            </div>
-                            @else
-                            <div class="form-group col-md-6">
-                                <label for="registro_entrada">Hora de retorno</label>
-                                <input type="time" id="registro_entrada" name="registro_entrada" class="form-control" value="">
-                            </div>
-                            @endif
+                        <div class="form-group col-md-6">
+                            <label for="registro_inicio"><b>Hora de Inicio</b></label>
+                            <input type="time" id="registro_inicio" name="registro_inicio" class="form-control" value="">
                         </div>
                         @endif
-                        <div class="col-md-12 text-right">
-                            <hr class="hrr">
-                            <button type="submit" class="btn btn-primary">Regularizar</button>
+                        @if($registroAsistencia->registro_final)
+                        <div class="form-group col-md-6">
+                            <label for="registro_final"><b>Salida Finalizada</b> </label>
+                            <input type="time" id="registro_final" name="registro_final" class="form-control" value="{{ $registroAsistencia->registro_final }}" readonly>
                         </div>
-                       
-                    </form>
+                        @else
+                        <div class="form-group col-md-6">
+                            <label for="registro_final"><b>Salida Finalizada</b> </label>
+                            <input type="time" id="registro_final" name="registro_final" class="form-control" value="">
+                        </div>
+                        @endif
+                    </div>
+                    @if($registroAsistencia->horario->tipo == 0)
 
-                </div>
+
+                    <div class="form-group row font-verdana-bg">
+
+                    </div>
+
+                    <div class="form-group row font-verdana-bg">
+                        <!-- Otros campos del formulario si los hay -->
+                    </div>
+                    @else
+                    <b>DESCANSO:</b>
+                    <div class="col-md-12">
+                        <hr class="hrr">
+                    </div>
+                    <div class="form-group row font-verdana-bg">
+                        @if($registroAsistencia->registro_salida)
+                        <div class="form-group col-md-6">
+                            <label for="registro_salida">Hora de salida</label>
+                            <input type="time" id="registro_salida" name="registro_salida" class="form-control" value="{{ $registroAsistencia->registro_salida }}" readonly required>
+                        </div>
+                        @else
+                        <div class="form-group col-md-6">
+                            <label for="registro_salida">Hora de salida</label>
+                            <input type="time" id="registro_salida" name="registro_salida" class="form-control" value="">
+                        </div>
+                        @endif
+                        @if($registroAsistencia->registro_entrada)
+                        <div class="form-group col-md-6">
+                            <label for="registro_entrada">Hora de retorno</label>
+                            <input type="time" id="registro_entrada" name="registro_entrada" class="form-control" value="{{ $registroAsistencia->registro_entrada }}" readonly required>
+                        </div>
+                        @else
+                        <div class="form-group col-md-6">
+                            <label for="registro_entrada">Hora de retorno</label>
+                            <input type="time" id="registro_entrada" name="registro_entrada" class="form-control" value="">
+                        </div>
+                        @endif
+                    </div>
+                    @endif
+                    <div class="col-md-12 text-right">
+                        <hr class="hrr">
+                        <button type="submit" class="btn btn-primary">Regularizar</button>
+                    </div>
+
+                </form>
+
             </div>
         </div>
-
-
     </div>
+
+
+ 
 
     <!-- Modal de Confirmación -->
     <div class="modal fade" id="confirmarModal" tabindex="-1" role="dialog" aria-labelledby="confirmarModalLabel" aria-hidden="true">
@@ -240,7 +240,7 @@
             var isChecked = $("#" + checkboxId).prop("checked");
 
             // Cambiar el texto del label según el estado del checkbox
-            $("#" + labelId).text(isChecked ? originalText + " (Activado)" : originalText.replace(" (Activado)", ""));
+            $("#" + labelId).text(isChecked ? originalText + " (MANUAL)" : originalText.replace(" (MANUAL)", ""));
 
             // Obtener el valor del input fuente
             var sourceValue = $("#" + sourceInputId).val();

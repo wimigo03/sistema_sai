@@ -77,8 +77,8 @@
                         </div>
 
                         <div class="form-group col-md-6 form-check">
-                            <label for="asignado">Asignar a Todos{{$asignados}}</label>
-                            <input type="checkbox" name="asignado" value="1" {{$asignados ? 'checked' : '' }} class="form-control">
+                            <label for="asignado">Asignar a Todos: </label>
+                            <input type="checkbox" name="asignado" value="1" {{$asignados ? 'checked' : '' }} class="form-control success">
                         </div>
                     </div>
 

@@ -10,7 +10,7 @@
             <a class="tts:left tts-slideIn tts-custom" aria-label="Exp" href="{{route('lista2.exp')}}">
                 <button class="btn btn-sm btn-info font-verdana" type="button">
 
-                    &nbsp; <i class="fa-regular fa-address-card"> &nbsp; </i>Lista General de Expiraciones</i>&nbsp;
+                    &nbsp; <i class="fa-regular fa-address-card"> &nbsp; </i>Lista de Expiraciones</i>&nbsp;
                 </button>
             </a>
             <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">

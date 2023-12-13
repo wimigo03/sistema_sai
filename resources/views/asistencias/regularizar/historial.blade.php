@@ -56,6 +56,7 @@
         $('#historial-table').DataTable({
             processing: true,
             serverSide: true,
+            pageLength: 3,
             ajax: "{{ route('historial_asistencia.index') }}",
             columns: [{
                     data: 'created_at_formatted',
@@ -115,7 +116,9 @@
 
                 }
             ], // cambiar lenguaje a español
-
+            order: [
+            [0, 'desc'] // Ordenar por la primera columna ('created_at') de manera ascendente
+        ],
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
             }
