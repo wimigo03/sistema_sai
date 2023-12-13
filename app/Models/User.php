@@ -18,10 +18,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role_id',
+
         'idemp',
         'estadouser',
-        'dea_id'
+
     ];
 
     protected $hidden = [
@@ -43,18 +43,6 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class,'role_id','id');
     }
 
-    static function boot(){
-        parent::boot();
-
-        static::created(function(Model $model){
-            if($model->role_id == ""){
-                $model->update([
-                    'role_id' => Role::where('title','user')->first()->id,
-                ]);
-            }
-        });
-
-    }
 
     public function usuariosEmpleados(){
        return $this->belongsTo(EmpleadosModel::class, 'idemp', 'idemp');

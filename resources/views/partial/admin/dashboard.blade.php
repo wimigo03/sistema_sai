@@ -69,14 +69,14 @@
                         </a>
                         <ul class="sub-menu collapse" id="dashboard_canasta_v2">
                             <li>
-                                <a href="{{ route('distritos.index') }}">  
+                                <a href="{{ route('distritos.index') }}">
                                     <span class="nav-label mr-4">
                                         <i class="fa-solid fa-house"></i>&nbsp;Distritos
                                     </span>
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('barrios.index') }}">  
+                                <a href="{{ route('barrios.index') }}">
                                     <span class="nav-label mr-4">
                                         <i class="fa-solid fa-house"></i>&nbsp;Barrios
                                     </span>
