@@ -105,7 +105,7 @@
                                 @endcan
                                 @can('roles_access')
                                     <li>
-                                        <a href="{{ route('roles.index') }}">
+                                        <a href="{{ route('admin.roles.index') }}">
                                             <span class="nav-label mr-4">
                                                 <i class="fa-solid fa-list"></i>&nbsp;Roles
                                             </span>
