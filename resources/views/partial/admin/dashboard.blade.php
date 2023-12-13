@@ -69,14 +69,14 @@
                         </a>
                         <ul class="sub-menu collapse" id="dashboard_canasta_v2">
                             <li>
-                                <a href="{{ route('distritos.index') }}">  
+                                <a href="{{ route('distritos.index') }}">
                                     <span class="nav-label mr-4">
                                         <i class="fa-solid fa-house"></i>&nbsp;Distritos
                                     </span>
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('barrios.index') }}">  
+                                <a href="{{ route('barrios.index') }}">
                                     <span class="nav-label mr-4">
                                         <i class="fa-solid fa-house"></i>&nbsp;Barrios
                                     </span>
@@ -96,7 +96,7 @@
                             <ul class="sub-menu collapse" id="dashboard_users">
                                 @can('users_access')
                                     <li>
-                                        <a href="{{ route('admin.users.index') }}">
+                                        <a href="{{ route('users.index') }}">
                                             <span class="nav-label mr-4">
                                                 <i class="fa-solid fa-people-arrows"></i>&nbsp;Listar
                                             </span>
@@ -105,7 +105,7 @@
                                 @endcan
                                 @can('roles_access')
                                     <li>
-                                        <a href="{{ route('admin.roles.index') }}">
+                                        <a href="{{ route('roles.index') }}">
                                             <span class="nav-label mr-4">
                                                 <i class="fa-solid fa-list"></i>&nbsp;Roles
                                             </span>

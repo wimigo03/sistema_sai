@@ -9,6 +9,7 @@ use App\Exportar\UsuariosExcel;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\EmpleadosModel;
+use App\Models\UserRolesModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Response;
@@ -71,8 +72,31 @@ class UserController extends Controller
         return view('admin.users.create', compact('roles', 'empleados'));
     }
 
-    public function store(StoreUserRequest $request){
-        User::create($request->validated());
+    public function store(Request $request){
+
+
+       // dd($request->input('roles'));
+        $user = new User();
+        $user->idemp = $request->input('idemp');
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->password = $request->input('password');
+        $user->dea_id = $request->input('dea');
+        $user->estadouser = 1;
+        //$user->estado_unidad = 1;
+        $user->save();
+        //dd($request);
+        //User::create($request->validated());
+
+        if ( $request->has('roles') ) {
+            foreach ( $request->get('roles') as $peso ) {
+                UserRolesModel::create([
+                    'id_user' => $user->id ,
+                    'id_role' => $peso
+                ]);
+            }
+        }
+
         return redirect()->route('users.index')->with(['status-success' => "Usuario registrado con exito."]);
     }
 
