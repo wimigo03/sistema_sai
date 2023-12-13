@@ -4,14 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\User;
 class CompraModel extends Model
 {
     protected $table = 'compra';
-
     protected $primaryKey= 'idcompra';
-
-    public $timestamps = true;
+    //public $timestamps = true;
 
     protected $fillable = [
         'idproveedor',
@@ -27,11 +25,13 @@ class CompraModel extends Model
         'controlinterno',
         'created_at',
         'updated_at',
-        'idarea'
+        'idarea',
+        'dea_id'
     ];
 
-    protected $guarded = [
-
-
-    ];
+    public function scopeByDea($query, $dea_id){
+        if($dea_id != null){
+            return $query->where('dea_id',$dea_id);
+        }
+    }
 }

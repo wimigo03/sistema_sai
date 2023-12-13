@@ -17,21 +17,8 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
+
     public const HOME = '/admin';
-
-    /**
-     * The controller namespace for the application.
-     *
-     * When present, controller route declarations will automatically be prefixed with this namespace.
-     *
-     * @var string|null
-     */
-
-    /**
-     * Define your route model bindings, pattern filters, etc.
-     *
-     * @return void
-     */
     protected $namespace = 'App\Http\Controllers';
 
     public function boot()
@@ -84,8 +71,11 @@ class RouteServiceProvider extends ServiceProvider
             ->namespace($this->namespace)
             ->group(base_path('routes/CanastaV2/barrios-route.php'));
 
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Compras/pedido-parcial-route.php'));
 
-            Route::middleware('web')
+        Route::middleware('web')
             ->namespace($this->namespace)
             ->group(base_path('routes/Expochaco/solicitud-route.php'));
     }
