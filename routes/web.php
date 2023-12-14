@@ -81,7 +81,12 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::group(['name' => 'admin.'], function () {
+        Route::get('admin/', 'Admin\HomeController@index')->name('home');
+        //Route::get('admin/roles/index', 'Admin\RoleController@index')->name('roles.index');
+        //Route::get('admin/roles/create', 'Admin\RoleController@create')->name('roles.create');
+    });
+    //Route::get('/', [HomeController::class, 'index'])->name('home');
     /*Route::get('admin/users/index', [UserController::class, 'index'])->name('admin.users.index');
     Route::get('admin/users/search', [UserController::class, 'search'])->name('admin.users.search');
     Route::get('admin/users/excel', [UserController::class, 'excel'])->name('admin.users.excel');
@@ -102,18 +107,10 @@ Auth::routes();
 
 
 
-Route::group(['prefix'=>"admin",'as' => 'admin.','namespace' => 'App\Http\Controllers\Admin','middleware' => ['auth','AdminPanelAccess']], function () {
 
-    Route::get('/', 'HomeController@index')->name('home');
-    Route::resource('/users', 'UserController');
-    Route::resource('/roles', 'RoleController');
-    Route::resource('/permissions', 'PermissionController')->except(['show']);
-
-
-});
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('home');
+    //Route::get('/', [HomeController::class, 'index'])->name('home');
 
 //////////////////////////////////////  MEDIDAS  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

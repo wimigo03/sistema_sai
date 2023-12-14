@@ -1,29 +1,31 @@
 @extends('layouts.admin')
 @section('content')
-<br>
+<link rel="stylesheet" href="/css/font-verdana.css" rel="stylesheet">
+<div class="card card-custom">
+    <div class="card-header font-verdana-bgt">
+        <b>SOLICITUD COMPRA - 'AREA'</b>
+    </div>
+    <div class="card-body">
+        {{--@include('canasta_v2.barrio.partials.search')--}}
+        @include('compras.pedidoparcial.partials.table')
+    </div>
+</div>
+
 <div class="row font-verdana-bg">
     <div class="col-md-8 titulo">
-        <b>SOLICITUDES DE COMPRAS -- </b><b style='color:red'>{{$idd->nombrearea}} </b>--
+        <b>SOLICITUDES DE COMPRAS -- </b><b style='color:red'>{{$personalArea->nombrearea}} </b>--
     </div>
     <div class="col-md-4 text-right titulo">
-        @can('compras_create')
-
         <a href="{{route('compras.pedidoparcial.create')}}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar Solicitud">
             <button class="btn btn-sm btn-success font-verdana" type="button" >Agreg.Solic.
                 &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
             </button>
-        </a>
-        @endcan
-
-
-        @can('compras_encargados')
-
+        </a>        
         <a href="{{route('compras.pedidoparcial.listadoResponsables')}}" class="tts:left tts-slideIn tts-custom" aria-label="Gestionar Responsable">
             <button class="btn btn-sm btn-info font-verdana" type="button" >Gest.Resp.
                 &nbsp;<i class="fa-sharp fa-solid fa-people-arrows" aria-hidden="true"></i>&nbsp;
             </button>
         </a>
-        @endcan
 
 
     </div>

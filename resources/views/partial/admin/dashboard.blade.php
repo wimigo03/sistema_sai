@@ -105,7 +105,7 @@
                                 @endcan
                                 @can('roles_access')
                                     <li>
-                                        <a href="{{ route('admin.roles.index') }}">
+                                        <a href="{{ route('roles.index') }}">
                                             <span class="nav-label mr-4">
                                                 <i class="fa-solid fa-list"></i>&nbsp;Roles
                                             </span>
@@ -114,10 +114,87 @@
                                 @endcan
                                 @can('permissions_access')
                                     <li>
-                                        <a href="{{ route('admin.permissions.index') }}">
+                                        <a href="{{-- route('admin.permissions.index') --}}">
                                             <span class="nav-label mr-4">
                                                 <i class="fa-solid fa-layer-group"></i>&nbsp;Permisos
                                             </span>
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </li>
+                    @endcanany
+                    {{-- COMPRAS --}}
+                    @canany(['compras_panel_access'])
+                        <li class="font-verdana-bg">
+                            <a href="" data-toggle="collapse" data-target="#dashboard_compras"
+                                class="active collapsed" aria-expanded="false">
+                                <i class="fa fa-shopping-cart" style="color:green"></i>
+                                <span class="nav-label mr-3">COMPRAS</span>
+                                <span class="fa fa-arrow-circle-left float-right"></span>
+                            </a>
+                            <ul class="sub-menu collapse" id="dashboard_compras">
+                                {{--@can('compras_panel_access')--}}
+                                    <li>
+                                        <a href="{{ route('compras.pedidoparcial.index') }}">
+                                            &nbsp; &nbsp; &nbsp;
+                                            <span class="nav-label mr-4">Solicitudes de Compra</span>
+                                        </a>
+                                    </li>
+                                {{--@endcan--}}
+                                @can('compras_panel_access')
+                                    <li>
+                                        <a href="{{ route('compras.pedido.index') }}">
+                                            &nbsp; &nbsp; &nbsp;
+                                            <span class="nav-label mr-4">Compras Solicitadas</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('medidas_access')
+                                    <li>
+                                        <a href="{{ route('medidas.index') }}">
+                                            &nbsp; &nbsp; &nbsp;
+                                            <span class="nav-label mr-4">Medidas</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('partidas_access')
+                                    <li>
+                                        <a href="{{ route('partida.index') }}">
+                                            &nbsp; &nbsp; &nbsp;
+                                            <span class="nav-label mr-4">Partidas</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('productos_access')
+                                    <li>
+                                        <a href="{{ route('productos.index') }}">
+                                            &nbsp; &nbsp; &nbsp;
+                                            <span class="nav-label mr-4">Productos-Items</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('proveedores_access')
+                                    <li>
+                                        <a href="{{ route('proveedores.index') }}">
+                                            &nbsp; &nbsp; &nbsp;
+                                            <span class="nav-label mr-4">Proveedores</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('programas_access')
+                                    <li>
+                                        <a href="{{ route('programas.index') }}">
+                                            &nbsp; &nbsp; &nbsp;
+                                            <span class="nav-label mr-4">Programas</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('catprog_access')
+                                    <li>
+                                        <a href="{{ route('catprog.index') }}">
+                                            &nbsp; &nbsp; &nbsp;
+                                            <span class="nav-label mr-4">Categ. Programaticas</span>
                                         </a>
                                     </li>
                                 @endcan
@@ -218,7 +295,7 @@
                         </li>
                     @endcanany
                     {{-- COMPRAS --}}
-                    @canany(['compras_panel_access'])
+                    {{--@canany(['compras_panel_access'])
                         <li class="font-verdana-bg">
                             <a href="" data-toggle="collapse" data-target="#dashboard_compras"
                                 class="active collapsed" aria-expanded="false">
@@ -293,7 +370,7 @@
                                 @endcan
                             </ul>
                         </li>
-                    @endcanany
+                    @endcanany--}}
                     {{-- COMPRAS combustible --}}
                     @canany(['combustiblescomb_access'])
                         <li class="font-verdana-bg">
@@ -695,7 +772,7 @@
                             <ul class="sub-menu collapse" id="dashboard_users">
                                 @can('users_access')
                                     <li>
-                                        <a href="{{ route('admin.users.index') }}">
+                                        <a href="{{ route('users.index') }}">
                                             &nbsp; &nbsp; &nbsp;
                                             <span class="nav-label mr-4">Usuarios</span>
                                         </a>
@@ -703,7 +780,7 @@
                                 @endcan
                                 @can('roles_access')
                                     <li>
-                                        <a href="{{ route('admin.roles.index') }}">
+                                        <a href="{{-- route('admin.roles.index') --}}">
                                             &nbsp; &nbsp; &nbsp;
                                             <span class="nav-label mr-4">Roles</span>
                                         </a>
@@ -711,7 +788,7 @@
                                 @endcan
                                 @can('permissions_access')
                                     <li>
-                                        <a href="{{ route('admin.permissions.index') }}">
+                                        <a href="{{-- route('admin.permissions.index') --}}">
                                             &nbsp; &nbsp; &nbsp;
                                             <span class="nav-label mr-4">Permisos</span>
                                         </a>

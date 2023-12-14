@@ -20,6 +20,11 @@ class CompraController2 extends Controller
 {
     public function index()
     {
+        $comprass = CompraModel::query()
+                                    ->byDea(Auth::user()->dea->id)
+                                    ->orderBy('idcompra', 'desc')
+                                    ->paginate(10);
+        //dd($comprass);
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
@@ -34,26 +39,12 @@ class CompraController2 extends Controller
             ->select('c.idcompra', 'c.estado1', 'c.controlinterno', 'a.nombrearea', 'c.objeto', 'c.justificacion', 'p.nombreproveedor', 'c.preventivo', 'c.numcompra', 'cat.codcatprogramatica', 'prog.nombreprograma')
             ->get();
 
-
-        // $user = User::first($id);
-        // $phone->usuariosempleados;
-
-        //$phone = \App\Models\User::find($id)->usuariosempleados;
-        //$usuario = User::find($id);
-        // $phone=$usuario->usuariosEmpleados;
-        // $image = $id->usuariosempleados->first();
-        //////////////////////encontrar usuario y area/////////////
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
         $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
 
-        //$phone = User::has('usuariosempleados')->get();
-        //$phone = User::with('usuariosempleados')->first();
-        //$phone = $usuario->usuariosempleados;
-        //dd($phone2->nombrearea);
-
-        return view('compras.pedidoparcial.index', ['compras' => $compras, 'idd' => $personalArea]);
+        return view('compras.pedidoparcial.index', compact('compras','personalArea','comprass'));
     }
 
     public function create()
