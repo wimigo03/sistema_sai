@@ -206,7 +206,11 @@
             sumarHoras(4);
         } else {
             // Restablecer las horas cuando el checkbox está desmarcado
-            sumarHoras(0);
+            horaSalidaInput.value = '';
+            horaFinalInput.value = '';
+            
+            horaEntradaInput.value = '';
+            sumarHoras(8);
         }
     });
 

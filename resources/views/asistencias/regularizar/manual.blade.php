@@ -6,7 +6,7 @@
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
             <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
-                <a href="{{url()->previous()}}" class="color-icon-1">
+                <a href="{{route('agregar.regulacion', $registroAsistencia->empleado_id)}}" class="color-icon-1">
                     <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
                 </a>
             </span>
@@ -117,8 +117,7 @@
                             <label for="descripcion"><b>Nombres y Apellidos :</b></label>
                             <input type="text" name="descripcion" value="{{ $registroAsistencia->empleado->nombres }} {{$registroAsistencia->empleado->ap_pat}} {{$registroAsistencia->empleado->ap_mat}}" class="form-control" readonly>
                             <input type="hidden" name="observ" value="Regularizado" class="form-control" readonly>
-                            <input type="hidden" name="estado" value="0" class="form-control" readonly>
-
+ 
                         </div>
 
                         <div class="form-group col-md-6">

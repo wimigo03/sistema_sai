@@ -3,8 +3,6 @@
 @section('content')
 <div class="container">
     <div class="row font-verdana-bg">
-
-
         <div class="col-md-12">
             <!-- Dentro de tu vista -->
             @if(session('success'))
@@ -32,18 +30,9 @@
             <b>Lista de Personal Activo</b>
         </div>
         <div class="col-md-6 text-right">
-            <a href="{{ route('historial_asistencia.index') }}" class="tts:left tts-slideIn tts-custom" aria-label="Restaurar Regularizacion">
-                <button class="btn btn-sm btn-primary font-verdana" type="button">
-                    <i class="fa fa-clock" aria-hidden="true"></i>
-                    &nbsp; Historial de Regularizaciones
-                </button>
-            </a>
+           
 
-            <a class="tts:left tts-slideIn tts-custom" aria-label="Asistencias Pendientes" href="{{route('ausencias.index')}}">
-                <button class="btn btn-sm btn-warning font-verdana" type="button">
-                    &nbsp;<i class="fa fa-calendar-days" aria-hidden="true"></i>&nbsp;Sin Regularizar
-                </button>
-            </a>
+           
 
             <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
                 <button class="btn btn-sm btn-danger font-verdana" type="button">

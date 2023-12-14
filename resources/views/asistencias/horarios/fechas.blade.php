@@ -3,16 +3,26 @@
 @section('content')
 <div class="container ">
     <div class="row font-verdana-bg">
-        <div class="col-md-4 titulo">
+        <div class="col-md-8 titulo">
             <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
                 <a href="{{ route('horarios.index') }}" class="color-icon-1">
                     <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
                 </a>
+                <b> Horarios Programados</b>
+                <?php
+
+                use Carbon\Carbon;
+
+                setlocale(LC_TIME, 'es_ES');
+
+                $fechaHoy = Carbon::now()->isoFormat('dddd, D [de] MMMM [de] YYYY');
+                ?>
+
+
             </span>
-            <b>Programar Horarios</b>
         </div>
 
-        <div class="col-md-8 text-right">
+        <div class="col-md-4 text-right">
             <div class="btn-group">
                 <input type="month" id="selectedMonth" name="selected_month" class="form-control" value="{{$vistaselectedMonth}}">
 
@@ -24,30 +34,92 @@
                 </button>
             </a>
         </div>
-        <div class="col-md-12">
-            <hr>
-            @if(Session::has('pendiente'))
-            <div class="alert alert-danger font-verdana-bg">
-                {{ Session::get('pendiente') }}
+        <div class="container">
+            <ul class="nav nav-tabs" id="myTabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#tab1">Principal</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#tab2">Detalle</a>
+                </li>
+
+            </ul>
+
+            <div class="col-md-12">
+                <hr>
+               <b class="card-text">Fecha de hoy: <strong><?php echo $fechaHoy; ?></strong></b>
+
+                @if(Session::has('pendiente'))
+                <div class="alert alert-danger font-verdana-bg">
+                    {{ Session::get('pendiente') }}
+                </div>
+                <hr>
+
+                @endif
+
+                @if(Session::has('success'))
+                <div class="alert alert-success">
+                    {{ Session::get('success') }}
+                </div>
+                <hr>
+
+                @endif
+                @if(Session::has('error'))
+                <div class="alert alert-danger font-verdana-bg">
+                    {{ Session::get('error') }}
+                </div>
+                <hr>
+
+                @endif
             </div>
-            <hr>
+            <div class="tab-content font-verdana">
+                <div class="tab-pane fade show active" id="tab1">
+                    <div class="row font-verdana-bg">
+                        <div class="col-md-8">
+                            <table id="calendar" class="table-bordered  font-verdana" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Lun</th>
+                                        <th>Mar</th>
+                                        <th>Mier</th>
+                                        <th>Jue</th>
+                                        <th>Vier</th>
+                                        <th>S</th>
+                                        <th>D</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="col-md-4">
+                            <div id="infoHorario" class="alert alert-info mt-3" style="display: 100%;">
+                                <!-- Contenido de la información del horario -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab2">
+                    <div class="row font-verdana-bg">
+                        <div class="col-md-12">
+                            <table id="calendar2" class="table-bordered  font-verdana" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Lun</th>
+                                        <th>Mar</th>
+                                        <th>Mier</th>
+                                        <th>Jue</th>
+                                        <th>Vier</th>
+                                        <th>S</th>
+                                        <th>D</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
 
-            @endif
-
-            @if(Session::has('success'))
-            <div class="alert alert-success">
-                {{ Session::get('success') }}
             </div>
-            <hr>
-
-            @endif
-            @if(Session::has('error'))
-            <div class="alert alert-danger font-verdana-bg">
-                {{ Session::get('error') }}
-            </div>
-            <hr>
-
-            @endif
         </div>
 
 
@@ -57,45 +129,9 @@
 
         <hr class="hrr">
     </div>
-    <div class="row font-verdana">
-        <div class="col-md-6  center">
-            <table id="calendar" class="table-bordered  font-verdana" style="width:45%">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Lun</th>
-                        <th>Mar</th>
-                        <th>Mier</th>
-                        <th>Jue</th>
-                        <th>Vier</th>
-                        <th>S</th>
-                        <th>D</th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
-        <div class="col-md-6  center">
-            <div id="infoHorario" class="alert alert-info mt-3" style="display: none;">
-                <!-- Contenido de la información del horario -->
-            </div>
-
-        </div>
 
 
-    </div>
 
-    <div class="row font-verdana">
-        <div class="col-md-12">
-            <hr class="hrr">
-        </div>
-        <div class="col-md-4 text-left">
-        </div>
-
-
-        <div class="col-md-8 text-right">
-        </div>
-
-    </div>
 </div>
 
 @section('scripts')
@@ -170,11 +206,7 @@
             ],
         });
 
-        // Manejar el cambio de mes
-        $('#selectedMonth').change(function() {
-            // Actualizar la tabla cuando cambie la fecha
-            dataTable.ajax.reload();
-        });
+
         // Función para personalizar la visualización de la celda
         function renderCell(data, type, row) {
             // Verificar si hay datos y personalizar la visualización
@@ -239,10 +271,154 @@
                 mostrarInformacionHorario(cellData);
             }
         });
+        // Manejar el cambio de mes
+        $('#selectedMonth').change(function() {
+            // Actualizar la tabla cuando cambie la fecha
+            dataTable.ajax.reload();
+            dataTable2.ajax.reload();
+        });
+
+        dataTable2 = $('#calendar2').DataTable({
+            processing: true,
+            serverSide: true,
+            lengthChange: false,
+            searching: false,
+            paging: false, // Deshabilita la paginación
+            info: false, // Deshabilita la información
+            ajax: {
+                url: "{{ route('horarios.fechas') }}",
+                data: function(d) {
+                    // Enviar la fecha seleccionada al servidor
+                    d.selected_month = $('#selectedMonth').val();
+                }
+            },
+            columns: [{
+                    data: 0,
+                    name: 'Semana',
+
+                    render: function(data, type, row) {
+                        // Personaliza la visualización de la celda aquí
+                        return '<strong>' + data + '</strong>';
+                    }
+                },
+                {
+                    data: 1,
+                    name: 'Día 1',
+                    render: renderCell3
+
+                },
+                {
+                    data: 2,
+                    name: 'Día 2',
+                    render: renderCell3
+
+                },
+                {
+                    data: 3,
+                    name: 'Día 3',
+                    render: renderCell3
+
+                },
+                {
+                    data: 4,
+                    name: 'Día 4',
+                    render: renderCell3
+
+                },
+                {
+                    data: 5,
+                    name: 'Día 5',
+                    render: renderCell3
+
+                },
+                {
+                    data: 6,
+                    name: 'Día 6',
+                    render: renderCell4
+
+                },
+                {
+                    data: 7,
+                    name: 'Día 7',
+                    render: renderCell4
+
+                },
+            ],
+        });
+        // Función para personalizar la visualización de la celda
+        function renderCell3(data, type, row) {
+            // Verificar si hay datos y personalizar la visualización
+            if (data.actual) {
+                let additionalInfo = '';
+                var hora = data.horario;
+
+                // Verificar el tipo de additional_info
+                if (Array.isArray(data.additional_info)) {
+                    var horarioInfo = hora.map(function(horario) {
+                        if (horario.tipo === 1) {
+                            return '<b>' + horario.Nombre + '</b>' + '<br>' + horario.hora_inicio + '-' + horario.hora_salida + '<br>' + horario.hora_entrada + '-' + horario.hora_final;
+
+                        } else {
+                            return '<b>' + horario.Nombre + '</b>' + '<br>' + horario.hora_inicio + '<br>' + horario.hora_final + '<br>';
+                        }
+
+                    }).join('');
+                    // additional_info es un array
+                    additionalInfo = data.additional_info.map(item => createLink2(item.id, item.descrip, item.estado)).join('<br>');
+                } else if (typeof data.additional_info === 'object') {
+
+                    var horarioInfo = hora.map(function(horario) {
+                        if (horario.tipo === 1) {
+                            return '<b>' + horario.Nombre + '</b>' + '<br>' + horario.hora_inicio + '-' + horario.hora_salida + '<br>' + horario.hora_entrada + '-' + horario.hora_final;
+
+                        } else {
+                            return '<b>' + horario.Nombre + '</b>' + '<br> ' + horario.hora_inicio + '<br> ' + horario.hora_final + '<br>';
+                        }
+                    }).join('');
+                    // additional_info es un objeto
+                    additionalInfo = Object.values(data.additional_info).map(item => createLink2(item.id, item.descrip, item.estado)).join('<br>');
+                }
+                if (!additionalInfo) {
+                    var fecha = data.date;
+                    var link = '<a aria-label="Asignar Horario" href="' + " {{ route('asistencia.crear', ['fecha' => ':fecha']) }}".replace(':fecha', fecha) + '"><i class="fa fa-lg fa-plus text-success"></i></a>'; // Devolver el enlace personalizado 
+                    return data.day + '<br>' + link;
+
+                }
+                return data.day + '<br>' + additionalInfo + ' ' + horarioInfo + '<br>';
+            }
+            return null;
+        }
+
+
+
+        function createLink2(id, descrip, estado) {
+            // Reemplaza 'nombre-de-ruta' con el nombre real de tu ruta
+
+            let routeUrl = "{{ route('asistencia.edit', ['id' => ':id']) }}";
+
+            // Reemplaza ':id' con el ID correspondiente
+            routeUrl = routeUrl.replace(':id', id);
+
+            // Retorna el enlace
+            if (estado === 1) {
+                return `<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Horario Programado" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen text-warning"></i></a>`;
+            } else if (estado === 0) {
+                return `<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Horario Activo" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen text-success"></i></a>`;
+
+            }
+        }
+
+        function renderCell4(data, type, row) {
+            // Verificar si hay datos y personalizar la visualización
+            if (data.actual) {
+                let additionalInfo = '';
+                return data.day + '<br>' + additionalInfo;
+            }
+            return null;
+        }
 
 
     });
-
 
     function mostrarInformacionHorario(cellData) {
         // Aquí debes implementar la lógica para mostrar la información del horario al lado de la tabla
@@ -264,16 +440,23 @@
             // Itera sobre los datos de horario y agrega la información al div
             cellData.horario.forEach(function(horario) {
                 if (horario.tipo === 1) {
-                    infoHorarioDiv.append('<b>Mañana:</b><br>'  + horario.hora_inicio + '');
+                    infoHorarioDiv.append('<b>________________ </b> <br>');
+
+                    infoHorarioDiv.append('<b>Horario: </b> ' + horario.Nombre + '<br>');
+
+                    infoHorarioDiv.append('<b>Mañana:</b><br>' + horario.hora_inicio + '');
                     infoHorarioDiv.append('-' + horario.hora_salida + '<br>');
-                    infoHorarioDiv.append('<b>Tarde:</b><br>'+ horario.hora_entrada +'');
-                    infoHorarioDiv.append('-' + horario.hora_final);
+                    infoHorarioDiv.append('<b>Tarde:</b><br>' + horario.hora_entrada + '');
+                    infoHorarioDiv.append('-' + horario.hora_final + '<br>');
 
                 } else {
+                    infoHorarioDiv.append('<b>________________ </b> <br>');
+                    infoHorarioDiv.append('<b>Horario: </b> ' + horario.Nombre + '<br>');
+
                     infoHorarioDiv.append('<b>Hora Entrada: </b> ' + horario.hora_inicio + '<br>');
                     infoHorarioDiv.append('<b>Hora Salida: </b> ' + horario.hora_final);
                 }
- 
+
                 // Agrega más campos según sea necesario
             });
         } else {

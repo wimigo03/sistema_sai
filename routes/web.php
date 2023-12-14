@@ -403,30 +403,42 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
     ///////////////////REGISTRO DE ASISTENCIAS/////////////////
 
-    Route::get('/estado-expiraciones/index', 'EstadoExpiracionesController@index')->name('notificacion.index')->middleware('can:horario_access');
-    Route::get('/estado-expiraciones/{id}', 'EstadoExpiracionesController@show')->name('lista.index')->middleware('can:horario_access');
-    Route::get('estado-expiraciones-exp/', 'EstadoExpiracionesController@expira')->name('lista2.exp')->middleware('can:horario_access');
-    Route::get('estado-expiraciones-exp/lista', 'EstadoExpiracionesController@planta')->name('planta')->middleware('can:horario_access');
-    Route::get('estado-expiraciones-exp/lista2', 'EstadoExpiracionesController@contrato')->name('contrato')->middleware('can:horario_access');
+    Route::get('/estado-expiraciones/index', 'EstadoExpiracionesController@index')->name('notificacion.index')->middleware('can:estado_exp_access');
+    Route::get('/estado-expiraciones/{id}', 'EstadoExpiracionesController@show')->name('lista.index')->middleware('can:estado_exp_access');
+    Route::get('estado-expiraciones-exp/', 'EstadoExpiracionesController@expira')->name('lista2.exp')->middleware('can:estado_exp_access');
+    Route::get('estado-expiraciones-exp/lista', 'EstadoExpiracionesController@planta')->name('planta')->middleware('can:estado_exp_access');
+    Route::get('estado-expiraciones-exp/lista2', 'EstadoExpiracionesController@contrato')->name('contrato')->middleware('can:estado_exp_access');
 
 
 
-    Route::put('/horarios/{id}/updateEstado', 'HorarioController@updateEstado')->name('horarios.updateEstado')->middleware('can:horario_access');
-
+ 
     Route::get('horarios/cambio/{empleado}', 'HorarioController@cambio')->name('horarios.cambio')->middleware('can:horario_access');
 
-    Route::put('/horarios/{horario}/updatehora', 'HorarioController@updatehora')->name('horarios.updatehora')->middleware('can:horario_access');
+    Route::put('/horarios/{horario}/updatehora', 'HorarioController@updatehora')->name('horarios.updatehora')->middleware('can:update_horario_access');
 
 
     Route::get('horarios/index', 'HorarioController@index')->name('horarios.index')->middleware('can:horario_access');
-    Route::get('horarios/create', 'HorarioController@create')->name('horarios.create')->middleware('can:horario_access');
-    Route::post('horarios/store', 'HorarioController@store')->name('horarios.store')->middleware('can:horario_access');
-    Route::get('horarios/show/{horario}', 'HorarioController@show')->name('horarios.show')->middleware('can:horario_access');
+    Route::get('horarios/create', 'HorarioController@create')->name('horarios.create')->middleware('can:horario_crear_access');
+    Route::post('horarios/store', 'HorarioController@store')->name('horarios.store')->middleware('can:horario_guardar_access');
+
+    //Route::get('horarios/show/{horario}', 'HorarioController@show')->name('horarios.show')->middleware('can:horario_access');
     //Route::get('horarios/destroy/{horario}', 'HorarioController@destroy')->name('horarios.destroy')->middleware('can:horario_access');
-    Route::get('horarios/{horario}/edit', 'HorarioController@edit')->name('horarios.edit')->middleware('can:horario_access');
-    Route::put('horarios/update/{horario}', 'HorarioController@update')->name('horarios.update')->middleware('can:horario_access');
+    Route::get('horarios/{horario}/edit', 'HorarioController@edit')->name('horarios.edit')->middleware('can:horario_editar_access');
+    Route::put('horarios/update/{horario}', 'HorarioController@update')->name('horarios.update')->middleware('can:update_horario_access');
+    
     Route::put('horarios/guardar/{empleado}', 'HorarioController@guardar')->name('horarios.guardar')->middleware('can:horario_access');
-    Route::put('horarios/pin/{empleado}', 'HorarioController@pinguardar')->name('pin.guardar')->middleware('can:horario_access');
+    Route::put('horarios/pin/{empleado}', 'HorarioController@pinguardar')->name('pin.guardar')->middleware('can:update_pin_access');
+   
+    //activar-Desactivar Horario
+    Route::put('/horarios/{id}/updateEstado', 'HorarioController@updateEstado')->name('horarios.updateEstado')->middleware('can:update_horario_access');
+
+    //Programar-Horario-Fechas
+    Route::get('horarios/fechas', 'HorarioController@fechas')->name('horarios.fechas')->middleware('can:asistencias_access');
+
+    Route::get('asistencia/{id}', 'AsistenciaController@edit')->name('asistencia.edit')->middleware('can:asistencias_fechas_edit_access');
+    Route::get('asistencia/crear/{fecha}', 'AsistenciaController@crear')->name('asistencia.crear')->middleware('can:asistencias_fechas_crear_access');
+    Route::post('asistencia/store', 'AsistenciaController@store')->name('asistencia.store')->middleware('can:asistencias_fechas_guardar_access');
+    Route::put('asistencia/update/{asistencia}', 'AsistenciaController@update')->name('asistencia.update')->middleware('can:asistencias_fechas_update_access');
 
 
     Route::get('empleadoasistencias/', 'EmpleadoAsistenciasController@index')->name('empleadoasistencias.index')->middleware('can:asistencias_access');
@@ -455,40 +467,40 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
     Route::get('agregar-regulacion/{id}', 'EmpleadoAsistenciasController@agregarRegulacion')->name('agregar.regulacion')->middleware('can:horario_access');;
     Route::get('regularizar-nuevo', 'AusenciasController@regularizar2')->name('regularizarCrear')->middleware('can:horario_access');;
-    Route::get('regularizar-fecha/{fecha}/{id}', 'AusenciasController@crear')->name('fecha.crear')->middleware('can:horario_access');
+    Route::get('regularizar-fecha/{fecha}/{id}', 'AusenciasController@crear')->name('fecha.crear')->middleware('can:regularizar_access_crear');
 
     Route::get('regularizar-ausencia/{id}', 'AusenciasController@regularizar')->name('regularizar.ausencia')->middleware('can:asistencias_access');
     Route::put('regularizar-asistencia/{id}', 'AusenciasController@update')->name('regularizar_asistencia.update')->middleware('can:asistencias_access');
     Route::get('historial-cambios-asistencia', 'HistorialAsistenciasController@index')->name('historial_asistencia.index')->middleware('can:asistencias_access');
     Route::get('restaurar-datos/{id}', 'HistorialAsistenciasController@restore')->name('restaurar-datos.restore')->middleware('can:asistencias_access');
+    Route::get('historial-cambios-personal', 'HistorialAsistenciasController@personalHistorial')->name('personalHistorial')->middleware('can:asistencias_access');
 
 
-   // Route::get('reportes', 'ReporteController@index')->name('reportes.index')->middleware('can:reporte_access');
+    // Route::get('reportes', 'ReporteController@index')->name('reportes.index')->middleware('can:reporte_access');
     Route::get('reportes/create', 'ReporteController@create')->name('reportes.create')->middleware('can:reporte_access');
-   // Route::post('reportes/store', 'ReporteController@store')->name('reportes.store')->middleware('can:reporte_access');
-   // Route::get('reportes/show/{reporte}', 'ReporteController@show')->name('reportes.show')->middleware('can:reporte_access');
+    // Route::post('reportes/store', 'ReporteController@store')->name('reportes.store')->middleware('can:reporte_access');
+    // Route::get('reportes/show/{reporte}', 'ReporteController@show')->name('reportes.show')->middleware('can:reporte_access');
     //Route::get('reportes/getReporte', 'ReporteController@getReporte')->name('reportes.getReporte')->middleware('can:reporte_access');
-    
+
     Route::get('reportes/personalgetReporte', 'ReporteController@personalgetReporte')->name('personalreportes.getReporte')->middleware('can:reporte_access');
     Route::get('reportes/areaGetReporte', 'ReporteController@areaGetReporte')->name('areaGetReportes.getReporte')->middleware('can:reporte_access');
     Route::get('reportes/allGetReporte', 'ReporteController@allGetReporte')->name('allGetReportes.getReporte')->middleware('can:reporte_access');
-   
+    
+    Route::post('reportes/registros-personales', 'ReporteController@registro')->name('registro.visualizar')->middleware('can:reporte_access');
+
     Route::post('reportes/personales', 'ReporteController@visualizar')->name('reportes.visualizar')->middleware('can:reporte_access');
     Route::post('reportes/unidades', 'ReporteController@visualizar2')->name('reportes.visualizar2')->middleware('can:reporte_access');
     Route::post('reportes/general', 'ReporteController@visualizar3')->name('reportes.visualizar3')->middleware('can:reporte_access');
-
+     Route::get('reportes/asistenciapersonalReporte', 'ReporteController@asistenciapersonalreportes')->name('asistenciapersonalreportes.getReporte')->middleware('can:reporte_access');
 
     Route::get('reportes/detalle/{id}/{fecha_i}/{fecha_f}', 'ReporteController@detalle')->name('reportespersonales.detalle')->middleware('can:reporte_access');
     Route::get('reportes/personalReporte-pdf', 'ReporteController@previsualizarPdf')->name('previsualizarPdf')->middleware('can:reporte_access');
     Route::get('reportes/areasReporte-pdf', 'ReporteController@areaprevisualizarPdf')->name('areaprevisualizarPdf')->middleware('can:reporte_access');
     Route::get('reportes/generalReporte-pdf', 'ReporteController@generalReportePdf')->name('generalReportePdf')->middleware('can:reporte_access');
+    Route::get('reportes/asistencia-personalReporte-pdf', 'ReporteController@asistenciaPdf')->name('asistenciaPdf')->middleware('can:reporte_access');
 
-    Route::get('horarios/fechas', 'HorarioController@fechas')->name('horarios.fechas')->middleware('can:asistencias_access');
-    Route::get('asistencia/{id}', 'AsistenciaController@edit')->name('asistencia.edit')->middleware('can:asistencias_access');
-    Route::post('asistencia/store', 'AsistenciaController@store')->name('asistencia.store')->middleware('can:asistencias_access');
-    Route::get('asistencia/crear/{fecha}', 'AsistenciaController@crear')->name('asistencia.crear')->middleware('can:asistencias_access');
-    Route::put('asistencia/update/{asistencia}', 'AsistenciaController@update')->name('asistencia.update')->middleware('can:asistencias_access');
-//Permisos Mensuales
+
+    //Permisos Mensuales
     Route::get('permisos/id', 'PermisosPersonalesController@getID')->name('permisospersonales.getID')->middleware('can:permisos_access');
     Route::get('permisos', 'PermisosPersonalesController@index')->name('permisospersonales.index')->middleware('can:permisos_access');
 
@@ -496,12 +508,12 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('permisos/get', 'PermisosPersonalesController@getEmpleados')->name('permisosempleados.get')->middleware('can:permisos_access');
     Route::get('permisos/create/', 'PermisosPersonalesController@create')->name('permisospersonales.create')->middleware('can:permisos_access');
     Route::post('permisos/store/', 'PermisosPersonalesController@store')->name('permisospersonales.store')->middleware('can:permisos_access');
-    Route::get('permisos/detalle/{id}/{permiso_id}', 'PermisosPersonalesController@detalle')->middleware('can:permisos_access');
+    Route::get('permisos/detalle/{id}/{permiso_id}', 'PermisosPersonalesController@detalle')->name('permisospersonales.detalle')->middleware('can:permisos_access');
     Route::get('permisos/show', 'PermisosPersonalesController@show')->name('permisospersonales.show')->middleware('can:permisos_access');
     Route::get('editar-permiso/{id}', 'PermisosPersonalesController@editarPermiso')->name('editar.permiso')->middleware('can:permisos_access');
     Route::put('actualizar-permiso/{id}', 'PermisosPersonalesController@actualizarPermiso')->name('update.permiso')->middleware('can:permisos_access');
     Route::get('listar-permisos/{id}', 'PermisosPersonalesController@listarPermiso')->name('listar.permiso')->middleware('can:permisos_access');
-    
+
     //Registro de Licencias
     Route::get('licencias', 'LicenciasPersonalesController@index')->name('licenciaspersonales.index')->middleware('can:licencias_access');
 
@@ -515,9 +527,9 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('editar-licencia/{id}', 'LicenciasPersonalesController@editarLicencias')->name('editar.licencia')->middleware('can:licencias_access');;
     Route::put('actualizar-licencia/{id}', 'LicenciasPersonalesController@actualizarLicencias')->name('update.licencia')->middleware('can:licencias_access');;
     Route::get('listar-licencia/{id}', 'LicenciasPersonalesController@listarLicencias')->name('listar.licencias')->middleware('can:licencias_access');;
-//movimientos Planta
+    //movimientos Planta
     Route::get('rechumanos/planta/movimientos/list', 'MovimientosPlantaController@index')->name('movimientosplanta.index');
     Route::get('rechumanos/contrato/movimientos/list', 'MovimientosContratoController@index')->name('movimientoscontrato.index');
-//lector Dactilar
+    //lector Dactilar
     Route::get('lectordactilar', 'LectorDactilarController@index')->name('lectordactilar.index')->middleware('can:dactilar_access');
 });

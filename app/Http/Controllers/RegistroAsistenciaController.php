@@ -51,7 +51,9 @@ class RegistroAsistenciaController extends Controller
             $data = $data->get();
             return DataTables::of($data)
                 ->addColumn('fecha', function ($row) {
-                    return $row->fecha ? Carbon::parse($row->fecha)->format('l j F Y') : '-';
+                    return $row->fecha ? Carbon::parse($row->fecha)->format('Y-m-d') : '-';
+
+                   // return $row->fecha ? Carbon::parse($row->fecha)->format('l j F Y') : '-';
                 })
 
 

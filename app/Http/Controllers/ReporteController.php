@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class ReporteController extends Controller
@@ -180,7 +181,19 @@ class ReporteController extends Controller
         }
     }
 
+    public function asistenciapersonalreportes(Request $request)
+    {
+        //  if ($request->ajax()) {
+        $empleado_id = $request->input('empleado');
 
+        // Asegúrate de que las fechas se están parseando correctamente
+        $fechaInicio = $request->input('fecha_inicio');
+        $fechaFinal = $request->input('fecha_final');
+
+        $fechas = $this->registropPersonalConsulta($empleado_id, $fechaInicio, $fechaFinal);
+        return $fechas;
+        // }
+    }
     private function calculateObservation($suma_retrasos)
     {
         $observacion = '';
@@ -215,6 +228,8 @@ class ReporteController extends Controller
             ->make(true);
     }
 
+
+
     public function visualizar(Request $request)
     {
         $empleado_id = $request->input('empleado');
@@ -222,7 +237,7 @@ class ReporteController extends Controller
         $fechaInicio = $request->input('fecha_inicio');
         $fechaFinal = $request->input('fecha_final');
 
-        
+
         return view('asistencias.reportes.reporte-personal', compact('empleado_id', 'fechaInicio', 'fechaFinal'));
     }
     public function visualizar2(Request $request)
@@ -230,16 +245,27 @@ class ReporteController extends Controller
         $area_id = $request->input('area_id');
         $fechaInicio = $request->input('fecha_inicio2');
         $fechaFinal = $request->input('fecha_final2');
- 
+
         return view('asistencias.reportes.reporte-area', compact('area_id', 'fechaInicio', 'fechaFinal'));
     }
     public function visualizar3(Request $request)
     {
- 
+
         $fechaInicio = $request->input('fecha_inicio3');
         $fechaFinal = $request->input('fecha_final3');
- 
+
         return view('asistencias.reportes.reporte-general', compact('fechaInicio', 'fechaFinal'));
+    }
+
+
+    public function registro(Request $request)
+    {
+
+        $empleado_id = $request->input('empleado2');
+        $fechaInicio = $request->input('fecha_inicio4');
+        $fechaFinal = $request->input('fecha_final4');
+
+        return view('asistencias.reportes.reporte-asistencia-personal', compact('empleado_id', 'fechaInicio', 'fechaFinal'));
     }
 
     public function personalConsulta($id, $fechaI, $fechaF)
@@ -391,6 +417,75 @@ class ReporteController extends Controller
         // For non-AJAX requests, return the view
     }
 
+    public function registropPersonalConsulta($id, $fechaI, $fechaF)
+    {
+
+        $empleado_id = $id;
+
+        $fechaInicio = $fechaI;
+        $fechaFinal = $fechaF;
+        $fechaInicio = Carbon::parse($fechaInicio);
+        $fechaFinal = Carbon::parse($fechaFinal);
+
+ 
+
+
+       
+   
+        $registros = RegistroAsistencia::with('empleado', 'horario')
+            ->where('empleado_id', $empleado_id)
+            ->whereBetween('fecha', [$fechaI, $fechaF])
+            ->get();
+
+        // Personalizar columnas
+
+        return DataTables::of($registros)
+
+            ->addColumn('fecha', function ($item) {
+                return $item['fecha'];
+            })
+
+
+            ->addColumn('horario', function ($row) {
+                $nombre = $row->horario->Nombre? : '';
+                $final = $row->horario->hora_final ? Carbon::parse($row->horario->hora_final)->format('H:i') : '-';
+                $inicio = $row->horario->hora_inicio ? Carbon::parse($row->horario->hora_inicio)->format('H:i') : '-';
+
+                if ($row->horario->tipo == 1) {
+
+                    $salida = $row->horario->hora_salida ? Carbon::parse($row->horario->hora_salida)->format('H:i') : '-';
+                    $entrada = $row->horario->hora_entrada ? Carbon::parse($row->horario->hora_entrada)->format('H:i') : '-';
+                    $html = '<span>' . $nombre . '</span><br><span>' . $inicio . '-' . $salida . '</span><br><span>' . $entrada . '-' . $final . '</span>';
+                } else if ($row->horario->tipo == 0) {
+
+                    $html = '<span>' . $nombre . '</span><br><span>' . $inicio . '</span><br><span>' . $final . '</span>';
+                }
+                return $html;
+            })
+            ->addColumn('nom_ap', function ($row) {
+                $nom = $row->empleado->nombres;
+                $ap_pat = $row->empleado->ap_pat ?? '-';
+                $ap_mat = $row->empleado->ap_mat ?? '-';
+                return $nom . ' ' . $ap_pat . ' ' . $ap_mat;
+            })
+            ->addColumn('registro_inicio', function ($row) {
+                return $row->registro_inicio ? Carbon::parse($row->registro_inicio)->format('H:i') : '-';
+            })
+            ->addColumn('registro_entrada', function ($row) {
+                return $row->registro_entrada ? Carbon::parse($row->registro_entrada)->format('H:i') : '-';
+            })
+            ->addColumn('registro_salida', function ($row) {
+                return $row->registro_salida ? Carbon::parse($row->registro_salida)->format('H:i') : '-';
+            })
+            ->addColumn('registro_final', function ($row) {
+                return $row->registro_final ? Carbon::parse($row->registro_final)->format('H:i') : '-';
+            })
+            ->addColumn('minutos_retraso', function ($row) {
+                return $row->minutos_retraso ?? '-';
+            })
+            ->rawColumns(['horario'])
+            ->make(true);
+    }
 
 
 
@@ -581,7 +676,15 @@ class ReporteController extends Controller
         try {
 
 
+            $usuario = Auth::user()->name;
+            $user = DB::table('users')->where('name', $usuario)->select('idemp')->first();
 
+            if ($user) {
+                $id = $user->idemp;
+                // Procede con el uso de $id
+            }
+
+            $usuarioCompleto = EmpleadosModel::where('idemp', $id)->select('nombres')->first();
             $fechaInicio = request('fechaInicio');
             $fechaFinal = request('fechaFinal');
 
@@ -638,6 +741,10 @@ class ReporteController extends Controller
             Log::error('Error al generar el PDF: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 500);
         }
+    }
+
+    public function asistenciaPdf(Request $request){
+
     }
 
 

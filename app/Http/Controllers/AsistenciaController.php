@@ -126,7 +126,7 @@ class AsistenciaController extends Controller
                 $this->verificarMarcado($registro);
                 $this->calcularRetraso($registro);
             }
-      
+
             return redirect()->route('horarios.fechas')->with('success', 'Asistencia modificada exitosamente.');
         } catch (\Throwable $th) {
             throw $th;
@@ -194,7 +194,7 @@ class AsistenciaController extends Controller
                     $retraso = $horaEntradaReal->diffInMinutes($horaEntradaProgramada);
                     $registro->retraso1 = $retraso;
                     $registro->minutos_retraso = $retraso;;
-           
+
                     $registro->save();
                 } else {
                     $registro->retraso1 = 0;
@@ -246,7 +246,7 @@ class AsistenciaController extends Controller
             }
         } else if ($registro->horario->tipo == 0) {
 
-   
+
             $horaInicio = Carbon::parse($registro->horario->hora_inicio);
             $excepcion = Carbon::parse($registro->horario->excepcion);
             if ($registro->registro_inicio) {
@@ -262,7 +262,7 @@ class AsistenciaController extends Controller
                     $retraso = $horaEntradaReal->diffInMinutes($horaEntradaProgramada);
                     $registro->retraso1 = $retraso;
                     $registro->minutos_retraso = $retraso;;
-                 
+
                     $registro->save();
                 } else {
                     $registro->retraso1 = 0;
@@ -292,6 +292,7 @@ class AsistenciaController extends Controller
                 $registro->registro_final
             ) {
                 $registro->observ = 'Pendiente';
+                $registro->tipo = 1;
                 $registro->estado = 4;
                 $registro->save();
             } else if (
@@ -301,16 +302,19 @@ class AsistenciaController extends Controller
                 $registro->registro_final
             ) {
                 $registro->observ = 'Pendiente';
+                $registro->tipo = 1;
                 $registro->estado = 4;
                 $registro->save();
             } else if (
                 $registro->registro_inicio &&
                 $registro->registro_salida &&
                 !$registro->registro_entrada &&
+
                 !$registro->registro_final
             ) {
                 $registro->observ = 'Pendiente';
                 $registro->estado = 3;
+                $registro->tipo = 1;
                 $registro->save();
             } else if (
                 $registro->registro_inicio &&
@@ -320,6 +324,7 @@ class AsistenciaController extends Controller
             ) {
                 $registro->estado = 5;
                 $registro->observ = 'Pendiente';
+                $registro->tipo = 1;
                 $registro->save();
             } else if (
                 !$registro->registro_inicio &&
@@ -329,6 +334,7 @@ class AsistenciaController extends Controller
             ) {
                 $registro->observ = 'Pendiente';
                 $registro->estado = 5;
+                $registro->tipo = 1;
                 $registro->save();
             } else if (
                 $registro->registro_inicio &&
@@ -338,6 +344,7 @@ class AsistenciaController extends Controller
             ) {
                 $registro->observ = 'Pendiente';
                 $registro->estado = 3;
+                $registro->tipo = 1;
                 $registro->save();
             } else if (
                 !$registro->registro_inicio &&
@@ -347,6 +354,7 @@ class AsistenciaController extends Controller
             ) {
                 $registro->observ = 'Pendiente';
                 $registro->estado = 3;
+                $registro->tipo = 1;
                 $registro->save();
             } else if (
                 $registro->registro_inicio &&
@@ -356,6 +364,7 @@ class AsistenciaController extends Controller
             ) {
                 $registro->observ = 'Pendiente';
                 $registro->estado = 5;
+                $registro->tipo = 1;
                 $registro->save();
             } else if (
                 !$registro->registro_inicio &&
@@ -365,6 +374,7 @@ class AsistenciaController extends Controller
             ) {
                 $registro->observ = 'Pendiente';
                 $registro->estado = 5;
+                $registro->tipo = 1;
                 $registro->save();
             } else if (
                 $registro->registro_inicio &&
@@ -374,6 +384,7 @@ class AsistenciaController extends Controller
             ) {
                 $registro->observ = 'Pendiente';
                 $registro->estado = 3;
+                $registro->tipo = 1;
                 $registro->save();
             } else if (
                 !$registro->registro_inicio &&
@@ -383,6 +394,7 @@ class AsistenciaController extends Controller
             ) {
                 $registro->observ = 'Pendiente';
                 $registro->estado = 5;
+                $registro->tipo = 1;
                 $registro->save();
             } else if (
                 $registro->registro_inicio &&
@@ -392,9 +404,9 @@ class AsistenciaController extends Controller
             ) {
                 $registro->observ = 'Pendiente';
                 $registro->estado = 5;
+                $registro->tipo = 1;
                 $registro->save();
-            }
-            else if (
+            } else if (
                 !$registro->registro_inicio &&
                 !$registro->registro_salida &&
                 !$registro->registro_entrada &&
@@ -402,29 +414,33 @@ class AsistenciaController extends Controller
             ) {
                 $registro->observ = 'Falta';
                 $registro->estado = 0;
+                $registro->tipo = 1;
                 $registro->save();
             }
         }
         if ($registro->horario->tipo == 0) {
             if ($registro->registro_final && $registro->registro_inicio) {
                 $registro->observ = 'Dia Trabajado';
-
+                $registro->tipo = 0;
                 $registro->estado = 1;
                 $registro->save();
             } else if (!$registro->registro_final && $registro->registro_inicio) {
                 $registro->observ = 'Pendiente';
                 $registro->estado = 3;
+                $registro->tipo = 0;
                 $registro->save();
             } else if ($registro->registro_final && !$registro->registro_inicio) {
                 $registro->observ = 'Pendiente';
                 $registro->estado = 4;
+                $registro->tipo = 0;
                 $registro->save();
             } else {
                 $registro->observ = 'Falta';
                 $registro->estado = 0;
+                $registro->tipo = 0;
                 $registro->save();
             }
         }
-    } 
+    }
 }
            // $fechas = App\Models\AsistenciaModel::with(['empleados' => function ($query) {$query->select('id', 'nombres'); }])->where('id', 32)->select('id')->get();

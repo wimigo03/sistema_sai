@@ -8,7 +8,7 @@
                 <a href="{{route('empleadoasistencias.index')}}" class="color-icon-1">
                     <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
                 </a>
-            
+
             </span>
             <b>Regularizar Marcado de Asistencia por Orden de Servicio</b>
         </div>
@@ -63,7 +63,7 @@
         <hr class="hrr">
     </div>
     <div class="row font-verdana-sm">
-        <div class="col-md-12  center">
+        <div class="col-md-6">
             <table id="calendar" class="table-bordered  table display font-verdana" style="width:100%">
                 <thead>
                     <tr>
@@ -79,6 +79,24 @@
                 </thead>
             </table>
         </div>
+        <div class="col-md-6">
+            <div class="col-md-8 titulo">
+
+                <b>Historial de Cambios</b>
+            </div>
+            <table class="table-bordered table-hover display hover compact font-verdana" id="historial-table" style="width:100%">
+                <thead class="table-light">
+                    <tr>
+                        <th>Fecha de Cambio</th>
+                        <th>Nombres <br>Apellidos</th>
+                        <th>Datos anteriores</th>
+                        <th>Usuario</th>
+                        <th>Acciones</th>
+
+                    </tr>
+                </thead>
+            </table>
+        </div>
 
 
     </div>
@@ -89,11 +107,8 @@
         </div>
         <div class="col-md-4 text-left">
         </div>
-
-
         <div class="col-md-8 text-right">
         </div>
-
     </div>
 </div>
 
@@ -182,7 +197,7 @@
             if (data.actual) {
                 console.log(data);
                 let additionalInfo = '';
-                
+
                 // Verificar el tipo de additional_info
                 if (Array.isArray(data.additional_info)) {
                     // additional_info es un array
@@ -192,7 +207,7 @@
 
                         // Hacer algo si las fechas son iguales
                         if (isFechaIgual) {
-                          
+
                             let routeUrl = "{{ route('regularizar.ausencia', ['id' => ':id']) }}";
                             // Reemplaza ':id' y ':otro_parametro' con los valores correspondientes
                             routeUrl = routeUrl.replace(':id', item.id);
@@ -200,7 +215,7 @@
                             // ... tu lógica aquí ...
                             if (item.estado === 1) {
                                 return `<a class="tts:left tts-slideIn tts-custom" aria-label="Asistencia Registrada" ><i class="fa-solid fa-2xl fa-square-check text-success"></i></a>`;
-                            }  else if (item.estado === 0) {
+                            } else if (item.estado === 0) {
                                 const link = `<a class="tts:left tts-slideIn tts-custom" aria-label="Regularizar Asistencia" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen  text-danger"></i></a>`;
                                 return `${link}<br>${item.observ}`;
 
@@ -222,7 +237,7 @@
                             routeUrl = routeUrl.replace(':id', item.id);
                             const link = `<a class="tts:left tts-slideIn tts-custom" aria-label="Regularizar Asistencia" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen  text-warning"></i></a>`;
                             // ... tu lógica aquí ...
-                            if (item.estado===0) {
+                            if (item.estado === 0) {
                                 const link = `<a class="tts:left tts-slideIn tts-custom" aria-label="Regularizar Asistencia" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen  text-danger"></i></a>`;
                                 return `${link}<br>${item.observ}`;
 
@@ -277,6 +292,102 @@
             return null;
         }
 
+        $('#historial-table').DataTable({
+            lengthChange: false,
+            processing: true,
+            serverSide: true,
+            pageLength: 1,
+            info: false,
+
+            ajax: {
+                url: "{{ route('personalHistorial') }}",
+                data: function(d) {
+                    // Enviar la fecha seleccionada al servidor
+                    d.selected_month = $('#selectedMonth').val();
+                    d.id = $('#id').val();
+                }
+            },
+            columns: [{
+                    data: 'created_at_formatted',
+                    name: 'created_at',
+
+                },
+                {
+                    data: 'nombre_empleado',
+                    name: 'nombre_empleado',
+
+                },
+                {
+                    data: 'datos_anteriores',
+                    name: 'datos_anteriores',
+                    render: function(data, type, row) {
+                        var formattedData = '';
+
+                        // Selecciona y renombra los datos que deseas mostrar
+                        if (data.tipo=== 0) {
+                            selectedData = {
+                                'Fecha': data.fecha,
+                                'Entrada': data.registro_inicio,
+                                'Salida': data.registro_final,
+                                'Total (min)': data.minutos_retraso,
+                               // 'tipo': data.tipo,
+                                'Observacion': data.observ,
+                               // 'estado': data.estado,
+
+                                // Agrega más campos según sea necesario
+                            };
+                        } else {
+                            selectedData = {
+                                'Fecha': data.fecha,
+                                'Entrada': data.registro_inicio,
+                                'Salida': data.registro_salida,
+                                'Retrasos': data.retraso1,
+                                'Retorno': data.registro_entrada,
+                                'Salida': data.registro_final,
+                                'Retraso': data.retraso2,
+                                'Total (min)': data.minutos_retraso,
+                             //   'tipo': data.tipo,
+                                'Observacion': data.observ,
+                                //'estado': data.estado,
+                                // Agrega más campos según sea necesario
+                            };
+                        }
+
+                        // Muestra cada clave y valor en líneas separadas
+                        for (var key in selectedData) {
+                            var value = selectedData[key];
+
+                            // Verifica si el valor es nulo o vacío y muestra un guion en su lugar
+                            value = (value === null || value === '') ? '-' : value;
+
+                            formattedData += '<b>' + key + ':</b> ' + value + '<br>';
+
+                        }
+
+                        return formattedData;
+
+                    }
+                },
+                {
+                    data: 'usuario_mod',
+                    name: 'usuario_mod',
+
+                },
+                {
+                    data: 'boton_html',
+                    name: 'boton_html',
+                    orderable: false,
+                    searchable: false,
+
+                }
+            ], // cambiar lenguaje a español
+            order: [
+                [0, 'desc'] // Ordenar por la primera columna ('created_at') de manera ascendente
+            ],
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+            }
+        });
 
     });
 </script>
