@@ -5,13 +5,13 @@
         <b>MODULO ALMACEN</b>
     </div>
     <div class="col-md-4 text-right">
-        @can('productos_create')
+   
 
 
 
             <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
 
-        @endcan
+   
     </div>
     <div class="col-md-12">
         <hr class="hrr">

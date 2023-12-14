@@ -1,4 +1,4 @@
-@can('oficina_edit')
+
 <center>
     <td style="padding: 0;" class="text-center p-1">
         <a class="tts:left tts-slideIn tts-custom" aria-label="Ver Responsables" href="{{ route('activo.responsable.index', )}}">
@@ -6,7 +6,7 @@
             </button>
         </a>
 
-        @can('oficina_create')
+     
 
         <a href="{{route('activo.responsable.create', )}}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar">
             <button class="btn btn-sm btn-primary font-verdana" type="button">
@@ -14,7 +14,6 @@
             </button>
         </a>
 
-        @endcan
+  
     </td>
 </center>
-@endcan

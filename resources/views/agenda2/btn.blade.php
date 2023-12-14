@@ -2,7 +2,7 @@
 <center>
 
     <td style="padding: 0;" class="text-center p-1">
-        @can('agenda_edit')
+        
             <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Evento">
                 <a href="{{route('agenda.edit',$idagenda)}}">
                     <span class="text-warning">
@@ -10,7 +10,7 @@
                     </span>
                 </a>
             </span>
-        @endcan
+       
     </td>
 
 

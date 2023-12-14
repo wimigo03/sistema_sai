@@ -13,7 +13,7 @@
                 </a>
             </span>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        @can('compras_encargados_create')
+       
         @if ($estado == 0)
         <a href="{{route('compras.pedidoparcial.crearEncargado')}}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar Responsable">
             <button class="btn btn-sm btn-primary font-verdana" type="button" >
@@ -21,7 +21,7 @@
             </button>
         </a>
         @endif
-        @endcan
+      
 
 
     </div>
@@ -53,7 +53,7 @@
                             <td class="text-justify p-1">{{$enc->nombrearea}}</td>
 
                             <td style="padding: 0;" class="text-center p-1">
-                                @can('compras_encargados_edit')
+                             
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar">
                                         <a href="{{route('compras.pedidoparcial.responsableEdit',$enc->idenc)}}">
                                             <span class="text-warning">
@@ -61,7 +61,7 @@
                                             </span>
                                         </a>
                                     </span>
-                                @endcan
+                               
                                 </td>
 
                         </tr>

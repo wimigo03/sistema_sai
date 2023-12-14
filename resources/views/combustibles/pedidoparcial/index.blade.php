@@ -9,7 +9,7 @@
    
 
     <div class="col-md-4 text-right titulo">
-        @can('comprascomb_create')
+       
 
         <a href="{{route('combustibles.pedidoparcial.create')}}" class="tts:left tts-slideIn tts-custom" 
         aria-label="Agregar Solicitud">
@@ -18,13 +18,6 @@
             </button>
         </a>
 
-        {{-- <a href="{{route('combustibles.pedidoparcial.index2')}}" class="tts:left tts-slideIn tts-custom" 
-        aria-label="Solicitudes Aprobadas">
-            <button class="btn btn-sm btn-success font-verdana" type="button" >Solicitudes aprovadas.
-                &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
-            </button>
-        </a> --}}
-        @endcan
 
 
      </div>
@@ -88,7 +81,7 @@
 
                             @if($comp->estadocompracomb == '1')
                             <td style="padding: 0;" class="text-center p-1">
-                                @can('comprascomb_edit')
+                            
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Compra">
                                         <a href="{{route('combustibles.pedidoparcial.editar',$comp->idcompracomb)}}">
                                             <span class="text-warning">
@@ -96,12 +89,12 @@
                                             </span>
                                         </a>
                                     </span>
-                                @endcan
+                            
                                 </td>
 
 
                                  <td style="padding: 0;" class="text-center p-1">
-                                @can('comprascomb_detalle')
+                            
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle">
                                     <a href="{{route('combustibles.pedidoparcial.edit',$comp->idcompracomb)}}">
                                         <span class="text-primary">
@@ -109,13 +102,13 @@
                                         </span>
                                     </a>
                                 </span>
-                                @endcan 
+                              
                             </td>
 
                             @elseif($comp->estadocompracomb == '2')
 
                             <td style="padding: 0;" class="text-center p-1">
-                                @can('comprascomb_edit')
+                             
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Compra">
                                         <a href="{{route('combustibles.pedidoparcial.ver',$comp->idcompracomb)}}">
                                             <span class="text-warning">
@@ -123,11 +116,11 @@
                                             </span>
                                         </a>
                                     </span>
-                                @endcan
+                              
                                 </td>
 
                             <td style="padding: 0;" class="text-center p-1">
-                                @can('comprascomb_detalle')
+                              
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle">
                                     <a href="{{route('combustibles.pedidoparcial.editable',$comp->idcompracomb)}}">
                                         <span class="text-primary">
@@ -135,14 +128,14 @@
                                         </span>
                                     </a>
                                 </span>
-                                @endcan 
+                             
                             </td>
                        
                             
                             @elseif($comp->estadocompracomb == '5')
 
                             <td style="padding: 0;" class="text-center p-1">
-                                 @can('comprascomb_edit')
+                                 
                                      <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Compra">
                                          <a href="{{route('combustibles.pedidoparcial.ver',$comp->idcompracomb)}}">
                                              <span class="text-warning">
@@ -150,11 +143,11 @@
                                              </span>
                                          </a>
                                      </span>
-                                 @endcan
+                                
                                  </td>
  
                              <td style="padding: 0;" class="text-center p-1">
-                                 @can('comprascomb_detalle')
+                             
                                  <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle">
                                      <a href="{{route('combustibles.pedidoparcial.editalma',$comp->idcompracomb)}}">
                                          <span class="text-primary">
@@ -162,7 +155,7 @@
                                          </span>
                                      </a>
                                  </span>
-                                 @endcan 
+                            
                              </td>
                            
                         
@@ -170,7 +163,7 @@
                              @elseif($comp->estadocompracomb == '10')
 
                            <td style="padding: 0;" class="text-center p-1">
-                                @can('comprascomb_edit')
+                             
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Compra">
                                         <a href="{{route('combustibles.pedidoparcial.ver',$comp->idcompracomb)}}">
                                             <span class="text-warning">
@@ -178,11 +171,11 @@
                                             </span>
                                         </a>
                                     </span>
-                                @endcan
+                            
                                 </td>
 
                             <td style="padding: 0;" class="text-center p-1">
-                                @can('comprascomb_detalle')
+                             
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle">
                                     <a href="{{route('combustibles.pedidoparcial.editrecha',$comp->idcompracomb)}}">
                                         <span class="text-primary">
@@ -190,7 +183,7 @@
                                         </span>
                                     </a>
                                 </span>
-                                @endcan 
+                           
                             </td>
 
                             @endif 

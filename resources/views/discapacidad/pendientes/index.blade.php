@@ -21,12 +21,12 @@
             <hr class="hrr">
         </div>
     </div>
-    @canany(['discapacidad_buscar'])
+
     <form action="{{ route('canasta.pendientes.search') }}" method="get" id="form">
         @csrf
         @include('discapacidad.pendientes.partials.search')
     </form>
-    @endcan
+   
 </div>
 <hr>
 

@@ -5,7 +5,7 @@
         <b>SOLICITUDES APROBADAS</b><b style='color:red'>{{$idd->nombrearea}} </b>--
     </div>
     <div class="col-md-4 text-right">
-         @can('almacenes_aprovadas') 
+        
 
              <a href="{{ route('almacenes.pedido.index') }}" class="tts:left tts-slideIn tts-custom" 
             aria-label="ir a solicitudes pendientes">
@@ -22,7 +22,7 @@
                     &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
                 </button>
             </a>
-         @endcan 
+         
     </div>
 
   

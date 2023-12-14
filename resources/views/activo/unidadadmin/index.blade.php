@@ -13,14 +13,14 @@
         </div>
         <div class="col-md-8 text-right">
 
-            @can('unidadadmin_create')
+ 
                 <a href="{{ route('activo.unidadadmin.create') }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar">
                     <button class="btn btn-sm btn-primary font-verdana" type="button">
                         &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
                     </button>
                 </a>
                 <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
-            @endcan
+      
         </div>
         <div class="col-md-12">
             <hr class="hrr">

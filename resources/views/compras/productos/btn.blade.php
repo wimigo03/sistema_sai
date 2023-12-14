@@ -2,7 +2,7 @@
     
     <td style="padding: 0;" class="text-center p-1">
 
-        @can('productos_edit')
+    
 
             <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar">
                 <a href="{{ route('productos.edit',$idprodserv) }}">
@@ -12,7 +12,7 @@
                 </a>
             </span>
 
-        @endcan
+    
         
     </td>
          

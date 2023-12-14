@@ -17,19 +17,10 @@
 
                 &nbsp;&nbsp;&nbsp;
 
-                    {{-- @can('proveedores_create') --}}
-{{--                    
-                    <a href="{{ route('IngresoController.createdoc', $idingreso) }}" 
-                    class="tts:left tts-slideIn tts-custom" aria-label="Agregar">
-                            <button class="btn btn-sm btn-info   font-verdana" type="button" >
-                                &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
-                            </button>
-                        </a> --}}
             
                         <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" 
                         style="display: none;"></i>
-                   
-                    {{-- @endcan --}}
+   
             
                 
             </div>
@@ -67,7 +58,7 @@
 
 
                              <td>
-                                 {{-- @can('proveedores_edit')  --}}
+        
                                    <span class="tts:left tts-slideIn tts-custom" aria-label="Previsualizar">
                                     <a href="/../../Documentos/{{$docprov ->documento}}" target="blank_">
                                         <span class="text-primary" >
@@ -75,7 +66,7 @@
                                         </span>
                                     </a>
                                 </span>  
-                                 {{-- @endcan  --}}
+                        
 
                             </td> 
 

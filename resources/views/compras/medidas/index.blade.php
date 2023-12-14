@@ -6,7 +6,7 @@
         <b>MEDIDAS</b>
     </div>
     <div class="col-md-4 text-right">
-        @can('medidas_create')
+     
 
         <a href="{{route('medidas.create')}}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar">
                 <button class="btn btn-sm btn-primary font-verdana" type="button" >
@@ -16,7 +16,6 @@
 
             <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
 
-        @endcan
     </div>
     <div class="col-md-12">
         <hr class="hrr">

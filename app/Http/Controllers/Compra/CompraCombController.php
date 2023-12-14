@@ -107,7 +107,6 @@ class CompraCombController extends Controller
                                 </button>
                                 </form>';
                     } else {
-                        // @can('comprasalmacen_aprovadas_access')
                         if ($compras->estadocompracomb == 2) {
                          $buttonHtml = '<form action="' . route('combustibles.pedido.editabledos', $compras->idcompracomb) . '" method="GET" style="display: inline">' .
                             csrf_field() .

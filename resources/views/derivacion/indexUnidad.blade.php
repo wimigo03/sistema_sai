@@ -21,7 +21,7 @@
         <div class="col-md-3 text-right titulo">
 
 
-            @can('ventanilla_access')
+        
                 <a href="{{ route('crear2.lugar') }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar Area">
                     <button class="btn btn-sm btn-success font-verdana" type="button">
                         &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
@@ -29,7 +29,6 @@
                 </a>
 
 
-            @endcan
 
 
 

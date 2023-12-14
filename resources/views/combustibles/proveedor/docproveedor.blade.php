@@ -17,7 +17,6 @@
 
                 &nbsp;&nbsp;&nbsp;
 
-                    @can('proveedorcomb_create')
 
                     <a href="{{ route('ProveedorController.createdoc', $idproveedor) }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar">
                             <button class="btn btn-sm btn-info   font-verdana" type="button" >
@@ -27,7 +26,6 @@
 
                         <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
 
-                    @endcan
 
 
             </div>
@@ -63,7 +61,7 @@
 
 
                             <td>
-                                @can('proveedorcomb_edit')
+                             
                                 <span class="tts:right tts-slideIn tts-custom" aria-label="Ver Documento">
                                 <a href="/../Documentos/{{$docprov ->documento}}" target="blank_"
                                 class="fa fa-eye fa-lg " ></a>
@@ -82,7 +80,7 @@
                                 </a>
                             </span>
 
-                                @endcan
+                                
                         </tr>
                         @empty
                         <tr>

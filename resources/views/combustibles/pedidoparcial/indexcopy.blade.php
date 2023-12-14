@@ -6,7 +6,7 @@
         <b>COMPRA DE COMBUSTIBLE -- </b><b style='color:red'>{{$idd->nombrearea}} </b>--
     </div>
     <div class="col-md-4 text-right titulo">
-        @can('compras_create')
+    
 
         <a href="{{route('combustibles.pedidoparcial.create')}}" class="tts:left tts-slideIn tts-custom" 
         aria-label="Agregar Solicitud">
@@ -21,7 +21,7 @@
                 &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
             </button>
         </a>
-        @endcan
+     
 
 
      </div>
@@ -61,7 +61,7 @@
 
 
                             <td style="padding: 0;" class="text-center p-1">
-                                @can('compras_edit')
+                              
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Compra">
                                         <a href="{{route('combustibles.pedidoparcial.editar',$comp->idcompracomb)}}">
                                             <span class="text-warning">
@@ -69,10 +69,10 @@
                                             </span>
                                         </a>
                                     </span>
-                                @endcan
+                            
                                 </td>
                                  <td style="padding: 0;" class="text-center p-1">
-                                @can('compras_detalle')
+                             
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle">
                                     <a href="{{route('combustibles.pedidoparcial.edit',$comp->idcompracomb)}}">
                                         <span class="text-primary">
@@ -80,7 +80,7 @@
                                         </span>
                                     </a>
                                 </span>
-                                @endcan 
+                            
                             </td>
                         </tr>
                     @empty

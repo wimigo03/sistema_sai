@@ -56,7 +56,7 @@
                             <td class="text-justify p-1">{{$comp->nombrearea}}</td>
 
                             <td style="padding: 0;" class="text-center p-1">
-                                @can('compras_edit')
+                              
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Compra">
                                         <a href="{{route('compras.pedidoparcial.editar',$comp->idcompra)}}">
                                             <span class="text-warning">
@@ -64,10 +64,10 @@
                                             </span>
                                         </a>
                                     </span>
-                                @endcan
+                              
                                 </td>
                                 <td style="padding: 0;" class="text-center p-1">
-                                @can('compras_detalle')
+                            
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle">
                                     <a href="{{route('compras.pedidoparcial.edit',$comp->idcompra)}}">
                                         <span class="text-primary">
@@ -75,7 +75,7 @@
                                         </span>
                                     </a>
                                 </span>
-                                @endcan
+                            
                             </td>
                         </tr>
                     @empty

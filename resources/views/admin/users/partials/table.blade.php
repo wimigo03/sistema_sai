@@ -30,34 +30,30 @@
                             {{--</span>--}}
                         </td>
                         <td class="text-center p-1">
-                            @can('user_edit')
-                                <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar">
-                                    <a href="{{ route('users.edit',$user->id) }}" class="btn btn-xs btn-warning">
-                                        <i class="fa fa-lg fa-edit" aria-hidden="true"></i>
-                                    </a>
-                                </span>
-                            @endcan
-                            @can('user_delete')
-                                @if ($user->estadouser == 1)
-                                    <form action="{{ route('users.baja',$user->id) }}" class="d-inline-block" method="get">
-                                            @csrf
-                                            <span class="tts:left tts-slideIn tts-custom" aria-label="Deshabilitar">
-                                                <button type="submit" onclick="return confirm('Se dará de baja al Usuario. ¿Esta Ud. seguro...?')" class="btn btn-xs btn-success">
-                                                    <i class="fa fa-lg fa-arrow-down" aria-hidden="true"></i>
-                                                </button>
-                                            </span>
-                                    </form>
-                                @else
-                                    <form action="{{ route('users.alta', $user->id) }}" class="d-inline-block" method="get">
+                            <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar">
+                                <a href="{{ route('users.edit',$user->id) }}" class="btn btn-xs btn-warning">
+                                    <i class="fa fa-lg fa-edit" aria-hidden="true"></i>
+                                </a>
+                            </span>
+                            @if ($user->estadouser == 1)
+                                <form action="{{ route('users.baja',$user->id) }}" class="d-inline-block" method="get">
                                         @csrf
-                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Habilitar">
-                                            <button type="submit" onclick="return confirm('Se dará de alta al Usuario. ¿Esta Ud. seguro...?')" class="btn btn-xs btn-danger">
-                                                <i class="fa fa-lg fa-arrow-up" aria-hidden="true"></i>
+                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Deshabilitar">
+                                            <button type="submit" onclick="return confirm('Se dará de baja al Usuario. ¿Esta Ud. seguro...?')" class="btn btn-xs btn-success">
+                                                <i class="fa fa-lg fa-arrow-down" aria-hidden="true"></i>
                                             </button>
                                         </span>
-                                    </form>
-                                @endif
-                            @endcan
+                                </form>
+                            @else
+                                <form action="{{ route('users.alta', $user->id) }}" class="d-inline-block" method="get">
+                                    @csrf
+                                    <span class="tts:left tts-slideIn tts-custom" aria-label="Habilitar">
+                                        <button type="submit" onclick="return confirm('Se dará de alta al Usuario. ¿Esta Ud. seguro...?')" class="btn btn-xs btn-danger">
+                                            <i class="fa fa-lg fa-arrow-up" aria-hidden="true"></i>
+                                        </button>
+                                    </span>
+                                </form>
+                            @endif
                         </td>
                     </tr>
                 @empty
