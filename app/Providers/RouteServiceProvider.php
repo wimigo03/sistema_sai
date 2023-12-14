@@ -64,6 +64,10 @@ class RouteServiceProvider extends ServiceProvider
             ->namespace($this->namespace)
             ->group(base_path('routes/Admin/roles-route.php'));
 
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Admin/permissions-route.php'));
+
         Route::middleware('web')
             ->namespace($this->namespace)
             ->group(base_path('routes/CanastaV2/barrios-route.php'));

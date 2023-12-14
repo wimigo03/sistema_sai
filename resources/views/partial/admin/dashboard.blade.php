@@ -85,7 +85,7 @@
                         </ul>
                     </li>
                     {{-- USUARIOS --}}
-                    @canany(['users_access', 'roles_access', 'permissions_access'])
+
                         <li class="font-verdana-bg">
                             <a href="" data-toggle="collapse" data-target="#dashboard_users"
                                 class="active collapsed" aria-expanded="false">
@@ -94,7 +94,7 @@
                                 <span class="fa fa-arrow-circle-left float-right"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_users">
-                                @can('users_access')
+
                                     <li>
                                         <a href="{{ route('users.index') }}">
                                             <span class="nav-label mr-4">
@@ -102,8 +102,8 @@
                                             </span>
                                         </a>
                                     </li>
-                                @endcan
-                                @can('roles_access')
+
+
                                     <li>
                                         <a href="{{ route('roles.index') }}">
                                             <span class="nav-label mr-4">
@@ -111,19 +111,18 @@
                                             </span>
                                         </a>
                                     </li>
-                                @endcan
-                                @can('permissions_access')
+
                                     <li>
-                                        <a href="{{-- route('admin.permissions.index') --}}">
+                                        <a href="{{ route('permissions.index') }}">
                                             <span class="nav-label mr-4">
                                                 <i class="fa-solid fa-layer-group"></i>&nbsp;Permisos
                                             </span>
                                         </a>
                                     </li>
-                                @endcan
+
                             </ul>
                         </li>
-                    @endcanany
+
                     {{-- COMPRAS --}}
                     @canany(['compras_panel_access'])
                         <li class="font-verdana-bg">
