@@ -8,24 +8,24 @@
             <b style='color:rgb(39, 6, 185)'>-- EVENTOS DE HOY --</b><b></b>
         </div>
         <div class="col-md-2 text-right titulo">
-            @can('agenda_access_ejecutivo')
+ 
                 <a href="{{ route('agenda.indexayer') }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar Solicitud">
                     <button class="btn btn-sm btn-danger font-verdana" type="button">Ayer
                         &nbsp;<i class="fa fa-eye fa-lg" aria-hidden="true"></i>&nbsp;
                     </button>
                 </a>
-            @endcan
+   
 
 
         </div>
         <div class="col-md-2 text-right titulo">
-            @can('agenda_access_ejecutivo')
+
                 <a href="{{ route('agenda.indexmaniana') }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar Solicitud">
                     <button class="btn btn-sm btn-success font-verdana" type="button">mañana
                         &nbsp;<i class="fa fa-eye fa-lg" aria-hidden="true"></i>&nbsp;
                     </button>
                 </a>
-            @endcan
+  
 
 
         </div>

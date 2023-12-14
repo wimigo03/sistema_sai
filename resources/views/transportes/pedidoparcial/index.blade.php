@@ -7,7 +7,7 @@
     </div>
     <div class="col-md-4 text-right titulo">
         
-         @can('solunidadconsumo_create') 
+   
 
         <a href="{{route('transportes.pedidoparcial.create')}}" class="tts:left tts-slideIn tts-custom" 
         aria-label="  Solicitud">
@@ -15,26 +15,6 @@
                 &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
             </button>
         </a>
-
-        {{-- <a href="{{route('transportes.pedidoparcial.index2')}}" class="tts:left tts-slideIn tts-custom" 
-        aria-label="  Aprobadas">
-            <button class="btn btn-sm btn-primary font-verdana" type="button" >Solic. Aprobadas
-                &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
-            </button>
-        </a> --}}
-         @endcan 
-
-             {{-- PASO UNO PDF --}}
-             {{-- <a href="{{route('transportes.pedidoparcial.pdf')}}" class="tts:left tts-slideIn tts-custom" aria-label="Pdf">
-                <button class="btn btn-sm btn-primary font-verdana" type="button" >
-                    &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true">PDF</i>&nbsp;
-                </button>
-            </a> --}}
-              {{-- PASO UNO PDF --}}
-            
-
-
-
     </div>
     <div class="col-md-12">
         <hr class="hrr">
@@ -83,7 +63,7 @@
 
                             @if($sol->estadosoluconsumo == '1')
                             <td style="padding: 0;" class="text-center p-1">
-                                @can('solunidadconsumo_edit')
+                               
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Solicitud">
                                         <a href="{{route('transportes.pedidoparcial.editar',$sol->idsoluconsumo)}}">
                                             <span class="text-warning">
@@ -91,14 +71,14 @@
                                             </span>
                                         </a>
                                     </span>
-                                @endcan
+                             
                                 </td>
 
 
                                 @elseif($sol->estadosoluconsumo == '3')
 
                                 <td style="padding: 0;" class="text-center p-1">
-                                    @can('solunidadconsumo_edit')
+                                    
                                         <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Compra">
                                             <a href="{{route('transportes.pedidoparcial.solicitud',$sol->idsoluconsumo)}}">
                                                 <span class="text-primary">
@@ -106,14 +86,14 @@
                                                 </span>
                                             </a>
                                         </span>
-                                    @endcan
+                                    
                                     </td>
 
 
                                     @elseif($sol->estadosoluconsumo == '10')
 
                                     <td style="padding: 0;" class="text-center p-1">
-                                         @can('solunidadconsumo_edit')
+                                        
                                              <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Compra">
                                                  <a href="{{route('transportes.pedidoparcial.editrechazado',$sol->idsoluconsumo)}}">
                                                      <span class="text-warning">
@@ -121,7 +101,7 @@
                                                      </span>
                                                  </a>
                                              </span>
-                                             @endcan
+                                          
                                             </td>
                                     @endif 
                               

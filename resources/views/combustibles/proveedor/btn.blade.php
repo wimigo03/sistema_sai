@@ -1,4 +1,4 @@
-@can('proveedorcomb_edit')
+
 <center>
 
       <td style="padding: 0;" class="text-center p-1">
@@ -12,4 +12,4 @@
     </td>
 
   </center>
-@endcan
+

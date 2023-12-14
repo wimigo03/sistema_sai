@@ -1,4 +1,4 @@
-@can('proveedorcomb_edit')
+
 <center>
      <td style="padding: 0;" class="text-center p-1">
         <span class="tts:left tts-slideIn tts-custom" aria-label="Documentos">
@@ -11,4 +11,4 @@
     </td> 
 
 </center>
-@endcan
+

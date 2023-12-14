@@ -1,5 +1,4 @@
 <span class="d-flex">
-    @can('actual_edit')
     <span class="tts:left tts-slideIn tts-custom" aria-label="Ver activo">
         <a class="mr-2" href="{{ route('activo.gestionactivo.show', $id) }}">
             <i class="fas fa-eye fa-xl" style="color: cadetblue"></i>
@@ -15,7 +14,6 @@
             <i class="fas fa-edit fa-xl" style="color: yellowgreen"></i>
         </a>
     </span>
-    @endcan
     <span class="tts:left tts-slideIn tts-custom" aria-label="Ver imagenes">
         <a class="mr-2" href="{{ route('activo.responsable.imagen.index', $id) }}">
             <i class="fas fa-images fa-xl" style="color: blue"></i>

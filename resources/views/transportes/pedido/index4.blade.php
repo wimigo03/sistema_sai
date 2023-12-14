@@ -7,7 +7,6 @@
     </div>
 
     <div class="col-md-4 text-right">
-        @can('solunidadconsumo_aprovada') 
 
              <a href="{{ route('transportes.pedido.index3') }}" class="tts:left tts-slideIn tts-custom" 
            aria-label="ir a solicitudes pendientes">
@@ -17,8 +16,6 @@
            </a>  
 
            <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
-
-        @endcan 
    </div>
     <div class="col-md-12">
         <hr class="hrr">

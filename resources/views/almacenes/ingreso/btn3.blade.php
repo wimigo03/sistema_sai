@@ -1,5 +1,5 @@
 <td style="padding: 0;" class="text-center p-1">
-    @can('almacenes_ingreso') 
+  
     <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle ">
         <a href="{{ route('almacenes.ingreso.detalle', $idingreso) }}">
             <span class="text-primary">
@@ -7,5 +7,5 @@
             </span>
         </a>
     </span>
-    @endcan 
+
 </td>

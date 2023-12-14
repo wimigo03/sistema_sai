@@ -24,14 +24,14 @@
         <b>TIPO DE ARCHIVOS</b>
     </div>
     <div class="col-md-2 text-right titulo">
-        @can('archivos_createTipo')
+    
         <a href="{{ route('archivos2.createtipo') }}" class="tts:left tts-slideIn tts-custom"
             aria-label="Agregar Tipo Archivo">
             <button class="btn btn-sm btn-info font-verdana" type="button">Agreg.Tipo.Arch
                 &nbsp;<i class="fa fa-lg fa-file" aria-hidden="true"></i>&nbsp;
             </button>
         </a>
-    @endcan
+  
 
 
     </div>

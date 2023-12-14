@@ -106,7 +106,7 @@
 
                             @if($prod->estadovale == '2')
                             <td style="padding: 0;" class="text-center p-1">
-                                {{-- @can('solunidadconsumo_edit') --}}
+                            
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Solicitud">
                                         <a href="{{route('almacenes.ingreso.delete',$prod->idvale)}}">
                                             <span class="text-warning">
@@ -114,14 +114,14 @@
                                             </span>
                                         </a>
                                     </span>
-                                {{-- @endcan --}}
+                           
                                 </td>
 
 
                                 @elseif($prod->estadovale == '3')
 
                                 <td style="padding: 0;" class="text-center p-1">
-                                    {{-- @can('solunidadconsumo_edit') --}}
+                               
                                         <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Compra">
                                             <a href="{{route('almacenes.ingreso.deletedos',$prod->idvale)}}">
                                                 <span class="text-primary">
@@ -129,7 +129,7 @@
                                                 </span>
                                             </a>
                                         </span>
-                                    {{-- @endcan --}}
+                              
                                     </td>
                                     @endif 
                         </tr>

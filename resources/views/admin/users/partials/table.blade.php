@@ -49,14 +49,14 @@
                                 @else
                                     <form action="{{ route('users.alta', $user->id) }}" class="d-inline-block" method="get">
                                         @csrf
-                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Habilitar">
-                                            <button type="submit" onclick="return confirm('Se dará de alta al Usuario. ¿Esta Ud. seguro...?')" class="btn btn-xs btn-danger">
-                                                <i class="fa fa-lg fa-arrow-up" aria-hidden="true"></i>
+                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Deshabilitar">
+                                            <button type="submit" onclick="return confirm('Se dará de baja al Usuario. ¿Esta Ud. seguro...?')" class="btn btn-xs btn-success">
+                                                <i class="fa fa-lg fa-arrow-down" aria-hidden="true"></i>
                                             </button>
                                         </span>
                                     </form>
                                 @endif
-                           
+
                         </td>
                     </tr>
                 @empty

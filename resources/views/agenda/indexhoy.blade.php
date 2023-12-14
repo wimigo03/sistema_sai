@@ -9,31 +9,31 @@
         </div>
 
         <div class="col-md-1 text-right titulo">
-            @can('agenda_access_ejecutivo')
+           
                 <a href="{{ route('agenda.indexayer') }}" class="tts:left tts-slideIn tts-custom" aria-label="Eventos de ayer">
                     <button class="btn btn-sm btn-danger font-verdana" type="button">Ayer
                     </button>
                 </a>
-            @endcan
+            
 
 
         </div>
         <div class="col-md-1 text-right titulo">
-            @can('agenda_access_ejecutivo')
+           
                 <a href="{{ route('agenda.indexmaniana') }}" class="tts:left tts-slideIn tts-custom" aria-label="Eventos de mañana">
                     <button class="btn btn-sm btn-success font-verdana" type="button">mañana
                     </button>
                 </a>
-            @endcan
+            
 
         </div>
         <div class="col-md-1 text-right titulo">
-            @can('agenda_access_ejecutivo')
+           
                 <a href="{{ route('agenda.indextotal') }}" class="tts:left tts-slideIn tts-custom" aria-label="Ver todos">
                     <button class="btn btn-sm btn-info font-verdana" type="button">Todos
                     </button>
                 </a>
-            @endcan
+            
         </div>
 
         <div class="col-md-12">

@@ -42,7 +42,6 @@
                     </button>
                 </span>
                 <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-
         </div>
         <div class="col-md-6 text-right">
             <button class="btn btn-outline-primary font-verdana" type="button" onclick="procesar();">

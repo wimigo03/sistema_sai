@@ -1,9 +1,9 @@
 <span class="d-flex">
-    @can('actual_edit')
+
         <a class="" href="{{ route('activo.gestionactivo.edit', $id) }}">
             <i class="fas fa-edit fa-xl mr-2" style="color: yellowgreen"></i>
         </a>
-    @endcan
+
     <a class="" href="{{ route('activo.responsable.imagen.index', $id) }}">
         <i class="fas fa-images fa-xl mr-2" style="color: blue"></i>
     </a>

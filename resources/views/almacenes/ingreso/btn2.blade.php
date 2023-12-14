@@ -1,5 +1,5 @@
 <td style="padding: 0;" class="text-center p-1">
-    @can('almacenesnotas_ingreso') 
+
     <span class="tts:left tts-slideIn tts-custom" aria-label="Crear Nota ">
         <a href="{{ route('ingreso.editdoc', $idingreso) }}">
             <span class="text-primary">
@@ -7,5 +7,5 @@
             </span>
         </a>
     </span>
-    @endcan 
+  
 </td>

@@ -1,6 +1,6 @@
 
 <td style="padding: 0;" class="text-center p-1">
-    {{-- @can('medidas_access') --}}
+
         <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar">
             <a href="{{route('expochaco.editar',$idsolicitud)}}">
                 <span class="text-warning">
@@ -8,6 +8,6 @@
                 </span>
             </a>
         </span>
-    {{-- @endcan --}}
+
 </td>
 

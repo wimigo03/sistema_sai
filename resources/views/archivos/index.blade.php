@@ -6,14 +6,14 @@
             <b>ARCHIVOS -- </b><b style='color:red'>{{ $idd->nombrearea }} </b>--
         </div>
         <div class="col-md-4 text-right titulo">
-            @can('archivos_create')
+   
                 <a href="{{ route('archivos.create') }}" class="tts:left tts-slideIn tts-custom"
                     aria-label="Agregar Solicitud">
                     <button class="btn btn-sm btn-success font-verdana" type="button">Agreg.Archivo.
                         &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
                     </button>
                 </a>
-            @endcan
+ 
 
 
 
@@ -52,7 +52,7 @@
                                 <td class="text-justify p-1">{{ $dat->nombretipo }}</td>
 
                                 <td style="padding: 0;" class="text-center p-1">
-                                    @can('archivos_edit')
+                                 
                                         <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Archivo">
                                             <a href="{{route('archivos.edit',$dat->idarchivo)}}">
                                                 <span class="text-warning">
@@ -60,10 +60,10 @@
                                                 </span>
                                             </a>
                                         </span>
-                                    @endcan
+                            
                                 </td>
                                 <td style="padding: 0;" class="text-center p-1">
-                                    @can('archivos_view')
+                          
                                         <span class="tts:left tts-slideIn tts-custom" aria-label="Previsualizar">
                                             <a href="/sai/public/Documentos/{{$dat -> documento}}" target="blank_">
                                                 <span class="text-primary" >
@@ -71,7 +71,7 @@
                                                 </span>
                                             </a>
                                         </span>
-                                    @endcan
+                            
                                 </td>
                             </tr>
                         @empty
