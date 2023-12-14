@@ -30,18 +30,21 @@
     </div>
     <div class="form-group row">
         <div class="col-md-6">
-
+            @can('users.create')
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Crear Nuevo Usuario">
                     <button class="btn btn-sm btn-outline-success font-verdana" type="button" onclick="create();">
                         &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;
                     </button>
                 </span>
+            @endcan
+            @can('users.excel')
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Exportar a Excel">
                     <button class="btn btn-sm btn-outline-success font-verdana" type="button" onclick="excel();">
                         &nbsp;<i class="fa fa-file-excel" aria-hidden="true"></i>&nbsp;
                     </button>
                 </span>
-                <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
+            @endcan
+            <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
         </div>
         <div class="col-md-6 text-right">
             <button class="btn btn-outline-primary font-verdana" type="button" onclick="procesar();">
