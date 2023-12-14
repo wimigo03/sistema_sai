@@ -55,10 +55,10 @@
                     <tbody>
                         @foreach ($permissions as $datos)
                             <tr class="font-verdana">
-                                <td class="text-left p-1">{{ $datos->id }}</td>
-                                <td class="text-left p-1">{{ $datos->name }}</td>
+                                <td class="text-left p-1">{{ $datos->permission_id }}</td>
+                                <td class="text-left p-1">{{ $datos->permission }}</td>
                                 <td class="text-left p-1">{{ $datos->descripcion }}</td>
-                                <td class="text-center p-1">{{ $datos->status }}</td>
+                                <td class="text-center p-1">{{ $datos->estado == 1 ? 'HABILITADO' : 'DESHABILITADO' }}</td>
                             </tr>
                         @endforeach
                     </tbody>

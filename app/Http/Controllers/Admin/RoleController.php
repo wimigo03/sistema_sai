@@ -11,6 +11,7 @@ use Illuminate\Http\Response;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\Canasta\Dea;
+use DB;
 
 class RoleController extends Controller
 {
@@ -59,7 +60,11 @@ class RoleController extends Controller
     public function show($id)
     {
         $role = Role::find($id);
-        $permissions = Permission::get();
+        $permissions = DB::table('role_permissions as a')
+                            ->join('permissions as b','a.permission_id','b.id')
+                            ->where('a.role_id',$id)
+                            ->select('b.id as permission_id','b.name as permission','b.descripcion','b.estado')
+                            ->get();
         return view('admin.roles.show',compact('role','permissions'));
     }
 
