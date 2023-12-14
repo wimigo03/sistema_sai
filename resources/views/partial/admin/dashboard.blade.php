@@ -105,7 +105,7 @@
                                 @endcan
                                 @can('roles_access')
                                     <li>
-                                        <a href="{{ route('admin.roles.index') }}">
+                                        <a href="{{ route('roles.index') }}">
                                             <span class="nav-label mr-4">
                                                 <i class="fa-solid fa-list"></i>&nbsp;Roles
                                             </span>
@@ -114,7 +114,7 @@
                                 @endcan
                                 @can('permissions_access')
                                     <li>
-                                        <a href="{{ route('admin.permissions.index') }}">
+                                        <a href="{{-- route('admin.permissions.index') --}}">
                                             <span class="nav-label mr-4">
                                                 <i class="fa-solid fa-layer-group"></i>&nbsp;Permisos
                                             </span>
@@ -780,7 +780,7 @@
                                 @endcan
                                 @can('roles_access')
                                     <li>
-                                        <a href="{{ route('admin.roles.index') }}">
+                                        <a href="{{-- route('admin.roles.index') --}}">
                                             &nbsp; &nbsp; &nbsp;
                                             <span class="nav-label mr-4">Roles</span>
                                         </a>
@@ -788,7 +788,7 @@
                                 @endcan
                                 @can('permissions_access')
                                     <li>
-                                        <a href="{{ route('admin.permissions.index') }}">
+                                        <a href="{{-- route('admin.permissions.index') --}}">
                                             &nbsp; &nbsp; &nbsp;
                                             <span class="nav-label mr-4">Permisos</span>
                                         </a>

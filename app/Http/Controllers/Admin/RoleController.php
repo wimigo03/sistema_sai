@@ -4,110 +4,123 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreRoleRequest;
-use App\Http\Requests\UpdateRoleRequest;
-use App\Models\Permission;
-use App\Models\Role;
+//use App\Http\Requests\StoreRoleRequest;
+//use App\Http\Requests\UpdateRoleRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Response;
+use App\Models\Permission;
+use App\Models\Role;
+use App\Models\Canasta\Dea;
 
 class RoleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
+    
+    public function index()
     {
-        abort_if(Gate::denies('roles_access'), Response::HTTP_FORBIDDEN, 'Forbidden');
-
-        $roles = Role::with('permissions')->paginate(10)->appends($request->query());;
-
-        return view('admin.roles.index',compact('roles'));
+        $unidades = Dea::pluck('descripcion','id');
+        $estados = Role::ESTADOS;
+        $roles = Role::orderBy('id','desc')->paginate(10);
+        return view('admin.roles.index',compact('unidades','estados','roles'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function search(Request $request)
+    {
+        $unidades = Dea::pluck('descripcion','id');
+        $estados = Role::ESTADOS;
+        $roles = Role::query()
+                        ->byCodigoId($request->codigo_id)
+                        ->byDea($request->dea_id)
+                        ->byTitulo($request->titulo)
+                        ->byCodigo($request->codigo)
+                        ->byEstado($request->estado)
+                        ->orderBy('id','desc')
+                        ->paginate(10);
+        return view('admin.roles.index',compact('unidades','estados','roles'));
+    }
+
+    public function deshabilitar($id)
+    {
+        $role = Role::find($id);
+        $role->update([
+            'estado' => 2
+        ]);
+        return redirect()->route('roles.index')->with('info_message', 'Se deshabilito el Rol seleccionado.');
+    }
+
+    public function habilitar($id)
+    {
+        $role = Role::find($id);
+        $role->update([
+            'estado' => 1
+        ]);
+        return redirect()->route('roles.index')->with('info_message', 'Se habilito el Rol seleccionado.');
+    }
+
+    public function show($id)
+    {
+        $role = Role::find($id);
+        $permissions = Permission::get();
+        return view('admin.roles.show',compact('role','permissions'));
+    }
+
     public function create()
     {
-        abort_if(Gate::denies('role_create'), Response::HTTP_FORBIDDEN, 'Forbidden');
+        $deas = Dea::pluck('descripcion','id');
         $permissions = Permission::all()->pluck('name', 'id');
-
-        return view('admin.roles.create', compact('permissions'));
+        return view('admin.roles.create', compact('deas','permissions'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreRoleRequest $request)
+    public function store(Request $request)
     {
-        $role = Role::create($request->validated());
-        $role->permissions()->sync($request->permissions);
-
-        return redirect()->route('admin.roles.index')->with('status-success','New Role Created');
+        $request->validate([
+            'dea_id' => 'required',
+            'titulo' => 'required|unique:roles,title',
+            'permissions' => 'required|array|min:1'
+        ]);
+        try{
+            $role = Role::create([
+                'title' => $request->titulo,
+                'short_code' => $request->codigo,
+                'estado' => 1,
+                'dea_id' => $request->dea_id
+            ]);
+            $role->permissions()->sync($request->permissions);
+            return redirect()->route('roles.index')->with('success_message', 'Se agrego un rol al registro.');
+        } catch (ValidationException $e) {
+            return redirect()->route('roles.create')
+                ->withErrors($e->validator->errors())
+                ->withInput();
+        }
     }
 
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Role  $permission
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Role $role)
+    public function edit($id)
     {
-        abort_if(Gate::denies('role_show'), Response::HTTP_FORBIDDEN, 'Forbidden');
-
-        return view('admin.roles.show',compact('role'));
-    }
-
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Role $role)
-    {
-        abort_if(Gate::denies('role_edit'), Response::HTTP_FORBIDDEN, 'Forbidden');
+        $role = Role::find($id);
+        $deas = Dea::select('descripcion','id')->get();
         $permissions = Permission::all()->pluck('name', 'id');
-
-        return view('admin.roles.edit', compact('role','permissions'));
+        return view('admin.roles.edit', compact('role','deas','permissions'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateRoleRequest $request, Role $role)
+    public function update(Request $request)
     {
-        $role->update($request->validated());
-        $role->permissions()->sync($request->permissions);
-
-        return redirect()->route('admin.roles.index')->with('status-success','Role Updated');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Role $role)
-    {
-        $role->delete();
-
-        return redirect()->back()->with(['status-success' => "Role Deleted"]);
+        $request->validate([
+            'dea_id' => 'required',
+            'titulo' => 'required|unique:roles,title,' . $request->role_id,
+            'permissions' => 'required|array|min:1'
+        ]);
+        try{
+            $role = Role::find($request->role_id);
+            $role->update([
+                'title' => $request->titulo,
+                'short_code' => $request->codigo,
+                'dea_id' => $request->dea_id
+            ]);
+            $role->permissions()->sync($request->permissions);
+            return redirect()->route('roles.index')->with('success_message', 'Se modifico un registro de rol.');
+        } catch (ValidationException $e) {
+            return redirect()->route('roles.editar')
+                ->withErrors($e->validator->errors())
+                ->withInput();
+        }
     }
 }

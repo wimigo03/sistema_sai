@@ -1,84 +1,50 @@
 @extends('layouts.admin')
-
 @section('content')
-
-    <div class="card">
-        <div class="card-header">{{ __('Editar rol') }}</div>
-
-        <div class="card-body">
-            <form method="POST" action="{{ route('admin.roles.update', $role->id) }}">
-                @csrf
-                @method('PUT')
-
-
-                <div class="form-group row">
-                    <label for="title" class="required col-md-4 col-form-label text-md-right">{{ __('Titulo') }}</label>
-
-                    <div class="col-md-6">
-                        <input id="text" type="title" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title', $role->title) }}" required autocomplete="title">
-
-                        @error('title')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                </div>
-
-
-                <div class="form-group row">
-                    <label for="short_code" class="col-md-4 col-form-label text-md-right">{{ __('Codigo') }}</label>
-
-                    <div class="col-md-6">
-                        <input id="text" type="short_code" class="form-control @error('short_code') is-invalid @enderror" name="short_code" value="{{ old('short_code', $role->short_code) }}" autocomplete="short_code">
-
-                        @error('short_code')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="permissions" class="col-md-4 col-form-label text-md-right">{{ __('Permisos') }}</label>
-
-                    <div class="col-md-6" id="permissions-select">
-                        <select name="permissions[]" id="permissions" class="@error('permissions') is-invalid @enderror"  multiple>
-                            @foreach ($permissions as $id => $permission)
-                                <option value="{{ $id }}" {{ (in_array($id, old('permissions', [])) || $role->permissions->contains($id)) ? 'selected' : '' }}>{{ $permission }}</option>
-                            @endforeach
-                        </select>
-                        <a href="#" id="permission-select-all" class="btn btn-link">seleccionar todo</a>
-                        <a href="#" id="permission-deselect-all" class="btn btn-link">quitar seleccion</a>
-
-                        @error('permissions')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-
-                    </div>
-                </div>
-
-
-                <div class="form-group row mb-0">
-                    <div class="col-md-6 offset-md-4">
-                        <button type="submit" class="btn btn-outline-primary">
-                            {{ __('Actualizar') }}
-                        </button>
-                    </div>
-                </div>
-            </form>
+<link rel="stylesheet" href="/css/font-verdana.css" rel="stylesheet">
+<div class="card card-custom">
+    <div class="card-header font-verdana-bgt">
+        <div class="row">
+            <div class="col-md-6">
+                <b>MODIFICACION DE ROL</b>
+            </div>
+            <div class="col-md-6 text-right">
+                <span class="tts:left tts-slideIn tts-custom" aria-label="Ir atras">
+                    <a href="{{ route('roles.index') }}" class="text-dark">
+                        <i class="fa fa-reply"></i>
+                    </a>
+                </span>
+            </div>
         </div>
     </div>
-
+    <div class="card-body">
+        @include('admin.roles.partials.form-edit')
+    </div>
+</div>
 @endsection
 @section('scripts')
     <script>
+        function procesar() {
+            $('#modal_confirmacion').modal({
+                keyboard: false
+            })
+        }
+
+        function confirmar(){
+            var url = "{{ route('roles.update') }}";
+            $("#form").attr('action', url);
+            $(".btn").hide();
+            $(".spinner-btn").show();
+            $("#form").submit();
+        }
+
+        function cancelar(){
+            $(".btn").hide();
+            $(".spinner-btn").show();
+            window.location.href = "{{ route('roles.index') }}";
+        }
+
         var permission_select = new SlimSelect({
             select: '#permissions-select select',
-            //showSearch: false,
             placeholder: 'Select Permissions',
             deselectLabel: '<span>&times;</span>',
             hideSelectedOption: true,
