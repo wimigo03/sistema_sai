@@ -142,7 +142,7 @@ class RegistroAsistenciaController extends Controller
 
 
         // Lógica para buscar el empleado
-        $emp = $this->buscarPersonal($pin, $id);
+        $emp = $this->buscarPersonal($id);
 
         if (!$emp) {
             return response()->json(['error' => 'El PIN NO CORRESPONDE A NINGÚN PERSONAL ACTIVO.']);
@@ -676,9 +676,14 @@ class RegistroAsistenciaController extends Controller
             }
 
 
-            // Lógica para buscar el empleado
-            $emp = $this->buscarPersonal($pin, $id);
+            if (!$pin) {
+                $emp = $this->buscarPersonalID($id);
+             }else if(!$id){
+                $emp = $this->buscarPersonalPIN($pin);
+             }
 
+            // Lógica para buscar el empleado
+ 
             if (!$emp) {
                 return response()->json(['error' => 'El PIN NO CORRESPONDE A NINGÚN PERSONAL ACTIVO.']);
             }
@@ -1029,7 +1034,7 @@ class RegistroAsistenciaController extends Controller
                             $this->verificarMarcado($registro);
                             return response()->json(['success' => 'SE GUARDÓ REGISTRO DE ENTRADA:']);
                         } else {
-                            return response()->json(['success' => 'YA EXISTE REGISTRO DE ENTRADA.']);
+                            return response()->json(['info' => 'YA EXISTE REGISTRO DE ENTRADA.']);
                         }
 
 
@@ -1043,7 +1048,7 @@ class RegistroAsistenciaController extends Controller
                             $this->verificarMarcado($registro);
                             return response()->json(['success' => 'SE GUARDÓ REGISTRO DE ENTRADA: RETRASOS :' . $registro->minutos_retraso]);
                         } else {
-                            return response()->json(['success' => 'YA EXISTE REGISTRO DE ENTRADA.']);
+                            return response()->json(['info' => 'YA EXISTE REGISTRO DE ENTRADA.']);
                         }
                     } else if ($horaActual < $horario->hora_inicio && $horaActual >= $HoraInicioJornada) {
 
@@ -1056,7 +1061,7 @@ class RegistroAsistenciaController extends Controller
                             Session::flash('success', 'SE GUARDÓ REGISTRO DE ENTRADA: ' . $registro->retraso1 . $horaActual  . $horario->Nombre);
                             return redirect()->back();
                         } else {
-                            return response()->json(['success' => 'YA EXISTE REGISTRO DE ENTRADA.']);
+                            return response()->json(['info' => 'YA EXISTE REGISTRO DE ENTRADA.']);
                         }
                     } else if ($horaActual >= $horario->hora_salida && $horaActual <= $horaMaximaSalida) {
 
@@ -1069,7 +1074,7 @@ class RegistroAsistenciaController extends Controller
                             $this->verificarMarcado($registro);
                             return response()->json(['success' => 'SE GUARDÓ REGISTRO DE SALIDA:']);
                         } else {
-                            return response()->json(['success' => 'YA EXISTE REGISTRO DE SALIDA.']);
+                            return response()->json(['info' => 'YA EXISTE REGISTRO DE SALIDA.']);
                         }
                     } else if ($horaActual < $horario->hora_entrada && $horaActual >= $horaMinimaEntrada) {
 
@@ -1082,7 +1087,7 @@ class RegistroAsistenciaController extends Controller
                             $this->verificarMarcado($registro);
                             return response()->json(['success' => 'SE GUARDÓ REGISTRO DE ENTRADA:']);
                         } else {
-                            return response()->json(['success' => 'YA EXISTE REGISTRO DE SALIDA.']);
+                            return response()->json(['info' => 'YA EXISTE REGISTRO DE SALIDA.']);
                         }
                     } else if ($horaActual >= $horario->hora_entrada && $horaActual <= $sumaEntradaFormateada) {
 
@@ -1096,7 +1101,7 @@ class RegistroAsistenciaController extends Controller
                             $registro->save();
                             return response()->json(['success' => 'SE GUARDÓ REGISTRO DE ENTRADA:']);
                         } else {
-                            return response()->json(['success' => 'YA EXISTE REGISTRO DE ENTRADA.']);
+                            return response()->json(['info' => 'YA EXISTE REGISTRO DE ENTRADA.']);
                         }
                     } else if ($horaActual < $horario->hora_final && $horaActual > $sumaEntradaFormateada) {
 
@@ -1111,7 +1116,7 @@ class RegistroAsistenciaController extends Controller
 
                             return response()->json(['success' => 'SE GUARDÓ REGISTRO DE ENTRADA:']);
                         } else {
-                            return response()->json(['success' => 'YA EXISTE REGISTRO DE ENTRADA.']);
+                            return response()->json(['info' => 'YA EXISTE REGISTRO DE ENTRADA.']);
                         }
                     } else if ($horaActual >= $horario->hora_final && $horaActual <= $finalDelDia) {
                         if (!$registro->registro_final) {
@@ -1123,7 +1128,7 @@ class RegistroAsistenciaController extends Controller
                             // $this->sumarRetrasos($registroactual);
                             return response()->json(['success' => 'SE GUARDÓ REGISTRO DE SALIDA:']);
                         } else {
-                            return response()->json(['success' => 'YA EXISTE REGISTRO DE SALIDA.']);
+                            return response()->json(['info' => 'YA EXISTE REGISTRO DE SALIDA.']);
                         }
                     }
                 } else if ($horario->tipo == 0) {
@@ -1515,7 +1520,7 @@ class RegistroAsistenciaController extends Controller
             return response()->json(['error' => 'DOMINGO. DÍA NO LABORAL.']);
         }
     }
-    public function buscarPersonal($pin)
+    public function buscarPersonalPIN($pin)
     {
 
         $areasExcluidas = [33, 34];
