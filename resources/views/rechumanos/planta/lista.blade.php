@@ -12,14 +12,12 @@
             <b>GESTIONAR PERSONAL-P/{{$nombrearea}}</b>
         </div>
         <div class="col-md-3 text-right">
-            @can('planta_create_access')
-                <a href="{{route('planta.crear',$idarea)}}" class="tts:left tts-slideIn tts-custom" aria-label="Registrar">
-                    <button class="btn btn-sm btn-outline-primary font-verdana" type="button" >
-                        &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
-                    </button>
-                </a>
-                <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
-            @endcan
+            <a href="{{route('planta.crear',$idarea)}}" class="tts:left tts-slideIn tts-custom" aria-label="Registrar">
+                <button class="btn btn-sm btn-outline-primary font-verdana" type="button" >
+                    &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
+                </button>
+            </a>
+            <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
         </div>
         <div class="col-md-12">
             <hr class="hrr">
@@ -82,22 +80,18 @@
                             @foreach ($empleados as $empleado)
                                 <tr class="font-verdana-sm">
                                     <td class="text-center p-1" style="vertical-align: middle;">
-                                        @can('planta_edit_access')
-                                            <span class="tts:right tts-slideIn tts-custom" aria-label="Modificar">
-                                                <a href="{{ route('planta.editar', $empleado->idemp)}}">
-                                                    <span class="text-primary"><i class="fa-solid fa-xl fa-pen-to-square"></i></span>
-                                                </a>
-                                            </span>
-                                        @endcan
+                                        <span class="tts:right tts-slideIn tts-custom" aria-label="Modificar">
+                                            <a href="{{ route('planta.editar', $empleado->idemp)}}">
+                                                <span class="text-primary"><i class="fa-solid fa-xl fa-pen-to-square"></i></span>
+                                            </a>
+                                        </span>
                                     </td>
                                     <td class="text-center p-1" style="vertical-align: middle;">
-                                        @can('planta_edit_access')
-                                            <span class="tts:right tts-slideIn tts-custom" aria-label="Activar o Desactivar">
-                                                <a href="{{ route('planta.editar2', $empleado->idemp)}}">
-                                                    <span class="text-warning"><i class="fas fa-xl fa-minus-circle"></i></span>
-                                                </a>
-                                            </span>
-                                        @endcan
+                                        <span class="tts:right tts-slideIn tts-custom" aria-label="Activar o Desactivar">
+                                            <a href="{{ route('planta.editar2', $empleado->idemp)}}">
+                                                <span class="text-warning"><i class="fas fa-xl fa-minus-circle"></i></span>
+                                            </a>
+                                        </span>
                                     </td>
                                     <td class="text-center p-1">{{$empleado->numfile}}</td>
                                     <td class="text-justify p-1">{{$empleado->nombres}}</td>

@@ -6,22 +6,6 @@
         
     </div>
 
-{{--
-     <div class="col-md-4 text-right">
-         @can('solunidadconsumo_aprovada') 
-          <a href="{{ route('transportes.pedido.index4') }}" class="tts:left tts-slideIn tts-custom" 
-
-            aria-label="ir a solicitudes aprobadas">
-                <button class="btn btn-sm btn-success font-verdana" type="button" >SOLICITUDES APROBADAS
-                    &nbsp;<i class="fa-solid fa-thumbs-up" style="font-size:14px"></i>&nbsp;
-                </button>
-            </a>   
-
-            <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
-
-         @endcan 
-    </div> 
-    --}}
     <div class="col-md-12">
         <hr class="hrr">
     </div>

@@ -125,7 +125,6 @@ class CompraCombController extends Controller
                                 Almacen
                                 </button>
                                </form>';
-                                // @endcan 
                     }else {
                         if ($compras->estadocompracomb == 10) {
                             $buttonHtml = '<form action="' . route('combustibles.pedido.editabletres', $compras->idcompracomb) . '" method="GET" style="display: inline">' .
