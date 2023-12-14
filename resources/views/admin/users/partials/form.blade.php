@@ -22,7 +22,7 @@
             @enderror
 
         </div>
-    </div>
+    </div >
 
 
 
