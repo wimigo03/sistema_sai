@@ -42,11 +42,6 @@ class User extends Authenticatable
     public function hasRole($role)
     {
         return $this->roles()->where('title', $role)->exists();
-        //return $this->roles()->where('title', trim($role))->exists();
-        //return $this->roles()->whereRaw('LOWER(title) = ?', [strtolower($role)])->exists();
-        /*$query = $this->roles()->where('title', $role);
-        dd($query->toSql(), $query->getBindings());*/
-
     }
 
     public function roles()

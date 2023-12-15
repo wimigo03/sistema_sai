@@ -82,8 +82,7 @@
                     </li>
                     {{-- USUARIOS --}}
                         <li class="font-verdana-bg">
-                            <a href="" data-toggle="collapse" data-target="#dashboard_users"
-                                class="active collapsed" aria-expanded="false">
+                            <a href="" data-toggle="collapse" data-target="#dashboard_users" class="active collapsed" aria-expanded="false">
                                 <i class="fa fa-users"></i>
                                 <span class="nav-label mr-3">Usuarios</span>
                                 <span class="fa fa-arrow-circle-left float-right"></span>
@@ -119,19 +118,21 @@
 
                     {{-- COMPRAS --}}
                         <li class="font-verdana-bg">
-                            <a href="" data-toggle="collapse" data-target="#dashboard_compras"
-                                class="active collapsed" aria-expanded="false">
-                                <i class="fa fa-shopping-cart" style="color:green"></i>
-                                <span class="nav-label mr-3">COMPRAS</span>
+                            <a href="" data-toggle="collapse" data-target="#dashboard_compras" class="active collapsed" aria-expanded="false">
+                                <i class="fa fa-shopping-cart"></i>
+                                <span class="nav-label mr-3">Compras</span>
                                 <span class="fa fa-arrow-circle-left float-right"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_compras">
-                                <li>
-                                    <a href="{{ route('compras.pedidoparcial.index') }}">
-                                        &nbsp; &nbsp; &nbsp;
-                                        <span class="nav-label mr-4">Solicitudes de Compra</span>
-                                    </a>
-                                </li>
+                                @can('compras.pedido.parcial.index')
+                                    <li>
+                                        <a href="{{ route('compras.pedidoparcial.index') }}">
+                                            <span class="nav-label mr-4">
+                                                <i class="fa-solid fa-credit-card"></i>&nbsp;Solicitudes de Compra
+                                            </span>
+                                        </a>
+                                    </li>
+                                @endcan
                                 <li>
                                     <a href="{{ route('compras.pedido.index') }}">
                                         &nbsp; &nbsp; &nbsp;

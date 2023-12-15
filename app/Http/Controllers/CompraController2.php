@@ -4,102 +4,98 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Validation\Rule;
 use App\Models\User;
 use App\Models\EmpleadosModel;
 use App\Models\AreasModel;
 use App\Models\CompraModel;
 use App\Models\TemporalModel;
 use App\Models\EncargadosModel;
-use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Redirect;
+use App\Models\CatProgModel;
+use App\Models\ProgramaModel;
 use DB;
 
 class CompraController2 extends Controller
 {
     public function index()
     {
-        $comprass = CompraModel::query()
-                                    ->byDea(Auth::user()->dea->id)
+        $empleado = EmpleadosModel::find(Auth::user()->idemp);
+        $compras = CompraModel::query()
+                                    //->byDea(Auth::user()->dea->id)
+                                    ->where('idarea',$empleado->idarea)
                                     ->orderBy('idcompra', 'desc')
                                     ->paginate(10);
-        //dd($comprass);
-        $personal = User::find(Auth::user()->id);
-        $id = $personal->id;
-        $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
-
-        $compras = DB::table('compra as c')
-            ->join('proveedores as p', 'p.idproveedor', '=', 'c.idproveedor')
-            ->join('catprogramatica as cat', 'cat.idcatprogramatica', '=', 'c.idcatprogramatica')
-            ->join('programa as prog', 'prog.idprograma', '=', 'c.idprograma')
-            ->join('areas as a', 'a.idarea', '=', 'c.idarea')
-            ->where('a.idarea', $personalArea->idarea)
-            ->select('c.idcompra', 'c.estado1', 'c.controlinterno', 'a.nombrearea', 'c.objeto', 'c.justificacion', 'p.nombreproveedor', 'c.preventivo', 'c.numcompra', 'cat.codcatprogramatica', 'prog.nombreprograma')
-            ->get();
-
-        $personal = User::find(Auth::user()->id);
-        $id = $personal->id;
-        $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
-
-        return view('compras.pedidoparcial.index', compact('compras','personalArea','comprass'));
+        return view('compras.pedidoparcial.index', compact('compras','compras'));
     }
 
+    public function search(Request $request)
+    {
+        $empleado = EmpleadosModel::find(Auth::user()->idemp);
+        $compras = CompraModel::query()
+                                    //->byDea(Auth::user()->dea->id)
+                                    ->byCodigoId($request->codigo_id)
+                                    ->byControlInterno($request->control_interno)
+                                    ->byObjeto($request->objeto)
+                                    ->where('idarea',$empleado->idarea)
+                                    ->orderBy('idcompra', 'desc')
+                                    ->paginate(10);
+        return view('compras.pedidoparcial.index', compact('compras','compras'));
+    }
     public function create()
     {
-
-        $personal = User::find(Auth::user()->id);
-        $id = $personal->id;
-        $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
-
-        $proveedores = DB::table('proveedores')->where('estadoproveedor', 1)->pluck('nombreproveedor', 'idproveedor');
-        $areas = DB::table('areas')->where('estadoarea', 1)->pluck('nombrearea', 'idarea');
-        $catprogramaticas = DB::table('catprogramatica')
-            ->select(DB::raw("concat(codcatprogramatica,' : ',nombrecatprogramatica) as programatica"), 'idcatprogramatica')
-            ->where('estadocatprogramatica', 1)
-            ->pluck('programatica', 'idcatprogramatica');
-        $programas = DB::table('programa')->where('estadoprograma', 1)->pluck('nombreprograma', 'idprograma');
-        return view('compras.pedidoparcial.create', compact('proveedores', 'areas', 'catprogramaticas', 'programas', 'personalArea'));
+        $empleado = EmpleadosModel::find(Auth::user()->idemp);
+        $catprogramaticas = CatProgModel::select(DB::raw("concat(codcatprogramatica,' : ',nombrecatprogramatica) as programatica"), 'idcatprogramatica')
+                                            ->where('estadocatprogramatica', 1)
+                                            ->pluck('programatica', 'idcatprogramatica');
+        $programas = ProgramaModel::where('estadoprograma', 1)->pluck('nombreprograma', 'idprograma');
+        return view('compras.pedidoparcial.create', compact('empleado','catprogramaticas','programas'));
     }
 
     public function store(Request $request)
     {
+        $request->validate([
+            'controlinterno' => [
+                'required',
+                Rule::unique('compra','controlinterno')->where(function ($query) use ($request) {
+                    return $query->where('idarea', $request->idarea);
+                }),
+            ],
+            'tipo' => 'required',
+            'idprograma' => 'required',
+            'idcatprogramatica' => 'required',
+            'objeto' => 'required',
+            'justificacion' => 'required'
+        ]);
+        try{
+            $compras = new CompraModel();
+            $compras->objeto = $request->input('objeto');
+            $compras->justificacion = $request->input('justificacion');
+            $compras->preventivo = 0;
+            $compras->tipo = $request->input('tipo');
+            $compras->numcompra = 0;
+            $compras->controlinterno = $request->input('controlinterno');
+            $compras->idproveedor = 1;
+            $compras->idarea = $request->idarea;
+            $compras->idcatprogramatica = $request->input('idcatprogramatica');
+            $compras->idprograma = $request->input('idprograma');
+            $compras->idproveedor = 1;
+            $compras->idusuario = Auth::user()->id;
+            $compras->estadocompra = 1;
+            $compras->estado1 = 1;
+            $compras->estado2 = 1;
+            $compras->estado3 = 1;
+            $compras->save();
 
-
-        $personal = User::find(Auth::user()->id);
-        $id = $personal->id;
-
-
-        $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
-
-
-        $compras = new CompraModel();
-        $compras->objeto = $request->input('objeto');
-        $compras->justificacion = $request->input('justificacion');
-        $compras->preventivo = 0;
-        $compras->tipo = $request->input('tipo');
-        $compras->numcompra = 0;
-        $compras->controlinterno = $request->input('controlinterno');
-        $compras->idproveedor = 1;
-        $compras->idarea = $personalArea->idarea;
-        $compras->idcatprogramatica = $request->input('idcatprogramatica');
-        $compras->idprograma = $request->input('idprograma');
-        $compras->idproveedor = 1;
-        $compras->idusuario = $id;
-        $compras->estadocompra = 1;
-        $compras->estado1 = 1;
-        $compras->estado2 = 1;
-        $compras->estado3 = 1;
-        if ($compras->save()) {
-            $request->session()->flash('message', 'Registro Procesado');
-        } else {
-            $request->session()->flash('message', 'Error al Procesar Registro');
+            return redirect()->route('compras.pedidoparcial.index')->with('success_message', 'Se agrego un registro de Solicitud de compra.');
+        } catch (ValidationException $e) {
+            return redirect()->route('compras.pedidoparcial.create')
+                ->withErrors($e->validator->errors())
+                ->withInput();
         }
-        return redirect()->route('compras.pedidoparcial.index');
     }
 
     public function show($id)

@@ -3,56 +3,46 @@
         <table class="table display table-bordered responsive" style="width:100%;">
             <thead>
                 <tr class="font-verdana">
-                    <td class="text-center p-1"><b>CODIGO</b></td>
-                    {{--<td class="text-left p-1"><b>TIPO</b></td>
-                    <td class="text-left p-1"><b>NOMBRE</b></td>
-                    <td class="text-left p-1"><b>DISTRITO</b></td>
-                    <td class="text-left p-1"><b>DEA</b></td>
-                    <td class="text-left p-1"><b>USUARIO</b></td>
-                    <td class="text-center p-1"><b>ESTADO</b></td>
-                    <td class="text-center p-1"><b><i class="fa-solid fa-bars"></i></b></td>--}}
+                    <td class="text-center p-1"><b>COD_ID</b></td>
+                    <td class="text-center p-1"><b>N°&nbsp;C.&nbsp;INT.</b></td>
+                    <td class="text-left p-1"><b>OBJETO</b></td>
+                    <td class="text-left p-1"><b>AREA</b></td>
+                    <td class="text-left p-1"><b>PROGRAMA</b></td>
+                    <td class="text-left p-1"><b>COD.&nbsp;CAT.&nbsp;PROG.</b></td>
+                    <td class="text-center p-1"><b><i class="fa-solid fa-bars"></i></b></td>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($comprass as $datos)
+                @foreach ($compras as $datos)
                     <tr class="font-verdana">
                         <td class="text-center p-1">{{ $datos->idcompra }}</td>
-                        {{--<td class="text-left p-1">{{ $datos->tipo_b }}</td>
-                        <td class="text-left p-1">{{ $datos->nombre }}</td>
-                        <td class="text-left p-1">{{ $datos->distrito->nombre }}</td>
-                        <td class="text-left p-1">{{ $datos->dea->nombre }}</td>
-                        <td class="text-left p-1">{{ strtoupper($datos->user->name) }}</td>
-                        <td class="text-center p-1">{{ $datos->status }}</td>
+                        <td class="text-center p-1">{{ $datos->controlinterno }}</td>
+                        <td class="text-left p-1">{{ $datos->objeto }}</td>
+                        <td class="text-left p-1">{{ $datos->area->nombrearea }}</td>
+                        <td class="text-left p-1">{{ $datos->programa->nombreprograma }}</td>
+                        <td class="text-left p-1">{{ $datos->cat_prog->codcatprogramatica }}</td>
                         <td class="text-center p-1">
                             <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar" style="cursor: pointer;">
-                                <a href="{{ route('barrios.editar',$datos->id) }}" class="btn btn-xs btn-warning">
+                                <a href="{{ route('compras.pedidoparcial.editar',$datos->idcompra) }}" class="btn btn-xs btn-warning">
                                     <i class="fa-solid fa-lg fa-pen-to-square"></i>
                                 </a>
                             </span>
-                            @if (App\Models\Canasta\Barrio::ESTADOS[$datos->estado] == 'HABILITADO')
-                                <span class="tts:left tts-slideIn tts-custom" aria-label="Dehabilitar" style="cursor: pointer;">
-                                    <a href="{{ route('barrios.deshabilitar',$datos->id) }}" class="btn btn-xs btn-danger">
-                                        <i class="fa-regular fa-lg fa-circle-down"></i>
-                                    </a>
-                                </span>
-                            @else
-                                <span class="tts:left tts-slideIn tts-custom" aria-label="Habilitar" style="cursor: pointer;">
-                                    <a href="{{ route('barrios.habilitar',$datos->id) }}" class="btn btn-xs btn-success">
-                                        <i class="fa-regular fa-lg fa-circle-up"></i>
-                                    </a>
-                                </span>
-                            @endif
-                        </td>--}}
+                            <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle" style="cursor: pointer;">
+                                <a href="{{ route('compras.pedidoparcial.edit',$datos->idcompra) }}" class="btn btn-xs btn-info">
+                                    <i class="fa-solid fa-lg fa-list"></i>
+                                </a>
+                            </span>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
             <tfoot>
                 <tr class="font-verdana">
                     <td colspan="12">
-                        {{ $comprass->appends(Request::all())->links() }}
+                        {{ $compras->appends(Request::all())->links() }}
                         <p class="text-muted">Mostrando
-                            <strong>{{$comprass->count()}}</strong> registros de
-                            <strong>{{$comprass->total()}}</strong> totales
+                            <strong>{{$compras->count()}}</strong> registros de
+                            <strong>{{$compras->total()}}</strong> totales
                         </p>
                     </td>
                 </tr>

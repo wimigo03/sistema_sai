@@ -137,12 +137,12 @@ Route::get('compras/pedido/editar/{id}', [CompraController::class,'editar'])->na
 Route::post('compras/pedido/update', [CompraController::class,'update'])->name('compras.pedido.update');
 
 /////////////////////////--COMPRAS PEDIDO PARCIAL--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-Route::get('compras/pedidoparcial/index', [CompraController2::class,'index'])->name('compras.pedidoparcial.index');
+/*Route::get('compras/pedidoparcial/index', [CompraController2::class,'index'])->name('compras.pedidoparcial.index');
 Route::get('compras/pedidoparcial/create', [CompraController2::class,'create'])->name('compras.pedidoparcial.create');
 Route::post('compras/pedidoparcial/store', [CompraController2::class,'store'])->name('compras.pedidoparcial.store');
 Route::get('compras/pedidoparcial/editar/{id}', [CompraController2::class,'editar'])->name('compras.pedidoparcial.editar');
 Route::post('compras/pedidoparcial/update', [CompraController2::class,'update'])->name('compras.pedidoparcial.update');
-Route::get('compras/pedidoparcial/edit/{id}', [CompraController2::class,'edit'])->name('compras.pedidoparcial.edit');
+Route::get('compras/pedidoparcial/edit/{id}', [CompraController2::class,'edit'])->name('compras.pedidoparcial.edit');*/
 
 ///////////////////////////////--COMPRAS DETALLE--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Route::get('compras/detalle/index', [DetalleCompraController::class,'index'])->name('compras.detalle.index');
@@ -525,11 +525,11 @@ Route::get('activosvsiaf/search', [ActivosVsiafController::class,'search'])->nam
 
 /////////////////////////--ENCARGADOS--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('compras/pedidoparcial/responsable', [CompraController2::class,'listadoResponsables'])->name('compras.pedidoparcial.listadoResponsables');
+/*Route::get('compras/pedidoparcial/responsable', [CompraController2::class,'listadoResponsables'])->name('compras.pedidoparcial.listadoResponsables');
 Route::get('compras/pedidoparcial/responsableCreate', [CompraController2::class,'crearEncargado'])->name('compras.pedidoparcial.crearEncargado')->middleware('can:compras_encargados_create');
 Route::POST('compras/pedidoparcial/store2', [CompraController2::class,'storeEncargado'])->name('compras.pedidoparcial.storeEncargado')->middleware('can:compras_encargados_create');
 Route::get('compras/pedidoparcial/responsableEdit/{id}', [CompraController2::class,'responsableEdit'])->name('compras.pedidoparcial.responsableEdit')->middleware('can:compras_encargados_edit');
-Route::post('compras/pedidoparcial/responsableUpdate', [CompraController2::class,'UpdateResponsable'])->name('compras.pedidoparcial.UpdateResponsable')->middleware('can:compras_encargados_edit');
+Route::post('compras/pedidoparcial/responsableUpdate', [CompraController2::class,'UpdateResponsable'])->name('compras.pedidoparcial.UpdateResponsable')->middleware('can:compras_encargados_edit');*/
 
 
 ////////////////////////////--ARCHIVOS--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
