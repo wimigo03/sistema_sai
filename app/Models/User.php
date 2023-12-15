@@ -18,10 +18,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-
         'idemp',
         'estadouser',
-
+        'dea_id'
     ];
 
     protected $hidden = [
@@ -48,6 +47,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class,'user_roles','id_user','id_role');
     }
+
+    /*public function permissions(){
+        return $this->belongsToMany('App\Models\Permission', 'role_permissions',  'role_id', 'permission_id');
+    }*/
 
     public function usuariosEmpleados(){
        return $this->belongsTo(EmpleadosModel::class, 'idemp', 'idemp');

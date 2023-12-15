@@ -17,6 +17,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateUserPhotoRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Models\Canasta\Dea;
 use DB;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests;
@@ -67,37 +68,38 @@ class UserController extends Controller
     }
 
     public function create(){
-        $roles = Role::pluck('title','id');
+        $deas = Dea::pluck('descripcion','id');
+        $roles = Role::all()->pluck('title','id');
         $empleados = EmpleadosModel::select(DB::raw("concat(nombres,' ',ap_pat,' ',ap_mat) as nombre_completo"),'idemp as id')->pluck('nombre_completo','id');
-        return view('admin.users.create', compact('roles', 'empleados'));
+        return view('admin.users.create', compact('deas','roles', 'empleados'));
     }
 
-    public function store(Request $request){
-
-
-       // dd($request->input('roles'));
-        $user = new User();
-        $user->idemp = $request->input('idemp');
-        $user->name = $request->input('name');
-        $user->email = $request->input('email');
-        $user->password = $request->input('password');
-        $user->dea_id = $request->input('dea');
-        $user->estadouser = 1;
-        //$user->estado_unidad = 1;
-        $user->save();
-        //dd($request);
-        //User::create($request->validated());
-
-        if ( $request->has('roles') ) {
-            foreach ( $request->get('roles') as $peso ) {
-                UserRolesModel::create([
-                    'id_user' => $user->id ,
-                    'id_role' => $peso
-                ]);
-            }
+    public function store(Request $request)
+    {
+        $request->validate([
+            'idemp' => 'required',
+            'name' => 'required|unique:users,name',
+            'email' => 'required|email',
+            'password' => 'required|min:6|confirmed',
+            'dea' => 'required',
+            'roles' => 'required|array|min:1'
+        ]);
+        try{
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => $request->password,
+                'idemp' => $request->idemp,
+                'estadouser' => 1,
+                'dea_id' => $request->dea
+            ]);
+            $user->roles()->sync($request->roles);
+            return redirect()->route('users.index')->with('success_message', 'Se agrego un usuario al registro.');
+        } catch (ValidationException $e) {
+            return redirect()->route('users.create')
+                ->withErrors($e->validator->errors())
+                ->withInput();
         }
-
-        return redirect()->route('users.index')->with(['status-success' => "Usuario registrado con exito."]);
     }
 
     public function show(User $user){
@@ -106,21 +108,41 @@ class UserController extends Controller
         return view('admin.users.show', compact('user'));
     }
 
-    public function edit($iduser){
-        $user = User::find($iduser);
-        //PersoneriasModel::where('tipo', '=', 1)->paginate(15)
-
-        $roleuser=UserRolesModel::where('id_user','=',$iduser)->pluck('id_user', 'id_role');
-
-        $roles = DB::table('roles')->get();
-        $roles2 = User::all()->pluck('name', 'email');
-        //dd($roleuser);
-        return view('admin.users.edit', compact('user', 'roles'));
+    public function edit($id)
+    {
+        $user = User::find($id);
+        $deas = Dea::select('descripcion','id')->get();
+        $roles = Role::all()->pluck('title','id');
+        $empleados = EmpleadosModel::select(DB::raw("concat(nombres,' ',ap_pat,' ',ap_mat) as nombre_completo"),'idemp as id')->get();
+        return view('admin.users.editar', compact('user','deas','roles', 'empleados'));
     }
 
-    public function update(UpdateUserRequest $request, User $user){
-        $user->update(array_filter($request->validated()));
-        return redirect()->route('users.index')->with(['status-success' => "User Updated"]);
+    public function update(Request $request)
+    {
+        $request->validate([
+            'idemp' => 'required',
+            'name' => 'required|unique:users,name,' . $request->user_id,
+            'email' => 'required|email',
+            'password' => 'nullable|min:6|confirmed',
+            'dea' => 'required',
+            'roles' => 'required|array|min:1'
+        ]);
+        try{
+            $user = User::find($request->user_id);
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => $request->password,
+                'idemp' => $request->idemp,
+                'dea_id' => $request->dea
+            ]);
+            $user->roles()->sync($request->roles);
+            return redirect()->route('users.index')->with('success_message', 'Se modifico un usuario en el registro.');
+        } catch (ValidationException $e) {
+            return redirect()->route('users.edit')
+                ->withErrors($e->validator->errors())
+                ->withInput();
+        }
     }
 
     public function destroy(User $user){
