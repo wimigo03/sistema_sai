@@ -39,10 +39,20 @@ class User extends Authenticatable
         }
     }
 
-    public function role(){
-        return $this->belongsTo(Role::class,'role_id','id');
+    public function hasRole($role)
+    {
+        return $this->roles()->where('title', $role)->exists();
+        //return $this->roles()->where('title', trim($role))->exists();
+        //return $this->roles()->whereRaw('LOWER(title) = ?', [strtolower($role)])->exists();
+        /*$query = $this->roles()->where('title', $role);
+        dd($query->toSql(), $query->getBindings());*/
+
     }
 
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class,'user_roles','id_user','id_role');
+    }
 
     public function usuariosEmpleados(){
        return $this->belongsTo(EmpleadosModel::class, 'idemp', 'idemp');

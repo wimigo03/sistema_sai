@@ -89,7 +89,7 @@
                                 <span class="fa fa-arrow-circle-left float-right"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_users">
-
+                                @can('users.index')
                                     <li>
                                         <a href="{{ route('users.index') }}">
                                             <span class="nav-label mr-4">
@@ -97,8 +97,7 @@
                                             </span>
                                         </a>
                                     </li>
-
-
+                                @endcan
                                     <li>
                                         <a href="{{ route('roles.index') }}">
                                             <span class="nav-label mr-4">
