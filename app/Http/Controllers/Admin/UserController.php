@@ -108,7 +108,13 @@ class UserController extends Controller
 
     public function edit($iduser){
         $user = User::find($iduser);
+        //PersoneriasModel::where('tipo', '=', 1)->paginate(15)
+
+        $roleuser=UserRolesModel::where('id_user','=',$iduser)->pluck('id_user', 'id_role');
+
         $roles = DB::table('roles')->get();
+        $roles2 = User::all()->pluck('name', 'email');
+        //dd($roleuser);
         return view('admin.users.edit', compact('user', 'roles'));
     }
 

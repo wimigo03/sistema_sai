@@ -31,6 +31,14 @@ class Role extends Model
         return $this->belongsToMany('App\Models\Permission', 'role_permissions',  'role_id', 'permission_id');
     }
 
+
+    public function roleusers(){
+        return $this->belongsToMany('App\Models\Permission', 'user_roles',  'id_role', 'id');
+    }
+
+
+
+
     static function boot(){
         parent::boot();
         static::deleting(function (Model $model){
@@ -40,9 +48,9 @@ class Role extends Model
 
     public function getStatusAttribute(){
         switch ($this->estado) {
-            case '1': 
+            case '1':
                 return "HABILITADO";
-            case '2': 
+            case '2':
                 return "NO HABILITADO";
         }
     }

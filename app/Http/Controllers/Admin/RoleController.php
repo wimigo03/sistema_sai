@@ -15,7 +15,7 @@ use DB;
 
 class RoleController extends Controller
 {
-    
+
     public function index()
     {
         $unidades = Dea::pluck('descripcion','id');
@@ -100,9 +100,12 @@ class RoleController extends Controller
 
     public function edit($id)
     {
+        //dd('hola');
         $role = Role::find($id);
         $deas = Dea::select('descripcion','id')->get();
         $permissions = Permission::all()->pluck('name', 'id');
+
+        //dd($role);
         return view('admin.roles.edit', compact('role','deas','permissions'));
     }
 
