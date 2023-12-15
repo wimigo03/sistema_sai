@@ -13,6 +13,9 @@ class HomeController extends Controller
 
     public function index()
     {
+        //dd(auth()->user()->roles()->where('title', 'administrador')->toSql());
+
+        //dd(auth()->user()->hasRole('superadmin'));
         return view('admin.home');
     }
 }

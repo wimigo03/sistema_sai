@@ -1,6 +1,16 @@
 @extends('layouts.admin')
 @section('content')
-@include('layouts.message_alert')
+<link rel="stylesheet" href="/css/font-verdana.css" rel="stylesheet">
+<div class="card card-custom">
+    <div class="card-header font-verdana-bgt">
+        <b>FORMULARIO DE SOLICITUD DE COMPRA</b>
+    </div>
+    <div class="card-body">
+        @include('compras.pedidoparcial.partials.form-create')
+    </div>
+</div>
+
+{{--
 <br>
 <div class="row font-verdana-bg">
     <div class="col-md-4 titulo">
@@ -100,7 +110,7 @@
             </div>
         </div>
     </form>
-</div>
+</div>--}}
 @endsection
 @section('scripts')
     <script>
@@ -110,59 +120,52 @@
             });
         });
 
-        function message_alert(mensaje){
+        function alerta(mensaje){
             $("#modal-alert .modal-body").html(mensaje);
             $('#modal-alert').modal({keyboard: false});
         }
 
-        function save(){
+        function procesar(){
             if(validar_formulario() == true){
+                var url = "{{ route('compras.pedidoparcial.store') }}";
+                $("#form").attr('action', url);
                 $(".btn").hide();
-                $(".spinner-btn-send").show();
+                $(".spinner-btn").show();
                 $("#form").submit();
             }
         }
 
         function cancelar(){
             $(".btn").hide();
-            $(".spinner-btn-send").show();
-            window.location.href = "{{url('compras/pedido')}}";
+            $(".spinner-btn").show();
+            window.location.href = "{{ route('compras.pedidoparcial.index') }}";
         }
 
         function validar_formulario(){
-            if($("#objeto").val() == ""){
-                message_alert("El campo <b>[Objeto]</b> es un dato obligatorio...");
-                return false;
-            }
-            if($("#justificacion").val() == ""){
-                message_alert("El campo <b>[Justificacion]</b> es un dato obligatorio...");
-                return false;
-            }
-
-            if($("#tipo >option:selected").val() == ""){
-                message_alert("El campo de seleccion <b>[Tipo]</b> es un dato obligatorio...");
-                return false;
-            }
-
             if($("#controlinterno").val() == ""){
-                message_alert("El campo <b>[Control Interno]</b> es un dato obligatorio...");
+                alerta("El campo <b>[Control Interno]</b> es un dato obligatorio...");
                 return false;
             }
-
-
             if($("#controlinterno").val() <= 1){
-                message_alert("El campo <b>[Control Interno]</b> debe ser mayor que 0...");
+                alerta("El campo <b>[Control Interno]</b> debe ser mayor que 0...");
                 return false;
             }
             if($("#idprograma >option:selected").val() == ""){
-                message_alert("El campo de seleccion <b>[Programa]</b> es un dato obligatorio...");
+                alerta("El campo de seleccion <b>[Programa]</b> es un dato obligatorio...");
                 return false;
             }
             if($("#idcatprogramatica >option:selected").val() == ""){
-                message_alert("El campo de seleccion <b>[Cat. Programatica]</b> es un dato obligatorio...");
+                alerta("El campo de seleccion <b>[Cat. Programatica]</b> es un dato obligatorio...");
                 return false;
             }
-
+            if($("#objeto").val() == ""){
+                alerta("El campo <b>[Objeto]</b> es un dato obligatorio...");
+                return false;
+            }
+            if($("#justificacion").val() == ""){
+                alerta("El campo <b>[Justificacion]</b> es un dato obligatorio...");
+                return false;
+            }
             return true;
         }
 
