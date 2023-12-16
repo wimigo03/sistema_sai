@@ -17,7 +17,7 @@
                  </span>
                  </div>
                  <div class="col-md-8 titulo text-right ">
-                     BAJA DE PERSONAL-P/{{strtoupper($areaactual->nombrearea)}}/REGISTRAR
+                     BAJA DE PERSONAL-P/{{strtoupper($areaactual->nombrearea)}}
                  </div>
              </div>
              <hr class="hrr">

@@ -10,7 +10,7 @@
                     <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
                 </a>
             </span>
-            <b>Regularizar Registro de Asistencia</b>
+            <b>Regularizar Asistencia Nueva</b>
         </div>
         <div class="col-md-4 text-right">
             <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">

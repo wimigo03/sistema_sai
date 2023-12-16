@@ -74,8 +74,9 @@ class PermisosPersonalesController extends Controller
     {
         $permiso_id = $request->input('permiso_id');
         $permiso = PermisoModel::find($permiso_id);
-
+        $areasExcluidas = [33, 34];
         $empleados = EmpleadosModel::where('tipo', 1)
+        ->whereNotIn('idarea', $areasExcluidas)
             ->select(['idemp', 'nombres', 'ap_mat', 'ap_pat'])
             ->withCount(['permisos as suma_horas_utilizadas' => function ($query) use ($permiso) {
                 $query
@@ -372,7 +373,7 @@ class PermisosPersonalesController extends Controller
 
                         $horasPermitidas = $permiso->horas_permitidas;
                         $totalHorasUtilizadas = $empleadopermiso->permisos->sum('pivot.horas_utilizadas');
-                        $suma = $totalHorasUtilizadas + $horasSolicitadas;
+                        $suma = $horasSolicitadas;
 
                         if ($horasPermitidas >= $suma) {
                             $permiso = EmpleadoPermisoModel::find($id);

@@ -54,6 +54,7 @@
                         <th></th>
                         <th>Nombres</th>
                         <th>Apellidos</th>
+                        <th>Apellidos</th>
                         <th>Horas Disponibles</th>
                         <th>Acciones</th>
                     </tr>
@@ -163,6 +164,10 @@
             {
                 data: 'ap_pat',
                 name: 'ap_pat',
+                class: 'text-justify p-1 font-verdana-sm'
+            }, {
+                data: 'ap_mat',
+                name: 'ap_mat',
                 class: 'text-justify p-1 font-verdana-sm'
             },
             {

@@ -16,8 +16,8 @@
                     </a>
                 </span>
             </div>
-            <div class="col-md-9 text-center titulo">
-                <b>GESTIONAR PERSONAL-C//REGISTRAR</b>
+            <div class="col-md-9 text-right titulo">
+                <b>GESTIONAR PERSONAL-C//MODIFICAR</b>
             </div>
 
             <div class="col-md-12">

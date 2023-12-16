@@ -16,7 +16,7 @@
                     </span>
                     </div>
                     <div class="col-md-8 titulo text-right">
-                        <b>GESTIONAR PERSONAL-P/{{strtoupper($areaactual->nombrearea)}}/REGISTRAR</b>
+                        <b>GESTIONAR PERSONAL-P/{{strtoupper($areaactual->nombrearea)}}/MODIFICAR</b>
                     </div>
                 </div>
                 <hr class="hrr">

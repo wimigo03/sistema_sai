@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AsistenciaModel;
+use App\Models\EmpleadoPermisoModel;
 use App\Models\EmpleadosModel;
 use App\Models\HistorialAsistenciasCambios;
 use App\Models\HorarioModel;
@@ -87,27 +88,55 @@ class AusenciasController extends Controller
             'asistencia'
         ])->find($id);
 
+        if ($registroAsistencia->horario->tipo == 0) {
+            $permiso = EmpleadoPermisoModel::where('fecha_solicitud', $registroAsistencia->fecha)
+            ->where('empleado_id', $registroAsistencia->empleado_id)
+            ->where('hora_retorno', '>', $registroAsistencia->horario->hora_final)
+            ->first();
+          
+        } else if ($registroAsistencia->horario->tipo == 1) {
+         
+            $permiso = EmpleadoPermisoModel::where('fecha_solicitud', $registroAsistencia->fecha)
+            ->where('empleado_id', $registroAsistencia->empleado_id)
+            ->where('hora_retorno', '>', $registroAsistencia->horario->hora_salida)
+            ->first();
+            $permiso2 = EmpleadoPermisoModel::where('fecha_solicitud', $registroAsistencia->fecha)
+            ->where('empleado_id', $registroAsistencia->empleado_id)
+            ->where('hora_retorno', '>', $registroAsistencia->horario->hora_final)
+            ->first();
+        }
+      
+    
+
         // Asegúrate de que $data no sea nulo antes de pasar los datos a la vista
         if (!$registroAsistencia) {
             abort(404); // o maneja de alguna manera el caso en que no se encuentre el registro
         }
 
-        return view('asistencias.regularizar.manual', compact('registroAsistencia'));
+        return view('asistencias.regularizar.manual', compact('permiso','registroAsistencia'));
     }
 
     public function crear($fecha, $id)
     {
 
+
         $empleado = EmpleadosModel::select('idemp', 'nombres', 'ap_pat', 'ap_mat')
             ->where('idemp', $id)
             ->first();
+        $horario =    HorarioModel::whereHas('registrosAsistencia', function ($query) use ($fecha) {
+            $query->where('fecha', $fecha);
+        })->select('id', 'tipo', 'Nombre', 'hora_inicio', 'hora_final', 'hora_entrada', 'hora_salida')->first();
 
-        $horario = $empleado->horarios()->where('estado', 1)->first();
-        if (!$horario) {
-            return view('asistencias.horarios.index')->with('error', 'Seleccione un Horario. NO HAY HORARIO ACTIVO O PROGRAMADO');;
 
+        $vistaselectedMonth = Carbon::parse($fecha)->format('Y-m');
+
+
+         if (!$horario) {
+            return view('asistencias.horarios.fechas',compact('vistaselectedMonth'))->with('error', 'Seleccione un Horario. NO HAY HORARIO ACTIVO O PROGRAMADO');;
         }
         $horarioId = $horario->id;
+
+        $permiso = EmpleadoPermisoModel::where('fecha_solicitud', '2023-12-15')->where('empleado_id', 1)->where('hora_retorno', '>', '12:30:00')->first();
 
         $asistencia = AsistenciaModel::where('fecha', $fecha)->select('id')->first();
         if (!$asistencia) {
@@ -122,7 +151,8 @@ class AusenciasController extends Controller
             $registroAsistencia->empleado_id = $empleado->idemp;
             $registroAsistencia->horario_id = $horarioId;
             $registroAsistencia->fecha = $fecha;
-
+            $registroAsistencia->estado = 0;
+            $registroAsistencia->observ = 'Falta';
             $registroAsistencia->asistencia_id = $asistencia->id;
             $registroAsistencia->save();
         }
@@ -132,7 +162,7 @@ class AusenciasController extends Controller
 
 
 
-        return view('asistencias.regularizar.manual2', compact('asistencia', 'horario', 'empleado', 'registroAsistencia'));
+        return view('asistencias.regularizar.manual2', compact('permiso', 'asistencia', 'horario', 'empleado', 'registroAsistencia'));
     }
 
     public function regularizar2(Request $request)
@@ -276,7 +306,7 @@ class AusenciasController extends Controller
             ]);
             //Encuentro el registro
 
-            $registro = RegistroAsistencia::where('id',$id)->first();
+            $registro = RegistroAsistencia::where('id', $id)->first();
 
             if (Auth::check()) {
                 $usuario_creacion = Auth::user()->name; // Obtener el nombre del usuario actualmente autenticado
@@ -296,7 +326,7 @@ class AusenciasController extends Controller
                 $historial->empleado_id = $registro->empleado_id;
                 $historial->datos_anteriores = json_encode($registro->toArray());
                 $historial->save();
-            }else {
+            } else {
                 $historial->registro_asistencia_id = $registro->id;
                 $historial->usuario_mod = Auth::user()->name;
                 $historial->empleado_id = $registro->empleado_id;
@@ -310,10 +340,10 @@ class AusenciasController extends Controller
                 $this->verificarMarcado($registro);
                 $this->calcularRetraso($registro);
             }
-  
+
             // Actualiza los datos del registro de asistencia
             $registro->update($request->all());
-         
+
             foreach ($registroF as $registro) {
                 $this->verificarMarcado($registro);
 

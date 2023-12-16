@@ -470,6 +470,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('regularizar-fecha/{fecha}/{id}', 'AusenciasController@crear')->name('fecha.crear')->middleware('can:regularizar_access_crear');
 
     Route::get('regularizar-ausencia/{id}', 'AusenciasController@regularizar')->name('regularizar.ausencia')->middleware('can:asistencias_access');
+    
     Route::put('regularizar-asistencia/{id}', 'AusenciasController@update')->name('regularizar_asistencia.update')->middleware('can:asistencias_access');
     Route::get('historial-cambios-asistencia', 'HistorialAsistenciasController@index')->name('historial_asistencia.index')->middleware('can:asistencias_access');
     Route::get('restaurar-datos/{id}', 'HistorialAsistenciasController@restore')->name('restaurar-datos.restore')->middleware('can:asistencias_access');

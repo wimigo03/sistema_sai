@@ -5,7 +5,7 @@
     <br>
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
-            <b> Reporte de Retrasos de Asistencia Personal </b>
+            <b> Reporte de Registro de Asistencia Personal </b>
         </div>
         <div class="col-md-4 text-right">
             <a href="{{ route('asistenciaPdf', ['empleadoId' => $empleado_id, 'fechaInicio' => $fechaInicio, 'fechaFinal' => $fechaFinal]) }}" target="blank_">
