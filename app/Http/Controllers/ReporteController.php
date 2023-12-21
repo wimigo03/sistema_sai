@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ReporteAraePorFechasExport;
+use App\Exports\ReporteGeneralPorFechasExport;
+use App\Exports\ReportePorFechasExport;
 use App\Models\AreasModel;
 use App\Models\DescuentoModel;
 use App\Models\ReporteModel;
@@ -21,6 +24,7 @@ use Illuminate\Support\Facades\View;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReporteController extends Controller
 {
@@ -155,7 +159,7 @@ class ReporteController extends Controller
             $fechaFinal = $request->input('fecha_final2');
             $area_id = $request->input('area_id');
 
-            $data = $this->areaConsulta($area_id, $fechaInicio, $fechaFinal);
+            $data = $this->areaConsulta($request,$area_id, $fechaInicio, $fechaFinal);
 
 
 
@@ -174,7 +178,7 @@ class ReporteController extends Controller
             $fechaInicio = $request->input('fecha_inicio');
             $fechaFinal = $request->input('fecha_final');
 
-            $data = $this->personalConsulta($empleado_id, $fechaInicio, $fechaFinal);
+            $data = $this->personalConsulta($request, $empleado_id, $fechaInicio, $fechaFinal);
 
 
             return response()->json($data);
@@ -190,8 +194,62 @@ class ReporteController extends Controller
         $fechaInicio = $request->input('fecha_inicio');
         $fechaFinal = $request->input('fecha_final');
 
-        $fechas = $this->registropPersonalConsulta($empleado_id, $fechaInicio, $fechaFinal);
-        return $fechas;
+        $registros = $this->registropPersonalConsulta($empleado_id, $fechaInicio, $fechaFinal);
+
+        return DataTables::of($registros)
+            ->addColumn('fecha', function ($item) {
+                return $item['fecha'];
+            })
+            ->addColumn('horario', function ($row) {
+                $nombre = $row->horario->Nombre ?: '';
+                $final = $row->horario->hora_final ? Carbon::parse($row->horario->hora_final)->format('H:i') : '-';
+                $inicio = $row->horario->hora_inicio ? Carbon::parse($row->horario->hora_inicio)->format('H:i') : '-';
+
+                if ($row->horario->tipo == 1) {
+
+                    $salida = $row->horario->hora_salida ? Carbon::parse($row->horario->hora_salida)->format('H:i') : '-';
+                    $entrada = $row->horario->hora_entrada ? Carbon::parse($row->horario->hora_entrada)->format('H:i') : '-';
+                    $html = '<span>' . $nombre . '</span><br><span>' . $inicio . '-' . $salida . '</span><br><span>' . $entrada . '-' . $final . '</span>';
+                } else if ($row->horario->tipo == 0) {
+
+                    $html = '<span>' . $nombre . '</span><br><span>' . $inicio . '</span><br><span>' . $final . '</span>';
+                }
+                return $html;
+            })
+            ->addColumn('nom_ap', function ($row) {
+                $nom = $row->empleado->nombres;
+                $ap_pat = $row->empleado->ap_pat ?? '-';
+                $ap_mat = $row->empleado->ap_mat ?? '-';
+                return $nom . ' ' . $ap_pat . ' ' . $ap_mat;
+            })
+            ->addColumn('registro_inicio', function ($row) {
+                return $row->registro_inicio ? Carbon::parse($row->registro_inicio)->format('H:i') : '-';
+            })
+            ->addColumn('registro_entrada', function ($row) {
+                return $row->registro_entrada ? Carbon::parse($row->registro_entrada)->format('H:i') : '-';
+            })
+            ->addColumn('registro_salida', function ($row) {
+                return $row->registro_salida ? Carbon::parse($row->registro_salida)->format('H:i') : '-';
+            })
+            ->addColumn('registro_final', function ($row) {
+                return $row->registro_final ? Carbon::parse($row->registro_final)->format('H:i') : '-';
+            })
+            ->addColumn('minutos_retraso', function ($row) {
+                return $row->minutos_retraso ?? '-';
+            })
+            ->addColumn('estado', function ($row) {
+                if ($row->estado == 0) {
+                    return 'Sin Registro';
+                } else if ($row->estado == 1) {
+                    return 'Registrado';
+                } else if ($row->estado == 2) {
+                    return 'Pendiente';
+                } else {
+                    return '-'; // Puedes personalizar este mensaje según sea necesario
+                }
+            })
+            ->rawColumns(['horario'])
+            ->make(true);
         // }
     }
     private function calculateObservation($suma_retrasos)
@@ -215,6 +273,7 @@ class ReporteController extends Controller
         $retrasos = RegistroAsistencia::where('empleado_id', $id)
             ->whereBetween('fecha', [$fechaI, $fechaF])
             ->where('estado', '=', 1)
+            ->where('minutos_retraso', '>', 0)
             ->get();
         return Datatables::of($retrasos)
             ->addColumn('fecha', function ($row) {
@@ -268,54 +327,60 @@ class ReporteController extends Controller
         return view('asistencias.reportes.reporte-asistencia-personal', compact('empleado_id', 'fechaInicio', 'fechaFinal'));
     }
 
-    public function personalConsulta($id, $fechaI, $fechaF)
+    public function personalConsulta($request, $id, $fechaI, $fechaF)
     {
-        $empleado_id = $id;
-        $fechaInicio = $fechaI;
-        $fechaFinal = $fechaF;
+        // Después de recibir los parámetros, no es necesario asignarlos a nuevas variables.
+        // Puedes utilizar directamente $id, $fechaI, y $fechaF.
+        $empleadoId = $request->input('empleadoId');
+        $fechaInicio = $request->input('fechaInicio');
+        $fechaFinal = $request->input('fechaFinal');
 
-        $query = EmpleadosModel::whereHas('registrosAsistencia', function ($query) use ($empleado_id, $fechaInicio, $fechaFinal) {
+        $query = EmpleadosModel::whereHas('registrosAsistencia', function ($query) use ($id, $fechaI, $fechaF) {
             $query
-                ->where('empleado_id', $empleado_id)
-                ->where('estado', '=', 1)
+                ->where('empleado_id', $id)
+                ->where('estado', 1) // Puedes omitir el '=', ya que es el valor predeterminado.
                 ->where('minutos_retraso', '>', 0)
-                ->whereBetween('fecha', [$fechaInicio, $fechaFinal]);
+                ->whereBetween('fecha', [$fechaI, $fechaF])
+                ->orderBy('fecha', 'asc'); // o 'desc' para ordenar en orden descendente
         });
-
 
         $totalRecords = $query->count();
         $empleados = $query->get();
         $empleadosData = [];
 
         foreach ($empleados as $empleado) {
-            $suma_retrasos = RegistroAsistencia::where('empleado_id', $empleado->idemp)
-                ->whereBetween('fecha', [$fechaInicio, $fechaFinal])
-                ->where('estado', '=', 1)
+            // Utiliza el método sum directamente en la relación registrosAsistencia.
+            $suma_retrasos = $empleado->registrosAsistencia()
+                ->whereBetween('fecha', [$fechaI, $fechaF])
+                ->where('estado', 1) // Puedes omitir el '=', ya que es el valor predeterminado.
+                ->orderBy('fecha', 'asc') // o 'desc' para ordenar en orden descendente
                 ->sum('minutos_retraso');
 
             $observacion = $this->calculateObservation($suma_retrasos);
 
             $empleadosData[] = [
-                'details_url' => (function ($empleado) use ($fechaInicio, $fechaFinal) {
-                    return route('reportespersonales.detalle', ['id' => $empleado->idemp, 'fecha_i' => $fechaInicio, 'fecha_f' => $fechaFinal]);
-                })($empleado),
+
+
+                'details_url' => route('reportespersonales.detalle', ['id' => $empleado->idemp, 'fecha_i' => $fechaI, 'fecha_f' => $fechaF]),
                 'idemp' => $empleado->idemp,
-                'empleado' => $empleado->nombres . ' ' . $empleado->ap_pat . ' ' . $empleado->ap_mat,
+                'empleado' => "{$empleado->nombres} {$empleado->ap_pat} {$empleado->ap_mat}",
                 'total_retrasos' => $suma_retrasos,
                 'observaciones' => $observacion,
+
             ];
         }
 
         $data = [
-
+            'draw' => $request->input('draw'),
             'recordsTotal' => $totalRecords,
             'recordsFiltered' => $totalRecords,
             'data' => $empleadosData,
         ];
-        return $data;
+         return $data;
     }
 
-    public function areaConsulta($id, $fechaI, $fechaF)
+
+    public function areaConsulta(Request $request, $id, $fechaI, $fechaF)
     {
         $area_id = $id;
         $fechaInicio = $fechaI;
@@ -371,7 +436,7 @@ class ReporteController extends Controller
 
             $fechaInicio = $request->input('fecha_inicio3');
             $fechaFinal = $request->input('fecha_final3');
-
+            dd($fechaInicio);
             $empleados = EmpleadosModel::whereHas('registrosAsistencia', function ($query) use ($fechaInicio, $fechaFinal) {
                 $query
                     ->where('estado', '=', 1)
@@ -427,72 +492,16 @@ class ReporteController extends Controller
         $fechaInicio = Carbon::parse($fechaInicio);
         $fechaFinal = Carbon::parse($fechaFinal);
 
- 
-
-
-       
-   
-        $registros = RegistroAsistencia::with('empleado', 'horario')
+        $registros = RegistroAsistencia::with('horario')->with(['empleado' => function ($query) {
+            $query->select('idemp', 'nombres', 'ap_pat', 'ap_mat');
+        }])
             ->where('empleado_id', $empleado_id)
             ->whereBetween('fecha', [$fechaI, $fechaF])
+            ->orderBy('fecha', 'asc') // o 'desc' para ordenar en orden descendente
             ->get();
 
-        // Personalizar columnas
-
-        return DataTables::of($registros)
-
-            ->addColumn('fecha', function ($item) {
-                return $item['fecha'];
-            })
-
-
-            ->addColumn('horario', function ($row) {
-                $nombre = $row->horario->Nombre? : '';
-                $final = $row->horario->hora_final ? Carbon::parse($row->horario->hora_final)->format('H:i') : '-';
-                $inicio = $row->horario->hora_inicio ? Carbon::parse($row->horario->hora_inicio)->format('H:i') : '-';
-
-                if ($row->horario->tipo == 1) {
-
-                    $salida = $row->horario->hora_salida ? Carbon::parse($row->horario->hora_salida)->format('H:i') : '-';
-                    $entrada = $row->horario->hora_entrada ? Carbon::parse($row->horario->hora_entrada)->format('H:i') : '-';
-                    $html = '<span>' . $nombre . '</span><br><span>' . $inicio . '-' . $salida . '</span><br><span>' . $entrada . '-' . $final . '</span>';
-                } else if ($row->horario->tipo == 0) {
-
-                    $html = '<span>' . $nombre . '</span><br><span>' . $inicio . '</span><br><span>' . $final . '</span>';
-                }
-                return $html;
-            })
-            ->addColumn('nom_ap', function ($row) {
-                $nom = $row->empleado->nombres;
-                $ap_pat = $row->empleado->ap_pat ?? '-';
-                $ap_mat = $row->empleado->ap_mat ?? '-';
-                return $nom . ' ' . $ap_pat . ' ' . $ap_mat;
-            })
-            ->addColumn('registro_inicio', function ($row) {
-                return $row->registro_inicio ? Carbon::parse($row->registro_inicio)->format('H:i') : '-';
-            })
-            ->addColumn('registro_entrada', function ($row) {
-                return $row->registro_entrada ? Carbon::parse($row->registro_entrada)->format('H:i') : '-';
-            })
-            ->addColumn('registro_salida', function ($row) {
-                return $row->registro_salida ? Carbon::parse($row->registro_salida)->format('H:i') : '-';
-            })
-            ->addColumn('registro_final', function ($row) {
-                return $row->registro_final ? Carbon::parse($row->registro_final)->format('H:i') : '-';
-            })
-            ->addColumn('minutos_retraso', function ($row) {
-                return $row->minutos_retraso ?? '-';
-            })
-            ->rawColumns(['horario'])
-            ->make(true);
+        return $registros;
     }
-
-
-
-
-
-
-
 
     /**
      * Display the specified resource.
@@ -579,6 +588,8 @@ class ReporteController extends Controller
             }
             $retrasos = RegistroAsistencia::where('empleado_id', $empleado_id)
                 ->whereBetween('fecha', [$fechaInicio, $fechaFinal])
+                ->where('minutos_retraso', '>', 0)
+
                 ->where('estado', '=', 1)
                 ->get();
 
@@ -589,7 +600,6 @@ class ReporteController extends Controller
                 'data' => $empleadosData,
 
             ];
-
 
 
 
@@ -674,6 +684,10 @@ class ReporteController extends Controller
     public function generalReportePdf(Request $request)
     {
         try {
+           // $empleadoId = $request->input('empleadoId');
+            $fechaInicio = $request->input('fechaInicio');
+            $fechaFinal = $request->input('fechaFinal');
+
 
 
             $usuario = Auth::user()->name;
@@ -685,11 +699,9 @@ class ReporteController extends Controller
             }
 
             $usuarioCompleto = EmpleadosModel::where('idemp', $id)->select('nombres')->first();
-            $fechaInicio = request('fechaInicio');
-            $fechaFinal = request('fechaFinal');
+          
 
-
-
+ 
             $empleados = EmpleadosModel::whereHas('registrosAsistencia', function ($query) use ($fechaInicio, $fechaFinal) {
                 $query
 
@@ -729,8 +741,7 @@ class ReporteController extends Controller
             ];
 
 
-
-
+ 
 
 
             $pdf = PDF::loadView('asistencias.reportes.reporte-general-pdf', compact(['data', 'fechaInicio', 'fechaFinal']));
@@ -743,12 +754,135 @@ class ReporteController extends Controller
         }
     }
 
-    public function asistenciaPdf(Request $request){
+    public function asistenciaPdf(Request $request)
+    {
 
+        try {
+
+
+            $empleado_id = request('empleadoId');
+            $fechaInicio = request('fechaInicio');
+            $fechaFinal = request('fechaFinal');
+            $empleadoDatos =  EmpleadosModel::where('idemp', $empleado_id)->with('empleadosareas')->first();
+
+            $registros = $this->registropPersonalConsulta($empleado_id, $fechaInicio, $fechaFinal);
+
+            // Acceder a los datos
+
+
+            $pdf = PDF::loadView('asistencias.reportes.pdf-reporte-personal-asistencias', compact(['registros', 'empleadoDatos',   'fechaInicio', 'fechaFinal']));
+            $pdf->setPaper('LETTER', 'landscape');
+            return $pdf->stream();
+        } catch (\Exception $e) {
+
+            Log::error('Error al generar el PDF: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
 
+    public function generarExcelReporte(Request $request)
+    {
+        $empleado_id = request('empleadoId');
+        $fechaInicio = request('fechaInicio');
+        $fechaFinal = request('fechaFinal');
 
+        $data = $this->personalConsulta($request, $empleado_id, $fechaInicio, $fechaFinal);
+        $empleadoDatos =  EmpleadosModel::where('idemp', $empleado_id)->with('empleadosareas')->select('nombres','ap_pat','ap_mat','idarea','ci')->first();
+     
+
+        $view =  view('asistencias.reportes.reporte-personal-excel', compact([ 'empleadoDatos', 'data', 'fechaInicio', 'fechaFinal']));
+
+        // Asegúrate de tener un modelo que represente tus datos
+        $fileName = 'reporte_por_fechas.xlsx';
+        return Excel::download(new ReportePorFechasExport($view), $fileName);
+    }
+    public function generarExcelAreaReporte(Request $request)
+    {
+        $area_id = request('area_id');
+        $fechaInicio = request('fechaInicio');
+        $fechaFinal = request('fechaFinal');
+
+        $data = $this->areaConsulta($request, $area_id, $fechaInicio, $fechaFinal);
+        $areasDatos =  AreasModel::where('idarea', $area_id)->first();
+
+
+        $view =  view('asistencias.reportes.reporte-area-excel', compact([ 'areasDatos', 'data', 'fechaInicio', 'fechaFinal']));
+
+        // Asegúrate de tener un modelo que represente tus datos
+        $fileName = 'reporte_area_por_fechas.xlsx';
+        return Excel::download(new ReporteAraePorFechasExport($view), $fileName);
+    }
+
+    public function ExcelGeneralReporte(Request $request)
+    {
+         $fechaInicio = request('fechaInicio');
+        $fechaFinal = request('fechaFinal');
+
+
+        $fechaInicio = $request->input('fechaInicio');
+        $fechaFinal = $request->input('fechaFinal');
+
+
+
+        $usuario = Auth::user()->name;
+        $user = DB::table('users')->where('name', $usuario)->select('idemp')->first();
+
+        if ($user) {
+            $id = $user->idemp;
+            // Procede con el uso de $id
+        }
+
+        $usuarioCompleto = EmpleadosModel::where('idemp', $id)->select('nombres')->first();
+      
+
+
+        $empleados = EmpleadosModel::whereHas('registrosAsistencia', function ($query) use ($fechaInicio, $fechaFinal) {
+            $query
+
+                ->where('estado', '=', 1)
+                ->where('minutos_retraso', '>', 0)
+                ->whereBetween('fecha', [$fechaInicio, $fechaFinal]);
+        })
+
+            ->select('idemp', 'nombres', 'ap_mat', 'ap_pat')
+            ->get();
+
+
+
+        $totalRecords = $empleados->count();
+
+        $areaempleadosData = [];
+
+        foreach ($empleados as $empleado) {
+            $suma_retrasos = RegistroAsistencia::where('empleado_id', $empleado->idemp)
+                ->whereBetween('fecha', [$fechaInicio, $fechaFinal])
+                ->sum('minutos_retraso');
+
+            $observacion = $this->calculateObservation($suma_retrasos);
+
+            $areaempleadosData[] = [
+                'empleado' => $empleado->nombres,
+                'total_retrasos' => $suma_retrasos,
+                'observaciones' => $observacion,
+            ];
+        }
+
+        $data = [
+            'draw' => $request->input('draw'),
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $totalRecords,
+            'data' => $areaempleadosData,
+        ];
+    
+ 
+
+        $view =  view('asistencias.reportes.reporte-general-excel', compact([  'data', 'fechaInicio', 'fechaFinal']));
+
+        // Asegúrate de tener un modelo que represente tus datos
+        $fileName = 'reporte_general_por_fechas.xlsx';
+        return Excel::download(new     ReporteGeneralPorFechasExport($view), $fileName);
+    }
 
     /**
      * Show the form for editing the specified resource.

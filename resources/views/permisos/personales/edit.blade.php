@@ -5,8 +5,8 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <span class="mr-auto">Editar Permiso para Empleado</span>
+                <div class="card-header d-flex justify-content-between  font-verdana-bg titulo align-items-center">
+                    <span class="mr-auto">MODIFICAR REGISTRO DE PERMISO PERSONAL </span>
                     @php
                     use Carbon\Carbon;
 
@@ -53,16 +53,16 @@
                         <div class="form-row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="empleado_id">Nombre:</label>{{$permiso->id}}
+                                    <label for="empleado_id"><b>Nombres y Apellidos:</b></label>{{$permiso->id}}
                                     <input type="hidden" name="permiso_id" value="{{ $permiso->permiso_id }}" readonly class="form-control">
 
                                     <input type="hidden" name="empleado_id" id="empleado_id" value="{{ $permiso->empleado_id }}" readonly class="form-control">
-                                    <input type="text" name="empleado" id="empleado" value="{{ $permiso->empleado->nombres }}" readonly class="form-control">
+                                    <input type="text" name="empleado" id="empleado" value="{{ $permiso->empleado->nombres }} {{ $permiso->empleado->ap_pat }} {{ $permiso->empleado->ap_mat }}" readonly class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="fecha_solicitud">Fecha de Solicitud:</label>
+                                    <label for="fecha_solicitud"><b>Fecha de Solicitud:</b></label>
                                     <input type="date" name="fecha_solicitud" id="fecha_solicitud" value="{{ $permiso->fecha_solicitud }}" required class="form-control">
                                 </div>
 
@@ -72,14 +72,13 @@
                         <div class="form-row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="asunto">Asunto:</label>
+                                    <label for="asunto"><b>Motivo:</b></label>
                                     <input type="text" name="asunto" value="Personal" class="form-control">
                                 </div>
                             </div>
-
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="duracion">Horas Utilizadas:</label>
+                                    <label for="duracion"><b>Horas Utilizadas:</b></label>
                                     <select name="duracion" id="duracion" class="form-control" required>
                                         @for ($i = 0; $i <= 120; $i +=30) @php $hours=floor($i / 60); $minutes=$i % 60; $hourLabel=($hours===1) ? 'hora' : 'horas' ; $minuteLabel=($minutes===1) ? 'minuto' : 'minutos' ; $durationText='' ; if ($hours> 0) {
                                             $durationText .= "$hours $hourLabel";
@@ -105,25 +104,28 @@
                             </div>
 
 
+
+
                         </div>
 
                         <div class="form-row">
+                          
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="hora_salida">Hora de Salida:</label>
+                                    <label for="hora_salida"><b>Hora de Salida:</b></label>
                                     <input type="time" name="hora_salida_input" id="hora_salida_input" value="{{ $permiso->hora_salida }}" required class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="hora_retorno">Hora de Retorno:</label>
+                                    <label for="hora_retorno"><b>Hora de Retorno:</b></label>
                                     <input type="time" name="hora_retorno" id="hora_retorno" required class="form-control">
                                 </div>
                             </div>
                         </div>
 
                         <input type="hidden" name="hora_actual" id="hora_salida" required class="form-control">
-                        <div class="form-group">
+                        <div class="form-group text-right">
                             <button type="submit" class="btn btn-primary">Actualizar Registro</button>
                         </div>
                     </form>

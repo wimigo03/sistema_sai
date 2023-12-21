@@ -8,6 +8,13 @@
             <b> Reporte de Retrasos de Asistencia por Area/Unidad  </b>
         </div>
         <div class="col-md-4 text-right">
+
+
+          <a href="{{ route('generarExcelAreaReporte', ['area_id' => $area_id, 'fechaInicio' => $fechaInicio, 'fechaFinal' => $fechaFinal]) }}" target="blank_">
+                <button class="btn btn-sm btn-success font-verdana " type="button">
+                    &nbsp; <i class="fa-solid fa-file-excel"></i> &nbsp;Exportar Excel
+                </button>
+            </a>
             <a href="{{ route('areaprevisualizarPdf', ['area_id' => $area_id, 'fechaInicio' => $fechaInicio, 'fechaFinal' => $fechaFinal]) }}" target="blank_">
                 <button class="btn btn-sm btn-info font-verdana " type="button">
                     &nbsp;&nbsp;Generar PDF

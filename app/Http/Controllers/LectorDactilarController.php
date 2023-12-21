@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HuellasDigitalesModel;
 use App\Models\LectorDactilarModel;
 use App\Models\RetrasosEmpleado;
 use App\Models\RetrasosModel;
@@ -15,26 +16,53 @@ class LectorDactilarController extends Controller
 {
     public function index(Request $request)
     {
+        //
+        $dactilar = HuellasDigitalesModel::select(['id', 'empleado_id', 'created_at', 'usuario_creac'])
+            ->with(['empleado' => function ($query) {
+                $query->select('idemp', 'nombres', 'ap_pat', 'ap_mat');
+            }])
+            ->orderBy('created_at', 'desc') // Ordenar por created_at en orden descendente
+            ->get();
+
+
+
         if ($request->ajax()) {
+            return DataTables::of($dactilar)
+                ->addColumn('created', function ($dactilar) {
+                    $carbonDate = Carbon::parse($dactilar->created_at);
 
-            $data = LectorDactilarModel::where('estado', 1);
-            $data = $data->get();
-
-            return DataTables::of($data)
-
-               
-                ->addColumn('opciones', function ($row) {
-                    return '<a class="tts:left tts-slideIn tts-custom" aria-label="Regularizar Ausencia" href="#" data-toggle="modal" data-target="#miModal" data-id="' . $row->id . '">
-                                <i class="fa-solid fa-2xl fa-square-pen text-warning"></i>
-                            </a>';
+                    return $carbonDate->isToday()
+                        ? '<span style="color: green;">' . $carbonDate->diffForHumans() . '</span>'
+                        : '<span style="color: black;">' . $carbonDate->diffForHumans() . '</span>';
                 })
-                
-                
-                ->rawColumns(['opciones'])
+                ->addColumn('nombres', function ($row) {
+                    $nom = $row->empleado->nombres;
+                    $ap_pat = $row->empleado->ap_pat ?? ' ';
+                    $ap_mat = $row->empleado->ap_mat ?? ' ';
+                    return $nom . ' ' . $ap_pat . ' ' . $ap_mat;
+                })
 
+
+                ->addColumn('actions', function ($dactilar) {
+                    // return '<button class="btn btn-danger btn-sm" href="' . route('descuentos.edit', $dactilar->id) . '">Eliminar</button>';
+                    return '<a class="tts:left tts-slideIn tts-custom" aria-label="Eliminar Huella Dactilar" href="#" data-toggle="modal" data-target="#confirmarEliminarModal" data-nombre="' . $dactilar->empleado->nombres . '" data-id="{{ $dactilar->id }}">
+                    <span class="badge badge-danger"> ELIMINAR</span>  
+                </a>
+                ';
+                })
+                ->rawColumns(['created', 'actions'])
                 ->make(true);
         }
 
-        return view('asistencias.lector.index');
+        return view('asistencias.control.index');
+    }
+
+    public function destroy(HuellasDigitalesModel $dactilar)
+    {
+        // Eliminar el horario
+        $dactilar->delete();
+
+        // Redireccionar a la lista de horarios con un mensaje de éxito
+        return redirect()->route('lectordactilar.index')->with('success', 'El la huella Dactilar ha sido eliminada correctamente.');
     }
 }

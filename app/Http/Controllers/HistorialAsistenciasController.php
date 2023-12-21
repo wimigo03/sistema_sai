@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AsistenciaModel;
 use App\Models\EmpleadosModel;
 use App\Models\HistorialAsistenciasCambios;
 use App\Models\LectorDactilarModel;
@@ -60,12 +61,12 @@ class HistorialAsistenciasController extends Controller
             $empleado = EmpleadosModel::where('idemp', $id)->select('idemp')->first();
             $id = $empleado->idemp;
             $selectedMonth = $request->input('selected_month');
+            $historial =    HistorialAsistenciasCambios::whereHas('registroAsistencia', function ($query) use ($selectedMonth, $id) {
+                $query->where('fecha', 'like', $selectedMonth . '%')
+                    ->where('empleado_id', $id);
+            })->get();
 
 
-            $historial = HistorialAsistenciasCambios::where('created_at', 'like', $selectedMonth . '%')
-                ->where('empleado_id', $id)
-                ->orderBy('created_at', 'desc')
-                ->get();
 
 
 
@@ -92,12 +93,12 @@ class HistorialAsistenciasController extends Controller
                         $row->apellidos_empleado,
                         $row->apellidos_empleado2,
                     ]);
-                
+
                     return $nombreCompleto;
                 })
-                
-                
-                ->rawColumns(['boton_html','nombre_empleado'])
+
+
+                ->rawColumns(['boton_html', 'nombre_empleado'])
                 ->toJson();
         }
 
@@ -129,6 +130,7 @@ class HistorialAsistenciasController extends Controller
 
         // Ahora, $datosAnterioresArray contiene los valores originales como un array asociativo
         // Puedes utilizar estos valores según tus necesidades
+        $registro = RegistroAsistencia::find($datosAnterioresArray['id'])->select('fecha')->first();
 
         // Por ejemplo, podrías restaurar los datos en el modelo original
         // Supongamos que el modelo original es Usuario y el ID del usuario está en $datosAnterioresArray['usuario_id']
@@ -136,23 +138,25 @@ class HistorialAsistenciasController extends Controller
         // Elimina el historial restaurado
         $historial->empleado_id;
         $historial->registro_asistencia_id;
+        $f2 = Carbon::parse($registro->fecha);
+        $f = $f2->isoFormat('dddd D [de] MMMM');
 
-        $registros2 = RegistroAsistencia::where('id',$historial->registro_asistencia_id)->get();
+
+        $registros2 = RegistroAsistencia::where('id', $historial->registro_asistencia_id)->get();
 
         foreach ($registros2 as $reg) {
             $this->verificarMarcado($reg);
             $this->calcularRetraso($reg);
-
         }
- 
-        $empleado = EmpleadosModel::where('idemp', $historial->empleado_id)->select('idemp', 'nombres', 'ap_pat', 'ap_mat')->first();
+
 
         $historial->delete();
+        return redirect()->route('agregar.regulacion', ['id' =>  $historial->empleado_id])->with('success', 'Se restauro con éxito el Registro de Asistencia  del personal del día ' . $f);
+
         //  return view('asistencias.registros.fechas', compact('vistaselectedMonth', 'empleado'));
-        $vistaselectedMonth = Carbon::now()->format('Y-m');
-        return view('asistencias.registros.fechas', compact('vistaselectedMonth', 'empleado'))->with('success', 'Se restauro con éxito el Regitro del personal :' . $empleado->nombres . ' ' . $empleado->ap_pat . ' ' . $empleado->ap_pat);
+        //return view('asistencias.registros.fechas', compact('vistaselectedMonth', 'empleado'))->with('success', );
     }
-    
+
     private function verificarMarcado(RegistroAsistencia $registro)
     {
         if ($registro->horario->tipo == 1) {
@@ -163,7 +167,6 @@ class HistorialAsistenciasController extends Controller
                 $registro->registro_final
             ) {
                 $registro->estado = 1;
-                $registro->observ = 'Dia Trabajado';
                 $registro->tipo = 1;
                 $registro->save();
             } else if (
@@ -172,9 +175,17 @@ class HistorialAsistenciasController extends Controller
                 $registro->registro_entrada &&
                 $registro->registro_final
             ) {
-                $registro->observ = 'Pendiente';
                 $registro->tipo = 1;
-                $registro->estado = 4;
+                $registro->estado = 2;
+                $registro->save();
+            } else if (
+                $registro->registro_inicio &&
+                $registro->registro_salida &&
+                !$registro->registro_entrada &&
+                !$registro->registro_final
+            ) {
+                $registro->estado = 2;
+                $registro->tipo = 1;
                 $registro->save();
             } else if (
                 !$registro->registro_inicio &&
@@ -182,19 +193,16 @@ class HistorialAsistenciasController extends Controller
                 $registro->registro_entrada &&
                 $registro->registro_final
             ) {
-                $registro->observ = 'Pendiente';
                 $registro->tipo = 1;
-                $registro->estado = 4;
+                $registro->estado = 2;
                 $registro->save();
             } else if (
                 $registro->registro_inicio &&
-                $registro->registro_salida &&
+                !$registro->registro_salida &&
                 !$registro->registro_entrada &&
-
                 !$registro->registro_final
             ) {
-                $registro->observ = 'Pendiente';
-                $registro->estado = 3;
+                $registro->estado = 2;
                 $registro->tipo = 1;
                 $registro->save();
             } else if (
@@ -203,8 +211,7 @@ class HistorialAsistenciasController extends Controller
                 !$registro->registro_entrada &&
                 $registro->registro_final
             ) {
-                $registro->estado = 5;
-                $registro->observ = 'Pendiente';
+                $registro->estado = 2;
                 $registro->tipo = 1;
                 $registro->save();
             } else if (
@@ -213,8 +220,7 @@ class HistorialAsistenciasController extends Controller
                 $registro->registro_entrada &&
                 !$registro->registro_final
             ) {
-                $registro->observ = 'Pendiente';
-                $registro->estado = 5;
+                $registro->estado = 2;
                 $registro->tipo = 1;
                 $registro->save();
             } else if (
@@ -223,8 +229,7 @@ class HistorialAsistenciasController extends Controller
                 $registro->registro_entrada &&
                 !$registro->registro_final
             ) {
-                $registro->observ = 'Pendiente';
-                $registro->estado = 3;
+                $registro->estado = 2;
                 $registro->tipo = 1;
                 $registro->save();
             } else if (
@@ -233,18 +238,7 @@ class HistorialAsistenciasController extends Controller
                 !$registro->registro_entrada &&
                 $registro->registro_final
             ) {
-                $registro->observ = 'Pendiente';
-                $registro->estado = 3;
-                $registro->tipo = 1;
-                $registro->save();
-            } else if (
-                $registro->registro_inicio &&
-                !$registro->registro_salida &&
-                !$registro->registro_entrada &&
-                !$registro->registro_final
-            ) {
-                $registro->observ = 'Pendiente';
-                $registro->estado = 5;
+                $registro->estado = 2;
                 $registro->tipo = 1;
                 $registro->save();
             } else if (
@@ -253,8 +247,16 @@ class HistorialAsistenciasController extends Controller
                 !$registro->registro_entrada &&
                 $registro->registro_final
             ) {
-                $registro->observ = 'Pendiente';
-                $registro->estado = 5;
+                $registro->estado = 2;
+                $registro->tipo = 1;
+                $registro->save();
+            } else if (
+                $registro->registro_inicio &&
+                !$registro->registro_salida &&
+                $registro->registro_entrada &&
+                !$registro->registro_final
+            ) {
+                $registro->estado = 2;
                 $registro->tipo = 1;
                 $registro->save();
             } else if (
@@ -263,8 +265,7 @@ class HistorialAsistenciasController extends Controller
                 !$registro->registro_entrada &&
                 $registro->registro_final
             ) {
-                $registro->observ = 'Pendiente';
-                $registro->estado = 3;
+                $registro->estado = 2;
                 $registro->tipo = 1;
                 $registro->save();
             } else if (
@@ -273,18 +274,7 @@ class HistorialAsistenciasController extends Controller
                 $registro->registro_entrada &&
                 !$registro->registro_final
             ) {
-                $registro->observ = 'Pendiente';
-                $registro->estado = 5;
-                $registro->tipo = 1;
-                $registro->save();
-            } else if (
-                $registro->registro_inicio &&
-                !$registro->registro_salida &&
-                $registro->registro_entrada &&
-                !$registro->registro_final
-            ) {
-                $registro->observ = 'Pendiente';
-                $registro->estado = 5;
+                $registro->estado = 2;
                 $registro->tipo = 1;
                 $registro->save();
             } else if (
@@ -293,39 +283,52 @@ class HistorialAsistenciasController extends Controller
                 !$registro->registro_entrada &&
                 !$registro->registro_final
             ) {
-                $registro->observ = 'Falta';
                 $registro->estado = 0;
+                $registro->tipo = 1;
+                $registro->save();
+            } else if (
+                !$registro->registro_inicio &&
+                $registro->registro_salida &&
+                !$registro->registro_entrada &&
+                !$registro->registro_final
+            ) {
+                $registro->estado = 2;
+                $registro->tipo = 1;
+                $registro->save();
+            } else if (
+                $registro->registro_inicio &&
+                !$registro->registro_salida &&
+                $registro->registro_entrada &&
+                $registro->registro_final
+            ) {
+                $registro->estado = 2;
                 $registro->tipo = 1;
                 $registro->save();
             }
         }
         if ($registro->horario->tipo == 0) {
             if (
-                $registro->registro_final &&
-                $registro->registro_inicio
+                $registro->registro_final && $registro->registro_inicio
             ) {
-                $registro->observ = 'Dia Trabajado';
                 $registro->tipo = 0;
                 $registro->estado = 1;
                 $registro->save();
             } else if (!$registro->registro_final && $registro->registro_inicio) {
-                $registro->observ = 'Pendiente';
-                $registro->estado = 3;
+                $registro->estado = 2;
                 $registro->tipo = 0;
                 $registro->save();
             } else if ($registro->registro_final && !$registro->registro_inicio) {
-                $registro->observ = 'Pendiente';
-                $registro->estado = 4;
+                $registro->estado = 2;
                 $registro->tipo = 0;
                 $registro->save();
             } else {
-                $registro->observ = 'Falta';
                 $registro->estado = 0;
                 $registro->tipo = 0;
                 $registro->save();
             }
         }
     }
+
     private function calcularRetraso(RegistroAsistencia $registro)
     {
         if ($registro->horario->tipo == 1) {
@@ -436,4 +439,3 @@ class HistorialAsistenciasController extends Controller
         }
     }
 }
-

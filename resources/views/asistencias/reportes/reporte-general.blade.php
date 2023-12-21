@@ -8,6 +8,13 @@
             <b> Reporte de Retrasos de Asistencia de Personal General  </b>
         </div>
         <div class="col-md-4 text-right">
+
+        <a href="{{ route('ExcelGeneralReporte', ['fechaInicio' => $fechaInicio, 'fechaFinal' => $fechaFinal]) }}" target="blank_">
+                <button class="btn btn-sm btn-success font-verdana " type="button">
+                    &nbsp; <i class="fa-solid fa-file-excel"></i> &nbsp;Exportar Excel
+                </button>
+            </a>
+
             <a href="{{ route('generalReportePdf', ['fechaInicio' => $fechaInicio, 'fechaFinal' => $fechaFinal]) }}" target="blank_">
                 <button class="btn btn-sm btn-info font-verdana " type="button">
                     &nbsp;&nbsp;Generar PDF
@@ -50,7 +57,7 @@
         <input type="hidden" id="data3" name="fecha_final" value="{{ $fechaFinal }}" class="form-control" required>
 
         <div class="col-md-12">
-            <table class="table-bordered  font-verdana   yajra-datatable hoverTable font-verdana" id="retrasos-table" style="width:100%">
+            <table class="table-bordered yajra-datatable hoverTable" id="retrasos-table" style="width:100%">
                 <thead class="table-light">
                     <tr>
                         <th></th>

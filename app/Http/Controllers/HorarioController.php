@@ -29,7 +29,23 @@ class HorarioController extends Controller
     public function index(Request $request)
     {
         //
+        $fecha = Carbon::now()->format('Y-m-d');
+        $f2 = Carbon::parse($fecha);
+        $f = $f2->isoFormat('dddd D [de] MMMM');
         $horarioActivo = HorarioModel::where('estado', 1)->first();
+
+        $fechaProgramada = AsistenciaModel::whereHas('registrosAsistencia', function ($query) use ($fecha) {
+            $query->where('fecha', $fecha);
+        })->select('id', 'estado')->first();
+
+        $horarioProgramado = null;
+
+        if ($fechaProgramada && $fechaProgramada->estado == 1) {
+            $horarioProgramado =    HorarioModel::whereHas('registrosAsistencia', function ($query) use ($fecha) {
+                $query->where('fecha', $fecha);
+            })->select('id', 'tipo', 'Nombre', 'hora_inicio', 'hora_final', 'hora_entrada', 'hora_salida')->first();
+        }
+
         if ($request->ajax()) {
             $horarios = HorarioModel::select(['id', 'Nombre', 'hora_final', 'hora_inicio', 'hora_entrada', 'hora_salida', 'excepcion', 'estado'])
                 ->withCount('empleados')->get();
@@ -91,7 +107,7 @@ class HorarioController extends Controller
                 ->make(true);
         }
 
-        return view('asistencias.horarios.index', compact('horarioActivo'));
+        return view('asistencias.horarios.index', compact('f', 'horarioActivo', 'horarioProgramado'));
     }
 
     public function create()
@@ -281,11 +297,11 @@ class HorarioController extends Controller
         $horarios = HorarioModel::all()->pluck('Nombre', 'id');
         $horariosCompletos = HorarioModel::all(['id', 'Nombre', 'hora_inicio', 'hora_final', 'hora_entrada', 'hora_salida', 'estado']);
 
-      
+
         $cantidadHuellas = HuellasDigitalesModel::where('empleado_id', $empleado->idemp)
-    ->count();
+            ->count();
         if ($empleado) {
-            return view('asistencias.horarios.cambio', compact('cantidadHuellas','empleado', 'horarios', 'horariosCompletos'));
+            return view('asistencias.horarios.cambio', compact('cantidadHuellas', 'empleado', 'horarios', 'horariosCompletos'));
         } else {
             // Manejar el caso en el que el empleado no se encuentra en la base de datos
             abort(404); // Otra respuesta apropiada
@@ -375,7 +391,7 @@ class HorarioController extends Controller
         $vistaselectedMonth = Carbon::now()->format('Y-m');
 
 
-       if ($request->ajax()) {
+        if ($request->ajax()) {
             // Obtener la fecha seleccionada desde el input de tipo month
             $selectedMonth = $request->input('selected_month');
             $formattedDate = $selectedMonth . '-01'; // Añade el primer día del mes
@@ -399,9 +415,9 @@ class HorarioController extends Controller
             $data = $this->transformDataForDataTables($weeksInMonth, $selectedMonth);
 
             return DataTables::of($data)
-          
-            ->make(true);
-     }
+
+                ->make(true);
+        }
 
         return view('asistencias.horarios.fechas', compact('vistaselectedMonth'));
     }
@@ -453,7 +469,7 @@ class HorarioController extends Controller
 
         // Obtener todos los datos del mes de una vez
         $allData = $this->getDataForMonth($weeksInMonth[0][0], end($weeksInMonth[count($weeksInMonth) - 1]));
- 
+
 
         foreach ($weeksInMonth as $week) {
             $rowData = [];
@@ -469,12 +485,12 @@ class HorarioController extends Controller
                     'horario' => HorarioModel::whereHas('registrosAsistencia', function ($query) use ($day) {
                         $query->where('fecha', $day->format('Y-m-d'));
                     })->select('id', 'tipo', 'Nombre', 'hora_inicio', 'hora_final', 'hora_entrada', 'hora_salida')->get()
-            
+
                     // Agrega más información según sea necesario
                 ];
                 $rowData[] = $cellData;
             }
-            
+
 
             // Llenar con nulos para completar la última semana
             while (count($rowData) < 7) {
@@ -496,13 +512,13 @@ class HorarioController extends Controller
         return $filteredData;
     }
 
-  
+
     private function getDataForMonth($start, $end)
     {
         // Realizar una sola consulta para obtener todos los datos del mes
         return AsistenciaModel::whereBetween('fecha', [$start->toDateString(), $end->toDateString()])->get();
     }
- 
+
 
 
 

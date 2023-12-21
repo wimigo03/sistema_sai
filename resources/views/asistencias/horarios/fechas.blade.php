@@ -34,6 +34,7 @@
                 </button>
             </a>
         </div>
+
         <div class="container">
             <ul class="nav nav-tabs" id="myTabs">
                 <li class="nav-item">
@@ -47,17 +48,13 @@
 
             <div class="col-md-12">
                 <hr>
-               <b class="card-text">Fecha de hoy: <strong><?php echo $fechaHoy; ?></strong></b>
+                <b class="card-text">Fecha de hoy: <strong><?php echo $fechaHoy; ?></strong></b>
 
-                @if(Session::has('pendiente'))
-                <div class="alert alert-danger font-verdana-bg">
-                    {{ Session::get('pendiente') }}
-                </div>
+            </div>
+            @if(Session::has('success'))
+            <div class="col-md-12">
                 <hr>
 
-                @endif
-
-                @if(Session::has('success'))
                 <div class="alert alert-success">
                     {{ Session::get('success') }}
                 </div>
@@ -70,56 +67,60 @@
                 </div>
                 <hr>
 
-                @endif
+
             </div>
-            <div class="tab-content font-verdana">
-                <div class="tab-pane fade show active" id="tab1">
-                    <div class="row font-verdana-bg">
-                        <div class="col-md-8">
-                            <table id="calendar" class="table-bordered  font-verdana" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>Lun</th>
-                                        <th>Mar</th>
-                                        <th>Mier</th>
-                                        <th>Jue</th>
-                                        <th>Vier</th>
-                                        <th>S</th>
-                                        <th>D</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                        <div class="col-md-4">
-                            <div id="infoHorario" class="alert alert-info mt-3" style="display: 100%;">
-                                <!-- Contenido de la información del horario -->
+            @endif
+            <div class="col-md-12">
+                <div class="tab-content font-verdana">
+                    <div class="tab-pane fade show active" id="tab1">
+                        <div class="row font-verdana-bg">
+                            <div class="col-md-8">
+                                <table id="calendar" class="table-bordered  font-verdana" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Lun</th>
+                                            <th>Mar</th>
+                                            <th>Mier</th>
+                                            <th>Jue</th>
+                                            <th>Vier</th>
+                                            <th>S</th>
+                                            <th>D</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div class="col-md-4">
+                                <div id="infoHorario" class="alert alert-info mt-3" style="display: 100%;">
+                                    <!-- Contenido de la información del horario -->
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="tab-pane fade" id="tab2">
-                    <div class="row font-verdana-bg">
-                        <div class="col-md-12">
-                            <table id="calendar2" class="table-bordered  font-verdana" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>Lun</th>
-                                        <th>Mar</th>
-                                        <th>Mier</th>
-                                        <th>Jue</th>
-                                        <th>Vier</th>
-                                        <th>S</th>
-                                        <th>D</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                    <div class="tab-pane fade" id="tab2">
+                        <div class="row font-verdana-bg">
+                            <div class="col-md-12">
+                                <table id="calendar2" class="table-bordered  font-verdana" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Lun</th>
+                                            <th>Mar</th>
+                                            <th>Mier</th>
+                                            <th>Jue</th>
+                                            <th>Vier</th>
+                                            <th>S</th>
+                                            <th>D</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
 
+                </div>
             </div>
+
         </div>
 
 
@@ -227,8 +228,8 @@
                 }
                 if (!additionalInfo) {
                     var fecha = data.date;
-                    var link = '<a aria-label="Asignar Horario" href="' + " {{ route('asistencia.crear', ['fecha' => ':fecha']) }}".replace(':fecha', fecha) + '"><i class="fa fa-lg fa-plus text-success"></i></a>'; // Devolver el enlace personalizado 
-                    return data.day + '<br>' + link;
+                    var link = '<a aria-label="Agregar Horario" href="' + " {{ route('asistencia.crear', ['fecha' => ':fecha']) }}".replace(':fecha', fecha) + '"><i class="fa fa-lg fa-plus text-success"></i></a>'; // Devolver el enlace personalizado 
+                    return data.day + '<br>' + link + '<br>-</br>';
 
                 }
                 return data.day + '<br>' + additionalInfo + '<br>';
@@ -244,11 +245,12 @@
             // Reemplaza ':id' con el ID correspondiente
             routeUrl = routeUrl.replace(':id', id);
 
+
             // Retorna el enlace
             if (estado === 1) {
-                return `<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Horario Programado" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen text-warning"></i></a>`;
+                return `<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Horario Programado" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen text-warning"></i></a><br>${descrip}`;
             } else if (estado === 0) {
-                return `<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Horario Activo" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen text-success"></i></a>`;
+                return `<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Horario Activo" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen text-success"></i></a><br>${descrip}`;
 
             }
         }

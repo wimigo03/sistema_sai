@@ -5,14 +5,19 @@
     <br>
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
-            <b> Reporte de Retrasos de Asistencia Personal  </b>
+            <b> Reporte de Retrasos de Asistencia Personal </b>
         </div>
         <div class="col-md-4 text-right">
-        <a href="{{ route('previsualizarPdf', ['empleadoId' => $empleado_id, 'fechaInicio' => $fechaInicio, 'fechaFinal' => $fechaFinal]) }}" target="blank_">
-            <button class="btn btn-sm btn-info font-verdana " type="button">
-                &nbsp;&nbsp;Generar PDF
-            </button>
-        </a>
+        <a href="{{ route('generarExcelReporte', ['empleadoId' => $empleado_id, 'fechaInicio' => $fechaInicio, 'fechaFinal' => $fechaFinal]) }}" target="blank_">
+                <button class="btn btn-sm btn-success font-verdana " type="button">
+                    &nbsp; <i class="fa-solid fa-file-excel"></i> &nbsp;Exportar Excel
+                </button>
+            </a>
+            <a href="{{ route('previsualizarPdf', ['empleadoId' => $empleado_id, 'fechaInicio' => $fechaInicio, 'fechaFinal' => $fechaFinal]) }}" target="blank_">
+                <button class="btn btn-sm btn-info font-verdana " type="button">
+                    &nbsp;&nbsp;Generar PDF
+                </button>
+            </a>
             <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('reportes.create')}}">
                 <button class="btn btn-sm btn-danger font-verdana" type="button">
                     &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
@@ -45,7 +50,7 @@
     </div>
 
     <div class="row font-verdana">
-       
+
         <input type="hidden" id="data1" name="fecha_final" value="{{$empleado_id}}" class="form-control" required>
         <input type="hidden" id="data2" name="fecha_inicio" value="{{ $fechaInicio }}" class="form-control" required>
         <input type="hidden" id="data3" name="fecha_final" value="{{ $fechaFinal }}" class="form-control" required>
@@ -100,7 +105,7 @@
             lengthChange: false,
             searching: false,
             ordering: false,
-            // Changed to false if you're not using server-side processing
+            dom: '<"top"Bf>lrtip', // Changed to false if you're not using server-side processing
             ajax: {
                 url: "{{route('personalreportes.getReporte') }}",
                 type: "GET", // Change the request type to GET
@@ -138,7 +143,7 @@
         $('#retrasos-table tbody').on('click', 'td.details-control', function() {
             var tr = $(this).closest('tr');
             var row = dataTable.row(tr);
-          //  console.log(row.data());
+            //  console.log(row.data());
 
             var tableId = 'registros-' + row.data().idemp;
             if (row.child.isShown()) {
@@ -149,7 +154,7 @@
                 // Open this row
                 row.child(template(row.data())).show();
                 initTable(tableId, row.data());
-               // console.log(row.data());
+                // console.log(row.data());
                 tr.addClass('shown');
                 tr.next().find('td').addClass('no-padding bg-gray');
             }

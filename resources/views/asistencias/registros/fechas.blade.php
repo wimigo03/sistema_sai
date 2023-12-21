@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="container ">
+ 
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
             <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
@@ -64,7 +64,7 @@
     </div>
     <div class="row font-verdana-sm">
         <div class="col-md-6">
-            <table id="calendar" class="table-bordered  table display font-verdana" style="width:100%">
+            <table id="calendar" class="table-bordered  table display font-verdana-sm" style="width:70%">
                 <thead>
                     <tr>
                         <th>S°</th>
@@ -80,25 +80,28 @@
             </table>
         </div>
         <div class="col-md-6">
-            <div class="col-md-8 titulo">
+            <row class="row font-verdana-sm">
+                <div class="col-md-12 titulo">
+                    <b>Historial de Cambios</b>
+                </div>
+            </row>
+            <div class="row font-verdana-sm">
+                <div class="col-md-12">
+                    <table class="table-responsive table-hover responsive display hover compact font-verdana-sm" id="historial-table" style="width:100%">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Regularizado</th>
+                                <th>Nombres <br>Apellidos</th>
+                                <th>Datos anteriores</th>
+                                <th>Usuario</th>
+                                <th>Acciones</th>
 
-                <b>Historial de Cambios</b>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
             </div>
-            <table class="table-bordered table-hover display hover compact font-verdana" id="historial-table" style="width:100%">
-                <thead class="table-light">
-                    <tr>
-                        <th>Fecha de Cambio</th>
-                        <th>Nombres <br>Apellidos</th>
-                        <th>Datos anteriores</th>
-                        <th>Usuario</th>
-                        <th>Acciones</th>
-
-                    </tr>
-                </thead>
-            </table>
         </div>
-
-
     </div>
 
     <div class="row font-verdana">
@@ -110,12 +113,13 @@
         <div class="col-md-8 text-right">
         </div>
     </div>
-</div>
+ 
 
 @section('scripts')
 <script>
     $(document).ready(function() {
         var dataTable;
+        var dataTable2;
         dataTable = $('#calendar').DataTable({
             processing: true,
             serverSide: true,
@@ -135,6 +139,7 @@
             columns: [{
                     data: 0,
                     name: 'Semana',
+                    visible: false, // Oculta la columna 0
 
                     render: function(data, type, row) {
                         // Personaliza la visualización de la celda aquí
@@ -190,6 +195,8 @@
         $('#selectedMonth').change(function() {
             // Actualizar la tabla cuando cambie la fecha
             dataTable.ajax.reload();
+            dataTable2.ajax.reload();
+
         });
         // Función para personalizar la visualización de la celda
         function renderCell(data, type, row) {
@@ -211,16 +218,19 @@
                             let routeUrl = "{{ route('regularizar.ausencia', ['id' => ':id']) }}";
                             // Reemplaza ':id' y ':otro_parametro' con los valores correspondientes
                             routeUrl = routeUrl.replace(':id', item.id);
-                            const link = `<a class="tts:left tts-slideIn tts-custom" aria-label="Regularizar Asistencia" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen  text-warning"></i></a>`;
+                            const link = `<a class="tts:left tts-slideIn tts-custom" aria-label="Regularizar  2 Asistencia" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen  text-warning"></i></a>`;
                             // ... tu lógica aquí ...
                             if (item.estado === 1) {
-                                return `<a class="tts:left tts-slideIn tts-custom" aria-label="Asistencia Registrada" ><i class="fa-solid fa-2xl fa-square-check text-success"></i></a>`;
+
+                                const link = `<a class="tts:left tts-slideIn tts-custom" aria-label="Asistencia  2 Registrada" ><i class="fa-solid fa-2xl fa-square-check text-success"></i></a>`;
+
+                                return `${link}<br>Registrado<br>`;
                             } else if (item.estado === 0) {
-                                const link = `<a class="tts:left tts-slideIn tts-custom" aria-label="Regularizar Asistencia" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen  text-danger"></i></a>`;
-                                return `${link}<br>${item.observ}`;
+                                const link = `<a class="tts:left tts-slideIn tts-custom" aria-label="Regularizar  2 Asistencia" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen  text-danger"></i></a>`;
+                                return `${link}<br>Falta`;
 
                             }
-                            return `${link}<br>${item.observ}`;
+                            return `${link}<br>Pendiente`;
                         }
                         // Crear el enlace normal
                         return createLink(item.id, item.descrip, item.estado);
@@ -235,17 +245,17 @@
                             let routeUrl = "{{ route('regularizar.ausencia', ['id' => ':id']) }}";
                             // Reemplaza ':id' y ':otro_parametro' con los valores correspondientes
                             routeUrl = routeUrl.replace(':id', item.id);
-                            const link = `<a class="tts:left tts-slideIn tts-custom" aria-label="Regularizar Asistencia" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen  text-warning"></i></a>`;
+                            const link = `<a class="tts:left tts-slideIn tts-custom" aria-label="Regularizar 2 Asistencia" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen  text-warning"></i></a>`;
                             // ... tu lógica aquí ...
                             if (item.estado === 0) {
-                                const link = `<a class="tts:left tts-slideIn tts-custom" aria-label="Regularizar Asistencia" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen  text-danger"></i></a>`;
-                                return `${link}<br>${item.observ}`;
+                                const link = `<a class="tts:left tts-slideIn tts-custom" aria-label="Regularizar 0 Asistencia" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen  text-danger"></i></a>`;
+                                return `${link}<br>Falta`;
 
                             }
-                            return `${link}<br>${item.observ}`;
+                            return `${link}<br>Pendiente`;
                         }
                         // Crear el enlace normal
-                        return createLink(item.id, item.descrip, item.estado);
+                        return createLink(item.id, item.observ, item.estado);
                     }).join('<br>');
                 }
 
@@ -255,7 +265,7 @@
                     let routeUrl = "{{ route('fecha.crear', ['fecha' => ':fecha', 'id' => ':id']) }}";
                     // Reemplaza ':id' y ':otro_parametro' con los valores correspondientes
                     routeUrl = routeUrl.replace(':fecha', fecha).replace(':id', empleado_id);
-                    var link = `<a class="tts:left tts-slideIn tts-custom" aria-label="Regularizar Asistencia" href="${routeUrl}"><i class="fa-solid fa-2xl fa-plus text-primary"></i></a>`;
+                    var link = `<a class="tts:left tts-slideIn tts-custom" aria-label="Regularizar 2 Asistencia" href="${routeUrl}"><i class="fa-solid fa-2xl fa-plus text-primary"></i></a>`;
                     return data.day + '<br>' + link;
                 }
                 return data.day + '<br>' + additionalInfo;
@@ -273,10 +283,10 @@
 
             // Retorna el enlace
             if (estado === 1) {
-                return `<a class="tts:left tts-slideIn tts-custom" aria-label="Asistencia Completa" ><i class="fa-solid fa-2xl fa-square-check text-success"></i></a>`;
+                const link = `<a class="tts:left tts-slideIn tts-custom" aria-label="Asistencia Completa" ><i class="fa-solid fa-2xl fa-square-check text-success"></i></a>`;
+                return `${link}<br>Registrado<br>`;
             } else if (estado === 0) {
                 return `<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Horario Activo" href="${routeUrl}"><i class="fa-solid fa-2xl fa-square-pen text-danger"></i></a>`;
-
             }
         }
 
@@ -292,7 +302,7 @@
             return null;
         }
 
-        $('#historial-table').DataTable({
+        dataTable2 = $('#historial-table').DataTable({
             lengthChange: false,
             processing: true,
             serverSide: true,
@@ -324,15 +334,15 @@
                         var formattedData = '';
 
                         // Selecciona y renombra los datos que deseas mostrar
-                        if (data.tipo=== 0) {
+                        if (data.tipo === 0) {
                             selectedData = {
                                 'Fecha': data.fecha,
                                 'Entrada': data.registro_inicio,
                                 'Salida': data.registro_final,
                                 'Total (min)': data.minutos_retraso,
-                               // 'tipo': data.tipo,
+                                // 'tipo': data.tipo,
                                 'Observacion': data.observ,
-                               // 'estado': data.estado,
+                                // 'estado': data.estado,
 
                                 // Agrega más campos según sea necesario
                             };
@@ -346,7 +356,7 @@
                                 'Salida': data.registro_final,
                                 'Retraso': data.retraso2,
                                 'Total (min)': data.minutos_retraso,
-                             //   'tipo': data.tipo,
+                                //   'tipo': data.tipo,
                                 'Observacion': data.observ,
                                 //'estado': data.estado,
                                 // Agrega más campos según sea necesario

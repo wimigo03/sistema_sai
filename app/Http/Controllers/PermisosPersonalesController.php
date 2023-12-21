@@ -58,7 +58,7 @@ class PermisosPersonalesController extends Controller
     {
         $mesAño = $request->input('mesID');
 
-      
+
         $permiso =  $this->obtenerOCrearPermiso($mesAño);
 
         $id =  $permiso->id;
@@ -76,19 +76,26 @@ class PermisosPersonalesController extends Controller
         $permiso = PermisoModel::find($permiso_id);
         $areasExcluidas = [33, 34];
         $empleados = EmpleadosModel::where('tipo', 1)
-        ->whereNotIn('idarea', $areasExcluidas)
+            ->whereNotIn('idarea', $areasExcluidas)
             ->select(['idemp', 'nombres', 'ap_mat', 'ap_pat'])
             ->withCount(['permisos as suma_horas_utilizadas' => function ($query) use ($permiso) {
                 $query
                     ->where('permisos_mensuales.id', $permiso->id)
                     ->select(DB::raw('sum(horas_utilizadas)'));
             }])
+            ->orderBy('idemp') // Ordenar por el campo 'idemp'
             ->get();
+
         $permisoId = $permiso->id;
 
         return Datatables::of($empleados)
             ->addColumn('details_url', function ($empleado) use ($permisoId) {
                 return route('permisospersonales.detalle', ['id' => $empleado->idemp, 'permiso_id' => $permisoId]);
+            })
+            ->addColumn('apellidos', function ($empleado) {
+                $ap_pat = $empleado->ap_pat ?? '-';
+                $ap_mat = $empleado->ap_mat ?? '-';
+                return  $ap_pat . ' ' . $ap_mat;
             })
             ->addColumn('total_horas_disponibles', function ($empleado) use ($permiso) {
                 $suma_horas_utilizadas = $empleado->suma_horas_utilizadas;
@@ -97,7 +104,7 @@ class PermisosPersonalesController extends Controller
 
                     $tiempo_disponible = $horas_permitidas - $suma_horas_utilizadas;
                     if ($tiempo_disponible == 0) {
-                        return '<span style="color: red;">SIN HORAS</span>';
+                        return '<span style="color: red;">Sin HORAS disponibles</span>';
                     }
 
                     $tiempoTexto = $this->convertirHorasMinutosATexto($tiempo_disponible);
@@ -112,12 +119,22 @@ class PermisosPersonalesController extends Controller
                     return $tiempoTexto;
                 }
             })
-            ->addColumn('btn2', function ($empleado) use ($permisoId) {
-                return '<a href="' . route('permisospersonales.nuevo', ['id' => $empleado->idemp, 'permiso_id' => $permisoId]) . ' " class="tts:left tts-slideIn tts-custom" aria-label="Registrar Nuevo Permiso Personal ">
-                            <i class="fa fa-lg fa-plus text-success"></i> &nbsp;
-                        </a>' . '<a class="tts:left tts-slideIn tts-custom" aria-label="Ver Todos los Registros" href="' . route('listar.permiso', ['id' => $empleado->idemp]) . '">
-                        &nbsp;<i class="fa-sharp fa-solid fa-list"></i></i>
-                        </a>';
+            ->addColumn('btn2', function ($empleado) use ($permisoId, $permiso) {
+                $suma_horas_utilizadas = $empleado->suma_horas_utilizadas;
+                $horas_permitidas = $permiso->horas_permitidas;
+                if ($suma_horas_utilizadas == $horas_permitidas) {
+
+                    return  '<a class="tts:left tts-slideIn tts-custom" aria-label="Ver Todos los Registros" href="' . route('listar.permiso', ['id' => $empleado->idemp]) . '">
+                &nbsp;<i class="fa-sharp fa-solid fa-list"></i></i>
+                </a>';
+                } else {
+
+                    return '<a href="' . route('permisospersonales.nuevo', ['id' => $empleado->idemp, 'permiso_id' => $permisoId]) . ' " class="tts:left tts-slideIn tts-custom" aria-label="Registrar Nuevo Permiso Personal ">
+                    <i class="fa fa-lg fa-plus text-success"></i> &nbsp;
+                </a>' . '<a class="tts:left tts-slideIn tts-custom" aria-label="Ver Todos los Registros" href="' . route('listar.permiso', ['id' => $empleado->idemp]) . '">
+                &nbsp;<i class="fa-sharp fa-solid fa-list"></i></i>
+                </a>';
+                }
             })
             ->rawColumns(['btn2', 'total_horas_disponibles'])
             ->make(true);
@@ -143,7 +160,7 @@ class PermisosPersonalesController extends Controller
                 }
             })
             ->addColumn('opciones', function ($permiso) {
-                return '<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Registro" href="' . route('editar.permiso', ['id' => $permiso->id]) . '">
+                return '<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Registro" href="' . route('editar.permiso', $permiso->id) . '">
                 <i class="fa-solid fa-2xl fa-square-pen text-warning"></i>
             </a>';
             })
@@ -158,16 +175,15 @@ class PermisosPersonalesController extends Controller
         return view('permisos.personales.create', compact('empleado', 'permiso'));
     }
 
-    public function editarPermiso($id)
+    public function editarPermiso(EmpleadoPermisoModel $permiso)
     {
         // Obtener el permiso y la información del empleado asociado al permiso
-        $permiso = EmpleadoPermisoModel::with('empleado', 'permiso')->find($id);
 
         // Verificar si el permiso existe
         if (!$permiso) {
             // Puedes manejar la situación en la que el permiso no existe, por ejemplo, redirigir o mostrar un error.
             // Aquí simplemente redirijo a alguna ruta, puedes ajustarlo según tus necesidades.
-            return redirect()->route('ruta.de.error');
+            abort(404); // o maneja de alguna manera el caso en que no se encuentre el registro
         }
 
         return view('permisos.personales.edit', compact('permiso'));
@@ -186,7 +202,7 @@ class PermisosPersonalesController extends Controller
                     $fechaEnEspañol = mb_strtoupper($fechaCarbon->locale('es')->isoFormat('MMMM YYYY'), 'UTF-8');
                     return $fechaEnEspañol ?? '-';
                 })
-                 
+
                 ->addColumn('horas_utilizadas', function ($permiso) {
 
                     $diaTexto = $this->convertirHorasMinutosATexto($permiso->pivot->horas_utilizadas);
@@ -269,6 +285,7 @@ class PermisosPersonalesController extends Controller
                         $horasPermitidas = $permiso->horas_permitidas;
                         $totalHorasUtilizadas = $empleadopermiso->permisos->sum('pivot.horas_utilizadas');
                         $suma = $totalHorasUtilizadas + $horasSolicitadas;
+                        $resta = $horasPermitidas - $totalHorasUtilizadas;
 
                         if ($horasPermitidas >= $suma) {
                             $permisoPersonal = new EmpleadoPermisoModel();
@@ -288,7 +305,7 @@ class PermisosPersonalesController extends Controller
                             // Redirecciona a la vista de éxito o a donde desees
                             return redirect()->route('permisospersonales.index')->with('success', 'Permiso registrado exitosamente.');
                         } else {
-                            return redirect()->back()->with('error', 'No se pudo crear el permiso: ' . $totalHorasUtilizadas . 'Limite  Excedido a' . $suma);
+                            return redirect()->back()->with('error', 'No se pudo crear el permiso: ' . 'Te quedan ' . $resta . '(minutos)');
                         }
                     } else {
 
@@ -373,24 +390,28 @@ class PermisosPersonalesController extends Controller
 
                         $horasPermitidas = $permiso->horas_permitidas;
                         $totalHorasUtilizadas = $empleadopermiso->permisos->sum('pivot.horas_utilizadas');
-                        $suma = $horasSolicitadas;
 
-                        if ($horasPermitidas >= $suma) {
-                            $permiso = EmpleadoPermisoModel::find($id);
+
+                        $limite  = $horasPermitidas - $totalHorasUtilizadas;
+                        $permiso = EmpleadoPermisoModel::find($id);
+                        $limite2 =  $limite +( $permiso->horas_utilizadas);
+                        if ($limite2 >=  $horasSolicitadas) {
+
                             $permiso->asunto = $request->input('asunto');
                             $permiso->hora_salida = $request->input('hora_salida_input');
                             $permiso->hora_retorno = $request->input('hora_retorno');
                             $permiso->fecha_solicitud = $request->input('fecha_solicitud');
                             $permiso->horas_utilizadas = $horasSolicitadas;
+
                             if (Auth::check()) {
                                 $permiso->usuario_modificacion = Auth::user()->name; // Obtener el nombre del usuario actualmente autenticado
                             }
                             // Guarda el registro en la base de datos
                             $permiso->save();
                             // Redirecciona a la vista de éxito o a donde desees
-                            return redirect()->route('permisospersonales.index')->with('success', 'Permiso modificado exitosamente.');
+                            return redirect()->route('permisospersonales.index')->with('success', $permiso . 'Permiso modificado exitosamente.');
                         } else {
-                            return redirect()->back()->with('error', 'No se pudo crear el permiso: ' . $totalHorasUtilizadas . 'Limite  Excedido a' . $suma);
+                            return redirect()->back()->with('error', 'Limite :' .$limite. '(mins) Minutos Solicitados'.$horasSolicitadas.' No se pudo crear el permiso: ' . $totalHorasUtilizadas . '(mins) Limite  Excedido a' . '(mins)');
                         }
                     }
                 } else {

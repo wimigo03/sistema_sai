@@ -43,6 +43,7 @@
         </div>
         @endcan
         <div class="col-md-12">
+
             <hr>
             @if(Session::has('pendiente'))
             <div class="alert alert-danger font-verdana-bg">
@@ -66,15 +67,110 @@
             <hr>
 
             @endif
+            <div class="row titulo">
+                @if(isset($horarioActivo))
+                <b>Horario Activo: </b> <span class="text-success font-weight-bold">-- {{$horarioActivo->Nombre}}--</span>
+                @else
+                <span class="text-danger font-weight-bold">--Sin Horario--</span>
+                @endif
+            </div>
         </div>
-    </div>
+        <div class="row font-verdana-bg">
 
-    <div class="body-border ">
+            <div class="col-md-12 ">
 
-        <div class="row">
-            @if(isset($horarioProgramado))
 
-            <div class="col-md-4 ">
+                @if(isset($horarioProgramado))
+                <div class="row">
+
+                    <div class="body-border ">
+                        <div class="col-md-12 ">
+                            <row>
+                                <div class="form-group">
+                                    <div class="alert alert-info">
+                                        <b>Hoy: </b> {{$fechaHoy}}
+                                    </div>
+                                </div>
+                            </row>
+                        </div>
+                        <div class="col-md-12 ">
+                            <row>
+                                <div class="form-group">
+                                    <div class="alert alert-info">
+                                        <b>Horario Programado: </b>
+                                        <span class="text-danger font-weight-bold"> {{$horarioProgramado->Nombre}}-</span>
+
+                                    </div>
+                                </div>
+                            </row>
+                        </div>
+                        @else
+
+                        @endif
+                        @if(isset($horarioProgramado) && $horarioProgramado->tipo == 1)
+
+                        <div class="form-group">
+
+
+
+
+                            <div class="col-md-12 ">
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="fecha_inicio2"><b>Entrada</b> </label>
+                                        <input type="time" id="fecha_inicio" name="fecha_inicio" value="{{ $horarioProgramado->hora_inicio }}" class="form-control" readonly>
+
+                                        <label for="fecha_inicio2"><b>Salida</b></label>
+                                        <input type="time" id="fecha_inicio" name="fecha_inicio" value="{{ $horarioProgramado->hora_salida }}" class="form-control" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="hora_entrada"><b>Entrada</b></label>
+                                        <input type="time" id="hora_entrada" name="hora_entrada" value="{{ $horarioProgramado->hora_entrada }}" class="form-control" readonly>
+
+                                        <label for="hora_final"><b>Salida</b></label>
+                                        <input type="time" id="hora_final" name="hora_final" value="{{ $horarioProgramado->hora_final }}" class="form-control" readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        @elseif(isset($horarioProgramado) && $horarioProgramado->tipo == 0)
+                        <div class="col-md-12 ">
+                            <row class="form-group row ">
+                                <div class="col-md-6 ">
+                                    <div class="form-group">
+                                        <label for="hora_inicio">Hora de Entrada</label>
+                                        <input type="time" id="hora_inicio" name="hora_inicio" value="{{ $horarioProgramado->hora_inicio }}" class="form-control" readonly>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6 ">
+
+                                    <div class="form-group">
+                                        <label for="hora_final">Hora de Salida</label>
+                                        <input type="time" id="hora_final" name="hora_final" value="{{ $horarioProgramado->hora_final }}" class="form-control" readonly>
+                                    </div>
+                                </div>
+                            </row>
+                        </div>
+
+                    </div>
+                </div>
+                @else
+                @endif
+
+
+
+            </div>
+
+        </div>
+
+        <div class="body-border ">
+
+            @if(isset($horarioActivo) && $horarioActivo->tipo == 1)
+            <div class="form-group col-md-12">
+
                 <row>
                     <div class="form-group">
                         <div class="alert alert-info">
@@ -83,155 +179,105 @@
                     </div>
                 </row>
 
+            </div>
+            <div class="col-md-12 ">
+                <row class="form-group row ">
+                    <div class="col-md-6 ">
+                        <label for="hora_inicio">TURNO MAÑANA</label>
+                        <hr>
+                    </div>
+                    <div class="col-md-3 ">
+                        <div class="form-group">
+                            <label for="hora_inicio">Hora de Entrada</label>
+                            <input type="time" id="hora_inicio" name="hora_inicio" value="{{ $horarioActivo->hora_inicio }}" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-3 ">
+                        <div class="form-group">
+                            <label for="hora_final">Hora de Salida</label>
+                            <input type="time" id="hora_final" name="hora_final" value="{{ $horarioActivo->hora_salida }}" class="form-control" readonly>
+                        </div>
+                    </div>
+                </row>
+                <row class="form-group row ">
+                    <div class="col-md-6 ">
+                        <label for="hora_inicio">TURNO TARDE</label>
+                        <hr>
+
+                    </div>
+                    <div class="col-md-3 ">
+                        <div class="form-group">
+                            <label for="hora_inicio">Hora de Entrada</label>
+                            <input type="time" id="hora_inicio" name="hora_inicio" value="{{ $horarioActivo->hora_entrada }}" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-3 ">
+                        <div class="form-group">
+                            <label for="hora_final">Hora de Salida</label>
+                            <input type="time" id="hora_final" name="hora_final" value="{{ $horarioActivo->hora_final }}" class="form-control" readonly>
+                        </div>
+                    </div>
+                </row>
+            </div>
+            @elseif(isset($horarioActivo) && $horarioActivo->tipo == 0)
+            <div class="col-md-12">
                 <row>
                     <div class="form-group">
                         <div class="alert alert-info">
-                            <b>Horario Programado: </b>
-                            <span class="text-danger font-weight-bold"> {{$horarioProgramado->Nombre}}-</span>
-                            <br>
-                            <b>MAÑANA: </b>
-                            <span class="text-danger font-weight-bold"> {{$horarioProgramado->hora_inicio}}-</span><span class="text-danger font-weight-bold"> {{$horarioProgramado->hora_salida}}</span>
-                            <br>
-                            <b>TARDE: </b>
-                            <span class="text-danger font-weight-bold"> {{$horarioProgramado->hora_entrada}}-</span><span class="text-danger font-weight-bold"> {{$horarioProgramado->hora_final}}</span>
-
+                            <b>Hoy: </b> {{$fechaHoy}}
+                        </div>
+                    </div>
+                </row>
+            </div>
+            <div class="col-md-12 ">
+                <row class="form-group row ">
+                    <div class="col-md-6 ">
+                        <div class="form-group">
+                            <label for="hora_inicio">Hora de Entrada</label>
+                            <input type="time" id="hora_inicio" name="hora_inicio" value="{{ $horarioActivo->hora_inicio }}" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        <div class="form-group">
+                            <label for="hora_final">Hora de Salida</label>
+                            <input type="time" id="hora_final" name="hora_final" value="{{ $horarioActivo->hora_final }}" class="form-control" readonly>
                         </div>
                     </div>
                 </row>
             </div>
 
             @else
-            <div class="col-md-4">
-                <div class="row">
-                    <div class="col">
+            <div class="col-md-6 ">
+                <row>
+                    <div class="form-group">
                         <div class="alert alert-info">
-                            <strong>Hoy:</strong> {{ $fechaHoy }}
+                            <b>Hoy: </b> {{$fechaHoy}}
                         </div>
                     </div>
-                </div>
+                </row>
             </div>
+            <div class="col-md-6 ">
 
+                <row>
+                    <div class="form-group">
+                        <label for="fecha_inicio2"><b>Horario</b></label>
+                        <div class="alert alert-warning">
+                            No hay un horario activo selecionado para la fecha actual.
+                        </div>
+                    </div>
+                </row>
+            </div>
             @endif
 
-            @if(isset($horarioActivo) && $horarioActivo->tipo == 1)
-            <div class="col-md-8">
-                <div class="row font-verdana-bg">
-                    <div class="col-md-12 titulo">
-                        <b>Horario Activo: </b>
-                        @if(isset($horarioActivo))
-                        <span class="text-success font-weight-bold">{{$horarioActivo->Nombre}}
-                        </span>
 
-                        @else
-                        <span class="text-danger font-weight-bold">--Sin Horario--</span>
-                        @endif<p>
-
-                    </div>
-                </div>
-                <div class="row font-verdana-bg">
-                    <div class="col-md-6">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <label for="fecha_inicio2"><b>MAÑANA</b> </label>
-
-                            </div>
-                        </div>
-                        <div class="row">
-
-                            <div class="col-md-6">
-                                <div class="alert alert-warning">
-
-                                    <label for="fecha_inicio2"><b>Entrada</b> </label>
-                                    <input type="time" id="fecha_inicio" name="fecha_inicio" value="{{ $horarioActivo->hora_inicio }}" class="form-control" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="alert alert-warning">
-
-                                    <label for="fecha_inicio2"><b>Salida</b></label>
-                                    <input type="time" id="fecha_inicio" name="fecha_inicio" value="{{ $horarioActivo->hora_salida }}" class="form-control" readonly>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <label for="fecha_inicio2"><b>TARDE</b> </label>
-
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="alert alert-warning">
-
-                                    <label for="hora_entrada"><b>Entrada</b></label>
-                                    <input type="time" id="hora_entrada" name="hora_entrada" value="{{ $horarioActivo->hora_entrada }}" class="form-control" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="alert alert-warning">
-
-                                    <label for="hora_final"><b>Salida</b></label>
-                                    <input type="time" id="hora_final" name="hora_final" value="{{ $horarioActivo->hora_final }}" class="form-control" readonly>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @elseif(isset($horarioActivo) && $horarioActivo->tipo == 0)
-            <div class="col-md-8">
-
-                <div class="row font-verdana-bg">
-                    <div class="col-md-12 titulo">
-                        <b>Horario Activo: </b>
-                        @if(isset($horarioActivo))
-                        <span class="text-success font-weight-bold">{{$horarioActivo->Nombre}}
-                        </span>
-
-                        @else
-                        <span class="text-danger font-weight-bold">--Sin Horario--</span>
-                        @endif<p>
-
-                    </div>
-
-
-                </div>
-                <div class="row font-verdana-bg">
-                    <div class="col-md-6">
-                        <div class="alert alert-warning">
-                            <label for="hora_inicio">ENTRADA</label>
-                            <input type="time" id="hora_inicio" name="hora_inicio" value="{{ $horarioActivo->hora_inicio }}" class="form-control" readonly>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="alert alert-warning">
-                            <label for="hora_final">SALIDA</label>
-                            <input type="time" id="hora_final" name="hora_final" value="{{ $horarioActivo->hora_final }}" class="form-control" readonly>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @else
-            <div class="col-md-8">
-                <div class="form-group">
-                    <label for="fecha_inicio2"><b>Horario</b></label>
-                    <div class="alert alert-warning">
-                        No hay un horario activo selecionado para la fecha actual.
-                    </div>
-                </div>
-            </div>
-
-            @endif
         </div>
-
     </div>
+
 
     <hr>
     <div class="row font-verdana-bg">
         <div class="col-md-6 titulo">
-            <b>Lista de Horarios de Trabajo</b>
+            <b>Lista de Horarios Laborales</b>
         </div>
 
         <div class="col-md-12 table-responsive center">

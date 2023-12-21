@@ -228,15 +228,20 @@
                     @csrf
                     <div class="row">
                         <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="empleado"><b>Nombre de Personal :</b> </label>
-                                <select name="empleado2" id="empleado2" aria-label="Seleciona Personal" required class="form-control">
-                                    <option value="">-</option>
-                                    @foreach ($empleados as $index => $value)
-                                    <option value="{{ $value->idemp }}"> {{ $value->nombres }} {{ $value->ap_pat }} {{ $value->ap_mat }}</option>
-                                    @endforeach
-                                </select>
+                        <label for="empleado2" class="col-md-12 col-form-label"> <b>{{ __('Nombre de Personal :') }}</b></label>
+
+                            <div id="horarios-select">
+                                <!-- Este será tu elemento select -->
+                                <select  name="empleado2"  required>
+                                <option value="" disabled selected>Seleccionar Horario</option>
+                                @foreach ($empleados as $index => $value)
+
+                                <option value="{{ $value->idemp }}"> {{ $value->nombres }} {{ $value->ap_pat }} {{ $value->ap_mat }}</option>
+                                        @endforeach 
+                            </select>
                             </div>
+                        
+
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
@@ -281,6 +286,15 @@
     $('#empleado').select2({
         placeholder: "--Seleccionar--"
     });
+    var horario_select = new SlimSelect({
+        select: '#horarios-select select',
+        placeholder: 'Seleccionar Horarios',
+        deselectLabel: '<span>&times;</span>',
+        searchTextPlaceholder: 'Buscar...', // Cambia el mensaje de búsqueda por defecto
+
+        hideSelectedOption: true
+    });
+
     $('#area_id').select2({
         placeholder: "--Seleccionar--"
     });
@@ -292,4 +306,3 @@
 @endsection
 
 @endsection
-

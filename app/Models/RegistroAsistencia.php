@@ -10,7 +10,7 @@ class RegistroAsistencia extends Model
     use HasFactory;
     protected $table = 'registro_asistencia';
     protected $primaryKey = 'id';
-    protected $fillable = ['empleado_id', 'registro_entrada','registro_inicio', 'registro_final','registro_salida', 'minutos_retraso','observ','created_at', 'tipo','horario_id'];
+    protected $fillable = ['empleado_id', 'registro_entrada','registro_inicio', 'registro_final','registro_salida', 'minutos_retraso','estado','observ','created_at', 'tipo','horario_id'];
 
     public function empleado()
     {

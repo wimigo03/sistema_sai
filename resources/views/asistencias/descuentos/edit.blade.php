@@ -13,8 +13,7 @@
                     &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
                 </button>
             </a>
-            <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
-        </div>
+         </div>
         <div class="col-md-12">
             <hr class="hrr">
         </div>

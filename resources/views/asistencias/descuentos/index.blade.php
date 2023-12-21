@@ -4,12 +4,17 @@
 <div class="container">
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
-            <b>Lista de descuentos por Retraso Haber Básico</b>
+            <b>Lista de Descuentos por Retraso Haber Básico</b>
         </div>
         <div class="col-md-4 text-right">
-            <a href="{{ route('descuentos.create') }}" class="tts:left tts-slideIn tts-custom" aria-label="Crear Nuevo Horario">
+            <a href="{{ route('descuentos.create') }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar Nuevo Descuento">
                 <button class="btn btn-sm btn-primary font-verdana" type="button">
                     &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
+                </button>
+            </a>
+            <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
+                <button class="btn btn-sm btn-danger font-verdana" type="button">
+                    &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
                 </button>
             </a>
         </div>

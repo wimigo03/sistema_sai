@@ -170,7 +170,7 @@ class EmpleadoAsistenciasController extends Controller
                     'horario' => function ($query) {
                         $query->select('id', 'Nombre', 'hora_inicio', 'hora_entrada', 'hora_salida', 'hora_final', 'tipo'); // Add the columns you want for the 'horario' relationship
                     }
-                ])->select('fecha', 'registro_inicio', 'registro_salida', 'registro_entrada', 'registro_final', 'horario_id', 'minutos_retraso', 'observ')
+                ])->select('fecha', 'registro_inicio', 'registro_salida', 'registro_entrada', 'registro_final', 'horario_id','estado', 'minutos_retraso', 'observ')
                 ->get();
             // Aplicar el filtro de fecha según el valor seleccionado
             $nombre_completo = $empleado->nombres . ' ' . $empleado->ap_pat . ' ' . $empleado->ap_mat;
@@ -208,10 +208,19 @@ class EmpleadoAsistenciasController extends Controller
                     }
                     return $html;
                 })
-
-
+                ->addColumn('estado', function ($row) {
+                    if ($row->estado == 0) {
+                        return 'Sin Registro';
+                    } else if ($row->estado == 1) {
+                        return 'Registrado';
+                    } else if ($row->estado == 2) {
+                        return 'Pendiente';
+                    } else {
+                        return '-'; // Puedes personalizar este mensaje según sea necesario
+                    }
+                })
                 ->rawColumns(['horario'])->toJson();
-        }
+       }
         // Pasar el valor del filtro a la vista
         $filtro = $request->input('filtro', 'actual');
         return view('asistencias.empleados.show', compact('empleado', 'filtro'));

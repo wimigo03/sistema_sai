@@ -51,6 +51,7 @@
                         <th> Entrada <br>Tarde</th>
                         <th> Salida <br>Tarde</th>
                         <th>Minutos <br> Retraso</th>
+                        <th>Estado </th>
                         <th>Observacion </th>
                     </tr>
                 </thead>
@@ -139,6 +140,12 @@
                 {
                     data: 'minutos_retraso',
                     name: 'minutos_retraso',
+                    class: 'text-justify p-1 font-verdana-sm'
+                }
+                ,
+                {
+                    data: 'estado',
+                    name: 'estado',
                     class: 'text-justify p-1 font-verdana-sm'
                 },
                 {

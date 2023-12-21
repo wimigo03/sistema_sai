@@ -4,12 +4,12 @@
 <div class="container ">
     <div class="row font-verdana-bg">
         <div class="col-md-4 titulo">
-                 <a href="{{ route('horarios.index') }}" class="color-icon-1">
-                    <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
-                </a>
-                Programar Horarios
-            
-            
+            <a href="{{ route('horarios.index') }}" class="color-icon-1">
+                <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
+            </a>
+            Programar Horarios
+
+
         </div>
 
         <div class="col-md-8 text-right">
@@ -25,12 +25,12 @@
                 </button>
             </a>
         </div>
-       
 
-    
-   
+
+
+
         <div class="col-md-12">
-        <hr class="hrr">
+            <hr class="hrr">
             @if(Session::has('pendiente'))
             <div class="alert alert-danger font-verdana-bg">
                 {{ Session::get('pendiente') }}
@@ -58,7 +58,7 @@
 
 
     </div>
-   
+
     <div class="row font-verdana">
         <div class="col-md-6  center">
             <table id="calendar" class="table-bordered  font-verdana" style="width:45%">
@@ -197,8 +197,8 @@
                 }
                 if (!additionalInfo) {
                     var fecha = data.date;
-                    var link = '<a aria-label="Asignar Horario" href="' + " {{ route('asistencia.crear', ['fecha' => ':fecha']) }}".replace(':fecha', fecha) + '"><i class="fa fa-lg fa-plus text-success"></i></a>'; // Devolver el enlace personalizado 
-                    return data.day + '<br>' + link;
+                    var link = '<a aria-label="Programar Horario" href="' + " {{ route('asistencia.crear', ['fecha' => ':fecha']) }}".replace(':fecha', fecha) + '"><i class="fa fa-lg fa-plus text-success"></i></a>'; // Devolver el enlace personalizado 
+                    return data.day + '<br>' + link + '<br>Sin Horario</br>';
 
                 }
                 return data.day + '<br>' + additionalInfo + '<br>';
@@ -270,10 +270,10 @@
 
                     infoHorarioDiv.append('<b>Horario: </b> ' + horario.Nombre + '<br>');
 
-                    infoHorarioDiv.append('<b>Mañana:</b><br>'  + horario.hora_inicio + '');
+                    infoHorarioDiv.append('<b>Mañana:</b><br>' + horario.hora_inicio + '');
                     infoHorarioDiv.append('-' + horario.hora_salida + '<br>');
-                    infoHorarioDiv.append('<b>Tarde:</b><br>'+ horario.hora_entrada +'');
-                    infoHorarioDiv.append('-' + horario.hora_final+'<br>');
+                    infoHorarioDiv.append('<b>Tarde:</b><br>' + horario.hora_entrada + '');
+                    infoHorarioDiv.append('-' + horario.hora_final + '<br>');
 
                 } else {
                     infoHorarioDiv.append('<b>________________ </b> <br>');
@@ -282,7 +282,7 @@
                     infoHorarioDiv.append('<b>Hora Entrada: </b> ' + horario.hora_inicio + '<br>');
                     infoHorarioDiv.append('<b>Hora Salida: </b> ' + horario.hora_final);
                 }
- 
+
                 // Agrega más campos según sea necesario
             });
         } else {

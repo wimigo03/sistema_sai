@@ -401,7 +401,7 @@
                     <a href="" data-toggle="collapse" data-target="#dashboard_asistencia" class="active collapsed" aria-expanded="false">
 
                         <i class='fas fa-user-clock' style="color:green"></i>
-                        <span class="nav-label mr-3">ASISTENCIAS</span>
+                        <span class="nav-label mr-3">CONTROL DE ASISTENCIAS</span>
                         <span class="fa fa-arrow-circle-left float-right"></span>
                     </a>
 
@@ -409,7 +409,7 @@
                         @can('horario_access')
                         <li>
                             <a href="{{ route('horarios.index') }}">
-                            &nbsp; &nbsp; &nbsp;
+                            &nbsp; &nbsp;
                                 <span class="nav-label mr-4">Gestionar Horarios</span>
 
                             </a>
@@ -426,6 +426,16 @@
                         @endcan
                         @can('horario_access')
                         <li>
+                            <a href="{{ route('lectordactilar.index') }}">
+                            &nbsp; &nbsp;
+                                <span class="nav-label mr-4">Huellas Dactilares</span>
+
+                            </a>
+
+                        </li>
+                        @endcan
+                        @can('horario_access')
+                        <li>
                             <a href="{{ route('registroasistencia.index') }}">
                             &nbsp; &nbsp;
                                 <span class="nav-label mr-4">Registros de Asistencias</span>
@@ -438,7 +448,7 @@
                         <li>
                             <a href="{{ route('empleadoasistencias.index') }}">
                             &nbsp; &nbsp;
-                                <span class="nav-label mr-4">Regularizar Asistencias</span>
+                                <span class="nav-label mr-4">Gestionar Asistencias</span>
                             </a>
                         </li>
                         @endcan
@@ -447,7 +457,7 @@
                         <li>
                             <a href="{{ route('reportes.create') }}">
                             &nbsp; &nbsp;
-                                <span class="nav-label mr-4">Reportes de Retrasos</span>
+                                <span class="nav-label mr-4">Generar Reportes</span>
                             </a>
                         </li>
                         @endcan
@@ -459,7 +469,7 @@
                         <li>
                             <a href="{{ route('permisospersonales.index') }}">
                             &nbsp; &nbsp; 
-                                <span class="nav-label mr-4">Permisos Mensuales</span>
+                                <span class="nav-label mr-4">Gestionar Permisos Personales</span>
                             </a>
                         </li>
                         @endcan

@@ -499,8 +499,12 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('reportes/areasReporte-pdf', 'ReporteController@areaprevisualizarPdf')->name('areaprevisualizarPdf')->middleware('can:reporte_access');
     Route::get('reportes/generalReporte-pdf', 'ReporteController@generalReportePdf')->name('generalReportePdf')->middleware('can:reporte_access');
     Route::get('reportes/asistencia-personalReporte-pdf', 'ReporteController@asistenciaPdf')->name('asistenciaPdf')->middleware('can:reporte_access');
+    Route::get('reportes/asistencia-personalReporte-excel', 'ReporteController@generarExcelReporte')->name('generarExcelReporte')->middleware('can:reporte_access');
+    Route::get('reportes/asistencia-areaReporte-excel', 'ReporteController@generarExcelAreaReporte')->name('generarExcelAreaReporte')->middleware('can:reporte_access');
+    Route::get('reportes/asistencia-generalReporte-excel', 'ReporteController@ExcelGeneralReporte')->name('ExcelGeneralReporte')->middleware('can:reporte_access');
+    Route::get('reportes/asistencia-asistenciaReporte-excel', 'ReporteController@excelRegistroReporte')->name('excelRegistroReporte')->middleware('can:reporte_access');
 
-
+    
     //Permisos Mensuales
     Route::get('permisos/id', 'PermisosPersonalesController@getID')->name('permisospersonales.getID')->middleware('can:permisos_access');
     Route::get('permisos', 'PermisosPersonalesController@index')->name('permisospersonales.index')->middleware('can:permisos_access');
@@ -511,7 +515,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::post('permisos/store/', 'PermisosPersonalesController@store')->name('permisospersonales.store')->middleware('can:permisos_access');
     Route::get('permisos/detalle/{id}/{permiso_id}', 'PermisosPersonalesController@detalle')->name('permisospersonales.detalle')->middleware('can:permisos_access');
     Route::get('permisos/show', 'PermisosPersonalesController@show')->name('permisospersonales.show')->middleware('can:permisos_access');
-    Route::get('editar-permiso/{id}', 'PermisosPersonalesController@editarPermiso')->name('editar.permiso')->middleware('can:permisos_access');
+    Route::get('editar-permiso/{permiso}', 'PermisosPersonalesController@editarPermiso')->name('editar.permiso')->middleware('can:permisos_access');
     Route::put('actualizar-permiso/{id}', 'PermisosPersonalesController@actualizarPermiso')->name('update.permiso')->middleware('can:permisos_access');
     Route::get('listar-permisos/{id}', 'PermisosPersonalesController@listarPermiso')->name('listar.permiso')->middleware('can:permisos_access');
 
@@ -532,5 +536,8 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('rechumanos/planta/movimientos/list', 'MovimientosPlantaController@index')->name('movimientosplanta.index');
     Route::get('rechumanos/contrato/movimientos/list', 'MovimientosContratoController@index')->name('movimientoscontrato.index');
     //lector Dactilar
-    Route::get('lectordactilar', 'LectorDactilarController@index')->name('lectordactilar.index')->middleware('can:dactilar_access');
+   // Route::get('lectordactilar', 'LectorDactilarController@index')->name('lectordactilar.index')->middleware('can:dactilar_access');
+    Route::get('lectordactilar/huellas', 'LectorDactilarController@index')->name('lectordactilar.index')->middleware('can:dactilar_access');
+    Route::get('lectordactilar/destroy/{dactilar}', 'LectorDactilarController@destroy')->name('lectordactilar.destroy')->middleware('can:dactilar_access');
+
 });

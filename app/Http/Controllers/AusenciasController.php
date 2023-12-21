@@ -49,14 +49,8 @@ class AusenciasController extends Controller
                         return 'FALTA';
                     } else if ($row->estado == 2) {
                         return 'No marco Salida';
-                    } else if ($row->estado == 4) {
-                        return 'Regularizar Registro de la mañana';
-                    } else if ($row->estado == 3) {
-                        return 'Regularizar Registro de la tarde';
-                    } else if ($row->estado == 5) {
-                        return 'Regularizar Registro de Mañana y Tarde';
                     } else {
-                        return '-'; // You can customize this message as needed
+                        return 'Dia Trabajado'; // You can customize this message as needed
                     }
                 })
                 ->addColumn('opciones', function ($row) {
@@ -87,33 +81,30 @@ class AusenciasController extends Controller
             'horario',
             'asistencia'
         ])->find($id);
-
+        //dd($registroAsistencia);
         if ($registroAsistencia->horario->tipo == 0) {
             $permiso = EmpleadoPermisoModel::where('fecha_solicitud', $registroAsistencia->fecha)
-            ->where('empleado_id', $registroAsistencia->empleado_id)
-            ->where('hora_retorno', '>', $registroAsistencia->horario->hora_final)
-            ->first();
-          
+                ->where('empleado_id', $registroAsistencia->empleado_id)
+                ->where('hora_retorno', '>', $registroAsistencia->horario->hora_final)
+                ->first();
+            return view('asistencias.regularizar.manual', compact('permiso', 'registroAsistencia'));
         } else if ($registroAsistencia->horario->tipo == 1) {
-         
+
             $permiso = EmpleadoPermisoModel::where('fecha_solicitud', $registroAsistencia->fecha)
-            ->where('empleado_id', $registroAsistencia->empleado_id)
-            ->where('hora_retorno', '>', $registroAsistencia->horario->hora_salida)
-            ->first();
+                ->where('empleado_id', $registroAsistencia->empleado_id)
+                ->where('hora_retorno', '>', $registroAsistencia->horario->hora_salida)
+                ->first();
             $permiso2 = EmpleadoPermisoModel::where('fecha_solicitud', $registroAsistencia->fecha)
-            ->where('empleado_id', $registroAsistencia->empleado_id)
-            ->where('hora_retorno', '>', $registroAsistencia->horario->hora_final)
-            ->first();
+                ->where('empleado_id', $registroAsistencia->empleado_id)
+                ->where('hora_retorno', '>', $registroAsistencia->horario->hora_final)
+                ->first();
+            return view('asistencias.regularizar.manual', compact('permiso', 'permiso2', 'registroAsistencia'));
         }
-      
-    
 
         // Asegúrate de que $data no sea nulo antes de pasar los datos a la vista
         if (!$registroAsistencia) {
             abort(404); // o maneja de alguna manera el caso en que no se encuentre el registro
         }
-
-        return view('asistencias.regularizar.manual', compact('permiso','registroAsistencia'));
     }
 
     public function crear($fecha, $id)
@@ -123,20 +114,24 @@ class AusenciasController extends Controller
         $empleado = EmpleadosModel::select('idemp', 'nombres', 'ap_pat', 'ap_mat')
             ->where('idemp', $id)
             ->first();
+
         $horario =    HorarioModel::whereHas('registrosAsistencia', function ($query) use ($fecha) {
             $query->where('fecha', $fecha);
         })->select('id', 'tipo', 'Nombre', 'hora_inicio', 'hora_final', 'hora_entrada', 'hora_salida')->first();
 
 
         $vistaselectedMonth = Carbon::parse($fecha)->format('Y-m');
+        $f2 = Carbon::parse($fecha);
+        $f = $f2->isoFormat('dddd D [de] MMMM');
 
 
-         if (!$horario) {
-            return view('asistencias.horarios.fechas',compact('vistaselectedMonth'))->with('error', 'Seleccione un Horario. NO HAY HORARIO ACTIVO O PROGRAMADO');;
+        if (!$horario) {
+            return redirect()->route('horarios.fechas', compact('vistaselectedMonth'))->with('error', 'Seleccione un Horario. NO HAY HORARIO ACTIVO O PROGRAMADO para el día ' . $f);
+            //return view('asistencias.horarios.fechas',compact('vistaselectedMonth'))->with('error', 'Seleccione un Horario. NO HAY HORARIO ACTIVO O PROGRAMADO');
         }
         $horarioId = $horario->id;
 
-        $permiso = EmpleadoPermisoModel::where('fecha_solicitud', '2023-12-15')->where('empleado_id', 1)->where('hora_retorno', '>', '12:30:00')->first();
+        // $permiso = EmpleadoPermisoModel::where('fecha_solicitud', '2023-12-15')->where('empleado_id', 1)->where('hora_retorno', '>', '12:30:00')->first();
 
         $asistencia = AsistenciaModel::where('fecha', $fecha)->select('id')->first();
         if (!$asistencia) {
@@ -152,24 +147,34 @@ class AusenciasController extends Controller
             $registroAsistencia->horario_id = $horarioId;
             $registroAsistencia->fecha = $fecha;
             $registroAsistencia->estado = 0;
-            $registroAsistencia->observ = 'Falta';
             $registroAsistencia->asistencia_id = $asistencia->id;
             $registroAsistencia->save();
         }
+        if ($registroAsistencia->horario->tipo == 0) {
+            $permiso = EmpleadoPermisoModel::where('fecha_solicitud', $registroAsistencia->fecha)
+                ->where('empleado_id', $registroAsistencia->empleado_id)
+                ->where('hora_retorno', '>', $registroAsistencia->horario->hora_final)
+                ->first();
+            return view('asistencias.regularizar.manual2', compact('permiso', 'asistencia', 'horario', 'empleado', 'registroAsistencia'));
+        } else if ($registroAsistencia->horario->tipo == 1) {
 
-
-
-
-
-
-        return view('asistencias.regularizar.manual2', compact('permiso', 'asistencia', 'horario', 'empleado', 'registroAsistencia'));
+            $permiso = EmpleadoPermisoModel::where('fecha_solicitud', $registroAsistencia->fecha)
+                ->where('empleado_id', $registroAsistencia->empleado_id)
+                ->where('hora_retorno', '>', $registroAsistencia->horario->hora_salida)
+                ->first();
+            $permiso2 = EmpleadoPermisoModel::where('fecha_solicitud', $registroAsistencia->fecha)
+                ->where('empleado_id', $registroAsistencia->empleado_id)
+                ->where('hora_retorno', '>', $registroAsistencia->horario->hora_final)
+                ->first();
+            return view('asistencias.regularizar.manual2', compact('permiso', 'permiso2', 'asistencia', 'horario', 'empleado', 'registroAsistencia'));
+        }
     }
 
     public function regularizar2(Request $request)
     {
         // Definir $selectedMonth fuera del bloque if para que esté disponible en ambos casos
         // Asignar un valor predeterminado a $selectedMonth
-        $vistaselectedMonth = Carbon::now()->format('Y-m');
+        // $vistaselectedMonth = Carbon::now()->format('Y-m');
 
 
         if ($request->ajax()) {
@@ -200,7 +205,8 @@ class AusenciasController extends Controller
 
             return DataTables::of($data)->make(true);
         }
-        return view('asistencias.registros.fechas', compact('vistaselectedMonth', 'empleado'));
+
+        return redirect()->route('agregar.regulacion', ['id' => 'id'])->with('success', 'Regularizado correctamente la asistencia del día: ');
     }
 
     private function getWeeksInMonth($start, $end, $selectedMonth)
@@ -371,7 +377,6 @@ class AusenciasController extends Controller
                 $registro->registro_final
             ) {
                 $registro->estado = 1;
-                $registro->observ = 'Dia Trabajado';
                 $registro->tipo = 1;
                 $registro->save();
             } else if (
@@ -380,9 +385,17 @@ class AusenciasController extends Controller
                 $registro->registro_entrada &&
                 $registro->registro_final
             ) {
-                $registro->observ = 'Pendiente';
                 $registro->tipo = 1;
-                $registro->estado = 4;
+                $registro->estado = 2;
+                $registro->save();
+            } else if (
+                $registro->registro_inicio &&
+                $registro->registro_salida &&
+                !$registro->registro_entrada &&
+                !$registro->registro_final
+            ) {
+                $registro->estado = 2;
+                $registro->tipo = 1;
                 $registro->save();
             } else if (
                 !$registro->registro_inicio &&
@@ -390,19 +403,16 @@ class AusenciasController extends Controller
                 $registro->registro_entrada &&
                 $registro->registro_final
             ) {
-                $registro->observ = 'Pendiente';
                 $registro->tipo = 1;
-                $registro->estado = 4;
+                $registro->estado = 2;
                 $registro->save();
             } else if (
                 $registro->registro_inicio &&
-                $registro->registro_salida &&
+                !$registro->registro_salida &&
                 !$registro->registro_entrada &&
-
                 !$registro->registro_final
             ) {
-                $registro->observ = 'Pendiente';
-                $registro->estado = 3;
+                $registro->estado = 2;
                 $registro->tipo = 1;
                 $registro->save();
             } else if (
@@ -411,8 +421,7 @@ class AusenciasController extends Controller
                 !$registro->registro_entrada &&
                 $registro->registro_final
             ) {
-                $registro->estado = 5;
-                $registro->observ = 'Pendiente';
+                $registro->estado = 2;
                 $registro->tipo = 1;
                 $registro->save();
             } else if (
@@ -421,8 +430,7 @@ class AusenciasController extends Controller
                 $registro->registro_entrada &&
                 !$registro->registro_final
             ) {
-                $registro->observ = 'Pendiente';
-                $registro->estado = 5;
+                $registro->estado = 2;
                 $registro->tipo = 1;
                 $registro->save();
             } else if (
@@ -431,8 +439,7 @@ class AusenciasController extends Controller
                 $registro->registro_entrada &&
                 !$registro->registro_final
             ) {
-                $registro->observ = 'Pendiente';
-                $registro->estado = 3;
+                $registro->estado = 2;
                 $registro->tipo = 1;
                 $registro->save();
             } else if (
@@ -441,18 +448,7 @@ class AusenciasController extends Controller
                 !$registro->registro_entrada &&
                 $registro->registro_final
             ) {
-                $registro->observ = 'Pendiente';
-                $registro->estado = 3;
-                $registro->tipo = 1;
-                $registro->save();
-            } else if (
-                $registro->registro_inicio &&
-                !$registro->registro_salida &&
-                !$registro->registro_entrada &&
-                !$registro->registro_final
-            ) {
-                $registro->observ = 'Pendiente';
-                $registro->estado = 5;
+                $registro->estado = 2;
                 $registro->tipo = 1;
                 $registro->save();
             } else if (
@@ -461,8 +457,16 @@ class AusenciasController extends Controller
                 !$registro->registro_entrada &&
                 $registro->registro_final
             ) {
-                $registro->observ = 'Pendiente';
-                $registro->estado = 5;
+                $registro->estado = 2;
+                $registro->tipo = 1;
+                $registro->save();
+            } else if (
+                $registro->registro_inicio &&
+                !$registro->registro_salida &&
+                $registro->registro_entrada &&
+                !$registro->registro_final
+            ) {
+                $registro->estado = 2;
                 $registro->tipo = 1;
                 $registro->save();
             } else if (
@@ -471,8 +475,7 @@ class AusenciasController extends Controller
                 !$registro->registro_entrada &&
                 $registro->registro_final
             ) {
-                $registro->observ = 'Pendiente';
-                $registro->estado = 3;
+                $registro->estado = 2;
                 $registro->tipo = 1;
                 $registro->save();
             } else if (
@@ -481,18 +484,7 @@ class AusenciasController extends Controller
                 $registro->registro_entrada &&
                 !$registro->registro_final
             ) {
-                $registro->observ = 'Pendiente';
-                $registro->estado = 5;
-                $registro->tipo = 1;
-                $registro->save();
-            } else if (
-                $registro->registro_inicio &&
-                !$registro->registro_salida &&
-                $registro->registro_entrada &&
-                !$registro->registro_final
-            ) {
-                $registro->observ = 'Pendiente';
-                $registro->estado = 5;
+                $registro->estado = 2;
                 $registro->tipo = 1;
                 $registro->save();
             } else if (
@@ -501,39 +493,52 @@ class AusenciasController extends Controller
                 !$registro->registro_entrada &&
                 !$registro->registro_final
             ) {
-                $registro->observ = 'Falta';
                 $registro->estado = 0;
+                $registro->tipo = 1;
+                $registro->save();
+            } else if (
+                !$registro->registro_inicio &&
+                $registro->registro_salida &&
+                !$registro->registro_entrada &&
+                !$registro->registro_final
+            ) {
+                $registro->estado = 2;
+                $registro->tipo = 1;
+                $registro->save();
+            } else if (
+                $registro->registro_inicio &&
+                !$registro->registro_salida &&
+                $registro->registro_entrada &&
+                $registro->registro_final
+            ) {
+                $registro->estado = 2;
                 $registro->tipo = 1;
                 $registro->save();
             }
         }
         if ($registro->horario->tipo == 0) {
             if (
-                $registro->registro_final &&
-                $registro->registro_inicio
+                $registro->registro_final && $registro->registro_inicio
             ) {
-                $registro->observ = 'Dia Trabajado';
                 $registro->tipo = 0;
                 $registro->estado = 1;
                 $registro->save();
             } else if (!$registro->registro_final && $registro->registro_inicio) {
-                $registro->observ = 'Pendiente';
-                $registro->estado = 3;
+                $registro->estado = 2;
                 $registro->tipo = 0;
                 $registro->save();
             } else if ($registro->registro_final && !$registro->registro_inicio) {
-                $registro->observ = 'Pendiente';
-                $registro->estado = 4;
+                $registro->estado = 2;
                 $registro->tipo = 0;
                 $registro->save();
             } else {
-                $registro->observ = 'Falta';
                 $registro->estado = 0;
                 $registro->tipo = 0;
                 $registro->save();
             }
         }
     }
+
     private function calcularRetraso(RegistroAsistencia $registro)
     {
         if ($registro->horario->tipo == 1) {

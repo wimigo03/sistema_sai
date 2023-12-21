@@ -54,8 +54,7 @@
                         <th></th>
                         <th>Nombres</th>
                         <th>Apellidos</th>
-                        <th>Apellidos</th>
-                        <th>Horas Disponibles</th>
+                         <th>Horas Disponibles</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -162,12 +161,8 @@
                 class: 'text-justify p-1 font-verdana-sm'
             },
             {
-                data: 'ap_pat',
-                name: 'ap_pat',
-                class: 'text-justify p-1 font-verdana-sm'
-            }, {
-                data: 'ap_mat',
-                name: 'ap_mat',
+                data: 'apellidos',
+                name: 'apellidos',
                 class: 'text-justify p-1 font-verdana-sm'
             },
             {
@@ -214,6 +209,29 @@
             searching: false, // Oculta la barra de búsqueda
             paging: false, // Desactiva la paginación
             lengthChange: false,
+            language: {
+            info: "<span class='font-verdana'>Mostrando _START_ al _END_ de _TOTAL_</span>",
+            search: '',
+            searchPlaceholder: "Buscar",
+
+            paginate: {
+                next: "<span class='font-verdana'><b>Siguiente</b></span>",
+                previous: "<span class='font-verdana'><b>Anterior</b></span>",
+            },
+            lengthMenu: "<span class='font-verdana'>Mostrar </span>" +
+                "<select class='form form-control-sm'>" +
+                "<option value='15'>15</option>" +
+                "<option value='50'>50</option>" +
+                "<option value='100'>100</option>" +
+                "<option value='-1'>Todos</option>" +
+                "</select> <span class='font-verdana'>Registros </span>",
+            loadingRecords: "<span class='font-verdana'>...Cargando...</span>",
+            processing: "<span class='font-verdana'>...Procesando...</span>",
+            emptyTable: "<span class='font-verdana'>No hay datos</span>",
+            zeroRecords: "<span class='font-verdana'>No hay resultados para mostrar</span>",
+            infoEmpty: "<span class='font-verdana'>Ningun registro encontrado</span>",
+            infoFiltered: "<span class='font-verdana'>(filtrados de un total de _MAX_ registros)</span>"
+        },
             ajax: data.details_url,
             columns: [{
                     data: 'fecha_solicitud',

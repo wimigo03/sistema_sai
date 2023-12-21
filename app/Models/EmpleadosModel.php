@@ -135,7 +135,7 @@ class EmpleadosModel extends Model
 
     public function huellasDigitales()
     {
-        return $this->hasMany(HuellasDigitalesModel::class,'idemp');
+        return $this->hasMany(HuellasDigitalesModel::class,'empleado_id');
     }
 
 

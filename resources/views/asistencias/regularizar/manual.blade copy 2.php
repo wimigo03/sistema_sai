@@ -34,8 +34,9 @@
     <!-- Campos del formulario -->
     <div class="row font-verdana-sm">
         <div class="col-md-6 table-responsive center">
-            @if($registroAsistencia->horario->tipo == 0)
+ 
             <div class="body-border ">
+                @if($registroAsistencia->horario->tipo == 0)
                 <div class="row">
                     <div class="form-group col-md-12 form-check">
                         <b>HORARIO :</b>
@@ -57,7 +58,7 @@
                             <div class="form-group col-md-6 form-check">
                                 <br><b>MARCADO DE SALIDA:</b></br>
                                 <label for="asignado" id="label4">Biometrico</label>
-                                <input type="checkbox" name="asignado" id="asignado4" class="form-control" onclick="toggleLabel2('label4', 'asignado4','registroH_final','registro_final')">
+                                <input type="checkbox" name="asignado" id="asignado4" class="form-control" onclick="toggleLabel('label4', 'asignado4','registroH_final','registro_final')">
                                 <input type="time" id="registroH_final" name="registro_final" class="form-control" value="{{ $registroAsistencia->horario->hora_final}}" required>
                             </div>
 
@@ -111,46 +112,36 @@
                             </div>
                         </div>
 
-
-                        @if(isset($permiso))
                         <div class="form-group row font-verdana-bg">
-                            <div class="form-group col-md-6">
-                                <!-- Agrega más campos según sea necesario -->
-                                <div class="form-check">
-                                    <label class="form-check-label" for="flexCheckDefault0">
-                                        BOLETA PERSONAL
-                                    </label>
-                                    <input class="form-control checkbox" type="checkbox" value="BOLETA PERSONAL" id="flexCheckDefault0">
-                                </div>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <div class="form-check">
-                                    <b>Fecha de <br>Solicitud:</b> {{ $permiso->fecha_solicitud }}</p>
-                                </div>
-                                <div class="form-check">
-                                    <b>Hora de <br>Retorno:</b> {{ $permiso->hora_retorno }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        @else
-                        <div class="form-group row font-verdana-sm">
 
-                            <div class="form-group col-md-12">
-
-                                <div class="form-check">
-                                    <p>No se encontró ningún permiso</p>
-
-                                </div>
+                            @if(isset($permiso))
+                            <!-- Agrega más campos según sea necesario -->
+                            <div class="form-check">
+                                <label class="form-check-label" for="flexCheckDefault0">
+                                    BOLETA PERSONAL
+                                </label>
+                                <input class="form-control checkbox" type="checkbox" value="BOLETA PERSONAL" id="flexCheckDefault0">
                             </div>
+                            <div class="form-check">
+                                <b>Fecha de <br>Solicitud:</b> {{ $permiso->fecha_solicitud }}</p>
+
+                            </div>
+                            <div class="form-check">
+                                <b>Hora de <br>Retorno:</b> {{ $permiso->hora_retorno }}</p>
+
+                            </div>
+                            @else
+                            <div class="form-check">
+                                <p>No se encontró <br>ningún permiso</p>
+
+                            </div>
+                            @endif
+
 
                         </div>
-                        @endif
-
                     </div>
                 </div>
-            </div>
-            @else
-            <div class="body-border ">
+                @else
                 <div class="row font-verdana-sm">
                     <div class="form-group col-md-12 form-check">
                         <b>HORARIO :</b>
@@ -165,8 +156,6 @@
                                 <div class="row">
                                     <div class="form-group col-md-12 form-check">
                                         <b>TURNO MAÑANA :</b>
-                                        <hr class="hr">
-
                                     </div>
                                 </div>
                                 <div class="row">
@@ -175,35 +164,37 @@
                                         <label for="asignado" id="label1">Biometrico</label>
                                         <input type="checkbox" name="asignado" id="asignado1" class="form-control" onclick="toggleLabel('label1', 'asignado1', 'registroH_inicio', 'registro_inicio')">
                                         <input type="time" id="registroH_inicio" name="registro_inicio" class="form-control form-control-sm" value="{{ $registroAsistencia->horario->hora_inicio }}" required>
+
                                     </div>
                                     <div class="form-group col-md-6 form-check">
                                         <br><b>SALIDA:</b></br>
                                         <label for="asignado" id="label2">Biometrico</label>
-                                        <input type="checkbox" name="asignado" id="asignado2" class="form-control" onclick="toggleLabel3('label2', 'asignado2', 'registroH_salida', 'registro_salida')">
+                                        <input type="checkbox" name="asignado" id="asignado2" class="form-control" onclick="toggleLabel('label2', 'asignado2', 'registroH_salida', 'registro_salida')">
                                         <input type="time" id="registroH_salida" name="registro_salida" class="form-control form-control-sm" value="{{ $registroAsistencia->horario->hora_salida }}" required>
+
                                     </div>
+
                                 </div>
                             </div>
                             <div class="form-group col-md-6 form-check">
+
                                 <div class="row">
                                     <div class="form-group col-md-12 form-check">
                                         <b>TURNO TARDE :</b>
-                                        <hr class="hr">
-
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-6 form-check">
                                         <br><b>ENTRADA:</b></br>
                                         <label for="asignado" id="label3">Biometrico</label>
-                                        <input type="checkbox" name="asignado" id="asignado3" class="form-control" onclick="toggleLabel4('label3', 'asignado3','registroH_entrada','registro_entrada')">
+                                        <input type="checkbox" name="asignado" id="asignado3" class="form-control" onclick="toggleLabel('label3', 'asignado3','registroH_entrada','registro_entrada')">
                                         <input type="time" id="registroH_entrada" name="registro_entrada" class="form-control form-control-sm" value="{{ $registroAsistencia->horario->hora_entrada }}" required>
 
                                     </div>
                                     <div class="form-group col-md-6 form-check">
                                         <br><b>SALIDA:</b></br>
                                         <label for="asignado" id="label4">Biometrico</label>
-                                        <input type="checkbox" name="asignado" id="asignado4" class="form-control" onclick="toggleLabel2('label4', 'asignado4','registroH_final','registro_final')">
+                                        <input type="checkbox" name="asignado" id="asignado4" class="form-control" onclick="toggleLabel('label4', 'asignado4','registroH_final','registro_final')">
                                         <input type="time" id="registroH_final" name="registro_final" class="form-control form-control-sm" value="{{ $registroAsistencia->horario->hora_final}}" required>
 
                                     </div>
@@ -256,84 +247,43 @@
                                 <hr class="hr">
                             </div>
                         </div>
-                        <div class="form-group row font-verdana-sm">
+
+                        <div class="form-group row font-verdana-bg">
+
                             @if(isset($permiso))
-                            <div class="form-group col-md-6 ">
-                                <div class="form-group row font-verdana-sm">
-                                    <div class="form-group col-md-4">
-                                        <!-- Agrega más campos según sea necesario -->
-                                        <div class="form-check">
-                                            <label class="form-check-label text-success" for="flexCheckDefault0">
-                                                <b>BOLETA PERSONAL</b>
-                                            </label>
-                                            <input class="form-control checkbox" type="checkbox" value="BOLETA PERSONAL" id="flexCheckDefault0">
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-md-8">
-                                        <div class="form-check">
-                                            <b>Fecha de Solicitud:</b><br> {{ $permiso->fecha_solicitud }}</p>
-                                        </div>
-                                        <div class="form-check">
-                                            <b>Hora de Retorno:</b><br> {{ $permiso->hora_retorno }}</p>
-                                        </div>
-                                    </div>
-                                </div>
+                            <!-- Agrega más campos según sea necesario -->
+                            <div class="form-check">
+                                <label class="form-check-label" for="flexCheckDefault0">
+                                    BOLETA PERSONAL
+                                </label>
+                                <input class="form-control checkbox" type="checkbox" value="BOLETA PERSONAL" id="flexCheckDefault0">
+                            </div>
+                            <div class="form-check">
+                                <b>Fecha de <br>Solicitud:</b> {{ $permiso->fecha_solicitud }}</p>
+
+                            </div>
+                            <div class="form-check">
+                                <b>Hora de <br>Retorno:</b> {{ $permiso->hora_retorno }}</p>
+
                             </div>
                             @else
-                            <div class="form-group row font-verdana-bg">
-                                <div class="form-group col-md-12">
-                                    <div class="form-check">
-                                        <p>No se encontró ningún permiso registrado</p>
-                                    </div>
-                                </div>
-                            </div>
-                            @endif
-                            @if(isset($permiso2))
-                            <div class="form-group col-md-6 ">
-
-                                <div class="form-group row font-verdana-sm">
-
-                                    <div class="form-group col-md-4 form-check">
-                                        <!-- Agrega más campos según sea necesario -->
-                                        <div class="form-check">
-                                            <label class="form-check-label text-success" for="flexCheckDefault0">
-                                                <b>BOLETA PERSONAL</b>
-                                            </label>
-                                            <input class="form-control checkbox" type="checkbox" value="BOLETA PERSONAL" id="flexCheckDefault0">
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-md-8 form-check">
-                                        <div class="form-check">
-                                            <b>Fecha de Solicitud:</b><br> {{ $permiso2->fecha_solicitud }}</p>
-                                        </div>
-                                        <div class="form-check">
-                                            <b>Hora de Retorno:</b><br> {{ $permiso2->hora_retorno }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            @else
-                            <div class="form-group row font-verdana-sm">
-
-                                <div class="form-group col-md-12 form-check">
-
-                                    <div class="form-check">
-                                        <p>No se encontró ningún permiso registrado</p>
-
-                                    </div>
-                                </div>
+                            <div class="form-check">
+                                <p>No tiene Boletas de Salida Personal Registrada</p>
 
                             </div>
                             @endif
+
+
                         </div>
-                        <hr class="hrr">
                     </div>
                 </div>
+                @endif
             </div>
-            @endif
+
+
         </div>
 
-        <div class="col-md-6 table-responsive center">
+         <div class="col-md-6 table-responsive center">
 
             <div class="body-border ">
                 <b>DATOS DE REGISTRO DE ASISTENCIA:</b>
@@ -344,14 +294,14 @@
                     @method('PUT')
 
                     <div class="form-group row ">
-                        <div class="form-group col-md-8">
+                        <div class="form-group col-md-6">
                             <label for="descripcion"><b>Nombres y Apellidos :</b></label>
                             <input type="text" name="descripcion" value="{{ $registroAsistencia->empleado->nombres }} {{$registroAsistencia->empleado->ap_pat}} {{$registroAsistencia->empleado->ap_mat}}" class="form-control form-control-sm" readonly>
                             <input type="hidden" name="observ" value="Regularizado" class="form-control form-control-sm" readonly>
 
                         </div>
 
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6">
                             <label for="fecha"><b>Fecha :</b></label>
                             <input type="date" name="fecha" class="form-control form-control-sm" value="{{ $registroAsistencia->asistencia->fecha }}" readonly>
                         </div>
@@ -431,8 +381,8 @@
                 </form>
 
             </div>
-        </div>
     </div>
+</div>
 </div>
 </div>
 
@@ -466,9 +416,6 @@
 <script>
     // Variable para almacenar el valor original de registro_inicio
     var originalRegistroInicioValue = $("#registro_inicio").val();
-    var originalRegistroFinalValue = $("#registro_final").val();
-    var originalRegistroSalidaValue = $("#registro_salida").val();
-    var originalRegistroEntradaValue = $("#registro_entrada").val();
 
     function toggleLabel(labelId, checkboxId, sourceInputId, targetInputId) {
         // Obtener el texto original del label
@@ -485,57 +432,6 @@
 
         // Asignar el valor del input fuente al input destino si el checkbox está marcado
         $("#" + targetInputId).val(isChecked ? sourceValue : originalRegistroInicioValue);
-    }
-
-    function toggleLabel2(labelId, checkboxId, sourceInputId, targetInputId) {
-        // Obtener el texto original del label
-        var originalText = $("#" + labelId).text();
-
-        // Verificar el estado actual del checkbox
-        var isChecked = $("#" + checkboxId).prop("checked");
-
-        // Cambiar el texto del label según el estado del checkbox
-        $("#" + labelId).text(isChecked ? originalText + " (MANUAL)" : originalText.replace(" (MANUAL)", ""));
-
-        // Obtener el valor del input fuente
-        var sourceValue = $("#" + sourceInputId).val();
-
-        // Asignar el valor del input fuente al input destino si el checkbox está marcado
-        $("#" + targetInputId).val(isChecked ? sourceValue : originalRegistroFinalValue);
-    }
-
-    function toggleLabel3(labelId, checkboxId, sourceInputId, targetInputId) {
-        // Obtener el texto original del label
-        var originalText = $("#" + labelId).text();
-
-        // Verificar el estado actual del checkbox
-        var isChecked = $("#" + checkboxId).prop("checked");
-
-        // Cambiar el texto del label según el estado del checkbox
-        $("#" + labelId).text(isChecked ? originalText + " (MANUAL)" : originalText.replace(" (MANUAL)", ""));
-
-        // Obtener el valor del input fuente
-        var sourceValue = $("#" + sourceInputId).val();
-
-        // Asignar el valor del input fuente al input destino si el checkbox está marcado
-        $("#" + targetInputId).val(isChecked ? sourceValue : originalRegistroSalidaValue);
-    }
-
-    function toggleLabel4(labelId, checkboxId, sourceInputId, targetInputId) {
-        // Obtener el texto original del label
-        var originalText = $("#" + labelId).text();
-
-        // Verificar el estado actual del checkbox
-        var isChecked = $("#" + checkboxId).prop("checked");
-
-        // Cambiar el texto del label según el estado del checkbox
-        $("#" + labelId).text(isChecked ? originalText + " (MANUAL)" : originalText.replace(" (MANUAL)", ""));
-
-        // Obtener el valor del input fuente
-        var sourceValue = $("#" + sourceInputId).val();
-
-        // Asignar el valor del input fuente al input destino si el checkbox está marcado
-        $("#" + targetInputId).val(isChecked ? sourceValue : originalRegistroEntradaValue);
     }
 </script>
 
