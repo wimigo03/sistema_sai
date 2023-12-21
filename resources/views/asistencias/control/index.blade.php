@@ -16,6 +16,31 @@
         <div class="col-md-12">
             <hr class="hrr">
         </div>
+        <div class="col-md-12">
+            <hr>
+            @if(Session::has('pendiente'))
+            <div class="alert alert-danger font-verdana-bg">
+                {{ Session::get('pendiente') }}
+            </div>
+            <hr>
+
+            @endif
+
+            @if(Session::has('success'))
+            <div class="alert alert-success">
+                {{ Session::get('success') }}
+            </div>
+            <hr>
+
+            @endif
+            @if(Session::has('error'))
+            <div class="alert alert-danger font-verdana-bg">
+                {{ Session::get('error') }}
+            </div>
+            <hr>
+
+            @endif
+        </div>
     </div>
 
     <div class="row font-verdana">
@@ -27,8 +52,9 @@
 
                         <th>ID</th>
                         <th>Nombres y Apellidos</th>
-                        <th>Agregado por <br>Usuario </th>
-                        <th>Agregado hace </th>
+                        <th class="text-center p-1">Agregado por Usuario </th>
+                        <th class="text-center p-1">Fecha</th>
+                        <th class="text-center p-1">Hace</th>
                         <th class="text-center p-1">Acciones</th>
                     </tr>
                 </thead>

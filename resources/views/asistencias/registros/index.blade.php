@@ -7,25 +7,17 @@
             <b>Lista de Registros de Asistencia</b>
 
         </div>
-        <div class="col-md-4 text-right">
-            <div class="btn-group">
-                <select id="filtro" aria-label="Seleciona los registros" class="form-control">
-                    <option value="todos" {{ $filtro == 'todos' ? 'selected' : '' }}>Todos</option>
-                    <option value="actual" {{ $filtro == 'actual' ? 'selected' : '' }}>Hoy</option>
-                    <option value="mensual" {{ $filtro == 'mensual' ? 'selected' : '' }}>Mes Actual</option>
-                </select>
-            </div>
-            <div class="btn-group">
+        <div class="col-md-4 text-right titulo">
+        <b>FECHA:</b>
 
-            </div>
-
-
-
+            <input type="date" id="filtro" name="fecha_final4" value="{{ $fechaHoy }}" class="form-control-sm" required>
             <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
                 <button class="btn btn-sm btn-danger font-verdana" type="button">
                     &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
                 </button>
             </a>
+
+
         </div>
         <div class="col-md-12">
             <hr class="hrr">

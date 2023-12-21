@@ -295,9 +295,10 @@ class ReporteController extends Controller
 
         $fechaInicio = $request->input('fecha_inicio');
         $fechaFinal = $request->input('fecha_final');
+        $empleadoDatos =  EmpleadosModel::where('idemp', $empleado_id)->with('empleadosareas')->first();
 
 
-        return view('asistencias.reportes.reporte-personal', compact('empleado_id', 'fechaInicio', 'fechaFinal'));
+        return view('asistencias.reportes.reporte-personal', compact('empleadoDatos','empleado_id', 'fechaInicio', 'fechaFinal'));
     }
     public function visualizar2(Request $request)
     {
@@ -323,8 +324,9 @@ class ReporteController extends Controller
         $empleado_id = $request->input('empleado2');
         $fechaInicio = $request->input('fecha_inicio4');
         $fechaFinal = $request->input('fecha_final4');
+        $empleadoDatos =  EmpleadosModel::where('idemp', $empleado_id)->with('empleadosareas')->first();
 
-        return view('asistencias.reportes.reporte-asistencia-personal', compact('empleado_id', 'fechaInicio', 'fechaFinal'));
+        return view('asistencias.reportes.reporte-asistencia-personal', compact('empleadoDatos','empleado_id', 'fechaInicio', 'fechaFinal'));
     }
 
     public function personalConsulta($request, $id, $fechaI, $fechaF)
@@ -436,8 +438,7 @@ class ReporteController extends Controller
 
             $fechaInicio = $request->input('fecha_inicio3');
             $fechaFinal = $request->input('fecha_final3');
-            dd($fechaInicio);
-            $empleados = EmpleadosModel::whereHas('registrosAsistencia', function ($query) use ($fechaInicio, $fechaFinal) {
+             $empleados = EmpleadosModel::whereHas('registrosAsistencia', function ($query) use ($fechaInicio, $fechaFinal) {
                 $query
                     ->where('estado', '=', 1)
                     ->where('minutos_retraso', '>', 0)
@@ -789,7 +790,7 @@ class ReporteController extends Controller
 
         $data = $this->personalConsulta($request, $empleado_id, $fechaInicio, $fechaFinal);
         $empleadoDatos =  EmpleadosModel::where('idemp', $empleado_id)->with('empleadosareas')->select('nombres','ap_pat','ap_mat','idarea','ci')->first();
-     
+        
 
         $view =  view('asistencias.reportes.reporte-personal-excel', compact([ 'empleadoDatos', 'data', 'fechaInicio', 'fechaFinal']));
 
@@ -883,6 +884,24 @@ class ReporteController extends Controller
         $fileName = 'reporte_general_por_fechas.xlsx';
         return Excel::download(new     ReporteGeneralPorFechasExport($view), $fileName);
     }
+    public function excelRegistroReporte(Request $request)
+    {
+       
+        $empleado_id = request('empleadoId');
+        $fechaInicio = request('fechaInicio');
+        $fechaFinal = request('fechaFinal');
+        $empleadoDatos =  EmpleadosModel::where('idemp', $empleado_id)->with('empleadosareas')->first();
+
+        $registros = $this->registropPersonalConsulta($empleado_id, $fechaInicio, $fechaFinal);
+
+
+        $view =  view('asistencias.reportes.excel-reporte-personal-asistencias', compact(['registros', 'empleadoDatos',   'fechaInicio', 'fechaFinal']));
+
+        // Asegúrate de tener un modelo que represente tus datos
+        $fileName = 'reporte_por_fechas.xlsx';
+        return Excel::download(new ReportePorFechasExport($view), $fileName);
+    }
+
 
     /**
      * Show the form for editing the specified resource.

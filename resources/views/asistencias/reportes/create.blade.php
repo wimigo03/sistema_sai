@@ -221,7 +221,7 @@
         </div>
         <div class="tab-pane fade" id="tab2">
             <div class="col-md-8 titulo">
-                <b>Reporte Personal</b>
+                <b>Reporte de ASistencia Personal</b>
             </div>
             <div class="body-border ">
                 <form method="POST" action="{{ route('registro.visualizar') }}" id="crearForm">
@@ -233,7 +233,7 @@
                             <div id="horarios-select">
                                 <!-- Este será tu elemento select -->
                                 <select  name="empleado2"  required>
-                                <option value="" disabled selected>Seleccionar Horario</option>
+                                <option value="" disabled selected>Seleccionar Personal</option>
                                 @foreach ($empleados as $index => $value)
 
                                 <option value="{{ $value->idemp }}"> {{ $value->nombres }} {{ $value->ap_pat }} {{ $value->ap_mat }}</option>

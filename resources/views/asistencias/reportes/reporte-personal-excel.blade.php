@@ -1,129 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<body>
+<head>
+    <!-- Puedes agregar estilos específicos para el PDF aquí -->
     <style>
         table {
-            display: inline-block;
-            margin-right: 20px;
-            /* Adjust the spacing between tables as needed */
-            vertical-align: top;
-            /* Align tables at the top */
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
         }
 
-        p {
-            margin: 0;
-            padding: 5px;
+        table,
+        th,
+        td {
+            border: 1px solid black;
         }
-
-        /* Add any additional styling as needed */
     </style>
-    <table>
-        <tr>
-            <td>
-                <b>Fecha Descarga: </b>
-                {{ date("d-m-Y H:i") }} 
-            </td>
+</head>
 
-            <td>
-                <b>Usuario: </b>
-                 {{ Auth()->user()->name }}
+<body>
+    <!-- Contenido de tu vista -->
 
+  
 
-            </td>
-
-            <td>
-              </td>
-        </tr>
+    <h3>
+        Reporte de Retrasos de Asistencia  Personal
+    </h3>
+    <table border="1" cellspacing="0" cellpadding="0" width="100%">
+        <tbody>
+            <tr>
+                <td width="34%" valign="top">
+                    <p>
+                        Reporte de Retrasos Acumulados:
+                    </p>
+                </td>
+                <td width="33%" valign="top">
+                    <p>
+                        Desde: {{$fechaInicio}}
+                    </p>
+                </td>
+                <td width="33%" valign="top">
+                    <p>
+                        Hasta: {{$fechaFinal}}
+                
+                    </p>
+                </td>
+            </tr>
+        </tbody>
     </table>
-
-    <table>
-        <tr>
-            <td>
-            </td>
-
-            <td>
-            </td>
-
-            <td>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <b>Desde: </b>
-                {{ $fechaInicio }}
-            </td>
-
-            <td>
-                <b>Hasta: </b>
-                {{ $fechaFinal }}
-
-
-
-            </td>
-
-            <td>
-                <b>Unidad: </b>
-                {{ $empleadoDatos->empleadosareas->nombrearea }}
-            </td>
-        </tr>
+    <table border="1" cellspacing="0" cellpadding="0" width="100%">
+        <tbody>
+            <tr>
+                <td width="50%" valign="top">
+                    <p>
+                        Nombre y Apellidos: {{$empleadoDatos->nombres}}
+                        {{$empleadoDatos->ap_pat}}
+                        {{$empleadoDatos->ap_mat}}
+                    </p>
+                 
+                </td>
+                <td width="50%" valign="top">
+                    <p>
+                        CI: {{$empleadoDatos->ci}}
+                    </p>
+  
+                </td>
+            </tr>
+            <tr>
+                <td width="50%" valign="top">
+                    <p>
+                        Unidad: {{ $empleadoDatos->empleadosareas->nombrearea }}
+                    </p>
+                </td>
+                <td width="50%" valign="top">
+                </td>
+            </tr>
+        </tbody>
     </table>
+    <h3>
+        Retrasos de Asistencia de Personal
+    </h3>
+    <table border="0" cellspacing="0" cellpadding="0" width="100%">
+        <tbody>
+            <tr>
+                <td width="29%" valign="top">
+                <p align="center">
+                        Nombres y Apellidos
+                    </p>
+                </td>
+                <td width="28%" valign="top">
+                <p align="center">
+                        Minutos de Retraso
+                    </p>
+                </td>
+                <td width="42%" valign="top">
+                <p align="center">
+                        Descuento Según Haber Básico
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                @foreach ($data['data'] as $empleado)
+                <td width="28%" valign="top">
+                <p align="center">
+                    {{ $empleado['empleado'] }}
+                </td>
+                <td width="29%" valign="top">
+                <p align="center">
+                    {{ $empleado['total_retrasos'] }}
+                </td>
 
-    <table>
-        <tr>
-            <td>
-                <p>Nombres: </p>
-                <p> {{ $empleadoDatos->nombres }}</p>
+                <td width="42%" valign="top">
+                <p align="center">
+                    {{ $empleado['observaciones'] }}
 
-            </td>
-
-            <td>
-                <p> Apellidos:</p>
-                <p> {{ $empleadoDatos->ap_pat }} {{ $empleadoDatos->ap_mat }}</p>
-
-            </td>
-
-            <td>
-                <p>CI: </p>
-                <p> {{ $empleadoDatos->ci }}</p>
-
-            </td>
-
-        </tr>
-        <tr>
-
-
-        </tr>
+                </td>
+                @endforeach
+            </tr>
+        </tbody>
     </table>
+ 
+    
 
-    <table>
-        <tr>
-            <td>
-                <b>Nombres y Apellidos</b>
-            </td>
-            <td>
-                <b>Minutos de Retraso</b>
-            </td>
-            <td>
-                <b>Descuento Según Haber Básico</b>
-            </td>
-        </tr>
-        @foreach ($data['data'] as $empleado)
-        <tr>
-            <td>
-                <p>{{ $empleado['empleado'] }}</p>
-            </td>
-            <td>
-                <p>{{ $empleado['total_retrasos'] }}</p>
-            </td>
-            <td>
-                <p>{{ $empleado['observaciones'] }}</p>
-            </td>
-        </tr>
-        @endforeach
-    </table>
-
-
+    <script type="text/php">
+        if ( isset($pdf) ) {
+            $pdf->page_script('
+                $font = $fontMetrics->get_font("Serif", "normal");
+                $pdf->text(50, 770, "{{ date("d-m-Y H:i") }} / {{ Auth()->user()->name }}", $font, 7);
+                $pdf->text(530, 765, "Pagina $PAGE_NUM de $PAGE_COUNT", $font, 7);
+            ');
+        }
+    </script>
 </body>
 
 </html>

@@ -130,50 +130,46 @@
                 </div>
                 <div class="row font-verdana-bg">
                     <div class="col-md-6">
+                     
+                        <div class="col-md-12">
                         <div class="row">
-                            <div class="col-md-8">
-                                <label for="fecha_inicio2"><b>MAÑANA</b> </label>
+                                 <label for="fecha_inicio2"><b>TURNO MAÑANA</b> </label>
 
-                            </div>
-                        </div>
-                        <div class="row">
+                         </div>
+                            <div class="row">
 
-                            <div class="col-md-6">
-                                <div class="alert alert-warning">
+                                <div class="alert alert-success">
 
-                                    <label for="fecha_inicio2"><b>Entrada</b> </label>
-                                    <input type="time" id="fecha_inicio" name="fecha_inicio" value="{{ $horarioActivo->hora_inicio }}" class="form-control" readonly>
+                                <label for="hora_inicio" style="color: black;"><b>ENTRADA</b></label>
+                                    <input type="time" id="fecha_inicio" name="fecha_inicio" value="{{ $horarioActivo->hora_inicio }}" class="form-control form-control-sm" readonly style="background-color: white;">
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="alert alert-warning">
+                                <div class="alert alert-success">
 
-                                    <label for="fecha_inicio2"><b>Salida</b></label>
-                                    <input type="time" id="fecha_inicio" name="fecha_inicio" value="{{ $horarioActivo->hora_salida }}" class="form-control" readonly>
-                                </div>
+                                <label for="hora_inicio" style="color: black;"><b>SALIDA</b></label>
+                                <input type="time" id="fecha_salida" name="fecha_salida" value="{{ $horarioActivo->hora_salida }}" class="form-control form-control-sm" readonly style="background-color: white;">
+
+                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <label for="fecha_inicio2"><b>TARDE</b> </label>
 
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="alert alert-warning">
+                        <div class="col-md-12">
+                            <div class="row">
+                                     <label for="fecha_inicio2"><b>TURNO TARDE</b> </label>
+                             </div>
+                            <div class="row center">
 
-                                    <label for="hora_entrada"><b>Entrada</b></label>
-                                    <input type="time" id="hora_entrada" name="hora_entrada" value="{{ $horarioActivo->hora_entrada }}" class="form-control" readonly>
+                                <div class="alert alert-success">
+
+                                <label for="hora_inicio" style="color: black;"><b>ENTRADA</b></label>
+                                    <input type="time" id="hora_entrada" name="hora_entrada" value="{{ $horarioActivo->hora_entrada }}" class="form-control form-control-sm" readonly style="background-color: white;">
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="alert alert-warning">
 
-                                    <label for="hora_final"><b>Salida</b></label>
-                                    <input type="time" id="hora_final" name="hora_final" value="{{ $horarioActivo->hora_final }}" class="form-control" readonly>
+                                <div class="alert alert-success">
+
+                                <label for="hora_inicio" style="color: black;"><b>SALIDA</b></label>
+                                    <input type="time" id="hora_final" name="hora_final" value="{{ $horarioActivo->hora_final }}" class="form-control form-control-sm" readonly style="background-color: white;">
                                 </div>
                             </div>
                         </div>
@@ -201,14 +197,14 @@
                 <div class="row font-verdana-bg">
                     <div class="col-md-6">
                         <div class="alert alert-warning">
-                            <label for="hora_inicio">ENTRADA</label>
-                            <input type="time" id="hora_inicio" name="hora_inicio" value="{{ $horarioActivo->hora_inicio }}" class="form-control" readonly>
+                        <label for="hora_inicio" style="color: black;">ENTRADA</label>
+                            <input type="time" id="hora_inicio" name="hora_inicio" value="{{ $horarioActivo->hora_inicio }}" class="form-control form-control-sm" readonly style="background-color: white;">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="alert alert-warning">
-                            <label for="hora_final">SALIDA</label>
-                            <input type="time" id="hora_final" name="hora_final" value="{{ $horarioActivo->hora_final }}" class="form-control" readonly>
+                        <label for="hora_inicio" style="color: black;"><b>SALIDA</b></label>
+                            <input type="time" id="hora_final" name="hora_final" value="{{ $horarioActivo->hora_final }}" class="form-control form-control-sm" readonly style="background-color: white;">
                         </div>
                     </div>
                 </div>

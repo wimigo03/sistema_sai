@@ -48,28 +48,13 @@
 
             <div class="col-md-12">
                 <hr>
+                <div class="alert alert-info">
                 <b class="card-text">Fecha de hoy: <strong><?php echo $fechaHoy; ?></strong></b>
 
-            </div>
-            @if(Session::has('success'))
-            <div class="col-md-12">
-                <hr>
-
-                <div class="alert alert-success">
-                    {{ Session::get('success') }}
                 </div>
-                <hr>
-
-                @endif
-                @if(Session::has('error'))
-                <div class="alert alert-danger font-verdana-bg">
-                    {{ Session::get('error') }}
-                </div>
-                <hr>
-
 
             </div>
-            @endif
+
             <div class="col-md-12">
                 <div class="tab-content font-verdana">
                     <div class="tab-pane fade show active" id="tab1">
@@ -94,6 +79,22 @@
                                 <div id="infoHorario" class="alert alert-info mt-3" style="display: 100%;">
                                     <!-- Contenido de la información del horario -->
                                 </div>
+                                @if(Session::has('success'))
+
+                                <div class="alert alert-success">
+                                    {{ Session::get('success') }}
+                                </div>
+                                <hr>
+
+                                @endif
+                                @if(Session::has('error'))
+                                <div class="alert alert-danger font-verdana-bg">
+                                    {{ Session::get('error') }}
+                                </div>
+                                <hr>
+
+
+                                @endif
                             </div>
                         </div>
                     </div>

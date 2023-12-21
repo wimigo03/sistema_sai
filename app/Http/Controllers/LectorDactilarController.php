@@ -45,7 +45,7 @@ class LectorDactilarController extends Controller
 
                 ->addColumn('actions', function ($dactilar) {
                     // return '<button class="btn btn-danger btn-sm" href="' . route('descuentos.edit', $dactilar->id) . '">Eliminar</button>';
-                    return '<a class="tts:left tts-slideIn tts-custom" aria-label="Eliminar Huella Dactilar" href="#" data-toggle="modal" data-target="#confirmarEliminarModal" data-nombre="' . $dactilar->empleado->nombres . '" data-id="{{ $dactilar->id }}">
+                    return '<a class="tts:left tts-slideIn tts-custom" aria-label="Eliminar Huella Dactilar" href="#" data-toggle="modal" data-target="#confirmarEliminarModal" data-nombre="' . $dactilar->empleado->nombres . '" data-id="'. $dactilar->id .'">
                     <span class="badge badge-danger"> ELIMINAR</span>  
                 </a>
                 ';
@@ -57,9 +57,10 @@ class LectorDactilarController extends Controller
         return view('asistencias.control.index');
     }
 
-    public function destroy(HuellasDigitalesModel $dactilar)
+    public function destroy($id)
     {
         // Eliminar el horario
+        $dactilar = HuellasDigitalesModel::find($id);
         $dactilar->delete();
 
         // Redireccionar a la lista de horarios con un mensaje de éxito

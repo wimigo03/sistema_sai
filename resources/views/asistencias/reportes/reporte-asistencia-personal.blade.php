@@ -5,11 +5,17 @@
     <br>
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
+        <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
+                <a href="javascript:void(0);" onclick="goBack();" class="color-icon-1" aria-label="Ir a gestionar-c">
+                    <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
+                </a>
+
+            </span>
             <b> Reporte de Registro de Asistencia Personal </b>
         </div>
         <div class="col-md-4 text-right">
 
-            <a href="{{ route('generarExcelReporte', ['empleadoId' => $empleado_id, 'fechaInicio' => $fechaInicio, 'fechaFinal' => $fechaFinal]) }}" target="blank_">
+            <a href="{{ route('excelRegistroReporte', ['empleadoId' => $empleado_id, 'fechaInicio' => $fechaInicio, 'fechaFinal' => $fechaFinal]) }}" target="blank_">
                 <button class="btn btn-sm btn-success font-verdana " type="button">
                     &nbsp; <i class="fa-solid fa-file-excel"></i> &nbsp;Exportar Excel
                 </button>
@@ -49,6 +55,24 @@
             <hr class="hrr">
         </div>
     </div>
+    <div class="col-md-12">
+
+        <table class="font-verdana">
+            <tr>
+                <td><b>Nombres y Apellidos :</b></td>
+                <td>{{$empleadoDatos->nombres}} {{$empleadoDatos->ap_pat}} {{$empleadoDatos->ap_mat}}</td>
+            </tr>
+            <tr>
+                <td><b>Desde:</b></td>
+                <td>{{ $fechaInicio }}</td>
+            </tr>
+            <tr>
+                <td><b>Hasta:</b></td>
+                <td>{{ $fechaFinal }}</td>
+            </tr>
+        </table>
+    </div>
+
 
     <div class="row font-verdana">
 
@@ -83,7 +107,11 @@
 
 
 @section('scripts')
-
+<script>
+    function goBack() {
+        history.back(); // Utiliza la función history.back() para retroceder sin recargar la página
+    }
+</script>
 <script>
     $(document).ready(function() {
         $('#retrasos-table').DataTable({
@@ -93,7 +121,6 @@
             searching: false,
             ordering: false,
             paging: false,
-            dom: '<"top"Bf>lrtip', // Changed to false if you're not using server-side processing
 
             ajax: {
                 url: "{{route('asistenciapersonalreportes.getReporte') }}",
@@ -160,7 +187,7 @@
                 },
             ],
         });
-        
+
     });
 </script>
 @endsection

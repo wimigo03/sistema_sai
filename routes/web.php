@@ -518,6 +518,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('editar-permiso/{permiso}', 'PermisosPersonalesController@editarPermiso')->name('editar.permiso')->middleware('can:permisos_access');
     Route::put('actualizar-permiso/{id}', 'PermisosPersonalesController@actualizarPermiso')->name('update.permiso')->middleware('can:permisos_access');
     Route::get('listar-permisos/{id}', 'PermisosPersonalesController@listarPermiso')->name('listar.permiso')->middleware('can:permisos_access');
+    Route::get('permisos/destroy/{id}', 'PermisosPersonalesController@destroy')->name('permisospersonales.destroy')->middleware('can:permisos_access');
 
     //Registro de Licencias
     Route::get('licencias', 'LicenciasPersonalesController@index')->name('licenciaspersonales.index')->middleware('can:licencias_access');
@@ -538,6 +539,6 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     //lector Dactilar
    // Route::get('lectordactilar', 'LectorDactilarController@index')->name('lectordactilar.index')->middleware('can:dactilar_access');
     Route::get('lectordactilar/huellas', 'LectorDactilarController@index')->name('lectordactilar.index')->middleware('can:dactilar_access');
-    Route::get('lectordactilar/destroy/{dactilar}', 'LectorDactilarController@destroy')->name('lectordactilar.destroy')->middleware('can:dactilar_access');
+    Route::get('lectordactilar/destroy/{id}', 'LectorDactilarController@destroy')->name('lectordactilar.destroy')->middleware('can:dactilar_access');
 
 });

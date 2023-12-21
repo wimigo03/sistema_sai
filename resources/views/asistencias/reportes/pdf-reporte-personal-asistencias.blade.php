@@ -25,14 +25,14 @@
         <img src="{{ asset('logos/header.jpg') }}" width="700px" height="70px" />
     </div>
     <h3>
-        Reporte de Registros de Asistencias
+        Reporte de Registros de Asistencias Personal
     </h3>
     <table border="1" cellspacing="0" cellpadding="0" width="100%">
         <tbody>
             <tr>
                 <td width="34%" valign="top">
                     <p>
-                        Reporte Personal de Registros de Asistencia:
+                        Reporte de Registros de Asistencia:
                     </p>
                 </td>
                 <td width="33%" valign="top">

@@ -226,8 +226,7 @@
             <hr class="hr">
             <div class="row font-verdana">
 
-                <hr class="hr">
-
+ 
                 <div class=" col-md-4  mb-2 ">
                     <div class="card bg-secondary text-white">
                         <div class="card-body">
@@ -235,7 +234,7 @@
                                 <div class="float-left mini-stat-img mr-4">
                                     <span class="fa fa-users" style="font-size: 30px"></span>
                                 </div>
-                                <h6 class="font-16 text-uppercase mt-0 text-white-50">Total <br>EXP. INDUCCIÓN</h6>
+                                <h6 class="font-16 text-uppercase mt-0 text-white-50">Total <br>EXP. SIPPASE</h6>
                             </div>
                             <span class="fa fa-user float-left " style="font-size: 60px; color:cadetblue "></span>
                             <div class="text-right">
@@ -265,7 +264,7 @@
                                 <div class="float-left mini-stat-img mr-4">
                                     <span class="fa fa-users" style="font-size: 30px"></span>
                                 </div>
-                                <h6 class="font-16 text-uppercase mt-0 text-white-50">Total <br>EXP. INDUCCIÓN</h6>
+                                <h6 class="font-16 text-uppercase mt-0 text-white-50">Total <br>EXP. REJAP</h6>
                             </div>
                             <span class="fa fa-user float-left " style="font-size: 60px; color:cadetblue "></span>
                             <div class="text-right">
@@ -311,6 +310,7 @@
             ]
         });
     });
+    
 </script>
 @endsection
 @endsection

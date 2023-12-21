@@ -114,10 +114,14 @@ class AusenciasController extends Controller
         $empleado = EmpleadosModel::select('idemp', 'nombres', 'ap_pat', 'ap_mat')
             ->where('idemp', $id)
             ->first();
-
-        $horario =    HorarioModel::whereHas('registrosAsistencia', function ($query) use ($fecha) {
-            $query->where('fecha', $fecha);
-        })->select('id', 'tipo', 'Nombre', 'hora_inicio', 'hora_final', 'hora_entrada', 'hora_salida')->first();
+        // Si la fecha es anterior a hoy
+        if (Carbon::parse($fecha)->isAfter(Carbon::now())) {
+            $horario = $empleado->horarios()->where('estado', 1)->first();           
+        } else {
+            $horario = HorarioModel::whereHas('registrosAsistencia', function ($query) use ($fecha) {
+                $query->where('fecha', $fecha);
+            })->select('id', 'tipo', 'Nombre', 'hora_inicio', 'hora_final', 'hora_entrada', 'hora_salida')->first();
+        }
 
 
         $vistaselectedMonth = Carbon::parse($fecha)->format('Y-m');

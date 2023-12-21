@@ -63,6 +63,25 @@
     </div>
 
 </div>
+<div class="modal" id="confirmarEliminarModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content  font-verdana-bg">
+            <div class="modal-header ">
+                <h5 class="modal-title">CONFIRMAR ELIMINACION</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body  font-verdana-bg">
+                <b>¿Estás seguro de que deseas eliminar la huella dactilar de <span id="nombreEmpleado"></span>?</b>
+            </div>
+            <div class="modal-footer  font-verdana-bg">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCELAR</button>
+                <a id="confirmarEliminarBtn" class="btn btn-danger" href="#">ELIMINAR</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 @section('scripts')
@@ -109,6 +128,17 @@
             }
         });
     });
+    $('#confirmarEliminarModal').on('show.bs.modal', function(event) {
+            var enlace = $(event.relatedTarget);
+            var nombreEmpleado = enlace.data('nombre');
+            var idDactilar = enlace.data('id');
+
+            // Establecer el nombre del empleado en el modal
+            $('#nombreEmpleado').text(nombreEmpleado);
+
+            // Configurar el enlace de confirmar eliminación
+            $('#confirmarEliminarBtn').attr('href', "{{ route('permisospersonales.destroy', ':id') }}".replace(':id', idDactilar));
+        });
 
     var selectedPermisoId = $('#permiso').val();
     $('#permiso').on('change', function() {

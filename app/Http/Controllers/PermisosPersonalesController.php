@@ -162,7 +162,9 @@ class PermisosPersonalesController extends Controller
             ->addColumn('opciones', function ($permiso) {
                 return '<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Registro" href="' . route('editar.permiso', $permiso->id) . '">
                 <i class="fa-solid fa-2xl fa-square-pen text-warning"></i>
-            </a>';
+            </a>&nbsp;&nbsp;'
+             . '<a class="tts:left tts-slideIn tts-custom" aria-label="Eliminar Huella Dactilar" href="#" data-toggle="modal" data-target="#confirmarEliminarModal" data-nombre="' . $permiso->empleado->nombres .' '.$permiso->empleado->ap_pat.' '.$permiso->empleado->ap_mat. '" data-id="'. $permiso->id .'"><span class="badge badge-danger"> ELIMINAR</span>  </a>'
+             ;
             })
             ->rawColumns(['horas_utilizadas', 'opciones'])
             ->make(true);
@@ -394,7 +396,7 @@ class PermisosPersonalesController extends Controller
 
                         $limite  = $horasPermitidas - $totalHorasUtilizadas;
                         $permiso = EmpleadoPermisoModel::find($id);
-                        $limite2 =  $limite +( $permiso->horas_utilizadas);
+                        $limite2 =  $limite + ($permiso->horas_utilizadas);
                         if ($limite2 >=  $horasSolicitadas) {
 
                             $permiso->asunto = $request->input('asunto');
@@ -409,9 +411,9 @@ class PermisosPersonalesController extends Controller
                             // Guarda el registro en la base de datos
                             $permiso->save();
                             // Redirecciona a la vista de éxito o a donde desees
-                            return redirect()->route('permisospersonales.index')->with('success', $permiso . 'Permiso modificado exitosamente.');
+                            return redirect()->route('permisospersonales.index')->with('success',  'Permiso modificado exitosamente.');
                         } else {
-                            return redirect()->back()->with('error', 'Limite :' .$limite. '(mins) Minutos Solicitados'.$horasSolicitadas.' No se pudo crear el permiso: ' . $totalHorasUtilizadas . '(mins) Limite  Excedido a' . '(mins)');
+                            return redirect()->back()->with('error', 'Limite :' . $limite . '(mins) Minutos Solicitados' . $horasSolicitadas . ' No se pudo crear el permiso: ' . $totalHorasUtilizadas . '(mins) Limite  Excedido a' . '(mins)');
                         }
                     }
                 } else {
@@ -468,10 +470,15 @@ class PermisosPersonalesController extends Controller
      * @param  \App\Models\PermisosPersonalesModel  $permisosPersonalesModel
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PermisoModel $permisosPersonalesModel)
+    public function destroy($id)
     {
-        //
-    }
+       // dd($id);
+        $permiso = EmpleadoPermisoModel::find($id);
+        $permiso->delete();
+
+        // Redireccionar a la lista de horarios con un mensaje de éxito
+        return redirect()->route('permisospersonales.index')->with('success', 'El la huella Dactilar ha sido eliminada correctamente.');
+       }
 
     function convertirHorasMinutosATexto($horas_permitidas)
     {

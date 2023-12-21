@@ -30,7 +30,7 @@
             <tr>
                 <td width="34%" valign="top">
                     <p>
-                        Reporte Personal de Registros de Asistencia:
+                        Reporte Personal <br>de Registros de Asistencia:
                     </p>
                 </td>
                 <td width="33%" valign="top">
@@ -52,7 +52,7 @@
             <tr>
                 <td width="50%" valign="top">
                     <p>
-                        Nombre y Apellidos: {{$empleadoDatos->nombres}}
+                        Nombre y Apellidos:<br> {{$empleadoDatos->nombres}}
                         {{$empleadoDatos->ap_pat}}
                         {{$empleadoDatos->ap_mat}}
                     </p>
@@ -60,7 +60,7 @@
                 </td>
                 <td width="50%" valign="top">
                     <p>
-                        CI: {{$empleadoDatos->ci}}
+                        CI: <br>{{$empleadoDatos->ci}}
                     </p>
 
                 </td>
@@ -68,7 +68,7 @@
             <tr>
                 <td width="50%" valign="top">
                     <p>
-                        Unidad/Area: {{ $empleadoDatos->empleadosareas->nombrearea }}
+                        Unidad/Area:<br> {{ $empleadoDatos->empleadosareas->nombrearea }}
                     </p>
                 </td>
                 <td width="50%" valign="top">
@@ -78,7 +78,8 @@
     </table>
 
     <h3>
-        Asistencias Registradas
+        Asistencias
+        Registradas
     </h3>
 
     <table border="1" cellspacing="0" cellpadding="0" width="100%">
@@ -91,7 +92,7 @@
                 </td>
                 <td width="13%" nowrap="">
                     <p align="center">
-                        <strong>Nombres Apellidos</strong>
+                        <strong>Nombres y Apellidos</strong>
                     </p>
                 </td>
                 <td width="12%" nowrap="">

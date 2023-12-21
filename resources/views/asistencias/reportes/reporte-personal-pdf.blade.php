@@ -26,14 +26,14 @@
     </div>
 
     <h3>
-        Reporte de Retrasos Personal
+        Reporte de Retrasos de Asistencia Personal
     </h3>
     <table border="1" cellspacing="0" cellpadding="0" width="100%">
         <tbody>
             <tr>
                 <td width="34%" valign="top">
                     <p>
-                        Reporte de Retrasos Personal:
+                        Retrasos de Asistencia Acumulados :
                     </p>
                 </td>
                 <td width="33%" valign="top">
@@ -80,7 +80,7 @@
         </tbody>
     </table>
     <h3>
-        Retrasos de Personal
+        Retrasos de Asistencia de Personal
     </h3>
     <table border="0" cellspacing="0" cellpadding="0" width="100%">
         <tbody>
