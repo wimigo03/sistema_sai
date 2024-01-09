@@ -31,5 +31,20 @@
 }
 
 .input-sm {
-  height: 28px;
+	height: 28px;
+}
+
+.fa-asterisk {
+	color: red;
+	opacity: 0.8;
+}
+
+label {
+	font-weight: 500;
+	opacity: 1.0;
+}
+
+.label-show {
+	font-weight: 700;
+	opacity: 1.0;
 }

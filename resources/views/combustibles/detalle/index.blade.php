@@ -244,8 +244,6 @@
             }else{
                 return false;
             }
-        }
-
- 
+        } 
     </script>
 @endsection

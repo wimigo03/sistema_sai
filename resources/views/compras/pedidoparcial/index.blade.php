@@ -13,7 +13,23 @@
 @section('scripts')
 <script>
     $(document).ready(function() {
-       
+        $('#estado').select2({
+            placeholder: "--Estado--"
+        });
+        $('#area_id').select2({
+            placeholder: "--Area--"
+        });
+        $('#programa_id').select2({
+            placeholder: "--Programa--"
+        });
+        $('#programatica_id').select2({
+            placeholder: "--Categoria Programatica--"
+        });
+        $("#fecha").datepicker({
+            inline: false, 
+            dateFormat: "dd/mm/yyyy",
+            autoClose: true
+        });
     });
 
     function create(){

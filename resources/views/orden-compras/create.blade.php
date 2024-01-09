@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="/css/font-verdana.css" rel="stylesheet">
 <div class="card card-custom">
     <div class="card-header font-verdana-bgt">
-        <b>FORMULARIO DE SOLICITUD DE COMPRA - {{ $dea->descripcion }}</b>
+        <b>FORMULARIO DE ORDEN DE COMPRA - {{ $dea->descripcion }}</b>
     </div>
     <div class="card-body">
         <div class="form-group row">
@@ -13,14 +13,14 @@
         </div>
         <form action="#" method="post" id="form">
             @csrf
-            @include('compras.pedidoparcial.partials.form-create')
+            @include('orden-compras.partials.form-create')
             <div class="row font-verdana-bg">
                 <div class="col-md-12 font-verdana-bg text-center">
                     <br>
                     <span class="text-dark"><b>DETALLE DE LA COMPRA</b></span>
                 </div>
             </div>
-            <div class="card card-body bg-light">
+            {{--<div class="card card-body bg-light">
                 @include('compras.pedidoparcial.partials.form-create-detalle')
                 <div class="form-group row">
                     <div class="col-md-12 text-right">
@@ -33,7 +33,7 @@
                         <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
                     </div>
                 </div>
-            </div>
+            </div>--}}
         </form>
     </div>
 </div>
@@ -41,7 +41,6 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            $("#total_detalle_compra").hide();
             $("#btn-registro").hide();
             $('.select2').select2({
                 placeholder: "--Seleccionar--"
@@ -58,86 +57,6 @@
             $('#modal-alert').modal({keyboard: false});
         }
 
-        function agregarMaterial(){
-            if(!validarHeader()){
-                return false;
-            }
-            if(!validarProductos()){
-                return false;
-            }
-            if(!validarRepetidos()){
-                return false;
-            }
-            cargarProductos();
-        }
-
-        function cargarProductos(){
-            var producto_id = $("#producto >option:selected").val();
-            var producto_texto = $("#producto option:selected").text();
-            var quitar = /[()]/g;
-            var string_texto = producto_texto.replace(quitar, '');
-            string_texto = string_texto.split('_');
-            var producto = string_texto[1];
-            var medida = string_texto[2];
-            var precio_bs = string_texto[3];
-            var precio = precio_bs.split('.')
-            var cantidad = $("#cantidad").val();
-            cantidad = parseFloat(cantidad).toFixed(2);
-            precio = parseFloat(precio[1]).toFixed(2);
-            var subtotal = cantidad * precio;
-            subtotal = subtotal.toFixed(2)
-            var fila = "<tr class='font-verdana-sm'>"+ 
-                            "<td class='text-justify p-1'>"+
-                                "<input type='hidden' class='producto_id' name='producto_id[]' value='" + producto_id + "'>" + producto_id +
-                            "</td>"+
-                            "<td class='text-justify p-1'>"+
-                                producto +
-                            "</td>"+
-                            "<td class='text-center p-1'>"+
-                                medida +
-                            "</td>"+
-                            "<td class='text-right p-1'>"+
-                                "<input type='hidden' name='precio[]' value='" + precio + "'>" + precio +
-                            "</td>"+
-                            "<td class='text-right p-1'>"+
-                                "<input type='hidden' name='cantidad[]' value='" + cantidad + "'>" + cantidad +
-                            "</td>"+
-                            "<td class='text-right p-1'>"+
-                                "<input type='hidden' name='subtotal[]' value='" + subtotal + "'>" + subtotal +
-                            "</td>"+
-                            "<td class='text-center p-1'>"+
-                                "<button type='button' class='btn btn-xs btn-danger' onclick='eliminarItem(this);'>" + 
-                                      "<i class='fa-solid fa-trash'></i>" +  
-                                 "</button>" +
-                            "</td>"
-                        "</tr>";
-
-            $("#detalle_tabla").append(fila); 
-            $('#producto').val('').trigger('change');
-            document.getElementById('cantidad').value = '';
-            $("#btn-registro").show();
-            sumaTotal();
-        }
-
-        function eliminarItem(thiss){                  
-            var tr = $(thiss).parents("tr:eq(0)");
-            tr.remove();
-            sumaTotal();
-        }
-
-        function sumaTotal(){
-            var filas = document.querySelectorAll("#detalle_tabla tbody tr");
-            var parcial = 0;
-            filas.forEach(function(e) {
-                var columnas = e.querySelectorAll("td");
-                var subtotal = parseFloat(columnas[5].textContent);
-                parcial += subtotal;
-            });
-            var total = document.getElementById("span_total_con_solicitud");
-            total.textContent = parcial.toFixed(2);
-            $("#total_detalle_compra").show();
-        }
-
         function procesar() {
             $('#modal_confirmacion').modal({
                 keyboard: false
@@ -146,9 +65,6 @@
 
         function confirmar(){
             if(!validarHeader()){
-                return false;
-            }
-            if(!validarRepetidos()){
                 return false;
             }
             var url = "{{ route('compras.pedidoparcial.store') }}";
@@ -219,38 +135,6 @@
             } else {
                     return false;
             }
-        }
-
-        function validarProductos(){
-            if($("#producto >option:selected").val() == ""){
-                alerta("El campo de seleccion <b>[Producto]</b> no esta seleccionado...");
-                return false;
-            }
-            if($("#cantidad").val() == ""){
-                alerta("El campo <b>[Cantidad]</b> esta vacio...");
-                return false;
-            }
-            if($("#cantidad").val() <= 0){
-                alerta("El campo <b>[Cantidad]</b> debe ser mayor a 0...");
-                return false;
-            }
-            return true;
-        }
-
-        function validarRepetidos(){
-            var productos = $("#detalle_tabla tbody tr");
-            if(productos.length>0){
-                var producto = $("#producto >option:selected").val(); 
-                for(var i=0;i<productos.length;i++){
-                    var tr = productos[i];
-                    var producto_id = $(tr).find(".producto_id").val();
-                    if(producto == producto_id){
-                        alerta("El registro ya se encuentra en la tabla actual...");
-                        return false;
-                    }
-                }
-            }
-            return true;
         }
 
         function valideNumber(evt) {

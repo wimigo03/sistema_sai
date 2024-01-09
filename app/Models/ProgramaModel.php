@@ -13,6 +13,7 @@ class ProgramaModel extends Model
 
     protected $fillable = [
         'nombreprograma',
-        'estadoprograma'
+        'estadoprograma',
+        'alias'
     ];
 }

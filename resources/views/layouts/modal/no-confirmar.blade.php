@@ -1,8 +1,8 @@
-<div class="modal fade font-verdana-bg" id="modal_confirmacion" tabindex="-1" role="dialog" aria-labelledby="modal_confirmacion_label" aria-hidden="true">
+<div class="modal fade font-verdana-bg" id="modal_no_confirmacion" tabindex="-1" role="dialog" aria-labelledby="modal_confirmacion_label" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modal_confirmacion_label">
+        <h5 class="modal-title" id="modal_no_confirmacion_label">
           <i class="fa fa-lg fa-exclamation-triangle text-warning" aria-hidden="true"></i>&nbsp;AVISO
         </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -10,11 +10,11 @@
         </button>
       </div>
       <div class="modal-body">
-        Estas por <span class="text-success">[Confirmar]</span> este proceso. ¿Esta seguro que desea continuar...?
+        Estas por <span class="text-danger">[Anular]</span> este proceso. ¿Esta seguro que desea continuar...?
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary font-verdana" type="button" onclick="confirmar();">
-          <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>&nbsp;Confirmar
+        <button class="btn btn-warning font-verdana" type="button" onclick="rechazar();">
+          <i class="fa-solid fa-xmark"></i>&nbsp;Confirmar
         </button>
         <button class="btn btn-secondary font-verdana text-white" type="button" data-dismiss="modal">
             <i class="fa-solid fa-xmark"></i>&nbsp;Cancelar

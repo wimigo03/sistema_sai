@@ -133,6 +133,15 @@
                                         </a>
                                     </li>
                                 @endcan
+                                @can('orden.compras.index')
+                                    <li>
+                                        <a href="{{ route('orden-compras.index') }}">
+                                            <span class="nav-label mr-4">
+                                                <i class="fa-solid fa-credit-card"></i>&nbsp;Ordenes de Compra
+                                            </span>
+                                        </a>
+                                    </li>
+                                @endcan
                                 <li>
                                     <a href="{{ route('compras.pedido.index') }}">
                                         &nbsp; &nbsp; &nbsp;
