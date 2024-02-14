@@ -11,6 +11,7 @@ use Yajra\DataTables\DataTables;
 
 use App\Models\EmpleadosModel;
 use App\Models\HorarioModel;
+use App\Models\LectorDactilarModel;
 use App\Models\RegistroAsistencia;
 use App\Models\RetrasosEmpleado;
 use App\Models\RetrasosModel;
@@ -39,7 +40,7 @@ class RegistroAsistenciaController extends Controller
             $filtro = Carbon::parse($filtro);
 
             $mesAnio = $filtro->format('Y-m');
-            
+
             $data = RegistroAsistencia::with('empleado', 'horario')
                 ->where('fecha', 'like', $mesAnio . '%')
                 ->get();
@@ -55,7 +56,7 @@ class RegistroAsistenciaController extends Controller
                 $data = $data->where('fecha', $filtro);
             }
 
-             return DataTables::of($data)
+            return DataTables::of($data)
                 ->addColumn('fecha', function ($row) {
                     return $row->fecha ? Carbon::parse($row->fecha)->format('Y-m-d') : '-';
 
@@ -144,13 +145,21 @@ class RegistroAsistenciaController extends Controller
         // Validar los datos del formulario
 
         $data = $request->json()->all();
+        $lid = isset($data['lector']) ? strval($data['lector']) : null;
+        $fid = $data['fid'] ?? null;
         $hora = $data['hora'] ?? null;
         $id = $data['id'] ?? null;
         $pin = $data['pin'] ?? null;
         $fecha = $data['fecha'] ?? null;
 
+
         try {
 
+
+            $response = $this->verificarLector($lid);
+            if ($response) {
+                return $response;
+            }
             //verificar dia
             $response = $this->verificarDomingo($fecha);
             if ($response) {
@@ -158,8 +167,19 @@ class RegistroAsistenciaController extends Controller
             }
 
 
-            if (!$pin) {
-                $emp = $this->buscarPersonalID($id);
+            if ($id && $fid) {
+                $areasExcluidas = [33, 34];
+
+                $emp = EmpleadosModel::whereHas('huellasdigitales', function ($query) use ($fid, $id) {
+                    $query
+                        ->where('fid', $fid)
+                        ->where('empleado_id', $id);
+                })
+                    ->whereNotIn('idarea', $areasExcluidas)
+                    ->first();
+                if (!$emp) {
+                    return response()->json(['update' => 'INTENTE DE NUEVO']);
+                }
             } else if (!$id) {
                 $emp = $this->buscarPersonalPIN($pin);
             }
@@ -1029,6 +1049,18 @@ class RegistroAsistenciaController extends Controller
             return response()->json(['error' => 'DOMINGO. DÍA NO LABORAL.']);
         }
     }
+
+    public function verificarLector($lid)
+    {
+        $serial_lector = LectorDactilarModel::where('serial_lector', $lid)->where('estado', 1)->first();
+
+
+        if ($serial_lector==null) {
+            return response()->json(['error' => 'DISPOSITIVO INACTIVO']);
+        }
+    }
+
+
     public function buscarPersonalPIN($pin)
     {
 
@@ -1037,18 +1069,6 @@ class RegistroAsistenciaController extends Controller
             ->whereNotIn('idarea', $areasExcluidas)
 
             ->first();
-        return $emp;
-    }
-
-
-    public function buscarPersonalID($id)
-    {
-
-        $areasExcluidas = [33, 34];
-        $emp = EmpleadosModel::where('idemp', $id)
-            ->whereNotIn('idarea', $areasExcluidas)
-            ->first();
-
         return $emp;
     }
 }

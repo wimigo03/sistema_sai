@@ -3,7 +3,7 @@
 @section('content')
 <div class="container-xl">
     <br>
-    <div class="row font-verdana-bg">
+    <div class="row font-verdana-sm">
         <div class="col-md-8 titulo">
             <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
                 <a href="{{url()->previous()}}" class="color-icon-1">
@@ -12,13 +12,13 @@
             </span>
             <b> Lista de Retrasos </b>
         </div>
-        <div class="col-md-4 text-right">
+        <div class="col-md-4 text-right titulo">
             <div class="btn-group">
-                <select id="filtro" aria-label="Seleciona los registros" class="form-control">
-                    <option value="todos" {{ $filtro == 'todos' ? 'selected' : '' }}>Todos</option>
-                    <option value="actual" {{ $filtro == 'actual' ? 'selected' : '' }}>Hoy</option>
-                    <option value="mensual" {{ $filtro == 'mensual' ? 'selected' : '' }}>Mensual</option>
-                </select>
+            <b> Fecha: </b>
+
+
+                <input type="month" id="filtro" name="fecha_final4" value="{{ $fechaHoy }}" class="form-control form-control-sm" required>
+
             </div>
 
             <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
@@ -122,7 +122,7 @@
         }).DataTable();
         $('#filtro').on('change', function() {
             $('#retrasos-table').DataTable().ajax.reload();
-            
+
         });
     });
 </script>

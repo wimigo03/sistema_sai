@@ -80,7 +80,8 @@
                                     <!-- Resaltar los horarios con estado 1 -->
                                     <strong>
                                         @endif
-                                        Mañana: {{ $horarioCompleto->hora_inicio ?? '-' }} - {{ $horarioCompleto->hora_salida ?? ' - ' }} - Tarde:{{ $horarioCompleto->hora_entrada ?? '-' }} - {{ $horarioCompleto->hora_final ?? '-' }}
+                                        {{ $horarioCompleto->hora_inicio ?? '-' }} - {{ $horarioCompleto->hora_salida ?? ' - ' }} -  {{ $horarioCompleto->hora_entrada ?? '-' }} - {{ $horarioCompleto->hora_final ?? '-' }}                                        <strong>    {{ $horarioCompleto->Nombre ?? '-' }}</strong>
+
                                         @if($horarioCompleto->estado == 1)
                                         <!-- Cerrar la etiqueta strong -->
                                     </strong>

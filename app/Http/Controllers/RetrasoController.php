@@ -14,19 +14,25 @@ class RetrasoController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $filtro = $request->input('filtro', 'actual');
+        $fechaHoy = Carbon::now()->format('Y-m');
 
-            $data = RegistroAsistencia::with('empleado')->where('minutos_retraso', '>', 0);
+        if ($request->ajax()) {
+        
+            $filtro = $request->input('filtro', 'fechaHoy');
+            $filtro = Carbon::parse($filtro);
+
+            $mesAnio = $filtro->format('Y-m');
+            
+            $data = RegistroAsistencia::with('empleado')->where('minutos_retraso', '>', 0)
+            ->where('fecha', 'like', $mesAnio . '%')
+            ;
+            
+            $fechaHoy = Carbon::now()->toDateString();
+
+
+            // Aplicar el filtro de fecha según el valor seleccionado
             $filtro = $request->input('filtro');
-            if ($filtro == 'actual') {
-                $data = $data->where('fecha', Carbon::today()->format('Y-m-d'));
-            } elseif ($filtro == 'mensual') {
-                $data = $data->where(function ($query) {
-                    $query->whereMonth('fecha', Carbon::now()->month);
-                });
-            }
-            $data = $data->get();
+            $filtro = Carbon::parse($filtro)->format('Y-m-d');
 
             return DataTables::of($data)
 
@@ -48,6 +54,6 @@ class RetrasoController extends Controller
         }
         $filtro = $request->input('filtro', 'actual');
 
-        return view('asistencias.retrasos.index', compact('filtro'));
+        return view('asistencias.retrasos.index', compact('filtro','fechaHoy'));
     }
 }

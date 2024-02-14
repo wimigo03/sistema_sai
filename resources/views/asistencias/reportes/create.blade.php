@@ -76,6 +76,8 @@
     </div>
     <div class="tab-content font-verdana">
         <div class="tab-pane fade show active" id="tab1">
+        <hr class="hr">
+
             <div class="col-md-8 titulo">
                 <b>Reporte Personal</b>
             </div>

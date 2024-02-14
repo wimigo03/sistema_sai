@@ -8,7 +8,7 @@
 
         </div>
         <div class="col-md-4 text-right titulo">
-        <b>FECHA:</b>
+            <b>FECHA:</b>
 
             <input type="date" id="filtro" name="fecha_final4" value="{{ $fechaHoy }}" class="form-control-sm" required>
             <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">

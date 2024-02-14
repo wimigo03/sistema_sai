@@ -426,6 +426,16 @@
                         @endcan
                         @can('horario_access')
                         <li>
+                            <a href="{{ route('lector.index') }}">
+                            &nbsp; &nbsp;
+                                <span class="nav-label mr-4">Dispositivos Dactilares</span>
+
+                            </a>
+
+                        </li>
+                        @endcan
+                        @can('horario_access')
+                        <li>
                             <a href="{{ route('lectordactilar.index') }}">
                             &nbsp; &nbsp;
                                 <span class="nav-label mr-4">Huellas Dactilares</span>

@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
-            <b>Lista General de Huellas Dactilares Registradas</b>
+            <b>Lista General de Dispositivos Dactilares Registradas</b>
         </div>
         <div class="col-md-4 text-right">
             <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
@@ -51,12 +51,13 @@
                     <tr>
                         <th>ID</th>
 
-                        <th>FID</th>
-                        <th>Nombres y Apellidos</th>
-                        <th class="text-center p-1">Agregado por Usuario </th>
+
+                        <th>Nombres de Usuario</th>
+                        <th class="text-center p-1">Dispositivo</th>
                         <th class="text-center p-1">Fecha</th>
                         <th class="text-center p-1">Hace</th>
-                        <th class="text-center p-1">Acciones</th>
+                        <th class="text-center p-1">Estado</th>
+
                     </tr>
                 </thead>
             </table>
@@ -73,17 +74,17 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content  font-verdana-bg">
             <div class="modal-header ">
-                <h5 class="modal-title">CONFIRMAR ELIMINACION</h5>
+                <h5 class="modal-title">Confirmar Cambio de Estado de Dispositivo</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body  font-verdana-bg">
-                <b>¿Estás seguro de que deseas eliminar la huella dactilar de <span id="nombreEmpleado"></span>?</b>
+                <b>¿Estás seguro de que deseas hacer cambios al Dispositivo dactilar de <span id="nombreEmpleado"></span>?</b>
             </div>
             <div class="modal-footer  font-verdana-bg">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCELAR</button>
-                <a id="confirmarEliminarBtn" class="btn btn-danger" href="#">ELIMINAR</a>
+                <a id="confirmarEliminarBtn" class="btn btn-danger" href="#">DESACTIVAR</a>
             </div>
         </div>
     </div>
@@ -118,33 +119,27 @@
                 infoEmpty: "<span class='font-verdana'>Ningun registro encontrado</span>",
                 infoFiltered: "<span class='font-verdana'>(filtrados de un total de _MAX_ registros)</span>"
             },
-            ajax: "{{ route('lectordactilar.index') }}",
+            ajax: "{{ route('lector.index') }}",
             orderFixed: [0, 'asc'],
             //    dataSrc: 'nombres'},
             columns: [{
-                    data: 'empleado.idemp',
+                    data: 'id',
                     name: 'id',
                     className: 'text-center p-1 ',
 
                 },
                 {
-                    data: 'fid',
-                    name: 'fid',
+                    data: 'model_lector',
+                    name: 'model_lector',
                     className: 'text-center p-1 ',
 
                 },
                 {
-                    data: 'nombres',
-                    name: 'nombres',
+                    data: 'descrip',
+                    name: 'descrip',
                     orderable: false,
 
                     className: 'text-left p-1 ',
-
-                },
-                {
-                    data: 'usuario_creac',
-                    name: 'usuario_creac',
-                    className: 'text-center p-1 ',
 
                 },
                 {
@@ -159,6 +154,7 @@
                     className: 'text-center p-1 ',
 
                 },
+
                 {
                     data: 'actions',
                     name: 'actions',
@@ -183,12 +179,21 @@
             var enlace = $(event.relatedTarget);
             var nombreEmpleado = enlace.data('nombre');
             var idDactilar = enlace.data('id');
+            var estadoDactilar = enlace.data('estado');
 
             // Establecer el nombre del empleado en el modal
             $('#nombreEmpleado').text(nombreEmpleado);
 
-            // Configurar el enlace de confirmar eliminación
-            $('#confirmarEliminarBtn').attr('href', "{{ route('lectordactilar.destroy', ':id') }}".replace(':id', idDactilar));
+            var btn = $('#confirmarEliminarBtn');
+            var btnText = estadoDactilar == 1 ? "DESACTIVAR" : "ACTIVAR";
+            var btnColor = estadoDactilar == 1 ? "btn-danger" : "btn-success";
+
+            btn.text(btnText);
+            btn.removeClass("btn-danger btn-success").addClass(btnColor);
+
+            btn.attr('href', "{{ route('dispositivo.updateEstado', ':id') }}".replace(':id', idDactilar));
+
+
         });
     });
 </script>

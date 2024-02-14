@@ -154,7 +154,7 @@
                 {
                     data: 'horario',
                     name: 'horario',
-                    class: 'text-justify p-1 font-verdana-sm'
+                    class: 'text-center p-1 font-verdana-sm'
                 },
 
                 {
@@ -162,7 +162,7 @@
                     name: 'actions1',
                     orderable: false,
                     searchable: false,
-                    class: 'text-justify p-1 font-verdana-sm'
+                    class: 'text-center p-1 font-verdana-sm'
                 },
 
                 {
@@ -170,14 +170,14 @@
                     name: 'actions2',
                     orderable: false,
                     searchable: false,
-                    class: 'text-justify p-1 font-verdana-sm'
+                    class: 'text-center p-1 font-verdana-sm'
                 },
                 {
                     data: 'actions3',
                     name: 'actions3',
                     orderable: false,
                     searchable: false,
-                    class: 'text-justify p-1 font-verdana-sm'
+                    class: 'text-center p-1 font-verdana-sm'
                 }
             ],
 
@@ -243,7 +243,7 @@
                                 name: 'actions1',
                                 orderable: false,
                                 searchable: false,
-                                class: 'text-justify p-1 font-verdana-sm'
+                                class: 'text-center p-1 font-verdana-sm'
                             },
 
                             {
@@ -251,14 +251,14 @@
                                 name: 'actions2',
                                 orderable: false,
                                 searchable: false,
-                                class: 'text-justify p-1 font-verdana-sm'
+                                class: 'text-center p-1 font-verdana-sm'
                             },
                             {
                                 data: 'actions3',
                                 name: 'actions3',
                                 orderable: false,
                                 searchable: false,
-                                class: 'text-justify p-1 font-verdana-sm'
+                                class: 'text-center p-1 font-verdana-sm'
                             }
                         ]
 
