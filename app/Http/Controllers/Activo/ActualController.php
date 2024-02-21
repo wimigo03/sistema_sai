@@ -25,9 +25,48 @@ class ActualController extends Controller
 {
     public function index()
     {
-        return view('activo.gestionactivo.index', [
-            'unidad' => UnidadadminModel::where('estadouni', 1)->first(),
-        ]);
+        $unidad = UnidadadminModel::where('estadouni', 1)->first();
+        $activos = ActualModel::orderBy('id', 'desc')
+            ->with([
+                'codconts',
+                'areas',
+                'empleados',
+                'empleados.file'
+            ])
+            ->paginate(10);
+            foreach ($activos as $activo) {
+                $activo->load(['auxiliars' => function ($query) use ($activo) {
+                    $query->where('codcont', $activo->codcont)
+                          ->where('codaux', $activo->codaux);
+                }]);
+            }
+        return view('activo.gestionactivo.index', compact('unidad', 'activos'));
+    }
+
+    public function search(Request $request)
+    {
+        $unidad = UnidadadminModel::where('estadouni', 1)->first();
+        $activos = ActualModel::query()
+            ->with([
+                'codconts',
+                'areas',
+                'empleados',
+                'empleados.file'
+            ])
+            ->byCi($request->ci)
+            ->byCodigo($request->codigo)
+            ->byEstado($request->estado)
+            ->byNombre(strtoupper($request->nombre))
+            ->byApPaterno(strtoupper($request->ap_pat))
+            ->byApMaterno(strtoupper($request->ap_mat))
+            ->byGrupo(strtoupper($request->grupo))
+            ->byOficina(strtoupper($request->oficina))
+            ->byCargo(strtoupper($request->cargo))
+            ->orderBy('id', 'desc')
+            ->paginate(10);
+
+            $activos->appends($request->except('page'));
+        return view('activo.gestionactivo.index', compact('activos', 'unidad'));
     }
 
     public function listado()
@@ -152,6 +191,7 @@ class ActualController extends Controller
     public function getCargo(Request $request)
     {
         $id = $request->input('emp_id');
+        $empleado = EmpleadosModel::find($id);
         $file = DB::table('empleados')->where('idemp', $id)->select('idfile')->first();
 
         $files = DB::table('file')->where('idfile', $file->idfile)->get();
@@ -159,11 +199,12 @@ class ActualController extends Controller
             ['idemp', '=', $id]
         ])->get();
         return response()->json([
+            'empleado' => $empleado,
             'files' => $files,
             'activos' => $activos
         ]);
     }
-
+    
     public function store(ActualStoreRequest $request)
     {
         DB::beginTransaction();

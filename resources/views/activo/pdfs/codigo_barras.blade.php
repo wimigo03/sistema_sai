@@ -35,7 +35,7 @@
             <tr>
                 <td colspan="2" style="padding: 7px 0; text-align: center;">
                     <div style="display: inline-block;">
-                        {!! DNS1D::getBarcodeHTML('' . $activo->codigo . '', 'C128', 1.9, 60) !!}
+                        {!! DNS1D::getBarcodeHTML('' . $activo->codigo . '', 'C128', 2.3, 60) !!}
                     </div>
                 </td>
             </tr>

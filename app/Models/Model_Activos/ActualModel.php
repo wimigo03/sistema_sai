@@ -114,4 +114,114 @@ class ActualModel extends Model
     {
         return $this->hasMany(Transferencia::class, 'activo_id');
     }
+
+    public function getIconoEstadoAttribute()
+    {
+        $status_icono = ['', 'badge-primary', 'badge-success', 'badge-danger'];
+        return $status_icono[$this->codestado];
+    }
+
+    public function getStatusAttribute()
+    {
+        $status = ['', 'BUENO', 'REGULAR', 'MALO'];
+        return $status[$this->codestado];
+    }
+
+
+    public function scopeByCodigo($query, $codigo)
+    {
+        if ($codigo != null) {
+            return $query->where('codigo', 'like', '%' . $codigo . '%');
+        }
+    }
+
+    public function scopeByEstado($query, $estado)
+    {
+        if ($estado != null) {
+            return $query->where('codestado', $estado);
+        }
+    }
+
+    public function scopeByCi($query, $ci)
+    {
+        if ($ci) {
+            return $query
+                ->whereIn('codemp', function ($subquery) use ($ci) {
+                    $subquery->select('idemp')
+                        ->from('empleados')
+                        ->where('ci', 'like', '%' . $ci . '%');
+                });
+        }
+    }
+
+    public function scopeByNombre($query, $nombre)
+    {
+        if ($nombre) {
+            return $query
+                ->whereIn('codemp', function ($subquery) use ($nombre) {
+                    $subquery->select('idemp')
+                        ->from('empleados')
+                        ->where('nombres', 'like', '%' . $nombre . '%');
+                });
+        }
+    }
+
+    public function scopeByApPaterno($query, $ap_pat)
+    {
+        if ($ap_pat) {
+            return $query
+                ->whereIn('codemp', function ($subquery) use ($ap_pat) {
+                    $subquery->select('idemp')
+                        ->from('empleados')
+                        ->where('ap_pat', 'like', '%' . $ap_pat . '%');
+                });
+        }
+    }
+
+    public function scopeByApMaterno($query, $ap_mat)
+    {
+        if ($ap_mat) {
+            return $query
+                ->whereIn('codemp', function ($subquery) use ($ap_mat) {
+                    $subquery->select('idemp')
+                        ->from('empleados')
+                        ->where('ap_mat', 'like', '%' . $ap_mat . '%');
+                });
+        }
+    }
+
+    public function scopeByGrupo($query, $grupo)
+    {
+        if ($grupo) {
+            return $query
+                ->whereIn('codcont', function ($subquery) use ($grupo) {
+                    $subquery->select('codcont')
+                        ->from('codcont')
+                        ->where('nombre', 'like', '%' . $grupo . '%');
+                });
+        }
+    }
+
+    public function scopeByOficina($query, $oficina)
+    {
+        if ($oficina) {
+            return $query
+                ->whereIn('codarea', function ($subquery) use ($oficina) {
+                    $subquery->select('idarea')
+                        ->from('areas')
+                        ->where('nombrearea', 'like', '%' . $oficina . '%');
+                });
+        }
+    }
+
+    public function scopeByCargo($query, $cargo)
+    {
+        if ($cargo) {
+            return $query->whereHas('empleados', function ($subquery) use ($cargo) {
+                $subquery->whereHas('file', function ($cargoQuery) use ($cargo) {
+                    $cargoQuery->where('nombrecargo', 'like', '%' . $cargo . '%');
+                });
+            });
+        }
+    }
 }

@@ -36,9 +36,9 @@ class ResponsableController extends Controller
         return DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('btns', function ($data) {
-                $btns ='<a href="' . route('activo.responsable.activo.index', $data->idemp) . '" class="tts:left tts-slideIn tts-custom" aria-label="Ver activos">
+                $btns ='<a href="' . route('activo.responsable.activo.index', $data->idemp) . '" class="tts:left tts-slideIn tts-custom" aria-label="Ver Activos">
                             <i class="fa-solid fa-2xl fa-right-to-bracket"></i>
-                        </a><a href="' . route('activo.responsable.archivos.index', $data->idemp) . '" class="tts:left tts-slideIn tts-custom ml-3" aria-label="Ver archivos">
+                        </a><a href="' . route('activo.responsable.archivos.index', $data->idemp) . '" class="tts:left tts-slideIn tts-custom ml-3" aria-label="Ver Archivos">
                         <i class="fa-solid fa-2xl fa-file-pdf"></i>
                     </a>';
                 return $btns;

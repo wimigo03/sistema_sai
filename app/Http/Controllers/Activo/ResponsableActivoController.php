@@ -38,7 +38,7 @@ class ResponsableActivoController extends Controller
             
         return DataTables::of($data)
             ->addIndexColumn()
-            ->addColumn('btn', 'activo.gestionactivo.btn')
+            ->addColumn('btn', 'activo.responsableActivo.btn')
             ->addColumn('estado_texto', function (ActualModel $activo) {
                 if ($activo->codestado == 1) {
                     return 'Bueno';

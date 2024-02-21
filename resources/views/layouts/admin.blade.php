@@ -208,7 +208,7 @@ function fetchdata() {
 }
 
         $(document).ready(function() {
-            setInterval(fetchdata, 4000);
+            //setInterval(fetchdata, 4000);
         });
 
 

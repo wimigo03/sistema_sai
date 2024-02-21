@@ -257,6 +257,13 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
+                            <label style="color:black;font-weight: bold;">C.I.:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" id="ci" value="" class="form-control" readonly>
+                            </div>
                             <div class="form-group">
                                 <label style="color:black;font-weight: bold;">FOTOGRAFIA:</label>
                                 <div class="d-flex justify-content-between">
@@ -486,12 +493,10 @@
                     $codauxselect.append('<option value="' + auxiliar.codaux + '" ' + selected + '>' +
                         auxiliar.nomaux + '</option>');
                 });
-
-
                 var $empleadosSelect = $('#empleado');
                 $empleadosSelect.empty();
                 $empleadosSelect.append(
-                    '<option value="">Elige un responsable</option>'); // Opción inicial
+                    '<option value="">Elige un responsable</option>');
 
                 $.each(empleados, function(index, empleado) {
                     var selected = (empleado.idemp == empleado_selected) ? 'selected' : '';
@@ -621,6 +626,7 @@
                         var cargo = data.files;
                         var $cargoSelect = $('#cargo');
                         $cargoSelect.empty();
+                        $('#ci').val(data.empleado.ci);
 
                         $.each(cargo, function(index, cargo) {
                             $cargoSelect.append('<option value="' + cargo.idfile +

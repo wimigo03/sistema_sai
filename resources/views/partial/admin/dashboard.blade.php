@@ -777,28 +777,6 @@
                             </ul>
                         </li>
                     @endcanany
-                    {{-- Activos Fijos --}}
-                    @canany(['recHumanos_access'])
-                        <li class="font-verdana-bg">
-                            <a href="" data-toggle="collapse" data-target="#dashboard_activos_fijos"
-                                class="active collapsed" aria-expanded="false">
-                                <i class="fa fa-circle" style="color:green"></i>
-                                <span class="nav-label mr-3">ACTIVOS FIJOS</span>
-                                <span class="fa fa-arrow-circle-left float-right"></span>
-                            </a>
-                            <ul class="sub-menu collapse" id="dashboard_activos_fijos"
-                                @if (request()->is('admin/users') || request()->is('admin/users/*')) in @endif ">
-                                        @can('areas_access')
-        <li>
-                                                        <a href="{{ route('activos.index') }}">
-                                                            &nbsp; &nbsp; &nbsp;
-                                                            <span class="nav-label mr-4">Activos</span>
-                                                        </a>
-                                                    </li>
-    @endcan
-                                    </ul>
-                                </li>
-                    @endcanany
                     {{-- Discapacidad --}}
                     @canany(['discapacidad_panel_acess'])
                                 <li class="font-verdana-bg">
@@ -871,7 +849,20 @@
                                                     &nbsp;<i class="fa fa-database"></i>
                                                     <span class="nav-label mr-4"> Gestión de Activos Fijos</span>
                                                 </a>
-                                            </li>   
+                                            </li> 
+                                            
+                                            <li>
+                                                <a href="{{ route('activo.vehiculo.index') }}">
+                                                    &nbsp;<i class="fa fa-database"></i>
+                                                    <span class="nav-label mr-4">Parque Automotor</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ route('activo.adeudo.index') }}">
+                                                    &nbsp;<i class="fa fa-database"></i>
+                                                    <span class="nav-label mr-4">No Adeudo</span>
+                                                </a>
+                                            </li>  
                                             <li>
                                                 <a href="{{ route('oficina.index') }}">
                                                     &nbsp; <i class="fa fa-building"></i>
