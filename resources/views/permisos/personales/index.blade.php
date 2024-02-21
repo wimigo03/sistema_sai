@@ -5,7 +5,7 @@
     <br>
     <div class="row font-verdana-bg">
         <div class="col-8 text-left titulo">
-            <b> Registro de Permisos Personales </b>
+            <b> Gestión de Boletas Personales - (2 HRS MENSUALES)</b>
         </div>
         <div class="col-4 text-right titulo">
             <b> MES: </b>
@@ -73,7 +73,7 @@
                 </button>
             </div>
             <div class="modal-body  font-verdana-bg">
-                <b>¿Estás seguro de que deseas eliminar la huella dactilar de <span id="nombreEmpleado"></span>?</b>
+                <b>¿Estás seguro de que deseas eliminar el Registro Boleta Personal  <span id="nombreEmpleado"></span>?</b>
             </div>
             <div class="modal-footer  font-verdana-bg">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCELAR</button>

@@ -479,7 +479,7 @@
                         <li>
                             <a href="{{ route('permisospersonales.index') }}">
                             &nbsp; &nbsp; 
-                                <span class="nav-label mr-4">Gestionar Permisos Personales</span>
+                                <span class="nav-label mr-4">Gestionar Boletas Personales</span>
                             </a>
                         </li>
                         @endcan

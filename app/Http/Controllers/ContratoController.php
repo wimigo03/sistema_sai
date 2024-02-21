@@ -134,11 +134,25 @@ class ContratoController extends Controller
     public function guardarcontrato(Request $request)
     {
         $ci = $request->input('ci');
+        //verificar si file esta disponible
+        $file = FileModel::where('idfile', $request->input('idfile'))->where('estadofile', 2)->first();
+        if ($file) {
+            return redirect()->back()->with('error', 'El File . Ya se encuentra ocupado por Personal de contrato');
+        }
+        //verificar si estaregistrado
         $ci = EmpleadosModel::where('ci', $ci)
-            ->where('tipo', 2);
+            ->where('tipo', 2)->first();
         if ($ci) {
             return redirect()->back()->with('error', 'Ya se encuentra Registrado como Personal de contrato');
-         }
+        }
+          //verificar si ya estaregistrado con su file
+        $fileci = EmpleadosModel::where('ci', $ci)
+            ->where('tipo', 2)
+            ->where('idfile', $request->input('idfile'))
+            ->first();
+        if ($fileci) {
+            return redirect()->back()->with('error', 'Ya se encuentra Registrado como Personal de Contrato');
+        }
 
         $empleados = new EmpleadosModel();
         $empleados->nombres = $request->input('nombres');
@@ -160,8 +174,8 @@ class ContratoController extends Controller
         $empleados->expsippase = $request->input('expsippase');
         $empleados->servmilitar = $request->input('servmilitar');
         $empleados->idioma = $request->input('idioma');
-        // $empleados -> induccion = $request->input('induccion');
-        // $empleados -> expinduccion = $request->input('expinduccion');
+        $empleados->induccion = $request->input('induccion');
+        $empleados->expinduccion = $request->input('expinduccion');
         //$empleados -> progvacacion = $request->input('progvacacion');
         //$empleados -> expprogvacacion = $request->input('expprogvacacion');
         // $empleados -> vacganadas = $request->input('vacganadas');
@@ -246,8 +260,8 @@ class ContratoController extends Controller
         $empleados->expsippase = $request->input('expsippase');
         $empleados->servmilitar = $request->input('servmilitar');
         $empleados->idioma = $request->input('idioma');
-        // $empleados -> induccion = $request->input('induccion');
-        // $empleados -> expinduccion = $request->input('expinduccion');
+        $empleados -> induccion = $request->input('induccion');
+        $empleados -> expinduccion = $request->input('expinduccion');
         //$empleados -> progvacacion = $request->input('progvacacion');
         //$empleados -> expprogvacacion = $request->input('expprogvacacion');
         // $empleados -> vacganadas = $request->input('vacganadas');

@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\AsistenciaModel;
+use App\Models\EmpleadoLicenciasModel;
 use App\Models\EmpleadoPermisoModel;
 use App\Models\EmpleadosModel;
 use App\Models\HistorialAsistenciasCambios;
 use App\Models\HorarioModel;
+use App\Models\LicenciasRipModel;
+use App\Models\PermisoModel;
 use App\Models\RetrasosEmpleado;
 use App\Models\RetrasosModel;
 
@@ -48,9 +51,9 @@ class AusenciasController extends Controller
                     if ($row->estado == 0) {
                         return 'FALTA';
                     } else if ($row->estado == 2) {
-                        return 'No marco Salida';
+                        return 'FALTA';
                     } else {
-                        return 'Dia Trabajado'; // You can customize this message as needed
+                        return 'Marcado'; // You can customize this message as needed
                     }
                 })
                 ->addColumn('opciones', function ($row) {
@@ -74,9 +77,15 @@ class AusenciasController extends Controller
 
     public function regularizar($id)
     {
+        $añoMesActual = Carbon::now()->format('Y-m');
+        $permisoID =  $this->obtenerOCrearPermiso($añoMesActual);
+
+        $año = Carbon::now()->format('Y');
+        $licencia =  $this->obtenerOCrearLicencia($año);
+        $licenciaID = $licencia->id;
         $registroAsistencia = RegistroAsistencia::with([
             'empleado' => function ($query) {
-                $query->select('idemp', 'nombres', 'ap_pat', 'ap_mat');
+                $query->select('idemp', 'nombres', 'ap_pat', 'ap_mat', 'tipo');
             },
             'horario',
             'asistencia'
@@ -86,19 +95,60 @@ class AusenciasController extends Controller
             $permiso = EmpleadoPermisoModel::where('fecha_solicitud', $registroAsistencia->fecha)
                 ->where('empleado_id', $registroAsistencia->empleado_id)
                 ->where('hora_retorno', '>', $registroAsistencia->horario->hora_final)
-                ->first();
-            return view('asistencias.regularizar.manual', compact('permiso', 'registroAsistencia'));
+                ->get();
+            $permisTotal = EmpleadoPermisoModel::where('permiso_id', $permisoID->id)
+                ->where('empleado_id', $registroAsistencia->empleado_id)
+                ->orderBy('fecha_solicitud', 'desc')
+                ->get();
+            $sumaPermisos = EmpleadoPermisoModel::where('permiso_id', $permisoID->id)
+                ->where('empleado_id', $registroAsistencia->empleado_id)
+                ->sum('horas_utilizadas');
+
+            $licencia  = EmpleadoLicenciasModel::where('fecha_solicitud',  $registroAsistencia->fecha)
+                ->where('empleado_id', $registroAsistencia->empleado_id)
+                ->get();
+            $licenciaTotal = EmpleadoLicenciasModel::where('licencia_id', $licenciaID)
+                ->where('empleado_id', $registroAsistencia->empleado_id)
+                ->orderBy('fecha_solicitud', 'desc')
+                ->get();
+
+            $sumaLicencias = EmpleadoLicenciasModel::where('licencia_id',  $licenciaID)
+                ->where('empleado_id', $registroAsistencia->empleado_id)
+                ->sum('dias_utilizados');
+            // $tiempoTexto = $this->convertirHorasMinutosATexto($sumaPermisos);
+            // dd($permiso);
+            return view('asistencias.regularizar.manual', compact('licenciaTotal', 'sumaLicencias', 'licencia', 'permisTotal', 'sumaPermisos', 'permisoID', 'permiso', 'registroAsistencia'));
         } else if ($registroAsistencia->horario->tipo == 1) {
 
-            $permiso = EmpleadoPermisoModel::where('fecha_solicitud', $registroAsistencia->fecha)
+
+
+            $permisos = EmpleadoPermisoModel::where('fecha_solicitud', $registroAsistencia->fecha)->where('empleado_id', $registroAsistencia->empleado_id)
+                ->where('hora_retorno', '>', [$registroAsistencia->horario->hora_salida, $registroAsistencia->horario->hora_final])
+                ->get();
+            $permisTotal = EmpleadoPermisoModel::where('permiso_id', $permisoID->id)
                 ->where('empleado_id', $registroAsistencia->empleado_id)
-                ->where('hora_retorno', '>', $registroAsistencia->horario->hora_salida)
-                ->first();
-            $permiso2 = EmpleadoPermisoModel::where('fecha_solicitud', $registroAsistencia->fecha)
+                ->orderBy('fecha_solicitud', 'desc')
+                ->get();
+            // dd($permisos);
+
+            $sumaPermisos = EmpleadoPermisoModel::where('permiso_id', $permisoID->id)
                 ->where('empleado_id', $registroAsistencia->empleado_id)
-                ->where('hora_retorno', '>', $registroAsistencia->horario->hora_final)
-                ->first();
-            return view('asistencias.regularizar.manual', compact('permiso', 'permiso2', 'registroAsistencia'));
+                ->sum('horas_utilizadas');
+
+            $licencia  = EmpleadoLicenciasModel::where('fecha_solicitud',  $registroAsistencia->fecha)
+                ->where('empleado_id', $registroAsistencia->empleado_id)
+                ->get();
+            $licenciaTotal = EmpleadoLicenciasModel::where('licencia_id', $licenciaID)
+                ->where('empleado_id', $registroAsistencia->empleado_id)
+                ->orderBy('fecha_solicitud', 'desc')
+                ->get();
+            $sumaLicencias = EmpleadoLicenciasModel::where('licencia_id',  $licenciaID)
+                ->where('empleado_id', $registroAsistencia->empleado_id)
+                ->sum('dias_utilizados');
+            // $tiempoTexto = $this->convertirHorasMinutosATexto($sumaPermisos);
+            //dd($sumaLicencias);
+
+            return view('asistencias.regularizar.manual', compact('licenciaTotal', 'sumaLicencias', 'licencia', 'permisTotal', 'sumaPermisos', 'permisoID', 'permisos', 'registroAsistencia'));
         }
 
         // Asegúrate de que $data no sea nulo antes de pasar los datos a la vista
@@ -109,68 +159,62 @@ class AusenciasController extends Controller
 
     public function crear($fecha, $id)
     {
+        try {
+            $añoMesActual = Carbon::now()->format('Y-m');
+            $permisoID =  $this->obtenerOCrearPermiso($añoMesActual);
 
 
-        $empleado = EmpleadosModel::select('idemp', 'nombres', 'ap_pat', 'ap_mat')
-            ->where('idemp', $id)
-            ->first();
-        // Si la fecha es anterior a hoy
-        if (Carbon::parse($fecha)->isAfter(Carbon::now())) {
-            $horario = $empleado->horarios()->where('estado', 1)->first();           
-        } else {
-            $horario = HorarioModel::whereHas('registrosAsistencia', function ($query) use ($fecha) {
-                $query->where('fecha', $fecha);
-            })->select('id', 'tipo', 'Nombre', 'hora_inicio', 'hora_final', 'hora_entrada', 'hora_salida')->first();
-        }
-
-
-        $vistaselectedMonth = Carbon::parse($fecha)->format('Y-m');
-        $f2 = Carbon::parse($fecha);
-        $f = $f2->isoFormat('dddd D [de] MMMM');
-
-
-        if (!$horario) {
-            return redirect()->route('horarios.fechas', compact('vistaselectedMonth'))->with('error', 'Seleccione un Horario. NO HAY HORARIO ACTIVO O PROGRAMADO para el día ' . $f);
-            //return view('asistencias.horarios.fechas',compact('vistaselectedMonth'))->with('error', 'Seleccione un Horario. NO HAY HORARIO ACTIVO O PROGRAMADO');
-        }
-        $horarioId = $horario->id;
-
-        // $permiso = EmpleadoPermisoModel::where('fecha_solicitud', '2023-12-15')->where('empleado_id', 1)->where('hora_retorno', '>', '12:30:00')->first();
-
-        $asistencia = AsistenciaModel::where('fecha', $fecha)->select('id')->first();
-        if (!$asistencia) {
-            $asistencia = $this->CrearAsistencia($fecha);
-        }
-
-        $registroAsistencia = RegistroAsistencia::where('empleado_id', $empleado->idemp)
-            ->where('asistencia_id', $asistencia->id)->first();
-
-        if (!$registroAsistencia) {
-            $registroAsistencia = new RegistroAsistencia();
-            $registroAsistencia->empleado_id = $empleado->idemp;
-            $registroAsistencia->horario_id = $horarioId;
-            $registroAsistencia->fecha = $fecha;
-            $registroAsistencia->estado = 0;
-            $registroAsistencia->asistencia_id = $asistencia->id;
-            $registroAsistencia->save();
-        }
-        if ($registroAsistencia->horario->tipo == 0) {
-            $permiso = EmpleadoPermisoModel::where('fecha_solicitud', $registroAsistencia->fecha)
-                ->where('empleado_id', $registroAsistencia->empleado_id)
-                ->where('hora_retorno', '>', $registroAsistencia->horario->hora_final)
+            $empleado = EmpleadosModel::select('idemp', 'nombres', 'ap_pat', 'ap_mat')
+                ->where('idemp', $id)
                 ->first();
-            return view('asistencias.regularizar.manual2', compact('permiso', 'asistencia', 'horario', 'empleado', 'registroAsistencia'));
-        } else if ($registroAsistencia->horario->tipo == 1) {
+            // Si la fecha es anterior a hoy
+            if (Carbon::parse($fecha)->isAfter(Carbon::now())) {
+                $horario = $empleado->horarios()->where('estado', 1)->first();
+            } else {
+                $horario = HorarioModel::whereHas('registrosAsistencia', function ($query) use ($fecha) {
+                    $query->where('fecha', $fecha);
+                })->select('id', 'tipo', 'Nombre', 'hora_inicio', 'hora_final', 'hora_entrada', 'hora_salida')->first();
+            }
 
-            $permiso = EmpleadoPermisoModel::where('fecha_solicitud', $registroAsistencia->fecha)
-                ->where('empleado_id', $registroAsistencia->empleado_id)
-                ->where('hora_retorno', '>', $registroAsistencia->horario->hora_salida)
-                ->first();
-            $permiso2 = EmpleadoPermisoModel::where('fecha_solicitud', $registroAsistencia->fecha)
-                ->where('empleado_id', $registroAsistencia->empleado_id)
-                ->where('hora_retorno', '>', $registroAsistencia->horario->hora_final)
-                ->first();
-            return view('asistencias.regularizar.manual2', compact('permiso', 'permiso2', 'asistencia', 'horario', 'empleado', 'registroAsistencia'));
+
+            $vistaselectedMonth = Carbon::parse($fecha)->format('Y-m');
+            $f2 = Carbon::parse($fecha);
+            $f = $f2->isoFormat('dddd D [de] MMMM');
+
+
+            if (!$horario) {
+                return redirect()->route('horarios.fechas', compact('vistaselectedMonth'))->with('error', 'Seleccione un Horario. NO HAY HORARIO ACTIVO O PROGRAMADO para el día ' . $f);
+                //return view('asistencias.horarios.fechas',compact('vistaselectedMonth'))->with('error', 'Seleccione un Horario. NO HAY HORARIO ACTIVO O PROGRAMADO');
+            }
+            $horarioId = $horario->id;
+
+            // $permiso = EmpleadoPermisoModel::where('fecha_solicitud', '2023-12-15')->where('empleado_id', 1)->where('hora_retorno', '>', '12:30:00')->first();
+
+            $asistencia = AsistenciaModel::where('fecha', $fecha)->select('id')->first();
+            if (!$asistencia) {
+                $asistencia = $this->CrearAsistencia($fecha);
+            }
+
+            $registroAsistencia = RegistroAsistencia::where('empleado_id', $empleado->idemp)
+                ->where('asistencia_id', $asistencia->id)->first();
+
+            if (!$registroAsistencia) {
+                $registroAsistencia = new RegistroAsistencia();
+                $registroAsistencia->empleado_id = $empleado->idemp;
+                $registroAsistencia->horario_id = $horarioId;
+                $registroAsistencia->fecha = $fecha;
+                $registroAsistencia->estado = 0;
+                $registroAsistencia->asistencia_id = $asistencia->id;
+                $registroAsistencia->save();
+            }
+            $id = $registroAsistencia->id;
+
+
+
+            return redirect()->route('regularizar.ausencia', ['id' =>  $id])->with('success', 'Regularizado correctamente la asistencia del día: ' . $fecha);
+        } catch (\Exception $e) {
+            // Catch any exception that may occur and return an error message
+            abort(404); // o maneja de alguna manera el caso en que no se encuentre el registro
         }
     }
 
@@ -680,5 +724,58 @@ class AusenciasController extends Controller
 
 
         return $asistenciaActual;
+    }
+
+    private function obtenerOCrearPermiso($añoMes)
+    {
+        // Verificar si el mes es posterior al mes actual
+        if (Carbon::now()->format('Y-m') < $añoMes) {
+            // Si es posterior, obtener o crear el permiso del mes actual
+            $permisoActual = PermisoModel::where('mes', Carbon::now()->format('Y-m'))->first();
+
+            if (!$permisoActual) {
+                $permisoActual = PermisoModel::create(['mes' => Carbon::now()->format('Y-m'), 'horas_permitidas' => 120]);
+            }
+
+            return $permisoActual;
+        }
+
+        // Si no es posterior, obtener o crear el permiso del mes proporcionado
+        $permiso = PermisoModel::where('mes', $añoMes)->first();
+
+        if (!$permiso) {
+            $permiso = PermisoModel::create(['mes' => $añoMes, 'horas_permitidas' => 120]);
+        }
+
+        return $permiso;
+    }
+
+    function convertirHorasMinutosATexto($horas_permitidas)
+    {
+        $horas = floor($horas_permitidas / 60);
+        $minutos = $horas_permitidas % 60;
+
+        // Genera una representación textual
+        $texto = '';
+
+        if ($horas > 0) {
+            $texto .= $horas . ' hora' . ($horas > 1 ? 's' : '') . ' ';
+        }
+
+        if ($minutos > 0) {
+            $texto .= $minutos . ' minuto' . ($minutos > 1 ? 's' : '');
+        }
+
+        return $texto;
+    }
+
+    private function obtenerOCrearLicencia($añoActual)
+    {
+        $licencia = LicenciasRipModel::where('licencia', $añoActual)->first();
+
+        if (!$licencia) {
+            $licencia = LicenciasRipModel::create(['licencia' => $añoActual, 'dias_permitidos' => 48]);
+        }
+        return $licencia;
     }
 }

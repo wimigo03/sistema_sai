@@ -31,4 +31,8 @@ class AreasModel extends Model
     public function iPais_all(){
         return $this->hasMany('App\Models\FileModel', 'idarea', 'idarea');
     }
+    public function nivel()
+    {
+        return $this->belongsTo(NivelModel::class, 'idnivel');
+    }
 }

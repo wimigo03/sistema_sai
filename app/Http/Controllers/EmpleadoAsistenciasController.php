@@ -58,7 +58,7 @@ class EmpleadoAsistenciasController extends Controller
             })
             ->addColumn('actions1', function ($row) {
                 return '<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Horarios Asignados" href="' . route('horarios.cambio', $row->idemp) . '">
-                <ifa-clock text-primary"></i><i  class="fa-solid fa-2xl  fa-circle-info"></i>
+                  <i class="fa-solid fa-2xl fa-bars"></i>
                 
             </a>';
             })->addColumn('actions2', function ($row) {
@@ -107,7 +107,7 @@ class EmpleadoAsistenciasController extends Controller
             })
             ->addColumn('actions1', function ($row) {
                 return '<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Horarios Asignados" href="' . route('horarios.cambio', $row->idemp) . '">
-                <ifa-clock text-primary"></i><i  class="fa-solid fa-2xl  fa-circle-info"></i>
+                <i class="fa-solid fa-2xl fa-bars"></i>
                 
             </a>';
             })->addColumn('actions2', function ($row) {
@@ -210,13 +210,17 @@ class EmpleadoAsistenciasController extends Controller
                 })
                 ->addColumn('estado', function ($row) {
                     if ($row->estado == 0) {
-                        return 'Sin Registro';
+                        return 'Falta';
                     } else if ($row->estado == 1) {
                         return 'Registrado';
                     } else if ($row->estado == 2) {
-                        return 'Pendiente';
+                        return 'Falta';
+                    } else if ($row->estado == 3) {
+                        # code...
+
+                        return 'Marcado'; // Puedes personalizar este mensaje según sea necesario
                     } else {
-                        return '-'; // Puedes personalizar este mensaje según sea necesario
+                        return '-';
                     }
                 })
                 ->rawColumns(['horario'])->toJson();

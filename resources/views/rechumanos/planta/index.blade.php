@@ -39,8 +39,8 @@
           <thead>
             <tr>
               <th class="text-justify">NOMBRES</th>
-              <th class="text-justify">AP. PATERNO</th>
-              <th class="text-justify">AP.MATERNO</th>
+              <th class="text-justify">APELLIDO<br> PATERNO</th>
+              <th class="text-justify">APELLIDO<br> MATERNO</th>
               <th class="text-justify">N° CARNET</th>
               <th class="text-justify">INGRESO</th>               
             </tr>

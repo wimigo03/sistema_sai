@@ -1,14 +1,14 @@
 @extends('layouts.admin')
 @section('content')
     <div class="row font-verdana-bg">
-    <div class="col-md-3 titulo">
+    <div class="col-md-1 titulo">
     <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
                 <a href="{{url()->previous()}}" class="color-icon-1">
                     <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
                 </a>
             </span>
         </div>
-        <div class="col-md-9 text-right titulo">
+        <div class="col-md-11 text-right titulo">
             <b>GESTIONAR PERSONAL-P/{{strtoupper($area_actual->nombrearea)}}/REGISTRAR</b>
                 
             <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">

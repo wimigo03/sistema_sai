@@ -18,54 +18,49 @@
                                 <th class="text-justify p-1"><b>File </th>
                                 <th class="text-justify p-1"><b>AREA </th>
                                 <th class="text-justify p-1"><b>Nombres </th>
-                                <th class="text-justify p-1"><b>Ap.Paterno </th>
-                                <th class="text-justify p-1"><b>Ap.Materno </th>
+                                <th class="text-justify p-1"><b>Apellido<br>Paterno </th>
+                                <th class="text-justify p-1"><b>Apellido<br>Materno </th>
                                 <th class="text-justify p-1"><b>Cargo </th>
-                                <th class="text-justify p-1"><b>Nomb.Cargo </th>
-                                <th class="text-justify p-1"><b>Hab.Basico </th>
+                                <th class="text-justify p-1"><b>Nombre<br>Cargo </th>
+                                <th class="text-justify p-1"><b>Haber<br>.Basico </th>
                                 <th class="text-justify p-1"><b>Categoria </th>
-                                <th class="text-justify p-1"><b>Nivel Adm. </th>
+                                <th class="text-justify p-1"><b>Nivel<br>Admin. </th>
                                 <th class="text-justify p-1"><b>Clase </th>
-                                <th class="text-justify p-1"><b>Nivelsal </th>
-                                <th class="text-justify p-1"><b>F.Ingreso </th>
+                                <th class="text-justify p-1"><b>Nivel<br>Salarial </th>
+                                <th class="text-justify p-1"><b>Fecha<br>Ingreso </th>
                                 <th class="text-justify p-1"><b>Natalicio </th>
                                 <th class="text-justify p-1"><b>Edad </th>
                                 <th class="text-justify p-1"><b>Ci </th>
                                 <th class="text-justify p-1"><b>Poai </th>
-                                <th class="text-justify p-1"><b>Exp.Poai </th>
-                                <th class="text-justify p-1"><b>Dec.Jurada </th>
-                                <th class="text-justify p-1"><b>Exp.Decjurada </th>
+                                <th class="text-justify p-1"><b>Exp.<br>Poai </th>
+                                <th class="text-justify p-1"><b>Declaracion<br>Jurada </th>
+                                <th class="text-justify p-1"><b>Expiración<br>Dec. Jurada </th>
                                 <th class="text-justify p-1"><b>Sippase </th>
-                                <th class="text-justify p-1"><b>Exp.Sippase </th>
-                                <th class="text-justify p-1"><b>Serv.Milit. </th>
+                                <th class="text-justify p-1"><b>Expiración<br>Sippase </th>
+                                <th class="text-justify p-1"><b>Servicio<br>Militar </th>
                                 <th class="text-justify p-1"><b>Idioma </th>
-                                <th class="text-justify p-1"><b>Induccion </th>
-                                <th class="text-justify p-1"><b>Exp.Inducc. </th>
-                                <th class="text-justify p-1"><b>Prog.Vacac. </th>
+                                <th class="text-justify p-1"><b>Inducción </th>
+                                <th class="text-justify p-1"><b>Expiraci´ón<br>Inducción. </th>
+                                <th class="text-justify p-1"><b>Prog.<br>Vacac. </th>
                                 <th class="text-justify p-1"><b>Exp.Prog.Vacac. </th>
                                 <th class="text-justify p-1"><b>Vac.Ganadas </th>
                                 <th class="text-justify p-1"><b>Vac.Pend. </th>
                                 <th class="text-justify p-1"><b>Vac.Usadas </th>
-                                <th class="text-justify p-1"><b>Seg.Salud </th>
-                                <th class="text-justify p-1"><b>Inamov. </th>
-                                <th class="text-justify p-1"><b>Años Serv. </th>
-                                <th class="text-justify p-1"><b>Curr.Vitae </th>
-                                <th class="text-justify p-1"><b>Telefono </th>
+                                <th class="text-justify p-1"><b>Seguro<br>Salud </th>
+                                <th class="text-justify p-1"><b>Inamovilidad. </th>
+                                <th class="text-justify p-1"><b>Años<br> Servicio </th>
+                                <th class="text-justify p-1"><b>Curriculum<br>Vitae </th>
+                                <th class="text-justify p-1"><b>Telef.<br>Celular </th>
                                 <th class="text-justify p-1"><b>Biométrico </th>
-                                <th class="text-justify p-1"><b>Drado Acad. </th>
+                                <th class="text-justify p-1"><b>Grado<br>Académico</th>
                                 <th class="text-justify p-1"><b>Rae </th>
-                                <th class="text-justify p-1"><b>Reg.Prof. </th>
-                                <th class="text-justify p-1"><b>Eval.Desemp. </th>
-
-
+                                <th class="text-justify p-1"><b>Registro<br>Profesional</th>
+                                <th class="text-justify p-1"><b>Evaluacion<br>Desempeño</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($empleados as $key => $empleado)
                             <tr>
-
-
-
                                 <td class="text-justify p-1">{{$empleado -> idemp}}</td>
                                 <td class="text-justify p-1">{{$empleado -> numfile}}</td>
                                 <td class="text-justify p-1">{{$empleado -> nombrearea}}</td>
@@ -116,7 +111,7 @@
 
                             @empty
                             <tr>
-                                <td colspan="100%" class="text-center text-muted py-3">No Users Found</td>
+                                <td colspan="100%" class="text-center text-muted py-3">No se Encontraron Registros</td>
                             </tr>
                             @endforelse
 

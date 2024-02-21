@@ -4,24 +4,24 @@
 <div class="container">
     <div class="row  font-verdana">
         <div class="col-md-8 titulo ">
-        <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
+            <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
                 <a href="{{route('empleadoasistencias.index') }}" class="color-icon-1">
                     <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
                 </a>
             </span>
-         Cambios de Horarios Personal
+            Horarios y Datos de Control de Personal 
         </div>
         <div class="col-md-4 text-right">
-                 
-        <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{ route('admin.home') }}">
-            <button class="btn btn-sm btn-danger font-verdana" type="button" aria-label="Cerrar">
-                &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
-            </button>
-        </a>
-  </div>
+
+            <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{ route('admin.home') }}">
+                <button class="btn btn-sm btn-danger font-verdana" type="button" aria-label="Cerrar">
+                    &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
+                </button>
+            </a>
+        </div>
 
 
-    
+
 
     </div>
     <div class="row font-verdana">
@@ -47,7 +47,7 @@
             <hr class="hrr">
         </div>
         <div class="col-md-6 center font-verdana">
-        <b>Modificar Horarios Asignados</b>
+            <b>Horario Asignado</b>
             <div class="body-border">
                 <form action="{{ route('horarios.guardar', $empleado->idemp) }}" method="POST">
                     @csrf
@@ -70,7 +70,7 @@
                         <!-- ... (código anterior) ... -->
 
                         <div class="col-md-12" id="horarios-select">
-                            <select name="horarios[]" id="horarios" class="@error('horarios') is-invalid @enderror" class="form-control" required>
+                            <select name="horarios[]" id="horarios" class="@error('horarios') is-invalid @enderror" class="form-control" required disabled>
                                 @foreach ($horarios as $id => $horario)
                                 @php
                                 $horarioCompleto = $horariosCompletos->firstWhere('id', $id);
@@ -80,7 +80,7 @@
                                     <!-- Resaltar los horarios con estado 1 -->
                                     <strong>
                                         @endif
-                                        {{ $horarioCompleto->hora_inicio ?? '-' }} - {{ $horarioCompleto->hora_salida ?? ' - ' }} -  {{ $horarioCompleto->hora_entrada ?? '-' }} - {{ $horarioCompleto->hora_final ?? '-' }}                                        <strong>    {{ $horarioCompleto->Nombre ?? '-' }}</strong>
+                                        {{ $horarioCompleto->hora_inicio ?? '-' }} - {{ $horarioCompleto->hora_salida ?? ' - ' }} - {{ $horarioCompleto->hora_entrada ?? '-' }} - {{ $horarioCompleto->hora_final ?? '-' }} <strong> {{ $horarioCompleto->Nombre ?? '-' }}</strong>
 
                                         @if($horarioCompleto->estado == 1)
                                         <!-- Cerrar la etiqueta strong -->
@@ -102,12 +102,13 @@
                     </div>
                     <p>Este empleado tiene horarios activos.</p>
 
-                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                    <!--    <button type="submit" class="btn btn-primary">Actualizar</button> ... -->
+
                 </form>
             </div>
         </div>
         <div class="col-md-6 center font-verdana">
-        <b>Datos de Control Asignados</b>
+            <b>Datos de Control Asignados</b>
             <div class="body-border">
                 <form action="{{ route('pin.guardar', $empleado->idemp) }}" method="POST">
                     @csrf
@@ -150,7 +151,7 @@
                                 <label for="horarios" class="col-md-12 col-form-label"><b>{{ __('PIN') }}<b></label>
                                 <!-- ... (código anterior) ... -->
                                 <div class="form-group">
-                                    <input type="password" class="form-control" id="pin" name="pin"  value="{{$empleado->pin}}" required>
+                                    <input type="password" class="form-control" id="pin" name="pin" value="{{$empleado->pin}}" required>
                                 </div>
                                 @if (!$empleado->pin)
                                 <!-- ... (código posterior) ... -->
@@ -170,9 +171,9 @@
                         </div>
                     </div>
                 </form>
-                     <!-- ...  <input type="hidden" class="form-control" id="pin2" name="pin2" maxlength="4" value="{{$empleado->pin}}" required>... -->
+                <!-- ...  <input type="hidden" class="form-control" id="pin2" name="pin2" maxlength="4" value="{{$empleado->pin}}" required>... -->
 
-            <!-- ... <button class="btn btn-success" onclick="obtenerValor()">Obtener Valor</button> ... -->
+                <!-- ... <button class="btn btn-success" onclick="obtenerValor()">Obtener Valor</button> ... -->
 
             </div>
         </div>
@@ -184,7 +185,7 @@
 
 </div>
 @section('scripts')
- 
+
 <script>
     var horario_select = new SlimSelect({
         select: '#horarios-select select',

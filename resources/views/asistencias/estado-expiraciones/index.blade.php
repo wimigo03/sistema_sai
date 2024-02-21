@@ -7,7 +7,7 @@
             <b>Lista de Personal Activo</b>
         </div>
         <div class="col-md-4 text-right">
-            <a class="tts:left tts-slideIn tts-custom" aria-label="Exp" href="{{route('lista2.exp')}}">
+            <a class="tts:left tts-slideIn tts-custom" aria-label="Ir a Lista" href="{{route('lista2.exp')}}">
                 <button class="btn btn-sm btn-info font-verdana" type="button">
 
                     &nbsp; <i class="fa-regular fa-address-card"> &nbsp; </i>Lista de Expiraciones</i>&nbsp;
@@ -20,7 +20,7 @@
             </a>
 
         </div>
-         <div class="col-md-12">
+        <div class="col-md-12">
             <hr class="hrr">
         </div>
         <ul class="nav nav-tabs" id="myTabs">
@@ -63,7 +63,7 @@
                                 </a>
                             </div>
                             <div class="text-right  ">
-                                <a href="{{ route('lista.index', 1) }}"  class="text-white"><i class=" mdi-arrow-right h7">MES
+                                <a href="{{ route('lista.index', 1) }}" class="text-white"><i class=" mdi-arrow-right h7">MES
                                     </i></a>
                                 </a>
                             </div>
@@ -141,8 +141,8 @@
                             </div>
                             <span class="fa fa-user float-left " style="font-size: 60px; color:cadetblue "></span>
                             <div class="text-right">
-                                @if ($expsippasehoyhoy>0)
-                                <h1 class="font-500 text-right"> {{ $expsippasehoyhoy }}</h1>
+                                @if ($cumplenexpsippasehoy>0)
+                                <h1 class="font-500 text-right"> {{ $cumplenexpsippasehoy }}</h1>
                                 @else
                                 <h1>0</h1>
                                 @endif
@@ -153,7 +153,7 @@
                                 </a>
                             </div>
                             <div class="text-right  ">
-                                <a href="{{ route('lista.index', 4) }}"class="text-white"><i class=" mdi-arrow-right h7">MES
+                                <a href="{{ route('lista.index', 4) }}" class="text-white"><i class=" mdi-arrow-right h7">MES
                                     </i></a>
                                 </a>
                             </div>
@@ -226,7 +226,7 @@
             <hr class="hr">
             <div class="row font-verdana">
 
- 
+
                 <div class=" col-md-4  mb-2 ">
                     <div class="card bg-secondary text-white">
                         <div class="card-body">
@@ -288,6 +288,36 @@
                     </div>
                 </div>
 
+                <div class=" col-md-4  mb-2 ">
+                    <div class="card bg-secondary text-white">
+                        <div class="card-body">
+                            <div>
+                                <div class="float-left mini-stat-img mr-4">
+                                    <span class="fa fa-users" style="font-size: 30px"></span>
+                                </div>
+                                <h6 class="font-16 text-uppercase mt-0 text-white-50">Total <br>EXP. INDUCCIÓN</h6>
+                            </div>
+                            <span class="fa fa-user float-left " style="font-size: 60px; color:cadetblue "></span>
+                            <div class="text-right">
+                                @if ($cumplenAnioshoy2 > 0)
+                                <h1 class="font-500 text-right"> {{ $cumplenAnioshoy2 }}</h1>
+                                @else
+                                <h1>0</h1>
+                                @endif
+                            </div>
+                            <div class="text-right  ">
+                                <a href="#hoy9" data-toggle="modal" class="text-white"><i class=" mdi-arrow-right h7">Ver HOY
+                                    </i></a>
+                                </a>
+                            </div>
+                            <div class="text-right  ">
+                                <a href="{{ route('lista.index', 9) }}" class="text-white"><i class=" mdi-arrow-right h7">MES : <i class="mdi mdi-arrow-right h7">{{ \Illuminate\Support\Str::ucfirst(\Carbon\Carbon::now()->locale('es')->isoFormat('MMMM YYYY')) }}</i>
+                                    </i></a>
+                                </a> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
 
@@ -302,15 +332,8 @@
 </div>
 @section('scripts')
 <script>
-    $(document).ready(function() {
-        $('#empleados-fecha').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'excelHtml5' // Agrega el botón de exportación a Excel
-            ]
-        });
-    });
-    
+
+
 </script>
 @endsection
 @endsection

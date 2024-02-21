@@ -7,13 +7,13 @@
         <div class="card">
             <div class="card-body">
                 <div class="form-group row font-verdana-bg">
-                 
+
                     <div class="col-md-4 titulo text-left">
-                    <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
-                        <a href="{{url()->previous()}}" class="color-icon-1">
-                            <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
-                        </a>
-                    </span>
+                        <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
+                            <a href="{{url()->previous()}}" class="color-icon-1">
+                                <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
+                            </a>
+                        </span>
                     </div>
                     <div class="col-md-8 titulo text-right">
                         <b>GESTIONAR PERSONAL-P/{{strtoupper($areaactual->nombrearea)}}/MODIFICAR</b>
@@ -39,7 +39,8 @@
                         </div>
                         <div class="col-md-2">
                             <label for="ap_materno"><b>Ap. Materno</b></label>
-                            <input type="text" name="ap_mat" class="form-control form-control-sm font-verdana-bg" onchange="javascript:this.value=this.value.toUpperCase();">
+                            <input required type="text" name="ap_mat" class="form-control " onchange="javascript:this.value=this.value.toUpperCase();" value="{{$empleados->ap_mat}}"></input>
+
                         </div>
                         <div class="col-md-2">
                             <label for="nro_carnet"><b>N° Carnet</b></label>
@@ -47,25 +48,31 @@
                         </div>
                         <div class="col-md-2">
                             <label for="procedencia"><b>Procedencia</b></label><br>
+
                             <select name="procedencia" id="procedencia" class="form-control form-control-sm" required>
-                                <option value="">-</option>
-                                <option value="TJ" @if(request('procedencia')=='TJ' ) selected @endif>TARIJA</option>
-                                <option value="CH" @if(request('procedencia')=='CH' ) selected @endif>CHUQUISACA</option>
-                                <option value="LP" @if(request('procedencia')=='LP' ) selected @endif>LA PAZ</option>
-                                <option value="CB" @if(request('procedencia')=='CB' ) selected @endif>COCHABAMBA</option>
-                                <option value="OR" @if(request('procedencia')=='OR' ) selected @endif>ORURO</option>
-                                <option value="PT" @if(request('procedencia')=='PT' ) selected @endif>POTOSI</option>
-                                <option value="SC" @if(request('procedencia')=='SC' ) selected @endif>SANTA CRUZ</option>
-                                <option value="BE" @if(request('procedencia')=='BE' ) selected @endif>BENI</option>
-                                <option value="PD" @if(request('procedencia')=='PD' ) selected @endif>PANDO</option>
+                               
+                                @foreach(['TJ' => 'TARIJA', 'CH' => 'CHUQUISACA', 'LP' => 'LA PAZ', 'CB' => 'COCHABAMBA', 'OR' => 'ORURO', 'PT' => 'POTOSI', 'SC' => 'SANTA CRUZ', 'BE' => 'BENI', 'PD' => 'PANDO'] as $value => $label)
+                                <option value="{{ $value }}" {{ old('procedencia', $empleados->procedencia ?? '') == $value ? 'selected' : '' }}>
+                                    {{ $label }}
+                                </option>
+                                @endforeach
                             </select>
+
+
                         </div>
+
+
                         <div class="col-md-2">
+                            <label for="date"><b>Fecha Cumpleaños</b></label>
+                            <input type="date" class="form-control" name="natalicio" value="{{$empleados->natalicio}}">
+                        </div>
+                       
+                    </div>
+                    <div class="form-group row font-verdana-bg">
+                    <div class="col-md-2">
                             <label for="date"><b>Fecha Ingreso</b></label>
                             <input type="date" class="form-control" name="fechingreso" value="{{$empleados->fechingreso}}">
                         </div>
-                    </div>
-                    <div class="form-group row font-verdana-bg">
                         <div class="col-md-2">
                             <div class="row">
                                 <div class="col-md-6">
@@ -77,14 +84,11 @@
                                     </span>
                                 </div>
                             </div>
-                            <input type="date" class="form-control" name="exppoai" value="{{$empleados->exppoai}}">
-                        </div>
-
-
-                        <div class="col-md-2">
-                            <label for="poai"><b>POAI</b></label>
                             <input type="text" name="poai" class="form-control" value="{{$empleados->poai}}">
-                        </div>
+
+                         </div>
+
+ 
                         <div class="col-md-2">
                             <label for="exp_poai"><b>Exp. POAI</b></label>
                             <input type="date" class="form-control" name="exppoai" value="{{$empleados->exppoai}}">

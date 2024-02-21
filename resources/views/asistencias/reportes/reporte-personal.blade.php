@@ -93,7 +93,20 @@
             </table>
         </div>
     </div>
+ 
 
+
+</div>
+<div class="col-md-12">
+
+<table class="font-verdana-sm">
+    <tr>
+        <td><b>Usuario</b>
+            {{ Auth()->user()->name }}
+            {{ date("d-m-Y H:i") }}
+        </td>
+    </tr>
+</table>
 </div>
 <script id="details-template" type="text/x-handlebars-template">
     @verbatim

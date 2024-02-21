@@ -457,13 +457,12 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
 
     Route::get('registroasistencia', 'RegistroAsistenciaController@index')->name('registroasistencia.index')->middleware('can:asistencias_access');
-    Route::get('registroasistencia/create', 'RegistroAsistenciaController@create')->name('registroasistencia.create')->middleware('can:asistencias_access');
-    Route::post('registroasistencia/store', 'RegistroAsistenciaController@store')->name('registroasistencia.store')->middleware('can:asistencias_access');
+    //Route::get('registroasistencia/create', 'RegistroAsistenciaController@create')->name('registroasistencia.create')->middleware('can:asistencias_access');
+    //Route::post('registroasistencia/store', 'RegistroAsistenciaController@store')->name('registroasistencia.store')->middleware('can:asistencias_access');
 
 
     /////////////
-    Route::get('retrasosempleado', 'RetrasoController@index')->name('retrasos.index')->middleware('can:reporte_access');
-    Route::get('ausencias', 'AusenciasController@index')->name('ausencias.index')->middleware('can:asistencias_access');
+     Route::get('ausencias', 'AusenciasController@index')->name('ausencias.index')->middleware('can:asistencias_access');
 
     Route::get('agregar-regulacion/{id}', 'EmpleadoAsistenciasController@agregarRegulacion')->name('agregar.regulacion')->middleware('can:horario_access');;
     Route::get('regularizar-nuevo', 'AusenciasController@regularizar2')->name('regularizarCrear')->middleware('can:horario_access');;

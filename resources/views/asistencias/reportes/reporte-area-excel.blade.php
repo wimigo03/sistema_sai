@@ -7,7 +7,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 12px;
+         
         }
 
         table,
@@ -20,10 +20,10 @@
 
 <body>
     <!-- Contenido de tu vista -->
- 
+
 
     <h3>
-        Reporte de Retrasos por Unidad
+        Reporte de Retrasos por Area/ Unidad
     </h3>
     <table border="1" cellspacing="0" cellpadding="0" width="100%">
         <tbody>
@@ -41,7 +41,7 @@
                 <td width="33%" valign="top">
                     <p>
                         Hasta: {{$fechaFinal}}
-                
+
                     </p>
                 </td>
             </tr>
@@ -53,63 +53,63 @@
                 <td width="50%" valign="top">
                     <p>
                         Nombre de Unidad: {{$areasDatos->nombrearea}}
-                   
+
                     </p>
-                 
+
                 </td>
                 <td width="50%" valign="top">
                     <p>
-                        Nivel:  
+                        Nivel:
                     </p>
-  
+
                 </td>
             </tr>
-          
+
         </tbody>
     </table>
     <h3>
-        Lista de Personal 
+        Lista de Personal
     </h3>
     <table border="0" cellspacing="0" cellpadding="0" width="100%">
         <tbody>
             <tr>
                 <td width="29%" valign="top">
-                <b align="center left">
-                        Nombres y Apellidos
-    </b>
+                    <b align="center left">Nombres y Apellidos</b>
                 </td>
                 <td width="28%" valign="top">
-                <b align="center">
-                        Minutos de Retraso
-    </b>
+                    <b align="center left">Minutos de Retraso</b>
                 </td>
                 <td width="42%" valign="top">
-                <b align="center">
-                        Descuento Según Haber Básico
-    </b>
+                    <b align="center left">Descuento Según Haber Básico</b>
                 </td>
             </tr>
+            @foreach ($data['data'] as $empleado)
             <tr>
-                @foreach ($data['data'] as $empleado)
                 <td width="28%" valign="top">
-                <p align="center left">
-                    {{ $empleado['empleado'] }}
+                    <p align="center left">{{ $empleado['empleado'] }}</p>
                 </td>
                 <td width="29%" valign="top">
-                <p align="center">
-                    {{ $empleado['total_retrasos'] }}
+                    <p align="center left">{{ $empleado['total_retrasos'] }}</p>
                 </td>
-
                 <td width="42%" valign="top">
-                <p align="center">
-                    {{ $empleado['observaciones'] }}
-
+                    <p align="center left">{{ $empleado['observaciones'] }}</p>
                 </td>
-                @endforeach
             </tr>
+            @endforeach
+
+
+
         </tbody>
     </table>
-  
+    <h5>Usuario
+    {{ $nombreCompleto }} - 
+    {{ Auth()->user()->name }}
+    {{ date("d-m-Y H:i") }}
+    </h5>
+   
+       
+ 
+
 
     <script type="text/php">
         if ( isset($pdf) ) {

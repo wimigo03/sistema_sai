@@ -108,11 +108,20 @@ class PlantaController extends Controller
     public function guardarplanta(Request $request)
     {
         $ci = $request->input('ci');
-        $ci = EmpleadosModel::where('ci',$ci)
-        ->where('tipo',1);
+
+        $file = FileModel::find($request->input('idfile'));
+        $ci = EmpleadosModel::where('ci', $ci)
+            ->where('tipo', 1)->first();
         if ($ci) {
             return redirect()->back()->with('error', 'Ya se encuentra Registrado como Personal de Planta');
+        }
 
+        $fileci = EmpleadosModel::where('ci', $ci)
+            ->where('tipo', 1)
+            ->where('idfile', $request->input('idfile'))
+            ->first();
+        if ($fileci) {
+            return redirect()->back()->with('error', 'Ya se encuentra Registrado como Personal de Planta');
         }
         $empleados = new EmpleadosModel();
         $empleados->nombres = $request->input('nombres');
@@ -120,6 +129,7 @@ class PlantaController extends Controller
         $empleados->ap_mat = $request->input('ap_mat');
         $empleados->fechingreso = $request->input('fechingreso');
         $empleados->natalicio = $request->input('natalicio');
+        $empleados->procedencia = $request->input('procedencia');
         $edad = Carbon::parse($request->input('natalicio'))->age;
         $empleados->edad = $edad;
         $empleados->ci = $request->input('ci');
@@ -361,6 +371,8 @@ class PlantaController extends Controller
             $movimientosplanta->nombreareanuevopt = $areaactual->nombrearea;
             $movimientosplanta->save();
         } else {
+            
+
         }
 
         return redirect()->action('App\Http\Controllers\PlantaController@lista', [$request->input('idareaoriginal')]);

@@ -5,7 +5,8 @@
     <br>
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
-            <b> Registro de Licencias Cargo RIP</b>
+            <b>Gestón de Licencias Cargo RIP - (2 DÍAS/AÑO) - Personal de Planta </b>
+
         </div>
         <div class="col-md-4 text-right">
             <div class="btn-group">
@@ -102,7 +103,7 @@
 
     var selectedLicenciaId = $('#licencia').val();
     $('#licencia').on('change', function() {
-      selectedLicenciaId = $(this).val(); // Actualiza el valor del permiso seleccionado
+        selectedLicenciaId = $(this).val(); // Actualiza el valor del permiso seleccionado
         // Actualiza la URL de la solicitud AJAX con el nuevo permiso seleccionado
         table.ajax.url("{{ route('licenciasempleados.get') }}?licencia_id=" + selectedLicenciaId).load();
     });
@@ -200,26 +201,24 @@
             lengthChange: false,
             searching: false, // Oculta la barra de búsqueda
             paging: false, // Desactiva la paginación
-        
+
             ajax: data.details_url,
             columns: [{
                     data: 'fecha_solicitud',
                     name: 'fecha_solicitud'
-                }
-                ,
+                },
                 {
-                  
+
                     data: 'asunto',
                     name: 'asunto'
                 },
                 {
-                  
+
                     data: 'dias_utilizados',
                     name: 'dias_utilizados'
-                }
-                ,
+                },
                 {
-                    
+
                     data: 'opciones',
                     name: 'opciones'
                 }

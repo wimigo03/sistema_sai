@@ -15,45 +15,45 @@
     </div>
     <div class="col-md-9 text-right titulo">
         <b>GESTIONAR PERSONAL-C//REGISTRAR</b>
-            
+
         <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
-                <button class="btn btn-sm btn-danger font-verdana" type="button">
-                    &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
-                </button>
-            </a>
+            <button class="btn btn-sm btn-danger font-verdana" type="button">
+                &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
+            </button>
+        </a>
     </div>
     <div class="col-md-12">
-            <hr>
-            @if(Session::has('pendiente'))
-            <div class="alert alert-danger font-verdana-bg">
-                {{ Session::get('pendiente') }}
-            </div>
-            <hr>
-
-            @endif
-
-            @if(Session::has('success'))
-            <div class="alert alert-success">
-                {{ Session::get('success') }}
-            </div>
-            <hr>
-
-            @endif
-            @if(Session::has('error'))
-            <div class="alert alert-danger font-verdana-bg">
-                {{ Session::get('error') }}
-            </div>
-            <hr>
-
-            @endif
+        <hr>
+        @if(Session::has('pendiente'))
+        <div class="alert alert-danger font-verdana-bg">
+            {{ Session::get('pendiente') }}
         </div>
+        <hr>
+
+        @endif
+
+        @if(Session::has('success'))
+        <div class="alert alert-success">
+            {{ Session::get('success') }}
+        </div>
+        <hr>
+
+        @endif
+        @if(Session::has('error'))
+        <div class="alert alert-danger font-verdana-bg">
+            {{ Session::get('error') }}
+        </div>
+        <hr>
+
+        @endif
+    </div>
     <div class="col-md-12">
         <hr class="hrr">
     </div>
 
 </div>
 
-<div class="body-borderd">
+<div class="body-bordered">
 
     <form method="POST" action="{{ route('contrato.guardar') }}">
         @csrf
@@ -97,7 +97,7 @@
         <div class="form-group row font-verdana-bg">
 
             <div class="col-md-2">
-                <label for="cvitae"><b>Curr.Vitae:</b></label>
+                <label for="cvitae"><b>Currículum Vitae:</b></label>
                 <input type="text" name="cvitae" class="form-control" onchange="javascript:this.value=this.value.toUpperCase();">
 
             </div>
@@ -130,9 +130,11 @@
 
                 <select name="aportesafp" class="form-control">
 
+                    <option value="">-</option>
+                    <option value="3">GESTORA PUBLICA</option>
                     <option value="1">PREVISION AFP</option>
                     <option value="2">FUTURO DE BOLIVIA</option>
-                    <option value="3">GESTORA PUBLICA</option>
+
 
                 </select>
             </div>
@@ -203,41 +205,52 @@
                 </select>
             </div>
             <div class="col-md-2">
-                <label for="biometrico"><b>Biometrico:</b></label>
+                <label for="biometrico"><b>Biométrico:</b></label>
                 <input type="text" name="biometrico" class="form-control">
             </div>
         </div>
 
 
-        </br>
+
         <div class="form-group row font-verdana-bg">
-        <label class="col-md-1" style="color:black;font-weight: bold;">File:</label>
-            <div id="permissions-select2">
-
-                <select name="idfile" id="permissions2" class="form-control" required>
-                    <option value="">== Seleccione un File ==</option>
-                    @foreach($area as $areas)
-                    <option disabled>
-                        <h1 color:blue;>{{$areas->nombrearea}}</H1>
-                    </option>
-                    @foreach($areas->iPais_all as $destino)
-
-                    @if ($destino->estadofile == 1 and $destino->tipofile == 2)
-
-                    <option style="color:red;" value="{{$destino->idfile}}">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-FILE-{{$destino->numfile}}-{{$destino->cargo}}-{{$destino->nombrecargo}}-{{$destino->habbasico}}-{{$destino->categoria}}-{{$destino->niveladm}}-{{$destino->clase}}-{{$destino->nivelsal}}
-                    </option>
-
-                    @endif
-
-                    @endforeach
-                    @endforeach
-
-                </select>
+            <div class="col-md-2">
+                <label for="induccion"><b>Induccion</b></label>
+                <input type="text" name="induccion" class="form-control form-control-sm font-verdana-bg">
             </div>
-        </div>
-       
+            <div class="col-md-2">
+                <label for="exp_induccion"><b>Exp. Inducción</b></label>
+                <input type="date" name="expinduccion" class="form-control form-control-sm font-verdana-bg">
+            </div>
+            <div class="col-md-6">
+                <label style="color:black;font-weight: bold;">Contrato-File:</label>
+                <div id="permissions-select2">
 
+                    <select name="idfile" id="permissions2" class="form-control" required>
+                        <option value="">== Seleccione un File ==</option>
+                        @foreach($area as $areas)
+                        <option disabled>
+                            {{$areas->nombrearea}}
+                        </option>
+                        @foreach($areas->iPais_all as $destino)
+
+                        @if ($destino->estadofile == 1 and $destino->tipofile == 2)
+
+                        <option value="{{$destino->idfile}}">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-FILE-{{$destino->numfile}}-{{$destino->cargo}}-{{$destino->nombrecargo}}-{{$destino->habbasico}}-{{$destino->categoria}}-{{$destino->niveladm}}-{{$destino->clase}}-{{$destino->nivelsal}}
+                        </option>
+
+                        @endif
+
+                        @endforeach
+                        @endforeach
+
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+        <hr class="hrr">
         </br>
         <div class="form-group row">
             <div class="col-md-12 text-right">
@@ -247,19 +260,17 @@
 
             </div>
         </div>
-         
+
     </form>
 
 </div>
 
 @section('scripts')
-    <script>
-  
-
-        $('#permissions2').select2({
-            placeholder: "--Seleccionar--"
-        });
-    </script>
-    @endsection
+<script>
+    $('#permissions2').select2({
+        placeholder: "--Seleccionar--"
+    });
+</script>
+@endsection
 
 @endsection

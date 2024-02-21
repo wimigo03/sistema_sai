@@ -6,63 +6,64 @@
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
             <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
-                <a href="{{route('agregar.regulacion', $registroAsistencia->empleado_id)}}" class="color-icon-1">
+                <a href="{{url()->previous()}}" class="color-icon-1">
                     <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
                 </a>
             </span>
-
-            <b>Regularizar Marcado de Asistencia</b>
+            <b>Regularizar Registro de Asistencia</b>
         </div>
-
-
         <div class="col-md-4 text-right">
-            <a class="tts:left tts-slideIn tts-custom" aria-label="Recargar">
-                <button class="btn btn-sm btn-primary font-verdana" onclick="recargarPagina()">
-                    &nbsp; <i class="fa-solid fa-rotate-right"></i>&nbsp;
+            <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
+                <button class="btn btn-sm btn-danger font-verdana" type="button">
+                    &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
                 </button>
             </a>
+            <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
+                <button class="btn btn-sm btn-danger font-verdana" type="button">
+                    &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
+                </button>
+            </a>
+
         </div>
-
-        @if(session('error'))
         <div class="col-md-12">
-
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
+            <hr class="hrr">
+        </div>
+        @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
         </div>
         @endif
 
     </div>
-    <!-- Campos del formulario -->
-    <div class="row font-verdana">
-        <div class="col-md-6 table-responsive center">
-            <hr class="hrr">
+    <div class="row font-verdana-sm">
+
+        <div class="col-md-6">
 
             <div class="body-border ">
                 @if($registroAsistencia->horario->tipo == 0)
                 <div class="row">
                     <div class="form-group col-md-12 form-check">
-                        <b>HORARIO :</b>
 
+
+
+
+                        <b>TURNO CONTINUO :</b>
                         <hr class="hrr">
-                        <div class="row">
-                            <div class="form-group col-md-12 form-check">
-                                <b>TURNO CONTINUO :</b>
-                            </div>
-                        </div>
+
+
                         <div class="row">
                             <div class="form-group col-md-6 form-check-sm">
                                 <br><b>MARCADO DE ENTRADA:</b></br>
                                 <label for="asignado" id="label1">Biometrico</label>
                                 <input type="checkbox" name="asignado" id="asignado1" class="form-control" onclick="toggleLabel('label1', 'asignado1', 'registroH_inicio', 'registro_inicio')">
-                                <input type="time" id="registroH_inicio" name="registro_entrada" class="form-control" value="{{ $registroAsistencia->horario->hora_inicio }}" required>
+                                <input type="time" id="registroH_inicio" name="registro_entrada" class="form-control" value="{{ $registroAsistencia->horario->hora_inicio }}" required readonly>
 
                             </div>
                             <div class="form-group col-md-6 form-check">
                                 <br><b>MARCADO DE SALIDA:</b></br>
                                 <label for="asignado" id="label4">Biometrico</label>
                                 <input type="checkbox" name="asignado" id="asignado4" class="form-control" onclick="toggleLabel('label4', 'asignado4','registroH_final','registro_final')">
-                                <input type="time" id="registroH_final" name="registro_final" class="form-control" value="{{ $registroAsistencia->horario->hora_final}}" required>
+                                <input type="time" id="registroH_final" name="registro_final" class="form-control" value="{{ $registroAsistencia->horario->hora_final}}" required readonly>
                             </div>
 
                         </div>
@@ -109,14 +110,32 @@
 
                             </div>
                         </div>
+                        <div class="form-group col-md-12 form-check">
+                            <hr class="hr">
+                        </div>
+
                         <div class="row">
-                            <div class="form-group col-md-12 form-check">
-                                <hr class="hr">
+                            <div class="form-check">
+                                <label class="form-check-label" for="flexCheckDefault4">
+                                    BAJA MÉDICA
+                                </label>
+                                <input class="form-control checkbox" type="checkbox" value="BAJA MÉDICA" id="flexCheckDefault4">
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label" for="flexCheckChecked5">
+                                    LIC. G/ DE HABERES
+                                </label>
+                                <input class="form-control checkbox" type="checkbox" value="LICENCIA SIN GOCE DE HABERES" id="flexCheckChecked5">
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label" for="flexCheckChecked6">
+                                    ÓRDEN DE SERVICIO
+                                </label>
+                                <input class="form-control checkbox" type="checkbox" value="ORDEN DE SERVICIO" id="flexCheckChecked6">
                             </div>
                         </div>
 
                         <div class="form-group row font-verdana-bg">
-
                             @if(isset($permiso))
                             <!-- Agrega más campos según sea necesario -->
                             <div class="form-check">
@@ -127,7 +146,14 @@
                             </div>
                             <div class="form-check">
                                 <b>Fecha de <br>Solicitud:</b> {{ $permiso->fecha_solicitud }}</p>
+                                <div class="form-group col-md-8">
+                                        <div class="col-md-12 text-right">
+                                            <hr class="hrr">
+                                            <button class="btn btn-success">Agregar</button>
+                                        </div>
 
+
+                                    </div>
                             </div>
                             <div class="form-check">
                                 <b>Hora de <br>Retorno:</b> {{ $permiso->hora_retorno }}</p>
@@ -135,7 +161,15 @@
                             </div>
                             @else
                             <div class="form-check">
-                                <p>No se encontró <br>ningún permiso</p>
+                                <p>No se encontró ningún permiso</p>
+                                <div class="form-group col-md-8">
+                                        <div class="col-md-12 text-right">
+                                            <hr class="hrr">
+                                            <button class="btn btn-success">Agregar</button>
+                                        </div>
+
+
+                                    </div>
 
                             </div>
                             @endif
@@ -143,62 +177,56 @@
 
                         </div>
                     </div>
+
                 </div>
                 @else
                 <div class="row font-verdana-sm">
                     <div class="form-group col-md-12 form-check">
-                        <b>HORARIO :</b>
 
-                        <hr class="hrr">
 
 
                         <div class="row">
 
                             <div class="form-group col-md-6 form-check">
+                                <b>TURNO MAÑANA :</b>
+                                <hr class="hrr">
 
                                 <div class="row">
-                                    <div class="form-group col-md-12 form-check">
-                                        <b>TURNO MAÑANA :</b>
-                                    </div>
-                                </div>
-                                <div class="row">
+
                                     <div class="form-group col-md-6 form-check">
                                         <br><b>ENTRADA:</b></br>
                                         <label for="asignado" id="label1">Biometrico</label>
                                         <input type="checkbox" name="asignado" id="asignado1" class="form-control" onclick="toggleLabel('label1', 'asignado1', 'registroH_inicio', 'registro_inicio')">
-                                        <input type="time" id="registroH_inicio" name="registro_inicio" class="form-control form-control-sm" value="{{ $registroAsistencia->horario->hora_inicio }}" required>
+                                        <input type="time" id="registroH_inicio" name="registro_inicio" class="form-control form-control-sm" value="{{ $registroAsistencia->horario->hora_inicio }}" required readonly>
 
                                     </div>
                                     <div class="form-group col-md-6 form-check">
                                         <br><b>SALIDA:</b></br>
                                         <label for="asignado" id="label2">Biometrico</label>
                                         <input type="checkbox" name="asignado" id="asignado2" class="form-control" onclick="toggleLabel('label2', 'asignado2', 'registroH_salida', 'registro_salida')">
-                                        <input type="time" id="registroH_salida" name="registro_salida" class="form-control form-control-sm" value="{{ $registroAsistencia->horario->hora_salida }}" required>
+                                        <input type="time" id="registroH_salida" name="registro_salida" class="form-control form-control-sm" value="{{ $registroAsistencia->horario->hora_salida }}" required readonly>
 
                                     </div>
 
                                 </div>
                             </div>
                             <div class="form-group col-md-6 form-check">
+                                <b>TURNO TARDE :</b>
+                                <hr class="hrr">
 
-                                <div class="row">
-                                    <div class="form-group col-md-12 form-check">
-                                        <b>TURNO TARDE :</b>
-                                    </div>
-                                </div>
                                 <div class="row">
                                     <div class="form-group col-md-6 form-check">
                                         <br><b>ENTRADA:</b></br>
                                         <label for="asignado" id="label3">Biometrico</label>
                                         <input type="checkbox" name="asignado" id="asignado3" class="form-control" onclick="toggleLabel('label3', 'asignado3','registroH_entrada','registro_entrada')">
-                                        <input type="time" id="registroH_entrada" name="registro_entrada" class="form-control form-control-sm" value="{{ $registroAsistencia->horario->hora_entrada }}" required>
+                                        <input type="time" id="registroH_entrada" name="registro_entrada" class="form-control form-control-sm" value="{{ $registroAsistencia->horario->hora_entrada }}" required readonly>
 
                                     </div>
                                     <div class="form-group col-md-6 form-check">
                                         <br><b>SALIDA:</b></br>
                                         <label for="asignado" id="label4">Biometrico</label>
                                         <input type="checkbox" name="asignado" id="asignado4" class="form-control" onclick="toggleLabel('label4', 'asignado4','registroH_final','registro_final')">
-                                        <input type="time" id="registroH_final" name="registro_final" class="form-control form-control-sm" value="{{ $registroAsistencia->horario->hora_final}}" required>
+                                        <input type="time" id="registroH_final" name="registro_final" class="form-control form-control-sm" value="{{ $registroAsistencia->horario->hora_final}}" required readonly>
 
                                     </div>
                                 </div>
@@ -261,6 +289,104 @@
                                 </label>
                                 <input class="form-control checkbox" type="checkbox" value="BOLETA PERSONAL" id="flexCheckDefault0">
                             </div>
+                            <div class="form-group col-md-8">
+                                        <div class="col-md-12 text-right">
+                                            <hr class="hrr">
+                                            <button class="btn btn-success">Agregar</button>
+                                        </div>
+
+
+                                    </div>
+                            <div class="form-check">
+                                <b>Fecha de <br>Solicitud:</b> {{ $permiso->fecha_solicitud }}</p>
+
+                            </div>
+                            <div class="form-check">
+                                <b>Hora de <br>Retorno:</b> {{ $permiso->hora_retorno }}</p>
+
+                            </div>
+                            @else
+                            @if(isset($permiso2))
+                            <!-- Agrega más campos según sea necesario -->
+                            <div class="form-check">
+                                <label class="form-check-label" for="flexCheckDefault0">
+                                    BOLETA PERSONAL
+                                </label>
+                                <input class="form-control checkbox" type="checkbox" value="BOLETA PERSONAL" id="flexCheckDefault0">
+                            </div>
+                            <div class="form-group col-md-8">
+                                        <div class="col-md-12 text-right">
+                                            <hr class="hrr">
+                                            <button class="btn btn-success">Agregar</button>
+                                        </div>
+
+
+                                    </div>
+                            <div class="form-check">
+                                <b>Fecha de <br>Solicitud:</b> {{ $permiso->fecha_solicitud }}</p>
+
+                            </div>
+                            <div class="form-check">
+                                <b>Hora de <br>Retorno:</b> {{ $permiso->hora_retorno }}</p>
+
+                            </div>
+                            @else
+                            <hr class="hrr">
+                            <div class="form-check">
+                                <p>No tiene Boletas de Salida Personal Registrada</p>
+                                <div class="form-group col-md-8">
+                                        <div class="col-md-12 text-right">
+                                          
+                                            <button class="btn btn-success">Agregar</button>
+                                        </div>
+
+
+                                    </div>
+
+                            </div>
+                            @endif
+                            @endif
+                            @if(isset($permiso2))
+                            <!-- Agrega más campos según sea necesario -->
+                            <div class="form-check">
+                                <label class="form-check-label" for="flexCheckDefault0">
+                                    BOLETA PERSONAL
+                                </label>
+                                <input class="form-control checkbox" type="checkbox" value="BOLETA PERSONAL" id="flexCheckDefault0">
+                            </div>
+                            <div class="form-group col-md-8">
+                                        <div class="col-md-12 text-right">
+                                            <hr class="hrr">
+                                            <button class="btn btn-success">Agregar</button>
+                                        </div>
+
+
+                                    </div>
+                            <div class="form-check">
+                                <b>Fecha de <br>Solicitud:</b> {{ $permiso->fecha_solicitud }}</p>
+
+                            </div>
+                            <div class="form-check">
+                                <b>Hora de <br>Retorno:</b> {{ $permiso->hora_retorno }}</p>
+
+                            </div>
+                            @else
+                            @if(isset($permiso))
+                            <!-- Agrega más campos según sea necesario -->
+                            <div class="form-check">
+                                <label class="form-check-label" for="flexCheckDefault0">
+                                    BOLETA PERSONAL
+                                </label>
+                                <input class="form-control checkbox" type="checkbox" value="BOLETA PERSONAL" id="flexCheckDefault0">
+                            </div>
+                            <div class="form-group col-md-8">
+                                        <div class="col-md-12 text-right">
+                                            <hr class="hrr">
+                                            <button class="btn btn-success">Agregar</button>
+                                        </div>
+
+
+                                    </div>
                             <div class="form-check">
                                 <b>Fecha de <br>Solicitud:</b> {{ $permiso->fecha_solicitud }}</p>
 
@@ -275,6 +401,7 @@
 
                             </div>
                             @endif
+                            @endif
 
 
                         </div>
@@ -286,10 +413,9 @@
 
         </div>
 
-        <div class="col-md-6 font-verdana-sm">
+        <div class="col-md-6 ">
 
-            <hr class="hrr">
-
+            <!-- Campos del formulario -->
             <div class="body-border">
                 <b>DATOS DE REGISTRO DE ASISTENCIA:</b>
                 <hr class="hrr">
@@ -297,147 +423,129 @@
                     @csrf
                     @method('PUT')
 
-                    <div class="form-group row ">
-                        <div class="form-group col-md-7">
-                            <label for="descripcion"><b>Nombres y Apellidos:</b></label>
-                            <input type="text" name="descripcion" value="{{ $registroAsistencia->empleado->nombres }} {{$registroAsistencia->empleado->ap_pat}} {{$registroAsistencia->empleado->ap_mat}}" class="form-control form-control-sm" readonly>
+                    <div class="form-group row font-verdana-sm">
+                        <div class="form-group col-md-8">
+                            <label for="descripcion">Nombres y Apellidos</label>
+                            <input type="text" name="descripcion" value="{{ $registroAsistencia->empleado->nombres }} {{$registroAsistencia->empleado->ap_pat}} {{$registroAsistencia->empleado->ap_mat}}" class="form-control form-control-sm" readonly required>
 
                         </div>
 
-                        <div class="form-group col-md-5">
-                            <label for="fecha"><b>Fecha :</b></label>
-                            <input type="date" name="fecha" class="form-control form-control-sm" value="{{ $registroAsistencia->asistencia->fecha }}" readonly>
+                        <div class="form-group col-md-4">
+                            <label for="fecha">Fecha</label>
+                            <input type="date" name="fecha" class="form-control" value="{{ $registroAsistencia->asistencia->fecha }}" readonly>
                         </div>
                     </div>
-
-
                     @if($registroAsistencia->horario->tipo == 0)
-                    <div class="form-group row font-verdana-bg">
-                        @if($registroAsistencia->registro_inicio)
-                        <div class="form-group col-md-12 form-check">
-                            <b>TURNO MAÑANA :</b>
-                            <hr class="hrr">
+                    <div class="form-group row font-verdana-sm">
 
-                        </div>
+                        @if($registroAsistencia->registro_inicio)
                         <div class="form-group col-md-6">
-                            <label for="registro_inicio"><b>R. de Entrada</b></label>
-                            <input type="time" id="registro_inicio" name="registro_inicio" class="form-control form-control-sm" value="{{ $registroAsistencia->registro_inicio }}" readonly>
+                            <label for="registro_inicio">Hora de Inicio</label>
+                            <input type="time" id="registro_inicio" name="registro_inicio" class="form-control" value="" readonly>
                         </div>
                         @else
                         <div class="form-group col-md-6">
-                            <label for="registro_inicio"><b>R. de Entrada</b></label>
-                            <input type="time" id="registro_inicio" name="registro_inicio" class="form-control form-control-sm" value="">
+                            <label for="registro_inicio">Hora de Inicio</label>
+                            <input type="time" id="registro_inicio" name="registro_inicio" class="form-control" value="" readonly>
                         </div>
                         @endif
                         @if($registroAsistencia->registro_final)
-                        <div class="form-group col-md-12 form-check">
-                            <b>TURNO MAÑANA :</b>
-                            <hr class="hrr">
-
-                        </div>
                         <div class="form-group col-md-6">
-                            <label for="registro_final"><b>R. de Salida</b> </label>
-                            <input type="time" id="registro_final" name="registro_final" class="form-control form-control-sm" value="{{ $registroAsistencia->registro_final }}" readonly>
+                            <label for="registro_final">Hora Final</label>
+                            <input type="time" id="registro_final" name="registro_final" class="form-control" value="" readonly>
                         </div>
                         @else
                         <div class="form-group col-md-6">
-                            <label for="registro_final"><b>R. de Salida</b> </label>
-                            <input type="time" id="registro_final" name="registro_final" class="form-control form-control-sm" value="">
+                            <label for="registro_final">Hora Final</label>
+                            <input type="time" id="registro_final" name="registro_final" class="form-control" value="" readonly>
                         </div>
                         @endif
                     </div>
                     @else
-                    <div class="form-group row font-verdana-sm">
 
-                        @if($registroAsistencia->registro_inicio)
-
+                    <div class="row font-verdana-sm">
                         <div class="form-group col-md-6">
-                            <div class="form-group col-md-6">
-                                <b>TURNO MAÑANA :</b>
-                                <hr class="hrr">
-                            </div>
+                            TURNO MAÑANA
+                            <hr class="hrr">
+                            <div class="form-group row font-verdana-sm">
+                                <div class="form-group col-md-6">
 
-                            <div class="form-group col-md-6">
-                                <label for="registro_inicio"><b>Registro de Entrada</b></label>
-                                <input type="time" id="registro_inicio" name="registro_inicio" class="form-control form-control-sm" value="{{ $registroAsistencia->registro_inicio }}" readonly>
-                            </div>
-                            @else
-                            <div class="form-group col-md-6">
-                                <b>TURNO MAÑANA :</b>
-                                <hr class="hrr">
+                                    @if($registroAsistencia->registro_inicio)
+                                    <label for="registro_inicio">ENTRADA</label>
+                                    <input type="time" id="registro_inicio" name="registro_inicio" class="form-control form-control-sm" value="" readonly>
+
+                                    @else
+                                    <label for="registro_inicio">ENTRADA</label>
+                                    <input type="time" id="registro_inicio" name="registro_inicio" class="form-control form-control-sm" value="" readonly>
+
+                                    @endif
+
+                                </div>
+                                <div class="form-group col-md-6">
+
+                                    @if($registroAsistencia->registro_salida)
+                                    <label for="registro_salida">SALIDA</label>
+                                    <input type="time" id="registro_salida" name="registro_salida" class="form-control form-control-sm" value="" readonly>
+
+                                    @else
+                                    <label for="registro_salida">SALIDA</label>
+                                    <input type="time" id="registro_salida" name="registro_salida" class="form-control form-control-sm" value="" readonly>
+
+                                    @endif
+
+                                </div>
 
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="registro_inicio"><b>Registro de Entrada</b></label>
-                                <input type="time" id="registro_inicio" name="registro_inicio" class="form-control form-control-sm" value="">
-                            </div>
-                            @endif
-
-                            @if($registroAsistencia->registro_salida)
-                            <div class="form-group col-md-6">
-                                <label for="registro_salida"><b>Registro de Salida</b></label>
-                                <input type="time" id="registro_salida" name="registro_salida" class="form-control form-control-sm" value="{{ $registroAsistencia->registro_salida }}" readonly required>
-                            </div>
-                            @else
-                            <div class="form-group col-md-6">
-                                <label for="registro_salida"><b>Registro de salida</b></label>
-                                <input type="time" id="registro_salida" name="registro_salida" class="form-control form-control-sm" value="">
-                            </div>
-                            @endif
-
                         </div>
-                        
-                            @if($registroAsistencia->registro_entrada)
-                            <div class="form-group col-md-6">
+                        <div class="form-group col-md-6">
+                            TURNO TARDE
+                            <hr class="hrr">
+                            <div class="form-group row font-verdana-sm">
+                                <div class="form-group col-md-6">
+                                    @if($registroAsistencia->registro_entrada)
+                                    <label for="registro_entrada">ENTRADA</label>
+                                    <input type="time" id="registro_entrada" name="registro_entrada" class="form-control form-control-sm" value="" readonly>
 
-                            <div class="form-group col-md-6">
-                                <label for="registro_entrada"><b>Registro. de Entrada</b></label>
-                                <input type="time" id="registro_entrada" name="registro_entrada" class="form-control form-control-sm" value="{{ $registroAsistencia->registro_entrada }}" readonly required>
-                            </div>
-                            @else
-                            <div class="form-group col-md-6">
-                                <label for="registro_entrada"><b>Registro de Entrada</b></label>
-                                <input type="time" id="registro_entrada" name="registro_entrada" class="form-control form-control-sm" value="">
-                            </div>
-                            @endif
 
-                            @if($registroAsistencia->registro_final)
-                            <div class="form-group col-md-6">
-                                <label for="registro_final"><b>Registro de Salida</b> </label>
-                                <input type="time" id="registro_final" name="registro_final" class="form-control form-control-sm" value="{{ $registroAsistencia->registro_final }}" readonly>
+                                    @else
+                                    <label for="registro_entrada">ENTRADA</label>
+                                    <input type="time" id="registro_entrada" name="registro_entrada" class="form-control form-control-sm" value="" readonly>
+
+                                    @endif
+
+                                </div>
+                                <div class="form-group col-md-6">
+
+                                    @if($registroAsistencia->registro_final)
+                                    <label for="registro_final">SALIDA</label>
+                                    <input type="time" id="registro_final" name="registro_final" class="form-control form-control-sm" value="" readonly>
+
+                                    @else
+                                    <label for="registro_final">SALIDA</label>
+                                    <input type="time" id="registro_final" name="registro_final" class="form-control form-control-sm" value="" readonly>
+
+                                    @endif
+
+                                </div>
+
                             </div>
-                            @else
-                            <div class="form-group col-md-6">
-                                <label for="registro_final"><b>Registro de Salida</b> </label>
-                                <input type="time" id="registro_final" name="registro_final" class="form-control form-control-sm" value="">
-                            </div>
-                            @endif
                         </div>
                     </div>
+
                     @endif
-                    <div class="col-md-12 form-check">
-
-                        <label for="asignado"><b>OBSERVACIONES:</b></label><br>
-
-                        <input type="hidden" id="observ2" name="observ2" class="form-control form-control-sm" value="{{$registroAsistencia->observ}}">
-
-                        <textarea class="form-control form-control-sm" name="observ" id="exampleTextarea" rows="5" required>{{$registroAsistencia->observ}}</textarea>
-
-                    </div>
-
-                    <div class="col-md-12 text-right">
-                        <hr class="hrr">
-                        <button type="submit" class="btn btn-success">Regularizar</button>
-                    </div>
+                    <label for="asignado"><b>OBSERVACIONES:</b></label><br>
+                    <input type="hidden" id="observ2" name="observ2" class="form-control form-control-sm" value="{{$registroAsistencia->observ}}">
+                    <textarea class="form-control form-control-sm" name="observ" id="exampleTextarea" rows="6" required></textarea>
+                    <hr class="hrr">
+                    <button type="submit" class="btn btn-success">Regularizar</button>
 
                 </form>
+
             </div>
+
         </div>
     </div>
 </div>
-
-
-
 
 <!-- Modal de Confirmación -->
 <div class="modal fade" id="confirmarModal" tabindex="-1" role="dialog" aria-labelledby="confirmarModalLabel" aria-hidden="true">
@@ -466,9 +574,6 @@
 <script>
     // Variable para almacenar el valor original de registro_inicio
     var originalRegistroInicioValue = $("#registro_inicio").val();
-    var originalRegistroEntradaValue = $("#registro_entrada").val();
-    var originalRegistroSalidaValue = $("#registro_salida").val();
-    var originalRegistroFinalValue = $("#registro_final").val();
 
     function toggleLabel(labelId, checkboxId, sourceInputId, targetInputId) {
         // Obtener el texto original del label
@@ -485,11 +590,6 @@
 
         // Asignar el valor del input fuente al input destino si el checkbox está marcado
         $("#" + targetInputId).val(isChecked ? sourceValue : originalRegistroInicioValue);
-        $("#" + targetInputId).val(isChecked ? sourceValue : originalRegistroEntradaValue);
-        $("#" + targetInputId).val(isChecked ? sourceValue : originalRegistroSalidaValue);
-        $("#" + targetInputId).val(isChecked ? sourceValue : originalRegistroFinalValue);
-
-
     }
 </script>
 
@@ -513,11 +613,6 @@
     });
 </script>
 <script>
-    function recargarPagina() {
-        location.reload(true); // El parámetro true fuerza la recarga desde el servidor y no desde la caché
-    }
-</script>
-<script>
     $(document).ready(function() {
         $('.checkbox').change(function() {
             var text = '';
@@ -526,23 +621,8 @@
             });
             $('#exampleTextarea').val(text.trim());
         });
-        $('.checkbox').change(function() {
-            updateTextarea();
-            // Almacenar el estado en el campo oculto
-            $('#observ2').val($('#exampleTextarea').val());
-        });
-
-        // Leer el valor almacenado en el campo oculto al cargar la página
-        var storedValue = $('#observ2').val();
-        if (storedValue) {
-            // Dividir el valor en líneas y marcar los checkboxes correspondientes
-            var lines = storedValue.split('\n');
-            lines.forEach(function(line) {
-                $('.checkbox[value="' + line.trim() + '"]').prop('checked', true);
-            });
-            updateTextarea();
-        }
     });
 </script>
+
 @endsection
 @endsection

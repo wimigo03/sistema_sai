@@ -1,119 +1,119 @@
 @extends('layouts.admin')
 
 @section('content')
- 
-    <div class="row font-verdana-bg">
-        <div class="col-md-8 titulo">
-            <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
-                <a href="{{route('empleadoasistencias.index')}}" class="color-icon-1">
-                    <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
-                </a>
 
-            </span>
-            <b>Regularizar Marcado de Asistencia por Orden de Servicio</b>
-        </div>
-        <div class="col-md-4 text-right">
-            <div class="btn-group">
-                <input type="hidden" id="id" name="id" class="form-control" value="{{$empleado->idemp}}">
-                <input type="month" id="selectedMonth" name="selected_month" class="form-control" value="{{$vistaselectedMonth}}">
-            </div>
-            <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
-                <button class="btn btn-sm btn-danger font-verdana" type="button">
-                    &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
-                </button>
+<div class="row font-verdana-bg">
+    <div class="col-md-8 titulo">
+        <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
+            <a href="{{route('empleadoasistencias.index')}}" class="color-icon-1">
+                <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
             </a>
 
+        </span>
+        <b>Regularizar Marcado de Asistencia</b>
+    </div>
+    <div class="col-md-4 text-right">
+        <div class="btn-group">
+            <input type="hidden" id="id" name="id" class="form-control" value="{{$empleado->idemp}}">
+            <input type="month" id="selectedMonth" name="selected_month" class="form-control" value="{{$vistaselectedMonth}}">
         </div>
-
-        <div class="col-md-12">
-            <hr>
-            @if(Session::has('pendiente'))
-            <div class="alert alert-danger font-verdana-bg">
-                {{ Session::get('pendiente') }}
-            </div>
-            <hr>
-
-            @endif
-
-            @if(Session::has('success'))
-            <div class="alert alert-success">
-                {{ Session::get('success') }}
-            </div>
-            <hr>
-
-            @endif
-            @if(Session::has('error'))
-            <div class="alert alert-danger font-verdana-bg">
-                {{ Session::get('error') }}
-            </div>
-            <hr>
-
-            @endif
-        </div>
-        <div class="col-md-8  text-left">
-            <div class="btn-group">
-                <b>Nombres y Apellidos :</b> {{$empleado->nombres}} {{$empleado->ap_pat}} {{$empleado->ap_mat}}
-            </div>
-        </div>
-
+        <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
+            <button class="btn btn-sm btn-danger font-verdana" type="button">
+                &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
+            </button>
+        </a>
 
     </div>
-    <div class="col-md-12">
 
+    <div class="col-md-12">
+        <hr>
+        @if(Session::has('pendiente'))
+        <div class="alert alert-danger font-verdana-bg">
+            {{ Session::get('pendiente') }}
+        </div>
+        <hr>
+
+        @endif
+
+        @if(Session::has('success'))
+        <div class="alert alert-success">
+            {{ Session::get('success') }}
+        </div>
+        <hr>
+
+        @endif
+        @if(Session::has('error'))
+        <div class="alert alert-danger font-verdana-bg">
+            {{ Session::get('error') }}
+        </div>
+        <hr>
+
+        @endif
+    </div>
+    <div class="col-md-8  text-left">
+        <div class="btn-group">
+            <b>Nombres y Apellidos :</b> {{$empleado->nombres}} {{$empleado->ap_pat}} {{$empleado->ap_mat}}
+        </div>
+    </div>
+
+
+</div>
+<div class="col-md-12">
+
+    <hr class="hrr">
+</div>
+<div class="row font-verdana-sm">
+    <div class="col-md-6">
+        <table id="calendar" class="table-bordered  table display font-verdana-sm" style="width:70%">
+            <thead>
+                <tr>
+                    <th>S°</th>
+                    <th>Lun</th>
+                    <th>Mar</th>
+                    <th>Mier</th>
+                    <th>Jue</th>
+                    <th>Vie</th>
+                    <th>Sa</th>
+                    <th>Do</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <row class="row font-verdana-sm">
+            <div class="col-md-12 titulo">
+                <b>Historial de Cambios</b>
+            </div>
+        </row>
+        <div class="row font-verdana-sm">
+            <div class="col-md-12">
+                <table class="table-responsive table-hover responsive display hover compact font-verdana-sm" id="historial-table" style="width:100%">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Regularizado</th>
+                            <th>Nombres <br>Apellidos</th>
+                            <th>Datos anteriores</th>
+                            <th>Usuario</th>
+                            <th>Acciones</th>
+
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row font-verdana">
+    <div class="col-md-12">
         <hr class="hrr">
     </div>
-    <div class="row font-verdana-sm">
-        <div class="col-md-6">
-            <table id="calendar" class="table-bordered  table display font-verdana-sm" style="width:70%">
-                <thead>
-                    <tr>
-                        <th>S°</th>
-                        <th>Lun</th>
-                        <th>Mar</th>
-                        <th>Mier</th>
-                        <th>Jue</th>
-                        <th>Vie</th>
-                        <th>Sa</th>
-                        <th>Do</th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
-        <div class="col-md-6">
-            <row class="row font-verdana-sm">
-                <div class="col-md-12 titulo">
-                    <b>Historial de Cambios</b>
-                </div>
-            </row>
-            <div class="row font-verdana-sm">
-                <div class="col-md-12">
-                    <table class="table-responsive table-hover responsive display hover compact font-verdana-sm" id="historial-table" style="width:100%">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Regularizado</th>
-                                <th>Nombres <br>Apellidos</th>
-                                <th>Datos anteriores</th>
-                                <th>Usuario</th>
-                                <th>Acciones</th>
-
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-            </div>
-        </div>
+    <div class="col-md-4 text-left">
     </div>
-
-    <div class="row font-verdana">
-        <div class="col-md-12">
-            <hr class="hrr">
-        </div>
-        <div class="col-md-4 text-left">
-        </div>
-        <div class="col-md-8 text-right">
-        </div>
+    <div class="col-md-8 text-right">
     </div>
- 
+</div>
+
 
 @section('scripts')
 <script>
@@ -265,7 +265,7 @@
                     let routeUrl = "{{ route('fecha.crear', ['fecha' => ':fecha', 'id' => ':id']) }}";
                     // Reemplaza ':id' y ':otro_parametro' con los valores correspondientes
                     routeUrl = routeUrl.replace(':fecha', fecha).replace(':id', empleado_id);
-                    var link = `<a class="tts:left tts-slideIn tts-custom" aria-label="Regularizar 2 Asistencia" href="${routeUrl}"><i class="fa-solid fa-2xl fa-plus text-primary"></i></a>`;
+                    var link = `<a class="tts:left tts-slideIn tts-custom" aria-label="Regularizar 22 Asistencia" href="${routeUrl}"><i class="fa-solid fa-2xl fa-plus text-primary"></i></a>`;
                     return data.day + '<br>' + link;
                 }
                 return data.day + '<br>' + additionalInfo;
@@ -294,11 +294,11 @@
             // Verificar si hay datos y personalizar la visualización
             if (data.actual) {
                 let additionalInfo = '';
+                // Si necesitas agregar información adicional, puedes hacerlo aquí
 
-
-
-                return data.day + '<br>' + additionalInfo;
+                return '<span class="text-danger">' + data.day + '</span>' + '<br>' + additionalInfo;
             }
+
             return null;
         }
 

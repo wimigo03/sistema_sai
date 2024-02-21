@@ -81,7 +81,7 @@ class RegistroAsistenciaController extends Controller
                     return $html;
                 })
                 ->addColumn('nom_ap', function ($row) {
-                    $nom = $row->empleado->nombres;
+                    $nom = $row->empleado->nombres ?? '-';
                     $ap_pat = $row->empleado->ap_pat ?? '-';
                     $ap_mat = $row->empleado->ap_mat ?? '-';
                     return $nom . ' ' . $ap_pat . ' ' . $ap_mat;
@@ -103,13 +103,17 @@ class RegistroAsistenciaController extends Controller
                 })
                 ->addColumn('estado', function ($row) {
                     if ($row->estado == 0) {
-                        return 'Sin Registro';
+                        return 'Falta';
                     } else if ($row->estado == 1) {
                         return 'Registrado';
                     } else if ($row->estado == 2) {
-                        return 'Pendiente';
+                        return 'Falta';
+                    } else if ($row->estado == 3) {
+                        # code...
+
+                        return 'Marcado'; // Puedes personalizar este mensaje según sea necesario
                     } else {
-                        return '-'; // Puedes personalizar este mensaje según sea necesario
+                        return '-';
                     }
                 })
 
@@ -152,10 +156,7 @@ class RegistroAsistenciaController extends Controller
         $pin = $data['pin'] ?? null;
         $fecha = $data['fecha'] ?? null;
 
-
         try {
-
-
             $response = $this->verificarLector($lid);
             if ($response) {
                 return $response;
@@ -168,19 +169,21 @@ class RegistroAsistenciaController extends Controller
 
 
             if ($id && $fid) {
-                $areasExcluidas = [33, 34];
-
+                //Ares Inactivos
+                $areasInactivas = [33, 34];
+                // Lógica para buscar el empleado por dactilar
                 $emp = EmpleadosModel::whereHas('huellasdigitales', function ($query) use ($fid, $id) {
                     $query
                         ->where('fid', $fid)
                         ->where('empleado_id', $id);
                 })
-                    ->whereNotIn('idarea', $areasExcluidas)
+                    ->whereNotIn('idarea', $areasInactivas)
                     ->first();
                 if (!$emp) {
                     return response()->json(['update' => 'INTENTE DE NUEVO']);
                 }
             } else if (!$id) {
+                // Lógica para buscar el empleado por PIN
                 $emp = $this->buscarPersonalPIN($pin);
             }
 
@@ -190,13 +193,22 @@ class RegistroAsistenciaController extends Controller
                 return response()->json(['error' => 'NO CORRESPONDE A NINGÚN PERSONAL ACTIVO.']);
             }
 
+            $nom = $emp->nombres ?? '-';
+            $ap_pat = $emp->ap_pat ?? '-';
+            $ap_mat = $emp->ap_mat ?? '-';
+            $nombreCompleto   = $nom . ' ' . $ap_pat . ' ' . $ap_mat;
+
+
             // Lógica para verificar el horario activo
             $horario = $emp->horarios()->where('estado', 1)->first();
 
 
             if (!$horario) {
                 // No se encontró un horario válido para la hora actual
-                return response()->json(['error' => 'NO SE ENCONTRÓ HORARIO ACTIVO PARA EL PERSONAL']);
+                return response()->json([
+                    'error' => 'NO SE ENCONTRÓ HORARIO ACTIVO PARA EL PERSONAL',
+                    'nombre' => $nombreCompleto
+                ]);
             }
 
 
@@ -243,6 +255,7 @@ class RegistroAsistenciaController extends Controller
                         ->where('horario_id', $horario_ID->horario_id)
                         ->first();
                     $registro->asistencia->fecha == $fecha;
+
                     if ($horarioID != $horario_ID->horario_id) {
                         $horario = HorarioModel::find($horario_ID->horario_id);
                     }
@@ -291,7 +304,7 @@ class RegistroAsistenciaController extends Controller
                         ->where('horario_id', $horario_ID->horario_id)
                         ->first();
 
-                    $registro->asistencia->fecha == $fecha;
+                    //$registro->asistencia->fecha == $fecha;
 
                     if ($horarioID != $horario_ID->horario_id) {
                         $horario = HorarioModel::find($horario_ID->horario_id);
@@ -312,7 +325,10 @@ class RegistroAsistenciaController extends Controller
                     $registro->save();
                     $this->verificarMarcado($registro);
 
-                    return response()->json(['success' => 'SE GUARDÓ REGISTRO DE SALIDA:']);
+                    return response()->json([
+                        'success' => 'SE GUARDÓ REGISTRO DE SALIDA: ',
+                        'nombre' => $nombreCompleto
+                    ]);
                 }
                 if (!$registro->registro_final) {
                     $registro->registro_final = $horaActual;
@@ -320,9 +336,15 @@ class RegistroAsistenciaController extends Controller
                     $this->verificarMarcado($registro);
 
                     // $this->sumarRetrasos($registroactual);
-                    return response()->json(['success' => 'SE GUARDÓ REGISTRO DE SALIDA:']);
+                    return response()->json([
+                        'success' => 'SE GUARDÓ REGISTRO DE SALIDA: ',
+                        'nombre' => $nombreCompleto
+                    ]);
                 } else {
-                    return response()->json(['success' => 'YA EXISTE REGISTRO DE SALIDA.']);
+                    return response()->json([
+                        'success' => 'YA EXISTE REGISTRO DE SALIDA: ',
+                        'nombre' => $nombreCompleto
+                    ]);
                 }
             }
 
@@ -362,7 +384,10 @@ class RegistroAsistenciaController extends Controller
 
                         $this->calcularRetraso($registro);
                         $this->verificarMarcado($registro);
-                        return response()->json(['success' => 'SE CREÓ REGISTRO DE ENTRADA']);
+                        return response()->json([
+                            'success' => 'SE CREÓ REGISTRO DE ENTRADA',
+                            'nombre' => $nombreCompleto
+                        ]);
 
                         // $this->sumarRetrasos($registroactual);
                     } else if ($horaActual < $horario->hora_salida && $horaActual  > $sumaInicioFormateada) {
@@ -402,7 +427,10 @@ class RegistroAsistenciaController extends Controller
 
                         $registro->save();
                         $this->verificarMarcado($registro);
-                        return response()->json(['success' => 'SE CREÓ REGISTRO DE SALIDA:']);
+                        return response()->json([
+                            'success' => 'SE CREÓ REGISTRO DE SALIDA: ',
+                            'nombre' => $nombreCompleto
+                        ]);
                     } else if ($horaActual < $horario->hora_entrada && $horaActual >= $horaMinimaEntrada) {
                         $registro = new RegistroAsistencia();
                         $registro->empleado_id = $emp->idemp;
@@ -416,7 +444,10 @@ class RegistroAsistenciaController extends Controller
                         // $this->sumarRetrasos($registroactual);
                         $registro->save();
                         $this->verificarMarcado($registro);
-                        return response()->json(['success' => 'SE CREÓ REGISTRO DE SALIDA:']);
+                        return response()->json([
+                            'success' => 'SE CREÓ REGISTRO DE ENTRADA: ',
+                            'nombre' => $nombreCompleto
+                        ]);
                     } else if ($horaActual >= $horario->hora_entrada && $horaActual <= $sumaEntradaFormateada) {
                         $registro = new RegistroAsistencia();
                         $registro->empleado_id = $emp->idemp;
@@ -431,14 +462,17 @@ class RegistroAsistenciaController extends Controller
                         $this->calcularRetraso($registro);
                         // $this->sumarRetrasos($registroactual);
                         $this->verificarMarcado($registro);
-                        return response()->json(['success' => 'SE CREÓ REGISTRO DE ENTRADA:']);
+                        return response()->json([
+                            'success' => 'SE CREÓ REGISTRO DE ENTRADA: ',
+                            'nombre' => $nombreCompleto
+                        ]);
                     } else if ($horaActual < $horario->hora_final && $horaActual > $sumaEntradaFormateada) {
                         $registro = new RegistroAsistencia();
                         $registro->empleado_id = $emp->idemp;
                         $registro->horario_id = $horario->id;
                         $registro->registro_entrada = $horaActual;
 
-                        $registro->estado = 0;
+
                         $registro->asistencia_id = $asistencia->id;
                         $registro->fecha = $asistencia->fecha;
 
@@ -447,7 +481,10 @@ class RegistroAsistenciaController extends Controller
                         $this->verificarMarcado($registro);
 
                         // $this->sumarRetrasos($registroactual);
-                        return response()->json(['success' => 'SE CREÓ REGISTRO DE SALIDA: RETRASOS' . $registro->retraso1]);
+                        return response()->json([
+                            'success' => 'SE CREÓ REGISTRO DE SALIDA: RETRASOS ' . $registro->retraso1,
+                            'nombre' => $nombreCompleto
+                        ]);
                     } else if ($horaActual >= $horario->hora_final && $horaActual <= $finalDelDia) {
                         $registro = new RegistroAsistencia();
                         $registro->empleado_id = $emp->idemp;
@@ -462,7 +499,10 @@ class RegistroAsistenciaController extends Controller
 
 
                         // $this->sumarRetrasos($registroactual);
-                        return response()->json(['success' => 'SE CREÓ REGISTRO DE SALIDA:']);
+                        return response()->json([
+                            'success' => 'SE CREÓ REGISTRO DE SALIDA: ',
+                            'nombre' => $nombreCompleto
+                        ]);
                     }
                 } else if ($horario->tipo == 0) {
                     //return response()->json(['success' => 'SIN REGISTRO HORARIO TIPO :' . $horario->tipo]);
@@ -476,7 +516,10 @@ class RegistroAsistenciaController extends Controller
 
                         $registro->save();
                         $this->verificarMarcado($registro);
-                        return response()->json(['success' => 'SE CREÓ REGISTRO DE ENTRADA']);
+                        return response()->json([
+                            'success' => 'SE CREÓ REGISTRO DE ENTRADA :',
+                            'nombre' => $nombreCompleto
+                        ]);
 
                         $this->calcularRetraso($registro);
                         // $this->sumarRetrasos($registroactual);
@@ -491,7 +534,10 @@ class RegistroAsistenciaController extends Controller
                         $registro->save();
                         $this->calcularRetraso($registro);
                         $this->verificarMarcado($registro);
-                        return response()->json(['success' => 'SE CREÓ REGISTRO DE ENTRADA. RETRASO: ' . $registro->retraso1]);
+                        return response()->json([
+                            'success' => 'SE CREÓ REGISTRO DE ENTRADA. RETRASO: ' . $registro->retraso1,
+                            'nombre' => $nombreCompleto
+                        ]);
                     } else if ($horaActual < $horario->hora_inicio && $horaActual >= $HoraInicioJornada) {
                         $registro = new RegistroAsistencia();
                         $registro->empleado_id = $emp->idemp;
@@ -504,7 +550,10 @@ class RegistroAsistenciaController extends Controller
 
                         $registro->save();
                         $this->verificarMarcado($registro);
-                        return response()->json(['success' => 'SE CREÓ REGISTRO DE ENTRADA. RETRASO: ' . $registro->retraso1]);
+                        return response()->json([
+                            'success' => 'SE CREÓ REGISTRO DE ENTRADA. RETRASO: ' . $registro->retraso1,
+                            'nombre' => $nombreCompleto
+                        ]);
                     } else if ($horaActual >= $horario->hora_final && $horaActual <= $finalDelDia) {
                         $registro = new RegistroAsistencia();
                         $registro->empleado_id = $emp->idemp;
@@ -513,11 +562,12 @@ class RegistroAsistenciaController extends Controller
                         $registro->asistencia_id = $asistencia->id;
                         $registro->fecha = $asistencia->fecha;
 
-
-                        $registro->estado = 0;
                         $registro->save();
                         $this->verificarMarcado($registro);
-                        return response()->json(['success' => 'SE CREÓ REGISTRO DE SALIDA.']);
+                        return response()->json([
+                            'success' => 'SE CREÓ REGISTRO DE SALIDA. :',
+                            'nombre' => $nombreCompleto
+                        ]);
 
                         // $this->sumarRetrasos($registroactual);
                     }
@@ -534,9 +584,15 @@ class RegistroAsistenciaController extends Controller
 
                             $this->calcularRetraso($registro);
                             $this->verificarMarcado($registro);
-                            return response()->json(['success' => 'SE GUARDÓ REGISTRO DE ENTRADA:']);
+                            return response()->json([
+                                'success' => 'SE GUARDÓ REGISTRO DE ENTRADA: ',
+                                'nombre' => $nombreCompleto
+                            ]);
                         } else {
-                            return response()->json(['info' => 'YA EXISTE REGISTRO DE ENTRADA.']);
+                            return response()->json([
+                                'info' => 'YA EXISTE REGISTRO DE ENTRADA. :',
+                                'nombre' => $nombreCompleto
+                            ]);
                         }
 
 
@@ -548,7 +604,10 @@ class RegistroAsistenciaController extends Controller
                             $registro->save();
                             $this->calcularRetraso($registro);
                             $this->verificarMarcado($registro);
-                            return response()->json(['success' => 'SE GUARDÓ REGISTRO DE ENTRADA: RETRASOS :' . $registro->minutos_retraso]);
+                            return response()->json([
+                                'success' => 'SE GUARDÓ REGISTRO DE ENTRADA: RETRASOS :' . $registro->minutos_retraso,
+                                'nombre' => $nombreCompleto
+                            ]);
                         } else {
                             return response()->json(['info' => 'YA EXISTE REGISTRO DE ENTRADA.']);
                         }
@@ -560,7 +619,10 @@ class RegistroAsistenciaController extends Controller
                             $registro->minutos_retraso = 0;
                             $registro->save();
                             $this->verificarMarcado($registro);
-                            Session::flash('success', 'SE GUARDÓ REGISTRO DE ENTRADA: ' . $registro->retraso1 . $horaActual  . $horario->Nombre);
+                            return response()->json([
+                                'success' => 'SE GUARDÓ REGISTRO DE ENTRADA: ' ,
+                                'nombre' => $nombreCompleto
+                            ]);
                             return redirect()->back();
                         } else {
                             return response()->json(['info' => 'YA EXISTE REGISTRO DE ENTRADA.']);
@@ -569,14 +631,18 @@ class RegistroAsistenciaController extends Controller
 
                         if (!$registro->registro_salida) {
                             $registro->registro_salida = $horaActual;
-                            $registro->estado = 0;
+
 
                             //  $this->sumarRetrasos($registroactual);
                             $registro->save();
                             $this->verificarMarcado($registro);
-                            return response()->json(['success' => 'SE GUARDÓ REGISTRO DE SALIDA:']);
+                            return response()->json(['success' => 'SE GUARDÓ REGISTRO DE SALIDA: ',
+                            'nombre' => $nombreCompleto
+                        ]);
                         } else {
-                            return response()->json(['info' => 'YA EXISTE REGISTRO DE SALIDA.']);
+                            return response()->json(['info' => 'YA EXISTE REGISTRO DE SALIDA. ',
+                            'nombre' => $nombreCompleto
+                        ]);
                         }
                     } else if ($horaActual < $horario->hora_entrada && $horaActual >= $horaMinimaEntrada) {
 
@@ -587,50 +653,66 @@ class RegistroAsistenciaController extends Controller
                             // $this->sumarRetrasos($registroactual);
                             $registro->save();
                             $this->verificarMarcado($registro);
-                            return response()->json(['success' => 'SE GUARDÓ REGISTRO DE ENTRADA:']);
+                            return response()->json(['success' => 'SE GUARDÓ REGISTRO DE ENTRADA: ',
+                            'nombre' => $nombreCompleto
+                        ]);
                         } else {
-                            return response()->json(['info' => 'YA EXISTE REGISTRO DE SALIDA.']);
+                            return response()->json(['info' => 'YA EXISTE REGISTRO DE SALIDA. ' ,
+                            'nombre' => $nombreCompleto
+                        ]);
                         }
                     } else if ($horaActual >= $horario->hora_entrada && $horaActual <= $sumaEntradaFormateada) {
 
                         if (!$registro->registro_entrada) {
                             $registro->registro_entrada = $horaActual;
                             $registro->retraso2 = 0;
-                            $registro->estado = 0;
+
                             $this->calcularRetraso($registro);
                             $this->verificarMarcado($registro);
                             // $this->sumarRetrasos($registroactual);
                             $registro->save();
-                            return response()->json(['success' => 'SE GUARDÓ REGISTRO DE ENTRADA:']);
+                            return response()->json(['success' => 'SE GUARDÓ REGISTRO DE ENTRADA:',
+                            'nombre' => $nombreCompleto
+                        ]);
                         } else {
-                            return response()->json(['info' => 'YA EXISTE REGISTRO DE ENTRADA.']);
+                            return response()->json(['info' => 'YA EXISTE REGISTRO DE ENTRADA.',
+                            'nombre' => $nombreCompleto
+                        ]);
                         }
                     } else if ($horaActual < $horario->hora_final && $horaActual > $sumaEntradaFormateada) {
 
                         if (!$registro->registro_entrada) {
                             $registro->registro_entrada = $horaActual;
 
-                            $registro->estado = 0;
+
                             $registro->save();
                             $this->calcularRetraso($registro);
                             $this->verificarMarcado($registro);
                             // $this->sumarRetrasos($registroactual);
 
-                            return response()->json(['success' => 'SE GUARDÓ REGISTRO DE ENTRADA:']);
+                            return response()->json(['success' => 'SE GUARDÓ REGISTRO DE ENTRADA: ',
+                            'nombre' => $nombreCompleto
+                        ]);
                         } else {
-                            return response()->json(['info' => 'YA EXISTE REGISTRO DE ENTRADA.']);
+                            return response()->json(['info' => 'YA EXISTE REGISTRO DE ENTRADA. ',
+                            'nombre' => $nombreCompleto
+                        ]);
                         }
                     } else if ($horaActual >= $horario->hora_final && $horaActual <= $finalDelDia) {
                         if (!$registro->registro_final) {
                             $registro->registro_final = $horaActual;
-                            $registro->estado = 0;
+
                             $registro->save();
                             $this->verificarMarcado($registro);
 
                             // $this->sumarRetrasos($registroactual);
-                            return response()->json(['success' => 'SE GUARDÓ REGISTRO DE SALIDA:']);
+                            return response()->json(['success' => 'SE GUARDÓ REGISTRO DE SALIDA: ',
+                            'nombre' => $nombreCompleto
+                        ]);
                         } else {
-                            return response()->json(['info' => 'YA EXISTE REGISTRO DE SALIDA.']);
+                            return response()->json(['info' => 'YA EXISTE REGISTRO DE SALIDA. ',
+                            'nombre' => $nombreCompleto
+                        ]);
                         }
                     }
                 } else if ($horario->tipo == 0) {
@@ -642,12 +724,16 @@ class RegistroAsistenciaController extends Controller
                             $registro->save();
                             $this->calcularRetraso($registro);
                             $this->verificarMarcado($registro);
-                            return response()->json(['success' => 'SE GUARDÓ REGISTRO DE ENTRADA:']);
+                            return response()->json(['success' => 'SE GUARDÓ REGISTRO DE ENTRADA:',
+                            'nombre' => $nombreCompleto
+                        ]);
 
                             // $this->sumarRetrasos($registroactual);
                             return redirect()->back();
                         } else {
-                            return response()->json(['info' => 'YA EXISTE REGISTRO DE ENTRADA.']);
+                            return response()->json(['info' => 'YA EXISTE REGISTRO DE ENTRADA. ',
+                            'nombre' => $nombreCompleto
+                        ]);
                         }
                     } else if ($horaActual  < $horario->hora_final && $horaActual  > $sumaInicioFormateada) {
                         if (!$registro->registro_inicio) {
@@ -655,9 +741,13 @@ class RegistroAsistenciaController extends Controller
                             $registro->save();
                             $this->calcularRetraso($registro);
                             $this->verificarMarcado($registro);
-                            return response()->json(['success' => 'SE GUARDÓ REGISTRO DE ENTRADA:']);
+                            return response()->json(['success' => 'SE GUARDÓ REGISTRO DE ENTRADA: ',
+                            'nombre' => $nombreCompleto
+                        ]);
                         } else {
-                            return response()->json(['info' => 'YA EXISTE REGISTRO DE ENTRADA.']);
+                            return response()->json(['info' => 'YA EXISTE REGISTRO DE ENTRADA.',
+                            'nombre' => $nombreCompleto
+                        ]);
                         }
                     } else if ($horaActual < $horario->hora_inicio && $horaActual >= $HoraInicioJornada) {
                         if (!$registro->registro_inicio) {
@@ -666,10 +756,14 @@ class RegistroAsistenciaController extends Controller
                             $registro->minutos_retraso = 0;
                             $registro->save();
                             $this->verificarMarcado($registro);
-                            return response()->json(['success' => 'SE GUARDÓ REGISTRO DE ENTRADA:']);
+                            return response()->json(['success' => 'SE GUARDÓ REGISTRO DE ENTRADA:',
+                            'nombre' => $nombreCompleto
+                        ]);
                             return redirect()->back();
                         } else {
-                            return response()->json(['info' => 'YA EXISTE REGISTRO DE ENTRADA.']);
+                            return response()->json(['info' => 'YA EXISTE REGISTRO DE ENTRADA.',
+                            'nombre' => $nombreCompleto
+                        ]);
                         }
                     } else if ($horaActual >= $horario->hora_final && $horaActual <= $finalDelDia) {
                         if (!$registro->registro_final) {
@@ -678,10 +772,14 @@ class RegistroAsistenciaController extends Controller
                             $registro->save();
                             $this->verificarMarcado($registro);
                             // $this->sumarRetrasos($registroactual);
-                            return response()->json(['success' => 'SE GUARDÓ REGISTRO DE SALIDA:']);
+                            return response()->json(['success' => 'SE GUARDÓ REGISTRO DE SALIDA:',
+                            'nombre' => $nombreCompleto
+                        ]);
                             return redirect()->back();
                         } else {
-                            return response()->json(['info' => 'YA EXISTE REGISTRO DE SALIDA.']);
+                            return response()->json(['info' => 'YA EXISTE REGISTRO DE SALIDA.',
+                            'nombre' => $nombreCompleto
+                        ]);
                         }
                     }
                 }
@@ -868,6 +966,8 @@ class RegistroAsistenciaController extends Controller
             }
         }
     }
+
+
     private function verificarMarcado(RegistroAsistencia $registro)
     {
         if ($registro->horario->tipo == 1) {
@@ -877,7 +977,7 @@ class RegistroAsistenciaController extends Controller
                 $registro->registro_entrada &&
                 $registro->registro_final
             ) {
-                $registro->estado = 1;
+                $registro->estado = 3;
                 $registro->tipo = 1;
                 $registro->save();
             } else if (
@@ -1022,7 +1122,7 @@ class RegistroAsistenciaController extends Controller
                 $registro->registro_final && $registro->registro_inicio
             ) {
                 $registro->tipo = 0;
-                $registro->estado = 1;
+                $registro->estado = 3;
                 $registro->save();
             } else if (!$registro->registro_final && $registro->registro_inicio) {
                 $registro->estado = 2;
@@ -1055,7 +1155,7 @@ class RegistroAsistenciaController extends Controller
         $serial_lector = LectorDactilarModel::where('serial_lector', $lid)->where('estado', 1)->first();
 
 
-        if ($serial_lector==null) {
+        if ($serial_lector == null) {
             return response()->json(['error' => 'DISPOSITIVO INACTIVO']);
         }
     }

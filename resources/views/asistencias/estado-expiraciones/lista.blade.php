@@ -3,16 +3,17 @@
 @section('content')
 <div class="container">
     <div class="row font-verdana-bg">
-        <div class="col-md-8 titulo">
+        <div class="col-md-10 titulo">
             <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
                 <a href="{{url()->previous()}}" class="color-icon-1">
                     <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
                 </a>
             </span>
-            <b>Lista de Expiracion de {{$descripcion}} del Personal</b>
+            <b>Lista de Expiracion de {{$descripcion}} del Personal</b>    -    ( {{ \Illuminate\Support\Str::ucfirst(\Carbon\Carbon::now()->locale('es')->isoFormat('MMMM YYYY')) }} )
+
 
         </div>
-        <div class="col-md-4 text-right">
+        <div class="col-md-2 text-right">
 
             <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
                 <button class="btn btn-sm btn-danger font-verdana" type="button">
@@ -33,9 +34,11 @@
             <table id="registrosTable" class="table-bordered yajra-datatable hoverTable table display responsive font-verdana" style="width:100%; margin: 0 auto;">
                 <thead>
                     <tr>
-                         <th>Nombres y Apellidos</th>
-                         <th>Fecha Específica</th> <!-- Nombre genérico para la cuarta columna -->
+                        <th>Area / Unidad</th>
+                        <th>Nombre Completo</th>
+                        <th>Fecha Específica</th> <!-- Nombre genérico para la cuarta columna -->
                         <th>Descripcion</th> <!-- Nombre genérico para la cuarta columna -->
+                        
                     </tr>
                 </thead>
 
@@ -52,7 +55,7 @@
 <script>
     $(document).ready(function() {
         $('#registrosTable').DataTable({
-             responsive: true,
+            responsive: true,
             processing: true,
             serverSide: true,
             language: {
@@ -89,10 +92,14 @@
             },
 
             columns: [{
+                    data: 'nombre_area',
+                    name: 'nombre_area',
+                    class: 'text-justify p-1 font-verdana-sm'
+                }, {
                     data: 'nombre_completo',
                     name: 'nombre_completo',
                     class: 'text-justify p-1 font-verdana-sm'
-                },{
+                }, {
                     data: 'fecha',
                     name: 'fecha',
                     class: 'text-justify p-1 font-verdana-sm'
@@ -102,7 +109,7 @@
                     name: 'ColumnaPersonalizada',
                     class: 'text-justify p-1 font-verdana-sm'
                 }
-                
+
             ],
 
             buttons: [{

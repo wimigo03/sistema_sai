@@ -124,7 +124,7 @@
                 },
                 {
                     data: 'opciones',
-                    name: 'nombres',
+                    name: 'opciones',
                     class: 'text-justify p-1 font-verdana-sm'
                 },
             ],

@@ -120,7 +120,11 @@
         </tbody>
     </table>
  
-    
+    <h5>Usuario
+    {{ $nombreCompleto }} - 
+    {{ Auth()->user()->name }}
+    {{ date("d-m-Y H:i") }}
+    </h5>
 
     <script type="text/php">
         if ( isset($pdf) ) {

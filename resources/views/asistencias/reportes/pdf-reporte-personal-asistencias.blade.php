@@ -7,13 +7,30 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 12px;
+            font-size: 10px;
+            /* Tamaño de la fuente para toda la tabla */
         }
 
         table,
         th,
         td {
             border: 1px solid black;
+            padding: 3px;
+            /* Ajustar el relleno de celda si es necesario */
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        h3 {
+            font-size: 16px;
+            /* Tamaño de la fuente para los encabezados */
+        }
+
+        p {
+            font-size: 12px;
+            /* Tamaño de la fuente para los párrafos */
+            margin-top: 0;
+            margin-bottom: 0;
         }
     </style>
 </head>
@@ -21,13 +38,15 @@
 <body>
     <!-- Contenido de tu vista -->
 
-    <div class="page-header" align="center">
-        <img src="{{ asset('logos/header.jpg') }}" width="700px" height="70px" />
-    </div>
+    <div class="page-header" style="text-align: center;">
+    <h3>- GOBIERNO AUTÓNOMO REGIONAL DEL GRAN CHACO - </h3>
+</div>
+
     <h3>
         Reporte de Registros de Asistencias Personal
     </h3>
-    <table border="1" cellspacing="0" cellpadding="0" width="100%">
+    <table border="1" cellspacing="0" cellpadding="0" width="100%" style="margin-top: 0; margin-bottom: 0;">
+
         <tbody>
             <tr>
                 <td width="34%" valign="top">
@@ -46,13 +65,10 @@
 
                     </p>
                 </td>
+
             </tr>
-        </tbody>
-    </table>
-    <table border="0" cellspacing="0" cellpadding="0" width="100%">
-        <tbody>
             <tr>
-                <td width="50%" valign="top">
+                <td width="34%" valign="top">
                     <p>
                         Nombre y Apellidos: {{$empleadoDatos->nombres}}
                         {{$empleadoDatos->ap_pat}}
@@ -60,30 +76,27 @@
                     </p>
 
                 </td>
-                <td width="50%" valign="top">
+                <td width="33%" valign="top">
                     <p>
                         CI: {{$empleadoDatos->ci}}
                     </p>
 
                 </td>
-            </tr>
-            <tr>
-                <td width="50%" valign="top">
+                <td width="33%" valign="top">
                     <p>
                         Unidad/Area: {{ $empleadoDatos->empleadosareas->nombrearea }}
                     </p>
-                </td>
-                <td width="50%" valign="top">
                 </td>
             </tr>
         </tbody>
     </table>
 
+
     <h3>
         Asistencias Registradas
     </h3>
 
-    <table border="1" cellspacing="0" cellpadding="0" width="100%">
+    <table border="1" cellspacing="0" cellpadding="0" width="100%" style="margin-top: 0; margin-bottom: 0;">
         <tbody>
             <tr>
                 <td width="6%" nowrap="">
@@ -142,107 +155,91 @@
                     </p>
                 </td>
             </tr>
-            @foreach ($registros as $row)
+            @foreach ($registros as $asistencia)
 
-            <tr>
+            <?php
+            $fechaAsistencia = $asistencia->fecha;
+            $estiloFondo = '';
+
+            if (\Carbon\Carbon::parse($fechaAsistencia)->isWeekend()) {
+                $estiloFondo = 'background-color: lightgrey;';
+            }
+            ?>
+
+            <tr style="<?php echo $estiloFondo; ?>">
                 <td width="6%" nowrap="">
                     <p align="center">
-                        {{ $row->fecha}}
+                        {{ $asistencia->fecha }}
                     </p>
                 </td>
                 <td width="13%" nowrap="">
                     <p>
-                        {{ $row->empleado->nombres }} {{ $row->empleado->ap_pat ?? '-' }} {{ $row->empleado->ap_mat ?? '-' }}
+                        {!! nl2br(e($asistencia->nombre_empleado)) !!}<br>
+                        {{ $asistencia->ap}}
+
                     </p>
                 </td>
 
                 <td width="12%">
                     <p align="center">
-                        @php
+                        @if($asistencia->ht ==1)
 
-                        $nombre = $row->horario->Nombre ?: '';
-                        $final = $row->horario->hora_final ? : '-';
-                        $inicio = $row->horario->hora_inicio ?  : '-';
-                        $html = '';
+               {{ $asistencia->hn }}<br>
+                    {{ $asistencia->hi }} - {{ $asistencia->hf }} <br>
+                    {{ $asistencia->he }} - {{ $asistencia->hs }}
+                
+                @else
 
-                        if ($row->horario->tipo == 1) {
-                        $salida = $row->horario->hora_salida ?: '-';
-                        $entrada = $row->horario->hora_entrada ?  : '';
-                        $html = '<span>' . $nombre . '</span><br><span>' . $inicio . '-' . $salida . '</span><br><span>' . $entrada . '-' . $final . '</span>';
-                        } elseif ($row->horario->tipo == 0) {
-                        $html = '<span>' . $nombre . '</span><br><span>' . $inicio . '</span><br><span>' . $final . '</span>';
-                        }
-                        @endphp
-                        {!! $html !!}
+                
+
+                    {{ $asistencia->hn }}<br>
+                    {{ $asistencia->hi }} - {{ $asistencia->hf }}
+                
+                @endif
+                </p>
+                </td>
+
+
+                <td width="8%" nowrap="">
+                    <p align="center">
+                        {{ $asistencia->registro_inicio }}
                     </p>
                 </td>
                 <td width="8%" nowrap="">
                     <p align="center">
-                        @if ( $row->registro_inicio)
-                      {{  $row->registro_inicio}}
-                        @else
-                        -
-                        @endif
+                        {{ $asistencia->registro_salida }}
                     </p>
                 </td>
                 <td width="8%" nowrap="">
                     <p align="center">
-                        @if ( $row->registro_salida)
-                       {{ $row->registro_salida}}
-                        @else
-                        -
-                        @endif
-                    </p>
-                </td>
-                <td width="8%" nowrap="">
-                    <p align="center">
-                        @if ( $row->registro_entrada)
-                       {{ $row->registro_entrada}}
-                        @else
-                        -
-                        @endif
+                        {{ $asistencia->registro_entrada }}
                     </p>
                 </td>
                 <td width="7%" nowrap="">
                     <p align="center">
+                        {{ $asistencia->registro_final }}
 
-                        @if ($row->registro_final)
-                       {{ $row->registro_final}}
-                        @else
-                        -
-                        @endif
                     </p>
                 </td>
-                <td width="7%" nowrap="">
-                    <p align="center">
-                        @if ($row->estado == 0)
-                        Sin Registro
-                        @elseif ($row->estado == 1)
-                        Registrado
-                        @elseif ($row->estado == 2)
-                        Pendiente
-                        @else
-                        -
-                        @endif
-                    </p>
-                </td>
+
                 <td width="8%" nowrap="">
                     <p align="center">
+                        {{ $asistencia->est }}
 
-                        @if ($row->observ)
-                        <span>{!! nl2br(e($row->observ)) !!}</span>
-                        @else
-                        -
-                        @endif
                     </p>
                 </td>
+
+
+                <td width="12%">
+                    <p align="center">
+                        {!! nl2br(e($asistencia->ovb)) !!}
+                    </p>
+                </td>
+
+
                 <td width="9%" nowrap="">
                     <p align="center">
-                        @if ($row->minutos_retraso)
-                       {{ $row->minutos_retraso}}
-                        @else
-                        -
-                        @endif
+                        {{ $asistencia->minutos_retraso }}
                     </p>
                 </td>
             </tr>
@@ -250,12 +247,16 @@
         </tbody>
     </table>
 
-
+    <h5>Usuario
+        {{ $nombreCompleto }} -
+        {{ Auth()->user()->name }}
+        {{ date("d-m-Y H:i") }}
+    </h5>
     <script type="text/php">
         if ( isset($pdf) ) {
             $pdf->page_script('
                 $font = $fontMetrics->get_font("Serif", "normal");
-                $pdf->text(50, 770, "{{ date("d-m-Y H:i") }} / {{ Auth()->user()->name }}", $font, 7);
+                $pdf->text(50, 770, "{{ date("d-m-Y H:i") }} / Usuario : {{ Auth()->user()->name }} Nombre Completo-{{ $nombreCompleto}}", $font, 7);
                 $pdf->text(530, 765, "Pagina $PAGE_NUM de $PAGE_COUNT", $font, 7);
             ');
         }

@@ -4,17 +4,28 @@
 <head>
     <!-- Puedes agregar estilos específicos para el PDF aquí -->
     <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 12px;
-        }
+              table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 10px; /* Tamaño de la fuente para toda la tabla */
+    }
 
-        table,
-        th,
-        td {
-            border: 1px solid black;
-        }
+    table,
+    th,
+    td {
+        border: 1px solid black;
+        padding: 3px; /* Ajustar el relleno de celda si es necesario */
+        margin-top: 0; margin-bottom: 0;
+    }
+
+    h3 {
+        font-size: 16px; /* Tamaño de la fuente para los encabezados */
+    }
+
+    p {
+        font-size: 12px; /* Tamaño de la fuente para los párrafos */
+        margin-top: 0; margin-bottom: 0;
+    }
     </style>
 </head>
 
@@ -26,14 +37,14 @@
     </div>
 
     <h3>
-        Reporte de Retrasos por Unidad
+        Reporte de Retrasos de Asistencia por Unidad
     </h3>
     <table border="1" cellspacing="0" cellpadding="0" width="100%">
         <tbody>
             <tr>
                 <td width="34%" valign="top">
                     <p>
-                        Reporte de Retrasos por Unidad:
+                       Fecha de Reporte:
                     </p>
                 </td>
                 <td width="33%" valign="top">
@@ -53,16 +64,29 @@
     <table border="1" cellspacing="0" cellpadding="0" width="100%">
         <tbody>
             <tr>
-                <td width="50%" valign="top">
+            <td width="10%" valign="top">
                     <p>
-                        Nombre de Unidad: {{$areasDatos->nombrearea}}
+                        Nombre de Unidad: 
                    
                     </p>
                  
                 </td>
-                <td width="50%" valign="top">
+                <td width="40%" valign="top">
+                    <p>
+                    {{$areasDatos->nombrearea}}
+                   
+                    </p>
+                 
+                </td>
+                <td width="5%" valign="top">
                     <p>
                         Nivel:  
+                    </p>
+  
+                </td>
+                <td width="45%" valign="top">
+                    <p>
+                      {{$areasDatos->nivel->nombrenivel}}
                     </p>
   
                 </td>
@@ -118,7 +142,7 @@
         if ( isset($pdf) ) {
             $pdf->page_script('
                 $font = $fontMetrics->get_font("Serif", "normal");
-                $pdf->text(50, 770, "{{ date("d-m-Y H:i") }} / {{ Auth()->user()->name }}", $font, 7);
+                $pdf->text(50, 770, "{{ date("d-m-Y H:i") }} / Usuario : {{ Auth()->user()->name }} Nombre Completo-{{ $nombreCompleto}}", $font, 7);
                 $pdf->text(530, 765, "Pagina $PAGE_NUM de $PAGE_COUNT", $font, 7);
             ');
         }

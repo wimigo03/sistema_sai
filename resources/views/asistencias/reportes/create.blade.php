@@ -7,12 +7,7 @@
             <b>Generar Reportes</b>
         </div>
         <div class="col-md-4  text-right">
-            <a href="{{ route('retrasos.index') }}" class="tts:left tts-slideIn tts-custom" aria-label="Ver Historial de Rgularizaciones">
-                <button class="btn btn-sm btn-success font-verdana" type="button">
-                    <i class="fa-regular fa-address-card"></i>
-                    &nbsp; Historial de retrasos General
-                </button>
-            </a>
+        
 
             <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
                 <button class="btn btn-sm btn-danger font-verdana" type="button">
@@ -223,7 +218,7 @@
         </div>
         <div class="tab-pane fade" id="tab2">
             <div class="col-md-8 titulo">
-                <b>Reporte de ASistencia Personal</b>
+                <b>Reporte de Asistencia Personal</b>
             </div>
             <div class="body-border ">
                 <form method="POST" action="{{ route('registro.visualizar') }}" id="crearForm">

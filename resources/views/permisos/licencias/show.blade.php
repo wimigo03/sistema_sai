@@ -9,10 +9,11 @@
                     <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
                 </a>
             </span>
-            <b>Lista de Registros de Licencias Cargo RIP</b>
+            <b>Registros de Licencias Cargo RIP - (2 DÍAS/AÑO) - Personal de Planta </b>
         </div>
 
         <div class="col-md-4 text-right">
+ 
             <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('licenciaspersonales.index')}}">
                 <button class="btn btn-sm btn-danger font-verdana" type="button">
                     &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
@@ -33,11 +34,12 @@
             <table class="table-bordered yajra-datatable hoverTable font-verdana-sm" style="width:100%" id="registrosTable">
                 <thead class="table-light">
                     <tr>
-                        <th>Año</th>
-                        <th>Fecha Solicitud</th>
+                        <th>Año / Gestión </th>
+                        <th>Fecha Solicitud<br>Licencia</th>
                         <th>Asunto</th>
                         <th>Registrado por Usuario</th>
-                        <th>Horas Utilizadas</th>
+                        <th>Modificado por Usuario</th>
+                        <th>Días Utilizados</th>
                     </tr>
                 </thead>
             </table>
@@ -45,6 +47,8 @@
     </div>
 </div>
 @section('scripts')
+ 
+
 <script>
     $(document).ready(function() {
         $('#registrosTable').DataTable({
@@ -77,6 +81,7 @@
             rowGroup: {
                 dataSrc: 'licencia'
             },
+            
             columns: [{
                     data: 'licencia',
                     name: 'licencia',
@@ -96,6 +101,11 @@
                 {
                     data: 'pivot.usuario_creacion',
                     name: 'pivot.usuario_creacion',
+                    class: 'text-justify p-1 font-verdana-sm'
+                },
+                {
+                    data: 'pivot.usuario_modificacion',
+                    name: 'pivot.usuario_modificacion',
                     class: 'text-justify p-1 font-verdana-sm'
                 },
                 {

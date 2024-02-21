@@ -22,4 +22,8 @@ class NivelModel extends Model
 
         
     ];
+    public function areas()
+    {
+        return $this->hasMany(AreasModel::class, 'idnivel');
+    }
 }

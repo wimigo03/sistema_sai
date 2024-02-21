@@ -2,17 +2,17 @@
 
 @section('content')
 <div class="row font-verdana">
-    <div class="col-md-3 titulo">
+    <div class="col-md-2 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
             <a href="{{route('contrato.index')}}" class="color-icon-1">
                 <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
             </a>
         </span>
     </div>
-    <div class="col-md-6 titulo">
+    <div class="col-md-8 titulo">
         <b>GESTIONAR PERSONAL-P/{{$nombrearea}}</b>
     </div>
-    <div class="col-md-3 text-right">
+    <div class="col-md-2 text-right">
         @can('empleado_contrato_create_access')
         <a href="{{route('contrato.crear',$idarea)}}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar">
             <button class="btn btn-sm btn-outline-primary font-verdana" type="button">
@@ -22,12 +22,12 @@
         <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
         @endcan
     </div>
-    <div class="col-md-12">
+  
+</div>
+<div class="col-md-12">
         <hr class="hrr">
         <input type="hidden" value="{{$idarea}}">
     </div>
-</div>
-
 <div class="row font-verdana">
     <div class="col-md-12">
         <div class="table-responsive ">
@@ -39,38 +39,39 @@
 
                         <th>File </th>
                         <th>Nombres </th>
-                        <th>Ap.Paterno </th>
-                        <th>Ap.Materno </th>
+                        <th>Apellido<br>Paterno </th>
+                        <th>Apellido<br>Materno </th>
                         <th>Cargo </th>
-                        <th>Nomb.Cargo </th>
-                        <th>Hab.Basico </th>
-                        <th>Categoria </th>
-                        <th>Nivel Adm. </th>
+                        <th>Nombre<br>Cargo </th>
+                        <th>Haber<br>Básico </th>
+                        <th>Categoría </th>
+                        <th>Nivel<br> Adm. </th>
                         <th>Clase </th>
                         <th>Nivelsal </th>
-                        <th>F.Ingreso </th>
+                        <th>Fecha<br>Ingreso </th>
                         <th>Natalicio </th>
                         <th>Edad </th>
                         <th>Ci </th>
-
                         <th>Sippase </th>
                         <th>Exp.Sippase </th>
-                        <th>Seerv.Milit. </th>
+                        <th>Sippase </th>
+                        <th>Exp.Sippase </th>
+                        <th>Servicio<br>Militar</th>
                         <th>Idioma </th>
-                        <th>Curr.Vitae </th>
-                        <th>Telefono </th>
+                        <th>Curriculum<br>.Vitae </th>
+                        <th>Telef.<br>Celular</th>
                         <th>Biometrico </th>
-                        <th>Drado Acad. </th>
+                        <th>Grado<br> Académico</th>
 
-                        <th>Total.Presup.</th>
-                        <th>Fecha.Fin.</th>
+                        <th>Total<br>Presup.</th>
+                        <th>Fecha<br>Final</th>
                         <th>N.Contrato</th>
                         <th>N.Preventivo</th>
-                        <th>Prog.Proy.</th>
+                        <th>Programa<br>Proyecto</th>
                         <th>Rejap</th>
                         <th>Ap.Afp.</th>
-                        <th>C.Banco</th>
-                        <th>File-Actual</th>
+                        <th>Cuenta<br>Banco</th>
+                        <th>File<br>Actual</th>
                         <th>Nit</th>
                         <th>Sigep</th>
                     </tr>
@@ -104,6 +105,8 @@
                         <td class="text-justify p-1">{{$empleado -> edad}}</td>
                         <td class="text-justify p-1">{{$empleado -> ci}}</td>
 
+                        <td class="text-justify p-1">{{$empleado -> induccion}}</td>
+                        <td class="text-justify p-1">{{$empleado -> expinduccion}}</td>
                         <td class="text-justify p-1">{{$empleado -> sippase}}</td>
                         <td class="text-justify p-1">{{$empleado -> expsippase}}</td>
                         <td class="text-justify p-1">{{$empleado -> servmilitar}}</td>

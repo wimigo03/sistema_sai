@@ -5,6 +5,12 @@
     <br>
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
+        <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
+                <a href="javascript:void(0);" onclick="goBack();" class="color-icon-1" aria-label="Ir a gestionar-c">
+                    <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
+                </a>
+
+            </span>
             <b> Reporte de Retrasos de Asistencia de Personal General  </b>
         </div>
         <div class="col-md-4 text-right">
@@ -72,6 +78,14 @@
     </div>
 
 </div>
+<table class="font-verdana-sm">
+    <tr>
+        <td><b>Usuario</b>
+            {{ Auth()->user()->name }}
+            {{ date("d-m-Y H:i") }}
+        </td>
+    </tr>
+</table>
 <script id="details-template" type="text/x-handlebars-template">
     @verbatim
         <table class="display compact hoverTable" id="registros-{{idemp}}" style="width:100%">

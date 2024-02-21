@@ -7,13 +7,30 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 12px;
+            font-size: 10px;
+            /* Tamaño de la fuente para toda la tabla */
         }
 
         table,
         th,
         td {
             border: 1px solid black;
+            padding: 3px;
+            /* Ajustar el relleno de celda si es necesario */
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        h3 {
+            font-size: 16px;
+            /* Tamaño de la fuente para los encabezados */
+        }
+
+        p {
+            font-size: 12px;
+            /* Tamaño de la fuente para los párrafos */
+            margin-top: 0;
+            margin-bottom: 0;
         }
     </style>
 </head>
@@ -36,14 +53,24 @@
                     Reporte de General de Retrasos de Personal
                     </p>
                 </td>
-                <td width="33%" valign="top">
+                <td width="7%" valign="top">
                     <p>
-                        Desde: {{$fechaInicio}}
+                        Desde:  
                     </p>
                 </td>
-                <td width="33%" valign="top">
+                <td width="20%" valign="top">
                     <p>
-                        Hasta: {{$fechaFinal}}
+                {{$fechaInicio}}
+                    </p>
+                </td>
+                <td width="7%" valign="top">
+                    <p>
+                    Hasta:
+                    </p>
+                </td>
+                <td width="20%" valign="top">
+                    <p>
+                      {{$fechaFinal}}
 
                     </p>
                 </td>
@@ -93,13 +120,13 @@
             </tr>
         </tbody>
     </table>
-
+    $nombreCompleto
 
     <script type="text/php">
         if ( isset($pdf) ) {
             $pdf->page_script('
                 $font = $fontMetrics->get_font("Serif", "normal");
-                $pdf->text(50, 770, "{{ date("d-m-Y H:i") }} / {{ Auth()->user()->name }}", $font, 7);
+                $pdf->text(50, 770, "{{ date("d-m-Y H:i") }} / Usuario : {{ Auth()->user()->name }} Nombre Completo-{{ $nombreCompleto}}", $font, 7);
                 $pdf->text(530, 765, "Pagina $PAGE_NUM de $PAGE_COUNT", $font, 7);
             ');
         }

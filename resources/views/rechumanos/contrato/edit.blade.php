@@ -25,7 +25,7 @@
             </div>
 
         </div>
-         <div class="body-borded font-verdana-bg">
+        <div class="body-borded font-verdana-bg">
             <form method="POST" action="{{ route('contrato.actualizar') }}">
                 @csrf
                 @method('POST')
@@ -55,7 +55,7 @@
 
 
                 </div>
-
+       
                 <div class="form-group row">
 
                     <span class="input-group col-md-1 " style="color:black;font-weight: bold;">Ci:</span>
@@ -80,7 +80,7 @@
 
 
                 </div>
-
+       
                 <div class="form-group row">
 
 
@@ -106,7 +106,7 @@
 
 
                 </div>
-
+        
                 <div class="form-group row">
 
 
@@ -136,7 +136,7 @@
 
 
                 </div>
-
+           
                 <div class="form-group row">
 
 
@@ -164,7 +164,7 @@
 
 
                 </div>
-
+            
                 <div class="form-group row">
 
                     <span class="input-group col-md-1 " style="color:black;font-weight: bold;">Sippase:</span>
@@ -191,13 +191,13 @@
 
 
                 </div>
-
+               
                 <div class="form-group row">
 
                     <span class="input-group col-md-1 " style="color:black;font-weight: bold;">Aportes.Afp:</span>
                     <div class="col-md-2">
                         <select name="aportesafp" class="form-control" value="{{$empleados->aportesafp}}">
-                            <option {{ ($empleados->aportesafp) == 'GESTORA PUBLICA' ? 'selected' : '' }} value="GESTORA PUBLICA">GESTORA PUBLICA</option>
+                            <option {{ ($empleados->aportesafp) == 'GESTORA PÚBLICA' ? 'selected' : '' }} value="GESTORA PUBLICA">GESTORA PUBLICA</option>
 
                             <option {{ ($empleados->aportesafp) == 'PREVISION AFP' ? 'selected' : '' }} value="PREVISION AFP">PREVISION AFP</option>
                             <option {{ ($empleados->aportesafp) == 'FUTURO DE BOLIVIA' ? 'selected' : '' }} value="FUTURO DE BOLIVIA">FUTURO DE BOLIVIA</option>
@@ -226,7 +226,7 @@
 
 
                 </div>
-
+          
                 <div class="form-group row">
 
 
@@ -259,8 +259,7 @@
 
 
                 </div>
-
-
+ 
                 <div class="form-group row">
 
 
@@ -314,14 +313,28 @@
 
 
                 </div>
-                </br>
+               
+
                 <div class="form-group row">
 
+                    <span class="input-group col-md-1 " style="color:black;font-weight: bold;">Induccion:</span>
 
-             
-                     <label class="col-md-1" style="color:black;font-weight: bold;">Area:</label>
-                    <div id="permissions-select">
-                        <select name="idarea" >
+                    <div class="col-md-2">
+
+                        <input type="text" name="induccion" class="form-control" value="{{$empleados->induccion}}">
+                    </div>
+                    <span class="input-group col-md-1 offset-md-1" style="color:black;font-weight: bold;">Exp. Induccion:</span>
+
+
+                    <div class="col-md-2">
+                        <input type="date" name="expinduccion" class="form-control" value="{{$empleados->expinduccion}}">
+                    </div>
+
+
+                    <span class="input-group col-md-1 offset-md-1" style="color:black;font-weight: bold;">Area :</span>
+
+                    <div class="col-md-2" id="permissions-select">
+                        <select name="idarea">
                             @foreach($area as $areas)
                             @if ($areas->idarea==$empleados->idarea)
                             <option value="{{$areas->idarea}}" selected>
@@ -336,16 +349,17 @@
                     </div>
 
                 </div>
-
+                <hr class="hrr">
                 <div class="form-group row">
                     <div class="col-md-12 text-right">
+
                         <button type="submit" class="btn btn-outline-primary font-verdana-bg" type="submit">
                             <i class="fa-solid fa-paper-plane"></i>&nbsp;Guardar
                         </button>
-                      
+
                     </div>
                 </div>
-                
+
                 </br>
 
 

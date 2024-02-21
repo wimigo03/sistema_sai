@@ -46,66 +46,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="registroAsistenciaModal" tabindex="-1" role="dialog" aria-labelledby="registroAsistenciaModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="registroAsistenciaModalLabel">Registrar Asistencia</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-
-            <div id="error-message" class="alert alert-danger" style="display: none;"></div>
-
-
-            <!-- Aquí puedes agregar los campos del formulario para registrar la asistencia -->
-            <div class="modal-body">
-                <form id="registroAsistenciaForm" method="POST" action="{{ route('registroasistencia.store') }}">
-                    @csrf
-                    <div class="form-group">
-                        <label for="pin">PIN</label>
-                        <div class="row">
-                            <div class="col-3">
-                                <input type="text" class="form-control pin-input" id="pin1" name="pin[]" maxlength="1" required>
-                            </div>
-                            <div class="col-3">
-                                <input type="text" class="form-control pin-input" id="pin2" name="pin[]" maxlength="1" required>
-                            </div>
-                            <div class="col-3">
-                                <input type="text" class="form-control pin-input" id="pin3" name="pin[]" maxlength="1" required>
-                            </div>
-                            <div class="col-3">
-                                <input type="text" class="form-control pin-input" id="pin4" name="pin[]" maxlength="1" required>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <!-- Aquí puedes agregar los campos del formulario -->
-                    <div class="form-group">
-                        <label for="fecha">Fecha</label>
-                        <input type="date" class="form-control" id="fecha" name="fecha" value="{{ date('Y-m-d') }}" readonly="true" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="hora">Hora</label>
-                        <input type="time" class="form-control" id="hora" name="hora" value="{{ date('H:i:s') }}" readonly="true" required>
-                    </div>
-
-                    <!-- Otros campos del formulario -->
-
-                </form>
-            </div>
-
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary">Guardar</button>
-            </div>
-        </div>
-    </div>
-</div>
+ 
 
 
 

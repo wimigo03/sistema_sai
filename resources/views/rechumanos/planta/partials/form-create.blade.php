@@ -14,35 +14,52 @@
     </div>
     <div class="col-md-2">
         <label for="nro_carnet"><b>N° Carnet</b></label>
-        <input type="text" name="ci" class="form-control form-control-sm font-verdana-bg" required>
+        <input type="text" name="ci" class="form-control" value="">
     </div>
+
     <div class="col-md-2">
         <label for="procedencia"><b>Procedencia</b></label><br>
         <select name="procedencia" id="procedencia" class="form-control form-control-sm" required>
             <option value="">-</option>
-            <option value="TJ" @if(request('procedencia') == 'TJ') selected @endif >TARIJA</option>
-            <option value="CH" @if(request('procedencia') == 'CH') selected @endif >CHUQUISACA</option>
-            <option value="LP" @if(request('procedencia') == 'LP') selected @endif >LA PAZ</option>
-            <option value="CB" @if(request('procedencia') == 'CB') selected @endif >COCHABAMBA</option>
-            <option value="OR" @if(request('procedencia') == 'OR') selected @endif >ORURO</option>
-            <option value="PT" @if(request('procedencia') == 'PT') selected @endif >POTOSI</option>
-            <option value="SC" @if(request('procedencia') == 'SC') selected @endif >SANTA CRUZ</option>
-            <option value="BE" @if(request('procedencia') == 'BE') selected @endif >BENI</option>
-            <option value="PD" @if(request('procedencia') == 'PD') selected @endif >PANDO</option>
+            <option value="TJ" @if(request('procedencia')=='TJ' ) selected @endif>TARIJA</option>
+            <option value="CH" @if(request('procedencia')=='CH' ) selected @endif>CHUQUISACA</option>
+            <option value="LP" @if(request('procedencia')=='LP' ) selected @endif>LA PAZ</option>
+            <option value="CB" @if(request('procedencia')=='CB' ) selected @endif>COCHABAMBA</option>
+            <option value="OR" @if(request('procedencia')=='OR' ) selected @endif>ORURO</option>
+            <option value="PT" @if(request('procedencia')=='PT' ) selected @endif>POTOSI</option>
+            <option value="SC" @if(request('procedencia')=='SC' ) selected @endif>SANTA CRUZ</option>
+            <option value="BE" @if(request('procedencia')=='BE' ) selected @endif>BENI</option>
+            <option value="PD" @if(request('procedencia')=='PD' ) selected @endif>PANDO</option>
         </select>
     </div>
     <div class="col-md-2">
-        <label for="date"><b>Fecha Ingreso</b></label>
+        <label for="date"><b>Fecha Cumpleaños</b></label>
         <input type="date" name="natalicio" class="form-control form-control-sm font-verdana-bg" required>
     </div>
 </div>
 <div class="form-group row font-verdana-bg">
+
+    <div class="col-md-2">
+        <label for="date"><b>Fecha Ingreso</b></label>
+        <input type="date" name="fechingreso" class="form-control form-control-sm font-verdana-bg" required>
+    </div>
+
+
+
+    <div class="col-md-2">
+    <label for="poai"> <span class="tts:right tts-slideIn tts-custom" aria-label="Programación Operativa Anual Individual">
+                <b> POAI</b></span></label>
+        <label for="poai"><b></b></label>
+        <input type="text" name="poai" class="form-control form-control-sm font-verdana-bg">
+    </div>
     <div class="col-md-2">
         <div class="row">
-            <div class="col-md-6">
-                <label for="factura"><b>POAI</b></label>
+
+            <div class="col-md-8">
+                <label for="factura"><b>EXP. POAI</b></label>
             </div>
-            <div class="col-md-6 text-right">
+            <div class="col-md-4 text-right">
+
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Seleccionar solo si tiene">
                     <input type="checkbox" name="poai" {{--class="form-check-input"--}} id="poai" onclick="checkPoai();">
                 </span>
@@ -50,19 +67,9 @@
         </div>
         <input type="date" name="exppoai" id="exppoai" class="form-control form-control-sm font-verdana-bg">
     </div>
-
-
-    <div class="col-md-2">
-        <label for="poai"><b>POAI</b></label>
-        <input type="text" name="poai" class="form-control form-control-sm font-verdana-bg" >
-    </div>
-    <div class="col-md-2">
-        <label for="exp_poai"><b>Exp. POAI</b></label>
-        <input type="date" name="exppoai" class="form-control form-control-sm font-verdana-bg">
-    </div>
     <div class="col-md-2">
         <label for="decjurada"><b>Dec. Jurada</b></label>
-        <input type="text" name="decjurada" class="form-control form-control-sm font-verdana-bg" >
+        <input type="text" name="decjurada" class="form-control form-control-sm font-verdana-bg">
     </div>
     <div class="col-md-2">
         <label for="exp_dec_jurada"><b>Exp. Dec. Jurada</b></label>
@@ -71,7 +78,10 @@
 </div>
 <div class="form-group row font-verdana-bg">
     <div class="col-md-2">
-        <label for="sippase"><b>SIPPASE</b></label>
+    
+    
+        <label for="sippase"> <span class="tts:right tts-slideIn tts-custom" aria-label="Sistema Integral Plurinacional de Prevención, Atención, Sanción, Erradicación de la Violencia contra las Mujeres">
+                <b>Cert. SIPPASE</b></span></label>
         <input type="text" name="sippase" class="form-control form-control-sm font-verdana-bg">
     </div>
     <div class="col-md-2">
@@ -87,17 +97,17 @@
         <input type="text" name="idioma" class="form-control form-control-sm font-verdana-bg" required>
     </div>
     <div class="col-md-2">
-        <label for="induccion"><b>Induccion</b></label>
+        <label for="induccion"><b>Inducción</b></label>
         <input type="text" name="induccion" class="form-control form-control-sm font-verdana-bg">
     </div>
     <div class="col-md-2">
-        <label for="exp_induccion"><b>Exp. Induccion</b></label>
+        <label for="exp_induccion"><b>Exp. Inducción</b></label>
         <input type="date" name="expinduccion" class="form-control form-control-sm font-verdana-bg">
     </div>
 </div>
 <div class="form-group row font-verdana-bg">
     <div class="col-md-2">
-        <label for="progvacacion"><b>Prog. Vacacion</b></label>
+        <label for="progvacacion"><b>Prog. Vacación</b></label>
         <input type="text" name="progvacacion" class="form-control form-control-sm font-verdana-bg">
     </div>
     <div class="col-md-2">
@@ -131,25 +141,27 @@
         <input type="text" name="aservicios" class="form-control form-control-sm font-verdana-bg">
     </div>
     <div class="col-md-2">
-        <label for="cvitae"><b>C.V.</b></label>
+        <label for="cvitae"><b>Currículum. Vitae</b></label>
         <input type="text" name="cvitae" class="form-control form-control-sm font-verdana-bg">
     </div>
     <div class="col-md-2">
-        <label for="telefono"><b>Telefono</b></label>
-        <input type="text" name="telefono" class="form-control form-control-sm font-verdana-bg" >
+        <label for="telefono"><b>Telef. Celular</b></label>
+        <input type="text" name="telefono" class="form-control form-control-sm font-verdana-bg">
     </div>
     <div class="col-md-2">
         <label for="biometrico"><b>Biometrico</b></label>
         <input type="text" name="biometrico" class="form-control form-control-sm font-verdana-bg">
     </div>
     <div class="col-md-2">
-        <label for="gradacademico"><b>Grado Acad.</b></label>
+        <label for="gradacademico"><b>Profesión (Gd. Acad.)</b></label>
         <input type="text" name="gradacademico" class="form-control form-control-sm font-verdana-bg">
     </div>
 </div>
 <div class="form-group row font-verdana-bg">
     <div class="col-md-2">
-        <label for="rae"><b>RAE</b></label>
+       
+        <label for="rae"> <span class="tts:right tts-slideIn tts-custom" aria-label="Registro Abogados del Estado">
+                <b> RAE.</b></span></label>
         <input type="text" name="rae" class="form-control form-control-sm font-verdana-bg">
     </div>
     <div class="col-md-2">
@@ -161,7 +173,8 @@
         <input type="number" name="evdesempenio" class="form-control form-control-sm font-verdana-bg">
     </div>
     <div class="col-md-2">
-        <label for="rejap"><b>REJAP</b></label>
+        <label for="rejap"> <span class="tts:right tts-slideIn tts-custom" aria-label="Fecha de Certificado de Registro Judicial de Antecedentes Penales">
+                <b>Cert. REJAP</b></span></label>
         <input type="date" name="rejap" class="form-control form-control-sm font-verdana-bg">
     </div>
     <div class="col-md-4">
@@ -169,7 +182,7 @@
         <select name="idfile" id="idfile" class="form-control form-control-sm" required>
             <option value="">-</option>
             @foreach ($files as $index => $value)
-                <option value="{{ $index }}" @if(request('idfile') == $index) selected @endif >{{ $value }}</option>
+            <option value="{{ $index }}" @if(request('idfile')==$index) selected @endif>{{ $value }}</option>
             @endforeach
         </select>
     </div>

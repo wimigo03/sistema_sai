@@ -1,17 +1,17 @@
 @extends('layouts.admin')
 @section('content')
     <div class="row font-verdana-bg">
-        <div class="col-md-3 titulo">
+        <div class="col-md-1 titulo">
             <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-p">
                 <a href="{{route('planta.index')}}" class="color-icon-1">
                     <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
                 </a>
             </span>
         </div>
-        <div class="col-md-6 titulo">
+        <div class="col-md-10 titulo text-right">
             <b>GESTIONAR PERSONAL-P/{{$nombrearea}}</b>
         </div>
-        <div class="col-md-3 text-right">
+        <div class="col-md-1 text-right">
             @can('planta_create_access')
                 <a href="{{route('planta.crear',$idarea)}}" class="tts:left tts-slideIn tts-custom" aria-label="Registrar">
                     <button class="btn btn-sm btn-outline-primary font-verdana" type="button" >
@@ -21,11 +21,12 @@
                 <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
             @endcan
         </div>
-        <div class="col-md-12">
+     
+    </div>
+    <div class="col-md-12">
             <hr class="hrr">
         </div>
         <input type="hidden" value="{{$idarea}}">
-    </div>
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive" >
@@ -36,45 +37,45 @@
                             <td class="text-center p-1" style="vertical-align: bottom;"><i class="fa fa-bars" aria-hidden="true"></i></td>
                             <td class="text-center p-1" style="vertical-align: bottom;"><b>FILE</b></td>
                             <td class="text-center p-1" style="vertical-align: bottom;"><b>NOMBRES</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>AP. PATERNO</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>AP. MATERNO</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>APELLIDO<br>PATERNO</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>APELLIDO<br> MATERNO</b></td>
                             <td class="text-center p-1" style="vertical-align: bottom;"><b>CARGO</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>NOMBRE CARGO</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>HAB. BASICO</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>NOMBRE<br>CARGO</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>HABER<br>BÁSICO</b></td>
                             <td class="text-center p-1" style="vertical-align: bottom;"><b>CATEGORIA</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>NIVEL ADM.</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>NIVEL<br> ADMIN.</b></td>
                             <td class="text-center p-1" style="vertical-align: bottom;"><b>CLASE</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>NIVEL SAL.</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>F. INGRESO</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>NIVEL<br> SALARIAL</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>FECHA<br>INGRESO</b></td>
                             <td class="text-center p-1" style="vertical-align: bottom;"><b>NATALICIO</b></td>
                             <td class="text-center p-1" style="vertical-align: bottom;"><b>EDAD</b></td>
                             <td class="text-center p-1" style="vertical-align: bottom;"><b>N° CARNET</b></td>
                             <td class="text-center p-1" style="vertical-align: bottom;"><b>POAI</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>EXP. POAI</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>DEC. JURADA</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>EXP. DEC. JURADA</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>EXP.<br> POAI</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>DECLARACIÓN<br>JURADA</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>EXP.<br> DEC. JURADA</b></td>
                             <td class="text-center p-1" style="vertical-align: bottom;"><b>REJAP</b></td>
                             <td class="text-center p-1" style="vertical-align: bottom;"><b>SIPPASE</b></td>
                             <td class="text-center p-1" style="vertical-align: bottom;"><b>EXP. SIPPASE</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>SERV. MILITAR</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>SERVICIO<br>MILITAR</b></td>
                             <td class="text-center p-1" style="vertical-align: bottom;"><b>IDIOMA</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>INDUCCION</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>EXP. INDUCCION</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>PROG. VACAC.</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>EXP. PROG. VACAC.</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>VAC. GANADAS</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>VAC. PENDIENTES</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>VAC. USADAS</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>SEG. SALUD</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>INAMOV.</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>AÑOS SERV.</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>CURR. VITAE</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>TELEFONO</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>BIOMETRICO</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>GRADO ACADEM.</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>INDUCCIóN</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>EXP. <br>INDUCCIóN</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>PROG.<br> VACACIÓN.</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>EXP. PROG.<br> VACACIÓN.</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>VAC.<br> GANADAS</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>VAC. <br>PENDIENTES</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>VAC.<br> USADAS</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>SEGURO<br>SALUD</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>INAMOVILIDAD.</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>AÑOS<br> SERVICIO.</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>CURRCULUM<br>VITAE</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>TELEF.<br>CELULAR</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>BIOMÉTRICO</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>GRADO<br>ACADÉMICO.</b></td>
                             <td class="text-center p-1" style="vertical-align: bottom;"><b>RAE</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>REG. PROF.</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>EVAL. DESEMP.</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>REGISTRO<br>PROFESIONAL</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>EVALUACIÓN.<br>DESEMPEÑO.</b></td>
                         </tr>
                     </thead>
                     <tbody>

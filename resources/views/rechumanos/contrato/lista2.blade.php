@@ -18,27 +18,29 @@
                                 <th>File </th>
                                 <th>AREA </th>
                                 <th>Nombres </th>
-                                <th>Ap.Paterno </th>
-                                <th>Ap.Materno </th>
+                                <th>Apellido<br>Paterno </th>
+                                <th>Apellido<br>Materno </th>
                                 <th>Cargo </th>
-                                <th>Nomb.Cargo </th>
-                                <th>Hab.Basico </th>
+                                <th>Nombre<br>Cargo </th>
+                                <th>Haber<br>Basico </th>
                                 <th>Categoria </th>
-                                <th>Nivel Adm. </th>
+                                <th>Nivel<br>Administrativo</th>
                                 <th>Clase </th>
-                                <th>Nivelsal </th>
-                                <th>F.Ingreso </th>
+                                <th>Nivel<br>Salarial</th>
+                                <th>Fecha<br>Ingreso </th>
                                 <th>Natalicio </th>
                                 <th>Edad </th>
                                 <th>Ci </th>
                                 <th>Sippase </th>
-                                <th>Exp.Sippase </th>
-                                <th>Seerv.Milit. </th>
+                                <th>Expiración<br>Sippase </th>
+                                <th>Inducción </th>
+                                <th>Expiración<br>Inducción </th>
+                                <th>Servicio<br>Militar </th>
                                 <th>Idioma </th>
-                                <th>Curr.Vitae </th>
+                                <th>Curriculum<br>Vitae </th>
                                 <th>Telefono </th>
                                 <th>Biometrico </th>
-                                <th>Drado Acad. </th>
+                                <th>Grado<br>Académico </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -48,7 +50,6 @@
 
 
                                 <td>{{$empleado -> idemp}}</td>
-
                                 <td>{{$empleado -> numfile}}</td>
                                 <td>{{$empleado -> nombrearea}}</td>
                                 <td>{{$empleado -> nombres}}</td>
@@ -68,7 +69,8 @@
                                 <td>{{$empleado -> natalicio}}</td>
                                 <td>{{$empleado -> edad}}</td>
                                 <td>{{$empleado -> ci}}</td>
-
+                                <td>{{$empleado -> induccion}}</td>
+                                <td>{{$empleado -> expinduccion}}</td>
                                 <td>{{$empleado -> sippase}}</td>
                                 <td>{{$empleado -> expsippase}}</td>
                                 <td>{{$empleado -> servmilitar}}</td>
@@ -87,7 +89,7 @@
 
                             @empty
                             <tr>
-                                <td colspan="100%" class="text-center text-muted py-3">No Users Found</td>
+                                <td colspan="100%" class="text-center text-muted py-3">No hay registros</td>
                             </tr>
                             @endforelse
 

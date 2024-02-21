@@ -11,6 +11,7 @@ use App\Models\ReporteModel;
 use App\Models\EmpleadosModel;
 use App\Models\FileModel;
 use App\Models\HorarioModel;
+use App\Models\NivelModel;
 use App\Models\RetrasosEmpleado;
 use App\Models\RetrasosModel;
 use Carbon\Carbon;
@@ -159,7 +160,7 @@ class ReporteController extends Controller
             $fechaFinal = $request->input('fecha_final2');
             $area_id = $request->input('area_id');
 
-            $data = $this->areaConsulta($request,$area_id, $fechaInicio, $fechaFinal);
+            $data = $this->areaConsulta($request, $area_id, $fechaInicio, $fechaFinal);
 
 
 
@@ -239,13 +240,17 @@ class ReporteController extends Controller
             })
             ->addColumn('estado', function ($row) {
                 if ($row->estado == 0) {
-                    return 'Sin Registro';
+                    return 'Falta';
                 } else if ($row->estado == 1) {
                     return 'Registrado';
                 } else if ($row->estado == 2) {
-                    return 'Pendiente';
+                    return 'Falta';
+                } else if ($row->estado == 3) {
+                    # code...
+
+                    return 'Marcado Biometrico'; // Puedes personalizar este mensaje según sea necesario
                 } else {
-                    return '-'; // Puedes personalizar este mensaje según sea necesario
+                    return '-';
                 }
             })
             ->rawColumns(['horario'])
@@ -272,7 +277,7 @@ class ReporteController extends Controller
     {
         $retrasos = RegistroAsistencia::where('empleado_id', $id)
             ->whereBetween('fecha', [$fechaI, $fechaF])
-            ->where('estado', '=', 1)
+            ->whereNotIn('estado', [0, 2])
             ->where('minutos_retraso', '>', 0)
             ->get();
         return Datatables::of($retrasos)
@@ -298,7 +303,7 @@ class ReporteController extends Controller
         $empleadoDatos =  EmpleadosModel::where('idemp', $empleado_id)->with('empleadosareas')->first();
 
 
-        return view('asistencias.reportes.reporte-personal', compact('empleadoDatos','empleado_id', 'fechaInicio', 'fechaFinal'));
+        return view('asistencias.reportes.reporte-personal', compact('empleadoDatos', 'empleado_id', 'fechaInicio', 'fechaFinal'));
     }
     public function visualizar2(Request $request)
     {
@@ -326,7 +331,88 @@ class ReporteController extends Controller
         $fechaFinal = $request->input('fecha_final4');
         $empleadoDatos =  EmpleadosModel::where('idemp', $empleado_id)->with('empleadosareas')->first();
 
-        return view('asistencias.reportes.reporte-asistencia-personal', compact('empleadoDatos','empleado_id', 'fechaInicio', 'fechaFinal'));
+               // Generar un arreglo de fechas dentro del rango deseado
+               $fechas = [];
+               $fechaActual = Carbon::parse($fechaInicio);
+               $fechaFinCarbon = Carbon::parse($fechaFinal);
+               while ($fechaActual->lte($fechaFinCarbon)) {
+                   $fechas[] = $fechaActual->toDateString();
+                   $fechaActual->addDay();
+               }
+       
+               // Obtener los registros de asistencia para las fechas dentro del rango
+               $data = RegistroAsistencia::whereBetween('fecha', [$fechaInicio, $fechaFinal])
+                   ->where('empleado_id', $empleado_id)
+                   ->get();
+       
+       
+       
+               // Combinar los registros con las fechas, rellenando los días sin registros con valores nulos
+               $registros = [];
+               foreach ($fechas as $fecha) {
+                   $reg = $data->where('fecha', $fecha)->first();
+       
+                   if ($reg) {
+                       $nom = $reg->empleado->nombres ?? '-';
+                       $ap_pat = $reg->empleado->ap_pat ?? '-';
+                       $ap_mat = $reg->empleado->ap_mat ?? '-';
+                       $nombreEmpleado = implode("", [$nom, $ap_pat, $ap_mat]);
+       
+                       $nombreEmpleado = $nom . ' ' . $ap_pat . ' ' . $ap_mat;
+                       $hi = $reg->horario->hora_inicio ? Carbon::parse($reg->horario->hora_inicio)->format('H:i') : '-';
+       
+                       $hf = $reg->horario->hora_final ? Carbon::parse($reg->horario->hora_final)->format('H:i') : '-';
+       
+                       $hs = $reg->horario->hora_salida ? Carbon::parse($reg->horario->hora_salida)->format('H:i') : '-';
+                       $he = $reg->horario->hora_entrada ? Carbon::parse($reg->horario->hora_entrada)->format('H:i') : '-';
+                       $hn = $reg->horario->Nombre;
+                       $ht = $reg->horario->tipo;
+       
+                       $est = $reg->estado;
+                       $ovb = $reg->observ;
+       
+       
+                       // Ajusta el nombre de la relación según corresponda en tu modelo
+                       $reg->ht = $ht;
+                       $reg->hs = $hs;
+                       $reg->he = $he;
+                       $reg->hi = $hi;
+                       $reg->hf = $hf;
+                       $reg->hn = $hn;
+                       $reg->est =  $est;
+                       $reg->ovb =  $ovb;
+       
+       
+       
+                       $reg->nombre_empleado = $nombreEmpleado;
+                       $registros[] = $reg;
+                   } else {
+                       // Si no hay registro para esta fecha, agregar un objeto con valores nulos
+       
+                       $registros[] = (object) [
+                           'id' => null,
+                           'fecha' => $fecha,
+                           'minutos_retraso' => null,
+                           'registro_inicio' => null,
+                           'registro_salida' => null,
+                           'registro_entrada' => null,
+                           'registro_final' => null,
+                           'nombre_empleado' => null,
+                           'hi' => null,
+                           'hf' => null,
+                           'he' => null,
+                           'hs' => null,
+                           'hn' => null,
+                           'est' => 4,
+                           'ovb' => null,
+                           'ht' => null
+       
+                           // Agregar más propiedades según tus necesidades
+                       ];
+                   }
+               }
+
+        return view('asistencias.reportes.reporte-asistencia-personal', compact('registros','empleadoDatos', 'empleado_id', 'fechaInicio', 'fechaFinal'));
     }
 
     public function personalConsulta($request, $id, $fechaI, $fechaF)
@@ -340,7 +426,7 @@ class ReporteController extends Controller
         $query = EmpleadosModel::whereHas('registrosAsistencia', function ($query) use ($id, $fechaI, $fechaF) {
             $query
                 ->where('empleado_id', $id)
-                ->where('estado', 1) // Puedes omitir el '=', ya que es el valor predeterminado.
+                ->where('estado', [1,3]) // Puedes omitir el '=', ya que es el valor predeterminado.
                 ->where('minutos_retraso', '>', 0)
                 ->whereBetween('fecha', [$fechaI, $fechaF])
                 ->orderBy('fecha', 'asc'); // o 'desc' para ordenar en orden descendente
@@ -354,7 +440,7 @@ class ReporteController extends Controller
             // Utiliza el método sum directamente en la relación registrosAsistencia.
             $suma_retrasos = $empleado->registrosAsistencia()
                 ->whereBetween('fecha', [$fechaI, $fechaF])
-                ->where('estado', 1) // Puedes omitir el '=', ya que es el valor predeterminado.
+                ->where('estado', [1,3]) // Puedes omitir el '=', ya que es el valor predeterminado.
                 ->orderBy('fecha', 'asc') // o 'desc' para ordenar en orden descendente
                 ->sum('minutos_retraso');
 
@@ -378,7 +464,7 @@ class ReporteController extends Controller
             'recordsFiltered' => $totalRecords,
             'data' => $empleadosData,
         ];
-         return $data;
+        return $data;
     }
 
 
@@ -391,7 +477,7 @@ class ReporteController extends Controller
         $empleados = EmpleadosModel::whereHas('registrosAsistencia', function ($query)
         use ($fechaInicio, $fechaFinal) {
             $query
-                ->where('estado', '=', 1)
+                ->where('estado', '=', [1,3])
                 ->where('minutos_retraso', '>', 0)
                 ->whereBetween('fecha', [$fechaInicio, $fechaFinal]);
         })->where('idarea', $area_id)
@@ -407,7 +493,7 @@ class ReporteController extends Controller
         foreach ($empleados as $empleado) {
             $suma_retrasos = RegistroAsistencia::where('empleado_id', $empleado->idemp)
                 ->whereBetween('fecha', [$fechaInicio, $fechaFinal])
-                ->where('estado', '=', 1)
+                ->where('estado', '=', [1,3])
                 ->sum('minutos_retraso');
 
             $observacion = $this->calculateObservation($suma_retrasos);
@@ -438,9 +524,9 @@ class ReporteController extends Controller
 
             $fechaInicio = $request->input('fecha_inicio3');
             $fechaFinal = $request->input('fecha_final3');
-             $empleados = EmpleadosModel::whereHas('registrosAsistencia', function ($query) use ($fechaInicio, $fechaFinal) {
+            $empleados = EmpleadosModel::whereHas('registrosAsistencia', function ($query) use ($fechaInicio, $fechaFinal) {
                 $query
-                    ->where('estado', '=', 1)
+                    ->where('estado', '=', [1,3])
                     ->where('minutos_retraso', '>', 0)
                     ->whereBetween('fecha', [$fechaInicio, $fechaFinal]);
             })
@@ -542,6 +628,12 @@ class ReporteController extends Controller
     public function previsualizarPdf(Request $request)
     {
         try {
+            $userID = Auth::user()->idemp;
+            $datoUsuario = EmpleadosModel::where('idemp', $userID)
+                ->select('nombres', 'ap_pat', 'ap_mat')
+                ->first();
+            
+            $nombreCompleto = $datoUsuario->nombres . ' ' . $datoUsuario->ap_pat . ' ' . $datoUsuario->ap_mat;
 
 
             $empleado_id = request('empleadoId');
@@ -555,7 +647,7 @@ class ReporteController extends Controller
             $query = EmpleadosModel::whereHas('registrosAsistencia', function ($query) use ($empleado_id, $fechaInicio, $fechaFinal) {
                 $query
                     ->where('empleado_id', $empleado_id)
-                    ->where('estado', '=', 1)
+                    ->where('estado', '=', [1,3])
                     ->where('minutos_retraso', '>', 0)
                     ->whereBetween('fecha', [$fechaInicio, $fechaFinal]);
             });
@@ -573,7 +665,7 @@ class ReporteController extends Controller
             foreach ($empleados as $empleado) {
                 $suma_retrasos = RegistroAsistencia::where('empleado_id', $empleado->idemp)
                     ->whereBetween('fecha', [$fechaInicio, $fechaFinal])
-                    ->where('estado', '=', 1)
+                    ->where('estado', '=', [1,3])
                     ->sum('minutos_retraso');
 
                 $observacion = $this->calculateObservation($suma_retrasos);
@@ -591,7 +683,7 @@ class ReporteController extends Controller
                 ->whereBetween('fecha', [$fechaInicio, $fechaFinal])
                 ->where('minutos_retraso', '>', 0)
 
-                ->where('estado', '=', 1)
+                ->where('estado', '=', [1,3])
                 ->get();
 
             $data = [
@@ -602,10 +694,7 @@ class ReporteController extends Controller
 
             ];
 
-
-
-
-            $pdf = PDF::loadView('asistencias.reportes.reporte-personal-pdf', compact(['retrasos', 'empleadoDatos', 'data', 'fechaInicio', 'fechaFinal']));
+            $pdf = PDF::loadView('asistencias.reportes.reporte-personal-pdf', compact(['retrasos', 'empleadoDatos', 'data', 'fechaInicio', 'fechaFinal','nombreCompleto']));
             $pdf->setPaper('LETTER', 'Portrait');
             return $pdf->stream();
         } catch (\Exception $e) {
@@ -620,23 +709,27 @@ class ReporteController extends Controller
     {
         try {
 
-
+            $userID = Auth::user()->idemp;
+            $datoUsuario = EmpleadosModel::where('idemp', $userID)
+                ->select('nombres', 'ap_pat', 'ap_mat')
+                ->first();
+            
+            $nombreCompleto = $datoUsuario->nombres . ' ' . $datoUsuario->ap_pat . ' ' . $datoUsuario->ap_mat;
             $area_id = request('area_id');
             $fechaInicio = request('fechaInicio');
             $fechaFinal = request('fechaFinal');
 
-
             $areasDatos =  AreasModel::where('idarea', $area_id)->first();
-
+          
             $empleados = EmpleadosModel::whereHas('registrosAsistencia', function ($query) use ($fechaInicio, $fechaFinal) {
                 $query
 
-                    ->where('estado', '=', 1)
+                    ->where('estado', '=', [1,3])
                     ->where('minutos_retraso', '>', 0)
                     ->whereBetween('fecha', [$fechaInicio, $fechaFinal]);
             })
                 ->where('idarea', $area_id)
-                ->select('idemp', 'nombres', 'ap_mat', 'ap_pat')
+                ->select('idemp', 'nombres', 'ap_mat', 'ap_pat', 'ci')
                 ->get();
 
 
@@ -653,7 +746,8 @@ class ReporteController extends Controller
                 $observacion = $this->calculateObservation($suma_retrasos);
 
                 $areaempleadosData[] = [
-                    'empleado' => $empleado->nombres,
+                    'empleado' => $empleado->nombres . ' ' . $empleado->ap_pat . ' ' . $empleado->ap_mat,
+                    'ci' => $empleado->ci,
                     'total_retrasos' => $suma_retrasos,
                     'observaciones' => $observacion,
                 ];
@@ -671,7 +765,7 @@ class ReporteController extends Controller
 
 
 
-            $pdf = PDF::loadView('asistencias.reportes.reporte-area-pdf', compact(['areasDatos', 'data', 'fechaInicio', 'fechaFinal']));
+            $pdf = PDF::loadView('asistencias.reportes.reporte-area-pdf', compact(['nombreCompleto','areasDatos', 'data', 'fechaInicio', 'fechaFinal']));
             $pdf->setPaper('LETTER', 'Portrait');
             return $pdf->stream();
         } catch (\Exception $e) {
@@ -685,28 +779,21 @@ class ReporteController extends Controller
     public function generalReportePdf(Request $request)
     {
         try {
-           // $empleadoId = $request->input('empleadoId');
+
+            $userID = Auth::user()->idemp;
+            $datoUsuario = EmpleadosModel::where('idemp', $userID)
+                ->select('nombres', 'ap_pat', 'ap_mat')
+                ->first();
+            
+            $nombreCompleto = $datoUsuario->nombres . ' ' . $datoUsuario->ap_pat . ' ' . $datoUsuario->ap_mat;
+            // $empleadoId = $request->input('empleadoId');
             $fechaInicio = $request->input('fechaInicio');
             $fechaFinal = $request->input('fechaFinal');
 
-
-
-            $usuario = Auth::user()->name;
-            $user = DB::table('users')->where('name', $usuario)->select('idemp')->first();
-
-            if ($user) {
-                $id = $user->idemp;
-                // Procede con el uso de $id
-            }
-
-            $usuarioCompleto = EmpleadosModel::where('idemp', $id)->select('nombres')->first();
-          
-
- 
             $empleados = EmpleadosModel::whereHas('registrosAsistencia', function ($query) use ($fechaInicio, $fechaFinal) {
                 $query
 
-                    ->where('estado', '=', 1)
+                    ->where('estado', '=', [1,3])
                     ->where('minutos_retraso', '>', 0)
                     ->whereBetween('fecha', [$fechaInicio, $fechaFinal]);
             })
@@ -728,7 +815,7 @@ class ReporteController extends Controller
                 $observacion = $this->calculateObservation($suma_retrasos);
 
                 $areaempleadosData[] = [
-                    'empleado' => $empleado->nombres,
+                    'empleado' => $empleado->nombres . ' ' . $empleado->ap_pat . ' ' . $empleado->ap_mat,
                     'total_retrasos' => $suma_retrasos,
                     'observaciones' => $observacion,
                 ];
@@ -742,10 +829,10 @@ class ReporteController extends Controller
             ];
 
 
- 
 
 
-            $pdf = PDF::loadView('asistencias.reportes.reporte-general-pdf', compact(['data', 'fechaInicio', 'fechaFinal']));
+
+            $pdf = PDF::loadView('asistencias.reportes.reporte-general-pdf', compact(['data', 'fechaInicio', 'fechaFinal','nombreCompleto']));
             $pdf->setPaper('LETTER', 'Portrait');
             return $pdf->stream();
         } catch (\Exception $e) {
@@ -760,19 +847,102 @@ class ReporteController extends Controller
 
         try {
 
+            $userID = Auth::user()->idemp;
+            $datoUsuario = EmpleadosModel::where('idemp', $userID)
+                ->select('nombres', 'ap_pat', 'ap_mat')
+                ->first();
+            
+            $nombreCompleto = $datoUsuario->nombres . ' ' . $datoUsuario->ap_pat . ' ' . $datoUsuario->ap_mat;
+
 
             $empleado_id = request('empleadoId');
             $fechaInicio = request('fechaInicio');
             $fechaFinal = request('fechaFinal');
             $empleadoDatos =  EmpleadosModel::where('idemp', $empleado_id)->with('empleadosareas')->first();
+            $fechas = [];
+            $fechaActual = Carbon::parse($fechaInicio);
+            $fechaFinCarbon = Carbon::parse($fechaFinal);
+            while ($fechaActual->lte($fechaFinCarbon)) {
+                $fechas[] = $fechaActual->toDateString();
+                $fechaActual->addDay();
+            }
+    
+            // Obtener los registros de asistencia para las fechas dentro del rango
+            $data = RegistroAsistencia::whereBetween('fecha', [$fechaInicio, $fechaFinal])
+                ->where('empleado_id', 1)
+                ->get();
+    
+    
+    
+            // Combinar los registros con las fechas, rellenando los días sin registros con valores nulos
+            $registros = [];
+            foreach ($fechas as $fecha) {
+                $reg = $data->where('fecha', $fecha)->first();
+    
+                if ($reg) {
+                     $nom = $reg->empleado->nombres ?? ' ';
+                    $ap_pat = $reg->empleado->ap_pat ?? ' ';
+                    $ap_mat = $reg->empleado->ap_mat ?? ' ';
+                      $ap =  $ap_pat. ' '.   $ap_mat ;
+                    $hi = $reg->horario->hora_inicio ? Carbon::parse($reg->horario->hora_inicio)->format('H:i') : '-';
+    
+                    $hf = $reg->horario->hora_final ? Carbon::parse($reg->horario->hora_final)->format('H:i') : '-';
+    
+                    $hs = $reg->horario->hora_salida ? Carbon::parse($reg->horario->hora_salida)->format('H:i') : '-';
+                    $he = $reg->horario->hora_entrada ? Carbon::parse($reg->horario->hora_entrada)->format('H:i') : '-';
+                    $hn = $reg->horario->Nombre;
+                    $ht = $reg->horario->tipo;
+                    $est = $reg->estado;
+                    $ovb = $reg->observ;
+    
+    
+                    // Ajusta el nombre de la relación según corresponda en tu modelo
+                    $reg->ht= $ht;
+                    $reg->hs = $hs;
+                    $reg->he = $he;
+                    $reg->hi = $hi;
+                    $reg->hf = $hf;
+                    $reg->hn = $hn;
+                    $reg->est =  $est;
+                    $reg->ovb =  $ovb;
+                    $reg->ap = $ap;
+    
+    
+    
+                    $reg->nombre_empleado = $nom;
+                    $registros[] = $reg;
+                } else {
+                    // Si no hay registro para esta fecha, agregar un objeto con valores nulos
+    
+                    $registros[] = (object) [
+                        'id' => null,
+                        'fecha' => $fecha,
+                        'minutos_retraso' => null,
+                        'registro_inicio' => null,
+                        'registro_salida' => null,
+                        'registro_entrada' => null,
+                        'registro_final' => null,
+                        'nombre_empleado' => null,
+                        'hi' => null,
+                        'hf' => null,
+                        'he' => null,
+                        'hs' => null,
+                        'hn' => null,
+                        'ht' => null,
+                        'est' => null,
+                        'est' => null,
+                        'ovb' => null,
+                        'ap' => null,
 
-            $registros = $this->registropPersonalConsulta($empleado_id, $fechaInicio, $fechaFinal);
+                        // Agregar más propiedades según tus necesidades
+                    ];
+                }
+            }
 
-            // Acceder a los datos
+            $pdf = PDF::loadView('asistencias.reportes.pdf-reporte-personal-asistencias', compact(['registros', 'empleadoDatos',   'fechaInicio', 'fechaFinal','nombreCompleto']));
+            $pdf->setPaper('LETTER', 'portrait');
+            $pdf->getDomPDF()->getOptions()->setDefaultFont('Calibri');
 
-
-            $pdf = PDF::loadView('asistencias.reportes.pdf-reporte-personal-asistencias', compact(['registros', 'empleadoDatos',   'fechaInicio', 'fechaFinal']));
-            $pdf->setPaper('LETTER', 'landscape');
             return $pdf->stream();
         } catch (\Exception $e) {
 
@@ -784,22 +954,36 @@ class ReporteController extends Controller
 
     public function generarExcelReporte(Request $request)
     {
+        $userID = Auth::user()->idemp;
+        $datoUsuario = EmpleadosModel::where('idemp', $userID)
+            ->select('nombres', 'ap_pat', 'ap_mat')
+            ->first();
+        
+        $nombreCompleto = $datoUsuario->nombres . ' ' . $datoUsuario->ap_pat . ' ' . $datoUsuario->ap_mat;
         $empleado_id = request('empleadoId');
         $fechaInicio = request('fechaInicio');
         $fechaFinal = request('fechaFinal');
 
         $data = $this->personalConsulta($request, $empleado_id, $fechaInicio, $fechaFinal);
-        $empleadoDatos =  EmpleadosModel::where('idemp', $empleado_id)->with('empleadosareas')->select('nombres','ap_pat','ap_mat','idarea','ci')->first();
-        
+        $empleadoDatos =  EmpleadosModel::where('idemp', $empleado_id)->with('empleadosareas')->select('nombres', 'ap_pat', 'ap_mat', 'idarea', 'ci')->first();
 
-        $view =  view('asistencias.reportes.reporte-personal-excel', compact([ 'empleadoDatos', 'data', 'fechaInicio', 'fechaFinal']));
+
+        $view =  view('asistencias.reportes.reporte-personal-excel', compact(['empleadoDatos', 'data', 'fechaInicio', 'fechaFinal']));
 
         // Asegúrate de tener un modelo que represente tus datos
         $fileName = 'reporte_por_fechas.xlsx';
         return Excel::download(new ReportePorFechasExport($view), $fileName);
     }
+    
     public function generarExcelAreaReporte(Request $request)
     {
+
+        $userID = Auth::user()->idemp;
+        $datoUsuario = EmpleadosModel::where('idemp', $userID)
+            ->select('nombres', 'ap_pat', 'ap_mat')
+            ->first();
+        
+        $nombreCompleto = $datoUsuario->nombres . ' ' . $datoUsuario->ap_pat . ' ' . $datoUsuario->ap_mat;
         $area_id = request('area_id');
         $fechaInicio = request('fechaInicio');
         $fechaFinal = request('fechaFinal');
@@ -808,7 +992,7 @@ class ReporteController extends Controller
         $areasDatos =  AreasModel::where('idarea', $area_id)->first();
 
 
-        $view =  view('asistencias.reportes.reporte-area-excel', compact([ 'areasDatos', 'data', 'fechaInicio', 'fechaFinal']));
+        $view =  view('asistencias.reportes.reporte-area-excel', compact(['areasDatos', 'data', 'fechaInicio', 'fechaFinal','nombreCompleto']));
 
         // Asegúrate de tener un modelo que represente tus datos
         $fileName = 'reporte_area_por_fechas.xlsx';
@@ -817,31 +1001,25 @@ class ReporteController extends Controller
 
     public function ExcelGeneralReporte(Request $request)
     {
-         $fechaInicio = request('fechaInicio');
+
+      
+        $userID = Auth::user()->idemp;
+        $datoUsuario = EmpleadosModel::where('idemp', $userID)
+            ->select('nombres', 'ap_pat', 'ap_mat')
+            ->first();
+        
+        $nombreCompleto = $datoUsuario->nombres . ' ' . $datoUsuario->ap_pat . ' ' . $datoUsuario->ap_mat;
+        $fechaInicio = request('fechaInicio');
         $fechaFinal = request('fechaFinal');
 
 
         $fechaInicio = $request->input('fechaInicio');
         $fechaFinal = $request->input('fechaFinal');
 
-
-
-        $usuario = Auth::user()->name;
-        $user = DB::table('users')->where('name', $usuario)->select('idemp')->first();
-
-        if ($user) {
-            $id = $user->idemp;
-            // Procede con el uso de $id
-        }
-
-        $usuarioCompleto = EmpleadosModel::where('idemp', $id)->select('nombres')->first();
-      
-
-
         $empleados = EmpleadosModel::whereHas('registrosAsistencia', function ($query) use ($fechaInicio, $fechaFinal) {
             $query
 
-                ->where('estado', '=', 1)
+                ->where('estado', '=', [1,3])
                 ->where('minutos_retraso', '>', 0)
                 ->whereBetween('fecha', [$fechaInicio, $fechaFinal]);
         })
@@ -875,10 +1053,10 @@ class ReporteController extends Controller
             'recordsFiltered' => $totalRecords,
             'data' => $areaempleadosData,
         ];
-    
- 
 
-        $view =  view('asistencias.reportes.reporte-general-excel', compact([  'data', 'fechaInicio', 'fechaFinal']));
+
+
+        $view =  view('asistencias.reportes.reporte-general-excel', compact(['data', 'fechaInicio', 'fechaFinal','nombreCompleto']));
 
         // Asegúrate de tener un modelo que represente tus datos
         $fileName = 'reporte_general_por_fechas.xlsx';
@@ -886,7 +1064,14 @@ class ReporteController extends Controller
     }
     public function excelRegistroReporte(Request $request)
     {
-       
+
+              $userID = Auth::user()->idemp;
+            $datoUsuario = EmpleadosModel::where('idemp', $userID)
+                ->select('nombres', 'ap_pat', 'ap_mat')
+                ->first();
+            
+            $nombreCompleto = $datoUsuario->nombres . ' ' . $datoUsuario->ap_pat . ' ' . $datoUsuario->ap_mat;
+
         $empleado_id = request('empleadoId');
         $fechaInicio = request('fechaInicio');
         $fechaFinal = request('fechaFinal');
@@ -895,7 +1080,7 @@ class ReporteController extends Controller
         $registros = $this->registropPersonalConsulta($empleado_id, $fechaInicio, $fechaFinal);
 
 
-        $view =  view('asistencias.reportes.excel-reporte-personal-asistencias', compact(['registros', 'empleadoDatos',   'fechaInicio', 'fechaFinal']));
+        $view =  view('asistencias.reportes.excel-reporte-personal-asistencias', compact(['nombreCompleto','registros', 'empleadoDatos',   'fechaInicio', 'fechaFinal']));
 
         // Asegúrate de tener un modelo que represente tus datos
         $fileName = 'reporte_por_fechas.xlsx';

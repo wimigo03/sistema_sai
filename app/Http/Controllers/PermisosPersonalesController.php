@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\EmpleadoPermisoModel;
 use App\Models\EmpleadosModel;
 use App\Models\PermisoModel;
+use App\Models\RegistroAsistencia;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -163,8 +164,7 @@ class PermisosPersonalesController extends Controller
                 return '<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Registro" href="' . route('editar.permiso', $permiso->id) . '">
                 <i class="fa-solid fa-2xl fa-square-pen text-warning"></i>
             </a>&nbsp;&nbsp;'
-             . '<a class="tts:left tts-slideIn tts-custom" aria-label="Eliminar Huella Dactilar" href="#" data-toggle="modal" data-target="#confirmarEliminarModal" data-nombre="' . $permiso->empleado->nombres .' '.$permiso->empleado->ap_pat.' '.$permiso->empleado->ap_mat. '" data-id="'. $permiso->id .'"><span class="badge badge-danger"> ELIMINAR</span>  </a>'
-             ;
+                    . '<a class="tts:left tts-slideIn tts-custom" aria-label="Eliminar Huella Dactilar" href="#" data-toggle="modal" data-target="#confirmarEliminarModal" data-nombre="' . $permiso->empleado->nombres . ' ' . $permiso->empleado->ap_pat . ' ' . $permiso->empleado->ap_mat . '" data-id="' . $permiso->id . '"><span class="badge badge-danger"> ELIMINAR</span>  </a>';
             })
             ->rawColumns(['horas_utilizadas', 'opciones'])
             ->make(true);
@@ -242,6 +242,8 @@ class PermisosPersonalesController extends Controller
     public function store(Request $request)
     {
         // Valida los datos del formulario
+
+
         $request->validate([
             'empleado_id' => 'required',
             'permiso_id' => 'required',
@@ -252,17 +254,36 @@ class PermisosPersonalesController extends Controller
             'duracion' => 'required|numeric',
         ]);
 
+
+
         try {
             // Obtén los valores del formulario
             $empleadoId = $request->input('empleado_id');
             $permisoId = $request->input('permiso_id');
             $horasSolicitadas = $request->input('duracion');
+            $registro_id = $request->input('registroAsistencia_id');
             if ($horasSolicitadas == 0) {
                 return redirect()->back()->with('error', 'No se pudo registrar el permiso');
             }
 
 
-            $fechaCompleta = $request->input('fecha_solicitud'); // Reemplaza esto con tu fecha completa en el formato 'Y-m-d'
+            $fechaCompleta = $request->input('fecha_solicitud');
+            // Reemplaza esto con tu fecha completa en el formato 'Y-m-d'
+            $permisoRegularizado = EmpleadoPermisoModel::where('fecha_solicitud', $fechaCompleta)->where('empleado_id', $empleadoId)
+                ->where('hora_retorno', '>', $request->input('hora_retorno'))
+                ->get();
+
+            if ($registro_id) {
+                if ($permisoRegularizado->count() > 0) {
+                    return redirect()->route('regularizar.ausencia', ['id' =>  $registro_id])->with('error', 'Regularizado correctamente la asistencia del día: '.$permisoRegularizado . $fechaCompleta);
+
+                  //  return redirect()->back()->with('error', 'Ya Registro la Boleta Personal' . $permisoRegularizado);
+                }
+            }
+
+
+
+
 
             $fechaCarbon = Carbon::createFromFormat('Y-m-d', $fechaCompleta);
             $fechaMes = $fechaCarbon->format('Y-m');
@@ -305,7 +326,12 @@ class PermisosPersonalesController extends Controller
                             // Guarda el registro en la base de datos
                             $permisoPersonal->save();
                             // Redirecciona a la vista de éxito o a donde desees
-                            return redirect()->route('permisospersonales.index')->with('success', 'Permiso registrado exitosamente.');
+                            if ($registro_id) {
+                                // return redirect()->route('regularizar.ausencia', ['id' =>  $registro_id ])->with('success', 'Regularizado correctamente la asistencia del día: '.$fechaCompleta );
+
+                                return redirect()->back()->with('success', 'Permiso registrado exitosamente.' . $permisoRegularizado);
+                            }
+                            return redirect()->route('permisospersonales.index')->with('success', 'Permiso registrado exitosamente.' . $permisoRegularizado . $registro_id);
                         } else {
                             return redirect()->back()->with('error', 'No se pudo crear el permiso: ' . 'Te quedan ' . $resta . '(minutos)');
                         }
@@ -326,7 +352,13 @@ class PermisosPersonalesController extends Controller
                         // Guarda el registro en la base de datos
                         $permisoPersonal->save();
                         // Redirecciona a la vista de éxito o a donde desees
-                        return redirect()->route('permisospersonales.index')->with('success', 'Permiso creado exitosamente.');
+
+                        if ($registro_id) {
+                            // return redirect()->route('regularizar.ausencia', ['id' =>  $registro_id ])->with('success', 'Regularizado correctamente la asistencia del día: '.$fechaCompleta );
+
+                            return redirect()->back()->with('success', 'Permiso registrado exitosamente.');
+                        }
+                        return redirect()->route('permisospersonales.index')->with('success', 'Permiso creado exitosamente.' . $permisoRegularizado);
                     }
                 } else {
                     // Manejar el caso en el que no se encuentra el empleado
@@ -472,13 +504,13 @@ class PermisosPersonalesController extends Controller
      */
     public function destroy($id)
     {
-       // dd($id);
+        // dd($id);
         $permiso = EmpleadoPermisoModel::find($id);
         $permiso->delete();
 
         // Redireccionar a la lista de horarios con un mensaje de éxito
-        return redirect()->route('permisospersonales.index')->with('success', 'El la huella Dactilar ha sido eliminada correctamente.');
-       }
+        return redirect()->route('permisospersonales.index')->with('success', 'El registro ha sido eliminado correctamente.');
+    }
 
     function convertirHorasMinutosATexto($horas_permitidas)
     {

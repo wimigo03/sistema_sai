@@ -431,16 +431,23 @@ class AsistenciaController extends Controller
         }
         if ($registro->horario->tipo == 0) {
             if (
-                $registro->registro_final && $registro->registro_inicio
+                $registro->registro_final &&
+                $registro->registro_inicio
             ) {
-                $registro->tipo = 0;
                 $registro->estado = 1;
+                $registro->tipo = 0;
                 $registro->save();
-            } else if (!$registro->registro_final && $registro->registro_inicio) {
+            } else if (
+                !$registro->registro_final &&
+                $registro->registro_inicio
+            ) {
                 $registro->estado = 2;
                 $registro->tipo = 0;
                 $registro->save();
-            } else if ($registro->registro_final && !$registro->registro_inicio) {
+            } else if (
+                $registro->registro_final &&
+                !$registro->registro_inicio
+            ) {
                 $registro->estado = 2;
                 $registro->tipo = 0;
                 $registro->save();

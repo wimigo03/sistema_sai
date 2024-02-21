@@ -4,7 +4,7 @@
 <div class="container-xl font-verdana-bg">
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
-        <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
+            <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
                 <a href="{{url()->previous()}}" class="color-icon-1">
                     <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
                 </a>
@@ -51,38 +51,92 @@
                                 <th>Exp. Rejap</th>
                                 <th>Exp. Poai</th>
                                 <th>Exp. Programa Vacación</th>
-                             </tr>
+                                <th>Acciones</th>
+
+                            </tr>
                         </thead>
                     </table>
                 </div>
             </div>
         </div>
         <div class="tab-pane fade" id="tab2">
-
+            <hr class="hr">
             <div class="row font-verdana">
+                <hr class="hr">
                 <div class="col-md-12 table-responsive center">
                     <table class="table-bordered yajra-datatable hoverTable table display responsive font-verdana" id="empleados-table2" style="width:100%">
                         <thead class="table-light">
                             <tr>
                                 <th>ID</th>
-                                <th>Nombres y Apellidos/th>
+                                <th>Nombres y Apellidos</th>
                                 <th>Expiracion de SIPPASE</th>
                                 <th>Expiracion de REJAP</th>
-                             </tr>
+                                <th>Exp. Inducción</th>
+                                <th>Acciones</th>
+
+                            </tr>
                         </thead>
                     </table>
                 </div>
             </div>
-
         </div>
-
-
     </div>
-    <div class="row  ">
 
-    </div>
 
 </div>
+
+<!-- Modal para editar -->
+
+<div class="modal fade" id="EditarModal" tabindex="-1" role="dialog" aria-labelledby="EditarModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="editarForm" method="POST" action="{{route('planta.actualizar')}}">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title" id="EditarModalLabel">Editar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Campos de edición -->
+                    <input type="text" id="nombreEditar" class="form-control mb-2" readonly>
+                    <input type="hidden" id="idEditar">
+
+                    <!-- Campos de tipo date en dos columnas -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="fecha1">Fecha 1:</label>
+                            <input type="date" id="fecha1" name="fecha1" class="form-control mb-2">
+                            
+                            <label for="fecha2">Fecha 2:</label>
+                            <input type="date" id="fecha2" name="fecha2" class="form-control mb-2">
+                            
+                            <label for="fecha3">Fecha 3:</label>
+                            <input type="date" id="fecha3" name="fecha3" class="form-control mb-2">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="fecha4">Fecha 4:</label>
+                            <input type="date" id="fecha4" name="fecha4" class="form-control mb-2">
+                            
+                            <label for="fecha5">Fecha 5:</label>
+                            <input type="date" id="fecha5" name="fecha5" class="form-control mb-2">
+                            
+                            <label for="fecha6">Fecha 6:</label>
+                            <input type="date" id="fecha6" name="fecha6" class="form-control mb-2">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 @section('scripts')
 <script>
     $(document).ready(function() {
@@ -146,7 +200,11 @@
                 {
                     data: 'expprogvacacion',
                     name: 'expprogvacacion'
+                }, {
+                    data: 'actions',
+                    name: 'actions'
                 }
+
             ]
 
         });
@@ -201,7 +259,14 @@
                             {
                                 data: 'rejap',
                                 name: 'rejap'
-                            } 
+                            },
+                            {
+                                data: 'expinduccion',
+                                name: 'expinduccion'
+                            }, {
+                                data: 'actions',
+                                name: 'actions'
+                            }
                         ]
 
                     });
@@ -211,5 +276,22 @@
 
     });
 </script>
+
+
+
+
+<script>
+    // Captura el evento de mostrar el modal y actualiza los campos según el enlace
+    $('#EditarModal').on('show.bs.modal', function(event) {
+        var enlace = $(event.relatedTarget);
+        var nombre = enlace.data('nombre');
+        var id = enlace.data('id');
+
+        // Actualiza los campos del modal con los datos del enlace
+        $(this).find('#nombreEditar').val(nombre);
+        $(this).find('#idEditar').val(id);
+    });
+</script>
+
 @endsection
 @endsection

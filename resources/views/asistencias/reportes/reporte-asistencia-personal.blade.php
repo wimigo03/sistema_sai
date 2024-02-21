@@ -5,7 +5,7 @@
     <br>
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
-        <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
+            <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
                 <a href="javascript:void(0);" onclick="goBack();" class="color-icon-1" aria-label="Ir a gestionar-c">
                     <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
                 </a>
@@ -80,28 +80,89 @@
         <input type="hidden" id="data2" name="fecha_inicio" value="{{ $fechaInicio }}" class="form-control" required>
         <input type="hidden" id="data3" name="fecha_final" value="{{ $fechaFinal }}" class="form-control" required>
 
-        <div class="col-md-12">
-            <table class="table-bordered yajra-datatable hoverTable" id="retrasos-table" style="width:100%">
-                <thead class="table-light">
-                    <tr>
-                        <th>Fecha</th>
-                        <th>Nombres Apellidos</th>
-                        <th>Horario</th>
-                        <th> Entrada<br> Mañana</th>
-                        <th> Salida<br> Mañana</th>
-                        <th> Entrada <br>Tarde</th>
-                        <th> Salida <br>Tarde</th>
-                        <th>Estado</th>
-                        <th>Observaciones</th>
-                        <th>Minutos <br> Retraso</th>
+        <table id="retrasos-table" class="table-compact yajra-datatable hoverTable table display responsive font-verdana" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Nombres Apellidos</th>
+                    <th>Horario</th>
+                    <th> Entrada<br> Mañana</th>
+                    <th> Salida<br> Mañana</th>
+                    <th> Entrada <br>Tarde</th>
+                    <th> Salida <br>Tarde</th>
+                    <th>Estado</th>
+                    <th>Observaciones</th>
+                    <th>Minutos <br> Retraso</th>
 
-                    </tr>
-                </thead>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($registros as $asistencia)
+                <?php
+                $fechaAsistencia = $asistencia->fecha;
+                $estiloFondo = '';
 
-            </table>
-        </div>
+                if (\Carbon\Carbon::parse($fechaAsistencia)->isWeekend()) {
+                    $estiloFondo = 'background-color: lightgrey;';
+                }
+                ?>
+
+                <tr style="<?php echo $estiloFondo; ?>">
+
+                    <td>{{ $asistencia->fecha }}</td>
+                    <td>{{ $asistencia->nombre_empleado }}</td>
+                    @if($asistencia->ht ==1)
+
+                    <td>{{ $asistencia->hn }}<br>
+                        {{ $asistencia->hi }} - {{ $asistencia->hf }} <br>
+                        {{ $asistencia->he }} - {{ $asistencia->hs }}
+                    </td>
+                    @else
+
+                    <td>
+
+                        {{ $asistencia->hn }}<br>
+                        {{ $asistencia->hi }} - {{ $asistencia->hf }}
+                    </td>
+                    @endif
+                    <td>{{ $asistencia->registro_inicio }}</td>
+                    <td>{{ $asistencia->registro_salida }}</td>
+
+                    <td>{{ $asistencia->registro_entrada }}</td>
+                    <td>{{ $asistencia->registro_final}}</td>
+
+                    <td>{{ $asistencia->minutos_retraso }}</td>
+
+                    <td>
+                        @if ($asistencia->est == 1)
+                        Registrado
+                        @elseif ($asistencia->est == 2)
+                        Falta
+                        @elseif ($asistencia->est == 0)
+                        Falta
+                        @elseif ($asistencia->est == 3)
+                        Marcado
+                        @elseif(
+                        \Carbon\Carbon::parse($asistencia->fecha)->isWeekend())
+
+                        @else
+                        -
+                        @endif
+                    </td>
+                    <td>{{ $asistencia->ovb }}</td>
+                    <!-- Agrega más celdas según tus necesidades -->
+                </tr>
+                @endforeach
+            </tbody>
+
+        </table>
     </div>
 
+</div>
+
+<div class="col-md-12">
+    <!-- Dentro de tu vista -->
+    <hr class="hrr">
 </div>
 
 
@@ -112,103 +173,19 @@
         history.back(); // Utiliza la función history.back() para retroceder sin recargar la página
     }
 </script>
+
 <script>
     $(document).ready(function() {
         $('#retrasos-table').DataTable({
-            processing: false,
-            serverSide: false,
-            lengthChange: true,
-            searching: false,
-            ordering: false,
-            paging: false,
-            language: {
-                info: "<span class='font-verdana'>Mostrando _START_ al _END_ de _TOTAL_</span>",
-                search: '',
-                searchPlaceholder: "Buscar",
-                paginate: {
-                    next: "<span class='font-verdana'><b>Siguiente</b></span>",
-                    previous: "<span class='font-verdana'><b>Anterior</b></span>",
-                },
-                lengthMenu: "<span class='font-verdana'>Mostrar </span>" +
-                    "<select class='form form-control-sm'>" +
-                    "<option value='15'>15</option>" +
-                    "<option value='50'>50</option>" +
-                    "<option value='100'>100</option>" +
-                    "<option value='-1'>Todos</option>" +
-                    "</select> <span class='font-verdana'>Registros </span>",
-                loadingRecords: "<span class='font-verdana'>...Cargando...</span>",
-                processing: "<span class='font-verdana'>...Procesando...</span>",
-                emptyTable: "<span class='font-verdana'>No hay datos</span>",
-                zeroRecords: "<span class='font-verdana'>No hay resultados para mostrar</span>",
-                infoEmpty: "<span class='font-verdana'>Ningun registro encontrado</span>",
-                infoFiltered: "<span class='font-verdana'>(filtrados de un total de _MAX_ registros)</span>"
-            },
-            ajax: {
-                url: "{{route('asistenciapersonalreportes.getReporte') }}",
-                type: "GET", // Change the request type to GET
-                data: function(d) {
-                    // Append parameters to the URL
-                    // Append parameters to the URL
-                    d.empleado = $('#data1').val();
-                    d.fecha_inicio = $('#data2').val();
-                    d.fecha_final = $('#data3').val();
-                }
-            },
-            columns: [{
-                    data: 'fecha',
-                    name: 'fecha',
-                    class: 'text-justify p-1 font-verdana-sm'
-                },
-                {
-                    data: 'nom_ap',
-                    name: 'nom_ap',
-                    class: 'text-justify p-1 font-verdana-sm'
-                },
-                {
-                    data: 'horario',
-                    name: 'horario',
-                    class: 'text-center p-1 font-verdana-sm'
-
-                },
-                {
-                    data: 'registro_inicio',
-                    name: 'registro_inicio',
-                    class: 'text-center p-1 font-verdana-sm'
-                },
-                {
-                    data: 'registro_salida',
-                    name: 'registro_salida',
-                    class: 'text-center p-1 font-verdana-sm'
-                },
-                {
-                    data: 'registro_entrada',
-                    name: 'registro_entrada',
-                    class: 'text-center p-1 font-verdana-sm'
-                },
-
-                {
-                    data: 'registro_final',
-                    name: 'registro_final',
-                    class: 'text-center p-1 font-verdana-sm'
-                },
-                {
-                    data: 'estado',
-                    name: 'estado',
-                    class: 'text-center p-1 font-verdana-sm'
-                },
-                {
-                    data: 'observ',
-                    name: 'observ',
-                    class: 'text-center p-1 font-verdana-sm'
-                },
-                {
-                    data: 'minutos_retraso',
-                    name: 'minutos_retraso',
-                    class: 'text-justify p-1 font-verdana-sm'
-                },
-            ],
+            "lengthMenu": [
+                [-1],
+                ["All"]
+            ], // Permite ver todos los registros
+            "lengthChange": false, // Desactiva el cambio de longitud
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+            }
         });
-
     });
 </script>
 @endsection

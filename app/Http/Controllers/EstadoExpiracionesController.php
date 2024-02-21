@@ -28,6 +28,7 @@ class EstadoExpiracionesController extends Controller
             ->get(['nombres', 'ap_pat', 'ap_mat', 'expinduccion']);
 
         $cumplenAnioshoy = count($personashoy);
+
         $expdecjuradahoy = EmpleadosModel::whereDay('natalicio', $currentDate->day)
             ->whereMonth('natalicio', $currentDate->month)
             ->where('tipo', 1)
@@ -42,7 +43,7 @@ class EstadoExpiracionesController extends Controller
             ->whereMonth('expsippase', $currentDate->month)
             ->where('tipo', 1)
             ->get(['nombres', 'ap_pat', 'ap_mat', 'expsippase']);
-        $expsippasehoyhoy = count($expsippasehoy);
+        $cumplenexpsippasehoy = count($expsippasehoy);
         $exppoaihoy = EmpleadosModel::whereDay('exppoai', $currentDate->day)
             ->whereMonth('exppoai', $currentDate->month)
             ->where('tipo', 1)
@@ -63,7 +64,13 @@ class EstadoExpiracionesController extends Controller
             ->where('tipo', 2)
             ->get(['nombres', 'ap_pat', 'ap_mat', 'rejap']);
         $cumplenrejaphoy2 = count($rejaphoy2);
+        $personashoy2 = EmpleadosModel::whereDay('expinduccion', $currentDate->day)
+            ->whereMonth('expinduccion', $currentDate->month)
+            ->where('tipo', 2)
+            ->get(['nombres', 'ap_pat', 'ap_mat', 'expinduccion','idarea']);
 
+        $cumplenAnioshoy2 = count($personashoy2);
+ 
         //return view('cumpleanios.index', compact('cumplenAnios'));
         return view(
             'asistencias.estado-expiraciones.index',
@@ -74,7 +81,7 @@ class EstadoExpiracionesController extends Controller
                 'cumplenrejaphoy',
                 'cumplenexpdecjuradahoy',
                 'expsippasehoy',
-                'expsippasehoyhoy',
+                'cumplenexpsippasehoy',
                 'exppoaihoy',
                 'cumplenexppoaihoy',
                 'expprogvacacionhoy',
@@ -83,9 +90,9 @@ class EstadoExpiracionesController extends Controller
                 'cumplenexpsippase2hoy',
                 'rejaphoy',
                 'rejaphoy2',
-                'cumplenrejaphoy2'
-
-
+                'cumplenrejaphoy2',
+                'personashoy2',
+                'cumplenAnioshoy2'
             )
         );
     }
@@ -125,7 +132,7 @@ class EstadoExpiracionesController extends Controller
 
 
 
-        if ($id >= 1 && $id <= 8) {
+        if ($id >= 1 && $id <= 9) {
             $columnName = '';  // Variable para almacenar el nombre de la columna dinámicamente
 
             switch ($id) {
@@ -164,6 +171,11 @@ class EstadoExpiracionesController extends Controller
                     $descripcion  = 'Certificado SIPPASE';
 
                     break;
+                case 9:
+                    $columnName = 'expinduccion';
+                    $descripcion  = 'Exp. Inducción';
+
+                    break;
                 default:
                     // Manejo de error o acción por defecto si el $id no coincide con ninguno de los casos anteriores
                     break;
@@ -171,18 +183,19 @@ class EstadoExpiracionesController extends Controller
             $tipo = $descripcion;
 
             $personasmes = EmpleadosModel::whereMonth($columnName, $currentDate->month)
-                ->where('tipo', ($id <= 6) ? 1 : 2)
-                ->get(['idemp', 'nombres', 'ap_pat', 'ap_mat', $columnName]);
-
-            // Renombrar la cuarta columna dinámicamente
-            $personasmes = $personasmes->map(function ($item) use ($columnName) {
-                return [
-                    'idemp' => $item['idemp'],
-                    'nombre_completo' => $item['nombres'] . ' ' . $item['ap_pat'] . ' ' . $item['ap_mat'],
-                    'fecha' => $item[$columnName],
-                    'ColumnaPersonalizada' => Carbon::parse($item[$columnName])->diffForHumans()
-                ];
-            });
+            ->where('tipo', ($id <= 6) ? 1 : 2)
+            ->with('empleadosareas') // Cargar la relación de área
+            ->get(['idemp', 'nombres', 'ap_pat', 'ap_mat', $columnName, 'idarea']);
+        
+        $personasmes = $personasmes->map(function ($item) use ($columnName) {
+            return [
+                'idemp' => $item['idemp'],
+                'nombre_completo' => $item['nombres'] . ' ' . $item['ap_pat'] . ' ' . $item['ap_mat'],
+                'fecha' => $item[$columnName],
+                'ColumnaPersonalizada' => Carbon::parse($item[$columnName])->diffForHumans(),
+                'nombre_area' => $item['empleadosareas']->nombrearea // Agregar el nombre del área
+            ];
+        });
 
             if ($request->ajax()) {
                 return DataTables::of($personasmes)
@@ -317,7 +330,7 @@ class EstadoExpiracionesController extends Controller
 
             ->addColumn('actions', function ($row) {
                 return '<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Horarios Asignados" href="' . route('planta.editar', $row->idemp) . '">
-                <i class="fa-solid fa-2xl fa-clock text-primary"></i>
+                <i class="fa-solid fa-2xl fa-edit text-warning"></i>
                 
             </a>';
             })->rawColumns(['actions', 'expprogvacacion', 'exppoai', 'rejap', 'expsippase', 'expdecjurada', 'expinduccion'])->make(true);
@@ -338,6 +351,7 @@ class EstadoExpiracionesController extends Controller
 
                 'expsippase',
                 'rejap',
+                'expinduccion',
 
             ]);
         return DataTables::of($data)
@@ -353,7 +367,7 @@ class EstadoExpiracionesController extends Controller
 
             ->addColumn('expsippase', function ($row) {
                 if (empty($row->expsippase)) {
-                    return '<span style="color: red;">NO TIENE</span>';
+                    return '<span style="color: black;">NO TIENE</span>';
                 }
                 $carbonDate = Carbon::parse($row->expsippase);
 
@@ -364,6 +378,19 @@ class EstadoExpiracionesController extends Controller
                         : $carbonDate->diffForHumans());
             })
             ->addColumn('rejap', function ($row) {
+
+                if (empty($row->rejap)) {
+                    return '<span style="color: black;">NO TIENE</span>';
+                }
+                $carbonDate = Carbon::parse($row->rejap);
+
+                return $carbonDate->isPast()
+                    ? '<span style="color: red;">' . $carbonDate->diffForHumans() . '</span>'
+                    : ($carbonDate->isFuture()
+                        ? '<span style="color: green;">' . $carbonDate->diffForHumans() . '</span>'
+                        : $carbonDate->diffForHumans());
+            })
+            ->addColumn('expinduccion', function ($row) {
 
                 if (empty($row->rejap)) {
                     return '<span style="color: black;">NO TIENE</span>';

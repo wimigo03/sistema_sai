@@ -121,8 +121,6 @@ class LicenciasPersonalesController extends Controller
                         return '<span style="color: blue;">' . $diaTexto . '</span>';
                     }
                 })
-
-
                 ->rawColumns(['dias_utilizados'])
                 ->make(true);
         }
@@ -169,20 +167,23 @@ class LicenciasPersonalesController extends Controller
         return view('permisos.licencias.create', compact('empleado', 'licencia'));
     }
 
-    public function editarLicencias($id)  {
+    public function editarLicencias($id)
+    {
         $licencia = EmpleadoLicenciasModel::with('empleado', 'licencia')->find($id);
 
-         // Verificar si el permiso existe
-         if (!$licencia) {
+        // Verificar si el permiso existe
+        if (!$licencia) {
             // Puedes manejar la situación en la que el permiso no existe, por ejemplo, redirigir o mostrar un error.
             // Aquí simplemente redirijo a alguna ruta, puedes ajustarlo según tus necesidades.
-            return redirect()->route('ruta.de.error');
+            abort(404); // o maneja de alguna manera el caso en que no se encuentre el registro
+
         }
 
         return view('permisos.licencias.edit', compact('licencia'));
     }
 
-    public function actualizarLicencias(Request $request, $id) {
+    public function actualizarLicencias(Request $request, $id)
+    {
         $request->validate([
             'empleado_id' => 'required',
             'licencia_id' => 'required',
@@ -200,9 +201,9 @@ class LicenciasPersonalesController extends Controller
             if ($diasSolicitados == 0) {
                 return redirect()->back()->with('error', 'No se pudo registrar la licencia. Seleccione ');
             }
-           
-            
-          
+
+
+
 
             $fechaCarbon = Carbon::createFromFormat('Y-m-d', $fechaCompleta);
             $fechaAño = $fechaCarbon->format('Y');
@@ -232,15 +233,15 @@ class LicenciasPersonalesController extends Controller
 
                         if ($diasPermitidas >= $suma) {
                             $licenciaPersonal = EmpleadoLicenciasModel::where('fecha_solicitud', $fechaCompleta)
-                            ->where('empleado_id', $empleadoId)
-                            ->first();
+                                ->where('empleado_id', $empleadoId)
+                                ->first();
                             // Asigna los valores del formulario a la instancia
-                            
+
                             $licenciaPersonal->asunto = $request->input('asunto');
                             $licenciaPersonal->fecha_solicitud = $request->input('fecha_solicitud');
                             $licenciaPersonal->dias_utilizados = $diasSolicitados;
                             if (Auth::check()) {
-                                $licenciaPersonal->usuario_modificacion = Auth::user()->name; // Obtener el nombre del usuario actualmente autenticado
+                                $licenciaPersonal->usuario_modificacion  = Auth::user()->name . '-' . now(); // Obtener el nombre del usuario actualmente autenticado
                             }
                             // Guarda el registro en la base de datos
                             $licenciaPersonal->save();
@@ -261,10 +262,8 @@ class LicenciasPersonalesController extends Controller
 
 
             // Captura cualquier excepción que pueda ocurrir y muestra un mensaje de error
-            return redirect()->back()->with('error', 'No se pudo actualizar el registro de Licencia:  '.$licencia.''.$fechaAño.'  '.$licenciaId .'  '.$empleadoId. $e->getMessage());
+            return redirect()->back()->with('error', 'No se pudo actualizar el registro de Licencia:  ' . $licencia . '' . $fechaAño . '  ' . $licenciaId . '  ' . $empleadoId . $e->getMessage());
         }
-   
-        
     }
 
 
@@ -346,6 +345,9 @@ class LicenciasPersonalesController extends Controller
                             $licenciaPersonal->asunto = $request->input('asunto');
                             $licenciaPersonal->fecha_solicitud = $request->input('fecha_solicitud');
                             $licenciaPersonal->dias_utilizados = $diasSolicitados;
+                            if (Auth::check()) {
+                                $licenciaPersonal->usuario_creacion  = Auth::user()->name . '-' . now(); // Obtener el nombre del usuario actualmente autenticado
+                            }
                             // Guarda el registro en la base de datos
                             $licenciaPersonal->save();
                             // Redirecciona a la vista de éxito o a donde desees
@@ -360,6 +362,11 @@ class LicenciasPersonalesController extends Controller
                         $licenciaPersonal->empleado_id = $empleadoId;
                         $licenciaPersonal->licencia_id = $licenciaId;
                         $licenciaPersonal->asunto = $request->input('asunto');
+                        if (Auth::check()) {
+                            $licenciaPersonal->usuario_creacion  = Auth::user()->name . '-' . now(); // Obtener el nombre del usuario actualmente autenticado
+                        }
+
+
 
                         $licenciaPersonal->fecha_solicitud = $request->input('fecha_solicitud');
                         $licenciaPersonal->dias_utilizados = $diasSolicitados;
