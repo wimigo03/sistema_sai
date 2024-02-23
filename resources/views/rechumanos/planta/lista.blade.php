@@ -58,7 +58,7 @@
                             <td class="text-center p-1" style="vertical-align: bottom;"><b>SIPPASE</b></td>
                             <td class="text-center p-1" style="vertical-align: bottom;"><b>EXP. SIPPASE</b></td>
                             <td class="text-center p-1" style="vertical-align: bottom;"><b>SERVICIO<br>MILITAR</b></td>
-                            <td class="text-center p-1" style="vertical-align: bottom;"><b>IDIOMA</b></td>
+                            <td class="text-center p-1" style="vertical-align: bottom;"><b>CERTIFICADO<br>IDIOMA</b></td>
                             <td class="text-center p-1" style="vertical-align: bottom;"><b>INDUCCIóN</b></td>
                             <td class="text-center p-1" style="vertical-align: bottom;"><b>EXP. <br>INDUCCIóN</b></td>
                             <td class="text-center p-1" style="vertical-align: bottom;"><b>PROG.<br> VACACIÓN.</b></td>

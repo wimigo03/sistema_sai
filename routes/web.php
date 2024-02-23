@@ -462,6 +462,8 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
 
     /////////////
+    Route::get('retrasosempleado', 'RetrasoController@index')->name('retrasos.index')->middleware('can:reporte_access');
+
      Route::get('ausencias', 'AusenciasController@index')->name('ausencias.index')->middleware('can:asistencias_access');
 
     Route::get('agregar-regulacion/{id}', 'EmpleadoAsistenciasController@agregarRegulacion')->name('agregar.regulacion')->middleware('can:horario_access');;

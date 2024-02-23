@@ -7,7 +7,7 @@
             <b>Generar Reportes</b>
         </div>
         <div class="col-md-4  text-right">
-        
+
 
             <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
                 <button class="btn btn-sm btn-danger font-verdana" type="button">
@@ -58,10 +58,10 @@
         </div>
         <ul class="nav nav-tabs" id="myTabs">
             <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="#tab1"><b>Reporte de Retrasos de Asistencia</b></a>
+                <a class="nav-link active" data-toggle="tab" href="#tab1"><b>Reporte de Registros de Asistencias</b></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#tab2"> <b>Reporte de Registros de Asistencias</b>
+                <a class="nav-link" data-toggle="tab" href="#tab2"> <b>Reporte de Retrasos de Asistencia</b>
                 </a>
             </li>
             <li class="nav-item">
@@ -71,25 +71,97 @@
     </div>
     <div class="tab-content font-verdana">
         <div class="tab-pane fade show active" id="tab1">
-        <hr class="hr">
-
+            <hr class="hr">
             <div class="col-md-8 titulo">
-                <b>Reporte Personal</b>
+                <b>Reporte de Asistencia Personal</b>
             </div>
             <div class="body-border ">
+                <form method="POST" action="{{ route('registro.visualizar') }}" id="crearForm">
+                    @csrf
+                    <div class="row">
+                        <div class="col-md-1">
+
+                            <label class="form-check-label text-primary" for="flexCheckDefault0">
+                                <b>Seleccionar<br>Todos</b>
+                            </label>
+                            <input class="form-control checkbox" type="checkbox" value="1" id="flexCheckDefault0" name="check">
+
+                        </div>
+                        <div class="col-md-4">
+                            <label for="empleado2" class="col-md-12 col-form-label"> <b>{{ __('Nombre de Personal :') }}</b></label>
+
+                            <div id="horarios-select">
+                                <!-- Este será tu elemento select -->
+                                <select name="empleado2" id="empleado2" required>
+                                    <option value="" disabled selected>Seleccionar Personal</option>
+                                    @foreach ($empleados as $index => $value)
+
+                                    <option value="{{ $value->idemp }}"> {{ $value->nombres }} {{ $value->ap_pat }} {{ $value->ap_mat }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="fecha_inicio"><b>Fecha Inicio: </b></label>
+                                <?php
+                                // Calcular la fecha del mes anterior
+                                $fechaMesAnterior = date('Y-m-d', strtotime('first day of last month'));
+                                ?>
+                                <input type="date" id="fecha_inicio4" name="fecha_inicio4" value="{{ $fechaMesAnterior }}" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="fecha_final">Fecha Final</label>
+                                <input type="date" id="fecha_final4" name="fecha_final4" value="" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <label for="fecha_final">Opciones</label>
+                            <div class="form-group">
+                                <div class="">
+                                    <button class="btn btn-info" id="verBtn">Ver Reporte</button>
+                                    <!-- Botón para generar PDF -->
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+
+
+
+        </div>
+        <div class="tab-pane fade" id="tab2">
+            <div class="col-md-12 titulo">
+                <b>Reporte Personal</b>
+            </div>
+            <div class="body-border col-md-12 ">
                 <form method="POST" action="{{ route('reportes.visualizar') }}" id="crearForm">
                     @csrf
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label for="empleado"><b>Nombre de Personal :</b> </label>
                                 <select name="empleado" id="empleado" aria-label="Seleciona Personal" required class="form-control">
-                                    <option value="">-</option>
+                                    <option value=""></option>
                                     @foreach ($empleados as $index => $value)
                                     <option value="{{ $value->idemp }}"> {{ $value->nombres }} {{ $value->ap_pat }} {{ $value->ap_mat }}</option>
                                     @endforeach
                                 </select>
                             </div>
+
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
@@ -104,7 +176,7 @@
 
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label for="fecha_final">Fecha Final</label>
+                                <label for="fecha_final"><b>Fecha Final</b></label>
                                 <input type="date" id="fecha_final" name="fecha_final" value="" class="form-control" required>
                             </div>
                         </div>
@@ -214,64 +286,6 @@
                 </form>
             </div>
 
-
-        </div>
-        <div class="tab-pane fade" id="tab2">
-            <div class="col-md-8 titulo">
-                <b>Reporte de Asistencia Personal</b>
-            </div>
-            <div class="body-border ">
-                <form method="POST" action="{{ route('registro.visualizar') }}" id="crearForm">
-                    @csrf
-                    <div class="row">
-                        <div class="col-md-4">
-                        <label for="empleado2" class="col-md-12 col-form-label"> <b>{{ __('Nombre de Personal :') }}</b></label>
-
-                            <div id="horarios-select">
-                                <!-- Este será tu elemento select -->
-                                <select  name="empleado2"  required>
-                                <option value="" disabled selected>Seleccionar Personal</option>
-                                @foreach ($empleados as $index => $value)
-
-                                <option value="{{ $value->idemp }}"> {{ $value->nombres }} {{ $value->ap_pat }} {{ $value->ap_mat }}</option>
-                                        @endforeach 
-                            </select>
-                            </div>
-                        
-
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label for="fecha_inicio"><b>Fecha Inicio: </b></label>
-                                <?php
-                                // Calcular la fecha del mes anterior
-                                $fechaMesAnterior = date('Y-m-d', strtotime('first day of last month'));
-                                ?>
-                                <input type="date" id="fecha_inicio4" name="fecha_inicio4" value="{{ $fechaMesAnterior }}" class="form-control" required>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label for="fecha_final">Fecha Final</label>
-                                <input type="date" id="fecha_final4" name="fecha_final4" value="" class="form-control" required>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-
-                            <label for="fecha_final">Opciones</label>
-                            <div class="form-group">
-                                <div class="">
-                                    <button class="btn btn-info" id="verBtn">Ver Reporte</button>
-                                    <!-- Botón para generar PDF -->
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
         </div>
         <div class="tab-pane fade" id="tab3">
 
@@ -280,12 +294,28 @@
 </div>
 @section('scripts')
 <script>
+     $(document).ready(function() {
+        $('#flexCheckDefault0').change(function() {
+            if (this.checked) {
+                $('#empleado2').prop('required', false); // Deshabilitar validación
+                $('#empleado2').val(''); // Establecer el valor del select como vacío
+
+            } else {
+                $('#empleado2').prop('required', true); // Habilitar validación
+            }
+        });
+        $('#empleado2').change(function() {
+            if ($(this).val() !== '') {
+                $('#flexCheckDefault0').prop('checked', false); // Desmarcar checkbox
+            }
+        });
+    });
     $('#empleado').select2({
-        placeholder: "--Seleccionar--"
+        placeholder: "--Seleccionar Personal--"
     });
     var horario_select = new SlimSelect({
         select: '#horarios-select select',
-        placeholder: 'Seleccionar Horarios',
+
         deselectLabel: '<span>&times;</span>',
         searchTextPlaceholder: 'Buscar...', // Cambia el mensaje de búsqueda por defecto
 
@@ -293,9 +323,10 @@
     });
 
     $('#area_id').select2({
-        placeholder: "--Seleccionar--"
+        placeholder: "--Seleccionar Unidad / Area--"
     });
 </script>
+
 <!-- Agrega estas líneas en tu vista para incluir las bibliotecas -->
 
 

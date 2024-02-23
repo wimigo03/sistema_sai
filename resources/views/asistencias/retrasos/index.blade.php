@@ -2,35 +2,45 @@
 
 @section('content')
 <div class="container-xl">
- 
-    <div class="row font-verdana-bg">
+    <br>
+    <div class="row font-verdana-sm">
         <div class="col-md-8 titulo">
-            <b> Movimientos Personal Planta</b>
+            <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
+                <a href="{{url()->previous()}}" class="color-icon-1">
+                    <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
+                </a>
+            </span>
+            <b> Lista de Retrasos </b>
         </div>
-        
+        <div class="col-md-4 text-right titulo">
+            <div class="btn-group">
+            <b> Fecha: </b>
+
+
+                <input type="month" id="filtro" name="fecha_final4" value="{{ $fechaHoy }}" class="form-control form-control-sm" required>
+
+            </div>
+
+            <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
+                <button class="btn btn-sm btn-danger font-verdana" type="button">
+                    &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
+                </button>
+            </a>
+        </div>
         <div class="col-md-12">
             <hr class="hrr">
         </div>
     </div>
 
-   
     <div class="row font-verdana">
         <div class="col-md-12">
-            <table class="table-bordered table-hover display hover compact font-verdana" id="movimientosplanta-table" style="width:100%">
+            <table class="table-bordered table-hover display hover compact font-verdana" id="retrasos-table" style="width:100%">
                 <thead class="table-light">
                     <tr>
                         <th>Fecha</th>
-                        <th>Nombres Apellidos</th>
-                        <th>Motivo</th>
-                        <th>Area Anterior</th>
-                        <th>Cargo Anterior</th>
-                        <th>Nombre Cargo</th>
-                        <th>Haber Basico</th>
-                      
-                        <th>Area Nueva</th>
-                        <th>Cargo Nueva</th>
-                        <th>Nombre Cargo</th>
-                        <th>Haber Basico</th>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>Retrasos (Minutos)</th>
                     </tr>
                 </thead>
             </table>
@@ -44,8 +54,7 @@
 <script>
     var groupColumn = 0;
     var table = $(document).ready(function() {
-      
-        $('#movimientosplanta-table').DataTable({
+        $('#retrasos-table').DataTable({
             responsive: true,
             serverSidez: true,
             processing: true,
@@ -71,66 +80,33 @@
                 infoEmpty: "<span class='font-verdana'>Ningun registro encontrado</span>",
                 infoFiltered: "<span class='font-verdana'>(filtrados de un total de _MAX_ registros)</span>"
             },
-            ajax: "{{ route('movimientosplanta.index') }}",
+
+            ajax: {
+                url: "{{ route('retrasos.index') }}",
+                data: function(d) {
+                    // Agregar parámetro de filtro de fecha
+                    d.filtro = $('#filtro').val();
+                }
+
+            },
             columns: [{
                     data: 'fecha',
                     name: 'fecha',
                     class: 'text-justify p-1 font-verdana-sm'
                 },
                 {
-                    data: 'nombres_apellidos',
-                    name: 'nombres_apellidos',
+                    data: 'nombres',
+                    name: 'nombres',
                     class: 'text-justify p-1 font-verdana-sm'
                 },
                 {
-                    data: 'motivo',
-                    name: 'motivo',
-                    class: 'text-justify p-1 font-verdana-sm'
-                }
-                ,
-                {
-                    data: 'areactual',
-                    name: 'areactual',
+                    data: 'apellidos',
+                    name: 'apellidos',
                     class: 'text-justify p-1 font-verdana-sm'
                 },
                 {
-                    data: 'cargoactual',
-                    name: 'cargoactual',
-                    class: 'text-justify p-1 font-verdana-sm'
-                }
-                ,
-                {
-                    data: 'nombrecargoactualpt',
-                    name: 'nombrecargoactualpt',
-                    class: 'text-justify p-1 font-verdana-sm'
-                },{
-                    data: 'haberbasicoactualpt',
-                    name: 'haberbasicoactualpt',
-                    class: 'text-justify p-1 font-verdana-sm'
-                }
-                ,{
-                    data: 'nombreareanuevopt',
-                    name: 'haberbasicoactualpt',
-                    class: 'text-justify p-1 font-verdana-sm'
-                },
-                
-                {
-                    data: 'cargonuevopt',
-                    name: 'cargonuevopt',
-                    class: 'text-justify p-1 font-verdana-sm'
-                }
-                ,
-                
-                {
-                    data: 'nombrecargonuevopt',
-                    name: 'nombrecargonuevopt',
-                    class: 'text-justify p-1 font-verdana-sm'
-                }
-                ,
-                
-                {
-                    data: 'haberbasiconuevopt',
-                    name: 'haberbasiconuevopt',
+                    data: 'minutos',
+                    name: 'minutos',
                     class: 'text-justify p-1 font-verdana-sm'
                 }
             ],
@@ -144,6 +120,10 @@
         $('#retrasos-table').on('draw.dt', function() {
             $('ul.pagination').addClass('pagination-sm');
         }).DataTable();
+        $('#filtro').on('change', function() {
+            $('#retrasos-table').DataTable().ajax.reload();
+
+        });
     });
 </script>
 @endsection

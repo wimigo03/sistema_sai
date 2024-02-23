@@ -19,7 +19,7 @@
 
     <div class="col-md-2">
         <label for="procedencia"><b>Procedencia</b></label><br>
-        <select name="procedencia" id="procedencia" class="form-control form-control-sm" required>
+        <select name="procedencia" id="procedencia" class="form-control form-control-sm" >
             <option value="">-</option>
             <option value="TJ" @if(request('procedencia')=='TJ' ) selected @endif>TARIJA</option>
             <option value="CH" @if(request('procedencia')=='CH' ) selected @endif>CHUQUISACA</option>

@@ -224,7 +224,20 @@
 
                 <td width="8%" nowrap="">
                     <p align="center">
-                        {{ $asistencia->est }}
+                    @if ($asistencia->est == 1)
+                        Registrado
+                        @elseif ($asistencia->est == 2)
+                        Falta
+                        @elseif ($asistencia->est == 0)
+                        Falta
+                        @elseif ($asistencia->est == 3)
+                        Marcado
+                        @elseif(
+                        \Carbon\Carbon::parse($asistencia->fecha)->isWeekend())
+
+                        @else
+                        -
+                        @endif
 
                     </p>
                 </td>

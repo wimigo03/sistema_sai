@@ -14,7 +14,7 @@
         </span>
     </div>
     <div class="col-md-9 text-right titulo">
-        <b>GESTIONAR PERSONAL-C//REGISTRAR</b>
+        <b>GESTIONAR PERSONAL-C // REGISTRAR</b>
 
         <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
             <button class="btn btn-sm btn-danger font-verdana" type="button">
@@ -68,7 +68,7 @@
 
             <div class="col-md-2 ">
                 <label for="nombres"><b>Ap.Paterno:</b></label>
-                <input required type="text" name="ap_pat" class="form-control " onchange="javascript:this.value=this.value.toUpperCase();"></input>
+                <input  type="text" name="ap_pat" class="form-control " onchange="javascript:this.value=this.value.toUpperCase();"></input>
             </div>
 
             <div class="col-md-2 ">
@@ -77,18 +77,18 @@
             </div>
 
             <div class="col-md-2 ">
-                <label for="nombres"><b>Ci:</b></label>
-                <input type="text" name="ci" class="form-control">
+                <label for="nombres"><b>N° CI:</b></label>
+                <input required type="text" name="ci" class="form-control">
             </div>
 
             <div class="col-md-2">
-                <label for="nombres"><b>Telefono:</b></label>
+                <label for="nombres"><b>N° Telefono Cel.:</b></label>
                 <input type="text" name="telefono" class="form-control">
             </div>
 
             <div class="col-md-2 ">
-                <label for="nombres"><b>F.Nacimien:</b></label>
-                <input type="date" class="form-control" name="natalicio">
+                <label for="nombres"><b>Fecha .Nacimiento:</b></label>
+                <input required type="date" class="form-control" name="natalicio">
             </div>
         </div>
 
@@ -102,58 +102,49 @@
 
             </div>
             <div class="col-md-2">
-                <label for="idioma"><b>Idioma:</b></label>
+                <label for="idioma"><b>Certificado Idioma (opcional)</b></label>
                 <input type="text" name="idioma" class="form-control" onchange="javascript:this.value=this.value.toUpperCase();">
             </div>
 
             <div class="col-md-2">
-                <label for="gradacademico"><b>Grad.Acad.:</b></label>
+                <label for="gradacademico"><b>Profesión (G. Acad.):</b></label>
                 <input type="text" name="gradacademico" class="form-control" onchange="javascript:this.value=this.value.toUpperCase();">
 
             </div>
 
             <div class="col-md-2">
 
-                <label for="servmilitar"><b>Serv.Militar:</b></label>
+                <label for="servmilitar"><b>Servicio Militar:</b></label>
                 <input type="text" name="servmilitar" class="form-control">
 
             </div>
 
             <div class="col-md-2">
 
-                <label for="cuentabanco"><b>Cuenta.Banco:</b></label>
+                <label for="cuentabanco"><b>N° Cuenta Banco:</b></label>
                 <input type="text" name="cuentabanco" class="form-control">
 
             </div>
             <div class="col-md-2">
-                <label for="aportesafp"><b>Aportes.Afp:</b></label>
-
-                <select name="aportesafp" class="form-control">
-
-                    <option value="">-</option>
-                    <option value="3">GESTORA PUBLICA</option>
-                    <option value="1">PREVISION AFP</option>
-                    <option value="2">FUTURO DE BOLIVIA</option>
-
-
-                </select>
+                <label for="aportesafp"><b>Fondo Pensiones<br>N° C.U.A:</b></label>
+                <input type="text" name="aportesafp" class="form-control" value="">
             </div>
         </div>
 
 
         <div class="form-group row font-verdana-bg">
             <div class="col-md-2">
-                <label for="ncontrato"><b>N.Contrato:</b></label>
+                <label for="ncontrato"><b>N° Contrato:</b></label>
                 <input type="text" name="ncontrato" class="form-control">
             </div>
 
             <div class="col-md-2 ">
-                <label for="fechingreso"><b>F.Ingreso:</b></label>
-                <input type="date" class="form-control" name="fechingreso">
+                <label for="fechingreso"><b>Fecha Ingreso:</b></label>
+                <input required type="date" class="form-control" name="fechingreso">
             </div>
 
             <div class="col-md-2 ">
-                <label for="fechafinal"><b>F.Final:</b></label>
+                <label for="fechafinal"><b>Fecha Finalización:</b></label>
                 <input type="date" class="form-control" name="fechafinal">
             </div>
 
@@ -179,24 +170,24 @@
         <div class="form-group row font-verdana-bg">
 
             <div class="col-md-2">
-                <label for="nit"><b>Nit:</b></label>
+                <label for="nit"><b>N° NIT:</b></label>
                 <input type="text" name="nit" class="form-control">
             </div>
             <div class="col-md-2">
-                <label for="progproy"><b>Sippase:</b></label>
+                <label for="progproy"><b>SIPPASE:</b></label>
                 <input type="text" name="sippase" class="form-control">
             </div>
 
             <div class="col-md-2">
-                <label for="progproy"><b>Exp.Sipp:</b></label>
+                <label for="progproy"><b>Exp. SIPPASE:</b></label>
                 <input type="date" class="form-control" name="expsippase">
             </div>
             <div class="col-md-2 ">
-                <label for="rejap"><b>Rejap:</b></label>
+                <label for="rejap"><b>REJAP:</b></label>
                 <input type="date" class="form-control" name="rejap">
             </div>
             <div class="col-md-2">
-                <label for="sigep"><b>Sigep:</b></label>
+                <label for="sigep"><b>SIGEP:</b></label>
                 <select name="sigep" class="form-control">
 
                     <option value="ACTIVO">ACTIVO</option>
@@ -206,7 +197,7 @@
             </div>
             <div class="col-md-2">
                 <label for="biometrico"><b>Biométrico:</b></label>
-                <input type="text" name="biometrico" class="form-control">
+                <input disabled type="text" name="biometrico" class="form-control">
             </div>
         </div>
 
@@ -214,7 +205,7 @@
 
         <div class="form-group row font-verdana-bg">
             <div class="col-md-2">
-                <label for="induccion"><b>Induccion</b></label>
+                <label for="induccion"><b>Inducción</b></label>
                 <input type="text" name="induccion" class="form-control form-control-sm font-verdana-bg">
             </div>
             <div class="col-md-2">
@@ -222,11 +213,13 @@
                 <input type="date" name="expinduccion" class="form-control form-control-sm font-verdana-bg">
             </div>
             <div class="col-md-6">
-                <label style="color:black;font-weight: bold;">Contrato-File:</label>
+                <label style="color:black;font-weight: bold;">Contrato File:</label>
+                <span id="mensajeError" style="color: red;"></span>
+
                 <div id="permissions-select2">
 
-                    <select name="idfile" id="permissions2" class="form-control" required>
-                        <option value="">== Seleccione un File ==</option>
+                    <select name="idfile" id="permissions2"  required>
+                        <option value=""></option>
                         @foreach($area as $areas)
                         <option disabled>
                             {{$areas->nombrearea}}
@@ -254,8 +247,8 @@
         </br>
         <div class="form-group row">
             <div class="col-md-12 text-right">
-                <button type="submit" class="btn btn-outline-success font-verdana-bg" type="submit">
-                    <i class="fa-solid fa-paper-plane"></i>&nbsp;Guardar
+                <button id="botonGuardar" type="submit" class="btn btn-outline-success font-verdana-bg">
+                    <i class="fa-solid fa-paper-plane"></i>&nbsp;GUARDAR
                 </button>
 
             </div>
@@ -267,8 +260,23 @@
 
 @section('scripts')
 <script>
-    $('#permissions2').select2({
-        placeholder: "--Seleccionar--"
+    $(document).ready(function() {
+        $('#permissions2').select2({
+            placeholder: "--Seleccionar--"
+        });
+
+        $('#permissions2').on('select2:select', function (e) {
+            $('#mensajeError').text('');
+        });
+
+        $('#botonGuardar').click(function() {
+            var seleccion = $('#permissions2').val();
+            if (seleccion === null) {
+                $('#mensajeError').text('Por favor, selecciona una opción antes de guardar.');
+                return;
+            }
+            // Aquí puedes realizar otras acciones relacionadas con el guardado.
+        });
     });
 </script>
 @endsection

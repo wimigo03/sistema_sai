@@ -113,7 +113,7 @@ class PlantaController extends Controller
         $ci = EmpleadosModel::where('ci', $ci)
             ->where('tipo', 1)->first();
         if ($ci) {
-            return redirect()->back()->with('error', 'Ya se encuentra Registrado como Personal de Planta');
+            return redirect()->back()->with('error', 'El CI '.$ci->ci. ' Ya se encuentra Registrado como Personal de Planta');
         }
 
         $fileci = EmpleadosModel::where('ci', $ci)
@@ -121,7 +121,7 @@ class PlantaController extends Controller
             ->where('idfile', $request->input('idfile'))
             ->first();
         if ($fileci) {
-            return redirect()->back()->with('error', 'Ya se encuentra Registrado como Personal de Planta');
+            return redirect()->back()->with('error', 'Ya se Registró y Ocupó el File de Personal de Planta');
         }
         $empleados = new EmpleadosModel();
         $empleados->nombres = $request->input('nombres');

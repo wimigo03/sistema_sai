@@ -34,11 +34,11 @@
                             <input required type="text" name="nombres" class="form-control" onchange="javascript:this.value=this.value.toUpperCase();" value="{{$empleados->nombres}}"></input>
                         </div>
                         <div class="col-md-2">
-                            <label for="ap_paterno"><b>Ap. Paterno</b></label>
-                            <input required type="text" name="ap_pat" class="form-control " onchange="javascript:this.value=this.value.toUpperCase();" value="{{$empleados->ap_pat}}"></input>
+                            <label for="ap_paterno"><b>Apellidos Paterno</b></label>
+                            <input  type="text" name="ap_pat" class="form-control " onchange="javascript:this.value=this.value.toUpperCase();" value="{{$empleados->ap_pat}}"></input>
                         </div>
                         <div class="col-md-2">
-                            <label for="ap_materno"><b>Ap. Materno</b></label>
+                            <label for="ap_materno"><b>Apellidos Materno</b></label>
                             <input required type="text" name="ap_mat" class="form-control " onchange="javascript:this.value=this.value.toUpperCase();" value="{{$empleados->ap_mat}}"></input>
 
                         </div>
@@ -49,7 +49,7 @@
                         <div class="col-md-2">
                             <label for="procedencia"><b>Procedencia</b></label><br>
 
-                            <select name="procedencia" id="procedencia" class="form-control form-control-sm" required>
+                            <select name="procedencia" id="procedencia" class="form-control form-control-sm" >
                                
                                 @foreach(['TJ' => 'TARIJA', 'CH' => 'CHUQUISACA', 'LP' => 'LA PAZ', 'CB' => 'COCHABAMBA', 'OR' => 'ORURO', 'PT' => 'POTOSI', 'SC' => 'SANTA CRUZ', 'BE' => 'BENI', 'PD' => 'PANDO'] as $value => $label)
                                 <option value="{{ $value }}" {{ old('procedencia', $empleados->procedencia ?? '') == $value ? 'selected' : '' }}>
@@ -128,13 +128,13 @@
                             <input type="text" name="induccion" class="form-control" value="{{$empleados->induccion}}">
                         </div>
                         <div class="col-md-2">
-                            <label for="exp_induccion"><b>Exp. Induccion</b></label>
+                            <label for="exp_induccion"><b>Exp. Inducción</b></label>
                             <input type="date" class="form-control" name="expinduccion" value="{{$empleados->expinduccion}}">
                         </div>
                     </div>
                     <div class="form-group row font-verdana-bg">
                         <div class="col-md-2">
-                            <label for="progvacacion"><b>Prog. Vacacion</b></label>
+                            <label for="progvacacion"><b>Program. Vacación</b></label>
                             <input type="text" name="progvacacion" class="form-control" value="{{$empleados->progvacacion}}">
                         </div>
                         <div class="col-md-2">
@@ -142,19 +142,19 @@
                             <input type="date" class="form-control" name="expprogvacacion" value="{{$empleados->expprogvacacion}}">
                         </div>
                         <div class="col-md-2">
-                            <label for="vacganadas"><b>Vac. Ganadas</b></label>
-                            <input required type="number" placeholder="0" name="vacganadas" class="form-control" placeholder="Ap.Pat...." value="{{$empleados->vacganadas}}"></input>
+                            <label for="vacganadas"><b>Vacaciones Ganadas</b></label>
+                            <input type="number" placeholder="0" name="vacganadas" class="form-control" placeholder="Ap.Pat...." value="{{$empleados->vacganadas}}"></input>
                         </div>
                         <div class="col-md-2">
-                            <label for="vacpendientes"><b>Vac. Pendientes</b></label>
+                            <label for="vacpendientes"><b>Vacaciones Pendientes</b></label>
                             <input type="text" name="vacpendientes" class="form-control" value="{{$empleados->vacpendientes}}">
                         </div>
                         <div class="col-md-2">
-                            <label for="vacusasdas"><b>Vac. Usadas</b></label>
+                            <label for="vacusasdas"><b>Vacaciones Usadas</b></label>
                             <input type="text" name="vacusasdas" class="form-control" value="{{$empleados->vacusasdas}}">
                         </div>
                         <div class="col-md-2">
-                            <label for="segsalud"><b>Seg. Salud</b></label>
+                            <label for="segsalud"><b>Seguro de Salud</b></label>
                             <input type="text" name="segsalud" class="form-control" value="{{$empleados->segsalud}}">
                         </div>
                     </div>
@@ -168,19 +168,19 @@
                             <input type="text" name="aservicios" class="form-control" value="{{$empleados->aservicios}}">
                         </div>
                         <div class="col-md-2">
-                            <label for="cvitae"><b>C.V.</b></label>
+                            <label for="cvitae"><b>Currículum Vitave.</b></label>
                             <input type="text" name="cvitae" class="form-control" value="{{$empleados->cvitae}}">
                         </div>
                         <div class="col-md-2">
-                            <label for="telefono"><b>Telefono</b></label>
+                            <label for="telefono"><b>Telef. Celular</b></label>
                             <input type="text" name="telefono" class="form-control" value="{{$empleados->telefono}}">
                         </div>
                         <div class="col-md-2">
                             <label for="biometrico"><b>Biometrico</b></label>
-                            <input type="text" name="biometrico" class="form-control" value="{{$empleados->biometrico}}">
+                            <input disabled type="text" name="biometrico" class="form-control" value="{{$empleados->biometrico}}">
                         </div>
                         <div class="col-md-2">
-                            <label for="gradacademico"><b>Grado Acad.</b></label>
+                            <label for="gradacademico"><b>Profesión (Grado. Academico.)</b></label>
                             <input type="text" name="gradacademico" class="form-control" value="{{$empleados->gradacademico}}">
                         </div>
                     </div>
