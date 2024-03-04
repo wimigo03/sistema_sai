@@ -21,8 +21,32 @@ use PDF;
 
 class DistritosV2Controller extends Controller
 {
+
+    private function copiardistritos()
+    {
+         $distritos = DB::connection('mysql_canasta')->table("barrios")->get();
+        foreach ($distritos as $data){
+
+            $datos=([
+
+                'nombre'=>$data->distrito,
+                'user_id'=>16,
+                'dea_id'=>1,
+                'estado'=>1
+                      ]
+
+
+                     );
+              $distrito=Distrito::CREATE($datos);
+    }
+       // dd($distritos);
+
+    }
+
     public function index()
     {
+
+        //$this->copiardistritos();
         $deas = Dea::pluck('nombre','id');
         $estados = Distrito::ESTADOS;
         $distritos = Distrito::orderBy('id', 'desc')->paginate(10);
@@ -130,7 +154,7 @@ class DistritosV2Controller extends Controller
                 ->withInput();
         }
     }
-    
+
     public function deshabilitar($id){
         $distrito = Distrito::find($id);
         $distrito->update([

@@ -21,7 +21,7 @@
                     <li class="font-verdana-bg">
                         <a href="" data-toggle="collapse" data-target="#dashboard_canasta_v1"
                             class="active collapsed" aria-expanded="false">
-                            <i class="fa-solid fa-gift"></i>
+                            <i class="fa-duotone fa-user" style="color:green">></i>
                             <span class="nav-label mr-3">Canasta (V1)</span>
                             <span class="fa fa-arrow-circle-left float-right"></span>
                         </a>
@@ -56,14 +56,30 @@
                             </li>
                         </ul>
                     </li>
+                    <hr style="margin-top:0; margin-bottom:0;">
                     <li class="font-verdana-bg">
                         <a href="" data-toggle="collapse" data-target="#dashboard_canasta_v2"
                             class="active collapsed" aria-expanded="false">
-                            <i class="fa-solid fa-gift"></i>
+                            <i class="fa-solid fa-gift" style="color:green">></i>
                             <span class="nav-label mr-3">Canasta (V2)</span>
                             <span class="fa fa-arrow-circle-left float-right"></span>
                         </a>
                         <ul class="sub-menu collapse" id="dashboard_canasta_v2">
+                            <li>
+                                <a href="{{ route('entregas.index') }}">
+                                    <span class="nav-label mr-4">
+                                        <i class="fa-solid fa-shopping-bag"></i>&nbsp;Paquetes
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('beneficiarios.index') }}">
+                                    <span class="nav-label mr-4">
+                                        <i class="fa-solid fa-male"></i>&nbsp;Beneficiarios
+                                    </span>
+                                </a>
+                            </li>
+
                             <li>
                                 <a href="{{ route('distritos.index') }}">
                                     <span class="nav-label mr-4">
@@ -78,13 +94,15 @@
                                     </span>
                                 </a>
                             </li>
+
                         </ul>
                     </li>
+                    <hr style="margin-top:0; margin-bottom:0;">
                     {{-- USUARIOS --}}
                     <li class="font-verdana-bg">
                         <a href="" data-toggle="collapse" data-target="#dashboard_users" class="active collapsed"
                             aria-expanded="false">
-                            <i class="fa fa-users"></i>
+                            <i class="fa fa-users" style="color:green">></i>
                             <span class="nav-label mr-3">Usuarios</span>
                             <span class="fa fa-arrow-circle-left float-right"></span>
                         </a>
@@ -110,6 +128,7 @@
                             <li>
                                 <a href="{{ route('permissions.index') }}">
                                     <span class="nav-label mr-4">
+                                        &nbsp; &nbsp; &nbsp;
                                         <i class="fa-solid fa-layer-group"></i>&nbsp;Permisos
                                     </span>
                                 </a>
@@ -117,7 +136,7 @@
 
                         </ul>
                     </li>
-
+                    <hr style="margin-top:0; margin-bottom:0;">
                     {{-- COMPRAS --}}
                     <li class="font-verdana-bg">
                         <a href="" data-toggle="collapse" data-target="#dashboard_compras"
@@ -177,6 +196,7 @@
                             </li>
                         </ul>
                     </li>
+                    <hr style="margin-top:0; margin-bottom:0;">
                     {{-- EXPOCHACO --}}
                     <li class="font-verdana-bg">
                         <a href="" data-toggle="collapse" data-target="#dashboard_expochaco"
@@ -194,6 +214,7 @@
                             </li>
                         </ul>
                     </li>
+                    <hr style="margin-top:0; margin-bottom:0;">
                     {{-- EXPOCHACO3 --}}
                     <li class="font-verdana-bg">
                         <a href="" data-toggle="collapse" data-target="#dashboard_expochaco3"
@@ -211,6 +232,7 @@
                             </li>
                         </ul>
                     </li>
+                    <hr style="margin-top:0; margin-bottom:0;">
                     {{-- PERSONALIDADES JURIDICAS --}}
                     <li class="font-verdana-bg">
                         <a href="" data-toggle="collapse" data-target="#dashboard_personerias"
@@ -228,6 +250,59 @@
                             </li>
                         </ul>
                     </li>
+                    <hr style="margin-top:0; margin-bottom:0;">
+                    {{-- SEREGES --}}
+                    <li class="font-verdana-bg">
+                        <a href="" data-toggle="collapse" data-target="#dashboard_sereges"
+                            class="active collapsed" aria-expanded="false">
+                            <i class="fa-duotone fa-book-user" style="color:green"></i>
+                            <span class="nav-label mr-3">SEREGES</span>
+                            <span class="fa fa-arrow-circle-left float-right"></span>
+                        </a>
+                        <ul class="sub-menu collapse" id="dashboard_sereges">
+
+                            <li>
+                                <a href="{{ route('sereges.registro_index') }}">
+                                    &nbsp; &nbsp; &nbsp;
+                                    <span class="nav-label mr-4">Registro</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{{ route('sereges.albergue_index') }}">
+                                    &nbsp; &nbsp; &nbsp;
+                                    <span class="nav-label mr-4">Albergue-Hogar</span>
+                                </a>
+                            </li>
+
+
+                        </ul>
+                    </li>
+
+                    <hr style="margin-top:0; margin-bottom:0;">
+                     {{-- INFORMATICA --}}
+                     <li class="font-verdana-bg">
+                        <a href="" data-toggle="collapse" data-target="#dashboard_infor"
+                            class="active collapsed" aria-expanded="false">
+                            <i class="fa-duotone fa-book-user" style="color:green"></i>
+                            <span class="nav-label mr-3">INFORMATICA</span>
+                            <span class="fa fa-arrow-circle-left float-right"></span>
+                        </a>
+                        <ul class="sub-menu collapse" id="dashboard_infor">
+
+                            <li>
+                                <a href="{{ route('informatica.registro_index') }}">
+                                    &nbsp; &nbsp; &nbsp;
+                                    <span class="nav-label mr-4">Registro</span>
+                                </a>
+                            </li>
+
+
+
+
+                        </ul>
+                    </li>
+                    <hr style="margin-top:0; margin-bottom:0;">
                     {{-- EVENTO --}}
                     <li class="font-verdana-bg">
                         <a href="" data-toggle="collapse" data-target="#dashboard_agenda"
@@ -251,6 +326,7 @@
                             </li>
                         </ul>
                     </li>
+                    <hr style="margin-top:0; margin-bottom:0;">
                     {{-- COMPRAS combustible --}}
                     <li class="font-verdana-bg">
                         <a href="" data-toggle="collapse" data-target="#dashboard_combustiblescomb"
@@ -310,6 +386,7 @@
                             </li>
                         </ul>
                     </li>
+                    <hr style="margin-top:0; margin-bottom:0;">
                     {{-- ALMACEN --}}
                     <li class="font-verdana-bg">
                         <a href="" data-toggle="collapse" data-target="#dashboard_almacen"
@@ -367,6 +444,7 @@
                             </li>
                         </ul>
                     </li>
+                    <hr style="margin-top:0; margin-bottom:0;">
                     {{-- todo trasnporte --}}
                     <li class="font-verdana-bg">
                         <a href="" data-toggle="collapse" data-target="#dashboard_transportes"
@@ -408,6 +486,7 @@
                             </li>
                         </ul>
                     </li>
+                    <hr style="margin-top:0; margin-bottom:0;">
                     {{-- CORRESPONDENCIA --}}
                     <li class="font-verdana-bg">
                         <a href="" data-toggle="collapse" data-target="#dashboard_ventanilla"
@@ -425,6 +504,7 @@
                             </li>
                         </ul>
                     </li>
+                    <hr style="margin-top:0; margin-bottom:0;">
                     {{-- CORRESPONDENCIA LOCAL --}}
                     <li class="font-verdana-bg">
                         <a href="" data-toggle="collapse" data-target="#dashboard_ventanilla2"
@@ -442,6 +522,7 @@
                             </li>
                         </ul>
                     </li>
+                    <hr style="margin-top:0; margin-bottom:0;">
                     {{-- CORRESPONDENCIA LOCAL 2 --}}
                     <li class="font-verdana-bg">
                         <a href="" data-toggle="collapse" data-target="#dashboard_ventanilla22"
@@ -459,6 +540,7 @@
                             </li>
                         </ul>
                     </li>
+                    <hr style="margin-top:0; margin-bottom:0;">
                     {{-- ARCHIVOS --}}
                     <li class="font-verdana-bg">
                         <a href="" data-toggle="collapse" data-target="#dashboard_archivos2"
@@ -484,6 +566,7 @@
                             </li>
                         </ul>
                     </li>
+                    <hr style="margin-top:0; margin-bottom:0;">
                     {{-- RRHH --}}
                     <li class="font-verdana-bg">
                         <a href="" data-toggle="collapse" data-target="#dashboard_rrhh"
@@ -525,6 +608,7 @@
                             </li>
                         </ul>
                     </li>
+                    <hr style="margin-top:0; margin-bottom:0;">
                     {{-- Personerias --}}
                     <li class="font-verdana-bg">
                         <a href="" data-toggle="collapse" data-target="#dashboard_personeria"
@@ -543,24 +627,9 @@
                             </li>
                         </ul>
                     </li>
-                    {{-- Activos Fijos --}}
-                    <li class="font-verdana-bg">
-                        <a href="" data-toggle="collapse" data-target="#dashboard_activos_fijos"
-                            class="active collapsed" aria-expanded="false">
-                            <i class="fa fa-circle" style="color:green"></i>
-                            <span class="nav-label mr-3">ACTIVOS FIJOS</span>
-                            <span class="fa fa-arrow-circle-left float-right"></span>
-                        </a>
-                        <ul class="sub-menu collapse" id="dashboard_activos_fijos"
-                            @if (request()->is('users') || request()->is('users/*')) in @endif>
-                            <li>
-                                <a href="{{ route('activos.index') }}">
-                                    &nbsp; &nbsp; &nbsp;
-                                    <span class="nav-label mr-4">Activos</span>
-                                </a>
-                            </li>
-                        </ul>
+
                     </li>
+                    <hr style="margin-top:0; margin-bottom:0;">
                     {{-- Usuarios --}}
                     <li class="font-verdana-bg">
                         <a href="" data-toggle="collapse" data-target="#dashboard_users"
@@ -590,46 +659,7 @@
                             </li>
                         </ul>
                     </li>
-                    {{-- Discapacidad --}}
-                    <li class="font-verdana-bg">
-                        <a href="" data-toggle="collapse" data-target="#dashboard_discapacidad"
-                            class="active collapsed" aria-expanded="false">
-                            <i class="fa fa-users" style="color:green"></i>
-                            <span class="nav-label mr-3">DISCAPACIDAD</span>
-                            <span class="fa fa-arrow-circle-left float-right"></span>
-                        </a>
-                        <ul class="sub-menu collapse" id="dashboard_discapacidad">
-                            <li>
-                                <a href="{{ route('canasta.entrega.index') }}">
-                                    &nbsp;
-                                    <span class="nav-label mr-4"></span>Listar Entregas
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('canasta.pendientes.index') }}">
-                                    &nbsp;
-                                    <span class="nav-label mr-4"></span>Pendientes
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    {{-- Activos --}}
-                    <li class="font-verdana-bg">
-                        <a href="" data-toggle="collapse" data-target="#dashboard_activosvsiaf"
-                            class="active collapsed" aria-expanded="false">
-                            <i class="fa fa-users" style="color:green"></i>
-                            <span class="nav-label mr-3">ACTIVOS</span>
-                            <span class="fa fa-arrow-circle-left float-right"></span>
-                        </a>
-                        <ul class="sub-menu collapse" id="dashboard_activosvsiaf">
-                            <li>
-                                <a href="{{ route('activos.vsiaf.index') }}">
-                                    &nbsp;
-                                    <span class="nav-label mr-4"></span>Listar
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                    <hr style="margin-top:0; margin-bottom:0;">
                     <li class="font-verdana-bg">
                         <a href="" data-toggle="collapse" data-target="#dashboard_activos_fijos"
                             class="active collapsed" aria-expanded="false">

@@ -28,7 +28,8 @@
 
             <div class="body-border">
                 <font size="2" face="Courier New">
-                    <form method="POST" action="{{ route('guardar2.recepcion') }}" id="form" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('guardar2.recepcion') }}" id="form"
+                        enctype="multipart/form-data">
                         @csrf
 
                         <div class="form-group row">
@@ -39,12 +40,13 @@
 
                                 <input type="text" name="fecha" placeholder="dd/mm/aaaa"
                                     class="form-control form-control-sm font-verdana-bg" id="fecha" data-language="es"
-                                    autocomplete="off" value="{{ $fechaActual }}" >
+                                    autocomplete="off" value="{{ $fechaActual }}">
                             </div>
                         </div>
 
 
-                        <div class="form-group row">
+
+      <div class="form-group row">
                             <label class="required  col-md-4 col-form-label text-md-right"
                                 style="color:black;font-weight: bold;">{{ __('Remintente') }}</label>
                             <div class="col-md-8">
@@ -62,13 +64,24 @@
                             </div>
                         </div>
 
+   {{--
+                        <select name="emp" id="emp" class="col-md-10 form-control select2" style="width: 100%">
+                            <option value="">-</option>
+                            @foreach ($remitentes as $remitente)
+                                <option value="{{ $remitente->id_remitente }}">
+                                    {{ $remitente->nombres_remitente }} {{ $remitente->apellidos_remitente }} --
+                                    {{ $remitente->nombre_unidad }}
+                                </option>
+                            @endforeach
+                        </select>
+ --}}
                         <div class="form-group row">
                             <label for="nombre" style="color:black;font-weight: bold;"
                                 class="required col-md-4 col-form-label text-md-right">Asunto:</label>
 
                             <div class="col-md-6">
                                 <textarea type="text" name="asunto" class="form-control" placeholder="Asunto..." required id="asunto"
-                                onchange="javascript:this.value=this.value.toUpperCase();" cols="50" rows="2"></textarea>
+                                    onchange="javascript:this.value=this.value.toUpperCase();" cols="50" rows="2"></textarea>
                             </div>
                         </div>
 
@@ -78,8 +91,8 @@
                                 class="required col-md-4 col-form-label text-md-right">Codigo:</label>
 
                             <div class="col-md-2">
-                                <input type="text" required name="codigo" class="form-control" placeholder="Codigo..." id="codigo"
-                                value="{{ $maxId2 }}" >
+                                <input type="text" required name="codigo" class="form-control" placeholder="Codigo..."
+                                    id="codigo" value="{{ $maxId2 }}">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -88,8 +101,7 @@
 
                             <div class="col-md-2">
                                 <input type="text" required name="oficio" class="form-control"
-                                    placeholder="Hoja de ruta..."
-                                    value="{{ $hojaderuta }}">
+                                    placeholder="Hoja de ruta..." value="{{ $hojaderuta }}">
                             </div>
                         </div>
 
@@ -100,9 +112,9 @@
                             <div class="col-md-8">
                                 <select name="tipo" id="tipo" class="col-md-10 form-control select2">
                                     @foreach ($tipos as $tipo)
-                                    <option value="">-</option>
-                                        <option value="{{$tipo->idtipo_corresp}}">
-                                            {{ $tipo->nombre_tipo}}
+                                        <option value="">-</option>
+                                        <option value="{{ $tipo->idtipo_corresp }}">
+                                            {{ $tipo->nombre_tipo }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -123,13 +135,15 @@
                         <br>
 
                         <div align='center'>
-                            <a href="{{ route('crear2.tipo') }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar tipo">
+                            <a href="{{ route('crear2.tipo') }}" class="tts:left tts-slideIn tts-custom"
+                                aria-label="Agregar tipo">
                                 <button class="btn btn-sm btn-warning font-verdana" type="button">
                                     &nbsp;<i class="fa fa-lg fa-align-justify" aria-hidden="true"></i>&nbsp;
                                 </button>
                             </a>
                             &nbsp;&nbsp;&nbsp;&nbsp;
-                            <a href="{{ route('crear2.remitente') }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar Remitente">
+                            <a href="{{ route('crear2.remitente') }}" class="tts:left tts-slideIn tts-custom"
+                                aria-label="Agregar Remitente">
                                 <button class="btn btn-sm btn-primary font-verdana" type="button">
                                     &nbsp;<i class="fa fa-lg fa-user" aria-hidden="true"></i>&nbsp;
                                 </button>
@@ -158,6 +172,33 @@
 @endsection
 @section('scripts')
     <script>
+$(document).ready(function () {
+        $('#emp').select2({
+            placeholder: "Seleccione un remitente",
+            allowClear: true, // Permite borrar la selección
+            minimumInputLength: 2, // Mínimo de caracteres para activar la búsqueda
+            ajax: {
+                type: 'get',
+                url: "{{ route('crear2.buscarRemitentes') }}",
+                dataType: 'json',
+                delay: 250,
+
+                data: function (params) {
+                    return {
+                        q: params.term // Parámetro de búsqueda
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
+    });
+
+
         $(document).ready(function() {
             $('.select2').select2({
                 placeholder: "--Seleccionar--"

@@ -16,14 +16,78 @@ use App\Models\Canasta\Dea;
 use App\Http\Requests;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exportar\Canasta\BarriosExcel;
+use App\Models\Canasta\Ocupaciones;
 use DB;
 use PDF;
 
 
 class BarriosV2Controller extends Controller
 {
+
+    private function copiarBarrios()
+    {
+         $barrios = DB::connection('mysql_canasta')->table("barrios")
+         ->where('distrito','!=',null)
+         //->where('estado','=','A')
+         //->where('tipo','=','Comunidad')
+         ->get();
+         foreach ($barrios as $data){
+            $tipo=0;
+            if($data->tipo == 'Barrio')
+            {
+         $tipo=1;
+
+           }
+        elseif($data->tipo == 'Comunidad'){
+         $tipo=2;
+           }
+
+            $datos=([
+                'id'=>$data->idBarrio,
+                'tipo'=>$tipo,
+                'nombre'=>$data->barrio,
+                'distrito_id'=>$data->distrito,
+                'user_id'=>16,
+                'dea_id'=>1,
+                'estado'=>1
+                      ]
+
+
+                     );
+              $barrio=Barrio::CREATE($datos);
+    }
+        //dd($barrios);
+
+    }
+    private function copiarOcupacion()
+    {
+         $ocupaciones = DB::connection('mysql_canasta')->table("ocupaciones")
+         //->where('distrito','!=',null)
+         //->where('estado','=','A')
+         //->where('tipo','=','Comunidad')
+         ->get();
+
+         //dd($ocupaciones);
+         foreach ($ocupaciones as $data){
+
+
+            $datos=([
+                'id'=>$data->idOcupacion,
+                'ocupacion'=>$data->ocupacion,
+                'estado'=>1
+                      ]
+
+
+                     );
+              $ocupacionff=Ocupaciones::CREATE($datos);
+    }
+        //dd($barrios);
+
+    }
+
     public function index()
     {
+       //$this->copiarBarrios();
         $tipos = Barrio::TIPOS;
         $distritos = Distrito::where('dea_id',Auth::user()->dea->id)->pluck('nombre','id');
         $deas = Dea::where('id',Auth::user()->dea->id)->pluck('nombre','id');
@@ -154,7 +218,7 @@ class BarriosV2Controller extends Controller
                 ->withInput();
         }
     }
-    
+
     public function deshabilitar($id){
         $barrio = Barrio::find($id);
         $barrio->update([

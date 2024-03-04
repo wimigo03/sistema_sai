@@ -300,6 +300,7 @@ class SolicitudController extends Controller
 //dd($credenciales);
        return view('expochaco.credencial', ["credenciales" => $credenciales,"idsolicitud" => $idsolicitud,"solicitud" => $solicitud]);
 
+
        // return view('expochaco.create');
     }
 
@@ -378,7 +379,10 @@ class SolicitudController extends Controller
 
     public function codigoqr($idcredencial){
 
-        $credencial = CredencialModel::where('idcredencial',$idcredencial)->firstOrFail();
+
+       // $credencial = CredencialModel::where('idcredencial',$idcredencial)->firstOrFail();
+
+        $credencial = CredencialModel::take(10)->get();
 
        // $credencial = DB::table('credenciales as c')
             //->join('remitente as re', 're.id_remitente', '=', 'r.id_remitente')
@@ -388,9 +392,13 @@ class SolicitudController extends Controller
             //->where('d.estadoderiv1', 1)
 
            /// ->first();
-           $ruta='https://ybasai.com/expochaco/generarqr/'.$credencial->idcredencial;
+          // $ruta='https://ybasai.com/expochaco/generarqr/'.$credencial->idcredencial;
           //dd( $credencial);
-        return view('expochaco.generarqr', ["credencial" => $credencial,"ruta" => $ruta]);
+      //  return view('expochaco.generarqr', ["credencial" => $credencial,"ruta" => $ruta]);
+
+        $pdf = PDF::loadView('expochaco.generarqr', compact(['credencial']));
+       // $pdf->setPaper('LEGAL', 'portrait'); //landscape
+        return $pdf->stream();
 
        // return view('expochaco.create');
     }

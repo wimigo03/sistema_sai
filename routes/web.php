@@ -645,6 +645,8 @@ Route::post('correspondencia2/storeRemitente', [Recepcion2Controller::class,'sto
 Route::get('correspondencia2/createTipo', [Recepcion2Controller::class,'createTipo'])->name('crear2.tipo');
 Route::post('correspondencia2/storeTipo', [Recepcion2Controller::class,'storeTipo'])->name('guardar2.tipo');
 
+Route::get('correspondencia2/buscarRemitentes', [Recepcion2Controller::class,'buscarRemitentes'])->name('crear2.buscarRemitentes');
+
 //////////////////
 Route::get('correspondencia2/{id}/gestionarCorrespondencia', [Recepcion2Controller::class,'gestionarCorrespondencia'])->name('correspondencia2.gestionar');
 Route::get('correspondencia2/{id}/cargarpdf', [Recepcion2Controller::class,'cargarpdf'])->name('correspondencia2.cargarpdf');
