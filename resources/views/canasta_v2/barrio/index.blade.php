@@ -8,6 +8,7 @@
     <div class="card-body">
         @include('canasta_v2.barrio.partials.search')
         @include('canasta_v2.barrio.partials.table')
+        @include('canasta_v2.barrio.partials.barrio_edit_delete_create')
     </div>
 </div>
 @endsection

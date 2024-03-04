@@ -6,11 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Canasta\Dea;
 use App\Models\Canasta\Distrito;
+use App\Models\Canasta\Beneficiario;
 
 class Barrio extends Model
 {
     protected $table = 'barrios';
+    protected $primaryKey= 'id';
     protected $fillable = [
+
         'tipo',
         'nombre',
         'distrito_id',
@@ -26,30 +29,46 @@ class Barrio extends Model
 
     const TIPOS = [
         '1' => 'BARRIO',
-        '2' => 'LOCALIDAD'
+        '2' => 'COMUNIDAD'
     ];
 
     public function getStatusAttribute(){
         switch ($this->estado) {
-            case '1': 
+            case '1':
                 return "HABILITADO";
-            case '2': 
+            case '2':
                 return "NO HABILITADO";
         }
     }
 
     public function getTipoBAttribute(){
         switch ($this->tipo) {
-            case '1': 
+            case '1':
                 return "BARRIO";
-            case '2': 
-                return "LOCALIDAD";
+            case '2':
+                return "COMUNIDAD";
         }
     }
 
     public function user(){
         return $this->belongsTo(User::class,'user_id','id');
     }
+    public function beneficiariosA(){
+        return $this->belongsTo(Beneficiario::class,'id','idBarrio')->where('estado','A');
+    }
+    public function beneficiariosB(){
+        return $this->belongsTo(Beneficiario::class,'id','idBarrio')->where('estado','B');
+    }
+
+    public function beneficiariosF(){
+        return $this->belongsTo(Beneficiario::class,'id','idBarrio')->where('estado','F');
+    }
+
+    public function beneficiariosX(){
+        return $this->belongsTo(Beneficiario::class,'id','idBarrio')->where('estado','X');
+    }
+
+
 
     public function dea(){
         return $this->belongsTo(Dea::class,'dea_id','id');
@@ -70,7 +89,7 @@ class Barrio extends Model
             return $query->where('tipo', $tipo);
         }
     }
-    
+
     public function scopeByNombre($query, $nombre){
         if($nombre){
             return $query->whereRaw('upper(nombre) like ?', ['%'.strtoupper($nombre).'%']);

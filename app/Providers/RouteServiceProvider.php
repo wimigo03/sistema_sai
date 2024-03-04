@@ -68,9 +68,24 @@ class RouteServiceProvider extends ServiceProvider
             ->namespace($this->namespace)
             ->group(base_path('routes/Admin/permissions-route.php'));
 
+             //////CANASTA///
         Route::middleware('web')
             ->namespace($this->namespace)
             ->group(base_path('routes/CanastaV2/barrios-route.php'));
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/CanastaV2/distritos-route.php'));
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/CanastaV2/beneficiarios-route.php'));
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/CanastaV2/entregas-route.php'));
+
+            //////////
 
         Route::middleware('web')
             ->namespace($this->namespace)
@@ -83,5 +98,13 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')
             ->namespace($this->namespace)
             ->group(base_path('routes/Expochaco/solicitud-route.php'));
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/sereges/sereges-route.php'));
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/informatica/informatica-route.php'));
     }
 }

@@ -222,6 +222,19 @@ class Recepcion2Controller extends Controller
         return view('correspondencia2.createRecepcion', ["remitentes" => $remitentes, "tipos" => $tipos, "maxId2" => $maxId2, "hojaderuta" => $hojaderuta, "fechaActual" => $fechaActual]);
     }
 
+
+    public function buscarRemitentes(Request $request)
+{
+    $q = $request->q;
+
+    $resultados = Remitente::where('nombres_remitente', 'like', '%' . $q . '%')
+        ->orWhere('apellidos_remitente', 'like', '%' . $q . '%')
+        ->orWhere('nombre_unidad', 'like', '%' . $q . '%')
+        ->get();
+
+    return response()->json($resultados);
+}
+
     public function storeRecepcion2(request $request)
     {
 
