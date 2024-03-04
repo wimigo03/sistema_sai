@@ -124,6 +124,8 @@ class CodigoBarrasController extends Controller
             'activo' => $activo,
             'cantidad' => $cantidad,
         ]);
+        $pdf->setPaper([0, 0, 150, 250], 'landscape');
+
         $pdf->getDomPDF()->setHttpContext(
             stream_context_create([
                 'ssl' => [
@@ -133,9 +135,6 @@ class CodigoBarrasController extends Controller
                 ]
             ])
         );
-        $pdf->setPaper('A8', 'landscape');
-
-
         $fecha = date('Y-m-d');
         return $pdf->stream("Reporte de codigo de barras -" . $fecha . "-activo-'. $activo->codigo .'.pdf");
     }

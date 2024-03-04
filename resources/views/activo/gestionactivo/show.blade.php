@@ -3,13 +3,13 @@
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
 
-            <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-                <a href="{{ url('Activo/gestionactivo/index') }}">
-                    <span class="color-icon-1">
-                        &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
-                    </span>
-                </a>
-            </span>
+                <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
+                    <a href="javascript:void(0);" onclick="window.history.back()">
+                        <span class="color-icon-1">
+                            &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
+                        </span>
+                    </a>
+                </span>
             <b>ACTIVO {{ $actual->codigo }}</b>
         </div>
 
@@ -55,6 +55,10 @@
         <div class="col-md-3">
             <b>CARGO:</b>
             <h6>{{ optional($actual->empleados)->file ? $actual->empleados->file->nombrecargo : null }}</h6>
+        </div>
+        <div class="col-md-3">
+            <b>C.I.:</b>
+            <h6>{{ optional($actual->empleados)->ci }}</h6>
         </div>
         <div class="col-md-3">
             <b>COSTO:</b>

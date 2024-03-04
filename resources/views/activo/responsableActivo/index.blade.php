@@ -34,12 +34,60 @@
             </span>
             <b>LISTA DE ACTIVOS DE {{ $empleado->nombres }} {{ $empleado->ap_pat }} {{ $empleado->ap_mat }}</b>
         </div>
-        <button id="abrirModal" class="btn btn-primary mb-0" style="display: none;" data-toggle="modal"
-            data-target="#miModal">
-            Transferir
-        </button>
+        <div class="">
+            <span class="tts:left tts-slideIn tts-custom" aria-label="Asignacion Interna de Bienes">
+                <button onclick="generarReporteAsignacion()" id="asignacion" class="btn btn-primary" disabled>
+                    <i class="fa-duotone fa-arrows-turn-right"></i>
+                </button>
+            </span>
+            <span class="tts:left tts-slideIn tts-custom" aria-label="Devolucion Interna de Bienes">
+                <button onclick="generarReporteDevolucion()" id="devolucion" class="btn btn-primary" disabled>
+                    <i class="fa-solid fa-left"></i>
+                </button>
+            </span>
+            <span class="tts:left tts-slideIn tts-custom" aria-label="Kardex de Activos">
+                <button onclick="generarReporteKardex()" id="kardex" class="btn btn-primary" disabled>
+                    <i class="fa-light fa-files"></i>
+                </button>
+            </span>
+            <span class="tts:left tts-slideIn tts-custom" aria-label="Transferir Activos">
+                <button id="abrirModal" class="btn btn-primary mb-0" data-toggle="modal" data-target="#miModal" disabled>
+                    <i class="fa-solid fa-right-left"></i>
+                </button>
+            </span>
+        </div>
     </div>
 
+    <div class="row font-verdana-sm">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table-bordered hoverTable" id="table-activos" style="width:100%;">
+                    <thead>
+                        <tr class="font-verdana-bg">
+                            <th class="text-center p-1 font-weight-bold bg-info"><input type="checkbox"
+                                    id="seleccionarTodo"></th>
+                            <th class="text-center p-1 font-weight-bold bg-info"><b>CODIGO</b></th>
+                            <th class="text-center p-1 font-weight-bold bg-info"><b>DESCRIPCION</b></th>
+                            <th class="text-center p-1 font-weight-bold bg-info"><b>GRUPO CONTABLE</b></th>
+                            <th class="text-center p-1 font-weight-bold bg-info"><b>AUXILIAR</b></th>
+
+                            <th class="text-center p-1 font-weight-bold bg-info"><b>OFICINA</b></th>
+                            <th class="text-center p-1 font-weight-bold bg-info"><b>EMPLEADO</b></th>
+                            <th class="text-center p-1 font-weight-bold bg-info"><b>CARGO</b></th>
+
+
+                            <th class="text-center p-1 font-weight-bold bg-info"><b>ESTADO</b></th>
+                            <th class="text-center p-1 font-weight-bold bg-info"><i class="fa fa-bars"
+                                    aria-hidden="true"></i>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog modal-xl role="document">
@@ -114,36 +162,6 @@
         </div>
     </div>
 
-    <div class="row font-verdana-sm">
-        <div class="col-md-12">
-            <div class="table-responsive">
-                <table class="table-bordered hoverTable" id="table-activos" style="width:100%;">
-                    <thead>
-                        <tr class="font-verdana-bg">
-                            <th class="text-center p-1 font-weight-bold bg-info"><b>N°</b></th>
-                            <th class="text-center p-1 font-weight-bold bg-info"><b>CODIGO</b></th>
-                            <th class="text-center p-1 font-weight-bold bg-info"><b>DESCRIPCION</b></th>
-                            <th class="text-center p-1 font-weight-bold bg-info"><b>GRUPO CONTABLE</b></th>
-                            <th class="text-center p-1 font-weight-bold bg-info"><b>AUXILIAR</b></th>
-                          
-                            <th class="text-center p-1 font-weight-bold bg-info"><b>OFICINA</b></th>
-                            <th class="text-center p-1 font-weight-bold bg-info"><b>EMPLEADO</b></th>
-                            <th class="text-center p-1 font-weight-bold bg-info"><b>CARGO</b></th>
-                           
-                    
-                            <th class="text-center p-1 font-weight-bold bg-info"><b>ESTADO</b></th>
-                            <th class="text-center p-1 font-weight-bold bg-info"><i class="fa fa-bars"
-                                    aria-hidden="true"></i>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
     <div class="modal fade" id="modalArchivo" tabindex="-1" aria-labelledby="modalArchivo" aria-hidden="true">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
@@ -176,6 +194,9 @@
 @section('scripts')
     <script src="/js/JsBarcode.all.min.js"></script>
     <script type="text/javascript">
+        var filasSeleccionadasArray = [];
+        var idsFilasSeleccionadas = [];
+        var empleado = {!! json_encode($empleado) !!};
         $(function() {
             var table = $('#table-activos').DataTable({
                 processing: true,
@@ -189,8 +210,8 @@
                             return '<input type="checkbox" class="seleccionarFila" value="' + row
                                 .id + '">';
                         },
-                        orderable: false, // Para evitar que la columna sea ordenable
-                        searchable: false, // Para evitar que la columna sea searchable
+                        orderable: false,
+                        searchable: false,
                         class: 'text-justify px-3 py-1 font-verdana'
                     },
                     {
@@ -213,7 +234,7 @@
                         name: 'auxiliars.nomaux',
                         class: 'text-justify p-1 font-verdana'
                     },
-                 
+
                     {
                         data: 'areas',
                         name: 'areas.nombrearea',
@@ -229,8 +250,8 @@
                         name: 'cargo',
                         class: 'text-justify p-1 font-verdana'
                     },
-                   
-                   
+
+
                     {
                         data: 'estado_texto',
                         name: 'estado_texto',
@@ -283,7 +304,6 @@
                 });
                 $('#modalArchivo').modal('show');
             });
-            var filasSeleccionadasArray = [];
             // Agrega un evento para seleccionar todo
             $('#seleccionarTodo').on('change', function() {
                 $('.seleccionarFila').prop('checked', this.checked);
@@ -294,6 +314,21 @@
                 }
                 mostrarBotonAbrirModal();
             });
+            // Función para habilitar u desabilitar los botones
+            function mostrarBotonAbrirModal() {
+                var filasSeleccionadas = $('.seleccionarFila:checked').length;
+                if (filasSeleccionadas > 0) {
+                    $('#abrirModal').prop('disabled', false);
+                    $('#asignacion').prop('disabled', false);
+                    $('#devolucion').prop('disabled', false);
+                    $('#kardex').prop('disabled', false);
+                } else {
+                    $('#abrirModal').prop('disabled', true);
+                    $('#asignacion').prop('disabled', true);
+                    $('#devolucion').prop('disabled', true);
+                    $('#kardex').prop('disabled', true);
+                }
+            }
             // Agrega un evento para actualizar el checkbox "Seleccionar todo" cuando se seleccionan todas las filas manualmente
             $(document).on('click', '.seleccionarFila', function() {
                 var fila = $(this).closest('tr');
@@ -306,30 +341,27 @@
                     .length;
                 $('#seleccionarTodo').prop('checked', todasSeleccionadas);
                 mostrarBotonAbrirModal();
+
+                llenarIds();
             });
-            // Función para mostrar u ocultar el botón "Abrir Modal"
-            function mostrarBotonAbrirModal() {
-                var filasSeleccionadas = $('.seleccionarFila:checked').length;
-                if (filasSeleccionadas > 0) {
-                    $('#abrirModal').show();
-                } else {
-                    $('#abrirModal').hide();
-                }
-            }
             $('#abrirModal').on('click', function() {
                 mostrarFilasSeleccionadasEnModal();
             });
-            // Función para mostrar las filas seleccionadas en el modal
-            function mostrarFilasSeleccionadasEnModal() {
-                var filasSeleccionadas = $('.seleccionarFila:checked'); // Obtener las filas seleccionadas
 
-                filasSeleccionadasArray = []; // Vaciar el array antes de llenarlo nuevamente
-
+            function llenarIds() {
+                var filasSeleccionadas = $('.seleccionarFila:checked');
+                filasSeleccionadasArray = [];
+                idsFilasSeleccionadas = []
                 filasSeleccionadas.each(function() {
                     var fila = $(this).closest('tr');
                     var rowData = table.row(fila).data();
                     filasSeleccionadasArray.push(rowData);
+                    idsFilasSeleccionadas.push(rowData.id);
                 });
+            }
+            // Función para mostrar las filas seleccionadas en el modal
+            function mostrarFilasSeleccionadasEnModal() {
+                llenarIds()
                 llenarTablaModal();
             }
             // Función para llenar la tabla y abrir el modal
@@ -420,6 +452,27 @@
             });
 
         });
+
+        function generarReporteAsignacion() {
+            const activosSeleccionadosJSON = JSON.stringify(idsFilasSeleccionadas);
+            const url =
+                `/reportes/asignacion?activos=${activosSeleccionadosJSON}&empleado=${empleado.idemp}`;
+            window.open(url, '_blank');
+        };
+
+        function generarReporteDevolucion() {
+            const activosSeleccionadosJSON = JSON.stringify(idsFilasSeleccionadas);
+            const url =
+                `/reportes/devolucion?activos=${activosSeleccionadosJSON}&empleado=${empleado.idemp}`;
+            window.open(url, '_blank');
+        };
+
+        function generarReporteKardex() {
+            const activosSeleccionadosJSON = JSON.stringify(idsFilasSeleccionadas);
+            const url =
+                `/reportes/kardex?activos=${activosSeleccionadosJSON}&empleado=${empleado.idemp}`;
+            window.open(url, '_blank');
+        };
     </script>
 @endsection
 @endsection

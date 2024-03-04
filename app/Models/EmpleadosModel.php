@@ -5,6 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\FileModel;
+use App\Models\Model_Activos\ActualModel;
+use App\Models\Model_Activos\Adeudo;
+use App\Models\Model_Activos\ArchivoAdjunto;
+use App\Models\Model_Activos\Transferencia;
+
 class EmpleadosModel extends Model
 {
     use HasFactory;
@@ -82,7 +87,7 @@ class EmpleadosModel extends Model
 
     public function actuals()
     {
-        return $this->hasMany(ActualModel::class, 'idemp');
+        return $this->hasMany(ActualModel::class, 'codemp');
     }
 
     public function file()
@@ -110,5 +115,10 @@ class EmpleadosModel extends Model
     public function getFullNameAttribute()
     {
         return $this->nombres . ' ' . $this->ap_pat . ' ' . $this->ap_mat;
+    }
+
+    public function adeudo()
+    {
+        return $this->hasOne(Adeudo::class, 'empleado_id');
     }
 }
