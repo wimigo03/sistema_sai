@@ -6,9 +6,9 @@
 .font-verdana-xs_alias {font-size: 8px; font-family: verdana,arial,helvetica;}
 .font-verdana-xs {font-size: 9px; font-family: verdana,arial,helvetica;}
 .font-verdana-sm {font-size: 10px; font-family: verdana,arial,helvetica;}
-.font-verdana {font-size: 11px; font-family: verdana,arial,helvetica;}
-.font-verdana-bg {font-size: 12px; font-family: verdana,arial,helvetica;}
-.font-verdana-bgt {font-size: 15px; font-family: verdana,arial,helvetica;}
+.font-verdana-11 {font-size: 11px; font-family: verdana,arial,helvetica;}
+.font-verdana-12 {font-size: 12px; font-family: verdana,arial,helvetica;}
+.font-verdana-15 {font-size: 15px; font-family: verdana,arial,helvetica;}
 .abs-center {display: flex;justify-content: center;}
 /*Ondular los laterales*/
 .tts-custom {
@@ -47,4 +47,9 @@ label {
 .label-show {
 	font-weight: 700;
 	opacity: 1.0;
+}
+
+.badge-with-padding {
+	padding: 7px;
+	font-weight: normal;
 }

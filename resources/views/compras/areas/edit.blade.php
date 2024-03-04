@@ -2,7 +2,7 @@
 @section('content')
 {{--<div class="row justify-content-center">
     <div class="col-md-10">--}}
-        <div class="row font-verdana-bg">
+        <div class="row font-verdana-12">
             <div class="col-md-3 titulo">
                 &nbsp;
             </div>
@@ -20,20 +20,20 @@
             <form method="POST" action="{{ route('areas.update', $areas->idarea) }}">
                 @csrf
                 @method('POST')
-                <div class="form-group row font-verdana-bg justify-content-center">
+                <div class="form-group row font-verdana-12 justify-content-center">
                     <div class="col-md-4">
                         <label for="nombre" class="d-inline">
                             <b>Nombre</b>
                         </label>
-                        <input type="text" name="nombre" value="{{$areas->nombrearea}}" class="form-control form-control-sm font-verdana-bg" onchange="javascript:this.value=this.value.toUpperCase();" required>
+                        <input type="text" name="nombre" value="{{$areas->nombrearea}}" class="form-control form-control-sm font-verdana-12" onchange="javascript:this.value=this.value.toUpperCase();" required>
                     </div>
                 </div>
                 <div class="form-group row font-courier-bg justify-content-center">
                     <div class="col-md-12 text-right">
-                        <button class="btn btn-outline-primary font-verdana-bg" type="submit">
+                        <button class="btn btn-outline-primary font-verdana-12" type="submit">
                             <i class="fa-solid fa-paper-plane"></i>&nbsp;Actualizar
                         </button>
-                        <a href="{{route('areas.index')}}" class="btn btn-outline-danger font-verdana-bg">
+                        <a href="{{route('areas.index')}}" class="btn btn-outline-danger font-verdana-12">
                             <i class="fa fa-lg fa-reply" aria-hidden="true"></i>&nbsp;Cancelar
                         </a>
                     </div>

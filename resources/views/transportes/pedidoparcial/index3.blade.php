@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-8 titulo">
         <b>--APROBADA POR TRANSPORTE. -- </b><b style='color:red'>{{$idd->nombrearea}} </b>--
     </div>

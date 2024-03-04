@@ -1,13 +1,13 @@
 @extends('layouts.admin')
 @section('content')
     <style>
-        .font-verdana-bg th {
+        .font-verdana-12 th {
             background-color: white !important;
             color: black;
         }
     </style>
 
-    <div class="row font-verdana-bg mb-3 flex justify-content-between align-items-center">
+    <div class="row font-verdana-12 mb-3 flex justify-content-between align-items-center">
         <div class="titulo col-md-8">
             <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
                 <a href="javascript:void(0);" onclick="window.history.back()">

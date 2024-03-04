@@ -823,7 +823,7 @@
                     </div>
                     <input type="hidden" name="actual_id" value="" id="actual_id">
                     <div class="text-center">
-                        <button class="btn color-icon-2 font-verdana-bg" type="submit">
+                        <button class="btn color-icon-2 font-verdana-12" type="submit">
                             <i class="fa-solid fa-paper-plane"></i>
                             &nbsp;REGISTRAR
                         </button>

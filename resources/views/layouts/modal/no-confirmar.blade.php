@@ -1,4 +1,4 @@
-<div class="modal fade font-verdana-bg" id="modal_no_confirmacion" tabindex="-1" role="dialog" aria-labelledby="modal_confirmacion_label" aria-hidden="true">
+<div class="modal fade font-verdana-12" id="modal_no_confirmacion" tabindex="-1" role="dialog" aria-labelledby="modal_confirmacion_label" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">

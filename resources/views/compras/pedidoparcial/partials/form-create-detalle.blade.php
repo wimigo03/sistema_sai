@@ -1,4 +1,4 @@
-<div class="form-group row font-verdana-bg">
+<div class="form-group row font-verdana-12">
     <div class="col-md-8">
         <label for="producto" class="d-inline">Producto</label>
         <select id="producto" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
@@ -38,7 +38,7 @@
             <tbody>
                 @if (isset($compra_detalle) && count($compra_detalle) > 0)
                     @foreach ($compra_detalle as $datos)
-                        <tr class="font-verdana">
+                        <tr class="font-verdana-11">
                             <td class="text-left p-1">
                                 <input type="hidden" class="producto_id" value="{{ $datos->idprodserv }}">
                                 {{ $datos->idprodserv }}
@@ -60,7 +60,7 @@
                 @endif
             </tbody>
             <tfoot>
-                <tr class="font-verdana" id="total_detalle_compra">
+                <tr class="font-verdana-11" id="total_detalle_compra">
                     <td class="text-right p-1" colspan="5">
                         <b>TOTAL</b>
                     </td>

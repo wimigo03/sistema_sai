@@ -1,7 +1,7 @@
 <form action="#" method="post" id="form">
     @csrf
     <input type="hidden" name="role_id" value="{{ $role->id }}">
-    <div class="form-group row font-verdana-bg">
+    <div class="form-group row font-verdana-12">
         <div class="col-md-5 pr-1">
             <label for="unidad" class="d-inline">Direccion Administrativa</label>
             <select name="dea_id" id="dea_id" class="form-control form-control-sm select2">
@@ -16,17 +16,17 @@
             </select>
         </div>
     </div>
-    <div class="form-group row font-verdana-bg">
+    <div class="form-group row font-verdana-12">
         <div class="col-md-3 pr-1">
             <label for="titulo" class="d-inline">Titulo</label>
             <input type="text" name="titulo" value="{{ $role->title }}" class="form-control form-control-sm font-verdana intro">
         </div>
         <div class="col-md-3 pr-1">
             <label for="codigo" class="d-inline">Codigo</label>
-            <input type="text" name="codigo" value="{{ $role->short_code }}" class="form-control form-control-sm font-verdana-bg intro">
+            <input type="text" name="codigo" value="{{ $role->short_code }}" class="form-control form-control-sm font-verdana-12 intro">
         </div>
     </div>
-    <div class="form-group row font-verdana-bg">
+    <div class="form-group row font-verdana-12">
         <div class="col-md-12" id="permissions-select">
             <div class="row">
                 <div class="col-md-6">

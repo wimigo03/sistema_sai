@@ -6,7 +6,7 @@
             <em> {!! session('message') !!}</em>
         </div>
     @endif
-    <div class="row font-verdana-bg">
+    <div class="row font-verdana-12">
         <div class="col-md-6 ">
             <b><h5>REGISTRO NIÑO(A)--{{ $nombre_tipo }}--{{ $nombre_albergue }}</h5></b>
 

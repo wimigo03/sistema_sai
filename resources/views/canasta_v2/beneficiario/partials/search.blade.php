@@ -1,23 +1,23 @@
 <form action="#" method="get" id="form">
     <div class="form-group row">
         <div class="col-md-1 pr-1">
-            <input type="text" name="codigo" placeholder="-- Cod. --" value="{{request('codigo')}}" class="form-control form-control-sm font-verdana-bg intro" onkeypress="return valideNumberInteger(event);">
+            <input type="text" name="codigo" placeholder="-- Cod. --" value="{{request('codigo')}}" class="form-control form-control-sm font-verdana-12 intro" onkeypress="return valideNumberInteger(event);">
         </div>
 
         <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="nombre" placeholder="-- Nombres --" value="{{request('nombre')}}" class="form-control form-control-sm font-verdana-bg intro">
+            <input type="text" name="nombre" placeholder="-- Nombres --" value="{{request('nombre')}}" class="form-control form-control-sm font-verdana-12 intro">
         </div>
 
         <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="ap" placeholder="-- Ap.Paterno --" value="{{request('ap')}}" class="form-control form-control-sm font-verdana-bg intro">
+            <input type="text" name="ap" placeholder="-- Ap.Paterno --" value="{{request('ap')}}" class="form-control form-control-sm font-verdana-12 intro">
         </div>
 
         <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="am" placeholder="-- Ap.Materno --" value="{{request('am')}}" class="form-control form-control-sm font-verdana-bg intro">
+            <input type="text" name="am" placeholder="-- Ap.Materno --" value="{{request('am')}}" class="form-control form-control-sm font-verdana-12 intro">
         </div>
 
         <div class="col-md-1 pr-1 pl-1">
-            <input type="text" name="ci" placeholder="-- C.i. --" value="{{request('ci')}}" class="form-control form-control-sm font-verdana-bg intro">
+            <input type="text" name="ci" placeholder="-- C.i. --" value="{{request('ci')}}" class="form-control form-control-sm font-verdana-12 intro">
         </div>
 
 
@@ -44,7 +44,7 @@
     </div>
     <div class="form-group row">
         <div class="col-md-2 pr-1">
-            <input type="text" name="usuario" placeholder="--Usuario--" value="{{request('usuario')}}" class="form-control form-control-sm font-verdana-bg intro">
+            <input type="text" name="usuario" placeholder="--Usuario--" value="{{request('usuario')}}" class="form-control form-control-sm font-verdana-12 intro">
         </div>
         <div class="col-md-2 pl-1">
             <select name="estado" id="estado" class="form-control form-control-sm">

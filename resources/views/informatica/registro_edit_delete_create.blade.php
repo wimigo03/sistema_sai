@@ -19,49 +19,49 @@
                             <div class="form-group row">
 
                                 <div class="col-md-6">
-                                    <label for="ncodigo" class="d-inline font-verdana-bg">
+                                    <label for="ncodigo" class="d-inline font-verdana-12">
                                         <b>N.Codigo:</b>
                                     </label>
-                                    <input type="text" class="form-control form-control-sm font-verdana-bg"
+                                    <input type="text" class="form-control form-control-sm font-verdana-12"
                                         id="ncodigo" name="ncodigo" required>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="nurej" class="d-inline font-verdana-bg">
+                                    <label for="nurej" class="d-inline font-verdana-12">
                                         <b>Nurej:</b>
                                     </label>
-                                    <input type="text" class="form-control form-control-sm font-verdana-bg"
+                                    <input type="text" class="form-control form-control-sm font-verdana-12"
                                         id="nurej" name="nurej" required>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="cud" class="d-inline font-verdana-bg">
+                                    <label for="cud" class="d-inline font-verdana-12">
                                         <b>Cud:</b>
                                     </label>
-                                    <input type="text" class="form-control form-control-sm font-verdana-bg"
+                                    <input type="text" class="form-control form-control-sm font-verdana-12"
                                         id="cud" name="cud" required>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="nombres" class="d-inline font-verdana-bg">
+                                    <label for="nombres" class="d-inline font-verdana-12">
                                         <b>Nombres:</b>
                                     </label>
-                                    <input type="text" class="form-control form-control-sm font-verdana-bg"
+                                    <input type="text" class="form-control form-control-sm font-verdana-12"
                                         id="nombres" name="nombres" required
                                         onchange="javascript:this.value=this.value.toUpperCase();">
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="apellidos" class="d-inline font-verdana-bg">
+                                    <label for="apellidos" class="d-inline font-verdana-12">
                                         <b>Apellidos:</b>
                                     </label>
-                                    <input type="text" class="form-control form-control-sm font-verdana-bg"
+                                    <input type="text" class="form-control form-control-sm font-verdana-12"
                                         id="apellidos" name="apellidos" required
                                         onchange="javascript:this.value=this.value.toUpperCase();">
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="sexo" class="d-inline font-verdana-bg">
+                                    <label for="sexo" class="d-inline font-verdana-12">
                                         <b>Sexo</b>
                                     </label>
 
@@ -74,32 +74,32 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="nacionalidad" class="d-inline font-verdana-bg">
+                                    <label for="nacionalidad" class="d-inline font-verdana-12">
                                         <b>Nacionalidad:</b>
                                     </label>
-                                    <input type="text" class="form-control form-control-sm font-verdana-bg"
+                                    <input type="text" class="form-control form-control-sm font-verdana-12"
                                         id="nacionalidad" name="nacionalidad" required
                                         onchange="javascript:this.value=this.value.toUpperCase();">
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="fnacimiento" class="d-inline font-verdana-bg">
+                                    <label for="fnacimiento" class="d-inline font-verdana-12">
                                         <b>F.Nacimiento:</b>
                                     </label>
 
                                     <input type="date" placeholder="dd/mm/aaaa"
-                                        class="form-control form-control-sm font-verdana-bg" id="fnacimiento"
+                                        class="form-control form-control-sm font-verdana-12" id="fnacimiento"
                                         name="fnacimiento" data-language="es" autocomplete="off" required>
 
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="fingreso" class="d-inline font-verdana-bg">
+                                    <label for="fingreso" class="d-inline font-verdana-12">
                                         <b>F.Ingreso:</b>
                                     </label>
 
                                     <input type="date" placeholder="dd/mm/aaaa"
-                                        class="form-control form-control-sm font-verdana-bg" name="fingreso"
+                                        class="form-control form-control-sm font-verdana-12" name="fingreso"
                                         id="fingreso" data-language="es" autocomplete="off" required>
 
                                 </div>
@@ -154,49 +154,49 @@
                             <div class="form-group row">
 
                                 <div class="col-md-6">
-                                    <label for="ncodigo" class="d-inline font-verdana-bg">
+                                    <label for="ncodigo" class="d-inline font-verdana-12">
                                         <b>N.Codigo:</b>
                                     </label>
-                                    <input type="text" class="form-control form-control-sm font-verdana-bg"
+                                    <input type="text" class="form-control form-control-sm font-verdana-12"
                                         id="ncodigo" name="ncodigo" required value="{{ $serege->ncodigo }}">
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="nurej" class="d-inline font-verdana-bg">
+                                    <label for="nurej" class="d-inline font-verdana-12">
                                         <b>Nurej:</b>
                                     </label>
-                                    <input type="text" class="form-control form-control-sm font-verdana-bg"
+                                    <input type="text" class="form-control form-control-sm font-verdana-12"
                                         id="nurej" name="nurej" required value="{{ $serege->nurej }}">
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="cud" class="d-inline font-verdana-bg">
+                                    <label for="cud" class="d-inline font-verdana-12">
                                         <b>Cud:</b>
                                     </label>
-                                    <input type="text" class="form-control form-control-sm font-verdana-bg"
+                                    <input type="text" class="form-control form-control-sm font-verdana-12"
                                         id="cud" name="cud" required value="{{ $serege->cud }}">
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="nombres" class="d-inline font-verdana-bg">
+                                    <label for="nombres" class="d-inline font-verdana-12">
                                         <b>Nombres:</b>
                                     </label>
-                                    <input type="text" class="form-control form-control-sm font-verdana-bg"
+                                    <input type="text" class="form-control form-control-sm font-verdana-12"
                                         id="nombres" name="nombres" required value="{{ $serege->nombres }}"
                                         onchange="javascript:this.value=this.value.toUpperCase();">
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="apellidos" class="d-inline font-verdana-bg">
+                                    <label for="apellidos" class="d-inline font-verdana-12">
                                         <b>Apellidos:</b>
                                     </label>
-                                    <input type="text" class="form-control form-control-sm font-verdana-bg"
+                                    <input type="text" class="form-control form-control-sm font-verdana-12"
                                         id="apellidos" name="apellidos" required value="{{ $serege->apellidos }}"
                                         onchange="javascript:this.value=this.value.toUpperCase();">
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="sexo" class="d-inline font-verdana-bg">
+                                    <label for="sexo" class="d-inline font-verdana-12">
                                         <b>Sexo</b>
                                     </label>
 
@@ -208,32 +208,32 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="nacionalidad" class="d-inline font-verdana-bg">
+                                    <label for="nacionalidad" class="d-inline font-verdana-12">
                                         <b>Nacionalidad:</b>
                                     </label>
-                                    <input type="text" class="form-control form-control-sm font-verdana-bg"
+                                    <input type="text" class="form-control form-control-sm font-verdana-12"
                                         id="nacionalidad" name="nacionalidad" required value="{{ $serege->nacionalidad }}"
                                         onchange="javascript:this.value=this.value.toUpperCase();">
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="fnacimiento" class="d-inline font-verdana-bg">
+                                    <label for="fnacimiento" class="d-inline font-verdana-12">
                                         <b>F.Nacimiento:</b>
                                     </label>
 
                                     <input type="date" placeholder="dd/mm/aaaa"
-                                        class="form-control form-control-sm font-verdana-bg" id="fnacimiento"
+                                        class="form-control form-control-sm font-verdana-12" id="fnacimiento"
                                         name="fnacimiento" data-language="es" autocomplete="off" required value="{{ $serege->fnacimiento }}">
 
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="fingreso" class="d-inline font-verdana-bg">
+                                    <label for="fingreso" class="d-inline font-verdana-12">
                                         <b>F.Ingreso:</b>
                                     </label>
 
                                     <input type="date" placeholder="dd/mm/aaaa"
-                                        class="form-control form-control-sm font-verdana-bg" name="fingreso"
+                                        class="form-control form-control-sm font-verdana-12" name="fingreso"
                                         id="fingreso" data-language="es" autocomplete="off" required value="{{ $serege->fingreso }}">
 
                                 </div>

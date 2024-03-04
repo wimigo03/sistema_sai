@@ -15,7 +15,7 @@
                         <div>
 
                             <div class="col-md-6">
-                                <label for="gestion" class="d-inline font-verdana-bg">
+                                <label for="gestion" class="d-inline font-verdana-12">
                                     <b>Gestion:</b>
                                 </label>
                                 <select name="gestion" id="gestion" placeholder="--Seleccionar--"
@@ -35,10 +35,10 @@
 
 
                             <div class="col-md-12">
-                                <label for="items" class="d-inline font-verdana-bg">
+                                <label for="items" class="d-inline font-verdana-12">
                                     <b>Items:</b>
                                 </label>
-                                <textarea type="text" rows="10" class="form-control form-control-sm font-verdana-bg" id="items" name="items" required></textarea>
+                                <textarea type="text" rows="10" class="form-control form-control-sm font-verdana-12" id="items" name="items" required></textarea>
                             </div>
 
                         </div>

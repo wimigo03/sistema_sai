@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
     <style>
-        .font-verdana-bg th {
+        .font-verdana-12 th {
             background-color: white !important;
             color: black;
         }
@@ -23,7 +23,7 @@
         }
     </style>
 
-    <div class="row font-verdana-bg flex justify-content-between align-items-center">
+    <div class="row font-verdana-12 flex justify-content-between align-items-center">
         <div class="col-md-8 titulo mb-4">
             <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
                 <a href="javascript:void(0);" onclick="window.history.back()">
@@ -63,7 +63,7 @@
             <div class="table-responsive">
                 <table class="table-bordered hoverTable" id="table-activos" style="width:100%;">
                     <thead>
-                        <tr class="font-verdana-bg">
+                        <tr class="font-verdana-12">
                             <th class="text-center p-1 font-weight-bold bg-info"><input type="checkbox"
                                     id="seleccionarTodo"></th>
                             <th class="text-center p-1 font-weight-bold bg-info"><b>CODIGO</b></th>
@@ -153,7 +153,7 @@
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary font-verdana-bg" id="btn_actualizar" type="submit">
+                    <button class="btn btn-primary font-verdana-12" id="btn_actualizar" type="submit">
                         <i class="fa-solid fa-paper-plane mr-2"></i>Transferir
                     </button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>

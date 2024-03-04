@@ -2,7 +2,7 @@
 @section('content')
 <link rel="stylesheet" href="/css/font-verdana.css" rel="stylesheet">
 <div class="card card-custom">
-    <div class="card-header font-verdana-bgt">
+    <div class="card-header font-verdana-15">
         <div class="row">
             <div class="col-md-10">
                 <b>ROL - DETALLE</b>
@@ -45,7 +45,7 @@
             <div class="col-md-12">
                 <table id="datatable" class="table display table-bordered responsive" style="width:100%;">
                     <thead>
-                        <tr class="font-verdana">
+                        <tr class="font-verdana-11">
                             <td class="text-left p-1"><b>ID</b></td>
                             <td class="text-left p-1"><b>NOMBRE</b></td>
                             <td class="text-left p-1"><b>DESCRIPCION</b></td>
@@ -54,7 +54,7 @@
                     </thead>
                     <tbody>
                         @foreach ($permissions as $datos)
-                            <tr class="font-verdana">
+                            <tr class="font-verdana-11">
                                 <td class="text-left p-1">{{ $datos->permission_id }}</td>
                                 <td class="text-left p-1">{{ $datos->permission }}</td>
                                 <td class="text-left p-1">{{ $datos->descripcion }}</td>

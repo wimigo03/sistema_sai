@@ -1,24 +1,22 @@
 <div class="form-group row">
     <div class="col-md-12 table-responsive">
-        <table class="table display table-bordered responsive" style="width:100%;">
+        <table class="table display responsive" style="width:100%;">
             <thead>
-                <tr class="font-verdana">
-                    <td class="text-left p-1"><b>TIPO</b></td>
-                    <td class="text-left p-1"><b>NOMBRE</b></td>
-                    <td class="text-left p-1"><b>DISTRITO</b></td>
-                    <td class="text-left p-1"><b>USUARIO</b></td>
+                <tr class="font-verdana-11">
+                    <td class="text-center p-1"><b>TIPO</b></td>
+                    <td class="text-center p-1"><b>NOMBRE</b></td>
+                    <td class="text-center p-1"><b>DISTRITO</b></td>
+                    <td class="text-center p-1"><b>USUARIO</b></td>
                     <td class="text-center p-1"><b>HABILITADOS</b></td>
                     <td class="text-center p-1"><b>BAJAS</b></td>
                     <td class="text-center p-1"><b>FALLECIDOS</b></td>
                     <td class="text-center p-1"><b>PENDIENTES</b></td>
                     <td class="text-center p-1"><b><i class="fa-solid fa-bars"></i></b></td>
-                    <td class="text-center p-1"><b><i class="fa-solid fa-bars"></i></b></td>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($barrios as $datos)
-                    <tr class="font-verdana">
-
+                    <tr class="font-verdana-11">
                         <td class="text-left p-1">{{ $datos->tipo_b }}</td>
                         <td class="text-left p-1">{{ $datos->nombre }}</td>
                         <td class="text-left p-1">{{ $datos->distrito->nombre }}</td>
@@ -30,27 +28,22 @@
                         <td class="text-center p-1">
                             <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar"
                                 style="cursor: pointer;">
-                                <a href="{{ route('barrios.editar', $datos->id) }}" class="btn btn-xs btn-warning">
-                                    <i class="fa-solid fa-lg fa-pen-to-square"></i>
+                                <a href="{{ route('barrios.editar', $datos->id) }}" class="badge-with-padding badge badge-warning text-white">
+                                    <i class="fa-solid fa-pen-to-square fa-fw"></i>
                                 </a>
                             </span>
-                        </td>
-                        <td class="text-center p-1">
-
                             @if (App\Models\Canasta\Barrio::ESTADOS[$datos->estado] == 'HABILITADO')
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Dehabilitar"
                                     style="cursor: pointer;">
-                                    <a href="{{ route('barrios.deshabilitar', $datos->id) }}"
-                                        class="btn btn-xs btn-success">
-                                        <i class="fa-regular fa-lg fa-circle-down"></i>
+                                    <a href="{{ route('barrios.deshabilitar', $datos->id) }}" class="badge-with-padding badge badge-success">
+                                        <i class="fa-regular fa-circle-down fa-lg"></i>
                                     </a>
                                 </span>
                             @else
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Habilitar"
                                     style="cursor: pointer;">
-                                    <a href="{{ route('barrios.habilitar', $datos->id) }}"
-                                        class="btn btn-xs btn-danger">
-                                        <i class="fa-regular fa-lg fa-circle-up"></i>
+                                    <a href="{{ route('barrios.habilitar', $datos->id) }}" class="badge-with-padding badge badge-danger">
+                                        <i class="fa-regular fa-circle-up fa-lg"></i>
                                     </a>
                                 </span>
                             @endif
@@ -59,7 +52,7 @@
                 @endforeach
             </tbody>
             <tfoot>
-                <tr class="font-verdana">
+                <tr class="font-verdana-11">
                     <td colspan="12">
                         {{ $barrios->appends(Request::all())->links() }}
                         <p class="text-muted">Mostrando

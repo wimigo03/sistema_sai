@@ -7,7 +7,7 @@
             cursor: pointer;
         }
     </style>
-    <div class="row font-verdana-bg">
+    <div class="row font-verdana-12">
         <div class="col-md-4 titulo">
             <b>UNIDAD ADMINISTRATIVA</b>
         </div>
@@ -28,7 +28,7 @@
             <hr class="hrr">
         </div>
     </div>
-    <div class="row font-verdana-bg">
+    <div class="row font-verdana-12">
         <div class="col-md-12">
             <center>
                 <table class="table-bordered yajra-datatable" style="width: 100%;">

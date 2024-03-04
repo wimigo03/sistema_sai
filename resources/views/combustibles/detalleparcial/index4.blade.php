@@ -7,7 +7,7 @@
         </div>
     @endif
     <br>
-    <div class="row font-verdana-bg">
+    <div class="row font-verdana-12">
 
         <div class="col-md-2 titulo">
             <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">

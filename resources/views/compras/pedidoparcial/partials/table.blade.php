@@ -2,7 +2,7 @@
     <div class="col-md-12 table-responsive">
         <table class="table display table-bordered responsive" style="width:100%;">
             <thead>
-                <tr class="font-verdana">
+                <tr class="font-verdana-11">
                     <td class="text-center p-1"><b>COD_ID</b></td>
                     <td class="text-center p-1"><b>N°&nbsp;C.&nbsp;INT.</b></td>
                     <td class="text-center p-1"><b>N°&nbsp;PREV.</b></td>
@@ -16,7 +16,7 @@
             </thead>
             <tbody>
                 @foreach ($compras as $datos)
-                    <tr class="font-verdana">
+                    <tr class="font-verdana-11">
                         <td class="text-center p-1">{{ $datos->idcompra }}</td>
                         <td class="text-center p-1">{{ $datos->controlinterno }}</td>
                         <td class="text-center p-1">{{ $datos->preventivo != null ? $datos->preventivo : '[]' }}</td>
@@ -43,7 +43,7 @@
                 @endforeach
             </tbody>
             <tfoot>
-                <tr class="font-verdana">
+                <tr class="font-verdana-11">
                     <td colspan="12">
                         {{ $compras->appends(Request::all())->links() }}
                         <p class="text-muted">Mostrando

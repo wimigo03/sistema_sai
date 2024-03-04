@@ -1,13 +1,13 @@
 @extends('layouts.admin')
 @section('content')
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-10 text-left titulo">
         <b>ROLES</b>
     </div>
     <div class="col-md-2 text-right">
         <span class="tts:left tts-slideIn tts-custom" aria-label="Agregar un nuevo rol">
-            <button class="btn btn-success font-verdana-bg" type="button" onclick="create();">
+            <button class="btn btn-success font-verdana-12" type="button" onclick="create();">
                 &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;
             </button>
         </span>

@@ -5,7 +5,7 @@
 <div class="row justify-content-center">
     <div class="col-md-8">
 
-        <div class="row font-verdana-bg">
+        <div class="row font-verdana-12">
             <div class="col-md-4 titulo">
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
                     <a href="{{ url('Activo/auxiliar/index', $auxiliar->codcont)}}">
@@ -99,7 +99,7 @@
                     </div>
                     <div>
 
-                        <button class="btn color-icon-2 font-verdana-bg" type="submit">
+                        <button class="btn color-icon-2 font-verdana-12" type="submit">
                             <i class="fa-solid fa-paper-plane"></i>
                             &nbsp;Actualizar
                         </button>

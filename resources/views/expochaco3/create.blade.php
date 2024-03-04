@@ -2,7 +2,7 @@
 @section('content')
     @include('layouts.message_alert')
 
-    <div class="row font-verdana-bg">
+    <div class="row font-verdana-12">
 
         <div class="col-md-12 text-right titulo">
             <b style="color: green">SOLICITUD DE STAND PABELLON GRAN CHACO</b>
@@ -20,39 +20,39 @@
 
         <input type="hidden" name="precio" id="precio" value="250">
         <input type="hidden" name="ci2" id="ci2">
-        <label for="representante" class="d-inline font-verdana-bg">
+        <label for="representante" class="d-inline font-verdana-12">
             <b style="color: green">DATOS DEL PABELLON</b>
         </label>
         <div class="body-border" style="background-color: #FFFFFF;">
 
             <div class="form-group row">
                 <div class="col-md-4">
-                    <label for="pabellon2" class="d-inline font-verdana-bg">
+                    <label for="pabellon2" class="d-inline font-verdana-12">
                         <b>PABELLON</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                     </label>
-                    <input type="text" name="pabellon2" disabled class="form-control form-control-sm font-verdana-bg"
+                    <input type="text" name="pabellon2" disabled class="form-control form-control-sm font-verdana-12"
                         id="pabellon2" value="GRAN CHACO">
                 </div>
 
                 <div class="col-md-4">
-                    <label for="superficie2" class="d-inline font-verdana-bg">
+                    <label for="superficie2" class="d-inline font-verdana-12">
                         <b>SUPERFICIE POR STAND</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                     </label>
-                    <input type="text" name="superficie2" disabled class="form-control form-control-sm font-verdana-bg"
+                    <input type="text" name="superficie2" disabled class="form-control form-control-sm font-verdana-12"
                         id="superficie2" value="3x3">
                 </div>
 
                 <div class="col-md-4">
-                    <label for="superficie" class="d-inline font-verdana-bg">
+                    <label for="superficie" class="d-inline font-verdana-12">
                         <b>PRECIO POR STAND (En Bs.)</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                     </label>
-                    <input type="text" name="precio2" disabled class="form-control form-control-sm font-verdana-bg"
+                    <input type="text" name="precio2" disabled class="form-control form-control-sm font-verdana-12"
                         id="precio2" value="250">
                 </div>
 
             </div>
         </div>
-        <label for="representante" class="d-inline font-verdana-bg">
+        <label for="representante" class="d-inline font-verdana-12">
             <b style="color: green">DATOS DEL SOLICITANTE</b>
         </label>
         <div class="body-border" style="background-color: #FFFFFF;">
@@ -61,25 +61,25 @@
 
 
                 <div class="col-md-4">
-                    <label for="nombresolicitud" class="d-inline font-verdana-bg">
+                    <label for="nombresolicitud" class="d-inline font-verdana-12">
                         <b>NOMBRES Y APELLIDOS DEL SOLICITANTE</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                     </label>
-                    <input type="text" name="nombresolicitud" cols="1" rows="1" class="form-control form-control-sm font-verdana-bg"
+                    <input type="text" name="nombresolicitud" cols="1" rows="1" class="form-control form-control-sm font-verdana-12"
                         id="nombresolicitud" onchange="javascript:this.value=this.value.toUpperCase();">
                 </div>
 
                 <div class="col-md-4">
-                    <label for="ci" class="d-inline font-verdana-bg">
+                    <label for="ci" class="d-inline font-verdana-12">
                         <b>N° C.I.</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                     </label>
-                    <input type="text" name="ci" class="form-control form-control-sm font-verdana-bg" id="ci"
+                    <input type="text" name="ci" class="form-control form-control-sm font-verdana-12" id="ci"
                         onchange="myFunction()">
                 </div>
 
 
 
                 <div class="col-md-4">
-                    <label for="asociacionsol" class="d-inline font-verdana-bg">
+                    <label for="asociacionsol" class="d-inline font-verdana-12">
                         <b>ASOCIACION/FEDERACION</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                     </label>
                     <select name="asociacionsol" id="asociacionsol" placeholder="--Seleccionar--"
@@ -97,11 +97,11 @@
                 </div>
 
                 <div class="col-md-6">
-                    <label for="cirepresentante" class="d-inline font-verdana-bg">
+                    <label for="cirepresentante" class="d-inline font-verdana-12">
                         <b>OTROS ASOCIACION/ FEDERACION(En caso que selecciono otros en el campo anterior)</b>&nbsp;<span
                             style="font-size:10px; color: red;">*</span>
                     </label>
-                    <input type="text" name="otros" class="form-control form-control-sm font-verdana-bg"
+                    <input type="text" name="otros" class="form-control form-control-sm font-verdana-12"
                         id="otros" onchange="javascript:this.value=this.value.toUpperCase();">
                 </div>
 
@@ -110,41 +110,41 @@
 
 
                 <div class="col-md-6">
-                    <label for="direccionsol" class="d-inline font-verdana-bg">
+                    <label for="direccionsol" class="d-inline font-verdana-12">
                         <b>DIRECCION DEL TALLER/NEGOCIO O EMPRENDIMIENTO</b>&nbsp;<span
                             style="font-size:10px; color: red;">*</span>
                     </label>
-                    <textarea name="direccionsol" cols="1" rows="3" class="form-control form-control-sm font-verdana-bg"
+                    <textarea name="direccionsol" cols="1" rows="3" class="form-control form-control-sm font-verdana-12"
                         id="direccionsol" onchange="javascript:this.value=this.value.toUpperCase();"></textarea>
                 </div>
 
                 <div class="col-md-6">
-                    <label for="ciudad" class="d-inline font-verdana-bg">
+                    <label for="ciudad" class="d-inline font-verdana-12">
                         <b>DISTRITO/CIUDAD</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                     </label>
-                    <textarea name="ciudad" cols="1" rows="2" class="form-control form-control-sm font-verdana-bg"
+                    <textarea name="ciudad" cols="1" rows="2" class="form-control form-control-sm font-verdana-12"
                         id="ciudad" onchange="javascript:this.value=this.value.toUpperCase();"></textarea>
                 </div>
 
 
                 <div class="col-md-4">
-                    <label for="telefonosol" class="d-inline font-verdana-bg">
+                    <label for="telefonosol" class="d-inline font-verdana-12">
                         <b>TELEFONO/CELULAR:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                     </label>
-                    <input type="text" name="telefonosol" class="form-control form-control-sm font-verdana-bg"
+                    <input type="text" name="telefonosol" class="form-control form-control-sm font-verdana-12"
                         id="telefonosol">
                 </div>
 
 
 
                 <div class="col-md-6">
-                    <label for="correosol" class="d-inline font-verdana-bg">
+                    <label for="correosol" class="d-inline font-verdana-12">
                         <b>E-MAIL</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                     </label>
 
 
 
-                    <input id="correosol" type="text" class="form-control form-control-sm font-verdana-bg"
+                    <input id="correosol" type="text" class="form-control form-control-sm font-verdana-12"
                         name="correosol">
 
 
@@ -153,7 +153,7 @@
                 </div>
 
                 <div class="col-md-4">
-                    <label for="idrubro" class="d-inline font-verdana-bg">
+                    <label for="idrubro" class="d-inline font-verdana-12">
                         <b>RUBRO:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                     </label>
                     <select name="idrubro" id="idrubro" placeholder="--Seleccionar--"
@@ -170,7 +170,7 @@
 
 
                 <div class="col-md-3">
-                    <label for="cantidad" class="d-inline font-verdana-bg">
+                    <label for="cantidad" class="d-inline font-verdana-12">
                         <b>CANTIDAD DE STANDS</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                     </label>
                     <select name="cantidad" id="cantidad" placeholder="--Seleccionar--"
@@ -184,7 +184,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <label for="unidsep" class="d-inline font-verdana-bg">
+                    <label for="unidsep" class="d-inline font-verdana-12">
                         <b>SEPARADOS O UNIDOS</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                     </label>
                     <select name="unidsep" id="unidsep" placeholder="--Seleccionar--"
@@ -201,26 +201,26 @@
 
 
         </div>
-        <label for="representante" class="d-inline font-verdana-bg">
+        <label for="representante" class="d-inline font-verdana-12">
             <b style="color: green">DATOS DEL REPRESENTANTE</b>
         </label>
         <div class="body-border" style="background-color: #FFFFFF;">
 
             <div class="form-group row">
                 <div class="col-md-6">
-                    <label for="representante" class="d-inline font-verdana-bg">
+                    <label for="representante" class="d-inline font-verdana-12">
                         <b>NOMBRE DEL REPRESENTANTE LEGAL ASOCIACION O INSTITUCION</b>&nbsp;<span
                             style="font-size:10px; color: red;">*</span>
                     </label>
-                    <textarea name="representante" cols="1" rows="2" class="form-control form-control-sm font-verdana-bg"
+                    <textarea name="representante" cols="1" rows="2" class="form-control form-control-sm font-verdana-12"
                         id="representante" onchange="javascript:this.value=this.value.toUpperCase();"></textarea>
                 </div>
 
                 <div class="col-md-4">
-                    <label for="cirepresentante" class="d-inline font-verdana-bg">
+                    <label for="cirepresentante" class="d-inline font-verdana-12">
                         <b>C.I. DELREPRESENTANTE</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                     </label>
-                    <input type="text" name="cirepresentante" class="form-control form-control-sm font-verdana-bg"
+                    <input type="text" name="cirepresentante" class="form-control form-control-sm font-verdana-12"
                         id="cirepresentante" onchange="javascript:this.value=this.value.toUpperCase();">
                 </div>
 
@@ -234,7 +234,7 @@
 
                 <div class="form-group row">
                     <div class="col-md-12    text-right">
-                        <button class="btn btn-danger font-verdana-bg" type="button" onclick="cancelar();">
+                        <button class="btn btn-danger font-verdana-12" type="button" onclick="cancelar();">
 
                             <a style="color:white">Cancelar</a>
                         </button>
@@ -243,7 +243,7 @@
 
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 
-                        <button class="btn color-icon-2 font-verdana-bg" type="button" onclick="save();">
+                        <button class="btn color-icon-2 font-verdana-12" type="button" onclick="save();">
                             <i class="fa-solid fa-paper-plane"></i>
                             Registrar
                         </button>

@@ -14,7 +14,7 @@
             <tbody>
                 @if (isset($compra_detalle) && count($compra_detalle) > 0)
                     @foreach ($compra_detalle as $datos)
-                        <tr class="font-verdana">
+                        <tr class="font-verdana-11">
                             <td class="text-left p-1">{{ $datos->idprodserv }}</td>
                             <td class="text-left p-1">{{ $datos->producto->nombreprodserv }}</td>
                             <td class="text-center p-1">{{ $datos->producto->unidad_medida }}</td>
@@ -26,7 +26,7 @@
                 @endif
             </tbody>
             <tfoot>
-                <tr class="font-verdana" id="total_sin_solicitud">
+                <tr class="font-verdana-11" id="total_sin_solicitud">
                     <td class="text-right p-1" colspan="5">
                         <b>TOTAL</b>
                     </td>

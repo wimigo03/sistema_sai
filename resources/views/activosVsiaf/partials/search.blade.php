@@ -1,12 +1,12 @@
 <div class="form-group row">
     <div class="col-md-2">
-        <input type="text" name="unidad" placeholder="--Unidad--" value="{{request('unidad')}}" class="form-control form-control-sm font-verdana-bg">
+        <input type="text" name="unidad" placeholder="--Unidad--" value="{{request('unidad')}}" class="form-control form-control-sm font-verdana-12">
     </div>
     <div class="col-md-3">
-        <input type="text" name="codigo" placeholder="--Codigo--" value="{{request('codigo')}}" class="form-control form-control-sm font-verdana-bg">
+        <input type="text" name="codigo" placeholder="--Codigo--" value="{{request('codigo')}}" class="form-control form-control-sm font-verdana-12">
     </div>
     <div class="col-md-5">
-        <input type="text" name="descripcion" placeholder="--Descripcion--" value="{{request('descripcion')}}" class="form-control form-control-sm font-verdana-bg">
+        <input type="text" name="descripcion" placeholder="--Descripcion--" value="{{request('descripcion')}}" class="form-control form-control-sm font-verdana-12">
     </div>
     <div class="col-md-2 text-right">
         {{--<button class="btn btn-danger font-verdana" type="button" onclick="searchdetallepdf();">

@@ -4,7 +4,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
 
-            <div class="row font-verdana-bg">
+            <div class="row font-verdana-12">
                 <div class="col-md-4 titulo">
                     <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
                         <a href="{{ url('/correspondencia2/index') }}">
@@ -39,7 +39,7 @@
                             <div class="col-md-3">
 
                                 <input type="text" name="fecha" placeholder="dd/mm/aaaa"
-                                    class="form-control form-control-sm font-verdana-bg" id="fecha" data-language="es"
+                                    class="form-control form-control-sm font-verdana-12" id="fecha" data-language="es"
                                     autocomplete="off" value="{{ $fechaActual }}">
                             </div>
                         </div>

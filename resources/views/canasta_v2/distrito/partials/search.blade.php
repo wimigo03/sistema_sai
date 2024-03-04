@@ -1,13 +1,13 @@
 <form action="#" method="get" id="form">
     <div class="form-group row">
         <div class="col-md-2 pr-1">
-            <input type="text" name="codigo" placeholder="--Codigo--" value="{{request('codigo')}}" class="form-control form-control-sm font-verdana-bg intro" onkeypress="return valideNumberInteger(event);">
+            <input type="text" name="codigo" placeholder="--Codigo--" value="{{request('codigo')}}" class="form-control form-control-sm font-verdana-12 intro" onkeypress="return valideNumberInteger(event);">
         </div>
         <div class="col-md-3 pr-1 pl-1">
-            <input type="text" name="nombre" placeholder="--Nombre--" value="{{request('nombre')}}" class="form-control form-control-sm font-verdana-bg intro">
+            <input type="text" name="nombre" placeholder="--Nombre--" value="{{request('nombre')}}" class="form-control form-control-sm font-verdana-12 intro">
         </div>
         <div class="col-md-3 pr-1 pl-1">
-            <input type="text" name="usuario" placeholder="--Usuario--" value="{{request('usuario')}}" class="form-control form-control-sm font-verdana-bg intro">
+            <input type="text" name="usuario" placeholder="--Usuario--" value="{{request('usuario')}}" class="form-control form-control-sm font-verdana-12 intro">
         </div>
         <div class="col-md-2 pr-1 pl-1">
             <select name="dea_id" id="dea" class="form-control form-control-sm">

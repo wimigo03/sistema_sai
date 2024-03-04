@@ -3,11 +3,11 @@
 
 
         <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="gestion" placeholder="-- Gestion --" value="{{request('gestion')}}" class="form-control form-control-sm font-verdana-bg intro">
+            <input type="text" name="gestion" placeholder="-- Gestion --" value="{{request('gestion')}}" class="form-control form-control-sm font-verdana-12 intro">
         </div>
 
         <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="periodo" placeholder="-- Periodo --" value="{{request('periodo')}}" class="form-control form-control-sm font-verdana-bg intro">
+            <input type="text" name="periodo" placeholder="-- Periodo --" value="{{request('periodo')}}" class="form-control form-control-sm font-verdana-12 intro">
         </div>
 
 

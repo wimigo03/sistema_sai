@@ -7,7 +7,7 @@
     </div>
 @endif
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-2 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
             <a href="{{ url('entregas') }}">
@@ -31,7 +31,7 @@
         <br>
             <div class="form-group row">
             <div class="col-md-4">
-                <label for="producto" class="d-inline font-verdana-bg">
+                <label for="producto" class="d-inline font-verdana-12">
                     <b>Periodo</b>&nbsp;<span style="font-size:10px; color: red;"></span>
                 </label>
                 <select name="periodo" id="periodo" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
@@ -45,14 +45,14 @@
 
             <div class="col-md-2 text-right">
                 <br>
-                <button class="btn btn-primary font-verdana-bg" type="button" onclick="save();">
+                <button class="btn btn-primary font-verdana-12" type="button" onclick="save();">
                     <i class="fa-solid fa-plus"></i>
                     &nbsp;Adicionar
                 </button>
             </div>
             <div class="col-md-2 text-right">
                 <br>
-                <button class="btn btn-success font-verdana-bg" type="button">
+                <button class="btn btn-success font-verdana-12" type="button">
                     <a href="{{ route('entregas.finalizar',$idPaquete) }}" class="btn btn-xs btn-success">
                         <i class="fa-regular fa-lg fa-circle-up">&nbsp;Finalizar</i>
                     </a>

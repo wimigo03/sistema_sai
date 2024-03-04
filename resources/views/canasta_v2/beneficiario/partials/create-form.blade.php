@@ -1,6 +1,6 @@
 <form action="#" method="post" id="form">
     @csrf
-    <div class="form-group row font-verdana-bg">
+    <div class="form-group row font-verdana-12">
         <div class="col-md-3 pr-1">
             <label for="tipo" class="d-inline">Tipo</label>
             <select name="tipo" id="tipo" class="form-control form-control-sm select2">
@@ -12,13 +12,13 @@
         </div>
         <div class="col-md-5 pl-1">
             <label for="nombre" class="d-inline">Nombre</label>
-            <input type="text" name="nombre" id="nombre" value="{{old('nombre')}}" oninput="this.value = this.value.toUpperCase()" class="form-control form-control-sm font-verdana-bg intro {{ $errors->has('nombre') ? ' is-invalid' : '' }}">
+            <input type="text" name="nombre" id="nombre" value="{{old('nombre')}}" oninput="this.value = this.value.toUpperCase()" class="form-control form-control-sm font-verdana-12 intro {{ $errors->has('nombre') ? ' is-invalid' : '' }}">
         </div>
     </div>
-    <div class="form-group row font-verdana-bg">
+    <div class="form-group row font-verdana-12">
         <div class="col-md-3 pr-1">
             <label for="dea" class="d-inline">DEA</label>
-            <input type="text" value="{{ Auth::user()->dea->nombre }}" class="form-control form-control-sm font-verdana-bg" disabled>
+            <input type="text" value="{{ Auth::user()->dea->nombre }}" class="form-control form-control-sm font-verdana-12" disabled>
         </div>
         <div class="col-md-5 pl-1">
             <label for="distrito" class="d-inline">Distrito</label>

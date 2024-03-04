@@ -2,20 +2,20 @@
 @section('content')
 <link rel="stylesheet" href="/css/font-verdana.css" rel="stylesheet">
 <div class="card card-custom">
-    <div class="card-header font-verdana-bgt">
+    <div class="card-header font-verdana-15">
         <b>FORMULARIO DE SOLICITUD DE COMPRA - {{ $dea->descripcion }}</b>
     </div>
     <div class="card-body">
         <div class="form-group row">
-            <div class="col-md-12 font-verdana-bg">
+            <div class="col-md-12 font-verdana-12">
                 Los campos <i class="fa-solid fa-xs fa-asterisk"></i> son obligatorios
             </div>
         </div>
         <form action="#" method="post" id="form">
             @csrf
             @include('compras.pedidoparcial.partials.form-create')
-            <div class="row font-verdana-bg">
-                <div class="col-md-12 font-verdana-bg text-center">
+            <div class="row font-verdana-12">
+                <div class="col-md-12 font-verdana-12 text-center">
                     <br>
                     <span class="text-dark"><b>DETALLE DE LA COMPRA</b></span>
                 </div>

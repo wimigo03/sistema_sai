@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('content')
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-8 titulo">
         <b>LISTA--PRODUCTOS--</b><b style='color:orange'>{{ $idd->nombrearea }} </b>--
     </div>

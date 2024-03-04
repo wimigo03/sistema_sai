@@ -3,7 +3,7 @@
 
 
     <br>
-    <div class="row font-verdana-bg">
+    <div class="row font-verdana-12">
         <div class="col-md-8 titulo">
             <b style='color:rgb(39, 6, 185)'>-- EVENTOS DE AYER--</b><b></b>
         </div>

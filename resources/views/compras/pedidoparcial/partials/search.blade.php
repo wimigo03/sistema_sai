@@ -1,16 +1,16 @@
 <form action="#" method="get" id="form">
     <div class="form-group row">
         <div class="col-md-2 pr-1">
-            <input type="text" name="codigo_id" placeholder="--Codigo ID--" value="{{ request('codigo_id') }}" class="form-control form-control-sm font-verdana-bg intro" onkeypress="return valideNumberInteger(event);">
+            <input type="text" name="codigo_id" placeholder="--Codigo ID--" value="{{ request('codigo_id') }}" class="form-control form-control-sm font-verdana-12 intro" onkeypress="return valideNumberInteger(event);">
         </div>
         <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="control_interno" placeholder="--N° Control Interno--" value="{{ request('control_interno') }}" class="form-control form-control-sm font-verdana-bg intro" onkeypress="return valideNumberInteger(event);">
+            <input type="text" name="control_interno" placeholder="--N° Control Interno--" value="{{ request('control_interno') }}" class="form-control form-control-sm font-verdana-12 intro" onkeypress="return valideNumberInteger(event);">
         </div>
         <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="nro_preventivo" placeholder="--N° Preventivo--" value="{{ request('nro_preventivo') }}" class="form-control form-control-sm font-verdana-bg intro">
+            <input type="text" name="nro_preventivo" placeholder="--N° Preventivo--" value="{{ request('nro_preventivo') }}" class="form-control form-control-sm font-verdana-12 intro">
         </div>
         <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="fecha" value="{{request('fecha')}}" placeholder="--Fecha--" class="form-control form-control-sm font-verdana-bg intro" id="fecha" data-language="es" autocomplete="off">
+            <input type="text" name="fecha" value="{{request('fecha')}}" placeholder="--Fecha--" class="form-control form-control-sm font-verdana-12 intro" id="fecha" data-language="es" autocomplete="off">
         </div>
         <div class="col-md-4 pl-1">
             <select name="area_id" id="area_id" class="form-control form-control-sm">

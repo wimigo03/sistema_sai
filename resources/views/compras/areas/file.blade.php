@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('content')
-    <div class="row font-verdana-bg">
+    <div class="row font-verdana-12">
         <div class="col-md-3 titulo">
             <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a Areas">
                 <a href="{{route('areas.index')}}" class="color-icon-1">

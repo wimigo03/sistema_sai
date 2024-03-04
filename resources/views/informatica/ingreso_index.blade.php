@@ -4,7 +4,7 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
 
-            <div class="row font-verdana-bg">
+            <div class="row font-verdana-12">
                 <div class="col-md-12">
 
                     <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">

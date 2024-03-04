@@ -7,7 +7,7 @@
         </div>
     @endif
     <br>
-    <div class="row font-verdana-bg">
+    <div class="row font-verdana-12">
         <div class="col-md-2 titulo">
             <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
                 <a href="{{ url('/entregas') }}">
@@ -61,7 +61,7 @@
                 <input type="hidden" value="{{ $idpaquete }}" id="idcompra" name="idpaquete">
                 <div class="form-group row">
                     <div class="col-md-4">
-                        <label for="barrio" class="d-inline font-verdana-bg">
+                        <label for="barrio" class="d-inline font-verdana-12">
                             <b>Barrio</b>&nbsp;<span style="font-size:10px;"></span>
                         </label>
                         <select name="barrio" id="barrio" class="form-control form-control-sm ">
@@ -75,7 +75,7 @@
 
                     <div class="col-md-2 ">
 
-                        <button class="btn btn-primary font-verdana-bg" type="button" onclick="save2();">
+                        <button class="btn btn-primary font-verdana-12" type="button" onclick="save2();">
                             <i class="fa-solid fa-plus"></i>
                             Agregar
                         </button>
@@ -94,7 +94,7 @@
                 <input type="hidden" value="{{ $idpaquete }}" id="idcompra" name="idpaquete">
                 <div class="form-group row">
                     <div class="col-md-4">
-                        <label for="barrio3" class="d-inline font-verdana-bg">
+                        <label for="barrio3" class="d-inline font-verdana-12">
                             <b>Barrio</b>&nbsp;<span style="font-size:10px;"></span>
                         </label>
                         <select name="barrio3" id="barrio3" class="form-control form-control-sm">
@@ -108,7 +108,7 @@
 
                     <div class="col-md-2 ">
 
-                        <button class="btn btn-primary font-verdana-bg" type="button" onclick="save3();" >
+                        <button class="btn btn-primary font-verdana-12" type="button" onclick="save3();" >
                             <i class="fa fa-print" aria-hidden="true"></i>
                             Imprimir
                         </button>

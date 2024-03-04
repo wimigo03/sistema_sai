@@ -2,7 +2,7 @@
 @section('content')
 @include('layouts.message_alert')
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-4 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
             <a href="{{url('/transportes/uconsumo/index')}}">
@@ -28,86 +28,86 @@
 
 
             <div class="col-md-3">
-                <label  class="d-inline font-verdana-bg">
+                <label  class="d-inline font-verdana-12">
                     <b>Codigo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <textarea type="text" name="codigoc" cols="1" rows="3" 
-                class="form-control form-control-sm font-verdana-bg" 
+                class="form-control form-control-sm font-verdana-12" 
                  id="codigoc"  onkeypress="return valideNumber(event);"></textarea>
             </div>
 
 
             <div class="col-md-3">
-                <label for="nombreuconsumo" class="d-inline font-verdana-bg">
+                <label for="nombreuconsumo" class="d-inline font-verdana-12">
                     <b>Nombre</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <textarea name="nombreuconsumo" cols="1" rows="3" 
-                class="form-control form-control-sm font-verdana-bg" 
+                class="form-control form-control-sm font-verdana-12" 
                 id="nombreuconsumo" onkeyup="javascript:this.value=this.value.toUpperCase();">{{request('nombreuconsumo')}}</textarea>
             </div>
 
 
             <div class="col-md-6">
-                <label for="desconsumo" class="d-inline font-verdana-bg">
+                <label for="desconsumo" class="d-inline font-verdana-12">
                 <b>Descripcion</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <textarea name="desconsumo" cols="1" rows="3" 
-                class="form-control form-control-sm font-verdana-bg" id="desconsumo" onkeyup="javascript:this.value=this.value.toUpperCase();">{{request('desconsumo')}}</textarea>
+                class="form-control form-control-sm font-verdana-12" id="desconsumo" onkeyup="javascript:this.value=this.value.toUpperCase();">{{request('desconsumo')}}</textarea>
             </div>
 
 
             <div class="col-md-2">
-                <label for="modeloc" class="d-inline font-verdana-bg">
+                <label for="modeloc" class="d-inline font-verdana-12">
                     <b>Modelo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="modeloc" value="{{request('modeloc')}}" 
-                class="form-control form-control-sm font-verdana-bg" id="modeloc" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                class="form-control form-control-sm font-verdana-12" id="modeloc" onkeyup="javascript:this.value=this.value.toUpperCase();">
             </div>
 
             <div class="col-md-2">
-                <label for="colorc" class="d-inline font-verdana-bg">
+                <label for="colorc" class="d-inline font-verdana-12">
                     <b>Color</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="color" name="colorc" value="{{request('colorc')}}" 
-                class="form-control form-control-sm font-verdana-bg" id="colorc">
+                class="form-control form-control-sm font-verdana-12" id="colorc">
             </div>
 
             <div class="col-md-2">
-                <label for="placac" class="d-inline font-verdana-bg">
+                <label for="placac" class="d-inline font-verdana-12">
                     <b>Placa</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="placac" value="{{request('placac')}}" 
-                class="form-control form-control-sm font-verdana-bg" id="placac" onkeyup="javascript:this.value=this.value.toUpperCase();" onkeypress="return validarPlaca(placa);">
+                class="form-control form-control-sm font-verdana-12" id="placac" onkeyup="javascript:this.value=this.value.toUpperCase();" onkeypress="return validarPlaca(placa);">
             </div>
 
             <div class="col-md-2">
-                <label for="marcac" class="d-inline font-verdana-bg">
+                <label for="marcac" class="d-inline font-verdana-12">
                     <b>Marca</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="marcac" value="{{request('marcac')}}" 
-                class="form-control form-control-sm font-verdana-bg" id="marcac" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                class="form-control form-control-sm font-verdana-12" id="marcac" onkeyup="javascript:this.value=this.value.toUpperCase();">
             </div>
 
             <div class="col-md-2">
-                <label for="klminicialc" class="d-inline font-verdana-bg">
+                <label for="klminicialc" class="d-inline font-verdana-12">
                     <b>klm inicial</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="number" name="klminicialc" value="{{request('klminicialc')}}" 
-                class="form-control form-control-sm font-verdana-bg" id="klminicialc">
+                class="form-control form-control-sm font-verdana-12" id="klminicialc">
             </div>
 
 
             <div class="col-md-2">
-                <label for="klmfinal" class="d-inline font-verdana-bg">
+                <label for="klmfinal" class="d-inline font-verdana-12">
                     <b>klm final</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="number" name="klmfinal" value="{{request('klmfinal')}}" 
-                class="form-control form-control-sm font-verdana-bg" id="klmfinal">
+                class="form-control form-control-sm font-verdana-12" id="klmfinal">
             </div>
 
 
             <div class="col-md-7">
-                <label for="idarea" class="d-inline font-verdana-bg">
+                <label for="idarea" class="d-inline font-verdana-12">
                     <b>Area</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="idarea" id="idarea" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
@@ -118,7 +118,7 @@
                 </select>
             </div>
             <div class="col-md-4">
-                <label for="idprograma" class="d-inline font-verdana-bg">
+                <label for="idprograma" class="d-inline font-verdana-12">
                     <b>Programa</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="idprograma" id="idprograma" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
@@ -130,7 +130,7 @@
             </div>
 
             <div class="col-md-5">
-                <label for="idtipomovilidad" class="d-inline font-verdana-bg">
+                <label for="idtipomovilidad" class="d-inline font-verdana-12">
                     <b>Tipo Movilidad</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="idtipomovilidad" id="idtipomovilidad" placeholder="--Seleccionar--" 
@@ -143,11 +143,11 @@
             </div>
 
             <div class="col-md-2">
-                <label for="gasklm" class="d-inline font-verdana-bg">
+                <label for="gasklm" class="d-inline font-verdana-12">
                     <b>Gas por kilometro</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="number" name="gasklm" value="{{request('gasklm')}}" 
-                class="form-control form-control-sm font-verdana-bg" id="gasklm">
+                class="form-control form-control-sm font-verdana-12" id="gasklm">
             </div>
             
             &nbsp;&nbsp;&nbsp;

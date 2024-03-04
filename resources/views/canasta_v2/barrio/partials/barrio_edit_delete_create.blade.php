@@ -27,7 +27,7 @@
                     </div>
                     <div class="form-group">
                         <label for="nombre" class="d-inline">Nombre</label>
-                        <input type="text" name="nombre" required id="nombre" value="{{old('nombre')}}" oninput="this.value = this.value.toUpperCase()" class="form-control form-control-sm font-verdana-bg intro {{ $errors->has('nombre') ? ' is-invalid' : '' }}">
+                        <input type="text" name="nombre" required id="nombre" value="{{old('nombre')}}" oninput="this.value = this.value.toUpperCase()" class="form-control form-control-sm font-verdana-12 intro {{ $errors->has('nombre') ? ' is-invalid' : '' }}">
 
                     </div>
 

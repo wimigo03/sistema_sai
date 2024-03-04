@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
 
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
 
     <div class="col-md-8 titulo">
         <b>IMAGENES</b>
