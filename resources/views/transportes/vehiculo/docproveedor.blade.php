@@ -4,7 +4,7 @@
 <div class="row justify-content-center">
     <div class="col-md-10">
 
-        <div class="row font-verdana-bg">
+        <div class="row font-verdana-12">
             <div class="col-md-4 titulo">
 
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
@@ -17,7 +17,7 @@
 
                 &nbsp;&nbsp;&nbsp;
 
-                    @can('proveedores_create')
+         
                    
                     <a href="{{ route('ProveedoresController.createdoc', $idproveedor) }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar">
                             <button class="btn btn-sm btn-info   font-verdana" type="button" >
@@ -26,8 +26,7 @@
                         </a>
             
                         <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
-                   
-                    @endcan
+           
             
                 
             </div>
@@ -62,13 +61,13 @@
 
 
                             <td>
-                                @can('proveedores_edit')
+                                
                                 <span class="tts:right tts-slideIn tts-custom" aria-label="Ver Documento">
                                 <a href="/sai/public/Archivos/{{$docprov -> documento}}" target="blank_"
                                 class="fa fa-eye fa-lg " ></a>
                                 
                             </span>
-                                @endcan
+                           
 
                             </td>
                         </tr>

@@ -1,12 +1,12 @@
 @extends('layouts.admin')
 @section('content')
 
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-8 titulo">
         <b>MEDIDAS</b>
     </div>
     <div class="col-md-4 text-right">
-        @can('medidas_create')
+     
 
         <a href="{{route('medidas.create')}}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar">
                 <button class="btn btn-sm btn-primary font-verdana" type="button" >
@@ -16,7 +16,6 @@
 
             <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
 
-        @endcan
     </div>
     <div class="col-md-12">
         <hr class="hrr">
@@ -29,7 +28,7 @@
         <center>
             <table  class="table  yajra-datatable table-bordered hoverTable responsive font-verdana" style="width:80%;">
                 <thead>
-                    <tr class="font-verdana">
+                    <tr class="font-verdana-11">
                         <td class="text-justify p-1"><b>N°</b></td>
                         <td class="text-justify p-1"><b>NOMBRE</b></td>
                         <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>

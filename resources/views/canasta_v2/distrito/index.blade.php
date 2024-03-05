@@ -2,7 +2,7 @@
 @section('content')
 <link rel="stylesheet" href="/css/font-verdana.css" rel="stylesheet">
 <div class="card card-custom">
-    <div class="card-header font-verdana-bgt">
+    <div class="card-header font-verdana-15">
         <b>DISTRITOS</b>
     </div>
     <div class="card-body">
@@ -17,13 +17,14 @@
             $('#dea').select2({
                 placeholder: "--DEA--"
             });
+
             $('#estado').select2({
                 placeholder: "--Estado--"
             });
         });
 
-        function search(){
-            var url = "{{ route('canasta.barrios.search') }}";
+        function procesar(){
+            var url = "{{ route('distritos.search') }}";
             $("#form").attr('action', url);
             $(".btn").hide();
             $(".spinner-btn-send").show();
@@ -31,7 +32,7 @@
         }
 
         function excel(){
-            var url = "{{ route('canasta.barrios.excel') }}";
+            var url = "{{ route('distritos.excel') }}";
             $("#form").attr('action', url);
             $("#form").submit();
         }
@@ -39,8 +40,13 @@
         function limpiar(){
             $(".btn").hide();
             $(".spinner-btn-send").show();
-            window.location.href = "{{ route('canasta.barrios.index') }}";
+            window.location.href = "{{ route('distritos.index') }}";
         }
 
+        function create(){
+            $(".btn").hide();
+            $(".spinner-btn-send").show();
+            window.location.href = "{{ route('distritos.create') }}";
+        }
     </script>
 @endsection

@@ -3,7 +3,7 @@
 @include('layouts.message_alert')
 
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
 
       <div class="col-md-10 text-right titulo">
         <b>Devolucion de combustible</b>
@@ -35,29 +35,29 @@
         <div class="form-group row">
           
             <div class="col-md-3">
-                <label for="aproxgas" class="d-inline font-verdana-bg">
+                <label for="aproxgas" class="d-inline font-verdana-12">
                     <b>Cantidad Solicitada :</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
               {{-- el disabled es para que no se pueda editar --}}
                 <input type="text" disabled name="aproxgas" value="{{$detalles->cantidadsol}}" 
-                class="form-control form-control-sm font-verdana-bg" >
+                class="form-control form-control-sm font-verdana-12" >
             </div>
          
             <div class="col-md-3">
-                <label for="cantidad" class="d-inline font-verdana-bg">
+                <label for="cantidad" class="d-inline font-verdana-12">
                     <b>Cantidad Cargada :</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="cantidad"  
-                class="form-control form-control-sm font-verdana-bg" id="cantidad" 
+                class="form-control form-control-sm font-verdana-12" id="cantidad" 
                 onkeypress="return valideNumber(event);" value="{{$detalles->devolucionresta}}">
             </div>
             <div class="col-md-2 text-right">
                 <div class="col-md-12 text-right">
-                    <button class="btn color-icon-2 font-verdana-bg" type="button" onclick="save();">
+                    <button class="btn color-icon-2 font-verdana-12" type="button" onclick="save();">
                         <i class="fa-solid fa-paper-plane"></i>
                         &nbsp;Actualizar
                     </button>
-                    <button class="btn btn-danger font-verdana-bg" type="button" >
+                    <button class="btn btn-danger font-verdana-12" type="button" >
     
                         <a href="{{url()->previous()}}" style="color:white">Cancelar</a>
                     </button>

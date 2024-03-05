@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="row font-verdana-bg mb-3">
+    <div class="row font-verdana-12 mb-3">
         <div class="col-md-12 titulo">
             <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
                 <a href="javascript:void(0);" onclick="window.history.back()">

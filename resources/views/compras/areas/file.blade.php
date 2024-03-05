@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('content')
-    <div class="row font-verdana-bg">
+    <div class="row font-verdana-12">
         <div class="col-md-3 titulo">
             <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a Areas">
                 <a href="{{route('areas.index')}}" class="color-icon-1">
@@ -12,7 +12,7 @@
             <b>FILES-P/{{strtoupper($area->nombrearea)}}</b>
         </div>
         <div class="col-md-3 text-right">
-            @can('file_create_access')
+       
                 <span class="tts:left tts-slideIn tts-custom" aria-label="Nuevo Registro">
                     <a href="{{ route('areas.crearFile', $id) }}" >
                         <span class="btn btn-sm btn-outline-success font-verdana">
@@ -20,7 +20,7 @@
                         </span>
                     </a>
                 </span>
-            @endcan
+          
         </div>
         <div class="col-md-12">
             <hr class="hrr">
@@ -61,13 +61,13 @@
                                     <td class="text-center p-1 text-danger"><b>OCUPADO</b></td>
                                 @endif
                                 <td class="text-center p-1">
-                                    @can('file_edit_access')
+                           
                                         <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar">
                                             <a href="{{ route('file.edit', $files->idfile) }}" style="color:#017EBE;">
                                                 &nbsp;<i class="fas fa-lg fa-edit" aria-hidden="true"></i>&nbsp;
                                             </a>
                                         </span>
-                                    @endcan
+                               
                                 </td>
                             </tr>    
                         @endforeach

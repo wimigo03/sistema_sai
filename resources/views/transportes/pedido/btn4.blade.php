@@ -1,5 +1,4 @@
 <td style="padding: 0;" class="text-center p-1">
-    @can('solunidadconsumo_aprovadaedit')
     <span class="tts:left tts-slideIn tts-custom" aria-label="Aprovar">
         <a href="{{route('transportes.pedido.aprovar',$idsoluconsumo)}}"
             onclick="return confirm('Se va a Aprovar la solicitud...')">
@@ -8,7 +7,6 @@
             </span>
         </a>
     </span>
-    @endcan
 </td>
 
 

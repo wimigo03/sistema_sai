@@ -31,7 +31,7 @@
                 </div>
                 <div class="row row justify-content-center">
 
-                    <button class="btn color-icon-2 font-verdana-bg" type="submit" >
+                    <button class="btn color-icon-2 font-verdana-12" type="submit" >
 
                       Acceder
                   </button>

@@ -2,7 +2,7 @@
 @section('content')
 <link rel="stylesheet" href="/css/font-verdana.css" rel="stylesheet">
 <div class="card card-custom">
-    <div class="card-header font-verdana-bgt">
+    <div class="card-header font-verdana-15">
         <b>USUARIOS</b>
     </div>
     <div class="card-body">
@@ -19,21 +19,14 @@
             });
         });
 
-        $('.search').on('keypress', function(event) {
-            if (event.which === 13) {
-                search();
-                event.preventDefault();
-            }
-        });
-
         function create(){
             $(".btn").hide();
             $(".btn-importar").hide();
             $(".spinner-btn").show();
-            window.location.href = "{{ route('admin.users.create') }}";
+            window.location.href = "{{ route('users.create') }}";
         }
-        function search(){
-            var url = "{{ route('admin.users.search') }}";
+        function procesar(){
+            var url = "{{ route('users.search') }}";
             $("#form").attr('action', url);
             $(".btn").hide();
             $(".btn-importar").hide();
@@ -44,10 +37,10 @@
             $(".btn").hide();
             $(".btn-importar").hide();
             $(".spinner-btn").show();
-            window.location.href = "{{ route('admin.users.index') }}";
+            window.location.href = "{{ route('users.index') }}";
         }
         function excel(){
-            var url = "{{ route('admin.users.excel') }}";
+            var url = "{{ route('users.excel') }}";
             $("#form").attr('action', url);
             $("#form").submit();
         }

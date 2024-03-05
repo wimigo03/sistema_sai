@@ -1,13 +1,13 @@
 @extends('layouts.admin')
 @section('content')
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-8 titulo">
         <b>--APROBADA POR TRANSPORTE. -- </b><b style='color:red'>{{$idd->nombrearea}} </b>--
     </div>
     <div class="col-md-4 text-right titulo">
         
-         @can('solunidadconsumo_create') 
+        
 
         <a href="{{route('transportes.pedidoparcial.index2')}}" class="tts:left tts-slideIn tts-custom" 
         aria-label="  Solicitud">
@@ -15,7 +15,7 @@
                 &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
             </button>
         </a>
-         @endcan 
+      
 
              {{-- PASO UNO PDF --}}
              {{-- <a href="{{route('transportes.pedidoparcial.pdf')}}" class="tts:left tts-slideIn tts-custom" aria-label="Pdf">

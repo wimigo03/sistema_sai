@@ -6,7 +6,7 @@
 </style>
 <br>
 <div class="header">
-    <div class="row font-verdana-bg">
+    <div class="row font-verdana-12">
         <div class="col-md-10 titulo">
             <b>CANASTAS PENDIENTES</b>
         </div>
@@ -21,12 +21,12 @@
             <hr class="hrr">
         </div>
     </div>
-    @canany(['discapacidad_buscar'])
+
     <form action="{{ route('canasta.pendientes.search') }}" method="get" id="form">
         @csrf
         @include('discapacidad.pendientes.partials.search')
     </form>
-    @endcan
+   
 </div>
 <hr>
 
@@ -113,7 +113,7 @@
 @else
 <div class="body">
     <div class="row">
-        <div class="col-md-12 font-verdana-bg text-center">
+        <div class="col-md-12 font-verdana-12 text-center">
             ... No existen resultados ...
         </div>
     </div>

@@ -22,6 +22,7 @@ class BarriosController extends Controller
         $barrios = CanastaBarriosModel::query()
                                         ->orderBy('idBarrio', 'desc')
                                         ->paginate(10);
+        dd($barrios);
         return view('canasta.barrios.index', compact('tipos_barrio','distritos','estados','barrios'));
     }
 

@@ -18,7 +18,8 @@ class AreasModel extends Model
     protected $fillable = [
         'nombrearea',
         'estadoarea',
-        'idnivel'
+        'idnivel',
+        'alias'
     ];
 
     protected $guarded = [

@@ -8,11 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ProveedoresModel extends Model
 {
     protected $table = 'proveedores';
-
     protected $primaryKey= 'idproveedor';
-
-    public $timestamps = false;
-
     protected $fillable = [
         'nombreproveedor',
         'representante',
@@ -22,10 +18,4 @@ class ProveedoresModel extends Model
         'validezci',
         'estadoproveedor'
     ];
-
-    protected $guarded = [
-
-
-    ];
-
 }

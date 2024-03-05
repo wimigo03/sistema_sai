@@ -3,7 +3,7 @@
         <div class="col-md-12 table-responsive">
             <table class="table display table-bordered responsive" style="width:100%;">
                 <thead>
-                    <tr class="font-verdana">
+                    <tr class="font-verdana-11">
                         <td class="text-center p-1"><b>CODIGO</b></td>
                         <td class="text-left p-1"><b>NOMBRE</b></td>
                         <td class="text-center p-1"><b>TIPO</b></td>
@@ -13,7 +13,7 @@
                 </thead>
                 <tbody>
                     @foreach ($barrios as $datos)
-                        <tr class="font-verdana">
+                        <tr class="font-verdana-11">
                             <td class="text-center p-1">{{ $datos->idBarrio }}</td>
                             <td class="text-left p-1">{{ $datos->barrio }}</td>
                             <td class="text-center p-1">{{ strtoupper($datos->tipo) }}</td>
@@ -23,7 +23,7 @@
                     @endforeach
                 </tbody>
                 <tfoot>
-                    <tr class="font-verdana">
+                    <tr class="font-verdana-11">
                         <td colspan="12">
                             {{ $barrios->appends(Request::all())->links() }}
                             <p class="text-muted">Mostrando

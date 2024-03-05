@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
 
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
 
     <div class="col-md-8 titulo">
         <b>vehiculo</b>
@@ -9,7 +9,7 @@
 
     <div class="col-md-4 text-right">
 
-        @can('vehiculo_create')
+      
 
             <a href="{{route('vehiculo.create')}}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar">
                 <button class="btn btn-sm btn-primary font-verdana" type="button" >
@@ -19,7 +19,7 @@
 
             <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
 
-        @endcan
+   
 
     </div>
 

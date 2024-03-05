@@ -6,7 +6,7 @@
 <div class="row justify-content-center">
     <div class="col-md-8">
 
-        <div class="row font-verdana-bg">
+        <div class="row font-verdana-12">
             <div class="col-md-4 titulo">
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
                     <a href="{{ url('/combustibles/producto/index') }}">
@@ -38,7 +38,7 @@
                             class="required col-md-4 col-form-label text-md-right">{{ __('Codigo') }}</label>
                         <div class="col-md-7">
                             <input type="number" name="codigoprodcomb"
-                            class="form-control form-control-sm font-verdana-bg" 
+                            class="form-control form-control-sm font-verdana-12" 
                             id="codigoprodcomb" onchange="myFunction()" cols="50" rows="2" >
                         </div>
                     </div>
@@ -88,11 +88,11 @@
                    
             <div align='center'>
                                
-                <button class="btn color-icon-2 font-verdana-bg" type="button" onclick="save();">
+                <button class="btn color-icon-2 font-verdana-12" type="button" onclick="save();">
                     <i class="fa-solid fa-paper-plane"></i>
                     &nbsp;Registrar
                 </button>
-                <button class="btn btn-danger font-verdana-bg" type="button" >
+                <button class="btn btn-danger font-verdana-12" type="button" >
 
                     <a href="{{url()->previous()}}" style="color:white">Cancelar</a>
                 </button>

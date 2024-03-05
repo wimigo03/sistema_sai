@@ -2,12 +2,41 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MedidaController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\MedidaController;
+use App\Http\Controllers\CompraController;
+use App\Http\Controllers\CompraController2;
+use App\Http\Controllers\DetalleCompraController;
+use App\Http\Controllers\DetalleCompraController2;
+use App\Http\Controllers\PartidaController;
+use App\Http\Controllers\ProdServController;
+use App\Http\Controllers\EmpleadosController;
 use App\Http\Controllers\PlantaController;
+use App\Http\Controllers\ContratoController;
+use App\Http\Controllers\ProveedoresController;
+use App\Http\Controllers\AreasController;
+use App\Http\Controllers\ProgramaController;
+use App\Http\Controllers\CatProgController;
+use App\Http\Controllers\ActivosController;
+use App\Http\Controllers\CanastaEntregaController;
+use App\Http\Controllers\ActivosVsiafController;
+use App\Http\Controllers\ArchivosController;
+use App\Http\Controllers\ArchivosController2;
+use App\Http\Controllers\AlmacenController;
+use App\Http\Controllers\RecepcionController;
+use App\Http\Controllers\AgendaController;
+use App\Http\Controllers\ControllerCalendar;
+use App\Http\Controllers\Recepcion2Controller;
+use App\Http\Controllers\ControllerEvent2;
+use App\Http\Controllers\ControllerEvent;
+use App\Http\Controllers\CanastaBeneficiariosController;
+use App\Http\Controllers\ExpoController;
+use App\Http\Controllers\Fexpo\SolicitudController;
+use App\Http\Controllers\Personerias\PersoneriasController;
 
-/*use App\Http\Controllers\ProveedoresController;
+/*use App\Http\Controllers\MedidaController;
+use App\Http\Controllers\ProveedoresController;
 use App\Http\Controllers\PrartidaController;
 use App\Http\Controllers\ProdServController;
 use App\Http\Controllers\DetalleCompraController;*/
@@ -56,8 +85,13 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::get('admin/users/index', [UserController::class, 'index'])->name('admin.users.index');
+    Route::group(['name' => 'admin.'], function () {
+        Route::get('admin/', 'Admin\HomeController@index')->name('home');
+        //Route::get('admin/roles/index', 'Admin\RoleController@index')->name('roles.index');
+        //Route::get('admin/roles/create', 'Admin\RoleController@create')->name('roles.create');
+    });
+    //Route::get('/', [HomeController::class, 'index'])->name('home');
+    /*Route::get('admin/users/index', [UserController::class, 'index'])->name('admin.users.index');
     Route::get('admin/users/search', [UserController::class, 'search'])->name('admin.users.search');
     Route::get('admin/users/excel', [UserController::class, 'excel'])->name('admin.users.excel');
     Route::get('admin/users/create', [UserController::class, 'create'])->name('admin.users.create');
@@ -65,7 +99,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin/users/edit/{id}', [UserController::class, 'edit'])->name('admin.users.edit');
     Route::put('admin/users/update', [UserController::class, 'update'])->name('admin.users.update');
     Route::get('admin/users/baja/{id}', [UserController::class, 'baja'])->name('admin.users.baja');
-    Route::get('admin/users/alta/{id}', [UserController::class, 'alta'])->name('admin.users.alta');
+    Route::get('admin/users/alta/{id}', [UserController::class, 'alta'])->name('admin.users.alta');*/
 
     Route::get('/compras/medidas/create', [MedidaController::class, 'create'])->name('medidas.create');
 
@@ -75,119 +109,101 @@ Route::middleware(['auth'])->group(function () {
 
 Auth::routes();
 
-Route::group(['prefix'=>"admin/",
-                'as' => 'admin.',
-                'namespace' => 'App\Http\Controllers\Admin',
-                'middleware' => ['auth','AdminPanelAccess']],
-function () {
-    //Route::get('/', 'HomeController@index')->name('home');
-    //Route::resource('/users', 'UserController');
-    //Route::get('users/index', 'UserController@index')->name('users.index');
-    //Route::get('users/search', 'UserController@search')->name('users.search');
-    //Route::get('users/create', 'Admin\UserController@create')->name('users.create');
-    Route::resource('/roles', 'RoleController');
-    Route::resource('/permissions', 'PermissionController')->except(['show']);
-
-    //Route::get('compras/medidas/create', 'MedidaController@create')->name('medidas.create');
-
-    /*Route::group(['namespace' => 'App\Http\Controllers'], function() {
-        Route::get('compras/medidas/index', 'MedidaController@index')->name('medidas.index')->middleware('can:medidas_access');
-    });*/
-});
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-Route::group(['namespace' => 'App\Http\Controllers'], function() {
-    Route::get('compras/medidas/index', 'MedidaController@index')->name('medidas.index')->middleware('can:medidas_access');
-    Route::get('compras/medidas/list', 'MedidaController@listado')->name('medidas.list');
-    Route::get('compras/medidas/{id}/edit', 'MedidaController@editar')->name('medidas.edit');
-    Route::post('compras/medidas/{id}/update', 'MedidaController@update')->name('medidas.update');
-   // Route::get('compras/medidas/create', 'MedidaController@create')->name('medidas.create');
-    //Route::get('compras/medidas/create', 'MedidaController@create')->name('medidas.create');
-    Route::post('compras/medidas/store', 'MedidaController@store')->name('medidas.store');
 
 
-    //Route::get('admin/users/baja/{id}', 'Admin\UserController@baja')->name('users.baja');
-    //Route::get('admin/users/alta/{id}', 'Admin\UserController@alta')->name('users.alta');
-    //Route::get('admin/users/index', 'Admin\UserController@index')->name('users.index');
-    //Route::get('admin/users/search', 'Admin\UserController@search')->name('users.search');
+Route::middleware(['auth'])->group(function () {
+    //Route::get('/', [HomeController::class, 'index'])->name('home');
+
+//////////////////////////////////////  MEDIDAS  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    Route::get('compras/medidas/index', [MedidaController::class,'index'])->name('medidas.index')->middleware('can:medidas_access');
+    Route::get('compras/medidas/list', [MedidaController::class,'listado'])->name('medidas.list');
+    Route::get('compras/medidas/{id}/edit', [MedidaController::class,'editar'])->name('medidas.edit');
+    Route::post('compras/medidas/{id}/update', [MedidaController::class,'update'])->name('medidas.update');
+    Route::get('compras/medidas/create',[MedidaController::class,'create'])->name('medidas.create');
+    Route::post('compras/medidas/store', [MedidaController::class,'store'])->name('medidas.store');
+
+
+    Route::get('admin/users/baja/{id}', [Admin\UserController::class,'baja'])->name('users.baja');
+    Route::get('admin/users/alta/{id}', [Admin\UserController::class,'alta'])->name('users.alta');
+    Route::get('admin/users//index', [Admin\UserController::class,'index'])->name('users.index');
 
 /////////////////////////--COMPRAS PEDIDO--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    Route::get('compras/pedido/index', 'CompraController@index')->name('compras.pedido.index');
-    Route::get('compras/pedido/index2', 'CompraController@index2')->name('compras.pedido.index2');
-    Route::get('compras/pedido/create', 'CompraController@create')->name('compras.pedido.create');
-    Route::post('compras/pedido/store', 'CompraController@store')->name('compras.pedido.store');
-    Route::get('compras/pedido/edit/{id}', 'CompraController@edit')->name('compras.pedido.edit');
-    Route::get('compras/pedido/editar/{id}', 'CompraController@editar')->name('compras.pedido.editar');
-    Route::post('compras/pedido/update', 'CompraController@update')->name('compras.pedido.update');
-    Route::get('compras/enviar/{id}', 'CompraController@enviar')->name('compras.pedido.enviar');
+Route::get('compras/pedido/index', [CompraController::class,'index'])->name('compras.pedido.index');
+Route::get('compras/pedido/index2', [CompraController::class,'index2'])->name('compras.pedido.index2');
+Route::get('compras/pedido/create', [CompraController::class,'create'])->name('compras.pedido.create');
+Route::post('compras/pedido/store', [CompraController::class,'store'])->name('compras.pedido.store');
+Route::get('compras/pedido/edit/{id}', [CompraController::class,'edit'])->name('compras.pedido.edit');
+Route::get('compras/pedido/editar/{id}', [CompraController::class,'editar'])->name('compras.pedido.editar');
+Route::post('compras/pedido/update', [CompraController::class,'update'])->name('compras.pedido.update');
 
-    /////////////////////////--COMPRAS PEDIDO PARCIAL--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    Route::get('compras/pedidoparcial/index', 'CompraController2@index')->name('compras.pedidoparcial.index');
-    Route::get('compras/pedidoparcial/create', 'CompraController2@create')->name('compras.pedidoparcial.create');
-    Route::post('compras/pedidoparcial/store', 'CompraController2@store')->name('compras.pedidoparcial.store');
-    Route::get('compras/pedidoparcial/editar/{id}', 'CompraController2@editar')->name('compras.pedidoparcial.editar');
-    Route::post('compras/pedidoparcial/update', 'CompraController2@update')->name('compras.pedidoparcial.update');
-    Route::get('compras/pedidoparcial/edit/{id}', 'CompraController2@edit')->name('compras.pedidoparcial.edit');
+/////////////////////////--COMPRAS PEDIDO PARCIAL--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*Route::get('compras/pedidoparcial/index', [CompraController2::class,'index'])->name('compras.pedidoparcial.index');
+Route::get('compras/pedidoparcial/create', [CompraController2::class,'create'])->name('compras.pedidoparcial.create');
+Route::post('compras/pedidoparcial/store', [CompraController2::class,'store'])->name('compras.pedidoparcial.store');
+Route::get('compras/pedidoparcial/editar/{id}', [CompraController2::class,'editar'])->name('compras.pedidoparcial.editar');
+Route::post('compras/pedidoparcial/update', [CompraController2::class,'update'])->name('compras.pedidoparcial.update');
+Route::get('compras/pedidoparcial/edit/{id}', [CompraController2::class,'edit'])->name('compras.pedidoparcial.edit');*/
 
 ///////////////////////////////--COMPRAS DETALLE--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Route::get('compras/detalle/index', [DetalleCompraController::class,'index'])->name('compras.detalle.index');
+Route::post('compras/detalle/store', [DetalleCompraController::class,'store'])->name('compras.detalle.store');
+Route::get('compras/detalle/principal/{id}', [DetalleCompraController::class,'crearOrdenxxx'])->name('compras.detalle.principal');
+Route::post('compras/detalle/principal/store', [DetalleCompraController::class,'crearOrden'])->name('compras.detalle.principal.store');
+Route::get('compras/detalle/{id}/principalorden', [DetalleCompraController::class,'crearOrdendocxx'])->name('compras.detalle.principalorden');
+Route::get('compras/detalle/show', [DetalleCompraController::class,'show'])->name('compras.detalle.show');
+Route::post('compras/detalle/principalorden', [DetalleCompraController::class,'crearOrdendoc'])->name('DetalleCompraController.crearOrdendoc');
+Route::get('compras/detalle/{id}/destroyed2', [DetalleCompraController::class,'destroyed2'])->name('DetalleCompraController.eliminar2');
+Route::get('compras/delete/{id}', [DetalleCompraController::class,'delete'])->name('compras.detalle.delete');
+Route::get('compras/aprovar/{id}', [DetalleCompraController::class,'aprovar'])->name('compras.detalle.aprovar');
 
-    Route::get('compras/detalle/index', 'DetalleCompraController@index')->name('compras.detalle.index');
-    Route::post('compras/detalle/store', 'DetalleCompraController@store')->name('compras.detalle.store');
-    Route::get('compras/detalle/principal/{id}', 'DetalleCompraController@crearOrdenxxx')->name('compras.detalle.principal');
-    Route::post('compras/detalle/principal/store', 'DetalleCompraController@crearOrden')->name('compras.detalle.principal.store');
-    Route::get('compras/detalle/{id}/principalorden', 'DetalleCompraController@crearOrdendocxx')->name('compras.detalle.principalorden');
-    Route::get('compras/detalle/show', 'DetalleCompraController@show')->name('compras.detalle.show');
-    Route::post('compras/detalle/principalorden', 'DetalleCompraController@crearOrdendoc')->name('DetalleCompraController.crearOrdendoc');
-    Route::get('compras/detalle/{id}/destroyed2', 'DetalleCompraController@destroyed2')->name('DetalleCompraController.eliminar2');
-    Route::get('compras/delete/{id}', 'DetalleCompraController@delete')->name('compras.detalle.delete');
-    Route::get('compras/aprovar/{id}', 'DetalleCompraController@aprovar')->name('compras.detalle.aprovar');
+Route::get('compras/detalle/invitacion/{id}', [DetalleCompraController::class,'invitacion'])->name('compras.detalle.principal.invitacion');
+Route::get('compras/detalle/aceptacion/{id}', [DetalleCompraController::class,'aceptacion'])->name('compras.detalle.principal.aceptacion');
+Route::get('compras/detalle/cotizacion/{id}', [DetalleCompraController::class,'cotizacion'])->name('compras.detalle.principal.cotizacion');
+Route::get('compras/detalle/adjudicacion/{id}', [DetalleCompraController::class,'adjudicacion'])->name('compras.detalle.principal.adjudicacion');
+Route::get('compras/detalle/orden/{id}', [DetalleCompraController::class,'orden'])->name('compras.detalle.principal.orden');
 
-    Route::get('compras/detalle/invitacion/{id}', 'DetalleCompraController@invitacion')->name('compras.detalle.principal.invitacion');
-    Route::get('compras/detalle/aceptacion/{id}', 'DetalleCompraController@aceptacion')->name('compras.detalle.principal.aceptacion');
-    Route::get('compras/detalle/cotizacion/{id}', 'DetalleCompraController@cotizacion')->name('compras.detalle.principal.cotizacion');
-    Route::get('compras/detalle/adjudicacion/{id}', 'DetalleCompraController@adjudicacion')->name('compras.detalle.principal.adjudicacion');
-    Route::get('compras/detalle/orden/{id}', 'DetalleCompraController@orden')->name('compras.detalle.principal.orden');
+
 
 
     ///////////////////////////////--COMPRAS DETALLE PARCIAL--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    Route::get('compras/detalleparcial/index', 'DetalleCompraController2@index')->name('compras.detalleparcial.index');
-    Route::post('compras/detalleparcial/store', 'DetalleCompraController2@store')->name('compras.detalleparcial.store');
-    Route::get('compras/detalleparcial/principal/{id}', 'DetalleCompraController2@crearOrdenxxx')->name('compras.detalleparcial.principal');
-    Route::post('compras/detalleparcial/principal/store', 'DetalleCompraController2@crearOrden')->name('compras.detalleparcial.principal.store');
-    Route::get('compras/detalleparcial/{id}/principalorden', 'DetalleCompraController2@crearOrdendocxx')->name('compras.detalleparcial.principalorden');
-    Route::get('compras/detalleparcial/show', 'DetalleCompraController2@show')->name('compras.detalleparcial.show');
-    Route::post('compras/detalleparcial/principalorden', 'DetalleCompraController@crearOrdendoc')->name('DetalleCompraController2.crearOrdendoc');
-    Route::get('compras/detalleparcial/{id}/destroyed2', 'DetalleCompraController2@destroyed2')->name('DetalleCompraController2.eliminar2');
-    Route::get('compras/delete2/{id}', 'DetalleCompraController2@delete')->name('compras.detalleparcial.delete');
+    Route::get('compras/detalleparcial/index', [DetalleCompraController2::class,'index'])->name('compras.detalleparcial.index');
+    Route::post('compras/detalleparcial/store', [DetalleCompraController2::class,'store'])->name('compras.detalleparcial.store');
+    Route::get('compras/detalleparcial/principal/{id}', [DetalleCompraController2::class,'crearOrdenxxx'])->name('compras.detalleparcial.principal');
+    Route::post('compras/detalleparcial/principal/store', [DetalleCompraController2::class,'crearOrden'])->name('compras.detalleparcial.principal.store');
+    Route::get('compras/detalleparcial/{id}/principalorden', [DetalleCompraController2::class,'crearOrdendocxx'])->name('compras.detalleparcial.principalorden');
+    Route::get('compras/detalleparcial/show', [DetalleCompraController2::class,'show'])->name('compras.detalleparcial.show');
+    Route::post('compras/detalleparcial/principalorden', [DetalleCompraController::class,'crearOrdendoc'])->name('DetalleCompraController2.crearOrdendoc');
+    Route::get('compras/detalleparcial/{id}/destroyed2', [DetalleCompraController2::class,'destroyed2'])->name('DetalleCompraController2.eliminar2');
+    Route::get('compras/delete2/{id}', [DetalleCompraController2::class,'delete'])->name('compras.detalleparcial.delete');
 
-    Route::get('compras/detalleparcial/invitacion/{id}', 'DetalleCompraController2@invitacion')->name('compras.detalleparcial.principal.invitacion');
-    Route::get('compras/detalleparcial/aceptacion/{id}', 'DetalleCompraController2@aceptacion')->name('compras.detalleparcial.principal.aceptacion');
-    Route::get('compras/detalleparcial/cotizacion/{id}', 'DetalleCompraController2@cotizacion')->name('compras.detalleparcial.principal.cotizacion');
-    Route::get('compras/detalleparcial/adjudicacion/{id}', 'DetalleCompraController2@adjudicacion')->name('compras.detalleparcial.principal.adjudicacion');
-    Route::get('compras/detalleparcial/orden/{id}', 'DetalleCompraController2@orden')->name('compras.detalleparcial.principal.orden');
+    Route::get('compras/detalleparcial/invitacion/{id}', [DetalleCompraController2::class,'invitacion'])->name('compras.detalleparcial.principal.invitacion');
+    Route::get('compras/detalleparcial/aceptacion/{id}', [DetalleCompraController2::class,'aceptacion'])->name('compras.detalleparcial.principal.aceptacion');
+    Route::get('compras/detalleparcial/cotizacion/{id}', [DetalleCompraController2::class,'cotizacion'])->name('compras.detalleparcial.principal.cotizacion');
+    Route::get('compras/detalleparcial/adjudicacion/{id}', [DetalleCompraController2::class,'adjudicacion'])->name('compras.detalleparcial.principal.adjudicacion');
+    Route::get('compras/detalleparcial/orden/{id}', [DetalleCompraController2::class,'orden'])->name('compras.detalleparcial.principal.orden');
 
 ///////////////////////////--COMPRAS PARTIDA--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-    Route::get('compras/partida/index', 'PartidaController@index')->name('partida.index');
-    Route::get('compras/partida/listado', 'PartidaController@listado')->name('partida.list');
+Route::get('compras/partida/index', [PartidaController::class,'index'])->name('partida.index');
+Route::get('compras/partida/listado', [PartidaController::class,'listado'])->name('partida.list');
 
 ////////////////////////////--COMPRAS PRODUCTO--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    Route::get('compras/productos/index', 'ProdServController@index')->name('productos.index');
-    Route::get('compras/productos/list', 'ProdServController@list')->name('producto.list');
-    Route::get('compras/productos/{id}/edit', 'ProdServController@editar')->name('productos.edit');
-    Route::POST('compras/productos/{id}/update', 'ProdServController@update')->name('productos.update');
-    Route::get('compras/productos/create', 'ProdServController@create')->name('productos.create');
-    Route::POST('compras/productos/store', 'ProdServController@store')->name('productos.store');
+Route::get('compras/productos/index', [ProdServController::class,'index'])->name('productos.index');
+Route::get('compras/productos/list', [ProdServController::class,'list'])->name('producto.list');
+Route::get('compras/productos/{id}/edit', [ProdServController::class,'editar'])->name('productos.edit');
+Route::POST('compras/productos/{id}/update', [ProdServController::class,'update'])->name('productos.update');
+Route::get('compras/productos/create', [ProdServController::class,'create'])->name('productos.create');
+Route::POST('compras/productos/store', [ProdServController::class,'store'])->name('productos.store');
 
 ///////////////////////////--EMPLEADOS--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    Route::get('compras/empleados/index', 'EmpleadosController@index')->name('empleados.index');
-    Route::get('compras/empleados/list', 'EmpleadosController@list')->name('empleados.list');
+Route::get('compras/empleados/index', [EmpleadosController::class,'index'])->name('empleados.index');
+Route::get('compras/empleados/list', [EmpleadosController::class,'list'])->name('empleados.list');
 
 
     /*RECURSOS HUMANOS PLANTA*/
@@ -205,69 +221,73 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
     Route::post('rechumanos/planta/deletePlanta', 'PlantaController@deletePlanta')->name('planta.delete');
 
 
-    /*RECURSOS HUMANOS CONTRATO*/
-    Route::get('rechumanos/contrato/index', 'ContratoController@index')->name('contrato.index');
-    Route::get('rechumanos/contrato/list', 'ContratoController@list')->name('contrato.list');
-    Route::get('rechumanos/contrato/detalle/{id}', 'ContratoController@detalle')->name('contrato_detalle');
-    Route::get('rechumanos/contrato/edit/{id}', 'ContratoController@edit')->name('contrato.edit');
-    Route::get('rechumanos/contrato/lista/{id}', 'ContratoController@lista')->name('contrato.lista');
-    Route::get('rechumanos/contrato/create/{id}', 'ContratoController@contratonuevo')->name('contrato.crear');
-    Route::get('rechumanos/contrato/edit/{id}', 'ContratoController@editarcontrato')->name('contrato.editar');
-    Route::POST('rechumanos/contrato/guardarcontrato', 'ContratoController@guardarcontrato')->name('contrato.guardar');
-    Route::POST('rechumanos/contrato/actualizarcontrato', 'ContratoController@actualizarcontrato')->name('contrato.actualizar');
-    Route::GET('rechumanos/contrato/lista2', 'ContratoController@detallecontrato')->name('contrato.listageneral');
+   /*RECURSOS HUMANOS CONTRATO*/
+   Route::get('rechumanos/contrato/index', [ContratoController::class,'index'])->name('contrato.index');
+   Route::get('rechumanos/contrato/list', [ContratoController::class,'list'])->name('contrato.list');
+   Route::get('rechumanos/contrato/detalle/{id}', [ContratoController::class,'detalle'])->name('contrato_detalle');
+   Route::get('rechumanos/contrato/edit/{id}', [ContratoController::class,'edit'])->name('contrato.edit');
+   Route::get('rechumanos/contrato/lista/{id}', [ContratoController::class,'lista'])->name('contrato.lista');
+   Route::get('rechumanos/contrato/create/{id}', [ContratoController::class,'contratonuevo'])->name('contrato.crear');
+   Route::get('rechumanos/contrato/edit/{id}', [ContratoController::class,'editarcontrato'])->name('contrato.editar');
+   Route::POST('rechumanos/contrato/guardarcontrato', [ContratoController::class,'guardarcontrato'])->name('contrato.guardar');
+   Route::POST('rechumanos/contrato/actualizarcontrato', [ContratoController::class,'actualizarcontrato'])->name('contrato.actualizar');
+   Route::GET('rechumanos/contrato/lista2', [ContratoController::class,'detallecontrato'])->name('contrato.listageneral');
+
 
 
     /*COMPRAS PROVEEDORES*/
-    Route::get('compras/proveedores/index', 'ProveedoresController@index')->name('proveedores.index')->middleware('can:proveedores_access');
-    Route::get('compras/proveedores/list', 'ProveedoresController@list')->name('proveedores.list')->middleware('can:proveedores_access');
-    Route::get('compras/proveedores/{id}/edit', 'ProveedoresController@edit')->name('proveedores.edit')->middleware('can:proveedores_access');
-    Route::POST('compras/proveedores/{id}/update', 'ProveedoresController@update')->name('proveedores.update')->middleware('can:proveedores_access');
-    Route::get('compras/proveedores/create', 'ProveedoresController@create')->name('proveedores.create')->middleware('can:proveedores_access');
-    Route::POST('compras/proveedores/store', 'ProveedoresController@store')->name('proveedores.store')->middleware('can:proveedores_access');
+    Route::get('compras/proveedores/index', [ProveedoresController::class,'index'])->name('proveedores.index')->middleware('can:proveedores_access');
+    Route::get('compras/proveedores/list', [ProveedoresController::class,'list'])->name('proveedores.list')->middleware('can:proveedores_access');
+    Route::get('compras/proveedores/{id}/edit', [ProveedoresController::class,'edit'])->name('proveedores.edit')->middleware('can:proveedores_access');
+    Route::POST('compras/proveedores/{id}/update', [ProveedoresController::class,'update'])->name('proveedores.update')->middleware('can:proveedores_access');
+    Route::get('compras/proveedores/create', [ProveedoresController::class,'create'])->name('proveedores.create')->middleware('can:proveedores_access');
+    Route::POST('compras/proveedores/store', [ProveedoresController::class,'store'])->name('proveedores.store')->middleware('can:proveedores_access');
     Route::get('compras/proveedores/{id}/editardoc', ['uses' => 'ProveedoresController@editardoc','as' => 'Proveedores.editdoc'])->middleware('can:proveedores_access');
-    Route::get('compras/proveedores/{id}/createdocproveedor', 'ProveedoresController@createdoc')->name('ProveedoresController.createdoc')->middleware('can:proveedores_access');
-    Route::POST('compras/proveedores/insertar', 'ProveedoresController@insertar')->name('ProveedoresController.insertar')->middleware('can:proveedores_access');
+    Route::get('compras/proveedores/{id}/createdocproveedor', [ProveedoresController::class,'createdoc'])->name('ProveedoresController.createdoc')->middleware('can:proveedores_access');
+    Route::POST('compras/proveedores/insertar', [ProveedoresController::class,'insertar'])->name('ProveedoresController.insertar')->middleware('can:proveedores_access');
 
-    /*COMPRAS AREAS*/
-    Route::get('compras/areas/index', 'AreasController@index')->name('areas.index')->middleware('can:areas_access');
-    Route::get('compras/areas/list', 'AreasController@listado')->name('areas.list')->middleware('can:areas_access');
-    Route::get('compras/areas/create', 'AreasController@create')->name('areas.create')->middleware('can:areas_access');
-    Route::get('compras/areas/{id}/edit', 'AreasController@edit')->name('areas.edit')->middleware('can:areas_access');
-    Route::POST('compras/areas/{id}/update', 'AreasController@update')->name('areas.update')->middleware('can:areas_access');
-    Route::POST('compras/areas/store', 'AreasController@store')->name('areas.store')->middleware('can:areas_access');
-    Route::get('compras/areas/{id}/file', 'AreasController@file')->name('areas.file')->middleware('can:areas_access');
-    Route::get('compras/areas/{id}/crearFile', 'AreasController@crearFile')->name('areas.crearFile')->middleware('can:areas_access');
-    Route::POST('compras/areas/guardarfile', 'AreasController@guardarfile')->name('areas.guardarfile')->middleware('can:areas_access');
-    Route::get('compras/areas/{id}/actualizarfile', 'AreasController@editfile')->name('file.edit')->middleware('can:areas_access');
-    Route::POST('compras/areas/updatefile', 'AreasController@updatefile')->name('file.update')->middleware('can:areas_access');
-    Route::get('compras/areas/{id}/file2', 'AreasController@file2')->name('areas.file2')->middleware('can:areas_access');
-    Route::get('compras/areas/{id}/crearFile2', 'AreasController@crearFile2')->name('areas.crearFile2')->middleware('can:areas_access');
-    Route::POST('compras/areas/guardarfile2', 'AreasController@guardarfile2')->name('areas.guardarfile2')->middleware('can:areas_access');
-    Route::get('compras/areas/{id}/actualizarfile2', 'AreasController@editfile2')->name('file2.edit')->middleware('can:areas_access');
-    Route::POST('compras/areas/updatefile2', 'AreasController@updatefile2')->name('file2.update')->middleware('can:areas_access');
+        /*COMPRAS AREAS*/
+        Route::get('compras/areas/index', [AreasController::class,'index'])->name('areas.index')->middleware('can:areas_access');
+        Route::get('compras/areas/list', [AreasController::class,'listado'])->name('areas.list')->middleware('can:areas_access');
+        Route::get('compras/areas/create', [AreasController::class,'create'])->name('areas.create')->middleware('can:areas_access');
+        Route::get('compras/areas/{id}/edit', [AreasController::class,'edit'])->name('areas.edit')->middleware('can:areas_access');
+        Route::POST('compras/areas/{id}/update', [AreasController::class,'update'])->name('areas.update')->middleware('can:areas_access');
+        Route::POST('compras/areas/store', [AreasController::class,'store'])->name('areas.store')->middleware('can:areas_access');
+        Route::get('compras/areas/{id}/file', [AreasController::class,'file'])->name('areas.file')->middleware('can:areas_access');
+        Route::get('compras/areas/{id}/crearFile', [AreasController::class,'crearFile'])->name('areas.crearFile')->middleware('can:areas_access');
+        Route::POST('compras/areas/guardarfile', [AreasController::class,'guardarfile'])->name('areas.guardarfile')->middleware('can:areas_access');
+        Route::get('compras/areas/{id}/actualizarfile', [AreasController::class,'editfile'])->name('file.edit')->middleware('can:areas_access');
+        Route::POST('compras/areas/updatefile', [AreasController::class,'updatefile'])->name('file.update')->middleware('can:areas_access');
+        Route::get('compras/areas/{id}/file2', [AreasController::class,'file2'])->name('areas.file2')->middleware('can:areas_access');
+        Route::get('compras/areas/{id}/crearFile2', [AreasController::class,'crearFile2'])->name('areas.crearFile2')->middleware('can:areas_access');
+        Route::POST('compras/areas/guardarfile2', [AreasController::class,'guardarfile2'])->name('areas.guardarfile2')->middleware('can:areas_access');
+        Route::get('compras/areas/{id}/actualizarfile2', [AreasController::class,'editfile2'])->name('file2.edit')->middleware('can:areas_access');
+        Route::POST('compras/areas/updatefile2', [AreasController::class,'updatefile2'])->name('file2.update')->middleware('can:areas_access');
 
-//////////////////////////////--COMPRAS PROGRAMAS--////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    Route::get('compras/programas/index', 'ProgramaController@index')->name('programas.index')->middleware('can:programas_access');
-    Route::get('compras/programas/list', 'ProgramaController@listado')->name('programas.list')->middleware('can:programas_access');
-    Route::get('compras/programas/{id}/edit', 'ProgramaController@edit')->name('programas.edit')->middleware('can:programas_access');
-    Route::POST('compras/programas/{id}/update', 'ProgramaController@update')->name('programas.update')->middleware('can:programas_access');
-    Route::get('compras/programas/create', 'ProgramaController@create')->name('programas.create')->middleware('can:programas_access');
-    Route::POST('compras/programas/store', 'ProgramaController@store')->name('programas.store')->middleware('can:programas_access');
+        //////////////////////////////--COMPRAS PROGRAMAS--////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    Route::get('compras/programas/index', [ProgramaController::class,'index'])->name('programas.index')->middleware('can:programas_access');
+    Route::get('compras/programas/list', [ProgramaController::class,'listado'])->name('programas.list')->middleware('can:programas_access');
+    Route::get('compras/programas/{id}/edit', [ProgramaController::class,'edit'])->name('programas.edit')->middleware('can:programas_access');
+    Route::POST('compras/programas/{id}/update', [ProgramaController::class,'update'])->name('programas.update')->middleware('can:programas_access');
+    Route::get('compras/programas/create', [ProgramaController::class,'create'])->name('programas.create')->middleware('can:programas_access');
+    Route::POST('compras/programas/store', [ProgramaController::class,'store'])->name('programas.store')->middleware('can:programas_access');
+
+
 
 ////////////////////////////////--COMPRAS CATEGORIAS PROGRAMATICAS--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    Route::get('compras/catprog/index', 'CatProgController@index')->name('catprog.index')->middleware('can:catprog_access');
-    Route::get('compras/catprog/list', 'CatProgController@listado')->name('catprog.list')->middleware('can:catprog_access');
-    Route::get('compras/catprog/{id}/edit', 'CatProgController@editar')->name('catprog.edit')->middleware('can:catprog_access');
-    Route::POST('compras/catprog/{id}/update', 'CatProgController@update')->name('catprog.update')->middleware('can:catprog_access');
-    Route::get('compras/catprog/create', 'CatProgController@create')->name('catprog.create')->middleware('can:catprog_access');
-    Route::POST('compras/catprog/store', 'CatProgController@store')->name('catprog.store')->middleware('can:catprog_access');
-
+Route::get('compras/catprog/index', [CatProgController::class,'index'])->name('catprog.index')->middleware('can:catprog_access');
+Route::get('compras/catprog/list', [CatProgController::class,'listado'])->name('catprog.list')->middleware('can:catprog_access');
+Route::get('compras/catprog/{id}/edit', [CatProgController::class,'editar'])->name('catprog.edit')->middleware('can:catprog_access');
+Route::POST('compras/catprog/{id}/update', [CatProgController::class,'update'])->name('catprog.update')->middleware('can:catprog_access');
+Route::get('compras/catprog/create', [CatProgController::class,'create'])->name('catprog.create')->middleware('can:catprog_access');
+Route::POST('compras/catprog/store', [CatProgController::class,'store'])->name('catprog.store')->middleware('can:catprog_access');
 
 ////////////////////////////////--ACTIVOS FIJOS--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+Route::get('activosFijos/activos', [ActivosController::class,'index'])->name('activos.index');
 
   //  Route::get('activosFijos/activos', 'ActivosController@index')->name('activos.index');
   Route::group(['namespace' => 'App\Http\Controllers\Activo'], function () {
@@ -316,7 +336,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
     // Filtros
     Route::get('Activo/reportes/filtroUnidad', [FiltrosController::class, 'filtroUnidad'])->name('activo.filtros.unidad');
     Route::get('Activo/reportes/filtroTodos', [FiltrosController::class, 'filtroTodos'])->name('activo.filtros.todos');
-    
+
     // Route::get('Activo/oficina', [OficinaController::class, 'index'])->name('activo.oficina.index');
     // Route::get('Activo/oficina/list', [OficinaController::class, 'list'])->name('activo.oficina.list');
     // Route::get('Activo/oficina/{idarea}/responsables', [OficinaController::class, 'responsables'])->name('oficina.responsables');
@@ -490,7 +510,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
     Route::get('/reportes/rep16-pdf', [ReportesController::class, 'reporte16Pdf'])->name('rep16.pdf');
     Route::get('/reportes/rep17-pdf', [ReportesController::class, 'reporte17Pdf'])->name('rep17.pdf');
     Route::get('/reportes/rep18-pdf', [ReportesController::class, 'reporte18Pdf'])->name('rep18.pdf');
-   
+
 
 
     Route::get('/reportes/asignacion', [ReportesController::class, 'asignacion'])->name('asignacion');
@@ -499,7 +519,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
     Route::get('/reportes/certificado/{empleado_id}', [ReportesController::class, 'certificado'])->name('certificado');
     Route::get('/reportes/formulario/{empleado_id}', [ReportesController::class, 'formulario'])->name('formulario');
 
-    
+
     Route::get('/reportes/rep1-excel', [ReportesController::class, 'reporte1Excel'])->name('rep1.excel');
     Route::get('/reportes/rep5-excel', [ReportesController::class, 'reporte5Excel'])->name('rep5.excel');
     Route::get('/reportes/rep7-excel', [ReportesController::class, 'reporte7Excel'])->name('rep7.excel');
@@ -536,9 +556,9 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
     Route::post('Activo/codigo-barras/generar', [CodigoBarrasController::class, 'generar'])->name('codigos_barras.generar');
     Route::get('Activo/etiquetas/{id}/imprimir/{cantidad}', [CodigoBarrasController::class, 'imprimirEtiquetas'])->name('etiquetas.imprimir');
     Route::post('Activo/configuracion/guardar', [CodigoBarrasController::class, 'guardarConfiguracion'])->name('configuracion.guardar');
-   
+
     Route::get('Activo/codigo-barras/{codigo}/buscar', [CodigoBarrasController::class, 'buscar'])->name('activo.codigos_barras.buscar');
-    
+
 
     Route::get('Activo/configuracion', [ConfiguracionController::class, 'index'])->name('activo.configuracion.index');
     Route::post('Activo/configuracion/general', [ConfiguracionController::class, 'guardarConfiguracionGeneral'])->name('configuracion.general.guardar');
@@ -552,179 +572,175 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
 
 ////////////////////////////////--DISCAPACIDAD--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    Route::get('canasta/entrega/index', 'CanastaEntregaController@index')->name('canasta.entrega.index');//->middleware('can:canasta.entrega.index');
-    Route::get('canasta/entrega/search', 'CanastaEntregaController@search')->name('canasta.entrega.search');//->middleware('can:canasta.entrega.index');
-    Route::get('canasta/pendientes/index', 'CanastaPendientesController@index')->name('canasta.pendientes.index');//->middleware('can:canasta.entrega.index');
-    Route::get('canasta/pendientes/search', 'CanastaPendientesController@search')->name('canasta.pendientes.search');//->middleware('can:canasta.entrega.index');
-    Route::get('canasta/pendientes/search-detalle', 'CanastaPendientesController@searchdetalle')->name('canasta.pendientes.search.detalle');//->middleware('can:canasta.entrega.index');
-    Route::get('canasta/pendientes/search-detalle-pdf', 'CanastaPendientesController@searchdetallepdf')->name('canasta.pendientes.search.detallepdf');//->middleware('can:canasta.entrega.index');
+Route::get('canasta/entrega/index', [CanastaEntregaController::class,'index'])->name('canasta.entrega.index');//->middleware('can:canasta.entrega.index');
+Route::get('canasta/entrega/search', [CanastaEntregaController::class,'search'])->name('canasta.entrega.search');//->middleware('can:canasta.entrega.index');
+Route::get('canasta/pendientes/index', [CanastaPendientesController::class,'index'])->name('canasta.pendientes.index');//->middleware('can:canasta.entrega.index');
+Route::get('canasta/pendientes/search', [CanastaPendientesController::class,'search'])->name('canasta.pendientes.search');//->middleware('can:canasta.entrega.index');
+Route::get('canasta/pendientes/search-detalle', [CanastaPendientesController::class,'searchdetalle'])->name('canasta.pendientes.search.detalle');//->middleware('can:canasta.entrega.index');
+Route::get('canasta/pendientes/search-detalle-pdf', [CanastaPendientesController::class,'searchdetallepdf'])->name('canasta.pendientes.search.detallepdf');//->middleware('can:canasta.entrega.index');
 
-    Route::get('activosvsiaf/index', 'ActivosVsiafController@index')->name('activos.vsiaf.index');//->middleware('can:canasta.entrega.index');
-    Route::get('activosvsiaf/search', 'ActivosVsiafController@search')->name('activos.vsiaf.search');//->middleware('can:canasta.entrega.index');
+Route::get('activosvsiaf/index', [ActivosVsiafController::class,'index'])->name('activos.vsiaf.index');//->middleware('can:canasta.entrega.index');
+Route::get('activosvsiaf/search', [ActivosVsiafController::class,'search'])->name('activos.vsiaf.search');//->middleware('can:canasta.entrega.index');
 
 /////////////////////////--ENCARGADOS--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('compras/pedidoparcial/responsable', 'CompraController2@listadoResponsables')->name('compras.pedidoparcial.listadoResponsables');
-Route::get('compras/pedidoparcial/responsableCreate', 'CompraController2@crearEncargado')->name('compras.pedidoparcial.crearEncargado')->middleware('can:compras_encargados_create');
-Route::POST('compras/pedidoparcial/store2', 'CompraController2@storeEncargado')->name('compras.pedidoparcial.storeEncargado')->middleware('can:compras_encargados_create');
-Route::get('compras/pedidoparcial/responsableEdit/{id}', 'CompraController2@responsableEdit')->name('compras.pedidoparcial.responsableEdit')->middleware('can:compras_encargados_edit');
-Route::post('compras/pedidoparcial/responsableUpdate', 'CompraController2@UpdateResponsable')->name('compras.pedidoparcial.UpdateResponsable')->middleware('can:compras_encargados_edit');
+/*Route::get('compras/pedidoparcial/responsable', [CompraController2::class,'listadoResponsables'])->name('compras.pedidoparcial.listadoResponsables');
+Route::get('compras/pedidoparcial/responsableCreate', [CompraController2::class,'crearEncargado'])->name('compras.pedidoparcial.crearEncargado')->middleware('can:compras_encargados_create');
+Route::POST('compras/pedidoparcial/store2', [CompraController2::class,'storeEncargado'])->name('compras.pedidoparcial.storeEncargado')->middleware('can:compras_encargados_create');
+Route::get('compras/pedidoparcial/responsableEdit/{id}', [CompraController2::class,'responsableEdit'])->name('compras.pedidoparcial.responsableEdit')->middleware('can:compras_encargados_edit');
+Route::post('compras/pedidoparcial/responsableUpdate', [CompraController2::class,'UpdateResponsable'])->name('compras.pedidoparcial.UpdateResponsable')->middleware('can:compras_encargados_edit');*/
 
 
 ////////////////////////////--ARCHIVOS--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('archivos/index', 'ArchivosController@index')->name('archivos.index');
-Route::get('archivos/createArchivo', 'ArchivosController@createArchivo')->name('archivos.create');
-Route::get('archivos/create', 'ArchivosController@create')->name('archivos.create');
-Route::POST('archivos/insertar', 'ArchivosController@insertar')->name('archivos.insertar');
+Route::get('archivos/index', [ArchivosController::class,'index'])->name('archivos.index');
+Route::get('archivos/createArchivo', [ArchivosController::class,'createArchivo'])->name('archivos.create');
+Route::get('archivos/create', [ArchivosController::class,'create'])->name('archivos.create');
+Route::POST('archivos/insertar', [ArchivosController::class,'insertar'])->name('archivos.insertar');
 
-Route::get('archivos/{id}/edit', 'ArchivosController@editar')->name('archivos.edit');
-Route::POST('archivos/{id}/update', 'ArchivosController@update')->name('archivos.update');
+Route::get('archivos/{id}/edit', [ArchivosController::class,'editar'])->name('archivos.edit');
+Route::POST('archivos/{id}/update', [ArchivosController::class,'update'])->name('archivos.update');
 
 
 ////////////////////////////--ARCHIVOS2--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('archivos2/index', 'ArchivosController2@index')->name('archivos2.index');
-Route::get('archivos2/createArchivo', 'ArchivosController2@createArchivo')->name('archivos2.create');
-Route::get('archivos2/create', 'ArchivosController2@create')->name('archivos2.create');
-Route::POST('archivos2/insertar', 'ArchivosController2@insertar')->name('archivos2.insertar');
+Route::get('archivos2/index', [ArchivosController2::class,'index'])->name('archivos2.index');
+Route::get('archivos2/createArchivo', [ArchivosController2::class,'createArchivo'])->name('archivos2.create');
+Route::get('archivos2/create', [ArchivosController2::class,'create'])->name('archivos2.create');
+Route::POST('archivos2/insertar', [ArchivosController2::class,'insertar'])->name('archivos2.insertar');
 
-Route::get('archivos2/{id}/edit', 'ArchivosController2@editar')->name('archivos2.edit');
-Route::POST('archivos2/{id}/update', 'ArchivosController2@update')->name('archivos2.update');
+Route::get('archivos2/{id}/edit', [ArchivosController2::class,'editar'])->name('archivos2.edit');
+Route::POST('archivos2/{id}/update', [ArchivosController2::class,'update'])->name('archivos2.update');
 
-Route::get('archivos2/index2', 'ArchivosController2@index2')->name('archivos2.index2');
-Route::get('/archivos2/datatable', 'ArchivosController2@index22')->name('archivos2.index22');
-Route::get('/archivos2/tipoarchivo', 'ArchivosController2@tipo')->name('archivos2.tipo');
-Route::POST('/archivos2/tipoarchivo', 'ArchivosController2@guardartipoarea')->name('archivos2.guardartipo');
-Route::get('/archivos2/delete{id}', 'ArchivosController2@delete')->name('archivos2.delete');
+Route::get('archivos2/index2', [ArchivosController2::class,'index2'])->name('archivos2.index2');
+Route::get('/archivos2/index22', [ArchivosController2::class,'index22'])->name('archivos2.index22');
 
+Route::get('archivos2/tipoarchivo', [ArchivosController2::class,'tipo'])->name('archivos2.tipo');
+Route::POST('archivos2/tipoarchivo', [ArchivosController2::class,'guardartipoarea'])->name('archivos2.guardartipo');
+Route::get('archivos2/delete{id}', [ArchivosController2::class,'delete'])->name('archivos2.delete');
 
-Route::get('archivos2/createtipo', 'ArchivosController2@createtipoarchivo')->name('archivos2.createtipo');
-Route::POST('archivos2/createtipoarchivo', 'ArchivosController2@guardartipoarchivo')->name('archivos2.storecreatetipo');
-
+Route::get('archivos2/createtipo', [ArchivosController2::class,'createtipoarchivo'])->name('archivos2.createtipo');
+Route::POST('archivos2/createtipoarchivo', [ArchivosController2::class,'guardartipoarchivo'])->name('archivos2.storecreatetipo');
 
 /////////////////////////--ALMACEN--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('almacen/index', 'AlmacenController@index')->name('almacen.index');
-Route::get('almacen/detalle/{id}','AlmacenController@detalle')->name('almacen.detalle');
+Route::get('almacen/index', [AlmacenController::class,'index'])->name('almacen.index');
 //Route::get('compras/pedido/index2', 'CompraController@index2')->name('compras.pedido.index2');
 //oute::get('compras/pedido/create', 'CompraController@create')->name('compras.pedido.create');
 //Route::post('compras/pedido/store', 'CompraController@store')->name('compras.pedido.store');
-Route::get('almacen/temporal/{id}','AlmacenController@temporal')->name('almacen.temporal');
+//Route::get('compras/pedido/edit/{id}', 'CompraController@edit')->name('compras.pedido.edit');
 //Route::get('compras/pedido/editar/{id}', 'CompraController@editar')->name('compras.pedido.editar');
 //Route::post('compras/pedido/update', 'CompraController@update')->name('compras.pedido.update');
 
 /////////////////////////--CORRESPONDENCIA--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('correspondencia/index', 'RecepcionController@index')->name('recepcion.index');
-Route::get('correspondencia/createRecepcion', 'RecepcionController@create')->name('recepcion.create');
-Route::get('correspondencia/indexUnidad', 'RecepcionController@indexUnidad')->name('recepcion.unidadIndex');
-Route::get('correspondencia/indexRemitente', 'RecepcionController@indexRemitente')->name('recepcion.remitenteIndex');
-Route::get('correspondencia/createUnidad', 'RecepcionController@createLugar')->name('crear.lugar');
-Route::post('correspondencia/storeLugar', 'RecepcionController@storeLugar')->name('guardar.lugar');
-Route::get('correspondencia/createRemitente', 'RecepcionController@createRemitente')->name('crear.remitente');
-Route::post('correspondencia/storeRemitente', 'RecepcionController@storeRemitente')->name('guardar.remitente');
-Route::get('correspondencia/createRecepcion', 'RecepcionController@createRecepcion')->name('crear.recepcion');
-Route::post('correspondencia/storeRecepcion', 'RecepcionController@storeRecepcion')->name('guardar.recepcion');
-Route::get('correspondencia/{id}/edit', 'RecepcionController@editarCodigo')->name('correspondencia.edit');
-Route::POST('correspondencia/{id}/updateCodigo', 'RecepcionController@updateCodigo')->name('correspondencia.update');
+Route::get('correspondencia/index', [RecepcionController::class,'index'])->name('recepcion.index');
+Route::get('correspondencia/createRecepcion', [RecepcionController::class,'create'])->name('recepcion.create');
+Route::get('correspondencia/indexUnidad', [RecepcionController::class,'indexUnidad'])->name('recepcion.unidadIndex');
+Route::get('correspondencia/indexRemitente', [RecepcionController::class,'indexRemitente'])->name('recepcion.remitenteIndex');
+Route::get('correspondencia/createUnidad', [RecepcionController::class,'createLugar'])->name('crear.lugar');
+Route::post('correspondencia/storeLugar', [RecepcionController::class,'storeLugar'])->name('guardar.lugar');
+Route::get('correspondencia/createRemitente', [RecepcionController::class,'createRemitente'])->name('crear.remitente');
+Route::post('correspondencia/storeRemitente', [RecepcionController::class,'storeRemitente'])->name('guardar.remitente');
+Route::get('correspondencia/createRecepcion', [RecepcionController::class,'createRecepcion'])->name('crear.recepcion');
+Route::post('correspondencia/storeRecepcion', [RecepcionController::class,'storeRecepcion'])->name('guardar.recepcion');
+Route::get('correspondencia/{id}/edit', [RecepcionController::class,'editarCodigo'])->name('correspondencia.edit');
+Route::POST('correspondencia/{id}/updateCodigo', [RecepcionController::class,'updateCodigo'])->name('correspondencia.update');
+
 
 ////////////////////////////--AGENDA--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('agenda/index', 'AgendaController@index')->name('agenda.index');
-Route::get('archivos2/createArchivo', 'ArchivosController@createArchivo')->name('agenda.create');
-Route::get('agenda/create', 'AgendaController@create')->name('agenda.create');
-Route::POST('agenda/insertar', 'AgendaController@insertar')->name('agenda.insertar');
 
-Route::get('agenda/{id}/edit', 'AgendaController@editar')->name('agenda.edit');
-Route::POST('agenda/{id}/update', 'AgendaController@update')->name('agenda.update');
+Route::get('agenda/index', [AgendaController::class,'index'])->name('agenda.index');
+//Route::get('archivos2/createArchivo', [ArchivosController::class,'createArchivo'])->name('agenda.create');
+Route::get('agenda/create', [AgendaController::class,'create'])->name('agenda.create');
+Route::POST('agenda/insertar', [AgendaController::class,'insertar'])->name('agenda.insertar');
 
-Route::get('agenda/{id}/edit2', 'AgendaController@editar2')->name('agenda.edit2');
-Route::POST('agenda/{id}/update2', 'AgendaController@update2')->name('agenda.update2');
+Route::get('agenda/{id}/edit', [AgendaController::class,'editar'])->name('agenda.edit');
+Route::POST('agenda/{id}/update', [AgendaController::class,'update'])->name('agenda.update');
 
-Route::get('agenda/indexayer', 'AgendaController@indexayer')->name('agenda.indexayer');
-Route::get('agenda/indexhoy', 'AgendaController@indexhoy')->name('agenda.indexhoy');
-Route::get('agenda/indexmaniana', 'AgendaController@indexmaniana')->name('agenda.indexmaniana');
-Route::get('agenda/delete/{id}', 'AgendaController@delete')->name('agenda.delete');
-Route::get('agenda/indextotal', 'AgendaController@indextotal')->name('agenda.indextotal');
+Route::get('agenda/{id}/edit2', [AgendaController::class,'editar2'])->name('agenda.edit2');
+Route::POST('agenda/{id}/update2', [AgendaController::class,'update2'])->name('agenda.update2');
+
+Route::get('agenda/indexayer', [AgendaController::class,'indexayer'])->name('agenda.indexayer');
+Route::get('agenda/indexhoy', [AgendaController::class,'indexhoy'])->name('agenda.indexhoy');
+Route::get('agenda/indexmaniana', [AgendaController::class,'indexmaniana'])->name('agenda.indexmaniana');
+Route::get('agenda/delete/{id}', [AgendaController::class,'delete'])->name('agenda.delete');
+
+
 
 ////evento////
-Route::get('Calendar/event','ControllerCalendar@index');
-Route::get('Calendar/event/{mes}','ControllerCalendar@index_month');
+Route::get('Calendar/event',[ControllerCalendar::class,'index']);
+Route::get('Calendar/event/{mes}',[ControllerCalendar::class,'index_month']);
 
 // formulario
-Route::get('Evento/form/{mes}','ControllerEvent@form');
-Route::post('Evento/create','ControllerEvent@create');
+Route::get('Evento/form/{mes}',[ControllerEvent::class,'form']);
+Route::post('Evento/create', [ControllerEvent::class,'create']);
 // Detalles de evento
-Route::get('Evento/details/{id},{id2},{id3}','ControllerEvent@details');
-Route::get('Evento/details2/{id}','ControllerEvent@details2');
+Route::get('Evento/details/{id},{id2},{id3}',[ControllerEvent::class,'details']);
+Route::get('Evento/details2/{id}',[ControllerEvent::class,'details2']);
 // Calendario
-Route::get('Evento/index','ControllerEvent@index');
-Route::get('Evento/index/{month}','ControllerEvent@index_month');
+Route::get('Evento/index',[ControllerEvent::class,'index']);
+Route::get('Evento/index/{month}',[ControllerEvent::class,'index_month']);
 
 // editar
-Route::get('Evento/actualizar/{id}','ControllerEvent@editar');
-Route::post('Evento/actualizar2/{id}','ControllerEvent@actualizar');
+Route::get('Evento/actualizar/{id}',[ControllerEvent::class,'editar']);
+Route::post('Evento/actualizar2/{id}',[ControllerEvent::class,'actualizar']);
+
 
 /////////////////////////--CORRESPONDENCIA 2--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('correspondencia2/index', 'Recepcion2Controller@index')->name('recepcion2.index');
-Route::get('correspondencia2/{id}/edit', 'Recepcion2Controller@editarCodigo')->name('correspondencia2.edit');
-Route::POST('correspondencia2/{id}/updateCodigo', 'Recepcion2Controller@updateCodigo')->name('correspondencia2.update');
-Route::get('correspondencia2/createRecepcion', 'Recepcion2Controller@createRecepcion')->name('crear2.recepcion');
-Route::post('correspondencia2/storeRecepcion', 'Recepcion2Controller@storeRecepcion')->name('guardar2.recepcion');
-Route::get('correspondencia2/indexUnidad', 'Recepcion2Controller@indexUnidad')->name('recepcion2.unidadIndex');
-Route::get('correspondencia2/createUnidad', 'Recepcion2Controller@createLugar')->name('crear2.lugar');
-Route::post('correspondencia2/storeLugar', 'Recepcion2Controller@storeLugar')->name('guardar2.lugar');
-Route::get('correspondencia2/indexRemitente', 'Recepcion2Controller@indexRemitente')->name('recepcion2.remitenteIndex');
-Route::get('correspondencia2/createRemitente', 'Recepcion2Controller@createRemitente')->name('crear2.remitente');
-Route::post('correspondencia2/storeRemitente', 'Recepcion2Controller@storeRemitente')->name('guardar2.remitente');
-Route::get('correspondencia2/createTipo', 'Recepcion2Controller@createTipo')->name('crear2.tipo');
-Route::post('correspondencia2/storeTipo', 'Recepcion2Controller@storeTipo')->name('guardar2.tipo');
+Route::get('correspondencia2/index', [Recepcion2Controller::class,'index'])->name('recepcion2.index');
+Route::get('correspondencia2/{id}/edit', [Recepcion2Controller::class,'editarCodigo'])->name('correspondencia2.edit');
+Route::POST('correspondencia2/{id}/updateCodigo', [Recepcion2Controller::class,'updateCodigo'])->name('correspondencia2.update');
+Route::get('correspondencia2/createRecepcion', [Recepcion2Controller::class,'createRecepcion'])->name('crear2.recepcion');
+Route::post('correspondencia2/storeRecepcion', [Recepcion2Controller::class,'storeRecepcion'])->name('guardar2.recepcion');
+Route::get('correspondencia2/indexUnidad', [Recepcion2Controller::class,'indexUnidad'])->name('recepcion2.unidadIndex');
+Route::get('correspondencia2/createUnidad', [Recepcion2Controller::class,'createLugar'])->name('crear2.lugar');
+Route::post('correspondencia2/storeLugar', [Recepcion2Controller::class,'storeLugar'])->name('guardar2.lugar');
+Route::get('correspondencia2/indexRemitente', [Recepcion2Controller::class,'indexRemitente'])->name('recepcion2.remitenteIndex');
+Route::get('correspondencia2/createRemitente', [Recepcion2Controller::class,'createRemitente'])->name('crear2.remitente');
+Route::post('correspondencia2/storeRemitente', [Recepcion2Controller::class,'storeRemitente'])->name('guardar2.remitente');
+Route::get('correspondencia2/createTipo', [Recepcion2Controller::class,'createTipo'])->name('crear2.tipo');
+Route::post('correspondencia2/storeTipo', [Recepcion2Controller::class,'storeTipo'])->name('guardar2.tipo');
+
+Route::get('correspondencia2/buscarRemitentes', [Recepcion2Controller::class,'buscarRemitentes'])->name('crear2.buscarRemitentes');
+
 //////////////////
-Route::get('correspondencia2/{id}/gestionarCorrespondencia', 'Recepcion2Controller@gestionarCorrespondencia')->name('correspondencia2.gestionar');
-Route::get('correspondencia2/{id}/cargarpdf', 'Recepcion2Controller@cargarpdf')->name('correspondencia2.cargarpdf');
-Route::post('correspondencia2/storepdf', 'Recepcion2Controller@storepdf')->name('correspondencia2.storepdf');
-Route::get('correspondencia2/{id}/derivar', 'Recepcion2Controller@derivar')->name('correspondencia2.derivar');
-Route::get('correspondencia2/derivar2', 'Recepcion2Controller@guardarderivacion')->name('correspondencia2.guardarderivacion');
-Route::get('correspondencia2/delete{id}', 'Recepcion2Controller@delete')->name('correspondencia2.delete');
-Route::get('correspondencia2/urlfile/{id}', 'Recepcion2Controller@urlfile')->name('correspondencia2.urlfile');
-Route::get('correspondencia2/{id}/actualizarpdf', 'Recepcion2Controller@actualizarpdf')->name('correspondencia2.actualizarpdf');
-Route::post('correspondencia2/updatepdf', 'Recepcion2Controller@updatepdf')->name('correspondencia2.updatepdf');
-Route::get('correspondencia2/notificacion', 'Recepcion2Controller@notificacion')->name('correspondencia2.notificacion');
-///////////
-Route::get('derivacion/index', 'Recepcion2Controller@indexderivacion')->name('derivacion.index');
-Route::get('derivacion/{id}/gestionarCorrespondencia', 'Recepcion2Controller@gestionarCorrespondencia2')->name('derivacion.gestionar');
-Route::get('correspondencia2/urlfilederivacion/{id}', 'Recepcion2Controller@urlfile')->name('derivacion.urlfilederivacion');
-Route::get('correspondencia2/pregunta', 'Recepcion2Controller@pregunta2')->name('derivacion.pregunta');
-Route::get('/get-users', 'Recepcion2Controller@getUsers')->name('get-users');
-Route::post('/ruta', 'Recepcion2Controller@respuesta')->name('pregunta');
-//Route::post('product-data', 'HomeController@postform');
+Route::get('correspondencia2/{id}/gestionarCorrespondencia', [Recepcion2Controller::class,'gestionarCorrespondencia'])->name('correspondencia2.gestionar');
+Route::get('correspondencia2/{id}/cargarpdf', [Recepcion2Controller::class,'cargarpdf'])->name('correspondencia2.cargarpdf');
+Route::post('correspondencia2/storepdf', [Recepcion2Controller::class,'storepdf'])->name('correspondencia2.storepdf');
+Route::get('correspondencia2/{id}/derivar', [Recepcion2Controller::class,'derivar'])->name('correspondencia2.derivar');
+Route::get('correspondencia2/derivar2', [Recepcion2Controller::class,'guardarderivacion'])->name('correspondencia2.guardarderivacion');
+Route::get('correspondencia2/delete{id}', [Recepcion2Controller::class,'delete'])->name('correspondencia2.delete');
+Route::get('correspondencia2/urlfile/{id}', [Recepcion2Controller::class,'urlfile'])->name('correspondencia2.urlfile');
+Route::get('correspondencia2/{id}/actualizarpdf', [Recepcion2Controller::class,'actualizarpdf'])->name('correspondencia2.actualizarpdf');
+Route::post('correspondencia2/updatepdf', [Recepcion2Controller::class,'updatepdf'])->name('correspondencia2.updatepdf');
+
+Route::post('/ruta', [Recepcion2Controller::class,'respuesta'])->name('pregunta');
+
+
 ////evento2////
 
 // formulario
-Route::get('Evento2/form/{mes}','ControllerEvent2@form');
-Route::post('Evento2/create','ControllerEvent2@create');
+Route::get('Evento2/form/{mes}',[ControllerEvent2::class,'form']);
+Route::post('Evento2/create',[ControllerEvent2::class,'create']);
 // Detalles de evento
-Route::get('Evento2/details/{id},{id2},{id3}','ControllerEvent2@details');
-Route::get('Evento2/details2/{id}','ControllerEvent2@details2');
+Route::get('Evento2/details/{id},{id2},{id3}',[ControllerEvent2::class,'details']);
+Route::get('Evento2/details2/{id}',[ControllerEvent2::class,'details2']);
 // Calendario
-Route::get('Evento2/index','ControllerEvent2@index');
-Route::get('Evento2/index/{month}','ControllerEvent2@index_month');
+Route::get('Evento2/index',[ControllerEvent2::class,'index']);
+Route::get('Evento2/index/{month}',[ControllerEvent2::class,'index_month']);
 
 // editar
-Route::get('Evento2/actualizar/{id}','ControllerEvent2@editar');
-Route::post('Evento2/actualizar2/{id}','ControllerEvent2@actualizar');
+Route::get('Evento2/actualizar/{id}',[ControllerEvent2::class,'editar']);
+Route::post('Evento2/actualizar2/{id}',[ControllerEvent2::class,'actualizar']);
 
-Route::get('Evento2/{id}/cargarpdf', 'ControllerEvent2@cargarpdf')->name('evento2.cargarpdf');
-Route::post('Evento2/storepdf', 'ControllerEvent2@storepdf')->name('evento2.storepdf');
-Route::get('Evento2/{id}/actualizarpdf', 'ControllerEvent2@actualizarpdf')->name('evento2.actualizarpdf');
-Route::POST('Evento2/updatepdf', 'ControllerEvent2@updatepdf')->name('evento2.updatepdf');
-Route::get('Evento2/urlfile/{id}', 'ControllerEvent2@urlfile')->name('evento2.urlfile');
-
-
-
-
+Route::get('Evento2/{id}/cargarpdf', [ControllerEvent2::class,'cargarpdf'])->name('evento2.cargarpdf');
+Route::post('Evento2/storepdf', [ControllerEvent2::class,'storepdf'])->name('evento2.storepdf');
+Route::get('Evento2/{id}/actualizarpdf', [ControllerEvent2::class,'actualizarpdf'])->name('evento2.actualizarpdf');
+Route::POST('Evento2/updatepdf', [ControllerEvent2::class,'updatepdf'])->name('evento2.updatepdf');
+Route::get('Evento2/urlfile/{id}', [ControllerEvent2::class,'urlfile'])->name('evento2.urlfile');
 
 /////////////////////////--CANASTA--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Route::get('almacen/detalle/{id}','AlmacenController@detalle')->name('almacen.detalle');
@@ -746,37 +762,65 @@ Route::get('distritos/', 'Canasta_v2\DistritosV2Controller@index')->name('distri
 
 
 //Route::get('compras/pedido/index2', 'CompraController@index2')->name('compras.pedido.index2');
-//Route::get('compras/pedido/create', 'CompraController@create')->name('compras.pedido.create');
+//oute::get('compras/pedido/create', 'CompraController@create')->name('compras.pedido.create');
 //Route::post('compras/pedido/store', 'CompraController@store')->name('compras.pedido.store');
 //Route::get('almacen/temporal/{id}','AlmacenController@temporal')->name('almacen.temporal');
 //Route::get('compras/pedido/editar/{id}', 'CompraController@editar')->name('compras.pedido.editar');
 //Route::post('compras/pedido/update', 'CompraController@update')->name('compras.pedido.update');
 
-/////////////////////////--EXPOCHACO SUDAMERICANO--//////////////////////
-    Route::get('expochaco/index', 'ExpoController@index')->name('expochaco.index');
-    Route::get('expochaco/rubro', 'ExpoController@rubro')->name('expochaco.rubro');
-
-    Route::get('expochaco/create', 'ExpoController@create')->name('expochaco.rubro.create');
-    Route::post('expochaco/store', 'ExpoController@store')->name('expochaco.rubro.store');
-});
-
-
-
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::get('/compras/medidas/create', [MedidaController::class, 'create'])->name('medidas.create');
 
 /////////////////////////--EXPOCHACO SUDAMERICANO--//////////////////////
-    //Route::get('expochaco/rubro', 'ExpoController@rubro')->name('expochaco.rubro');
+//Route::get('expochaco/index', [ExpoController::class,'index'])->name('expochaco.index');
+
+
+//Route::get('expochaco/createrubro', [ExpoController::class,'createrubro'])->name('expochaco.createrubro');
+//Route::post('expochaco/storerubro', [ExpoController::class,'storerubro'])->name('expochaco.storerubro');
+
+
+//Route::get('expochaco/index', [SolicitudController::class,'index'])
+//->name('expochaco.index');
+
+
+
+//Route::get('qrcode', function () {
+  // return QrCode::size(300)->generate('A basic example of QR code!');
+//})->name('qrr');
+
+    //////PERSONERIAS/////
+   Route::get('personerias/index', [PersoneriasController::class,'index'])
+   ->name('personerias.index');
+
+   Route::get('personerias/index2', [PersoneriasController::class,'indexantiguo'])
+   ->name('personerias.index2');
+
+   Route::get('personerias/index3', [PersoneriasController::class,'indexActualizada'])
+   ->name('personerias.index3');
+
+   Route::post('personerias/index2/{id}', [PersoneriasController::class,'update'])
+   ->name('personerias.update');
+
+   Route::get('personerias/index3/{id}', [PersoneriasController::class,'borrar'])
+   ->name('personerias.destroy');
+
+   Route::post('personerias/index4', [PersoneriasController::class,'create'])
+   ->name('personerias.create');
+
+   Route::post('personerias/index5/{id}', [PersoneriasController::class,'create2'])
+   ->name('personerias.create2');
 
 });
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Route::group(['namespace' => 'App\Http\Controllers'], function() {
+
+//});
+
+
+
 
 
 Route::group(['namespace' => 'App\Http\Controllers\Fexpo'], function() {
 
-    Route::get('expochaco/index', 'SolicitudController@index')
-    ->name('expochaco.index');
 
     Route::get('expochaco/create', 'SolicitudController@create')
     ->name('expochaco.create');
@@ -784,17 +828,9 @@ Route::group(['namespace' => 'App\Http\Controllers\Fexpo'], function() {
     Route::post('expochaco/store', 'SolicitudController@store')
     ->name('expochaco.store');
 
-    Route::get('expochaco/{id}/editar', 'SolicitudController@editar')
-    ->name('expochaco.editar');
-
-    Route::post('expochaco/update', 'SolicitudController@update')
-    ->name('expochaco.update');
-
-    Route::get('expochaco/delete2/{id}', 'SolicitudController@delete')
-    ->name('expochaco.delete');
-
-    Route::get('expochaco/aprovar/{id}', 'SolicitudController@aprovar')
-    ->name('expochaco.aprovar');
+    Route::get('expochaco/generarqr/{id}', 'SolicitudController@codigoqr')
+    ->name('expochaco.generarqr');
+    Route::post('/ruta2', 'SolicitudController@respuesta2')->name('pregunta2');
 });
 
 
@@ -879,10 +915,10 @@ Route::group(['namespace' => 'App\Http\Controllers\Compra'], function() {
     Route::post('combustibles/pedidoparcial/store', 'CompraCombController2@store')
     ->name('combustibles.pedidoparcial.store')->middleware('can:comprascomb_panel_access');
 
-    
+
     Route::post('combustibles/pedidoparcial/update', 'CompraCombController2@update')
     ->name('combustibles.pedidoparcial.update')->middleware('can:comprascomb_panel_access');
-    
+
     Route::get('combustibles/pedidoparcial/editar/{id}', 'CompraCombController2@editar')
     ->name('combustibles.pedidoparcial.editar')->middleware('can:comprascomb_panel_access');
 
@@ -908,7 +944,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Compra'], function() {
 
     Route::get('combustibles/detalle/index2', 'DetalleCompraCombController@index2')->name('combustibles.detalle.index2')->middleware('can:comprasalmacen_aprovadas_access');
 
-    
+
     Route::get('combustibles/detalle/index3', 'DetalleCompraCombController@index3')->name('combustibles.detalle.index3')->middleware('can:comprascomb_janeth_access');
     Route::get('combustibles/detalle/index4', 'DetalleCompraCombController@index4')->name('combustibles.detalle.index4');
     Route::get('combustibles/detalle/index5', 'DetalleCompraCombController@index5')->name('combustibles.detalle.index5')->middleware('can:comprascomb_janeth_access');
@@ -935,7 +971,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Compra'], function() {
 
 
 
-    
+
 
     Route::get('combustibles/detalleparcial/index', 'DetalleCompraCombController2@index')
     ->name('combustibles.detalleparcial.index')->middleware('can:comprascomb_panel_access');
@@ -943,7 +979,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Compra'], function() {
     Route::get('combustibles/detalleparcial/index2', 'DetalleCompraCombController2@index2')
     ->name('combustibles.detalleparcial.index2')->middleware('can:comprascomb_panel_access');
 
-    
+
     Route::get('combustibles/detalleparcial/index3', 'DetalleCompraCombController2@index3')
     ->name('combustibles.detalleparcial.index3')->middleware('can:comprascomb_panel_access');
     Route::get('combustibles/detalleparcial/index4', 'DetalleCompraCombController2@index4')
@@ -962,7 +998,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Compra'], function() {
 
 
 
-});   
+});
 
 Route::group(['namespace' => 'App\Http\Controllers\Transporte'], function() {
 
@@ -980,15 +1016,15 @@ Route::POST('transportes/uconsumo/insertar', 'UnidaddConsumoController@insertar'
 Route::get('transportes/uconsumo/aprovar/{id}', 'UnidaddConsumoController@aprovar')
     ->name('transportes.uconsumo.aprovar')->middleware('can:transportescombvehiculo_access');
 
-  
-    
+
+
     Route::get('transportes/tipo/index', 'TipomovilidadController@index')->name('tipo.index')->middleware('can:transportescombtipo_access');
     Route::get('transportes/tipo/list', 'TipomovilidadController@listado')->name('tipo.list')->middleware('can:transportescombtipo_access');
     Route::get('transportes/tipo/{id}/edit', 'TipomovilidadController@editar')->name('tipo.edit')->middleware('can:transportescombtipo_access');
     Route::POST('transportes/tipo/{id}/update', 'TipomovilidadController@update')->name('tipo.update')->middleware('can:transportescombtipo_access');
     Route::get('transportes/tipo/create', 'TipomovilidadController@create')->name('tipo.create')->middleware('can:transportescombtipo_access');
     Route::POST('transportes/tipo/store', 'TipomovilidadController@store')->name('tipo.store')->middleware('can:transportescombtipo_access');
-       
+
 
 
     Route::get('transportes/pedido/index', 'SoluconsumoController@index')
@@ -1006,12 +1042,12 @@ Route::get('transportes/uconsumo/aprovar/{id}', 'UnidaddConsumoController@aprova
     Route::POST('transportes/pedido/update', 'SoluconsumoController@update')->name('transportes.pedido.update');
     Route::get('transportes/pedido/edit/{id}', 'SoluconsumoController@edit')->name('transportes.pedido.edit');
     Route::get('transportes/pedido/editable/{id}', 'SoluconsumoController@editable')->name('transportes.pedido.editable');
-    
+
     Route::get('transportes/pedido/aprovar/{id}', 'SoluconsumoController@aprovar')
     ->name('transportes.pedido.aprovar')->middleware('can:vehiculocomb_solicitud_janeth');
     Route::get('transportes/pedido/rechazar/{id}', 'SoluconsumoController@rechazar')
     ->name('transportes.pedido.rechazar')->middleware('can:vehiculocomb_solicitud_janeth');
-    
+
     Route::get('transportes/pedido/rechazartr/{id}', 'SoluconsumoController@rechazartr')
     ->name('transportes.pedido.rechazartr');
 
@@ -1022,48 +1058,48 @@ Route::get('transportes/uconsumo/aprovar/{id}', 'UnidaddConsumoController@aprova
 
     Route::get('transportes/pedidoparcial/index2', 'SoluconsumoController2@index2')
     ->name('transportes.pedidoparcial.index2')->middleware('can:vehiculocomb_solicitud_access');
-    
+
     Route::get('transportes/pedidoparcial/index3', 'SoluconsumoController2@index3')
     ->name('transportes.pedidoparcial.index3')->middleware('can:vehiculocomb_solicitud_access');
-    
+
 
     Route::get('transportes/pedidoparcial/create', 'SoluconsumoController2@create')
     ->name('transportes.pedidoparcial.create')->middleware('can:vehiculocomb_solicitud_access');
-    
+
     Route::post('transportes/pedidoparcial/store', 'SoluconsumoController2@store')
     ->name('transportes.pedidoparcial.store')->middleware('can:vehiculocomb_solicitud_access');
-    
+
     Route::get('transportes/pedidoparcial/editar/{id}', 'SoluconsumoController2@editar')->name('transportes.pedidoparcial.editar')->middleware('can:vehiculocomb_solicitud_access');
-    
+
     Route::get('transportes/pedidoparcial/editrechazado/{id}', 'SoluconsumoController2@editrechazado')->name('transportes.pedidoparcial.editrechazado')->middleware('can:vehiculocomb_solicitud_access');
 
     Route::POST('transportes/pedidoparcial/update', 'SoluconsumoController2@update')->name('transportes.pedidoparcial.update')->middleware('can:vehiculocomb_solicitud_access');
-    
+
     Route::GET('transportes/pedidoparcial/pdf', 'SoluconsumoController2@pdf')->name('transportes.pedidoparcial.pdf')->middleware('can:vehiculocomb_solicitud_access');
-    
+
     Route::get('transportes/pedidoparcial/solicitud/{id}', 'SoluconsumoController2@solicitud')->name('transportes.pedidoparcial.solicitud')->middleware('can:vehiculocomb_solicitud_access');
-    
-    
+
+
     Route::post('/ruta7', 'SoluconsumoController2@respuesta7')->name('pregunta7')->middleware('can:vehiculocomb_solicitud_access');
-    
-    
+
+
     Route::get('transportes/detalle/index', 'DetalleSoluconsumoController@index')
     ->name('transportes.detalle.index')->middleware('can:vehiculocombu_pendiente');
-    
+
     Route::get('transportes/detalle/index2', 'DetalleSoluconsumoController@index2')
     ->name('transportes.detalle.index2')->middleware('can:vehiculocombu_pendiente');
-    
+
     Route::post('transportes/detalle/store', 'DetalleSoluconsumoController@store')
     ->name('transportes.detalle.store')->middleware('can:vehiculocombu_pendiente');
-    
+
     Route::get('transportes/delete2/{id}', 'DetalleSoluconsumoController@delete')
         ->name('transportes.detalle.delete')->middleware('can:vehiculocombu_pendiente');
-    
+
     Route::get('transportes/detalle/aprovar/{id}', 'DetalleSoluconsumoController@aprovar')
         ->name('transportes.detalle.aprovar')->middleware('can:vehiculocombu_pendiente');
-    
 
-});   
+
+});
 
 
 Route::group(['namespace' => 'App\Http\Controllers\Almacen'], function() {
@@ -1105,30 +1141,30 @@ Route::get('almacenes/detalle/editar/{id}', 'DetalleValeController@editar')->nam
 
 Route::POST('almacenes/detalle/update', 'DetalleValeController@update')->name('almacenes.detalle.update')->middleware('can:almacen_ingreso_access');
 
-});  
+});
 
 Route::group(['namespace' => 'App\Http\Controllers\Almacen\Ingreso'], function() {
 
-    
+
  Route::get('almacenes/ingreso/index', 'IngresoController@index')
  ->name('almacenes.ingreso.index')->middleware('can:almacen_ingreso_access');
- 
+
  Route::get('almacenes/ingreso/{id}/editardoc', ['uses' => 'IngresoController@editardoc','as' => 'ingreso.editdoc'])->middleware('can:almacen_ingreso_access');
  Route::get('almacenes/ingreso/{id}/editararchivo', 'IngresoController@editararchivo')->name('IngresoController.editararchivo')->middleware('can:almacen_ingreso_access');
  Route::POST('almacenes/ingreso/{id}/updatearchivonota', 'IngresoController@updatearchivonota')->name('IngresoController.updatearchivonota')->middleware('can:almacen_ingreso_access');
 
- 
- 
+
+
  Route::get('almacenes/ingreso/{id}/createdocuconsumo', 'IngresoController@createdoc')->name('IngresoController.createdoc')->middleware('can:almacen_ingreso_access');
  Route::POST('almacenes/ingreso/insertar', 'IngresoController@insertar')->name('IngresoController.insertar')->middleware('can:almacen_ingreso_access');
  Route::get('almacenes/ingreso/grafico', 'IngresoController@grafico')->name('almacenes.ingreso.grafico')->middleware('can:almacen_ingreso_access');
- 
+
  Route::get('almacenes/ingreso/detalle/{id}', 'IngresoController@detalle')->name('almacenes.ingreso.detalle')->middleware('can:almacen_ingreso_access');
  Route::get('almacenes/ingreso/solicitud/{id}', 'IngresoController@solicitud')->name('almacenes.ingreso.solicitud')->middleware('can:almacen_ingreso_access');
- 
+
  Route::get('almacenes/ingreso/reporte', 'IngresoController@reporte')->name('almacenes.ingreso.reporte')->middleware('can:almacen_ingreso_access');
  Route::post('almacenes/ingreso/store2', 'IngresoController@store2')->name('almacenes.ingreso.store2')->middleware('can:almacen_ingreso_access');
- 
+
  Route::get('almacenes/ingreso/delete2/{id}', 'IngresoController@delete')
  ->name('almacenes.ingreso.delete')->middleware('can:almacen_ingreso_access');
 
@@ -1137,7 +1173,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Almacen\Ingreso'], function()
 
  Route::get('almacenes/reporte/index', 'ReporteAreasController@index')
  ->name('almacenes.reporte.index')->middleware('can:almacen_ingreso_access');
- 
+
  Route::post('almacenes/reporte/store', 'ReporteAreasController@store')
  ->name('almacenes.reporte.store')->middleware('can:almacen_ingreso_access');
 
@@ -1145,11 +1181,86 @@ Route::group(['namespace' => 'App\Http\Controllers\Almacen\Ingreso'], function()
 
  Route::get('almacenes/reporte/index2', 'ReporteAreasController@index2')
  ->name('almacenes.reporte.index2')->middleware('can:almacen_ingreso_access');
- 
+
  Route::post('almacenes/reporte/store2', 'ReporteAreasController@store2')
  ->name('almacenes.reporte.store2')->middleware('can:almacen_ingreso_access');
 
  Route::get('almacenes/reporte/solicituddos/{id}', 'ReporteAreasController@solicituddos')->name('almacenes.reporte.solicituddos')->middleware('can:almacen_ingreso_access');
 
 
-});  
+});
+
+
+Route::group(['namespace' => 'Fexpo'], function() {
+
+
+    Route::get('expochaco/pdf-reporte', 'SolicitudController@reporte')
+    ->name('expochaco.reporte');
+
+
+
+    Route::get('expochaco/index2', 'SolicitudController@index2')
+    ->name('expochaco.index2');
+
+    Route::get('expochaco/create', 'SolicitudController@create')
+    ->name('expochaco.create');
+
+    Route::post('expochaco/store', 'SolicitudController@store')
+    ->name('expochaco.store');
+
+    Route::get('expochaco/{id}/editar', 'SolicitudController@editar')
+    ->name('expochaco.editar');
+
+
+    Route::get('expochaco/imprimir/{id}', 'SolicitudController@imprimirboleta')
+    ->name('expochaco.imprimir');
+
+    Route::post('expochaco/update', 'SolicitudController@update')
+    ->name('expochaco.update');
+
+    Route::get('expochaco/delete2/{id}', 'SolicitudController@delete')
+    ->name('expochaco.delete');
+
+    Route::get('expochaco/aprovar/{id}', 'SolicitudController@aprovar')
+    ->name('expochaco.aprovar');
+
+    Route::get('expochaco/credenciales/{id}', 'SolicitudController@credencial')
+    ->name('expochaco.credencial');
+
+    Route::get('expochaco/credenciales/{id}', 'SolicitudController@credencial')
+    ->name('expochaco.credencial');
+
+
+    Route::get('expochaco/createcredencial/{id}', 'SolicitudController@createcredencial')->name('credencial.create');
+    Route::POST('expochaco/insertarcredencial', 'SolicitudController@insertarcredencial')->name('credencial.insertarcredencial');
+
+    Route::get('expochaco/generarqr/{id}', 'SolicitudController@codigoqr')
+    ->name('expochaco.generarqr');
+
+
+    Route::post('/ruta2', 'SolicitudController@respuesta2')->name('pregunta2');
+
+    //Route::get('qrcode', function () {
+       // return QrCode::size(300)->generate('A basic example of QR code!');
+   // })->name('qrr');
+
+
+
+   Route::get('expochaco3/index', 'SolicitudController2@index')
+   ->name('expochaco3.index');
+
+   Route::post('expochaco3/index2/{id}', 'SolicitudController2@update')
+   ->name('employees.update');
+
+   Route::get('expochaco3/index3/{id}', 'SolicitudController2@borrar')
+   ->name('employees.destroy');
+
+///////////
+Route::get('derivacion/index', 'Recepcion2Controller@indexderivacion')->name('derivacion.index');
+Route::get('derivacion/{id}/gestionarCorrespondencia', 'Recepcion2Controller@gestionarCorrespondencia2')->name('derivacion.gestionar');
+Route::get('correspondencia2/urlfilederivacion/{id}', 'Recepcion2Controller@urlfile')->name('derivacion.urlfilederivacion');
+Route::get('correspondencia2/pregunta', 'Recepcion2Controller@pregunta2')->name('derivacion.pregunta');
+Route::get('/get-users', 'Recepcion2Controller@getUsers')->name('get-users');
+Route::post('/ruta', 'Recepcion2Controller@respuesta')->name('pregunta');
+
+});

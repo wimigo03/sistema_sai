@@ -1,12 +1,12 @@
 @extends('layouts.admin')
 @section('content')
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-8 titulo">
         <b>SOLICITUDES APROVADAS -- </b><b style='color:red'>{{$idd->nombrearea}} </b>--
     </div>
     <div class="col-md-4 text-right titulo">
-        @can('compras_create')
+   
 
         <a href="{{route('combustibles.pedidoparcial.index')}}" class="tts:left tts-slideIn tts-custom" 
         aria-label="Volver a pendientes">
@@ -14,7 +14,7 @@
                 &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
             </button>
         </a>
-        @endcan
+   
 
 
      </div>
@@ -59,7 +59,7 @@
                             @endif
 
                               <td style="padding: 0;" class="text-center p-1">
-                                @can('compras_detalle')
+                  
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle">
                                     <a href="{{route('combustibles.pedidoparcial.editable',$comp->idcompracomb)}}">
                                         <span class="text-primary">
@@ -67,7 +67,7 @@
                                         </span>
                                     </a>
                                 </span>
-                                @endcan 
+                    
                             </td>
                         </tr>
                     @empty

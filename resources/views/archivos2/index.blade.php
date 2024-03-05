@@ -3,28 +3,28 @@
 
 
     <br>
-    <div class="row font-verdana-bg">
+    <div class="row font-verdana-12">
         <div class="col-md-8 titulo">
             <b>ARCHIVOS -- </b><b style='color:orange'>{{ $idd->nombrearea }} </b>--
         </div>
         <div class="col-md-4 text-right titulo">
-            @can('archivos_create')
+      
             <a href="{{ route('archivos2.tipo') }}" class="tts:left tts-slideIn tts-custom"
                 aria-label="Agregar Tipo Archivo">
                 <button class="btn btn-sm btn-primary font-verdana" type="button">Agreg.Tipo
                     &nbsp;<i class="fa fa-lg fa-file" aria-hidden="true"></i>&nbsp;
                 </button>
             </a>
-        @endcan
+    
  {{-- EVENTO 2--}}
-            @can('archivos_create')
+          
                 <a href="{{ route('archivos2.create') }}"  class="tts:left tts-slideIn tts-custom"
                     aria-label="Agregar Archivo" >
                     <button class="btn btn-sm btn-success font-verdana" type="button">Agreg.Archivo.
                         &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
                     </button>
                 </a>
-            @endcan
+         
 
 
 

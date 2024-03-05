@@ -1,27 +1,11 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-8 titulo">
         <b>ALMACEN--</b><b style='color:red'>{{$idd->nombrearea}} </b>--
     </div>
-    {{-- <div class="col-md-4 text-right">
-        @can('archivos_access')
- 
 
- 
-
-             <a href="{{ route('almacenes.ingreso.index') }}" class="tts:left tts-slideIn tts-custom" aria-label="CREAR NUEVO">
-                <button class="btn btn-sm btn-success font-verdana" type="button" >create nuevo
-                    &nbsp;<i class="fa-solid fa-thumbs-up" style="font-size:14px"></i>&nbsp;
-                </button>
-            </a> 
-
-            <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" 
-            style="display: none;"></i>
-
-     
-    </div> --}}
     <div class="col-md-12">
         <hr class="hrr">
     </div>

@@ -1,8 +1,16 @@
 @extends('layouts.admin')
 @section('content')
+<<<<<<< HEAD
 <link rel="stylesheet" href="https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/5.0.0/css/fixedColumns.dataTables.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/select/2.0.0/css/select.dataTables.css">
+=======
+    <style>
+        .font-verdana-12 th {
+            background-color: white !important;
+            color: black;
+        }
+>>>>>>> 3edb64968420d77fd93f44287fe518a940cbb99d
 
 <style>
 .font-verdana-bg th {
@@ -18,6 +26,7 @@
     padding: 5px;
 }
 
+<<<<<<< HEAD
 .descripcionStyle {
     color: #000 !important;
     font-size: 16px;
@@ -26,6 +35,42 @@
     padding: 5px;
 }
 </style>
+=======
+    <div class="row font-verdana-12 flex justify-content-between align-items-center">
+        <div class="col-md-8 titulo mb-4">
+            <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
+                <a href="javascript:void(0);" onclick="window.history.back()">
+                    <span class="color-icon-1">
+                        &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
+                    </span>
+                </a>
+            </span>
+            <b>LISTA DE ACTIVOS DE {{ $empleado->nombres }} {{ $empleado->ap_pat }} {{ $empleado->ap_mat }}</b>
+        </div>
+        <div class="">
+            <span class="tts:left tts-slideIn tts-custom" aria-label="Asignacion Interna de Bienes">
+                <button onclick="generarReporteAsignacion()" id="asignacion" class="btn btn-primary" disabled>
+                    <i class="fa-duotone fa-arrows-turn-right"></i>
+                </button>
+            </span>
+            <span class="tts:left tts-slideIn tts-custom" aria-label="Devolucion Interna de Bienes">
+                <button onclick="generarReporteDevolucion()" id="devolucion" class="btn btn-primary" disabled>
+                    <i class="fa-solid fa-left"></i>
+                </button>
+            </span>
+            <span class="tts:left tts-slideIn tts-custom" aria-label="Kardex de Activos">
+                <button onclick="generarReporteKardex()" id="kardex" class="btn btn-primary" disabled>
+                    <i class="fa-light fa-files"></i>
+                </button>
+            </span>
+            <span class="tts:left tts-slideIn tts-custom" aria-label="Transferir Activos">
+                <button id="abrirModal" class="btn btn-primary mb-0" data-toggle="modal" data-target="#miModal" disabled>
+                    <i class="fa-solid fa-right-left"></i>
+                </button>
+            </span>
+        </div>
+    </div>
+>>>>>>> 3edb64968420d77fd93f44287fe518a940cbb99d
 
 
 
@@ -89,21 +134,116 @@
                 <h4>Activos seleccionados <span id="totalSeleccionados"></span> </h4>
                 <table id="tablaSeleccionadas" class="table table-striped">
                     <thead>
+<<<<<<< HEAD
                         <tr>
                             <th>ID</th>
                             <th>Descripcion</th>
                             <th>Estado</th>
+=======
+                        <tr class="font-verdana-12">
+                            <th class="text-center p-1 font-weight-bold bg-info"><input type="checkbox"
+                                    id="seleccionarTodo"></th>
+                            <th class="text-center p-1 font-weight-bold bg-info"><b>CODIGO</b></th>
+                            <th class="text-center p-1 font-weight-bold bg-info"><b>DESCRIPCION</b></th>
+                            <th class="text-center p-1 font-weight-bold bg-info"><b>GRUPO CONTABLE</b></th>
+                            <th class="text-center p-1 font-weight-bold bg-info"><b>AUXILIAR</b></th>
+
+                            <th class="text-center p-1 font-weight-bold bg-info"><b>OFICINA</b></th>
+                            <th class="text-center p-1 font-weight-bold bg-info"><b>EMPLEADO</b></th>
+                            <th class="text-center p-1 font-weight-bold bg-info"><b>CARGO</b></th>
+
+
+                            <th class="text-center p-1 font-weight-bold bg-info"><b>ESTADO</b></th>
+                            <th class="text-center p-1 font-weight-bold bg-info"><i class="fa fa-bars"
+                                    aria-hidden="true"></i>
+                            </th>
+>>>>>>> 3edb64968420d77fd93f44287fe518a940cbb99d
                         </tr>
                     </thead>
                     <tbody>
                     </tbody>
                 </table>
             </div>
+<<<<<<< HEAD
             <div class="modal-footer">
                 <button class="btn btn-primary font-verdana-bg" id="btn_actualizar" type="submit">
                     <i class="fa-solid fa-paper-plane mr-2"></i>Transferir
                 </button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+=======
+        </div>
+    </div>
+
+    <div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-xl role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Cambiar responsable</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <input type="hidden" id="empleadoOrigen" value="{{ $empleado->idemp }}">
+                        <div class="col-md-4 mb-3">
+                            <label style="color:black;font-weight: bold;">OFICINA:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <select name="idarea" id="area" class="form-control">
+                                    <option value=""> Seleccione Oficina</option>
+                                    @foreach ($areas as $area)
+                                        <option value="{{ $area->idarea }}">
+                                            <h1 color:blue;>{{ $area->nombrearea }}</h1>
+                                        </option>
+                                    @endforeach
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label style="color:black;font-weight: bold;">RESPONSABLE:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <select name="idemp" id="empleado" class="form-control">
+                                    <option value=""> Seleccione Responsable</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label style="color:black;font-weight: bold;">CARGO:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <select name="idcargo" id="cargo" class="form-control">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <h4>Activos seleccionados</h4>
+                    <table id="tablaSeleccionadas" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Descripcion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary font-verdana-12" id="btn_actualizar" type="submit">
+                        <i class="fa-solid fa-paper-plane mr-2"></i>Transferir
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                </div>
+>>>>>>> 3edb64968420d77fd93f44287fe518a940cbb99d
             </div>
         </div>
     </div>

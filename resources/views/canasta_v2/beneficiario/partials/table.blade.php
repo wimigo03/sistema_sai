@@ -1,0 +1,85 @@
+<div class="form-group row">
+    <div class="col-md-12 table-responsive">
+        <table class="table display table-bordered responsive" style="width:100%;">
+            <thead>
+                <tr class="font-verdana-11">
+                    <td class="text-center p-1"><b>CODIGO</b></td>
+                    <td class="text-left p-1"><b>NOMBRES</b></td>
+                    <td class="text-left p-1"><b>AP_PAT</b></td>
+                    <td class="text-left p-1"><b>AP_MAT</b></td>
+                    <td class="text-left p-1"><b>CI</b></td>
+                    <td class="text-left p-1"><b>BARRIO</b></td>
+                    <td class="text-left p-1"><b>DIRECCION</b></td>
+                    <td class="text-center p-1"><b>ESTADO</b></td>
+
+                    <td class="text-center p-1 font-weight-bold">
+                        <i class="fa fa-bars" aria-hidden="true"></i>
+                    </td>
+
+                    <td class="text-center p-1 font-weight-bold">
+                        <i class="fa fa-bars" aria-hidden="true"></i>
+                    </td>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($beneficiarios as $datos)
+                    <tr class="font-verdana-11">
+                        <td class="text-center p-1">{{ $datos->id }}</td>
+                        <td class="text-left p-1">{{ $datos->nombres }}</td>
+                        <td class="text-left p-1">{{ $datos->ap }}</td>
+                        <td class="text-left p-1">{{ $datos->am }}</td>
+                        <td class="text-left p-1">{{ $datos->ci }}</td>
+                        <td class="text-left p-1">{{ $datos->barrio->nombre }}</td>
+                        <td class="text-left p-1">{{ $datos->direccion }}</td>
+
+                        @if (strtoupper($datos->status) == 'ACTIVO')
+                        <td class="text-left p-1" style="color: green;font-weight: bold;">{{ strtoupper($datos->status) }}</td>
+                        @elseif(strtoupper($datos->status) == 'FALLECIDO')
+                        <td class="text-left p-1" style="color: red;font-weight: bold;">{{ strtoupper($datos->status) }}</td>
+                        @elseif(strtoupper($datos->status) == 'BAJA')
+                        <td class="text-left p-1" style="color: orange;font-weight: bold;">{{ strtoupper($datos->status) }}</td>
+                        @elseif(strtoupper($datos->status) == 'PENDIENTE')
+                        <td class="text-left p-1" style="color: blue;font-weight: bold;">{{ strtoupper($datos->status) }}</td>
+                        @endif
+                        <td style="padding: 0;" class="text-center p-1">
+
+                            <span class="tts:left tts-slideIn tts-custom" aria-label="Previsualizar foto">
+                                <a href="{{ $datos->dirFoto }}" target="blank_">
+                                    <span class="text-primary">
+                                        <i class="fa-regular fa-image fa-lg" style="color:rgb(102, 14, 234)"></i>
+                                    </span>
+                                </a>
+                            </span>
+
+                        </td>
+
+                        <td style="padding: 0;" class="text-center p-1">
+
+                            <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Archivo">
+                                <a href="">
+                                    <span class="text-warning">
+                                        <i class="fas fa-lg fa-edit" style="color:rgb(26, 162, 16)"></i>
+                                    </span>
+                                </a>
+                            </span>
+
+                        </td>
+
+                    </tr>
+                @endforeach
+            </tbody>
+            <tfoot>
+                <tr class="font-verdana-11">
+                    <td colspan="12">
+                        {{ $beneficiarios->appends(Request::all())->links() }}
+                        <p class="text-muted">Mostrando
+                            <strong>{{ $beneficiarios->count() }}</strong> registros de
+                            <strong>{{ $beneficiarios->total() }}</strong> totales
+                        </p>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

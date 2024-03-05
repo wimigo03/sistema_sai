@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 @section('content')
 <style>
-    table tbody tr:hover{background:orange!important;} 
+    table tbody tr:hover{background:orange!important;}
 </style>
 <br>
 <div class="header">
-    <div class="row font-verdana-bg">
+    <div class="row font-verdana-12">
         <div class="col-md-10 titulo">
             <b>ENTREGA CANASTA</b>
         </div>
@@ -63,15 +63,15 @@
                                 <td  class="text-center p-1">{{$datos->mes2}}</td>
                                 <td  class="text-center p-1">{{$datos->mes3}}</td>
                                 {{--<td  class="text-center p-1">x</td>--}}
-                            </tr> 
+                            </tr>
                         @endforeach
                     </tbody>
                     <tfoot>
                         <tr>
                             <td colspan="12">
                                 {{ $entregas->appends(Request::all())->links() }}
-                                <p class="text-muted">Mostrando 
-                                    <strong>{{ $entregas->count() }}</strong> registros de 
+                                <p class="text-muted">Mostrando
+                                    <strong>{{ $entregas->count() }}</strong> registros de
                                     <strong>{{$entregas->total() }}</strong> totales
                                 </p>
                             </td>
@@ -95,15 +95,15 @@
         $(".spinner-btn-send").show();
         $("#form").submit();
     }
-    
+
     $("#fecha_desde").datepicker({
-        inline: false, 
+        inline: false,
         dateFormat: "dd/mm/yyyy",
         autoClose: true
     });
 
     $("#fecha_hasta").datepicker({
-        inline: false, 
+        inline: false,
         dateFormat: "dd/mm/yyyy",
         autoClose: true
     });

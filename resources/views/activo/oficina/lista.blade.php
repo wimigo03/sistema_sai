@@ -8,9 +8,9 @@
     <div style="color:black;font-weight: bold;font-size: 16px;">{{$nombrearea}}
         &nbsp;&nbsp;
 
-        @can('empleado_contrato_create_access')
+    
         <a href="{{ route('activo.oficina.create',$idarea) }}" class="btn btn-outline-info btn-sm">Agregar</a>
-        @endcan
+      
     </div>
     </br>
        
@@ -54,10 +54,10 @@
 
                                 <td>
 
-                                    @can('empleado_contrato_edit_access')
+                                   
                                     <a href="{{ route('contrato.editar', $empleado -> idemp)}}"
                                         class="btn btn-outline-info btn-sm">Editar</a>
-                                    @endcan
+                                    
 
                                 </td>
 

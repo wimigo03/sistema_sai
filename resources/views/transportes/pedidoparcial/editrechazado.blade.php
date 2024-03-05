@@ -2,7 +2,7 @@
 @section('content')
 @include('layouts.message_alert')
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-4 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
             <a href="{{url()->previous()}}">
@@ -31,26 +31,26 @@
         <div class="form-group row">
 
             <div class="col-md-3">
-                <label for="oficina" class="d-inline font-verdana-bg">
+                <label for="oficina" class="d-inline font-verdana-12">
                     <b>oficina</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" disabled name="oficina" 
     value="{{$NomFci}}" 
-    class="form-control form-control-sm font-verdana-bg" 
+    class="form-control form-control-sm font-verdana-12" 
     id="oficina">
             </div>
 
             <div class="col-md-3">
-                <label for="cominterna" class="d-inline font-verdana-bg">
+                <label for="cominterna" class="d-inline font-verdana-12">
                     <b>coninterna</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <input type="text" disabled name="cominterna" class="form-control form-control-sm font-verdana-bg"
+                <input type="text" disabled name="cominterna" class="form-control form-control-sm font-verdana-12"
                   id="cominterna" onchange="myFunction()"  
                  onkeypress="return valideNumber(event);" value="{{$soluconsumos->cominterna}}">
             </div>
             
             <div class="col-md-2">
-                <label for="fechasol" class="d-inline font-verdana-bg">
+                <label for="fechasol" class="d-inline font-verdana-12">
                     <b> fechasol</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input   type="text" disabled name="fechasol" placeholder="dd/mm/aaaa" data-language="es"
@@ -60,31 +60,31 @@
             </div>
 
             <div class="col-md-4">
-                <label for="referencia" class="d-inline font-verdana-bg">
+                <label for="referencia" class="d-inline font-verdana-12">
                     <b>referencia</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <textarea disabled name="referencia"  class="form-control form-control-sm font-verdana-bg" 
+                <textarea disabled name="referencia"  class="form-control form-control-sm font-verdana-12" 
                 id="referencia" >{{$soluconsumos->referencia}}</textarea>
             </div>
 
             <div class="col-md-4">
-                <label for="dirigidoa" class="d-inline font-verdana-bg">
+                <label for="dirigidoa" class="d-inline font-verdana-12">
                     <b>Dirigido a:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" disabled name="dirigidoa" 
                 value="{{$encargadotres->abrev}} {{$encargadotres->nombres}} {{$encargadotres->ap_pat}} {{$encargadotres->ap_mat}}" 
-               class="form-control form-control-sm font-verdana-bg" 
+               class="form-control form-control-sm font-verdana-12" 
                id="dirigidoa" data-language="es" autocomplete="off" >
                 <td colspan="8" width="564" style="font-size: 12px;">
             </div>
             
             <div class="col-md-4">
-                <label for="viauno" class="d-inline font-verdana-bg">
+                <label for="viauno" class="d-inline font-verdana-12">
                     <b>Via:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" disabled name="viauno" 
                 value="{{$encargadodos->abrev}} {{$encargadodos->nombres}} {{$encargadodos->ap_pat}} {{$encargadodos->ap_mat}}" 
-               class="form-control form-control-sm font-verdana-bg" 
+               class="form-control form-control-sm font-verdana-12" 
                id="viauno" data-language="es" autocomplete="off" >
                 <td colspan="8" width="564" style="font-size: 12px;">
                     
@@ -92,12 +92,12 @@
             </div>
 
             <div class="col-md-4">
-                <label for="viauno" class="d-inline font-verdana-bg">
+                <label for="viauno" class="d-inline font-verdana-12">
                     <b>Via:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" disabled name="viauno" 
                 value="{{$encargado->abrev}} {{$encargado->nombres}} {{$encargado->ap_pat}} {{$encargado->ap_mat}}" 
-               class="form-control form-control-sm font-verdana-bg" 
+               class="form-control form-control-sm font-verdana-12" 
                id="viauno" data-language="es" autocomplete="off" >
                 <td colspan="8" width="564" style="font-size: 12px;">
                     
@@ -106,7 +106,7 @@
            
 
             <div class="col-md-3">
-                <label for="fechasalida" class="d-inline font-verdana-bg">
+                <label for="fechasalida" class="d-inline font-verdana-12">
                     <b> fechasalida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input   type="text" disabled name="fechasalida" id="fechasalida" placeholder="dd/mm/aaaa"data-language="es"
@@ -116,7 +116,7 @@
             </div>
 
             <div class="col-md-3">
-                <label for="fecharetorno" class="d-inline font-verdana-bg">
+                <label for="fecharetorno" class="d-inline font-verdana-12">
                     <b> fecharetorno</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input   type="text" disabled name="fecharetorno" id="fecharetorno" placeholder="dd/mm/aaaa" data-language="es"
@@ -127,16 +127,16 @@
 
 
             <div class="col-md-6">
-                <label for="detallesouconsumo" class="d-inline font-verdana-bg">
+                <label for="detallesouconsumo" class="d-inline font-verdana-12">
                     <b>detallesouconsumo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <textarea disabled name="detallesouconsumo" cols="1" rows="5" class="form-control form-control-sm font-verdana-bg" 
+                <textarea disabled name="detallesouconsumo" cols="1" rows="5" class="form-control form-control-sm font-verdana-12" 
                 id="detallesouconsumo" >{{$soluconsumos->detallesouconsumo}}</textarea>
             </div>
 
 
             <div class="col-md-3">
-                <label for="tsalida" class="d-inline font-verdana-bg">
+                <label for="tsalida" class="d-inline font-verdana-12">
                     <b>tsalida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select disabled name="tsalida" id="tsalida" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
@@ -148,7 +148,7 @@
             </div>
 
             <div class="col-md-3">
-                <label for="tllegada" class="d-inline font-verdana-bg">
+                <label for="tllegada" class="d-inline font-verdana-12">
                     <b>tllegada</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select disabled name="tllegada" id="tllegada" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
@@ -163,7 +163,7 @@
 
 
             <div class="col-md-4">
-                <label for="idlocalidad" class="d-inline font-verdana-bg">
+                <label for="idlocalidad" class="d-inline font-verdana-12">
                     <b>Localidad</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select disabled name="idlocalidad" id="idlocalidad" class="form-control form-control-sm select2">
@@ -181,7 +181,7 @@
             </div>
 
             <div class="col-md-7">
-                <label for="idarea" class="d-inline font-verdana-bg">
+                <label for="idarea" class="d-inline font-verdana-12">
                     <b>idarea</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select disabled name="idarea" id="idarea" class="col-md-10 form-control select2 ">

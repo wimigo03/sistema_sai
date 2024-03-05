@@ -6,9 +6,8 @@
     <div style="color:black;font-weight: bold;font-size: 18px;">Modulo Medidas
         &nbsp;&nbsp;
 
-        @can('medidas_create')
         <a href="{{ route('medidas.create') }}" class="btn btn-outline-info btn-sm">Agregar</a>
-        @endcan
+
     </div>
     </br></br></br>
     <div class="col-md-10">

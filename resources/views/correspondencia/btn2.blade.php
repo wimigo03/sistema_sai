@@ -2,7 +2,7 @@
 <center>
 
     <td style="padding: 0;" class="text-center p-1">
-        @can('ventanilla_access')
+ 
             <span class="tts:left tts-slideIn tts-custom" aria-label="Previsualizar">
                 <a href="../Documentos/{{$documento}}" target="blank_">
                     <span class="text-primary" >
@@ -10,7 +10,7 @@
                     </span>
                 </a>
             </span>
-        @endcan
+  
     </td>
 
 </center>

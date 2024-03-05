@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{{ asset('admin_assets/plugins/slim-select/slimselect.min.css') }}">
     <link rel="stylesheet" href="{{ asset('dataTable_1.10.22/css/jquery.dataTables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('dataTable_1.10.22/css/responsive.dataTables.min.css') }}">
+    <link href="{{ asset('dashboard/css/select2.min.css') }}" rel="stylesheet">
     {{--<link rel="stylesheet" href="{{ asset('plugins2/datatables/dataTables.css') }}" />--}}
     <link href="{{ asset('dashboard/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('dashboard/css/fonts/roboto.css') }}" rel="stylesheet">
@@ -21,9 +22,10 @@
     <link href="{{ asset('dashboard/css/owl.carousel.min.css') }}" rel="stylesheet">
     <link href="{{ asset('dashboard/css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('font-awesome_6.0/css/all.css') }}" rel="stylesheet">
-    <link href="{{ asset('dashboard/css/select2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('datepicker/datepicker.min.css') }}" rel="stylesheet">
     <link href="{{ asset('dashboard/css/tooltips.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/notificaciones/Lobibox.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/notificaciones/notifications.css') }}" rel="stylesheet">
     <style>
         #customers-table tbody td.details-control {
             background-image: url('{{ asset('admin_assets/images/details_open.png') }}');
@@ -48,6 +50,10 @@
             padding: 0px;
         }
     </style>
+    @include('layouts.modal.alerta')
+    @include('layouts.modal.confirmar')
+    @include('layouts.modal.no-confirmar')
+    @include('layouts.modal.confirmar_compra')
     @yield('styles')
 </head>
 <body style="background-color: #fafafa;" {{--onLoad="document.getElementById('alx').click();"--}}>
@@ -58,186 +64,35 @@
             <div class="container-xl">
                 <br>
                 <br>
+                {{--@include('components.flash_alerts')--}}
                 @yield('content')
                 <form action="{{ route('logout') }}" method="POST" id="logout-form">
                     @csrf
                 </form>
             </div>
-        {{--</div>--}}
+        {{--</div>
+             //url: "{{ route('pregunta/id') }}",
+            --}}
     </main>
     <script src="{{ asset('admin_assets/plugins/slim-select/slimselect.min.js') }}"></script>
     <script src="{{ asset('admin_assets/js/handlebars.js') }}"></script>
     <script src="{{ asset('dataTable_1.10.22/js/jquery-3.5.1.js') }}"></script>
     <script src="{{ asset('dataTable_1.10.22/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('dataTable_1.10.22/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('dashboard/js/select2.min.js') }}"></script>
     <script src="{{ asset('dashboard/js/popper.min.js') }}"></script>
     <script src="{{ asset('dashboard/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('dashboard/js/main.js') }}"></script>
-    <script src="{{ asset('dashboard/js/select2.min.js') }}"></script>
     <script src="{{ asset('datepicker/datepicker.min.js') }}"></script>
     <script src="{{ asset('datepicker/datepicker.es.js') }}"></script>
+    <script src="{{ asset('js/notificaciones/Lobibox.js') }}"></script>
+    <script src="{{ asset('js/notificaciones/notification-active.js') }}"></script>
+    <script src="{{ asset('js/auxiliares.js') }}"></script>
+
+    @include('layouts.modal.notificaciones')
 
     <script>
-        var id = 2;
-
-        function fetchdata() {
-    $.ajax({
-    url: "{{ route('pregunta2') }}",
-    type: 'POST',
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    },
-    dataType: 'JSON',
-
-    success: function(data) {
-        if (data.success == true) {
-            notifyMe();
-        } else {
-               }
-                             }
-});
-}
-
-function fetchdata() {
-    $.ajax({
-    url: "{{ route('pregunta2') }}",
-    type: 'POST',
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    },
-    dataType: 'JSON',
-
-    success: function(data) {
-        if (data.success == true) {
-            notifyMe();
-        } else {
-               }
-                             }
-});
-}
-
-function fetchdata() {
-    $.ajax({
-    url: "{{ route('pregunta3') }}",
-    type: 'POST',
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    },
-    dataType: 'JSON',
-
-    success: function(data) {
-        if (data.success == true) {
-            notifyMe();
-        } else {
-               }
-                             }
-});
-}
-
-
-function fetchdata() {
-    $.ajax({
-    url: "{{ route('pregunta4') }}",
-    type: 'POST',
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    },
-    dataType: 'JSON',
-
-    success: function(data) {
-        if (data.success == true) {
-            notifyMe();
-        } else {
-               }
-                             }
-});
-}
-
-function fetchdata() {
-    $.ajax({
-    url: "{{ route('pregunta5') }}",
-    type: 'POST',
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    },
-    dataType: 'JSON',
-
-    success: function(data) {
-        if (data.success == true) {
-            notifyMe();
-        } else {
-               }
-                             }
-});
-}
-
-function fetchdata() {
-    $.ajax({
-    url: "{{ route('pregunta6') }}",
-    type: 'POST',
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    },
-    dataType: 'JSON',
-
-    success: function(data) {
-        if (data.success == true) {
-            notifyMe();
-        } else {
-               }
-                             }
-});
-}
-
-function fetchdata() {
-    $.ajax({
-    url: "{{ route('pregunta7') }}",
-    type: 'POST',
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    },
-    dataType: 'JSON',
-
-    success: function(data) {
-        if (data.success == true) {
-            notifyMe();
-        } else {
-               }
-                             }
-});
-}
-
-        $(document).ready(function() {
-            //setInterval(fetchdata, 4000);
-        });
-
-
-        function notifyMe() {
-            if (!("Notification" in window)) {
-                alert("Este navegador no soporta notificaciones de escritorio");
-            } else if (Notification.permission === "granted") {
-                var options = {
-                    body: "Usted Tiene Una Correspondencia sin responder",
-                    icon: href="{{ asset('logos/logo2.png') }}",
-                    dir: "ltr"
-                };
-                var notification = new Notification("!! ATENCION !!", options);
-            } else if (Notification.permission !== 'denied') {
-                Notification.requestPermission(function(permission) {
-                    if (!('permission' in Notification)) {
-                        Notification.permission = permission;
-                    }
-                    if (permission === "granted") {
-                        var options = {
-                            body: "Descripción o cuerpo de la notificación",
-                            icon: "url_del_icono.jpg",
-                            dir: "ltr"
-                        };
-                        var notification = new Notification("Hola :)", options);
-                    }
-                });
-            }
-        }
+      //
     </script>
 @yield('scripts')
 </body>

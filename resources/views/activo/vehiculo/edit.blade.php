@@ -771,9 +771,14 @@
                         </div>
                     </div>
                     <div class="text-center">
+<<<<<<< HEAD
                         <button class="btn color-icon-2 font-verdana-bg" type="submit">
                             <i class="fa-solid fa-paper-plane"></i>
                             &nbsp;REGISTRAR
+=======
+                        <button class="btn color-icon-2 font-verdana-12" type="submit">
+                            <i class="fa-solid fa-paper-plane mr-2"></i>Actualizar
+>>>>>>> 3edb64968420d77fd93f44287fe518a940cbb99d
                         </button>
                     </div>
                 </form>

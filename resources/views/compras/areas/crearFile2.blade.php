@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('content')
-    <div class="row font-verdana-bg">
+    <div class="row font-verdana-12">
         <div class="col-md-12 text-center titulo">
             <b>REGISTRAR FILE-C/{{strtoupper($area->nombrearea)}}</b>
         </div>
@@ -12,7 +12,7 @@
         <form method="POST" action="{{ route('areas.guardarfile2') }}">
             @csrf
             <input type="hidden" class="form-control" name="idarea" placeholder="" value="{{$idarea}}">
-            <div class="form-group row font-verdana-bg">
+            <div class="form-group row font-verdana-12">
                 <div class="col-md-2">
                     <label for="numfile" class="d-inline">
                         <b>N° File</b>
@@ -38,7 +38,7 @@
                     <input type="number" step="0" name="habbasico" class="form-control form-control-sm font-courier-bg" required>
                 </div>
             </div>
-            <div class="form-group row font-verdana-bg">
+            <div class="form-group row font-verdana-12">
                 <div class="col-md-3">
                     <label for="categoria" class="d-inline">
                         <b>Categoria</b>
@@ -109,10 +109,10 @@
             </div>
             <div class="form-group row">
                 <div class="col-md-12 text-right">
-                    <button class="btn btn-outline-primary font-verdana-bg" type="submit">
+                    <button class="btn btn-outline-primary font-verdana-12" type="submit">
                         <i class="fa-solid fa-paper-plane"></i>&nbsp;Registrar
                     </button>
-                    <a href="{{route('areas.file2',$idarea)}}" class="btn btn-outline-danger font-verdana-bg">
+                    <a href="{{route('areas.file2',$idarea)}}" class="btn btn-outline-danger font-verdana-12">
                         <i class="fa fa-lg fa-reply" aria-hidden="true"></i>&nbsp;Cancelar
                     </a>
                 </div>
