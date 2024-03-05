@@ -15,6 +15,8 @@ use App\Http\Controllers\Activo\ActivoArchivoController;
 use App\Http\Controllers\Activo\ActualController;
 use App\Http\Controllers\Activo\AdeudoController;
 use App\Http\Controllers\Activo\UbicacionController;
+use App\Http\Controllers\Activo\FormularioController;
+use App\Http\Controllers\Activo\FormularioActivoController;
 
 use App\Http\Controllers\Activo\ReportesController;
 use App\Http\Controllers\Activo\CodigoBarrasController;
@@ -336,6 +338,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
 
     // Activos del responsable
     Route::get('Activo/responsable/index/{id}/activo', [ResponsableActivoController::class, 'index'])->name('activo.responsable.activo.index')->middleware('can:oficina_access');
+    Route::get('Activo/responsable/search/{id}/activo', [ResponsableActivoController::class, 'search'])->name('activo.responsable.activo.search')->middleware('can:oficina_access');
     Route::get('Activo/responsable/listado/{id}/activo', [ResponsableActivoController::class, 'listado'])->name('activo.responsable.activo.listado')->middleware('can:oficina_access');
     Route::POST('Activo/responsable/update/activo', [ResponsableActivoController::class, 'update'])->name('activo.responsable.activo.update')->middleware('can:oficina_access');
     // Archivos del responsable
@@ -457,6 +460,22 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
     Route::get('/Activo/adeudo/getCi', [AdeudoController::class, 'getCi'])->name('activo.adeudo.getCi')->middleware('can:actual_access');
 
 
+        // FORMULARIO
+        Route::get('Activo/formulario/index', [FormularioController::class, 'index'])->name('activo.formulario.index')->middleware('can:actual_access');
+        Route::get('Activo/formulario/search', [FormularioController::class, 'search'])->name('activo.formulario.search')->middleware('can:actual_access');
+        Route::get('Activo/formulario/list', [FormularioController::class, 'listado'])->name('activo.formulario.list')->middleware('can:actual_access');
+        Route::get('Activo/formulario/{id}/edit', [FormularioController::class, 'editar'])->name('activo.formulario.edit')->middleware('can:actual_access');
+        Route::get('Activo/formulario/{id}/show', [FormularioController::class, 'show'])->name('activo.formulario.show')->middleware('can:actual_access');
+        Route::POST('Activo/formulario/{id}/update', [FormularioController::class, 'update'])->name('activo.formulario.update')->middleware('can:actual_access');
+        Route::get('Activo/formulario/create', [FormularioController::class, 'create'])->name('activo.formulario.create')->middleware('can:actual_access');
+        Route::POST('Activo/formulario/store', [FormularioController::class, 'store'])->name('activo.formulario.store')->middleware('can:actual_access');
+        Route::get('/Activo/formulario/getCi', [FormularioController::class, 'getEmleadoByCi'])->name('activo.formulario.getCi')->middleware('can:actual_access');
+        // Activos del formulario
+        Route::get('Activo/listado/{id}/formulario', [FormularioActivoController::class, 'listado'])->name('activo.formulario.activo.listado')->middleware('can:oficina_access');
+        Route::POST('Activo/store/formulario', [FormularioActivoController::class, 'store'])->name('activo.formulario.activo.store')->middleware('can:oficina_access');
+        Route::POST('Activo/update/{id}/formulario', [FormularioActivoController::class, 'update'])->name('activo.formulario.activo.update')->middleware('can:oficina_access');
+        Route::POST('Activo/destroy/{id}/formulario', [FormularioActivoController::class, 'destroy'])->name('activo.formulario.activo.destroy')->middleware('can:oficina_access');
+        
     Route::get('/reportes/rep1-pdf', [ReportesController::class, 'reporte1Pdf'])->name('rep1.pdf');
     Route::get('/reportes/rep2-pdf', [ReportesController::class, 'reporte2Pdf'])->name('rep2.pdf');
     Route::get('/reportes/rep3-pdf', [ReportesController::class, 'reporte3Pdf'])->name('rep3.pdf');
@@ -478,6 +497,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
     Route::get('/reportes/devolucion', [ReportesController::class, 'devolucion'])->name('devolucion');
     Route::get('/reportes/kardex', [ReportesController::class, 'kardex'])->name('kardex');
     Route::get('/reportes/certificado/{empleado_id}', [ReportesController::class, 'certificado'])->name('certificado');
+    Route::get('/reportes/formulario/{empleado_id}', [ReportesController::class, 'formulario'])->name('formulario');
 
     
     Route::get('/reportes/rep1-excel', [ReportesController::class, 'reporte1Excel'])->name('rep1.excel');

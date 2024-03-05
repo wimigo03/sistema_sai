@@ -10,6 +10,7 @@ use App\Models\Model_Activos\Adeudo;
 use App\Models\Model_Activos\AuxiliarModel;
 use App\Models\Model_Activos\CodcontModel;
 use App\Models\Model_Activos\EntidadesModel;
+use App\Models\Model_Activos\Formulario;
 use App\Models\Model_Activos\Ufv;
 use App\Models\Model_Activos\UnidadadminModel;
 use App\Traits\DepreciationCalculations;
@@ -46,24 +47,18 @@ class ReportesController extends Controller
         $entidad = EntidadesModel::where('entidad', 4601)->first();
         $activosSeleccionados = json_decode($request->input('activos'), true);
         $activos = ActualModel::query()
-            ->with([
-                'auxiliars' => function ($query) {
-                    $query->join('codcont', function ($join) {
-                        $join->on('auxiliar.codcont', '=', 'codcont.codcont')
-                            ->whereRaw('codcont.codcont = auxiliar.codcont');
-                    });
-                    $query->join('actual', function ($join) {
-                        $join->on('actual.codaux', '=', 'auxiliar.codaux')
-                            ->whereRaw('actual.codcont = auxiliar.codcont');
-                    });
-                },
-            ])
             ->where('entidad', 4601)
             ->where('unidad', $unidad->unidad)
             ->whereIn('id', $activosSeleccionados)
             ->orderBy('codigo')
-            ->get()
-            ->toArray();
+            ->get();
+            foreach ($activos as $activo) {
+                $activo->load(['auxiliars' => function ($query) use ($activo) {
+                    $query->where('codcont', $activo->codcont)
+                          ->where('codaux', $activo->codaux);
+                }])
+                ->toArray();
+            }
         $pdf = PDF::loadView('activo.reportes.asignacion', [
             'activos' => $activos,
             'entidad' => $entidad,
@@ -80,6 +75,23 @@ class ReportesController extends Controller
         return $pdf->stream($fileName);
     }
 
+
+    public function formulario($id)
+    {
+        $formulario = Formulario::with('formularios','user.usuariosEmpleados','empleado','empleado.empleadosareas','empleado.file')->find($id);
+        $pdf = PDF::loadView('activo.reportes.formulario', [
+            'formulario' => $formulario,
+        ]);
+
+        $this->configureSSLContext($pdf);
+
+        $pdf->setPaper('A4', 'portrait');
+
+        $fileName = "FORMULARIO TOMA DE INVENTARIO FÍSICO -" . date('Y-m-d') . ".pdf";
+
+        return $pdf->stream($fileName);
+    }
+
     public function devolucion(Request $request)
     {
         $empleado = EmpleadosModel::find($request->input('empleado'));
@@ -87,24 +99,18 @@ class ReportesController extends Controller
         $entidad = EntidadesModel::where('entidad', 4601)->first();
         $activosSeleccionados = json_decode($request->input('activos'), true);
         $activos = ActualModel::query()
-            ->with([
-                'auxiliars' => function ($query) {
-                    $query->join('codcont', function ($join) {
-                        $join->on('auxiliar.codcont', '=', 'codcont.codcont')
-                            ->whereRaw('codcont.codcont = auxiliar.codcont');
-                    });
-                    $query->join('actual', function ($join) {
-                        $join->on('actual.codaux', '=', 'auxiliar.codaux')
-                            ->whereRaw('actual.codcont = auxiliar.codcont');
-                    });
-                },
-            ])
             ->where('entidad', 4601)
             ->where('unidad', $unidad->unidad)
             ->whereIn('id', $activosSeleccionados)
             ->orderBy('codigo')
-            ->get()
-            ->toArray();
+            ->get();
+            foreach ($activos as $activo) {
+                $activo->load(['auxiliars' => function ($query) use ($activo) {
+                    $query->where('codcont', $activo->codcont)
+                          ->where('codaux', $activo->codaux);
+                }])
+                ->toArray();
+            }
         $pdf = PDF::loadView('activo.reportes.devolucion', [
             'activos' => $activos,
             'entidad' => $entidad,
@@ -128,25 +134,19 @@ class ReportesController extends Controller
         $entidad = EntidadesModel::where('entidad', 4601)->first();
         $activosSeleccionados = json_decode($request->input('activos'), true);
         $activos = ActualModel::query()
-            ->with([
-                'auxiliars' => function ($query) {
-                    $query->join('codcont', function ($join) {
-                        $join->on('auxiliar.codcont', '=', 'codcont.codcont')
-                            ->whereRaw('codcont.codcont = auxiliar.codcont');
-                    });
-                    $query->join('actual', function ($join) {
-                        $join->on('actual.codaux', '=', 'auxiliar.codaux')
-                            ->whereRaw('actual.codcont = auxiliar.codcont');
-                    });
-                },
-            ])
             ->where('entidad', 4601)
             ->where('unidad', $unidad->unidad)
             ->whereIn('id', $activosSeleccionados)
             ->where('observaciones', '!=', '')
             ->orderBy('codigo')
-            ->get()
-            ->toArray();
+            ->get();
+            foreach ($activos as $activo) {
+                $activo->load(['auxiliars' => function ($query) use ($activo) {
+                    $query->where('codcont', $activo->codcont)
+                          ->where('codaux', $activo->codaux);
+                }])
+                ->toArray();
+            }
         $pdf = PDF::loadView('activo.reportes.kardex', [
             'activos' => $activos,
             'entidad' => $entidad,

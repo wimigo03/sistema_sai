@@ -103,42 +103,13 @@
                             <p id="descripcion"></p>
                         </div>
                         <div class="col-md-4 form-group">
-                            <label class="font-label">CODIGO INTERNO:</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"></span>
-                                </div>
-                                <input type="text" name="codigo_interno" class="form-control"
-                                    value="{{ old('codigo_interno') }}">
-                            </div>
-                            @error('codigo_interno')
-                                <span class="invalid-feedback d-block" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-                        <div class="col-md-4 form-group">
-                            <label class="font-label">D.A.:</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"></span>
-                                </div>
-                                <input type="text" name="da" class="form-control" value="{{ old('da') }}">
-                            </div>
-                            @error('da')
-                                <span class="invalid-feedback d-block" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-                        <div class="col-md-4 form-group">
                             <label class="font-label">COSTO HISTORICO:</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"></span>
                                 </div>
-                                <input type="number" name="costo_historico" min="0" class="form-control"
-                                    value="{{ old('costo_historico') }}">
+                                <input type="number" id="costo_historico" min="0" class="form-control"
+                                    value="{{ old('costo_historico') }}" readonly>
                             </div>
                             @error('costo_historico')
                                 <span class="invalid-feedback d-block" role="alert">
@@ -169,15 +140,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"></span>
                                 </div>
-                                <select name="estado" class="form-control">
-                                    @php
-                                        $oldEstado = old('estado');
-                                    @endphp
-                                    @foreach (['BUENO', 'REGULAR', 'MALO'] as $option)
-                                        <option value="{{ $option }}"
-                                            @if ($oldEstado == $option) selected @endif>{{ $option }}</option>
-                                    @endforeach
-                                </select>
+                                <input type="text" class="form-control" id="estado" name="estado" readonly>
                             </div>
                             @error('estado')
                                 <span class="invalid-feedback d-block" role="alert">
@@ -755,7 +718,7 @@
                             @enderror
                         </div>
                         <div class="col-md-4 form-group">
-                            <label class="font-label">KARDEX ACLARACION:</label>
+                            <label class="font-label">KARDEX DE OBSERVACION:</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"></span>
@@ -787,21 +750,6 @@
                             @enderror
                         </div>
                         <div class="col-md-4 form-group">
-                            <label class="font-label">UBICACION SATELITAL:</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"></span>
-                                </div>
-                                <input type="text" name="ubicacion_satelital" class="form-control"
-                                    value="{{ old('ubicacion_satelital') }}">
-                            </div>
-                            @error('ubicacion_satelital')
-                                <span class="invalid-feedback d-block" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-                        <div class="col-md-4 form-group">
                             <label class="font-label">IMAGEN:</label>
                             <div class="d-flex justify-content-between">
                                 <div class="file-input">
@@ -821,7 +769,7 @@
                             @enderror
                         </div>
                     </div>
-                    <input type="hidden" name="actual_id" value="" id="actual_id">
+                    <input type="hidden" name="actual_id" value="{{ old('actual_id') }}" id="actual_id">
                     <div class="text-center">
                         <button class="btn color-icon-2 font-verdana-bg" type="submit">
                             <i class="fa-solid fa-paper-plane"></i>
@@ -872,6 +820,21 @@
                     if (res.response && res.response.descrip) {
                         $('#descripcion').text(res.response.descrip);
                         $('#actual_id').val(res.response.id);
+                        $('#costo_historico').val(res.response.costo);
+                        switch (res.response.codestado) {
+                          case 1:
+                            $('#estado').val('BUENO');
+                            break;
+                          case 2:
+                            $('#estado').val('REGULAR');
+                            break;
+                          case 3:
+                            $('#estado').val('MALO');
+                            break;
+                          default:
+                            $('#estado').val('');
+                            break;
+                        }
                     } else {
                         $('#descripcion').text("No se ha encontrado ese codigo");
                     }

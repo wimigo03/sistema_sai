@@ -27,6 +27,14 @@
             <input type="text" name="oficina" value="{{ request('oficina') }}" placeholder="--Oficina--"
                 class="form-control font-verdana">
         </div>
+        <div class="col-md-3">
+            <input type="text" name="grupo" value="{{ request('grupo') }}" placeholder="--Grupo Contable--"
+                class="form-control font-verdana">
+        </div>
+        <div class="col-md-3">
+            <input type="text" name="auxiliar" value="{{ request('auxiliar') }}" placeholder="--Auxiliar--"
+                class="form-control font-verdana">
+        </div>
     </div>
     <div class="form-group row">
         <div class="col-md-6">
