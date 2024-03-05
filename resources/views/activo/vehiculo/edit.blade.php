@@ -6,6 +6,11 @@
             font-size: 13px;
         }
 
+        .font-label {
+            color: black;
+            font-weight: bold;
+        }
+
         .file-input__input {
             width: 0.1px;
             height: 0.1px;
@@ -36,10 +41,11 @@
     </style>
     <div class="row ">
         <div class="col-md-12">
+
             <div class="row font-verdana-sm">
                 <div class="col-md-4 titulo">
                     <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-                        <a href="javascript:void(0);" onclick="window.history.back()">
+                        <a href="{{ url('Activo/vehiculo/index') }}">
                             <span class="color-icon-1">
                                 &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                             </span>
@@ -48,7 +54,7 @@
                 </div>
 
                 <div class="col-md-8 text-right titulo">
-                    <b>ACTUALIZAR ACTIVO</b>
+                    <b>REGISTRAR NUEVO VEHICULO</b>
                 </div>
 
                 <div class="col-md-12">
@@ -58,506 +64,785 @@
 
             </div>
 
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
             <div class="body-border ">
-                <form method="POST" action="{{ route('activo.gestionactivo.update', $actual->id) }}"
-                    enctype="multipart/form-data">
+                <form method="POST" action="{{ route('activo.vehiculo.update', $vehiculo->id) }}" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group row font-verdana-sm">
-                        <div class="col-md-4">
-                            <label style="color:black;font-weight: bold;">UNIDAD:</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">{{ $actual->unidad }}</span>
-                                </div>
-                                <input type="text" name="sigla" readonly="true" class="form-control"
-                                    value="{{ $unidad->descrip }}">
-                            </div>
-                            <label style="color:black;font-weight: bold;">CODIGO:</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">{{ $actual->codcont }}</span>
-                                </div>
-                                <input type="text" required name="codigo" value="{{ $actual->codigo }}"
-                                    class="form-control" readonly required>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label style="color:black;font-weight: bold;">VIDA UTIL :</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">AÑOS </span>
-                                </div>
-                                <input type="text" name="vidautil" id="vida" readonly class="form-control"
-                                    value="{{ $actual->vidautil }} " required>
-                            </div>
-                            <label style="color:black;font-weight: bold;">FECHA INCORPORACIÓN :</label>
-                            <div class="input-group">
-                                <input type="date" required name="feul" id="feul" readonly="true"
-                                    class="form-control" required>
-                                <input type="hidden" value="{{ $actual->dia }}" id="dia">
-                                <input type="hidden" value="{{ $actual->mes }}" id="mes">
-                                <input type="hidden" value="{{ $actual->ano }}" id="ano">
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label style="color:black;font-weight: bold;">ORGANISMO FINANCIERO:</label>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">CODIGO VSIAF:</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"></span>
                                 </div>
-                                <select name="org_fin" id="organismofin" class="form-control" disabled>
-                                    @foreach ($organismofins as $organismofin)
-                                        <option value="{{ $organismofin->idorganismofin }}"
-                                            @if ($organismofin->idorganismofin == $actual->org_fin) selected @endif>
-                                            {{ optional($organismofin)->des }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group mt-2">
-                                <label style="color:black;font-weight: bold;">AMBIENTE:</label>
-                                <select class="form-control js-example-basic-multiple" id="ambiente" name="ambiente_id"
-                                    disabled>
-                                    <option value="">Seleccione un ambiente</option>
-                                    @foreach ($ambientes as $ambiente)
-                                        <option value="{{ $ambiente->id }}"
-                                            @if ($ambiente->id == $actual->ambiente_id) selected @endif>{{ $ambiente->nombre }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <input type="text" name="codigo" id="codigo" class="form-control"
+                                    value="{{ old('codigo', $vehiculo->codigo) }}">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary btn-sm" id="buscar-codigo"><i
+                                            class="fa-solid fa-magnifying-glass"></i></button>
+                                </div>
+                                <input type="hidden" name="actual_id" id="actual_id" value="{{ $vehiculo->actual->id }}">
                             </div>
 
+                            @error('codigo')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
-                        <div class="col-md-7 mb-3">
-                            <label for="observ" style="color:black;font-weight: bold;">DESCRIPCIÓN :</label>
-                            <textarea type="text" required name="descrip" class="form-control" rows="1" placeholder="Descripción..."
-                                onkeyup="javascript:this.value=this.value.toUpperCase();">{{ $actual->descrip }}</textarea>
-                            @error('descrip')
-                                <span class="invalid-feedback d-block" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                            <label style="color:black;font-weight: bold;">GRUPO CONTABLE:</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">{{ $actual->codcont }}</span>
-                                </div>
-                                <select name="codaux" id="codcont" class="form-control" disabled>
-                                    <option value="">Seleccione grupo contable</option>
-                                    @foreach ($codcont as $grupo)
-                                        <option value="{{ $grupo->codcont }}"
-                                            @if ($grupo->codcont == $actual->codcont) selected @endif>
-                                            <h1 style="color: blue;">{{ $grupo->nombre }}</h1>
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            @error('codaux')
-                                <span class="invalid-feedback d-block" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                            <label style="color:black;font-weight: bold;">AUXILIAR:</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">{{ $actual->codaux }}</span>
-                                </div>
-                                <select name="idaux" id="codaux" class="form-control" disabled>
-                                    <option value="">Seleccione Auxiliar</option>
-                                    @foreach ($auxiliars as $auxiliar)
-                                        <option value="{{ $auxiliar->codaux }}"
-                                            {{ $auxiliar->codaux == $actual->codaux ? 'selected' : '' }}>
-                                            {{ $auxiliar->nomaux }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            @error('idaux')
-                                <span class="invalid-feedback d-block" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                            <label style="color:black;font-weight: bold;">ESTADO ACTIVO:</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"> </span>
-                                </div>
-                                <select name="codestado" id="codestado" class="form-control">
-                                    <option value="">Seleccione el estado</option>
-                                    <option value="1" {{ $actual->codestado == 1 ? 'selected' : '' }}>BUENO
-                                    </option>
-                                    <option value="2" {{ $actual->codestado == 2 ? 'selected' : '' }}>REGULAR
-                                    </option>
-                                    <option value="3" {{ $actual->codestado == 3 ? 'selected' : '' }}>MALO</option>
-                                </select>
-                            </div>
-                            @error('codestado')
-                                <span class="invalid-feedback d-block" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                            <label for="observ" style="color:black;font-weight: bold;">OBSERVACIONES :</label>
-                            <div class="input-group">
-                                <textarea type="text" name="observaciones" class="form-control" rows="1" placeholder="observacion..."
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();">{{ $actual->observaciones }}</textarea>
-                            </div>
-                            @error('observaciones')
-                                <span class="invalid-feedback d-block" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-
-                            {{-- <div class="form-check-inline">
-                                <label for="depreciar" style="color:black;font-weight: bold;"
-                                    class="required col-md-12 col-form-label text-md-right">DEPRECIAR</label>
-                                <input type="checkbox" name="depreciar" value="1" class="form-control" checked>
-                                <label for="actualizar" style="color:black;font-weight: bold;"
-                                    class="required col-md-12 col-form-label text-md-right">ACTUALIZAR</label>
-                                <input type="checkbox" name="actualizar" value="1" class="form-control" checked>
-
-                            </div> --}}
+                        <div class="col-md-8">
+                            <label class="font-label">DESCRIPCION:</label>
+                            <p id="descripcion">{{ $vehiculo->actual->descrip }}</p>
                         </div>
-                        <div class="col-md-5 mb-3">
-                            <label style="color:black;font-weight: bold;">OFICINA:</label>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">COSTO HISTORICO:</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"></span>
                                 </div>
-                                <select name="codarea" id="area" class="form-control" disabled>
-                                    @foreach ($areas as $area)
-                                        <option value="{{ $area->idarea }}"
-                                            {{ $area->idarea == $actual->codarea ? 'selected' : '' }}>
-                                            <h1 color:blue;>{{ $area->nombrearea }}</h1>
-                                        </option>
-                                    @endforeach
-
-                                </select>
+                                <input type="number" id="costo_historico" min="0" class="form-control"
+                                    value="{{ old('costo_historico', $vehiculo->actual->costo) }}" readonly>
                             </div>
-                            @error('codarea')
+                            @error('costo_historico')
                                 <span class="invalid-feedback d-block" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-
-                            <label style="color:black;font-weight: bold;">RESPONSABLE:</label>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">DOC. EFECTO DE ASIGNACION INDIVIDUAL:</label>
+                            <div class="file-input">
+                                <input type="file" name="documento" id="documento" class="file-input__input"
+                                    accept="application/pdf" />
+                                <label class="file-input__label" for="documento">
+                                    <i class="fa fa-file-pdf mr-3 fa-lg"></i>
+                                    <span>Documento</span>
+                                </label>
+                                <span id="documento-filename" class="file-name d-block"></span>
+                            </div>
+                            @error('documento')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">ESTADO:</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"></span>
                                 </div>
-                                <select name="codemp" id="empleado" class="form-control" disabled>
-                                    <option value="{{ $actual->codemp }}" selected>
-                                        {{ $actual->empleados->full_name }}
-                                    </option>
-                                </select>
+                                <input type="text" class="form-control" id="estado" name="estado" readonly>
                             </div>
-                            @error('codemp')
+                            @error('estado')
                                 <span class="invalid-feedback d-block" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-
-                            <label style="color:black;font-weight: bold;">CARGO:</label>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">NOMBRE DEL PROPIETARIO:</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"></span>
                                 </div>
-                                <select name="idcargo" id="cargo" class="form-control" disabled>
-                                    <option
-                                        value="{{ optional($actual->empleados)->file ? $actual->empleados->file->idFile : null }}">
-                                        {{ optional($actual->empleados)->file ? $actual->empleados->file->nombrecargo : null }}
-                                    </option>
-                                </select>
+                                <input type="text" name="nombre_propietario" class="form-control"
+                                    value="{{ old('nombre_propietario',$vehiculo->nombre_propietario) }}">
                             </div>
-                            @error('idcargo')
+                            @error('nombre_propietario')
                                 <span class="invalid-feedback d-block" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-                            <div class="form-group">
-                                @if ($actual->ultimaImagen)
-                                    <img src="{{ asset('public/images/' . $actual->ultimaImagen->ruta) }}"
-                                        alt="Imagen Actual" style="height: 150px;">
-                                @endif
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">MUNICIPIO RADICATORIA:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="municipio_radicatoria" class="form-control"
+                                    value="{{ old('municipio_radicatoria',$vehiculo->municipio_radicatoria) }}">
                             </div>
-                            <label style="color:black;font-weight: bold;">FOTOGRAFIA:</label>
+                            @error('municipio_radicatoria')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">CLASE VEHICULO:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="clase_vehiculo" class="form-control"
+                                    value="{{ old('clase_vehiculo',$vehiculo->clase_vehiculo) }}">
+                            </div>
+                            @error('clase_vehiculo')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">TIPO COMBUSTIBLE:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="tipo_combustible" class="form-control"
+                                    value="{{ old('tipo_combustible',$vehiculo->tipo_combustible) }}">
+                            </div>
+                            @error('tipo_combustible')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">GNV:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <select name="gnv" class="form-control @error('gnv') is-invalid @enderror">
+                                    <option value="1" {{ old('gnv',$vehiculo->gnv) == '1' ? 'selected' : '' }}>Verdadero</option>
+                                    <option value="0" {{ old('gnv',$vehiculo->gnv) == '0' ? 'selected' : '' }}>Falso</option>
+                                </select>
+                            </div>
+                            @error('gnv')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">NUMERO DE PLACA:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="nro_placa" class="form-control"
+                                    value="{{ old('nro_placa',$vehiculo->nro_placa) }}">
+                            </div>
+                            @error('nro_placa')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">TIPO:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="tipo" class="form-control" value="{{ old('tipo',$vehiculo->tipo) }}">
+                            </div>
+                            @error('tipo')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">MARCA:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="marca" class="form-control" value="{{ old('marca',$vehiculo->marca) }}">
+                            </div>
+                            @error('marca')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">MODELO:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="modelo" class="form-control" value="{{ old('modelo',$vehiculo->modelo) }}">
+                            </div>
+                            @error('modelo')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">COLOR:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="color" class="form-control" value="{{ old('color',$vehiculo->color) }}">
+                            </div>
+                            @error('color')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">PAIS PROCEDENCIA:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="pais_procedencia" class="form-control"
+                                    value="{{ old('pais_procedencia',$vehiculo->pais_procedencia) }}">
+                            </div>
+                            @error('pais_procedencia')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">USO DEL BIEN:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="uso_bien" class="form-control"
+                                    value="{{ old('uso_bien',$vehiculo->uso_bien) }}">
+                            </div>
+                            @error('uso_bien')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">NRO. MOTOR:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="nro_motor" class="form-control"
+                                    value="{{ old('nro_motor',$vehiculo->nro_motor) }}">
+                            </div>
+                            @error('nro_motor')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">NRO. CHASIS:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="nro_chasis" class="form-control"
+                                    value="{{ old('nro_chasis',$vehiculo->nro_chasis) }}">
+                            </div>
+                            @error('nro_chasis')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">CILINDRADA Cc:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="number" min="0" name="cilindrada" class="form-control"
+                                    value="{{ old('cilindrada',$vehiculo->cilindrada) }}">
+                            </div>
+                            @error('cilindrada')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">TRACCION:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="traccion" class="form-control"
+                                    value="{{ old('traccion',$vehiculo->traccion) }}">
+                            </div>
+                            @error('traccion')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">NRO. PLAZAS:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="number" min="0" name="nro_plazas" class="form-control"
+                                    value="{{ old('nro_plazas',$vehiculo->nro_plazas) }}">
+                            </div>
+                            @error('nro_plazas')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">NRO. PUERTAS:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="number" min="0" name="nro_puertas" class="form-control"
+                                    value="{{ old('nro_puertas',$vehiculo->nro_puertas) }}">
+                            </div>
+                            @error('nro_puertas')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">CAPACIDAD DE CARGA KL:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="number" min="0" name="capacidad_carga" class="form-control"
+                                    value="{{ old('capacidad_carga',$vehiculo->capacidad_carga) }}">
+                            </div>
+                            @error('capacidad_carga')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">NRO. POLIZA PROCEDENCIA:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="nro_poliza_procedencia" class="form-control"
+                                    value="{{ old('nro_poliza_procedencia',$vehiculo->nro_poliza_procedencia) }}">
+                            </div>
+                            @error('nro_poliza_procedencia')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">FECHA DE POLIZA:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="date" name="fecha_poliza" class="form-control"
+                                    value="{{ old('fecha_poliza',$vehiculo->fecha_poliza) }}">
+                            </div>
+                            @error('fecha_poliza')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">ULTIMO SOAT:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="number" min="1" name="ultimo_soat" class="form-control"
+                                    value="{{ old('ultimo_soat',$vehiculo->ultimo_soat) }}">
+                            </div>
+                            @error('ultimo_soat')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">ULTIMO I.T.V.:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="number" min="1" name="ultima_itv" class="form-control"
+                                    value="{{ old('ultima_itv',$vehiculo->ultima_itv) }}">
+                            </div>
+                            @error('ultima_itv')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">B-SISA:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="b_sisa" class="form-control" value="{{ old('b_sisa',$vehiculo->b_sisa) }}">
+                            </div>
+                            @error('b_sisa')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">NRO. R.U.A.T.:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="nro_ruat" class="form-control"
+                                    value="{{ old('nro_ruat',$vehiculo->nro_ruat) }}">
+                            </div>
+                            @error('nro_ruat')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">DOC. ADJ. R.U.A.T:</label>
                             <div class="d-flex justify-content-between">
                                 <div class="file-input">
-                                    <input type="file" name="imagenes[]" multiple id="gallery-input"
-                                        class="file-input__input" accept="image/*" />
-                                    <label class="file-input__label" for="gallery-input">
-                                        <i class="fa fa-image mr-3 fa-lg"></i>
-                                        <span>Galeria</span>
+                                    <input type="file" name="documento_ruat" id="documento_ruat"
+                                        class="file-input__input" accept="application/pdf" />
+                                    <label class="file-input__label" for="documento_ruat">
+                                        <i class="fa fa-file-pdf mr-3 fa-lg"></i>
+                                        <span>Documento</span>
                                     </label>
-                                    <span id="gallery-filename" class="file-name d-block"></span>
-                                </div>
-                                <div class="file-input">
-                                    <input type="file" name="fotografia" id="camera-input" class="file-input__input"
-                                        accept="image/*" />
-                                    <label class="file-input__label" for="camera-input">
-                                        <i class="fa fa-camera mr-3 fa-lg"></i>
-                                        <span>Cámara</span>
-                                    </label>
-                                    <span id="camera-filename" class="file-name d-block"></span>
+                                    <span id="documento_ruat-filename" class="file-name d-block"></span>
                                 </div>
                             </div>
-                            @error('imagenes')
+                            @error('documento_ruat')
                                 <span class="invalid-feedback d-block" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-                            @error('fotografia')
-                                <span class="invalid-feedback d-block" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-
-                            <div class="form-group">
-                                <label style="color:black;font-weight: bold;">UBICACION:</label>
-                                <div class="input-group">
-                                    <div id="mapa" style="height: 120px; width: 100%;"></div>
-                                </div>
-                                <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
-                                <input type="hidden" id="latitude" name="latitude">
-                                <input type="hidden" id="longitude" name="longitude">
-                            </div>
                         </div>
-                        <div class="col-12">
-                            <div class="row">
-                                <div class="col-md-4 mb-3">
-                                    <label style="color:black;font-weight: bold;">COSTO INICIAL:</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">Bs </span>
-                                        </div>
-                                        <input type="text" name="costo" id="costoInicial" class="form-control"
-                                            value="{{ $actual->costo }}">
-                                    </div>
-                                    @error('costo')
-                                        <span class="invalid-feedback d-block" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">NRO. (CRPVA):</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
                                 </div>
-                                <div class="col-md-3 mb-3">
-                                    <label style="color:black;font-weight: bold;">FACTOR. ACTUAL:</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"></span>
-                                        </div>
-                                        <input type="text" readonly name="depacu" id="factor_actual"
-                                            class="form-control" value="00" required>
-                                    </div>
+                                <input type="text" name="nro_crpva" class="form-control"
+                                    value="{{ old('nro_crpva',$vehiculo->nro_crpva) }}">
+                            </div>
+                            @error('nro_crpva')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">NRO. POLIZA SEGURO:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="nro_poliza_seguro" class="form-control"
+                                    value="{{ old('nro_poliza_seguro',$vehiculo->nro_poliza_seguro) }}">
+                            </div>
+                            @error('nro_poliza_seguro')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">VENC. POLIZA DEL SEGURO:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="date" name="vencimiento_poliza_seguro" class="form-control"
+                                    value="{{ old('vencimiento_poliza_seguro',$vehiculo->vencimiento_poliza_seguro) }}">
+                            </div>
+                            @error('vencimiento_poliza_seguro')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">DEPARTAMENTO:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="departamento" class="form-control"
+                                    value="{{ old('departamento',$vehiculo->departamento) }}">
+                            </div>
+                            @error('departamento')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">PROVINCIA:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="provincia" class="form-control"
+                                    value="{{ old('provincia',$vehiculo->provincia) }}">
+                            </div>
+                            @error('provincia')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">MUNICIPIO:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="municipio" class="form-control"
+                                    value="{{ old('municipio',$vehiculo->municipio) }}">
+                            </div>
+                            @error('municipio')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">LOCALIDAD:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="localidad" class="form-control"
+                                    value="{{ old('localidad',$vehiculo->localidad) }}">
+                            </div>
+                            @error('localidad')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">DISTRITO:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="number" min="1" name="distrito" class="form-control"
+                                    value="{{ old('distrito',$vehiculo->distrito) }}">
+                            </div>
+                            @error('distrito')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">CANTON:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="canton" class="form-control" value="{{ old('canton',$vehiculo->canton) }}">
+                            </div>
+                            @error('canton')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">COMUNIDAD:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="comunidad" class="form-control"
+                                    value="{{ old('comunidad',$vehiculo->comunidad) }}">
+                            </div>
+                            @error('comunidad')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">ZONA:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="zona" class="form-control" value="{{ old('zona',$vehiculo->zona) }}">
+                            </div>
+                            @error('zona')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">DIRECCION:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="direccion" class="form-control"
+                                    value="{{ old('direccion',$vehiculo->direccion) }}">
+                            </div>
+                            @error('direccion')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">KARDEX DE OBSERVACION:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"></span>
+                                </div>
+                                <input type="text" name="kardex_aclaracion" class="form-control"
+                                    value="{{ old('kardex_aclaracion',$vehiculo->kardex_aclaracion) }}">
+                            </div>
+                            @error('kardex_aclaracion')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">DOCUMENTOS ADJUNTOS:</label>
+                            <div class="file-input">
+                                <input type="file" name="documentos[]" multiple id="documentos"
+                                    class="file-input__input" accept="application/pdf" />
+                                <label class="file-input__label" for="documentos">
+                                    <i class="fa fa-file-pdf mr-3 fa-lg"></i>
+                                    <span>Documento</span>
+                                </label>
+                                <span id="documentos-filename" class="file-name d-block"></span>
+                            </div>
+                            @error('documentos')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-label">IMAGEN:</label>
+                            <div class="d-flex justify-content-between">
+                                <div class="file-input">
+                                    <input type="file" name="imagen" id="imagen" class="file-input__input"
+                                        accept="image/*" />
+                                    <label class="file-input__label" for="imagen">
+                                        <i class="fa fa-image mr-3 fa-lg"></i>
+                                        <span>Imagen</span>
+                                    </label>
+                                    <span id="imagen-filename" class="file-name d-block"></span>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-2 form-group">
-                                    <label style="color:black;font-weight: bold;">VIDA:</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">AÑOS</span>
-                                        </div>
-                                        <input type="text" readonly class="form-control"
-                                            value="{{ $actual->vidautil }}" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 form-group">
-                                    <label style="color:black;font-weight: bold;">DEPRE ACUM INICIAL:</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">BS</span>
-                                        </div>
-                                        <input type="text" id="depre_acumulada_inicial" readonly class="form-control"
-                                            value="" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 form-group">
-                                    <label style="color:black;font-weight: bold;">% DEPRECIA:</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">%</span>
-                                        </div>
-                                        <input type="text" readonly id="porcentaje_depreciacion" class="form-control"
-                                            value="{{ $actual->vidautil != 0 ? number_format((1 / $actual->vidautil) * 100, 2) : 0 }}"
-                                            required>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 form-group">
-                                    <label style="color:black;font-weight: bold;">DEPRE GESTION:</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">BS</span>
-                                        </div>
-                                        <input type="text" id="depre_gestion" readonly class="form-control"
-                                            value="" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 form-group">
-                                    <label style="color:black;font-weight: bold;">DEP. ACUMULADA:</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">Bs </span>
-                                        </div>
-                                        <input type="text" readonly name="depacu" id="depre_acumulada"
-                                            class="form-control" value="00" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 form-group">
-                                    <label style="color:black;font-weight: bold;">VALOR NETO:</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">Bs </span>
-                                        </div>
-                                        <input type="text" readonly name="depacu" id="valor_actual"
-                                            class="form-control" value="00" required>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="row">
-                                        <div class="col-md-3 form-group">
-                                            <label style="color:black;font-weight: bold; ">CALCULADO A :</label>
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">DÍA </span>
-                                                </div>
-                                                <input type="text" name="dia" class="form-control"
-                                                    value="{{ date('d') }}" required>
-                                                <input type="text" name="mes" class="form-control"
-                                                    value="{{ date('m') }}" required>
-                                                <input type="text" name="año" class="form-control"
-                                                    value="{{ date('Y') }}" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 form-group">
-                                            <label style="color:black;font-weight: bold;">Ufv Inicial:</label>
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">Bs </span>
-                                                </div>
-                                                <input type="text" readonly class="form-control"
-                                                    value="{{ $ufInicial }}" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 form-group">
-                                            <label style="color:black;font-weight: bold;">Ufv Actual:</label>
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">Bs </span>
-                                                </div>
-                                                <input type="text" readonly class="form-control"
-                                                    value="{{ $ufActual }}" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            @error('imagen')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
                     </div>
                     <div class="text-center">
                         <button class="btn color-icon-2 font-verdana-bg" type="submit">
-                            <i class="fa-solid fa-paper-plane mr-2"></i>Actualizar
+                            <i class="fa-solid fa-paper-plane"></i>
+                            &nbsp;REGISTRAR
                         </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-@section('styles')
-    <link rel="stylesheet" href="{{ asset('admin_assets/plugins/select2/css/select2.min.css') }}">
-    <style>
-        .select2-search__field:focus {
-            outline: none;
-            border: none;
-        }
-    </style>
 @endsection
 @section('scripts')
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD73WmrwkgvJi5CLHprURygkrcTJerWGIk&callback=initMap" async
-        defer></script>
-    <script src="{{ asset('admin_assets/plugins/select2/js/select2.min.js') }}"></script>
-    <script src="{{ asset('js/depreciar.js') }}"></script>
     <script>
-        $(document).ready(function() {
-            $('#ambiente').select2({
-                tags: true,
-                language: {
-                    noResults: function() {
-                        return "No se encontraron resultados";
+        $('#documento').on('change', function() {
+            const numFiles = this.files.length;
+            $('#documento-filename').text(numFiles > 0 ? `${numFiles} archivo seleccionado` :
+                'Ningún archivo seleccionado');
+        });
+
+        $('#documento_ruat').on('change', function() {
+            const numFiles = this.files.length;
+            $('#documento_ruat-filename').text(numFiles > 0 ? `${numFiles} archivo seleccionado` :
+                'Ningún archivo seleccionado');
+        });
+
+        $('#documentos').on('change', function() {
+            const numFiles = this.files.length;
+            $('#documentos-filename').text(numFiles > 0 ? `${numFiles} archivo(s) seleccionado(s)` :
+                'Ningún archivo seleccionado');
+        });
+
+        $('#imagen').on('change', function() {
+            const numFiles = this.files.length;
+            $('#imagen-filename').text(numFiles > 0 ? `${numFiles} imagen seleccionada` :
+                'Ningún archivo seleccionado');
+        });
+
+        $('#buscar-codigo').click(function(event) {
+            var codigo = $('#codigo').val();
+            event.preventDefault();
+            $.ajax({
+                url: '/Activo/vehiculo/getCodigo',
+                method: 'GET',
+                data: {
+                    codigo: codigo
+                },
+                success: function(res) {
+                    if (res.response && res.response.descrip) {
+                        $('#descripcion').text(res.response.descrip);
+                        $('#actual_id').val(res.response.id);
+                        $('#costo_historico').val(res.response.costo);
+                        switch (res.response.codestado) {
+                          case 1:
+                            $('#estado').val('BUENO');
+                            break;
+                          case 2:
+                            $('#estado').val('REGULAR');
+                            break;
+                          case 3:
+                            $('#estado').val('MALO');
+                            break;
+                          default:
+                            $('#estado').val('');
+                            break;
+                        }
+                    } else {
+                        $('#descripcion').text("No se ha encontrado ese codigo");
                     }
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
                 }
             });
         });
-        $(document).ready(function() {
-            var vidaUtil = parseFloat($('#vida').val());
-            var costoInicial = parseFloat($('#costoInicial').val());
-            var fechaInicial = new Date(
-                '{{ $actual->ano }}',
-                '{{ $actual->mes - 1 }}',
-                '{{ $actual->dia }}'
-            );
-            var ufInicial = '{{ $ufInicial }}';
-            var ufActual = '{{ $ufActual }}';
-
-            var formattedDate = fechaInicial.toISOString().split('T')[0];
-            $('#feul').val(formattedDate);
-            $('#factor_actual').val(
-                factorActual(ufInicial, ufActual).toFixed(2)
-            );
-            $('#depre_acumulada').val(
-                depreciacionAcumulada(costoInicial, vidaUtil, fechaInicial, ufInicial, ufActual).toFixed(2)
-            );
-            $('#valor_actual').val(
-                valorActual(costoInicial, vidaUtil, fechaInicial, ufInicial, ufActual).toFixed(2)
-            );
-            $('#depre_gestion').val(
-                depreciacionAcumuladaGestion(costoInicial, vidaUtil, ufInicial, ufActual).toFixed(2)
-            );
-            $('#depre_acumulada_inicial').val(
-                depreciacionAcumuladaInicial(costoInicial, vidaUtil, fechaInicial, ufInicial, ufActual).toFixed(
-                    2)
-            );
-        });
-
-        $('#gallery-input').on('change', function() {
-            const numFiles = this.files.length;
-            $('#gallery-filename').text(numFiles > 0 ? `${numFiles} archivo(s) seleccionado(s)` :
-                'Ningún archivo seleccionado');
-        });
-
-        $('#camera-input').on('change', function() {
-            const numFiles = this.files.length;
-            $('#camera-filename').text(numFiles > 0 ? `${numFiles} archivo(s) seleccionado(s)` :
-                'Ningún archivo seleccionado');
-        });
-
-        function initMap() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    var latitud = position.coords.latitude;
-                    var longitud = position.coords.longitude;
-
-                    $("#latitude").val(latitud);
-                    $("#longitude").val(longitud);
-
-                    var ubicacion = {
-                        lat: latitud,
-                        lng: longitud
-                    };
-                    var opcionesMapa = {
-                        center: ubicacion,
-                        zoom: 17
-                    };
-
-                    mapa = new google.maps.Map(document.getElementById("mapa"), opcionesMapa);
-                    var marker = new google.maps.Marker({
-                        position: ubicacion,
-                        map: mapa
-                    })
-                });
-            } else {
-                alert("La geolocalización no está disponible en este navegador.");
-            }
-        }
     </script>
-@endsection
 @endsection

@@ -13,6 +13,7 @@
                         <th class="text-center p-1">RESPONSABLE</th>
                         <th class="text-center p-1">CARGO</th>
                         <th class="text-left p-1">CI</th>
+                        <th class="text-center p-1">PREVENTIVO</th>
                         <th class="text-center p-1">ESTADO</th>
                         <th class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></th>
                     </tr>
@@ -42,6 +43,8 @@
                                 <td class="text-left p-1" style="vertical-align: middle;">
                                     {{ optional($activo->empleados)->ci }}
                                 </td>
+                                <td class="text-left p-1" style="vertical-align: middle;">
+                                    {{ $activo->cod_rube }}</td>
                             <td class="text-center p-1" style="vertical-align: middle;">
                                 <span class="badge {{ $activo->icono_estado }} badge-with-padding">
                                     {{ $activo->status }}

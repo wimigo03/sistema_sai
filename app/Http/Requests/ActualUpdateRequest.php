@@ -33,6 +33,7 @@ class ActualUpdateRequest extends FormRequest
             'longitude' => 'required',
             'costo' => 'required|integer',
             'codestado' => 'required|in:1,2,3',
+            'ambiente_id' => 'required|exists:ambientes,id'
         ];
     }
 

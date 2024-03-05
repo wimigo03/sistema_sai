@@ -6,9 +6,10 @@
                     <tr class="font-verdana-sm">
                         <th class="text-left p-1">N°</th>
                         <th class="text-left p-1">CODIGO</th>
-                        <th class="text-left p-1">CODIGO VSIAF</th>
                         <th class="text-center p-1">OFICINA</th>
                         <th class="text-center p-1">RESPONSABLE</th>
+                        <th class="text-center p-1">GRUPO</th>
+                        <th class="text-center p-1">AUXILIAR</th>
                         <th class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></th>
                     </tr>
                 </thead>
@@ -22,13 +23,16 @@
                                 {{ $vehiculo->codigo }}
                             </td>
                             <td class="text-left p-1" style="vertical-align: middle;">
-                                {{ $vehiculo->codigo_interno }}
-                            </td>
-                            <td class="text-left p-1" style="vertical-align: middle;">
                                 {{ optional($vehiculo->actual->areas)->nombrearea }}</td>
                             <td class="text-left p-1" style="vertical-align: middle;">
                                 {{ optional($vehiculo->actual->empleados)->full_name }}</td>
                             </td>
+                        <td class="text-left p-1" style="vertical-align: middle;">
+                            {{ optional(optional($vehiculo->actual)->codconts)->nombre }}
+                        </td>
+                        <td class="text-left p-1" style="vertical-align: middle;">
+                            {{ optional(optional($vehiculo->actual)->auxiliar)->nomaux }}
+                        </td>
                             <td class="text-center p-1" style="vertical-align: middle;">
                                 @include('activo.vehiculo.btn')
                             </td>

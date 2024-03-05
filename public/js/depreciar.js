@@ -5,7 +5,7 @@ const diasDesdeDiciembre = () => {
 };
 
 const diasTranscurridos = (fechaInicial) => {
-    return Math.floor((new Date() - fechaInicial) / (1000 * 60 * 60 * 24));
+    return Math.floor((new Date() - fechaInicial) / (1000 * 60 * 60 * 24)) +1;
 };
 
 const fechaUltimoCorte = (fechaInicial) => {
@@ -26,6 +26,10 @@ const coeficienteDep = (vidaUtil) => {
     return (1 / vidaUtil) * 100;
 };
 
+const valorActual = (costoInicial, ufInicial, ufActual) =>{
+    return costoInicial * factorActual(ufInicial, ufActual)
+}
+
 const costoInicialActualizado = (costoInicial, ufInicial, ufActual) => {
     return costoInicial * factorActual(ufInicial, ufActual);
 };
@@ -40,9 +44,13 @@ const depreciacionAcumulada = (costoInicial, vidaUtil, fechaInicial, ufInicial,u
     if(vidaUtil == 0){
         return 0;
     }
+    var resultado =  depreciacionDiaria(costoInicial, vidaUtil, ufInicial,ufActual) *
+    diasTranscurridos(fechaInicial)
+    if(resultado> valorActual(costoInicial, ufInicial, ufActual)){
+        resultado = valorActual(costoInicial, ufInicial, ufActual) - 1
+    }
     return (
-        depreciacionDiaria(costoInicial, vidaUtil, ufInicial,ufActual) *
-        diasTranscurridos(fechaInicial)
+       resultado
     );
 };
 
@@ -66,12 +74,12 @@ const depreciacionAcumuladaInicial = (costoInicial, vidaUtil, fechaInicial, ufIn
     return 0;
 };
 
-const valorActual = (costoInicial, vidaUtil, fechaInicial,ufInicial,ufActual) => {
+const valorNeto = (costoInicial, vidaUtil, fechaInicial,ufInicial,ufActual) => {
     if(vidaUtil == 0){
         return costoInicialActualizado(costoInicial,ufInicial, ufActual);
     }
     const resultado =
-        costoInicial -
+        valorActual(costoInicial, ufInicial, ufActual) -
         depreciacionAcumulada(costoInicial, vidaUtil, fechaInicial, ufInicial,ufActual);
     if (resultado < 0) {
         return 1;

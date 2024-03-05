@@ -2,6 +2,7 @@
 
 namespace App\Models\Model_Activos;
 
+use App\Models\Ambiente;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -75,6 +76,11 @@ class ActualModel extends Model
         return $this->belongsTo(AuxiliarModel::class, 'codaux','codaux');
     }
 
+    public function auxiliar()
+    {
+        return $this->belongsTo(AuxiliarModel::class, 'codaux', 'codaux');
+    }
+
     public function areas()
     {
         return $this->belongsTo(AreasModel::class, 'codarea');
@@ -115,6 +121,11 @@ class ActualModel extends Model
         return $this->hasMany(Transferencia::class, 'activo_id');
     }
 
+    public function ambiente()
+    {
+        return $this->belongsTo(Ambiente::class);
+    }
+    
     public function getIconoEstadoAttribute()
     {
         $status_icono = ['', 'badge-primary', 'badge-success', 'badge-danger'];
@@ -143,6 +154,59 @@ class ActualModel extends Model
     }
 
     public function scopeByCi($query, $ci)
+    {
+        if ($ci) {
+            return $query
+                ->whereIn('codemp', function ($subquery) use ($ci) {
+                    $subquery->select('idemp')
+                        ->from('empleados')
+                        ->where('ci', 'like', '%' . $ci . '%');
+                });
+        }
+    }
+
+    public function scopeByKardex($query, $kardex)
+    {
+        if ($kardex != null) {
+            if($kardex == 1){
+                return $query->where('observaciones', '!=','');
+            }else{
+                return $query->where('observaciones',null);
+            }
+        }
+    }
+    
+    public function scopeByPreventivo($query, $preventivo)
+    {
+        if ($preventivo != null) {
+            return $query->where('cod_rube', 'like', '%' . $preventivo . '%');
+        }
+    }
+
+    public function scopeByAuxiliar($query, $auxiliar)
+    {
+        if ($auxiliar) {
+            return $query->where('codaux', $auxiliar->codaux)
+            ->where('codcont', $auxiliar->codcont)
+            ->where('unidad', $auxiliar->unidad);
+        }
+    }
+
+
+    public function scopeByAmbiente($query, $ambiente)
+    {
+        if ($ambiente) {
+            return $query
+                ->whereIn('ambiente_id', function ($subquery) use ($ambiente) {
+                    $subquery->select('id')
+                        ->from('ambientes')
+                        ->where('nombre', 'like', '%' . $ambiente . '%');
+                });
+        }
+    }
+
+
+    public function scopeByIdBien($query, $ci)
     {
         if ($ci) {
             return $query
