@@ -9,7 +9,7 @@
 </div>
 
 <div class="col-md-2">
-    <label for="fechasalida" class="d-inline font-verdana-bg">
+    <label for="fechasalida" class="d-inline font-verdana-12">
         <b> fechasalida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
     </label>
     <textarea required type="date" name="fechasalida" placeholder="dd/mm/aaaa"

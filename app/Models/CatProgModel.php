@@ -8,19 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class CatProgModel extends Model
 {
     protected $table = 'catprogramatica';
-    
     protected $primaryKey= 'idcatprogramatica';
-
     public $timestamps = false;
 
     protected $fillable = [
         'codcatprogramatica',
         'nombrecatprogramatica',
         'estadocatprogramatica'
-    ];
-
-    protected $guarded = [
-
-        
     ];
 }

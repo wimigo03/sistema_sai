@@ -7,7 +7,7 @@
     </div>
 @endif
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-2 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
             <a href="{{ url('/compras/pedidoparcial/index') }}">
@@ -52,7 +52,7 @@
         <br>
         <div class="form-group row">
             <div class="col-md-8">
-                <label for="producto" class="d-inline font-verdana-bg">
+                <label for="producto" class="d-inline font-verdana-12">
                     <b>Producto-Item</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="producto" id="producto" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
@@ -64,16 +64,16 @@
                 </select>
             </div>
             <div class="col-md-1">
-                <label for="cantidad" class="d-inline font-verdana-bg">
+                <label for="cantidad" class="d-inline font-verdana-12">
                     <b>Cantidad</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <input type="text" name="cantidad" value="{{request('cantidad')}}" class="form-control form-control-sm font-verdana-bg" id="cantidad" onkeypress="return valideNumber(event);">
+                <input type="text" name="cantidad" value="{{request('cantidad')}}" class="form-control form-control-sm font-verdana-12" id="cantidad" onkeypress="return valideNumber(event);">
             </div>
             <div class="col-md-2 text-right">
                 <br>
                 @if($compras->estado1 == 1)
 
-                <button class="btn btn-primary font-verdana-bg" type="button" onclick="save();">
+                <button class="btn btn-primary font-verdana-12" type="button" onclick="save();">
                     <i class="fa-solid fa-plus"></i>
                     &nbsp;Adicionar
                 </button>

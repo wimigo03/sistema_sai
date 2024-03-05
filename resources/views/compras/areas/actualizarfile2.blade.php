@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('content')
-    <div class="row font-verdana-bg">
+    <div class="row font-verdana-12">
         <div class="col-md-12 text-center titulo">
             <b>MODIFICAR FILE-C/{{strtoupper($area->nombrearea)}}</b>
         </div>
@@ -13,38 +13,38 @@
             @csrf
             <input type="hidden" name="idfile" value="{{$file->idfile}}">
             <input type="hidden" name="idarea" value="{{$file->idarea}}">
-            <div class="form-group row font-verdana-bg">
+            <div class="form-group row font-verdana-12">
                 <div class="col-md-2">
                     <label for="numfile" class="d-inline">
                         <b>N° File</b>
                     </label>
-                    <input type="number" value="{{$file->numfile}}" name="numfile" class="form-control form-control-sm font-verdana-bg" required>
+                    <input type="number" value="{{$file->numfile}}" name="numfile" class="form-control form-control-sm font-verdana-12" required>
                 </div>
                 <div class="col-md-4">
                     <label for="cargo" class="d-inline">
                         <b>Cargo</b>
                     </label>
-                    <input type="text" value="{{$file->cargo}}" name="cargo" class="form-control form-control-sm font-verdana-bg" onchange="javascript:this.value=this.value.toUpperCase();" required>
+                    <input type="text" value="{{$file->cargo}}" name="cargo" class="form-control form-control-sm font-verdana-12" onchange="javascript:this.value=this.value.toUpperCase();" required>
                 </div>
                 <div class="col-md-4">
                     <label for="nombrecargo" class="d-inline">
                         <b>Nombre de Cargo</b>
                     </label>
-                    <input type="text" value="{{$file->nombrecargo}}" name="nombrecargo" class="form-control form-control-sm font-verdana-bg" onchange="javascript:this.value=this.value.toUpperCase();" required>
+                    <input type="text" value="{{$file->nombrecargo}}" name="nombrecargo" class="form-control form-control-sm font-verdana-12" onchange="javascript:this.value=this.value.toUpperCase();" required>
                 </div>
                 <div class="col-md-2">
                     <label for="habbasico" class="d-inline">
                         <b>Haber Basico</b>
                     </label>
-                    <input type="number" value="{{$file->habbasico}}" step="0" name="habbasico" class="form-control form-control-sm font-verdana-bg" required>
+                    <input type="number" value="{{$file->habbasico}}" step="0" name="habbasico" class="form-control form-control-sm font-verdana-12" required>
                 </div>
             </div>
-            <div class="form-group row font-verdana-bg">
+            <div class="form-group row font-verdana-12">
                 <div class="col-md-2">
                     <label for="categoria" class="d-inline">
                         <b>Categoria</b>
                     </label><br>
-                    <select name="categoria" id="#" class="form-control form-control-sm font-verdana-bg select2" required>
+                    <select name="categoria" id="#" class="form-control form-control-sm font-verdana-12 select2" required>
                         <option {{ ($file->categoria) == 'SUPERIOR' ? 'selected' : '' }} value="SUPERIOR">Superior</option>
                         <option {{ ($file->categoria) == 'EJECUTIVO' ? 'selected' : '' }} value="EJECUTIVO">Ejecutivo</option>
                         <option {{ ($file->categoria) == 'OPERATIVO' ? 'selected' : '' }} value="OPERATIVO">Operativo</option>
@@ -54,7 +54,7 @@
                     <label for="niveladm" class="d-inline">
                         <b>Nivel Administrativo</b>
                     </label><br>
-                    <select name="niveladm" id="#" class="form-control form-control-sm font-verdana-bg select2" required>
+                    <select name="niveladm" id="#" class="form-control form-control-sm font-verdana-12 select2" required>
                         <option {{ ($file->niveladm) == 1 ? 'selected' : '' }} value="1">1</option>
                         <option {{ ($file->niveladm) == 2 ? 'selected' : '' }} value="2">2</option>
                         <option {{ ($file->niveladm) == 3 ? 'selected' : '' }} value="3">3</option>
@@ -71,7 +71,7 @@
                     <label for="clase" class="d-inline">
                         <b>Clase</b>
                     </label><br>
-                    <select name="clase" id="#" class="form-control form-control-sm font-verdana-bg select2" required>
+                    <select name="clase" id="#" class="form-control form-control-sm font-verdana-12 select2" required>
                         <option {{ ($file->clase) == 1 ? 'selected' : '' }} value="1">1</option>
                         <option {{ ($file->clase) == 2 ? 'selected' : '' }} value="2">2</option>
                         <option {{ ($file->clase) == 3 ? 'selected' : '' }} value="3">3</option>
@@ -87,7 +87,7 @@
                     <label for="nivelsal" class="d-inline">
                         <b>Nivel Salarial</b>
                     </label><br>
-                    <select name="nivelsal" id="#" class="form-control form-control-sm font-verdana-bg select2" required>
+                    <select name="nivelsal" id="#" class="form-control form-control-sm font-verdana-12 select2" required>
                         <option {{ ($file->nivelsal) == 1 ? 'selected' : '' }} value="1">1</option>
                         <option {{ ($file->nivelsal) == 2 ? 'selected' : '' }} value="2">2</option>
                         <option {{ ($file->nivelsal) == 3 ? 'selected' : '' }} value="3">3</option>
@@ -107,7 +107,7 @@
                     <label for="nivelsal" class="d-inline">
                         <b>Area</b>
                     </label><br>
-                    <select name="idarea2" id="#" class="form-control form-control-sm font-verdana-bg select2" required>
+                    <select name="idarea2" id="#" class="form-control form-control-sm font-verdana-12 select2" required>
                         @foreach ($areas as $area)
                             @if ($area->idarea==$file->idarea)
                                 <option value="{{$area->idarea}}" selected>{{$area->nombrearea}}</option>
@@ -120,10 +120,10 @@
             </div>
             <div class="form-group row">
                 <div class="col-md-12 text-right">
-                    <button class="btn btn-outline-primary font-verdana-bg" type="submit">
+                    <button class="btn btn-outline-primary font-verdana-12" type="submit">
                         <i class="fa-solid fa-paper-plane"></i>&nbsp;Actualizar
                     </button>
-                    <a href="{{route('areas.file2',$file->idarea)}}" class="btn btn-outline-danger font-verdana-bg">
+                    <a href="{{route('areas.file2',$file->idarea)}}" class="btn btn-outline-danger font-verdana-12">
                         <i class="fa fa-lg fa-reply" aria-hidden="true"></i>&nbsp;Cancelar
                     </a>
                 </div>

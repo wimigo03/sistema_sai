@@ -11,7 +11,7 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
 
-            <div class="row font-verdana-bg">
+            <div class="row font-verdana-12">
                 <div class="col-md-4 titulo">
 
                     <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
@@ -47,7 +47,7 @@
                             <div class="col-md-3">
 
                                 <input type="text" name="fecha" placeholder="dd/mm/aaaa"
-                                    class="form-control form-control-sm font-verdana-bg" id="fecha" data-language="es"
+                                    class="form-control form-control-sm font-verdana-12" id="fecha" data-language="es"
                                     autocomplete="off">
                             </div>
                         </div>
@@ -57,7 +57,7 @@
                             <label for="nombre" style="color:black;font-weight: bold;"
                                 class="required col-md-4 col-form-label text-md-right">Hora Inicio:</label>
                             <div class="col-md-2">
-                                <input type="time" name="horaini"  class="form-control form-control-sm font-verdana-bg" id="horaini" >
+                                <input type="time" name="horaini"  class="form-control form-control-sm font-verdana-12" id="horaini" >
                             </div>
                         </div>
 
@@ -65,7 +65,7 @@
                             <label for="nombre" style="color:black;font-weight: bold;"
                                 class="required col-md-4 col-form-label text-md-right">Hora Final:</label>
                             <div class="col-md-2">
-                                <input type="time" name="horafin"  class="form-control form-control-sm font-verdana-bg" id="horafin">
+                                <input type="time" name="horafin"  class="form-control form-control-sm font-verdana-12" id="horafin">
                             </div>
                         </div>
 
@@ -98,13 +98,13 @@
                         <div align='center'>
 
 
-                            <button class="btn btn-success font-verdana-bg" type="button" id="cancelar">
+                            <button class="btn btn-success font-verdana-12" type="button" id="cancelar">
                                 Cancelar
                             </button>
 
                             &nbsp;&nbsp;&nbsp;&nbsp;
 
-                            <button class="btn color-icon-2 font-verdana-bg" type="button" id="insertar_item_material">
+                            <button class="btn color-icon-2 font-verdana-12" type="button" id="insertar_item_material">
                                 <i class="fa-solid fa-paper-plane"></i>
                                 Guardar
                             </button>

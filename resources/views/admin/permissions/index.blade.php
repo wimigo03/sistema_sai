@@ -6,9 +6,9 @@
         <div class="card-header">MODULO PERMISOS</div>
 
         <div class="card-body table-responsive">
-            @can('permission_create')
+    )
             <a href="{{ route('admin.permissions.create') }}" class="btn btn-outline-primary">Agregar nuevo permiso</a>
-            @endcan
+
 
             <br /><br />
 
@@ -27,16 +27,14 @@
                             <td class="text-center">{{$permission->id}}</td>
                             <td>{{$permission->name}}</td>
                             <td>
-                                    @can('permission_edit')
+  
                                         <a href="{{ route('admin.permissions.edit', $permission->id) }}" class="btn btn-sm btn-outline-warning">Editar</a>
-                                    @endcan
-                                    @can('permission_delete')
+ 
                                 <form action="{{ route('admin.permissions.destroy', $permission->id) }}" class="d-inline-block" method="post">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" onclick="return confirm('Esta Ud. seguro?')" class="btn btn-sm btn-outline-danger">Borrar</button>
                                 </form>
-                                @endcan
                             </td>
                         </tr>
                         @empty

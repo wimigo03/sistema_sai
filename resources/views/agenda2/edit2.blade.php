@@ -4,7 +4,7 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
 
-            <div class="row font-verdana-bg">
+            <div class="row font-verdana-12">
                 <div class="col-md-4 titulo">
 
                     <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
@@ -40,7 +40,7 @@
                             <div class="col-md-3">
 
                                 <input type="text" name="fecha" placeholder="aaaa/mm/dd"
-                                    class="form-control form-control-sm font-verdana-bg" id="fecha" data-language="es"
+                                    class="form-control form-control-sm font-verdana-12" id="fecha" data-language="es"
                                     autocomplete="off"  value="{{ $date2}}">
                             </div>
                         </div>
@@ -50,7 +50,7 @@
                             <label for="nombre" style="color:black;font-weight: bold;"
                                 class="required col-md-4 col-form-label text-md-right">Hora Inicio:</label>
                             <div class="col-md-2">
-                                <input type="time" name="horaini" value="{{ $agenda->hora1}}"  class="form-control form-control-sm font-verdana-bg" id="horaini" >
+                                <input type="time" name="horaini" value="{{ $agenda->hora1}}"  class="form-control form-control-sm font-verdana-12" id="horaini" >
                             </div>
                         </div>
 
@@ -58,7 +58,7 @@
                             <label for="nombre" style="color:black;font-weight: bold;"
                                 class="required col-md-4 col-form-label text-md-right">Hora Final:</label>
                             <div class="col-md-2">
-                                <input type="time" name="horafin" value="{{ $agenda->hora2}}" class="form-control form-control-sm font-verdana-bg" id="horafin">
+                                <input type="time" name="horafin" value="{{ $agenda->hora2}}" class="form-control form-control-sm font-verdana-12" id="horafin">
                             </div>
                         </div>
 
@@ -71,7 +71,7 @@
 
                         <div align='center'>
 
-                            <button class="btn color-icon-2 font-verdana-bg" type="submit">
+                            <button class="btn color-icon-2 font-verdana-12" type="submit">
                                 <i class="fa-solid fa-paper-plane"></i>
 
                                 &nbsp;

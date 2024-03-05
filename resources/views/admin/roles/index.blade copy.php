@@ -1,13 +1,13 @@
 @extends('layouts.admin')
 @section('content')
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-10 text-left titulo">
         <b>ROLES</b>
     </div>
     <div class="col-md-2 text-right">
         <span class="tts:left tts-slideIn tts-custom" aria-label="Agregar un nuevo rol">
-            <button class="btn btn-success font-verdana-bg" type="button" onclick="create();">
+            <button class="btn btn-success font-verdana-12" type="button" onclick="create();">
                 &nbsp;<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;
             </button>
         </span>
@@ -36,7 +36,7 @@
                             <td class="text-justify p-1">{{$datos->title}}</td>
                             <td class="text-right p-1">{{$datos->short_code}}</td>
                             <td class="text-center p-1">
-                                @can('role_show')
+                                
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle">
                                         <a href="{{route('admin.roles.show',$datos->id)}}">
                                             <span class="text-primary">
@@ -44,8 +44,8 @@
                                             </span>
                                         </a>
                                     </span>
-                                @endcan
-                                @can('role_edit')
+                              
+                               
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar">
                                         <a href="{{route('admin.roles.edit',$datos->id)}}">
                                             <span class="text-warning">
@@ -53,8 +53,8 @@
                                             </span>
                                         </a>
                                     </span>
-                                @endcan
-                                @can('role_delete')
+                              
+                               
                                     <form action="{{ route('admin.roles.destroy', $datos->id) }}" class="d-inline-block" method="post">
                                         @csrf
                                         @method('DELETE')
@@ -64,7 +64,7 @@
                                             </span>
                                         </span>
                                     </form>
-                                @endcan
+                               
                             </td>
                         </tr>
                     @endforeach

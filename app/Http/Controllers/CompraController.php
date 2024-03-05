@@ -172,6 +172,8 @@ class CompraController extends Controller
 
     public function update(Request $request)
     {
+
+        //dd($request->all());
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
 

@@ -4,17 +4,15 @@
     <div class="col-md-12">
         <div class="card rounded">
             <div class="card-header bg-gradient-secondary text-white rounded">
-                <div class="card-title"><b class="font-verdana-bg">LISTA DE SOLICITUDES DE COMPRAS</b></div>
+                <div class="card-title"><b class="font-verdana-12">LISTA DE SOLICITUDES DE COMPRAS</b></div>
             </div>
             <div class="card-body">
                 <div class="form-group row">
                     <div class="col-md-12 text-right">
-                        @can('medidas_create')
                         <a href="{{ route('pedido.create') }}"
                             class="btn btn-color-success font-verdana text-white font-weight-bold">
                             <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Agregar
                         </a>
-                        @endcan
                     </div>
                 </div>
                 <div class="form-group row justify-content-center">
@@ -44,12 +42,10 @@
 
 
                                     <td>
-                                        @can('medidas_access')
                                         <a href="pedido/{{$comp->idcompra}}/editar" class="btn btn-xs btn-info" title="Editar Solicitud">
                                             <i class="fas fa-pencil-alt text-white" aria-hidden="true"></i>
                                         </a>
 
-                                        @endcan
 
                                         <a href="pedido/{{$comp->idcompra}}/edit" style="color:white;"
                                             class="btn btn-xs btn-warning" title="Acceder al detalle">

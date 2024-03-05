@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.3|^8.0",
         "barryvdh/laravel-dompdf": "^2.0",
+        "dompdf/dompdf": "^2.0",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -20,7 +21,8 @@
         "luecano/numero-a-letras": "^3.0",
         "maatwebsite/excel": "^3.1",
         "nesbot/carbon": "^2.58",
-        "milon/barcode": "^8.0",
+        "setasign/fpdi": "^2.6",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "styde/html": "~1.0",
         "villca/numeros-en-letras": "^1.2",
         "yajra/laravel-datatables-oracle": "~9.0"

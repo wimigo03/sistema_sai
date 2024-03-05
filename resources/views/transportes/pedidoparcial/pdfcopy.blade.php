@@ -1,21 +1,20 @@
 @extends('layouts.admin')
 @section('content')
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-8 titulo">
         <b>SOLICITUD DE UNIDAD -- </b><b style='color:red'>{{$idd->nombrearea}} </b>--
     </div>
     <div class="col-md-4 text-right titulo">
         
-         @can('unidadconsumo_create') 
-
+   
         <a href="{{route('transportes.pedidoparcial.create')}}" class="tts:left tts-slideIn tts-custom" 
         aria-label="  Solicitud">
             <button class="btn btn-sm btn-success font-verdana" type="button" >Agreg.Solic.
                 &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
             </button>
         </a>
-         @endcan 
+       
 
              {{-- PASO UNO PDF --}}
              <a href="{{route('transportes.pedidoparcial.pdf')}}" class="tts:left tts-slideIn tts-custom" aria-label="Pdf">
@@ -57,7 +56,7 @@
                             <td class="text-justify p-1">{{$sol->nombrearea}}</td>
 
                              <td style="padding: 0;" class="text-center p-1">
-                                 @can('combustibles_access') 
+                               
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Solicitud">
                                         <a href="{{route('transportes.pedidoparcial.editar',$sol->idsoluconsumo)}}">
                                             <span class="text-warning">
@@ -65,7 +64,7 @@
                                             </span>
                                         </a>
                                     </span>
-                                 @endcan 
+                            
 
                                  <span class="tts:left tts-slideIn tts-custom" aria-label="Imprimir Solicitud">
                                     <a href="{{route('transportes.pedidoparcial.solicitud',$sol->idsoluconsumo)}}">

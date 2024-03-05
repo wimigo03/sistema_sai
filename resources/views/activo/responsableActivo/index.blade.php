@@ -1,5 +1,6 @@
 @extends('layouts.admin')
 @section('content')
+
 <link rel="stylesheet" href="https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/5.0.0/css/fixedColumns.dataTables.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/select/2.0.0/css/select.dataTables.css">
@@ -10,6 +11,13 @@
     color: black;
 }
 
+.encabezadoCodigoBarras {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid #000;
+    padding: 5px;
+}
 .encabezadoCodigoBarras {
     display: flex;
     justify-content: space-between;
@@ -34,6 +42,78 @@
 @include('activo.responsableActivo.search')
 
 @include('activo.responsableActivo.table')
+
+<div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-xl role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Cambiar responsable</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <input type="hidden" id="empleadoOrigen" value="{{ $empleado->idemp }}">
+                    <div class="col-md-4 mb-3">
+                        <label style="color:black;font-weight: bold;">OFICINA:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"></span>
+                            </div>
+                            <select name="idarea" id="area" class="form-control">
+                                <option value=""> Seleccione Oficina</option>
+                                @foreach ($areas as $area)
+                                <option value="{{ $area->idarea }}">
+                                    <h1 color:blue;>{{ $area->nombrearea }}</h1>
+                                </option>
+                                @endforeach
+                            </select>
+
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label style="color:black;font-weight: bold;">RESPONSABLE:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"></span>
+                            </div>
+                            <select name="idemp" id="empleado" class="form-control">
+                                <option value=""> Seleccione Responsable</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label style="color:black;font-weight: bold;">CARGO:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"></span>
+                            </div>
+                            <select name="idcargo" id="cargo" class="form-control">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <h4>Activos seleccionados <span id="totalSeleccionados"></span> </h4>
+                <table id="tablaSeleccionadas" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Descripcion</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary font-verdana-bg" id="btn_actualizar" type="submit">
+                    <i class="fa-solid fa-paper-plane mr-2"></i>Transferir
+                </button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
 
 <div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-xl role="document">

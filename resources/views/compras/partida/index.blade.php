@@ -3,7 +3,7 @@
 @section('content')
 
 
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-10 titulo">
         <b>LISTADO DE PARTIDAS</b>
     </div>

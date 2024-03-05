@@ -1,10 +1,10 @@
 <form action="#" method="get" id="form">
     <div class="form-group row">
         <div class="col-md-2 pr-1">
-            <input type="text" name="codigo" placeholder="--Codigo--" value="{{request('codigo')}}" class="form-control form-control-sm font-verdana-bg">
+            <input type="text" name="codigo" placeholder="--Codigo--" value="{{request('codigo')}}" class="form-control form-control-sm font-verdana-12">
         </div>
         <div class="col-md-4 pr-1 pl-1">
-            <input type="text" name="nombre" placeholder="--Nombre--" value="{{request('nombre')}}" class="form-control form-control-sm font-verdana-bg">
+            <input type="text" name="nombre" placeholder="--Nombre--" value="{{request('nombre')}}" class="form-control form-control-sm font-verdana-12">
         </div>
         <div class="col-md-2 pr-1 pl-1">
             <select name="tipo" id="tipo" class="form-control form-control-sm">

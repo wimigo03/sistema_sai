@@ -35,14 +35,11 @@
                             <td class="text-left p-1" style="vertical-align: middle;">{{ $empleado->file->clase }}</td>
                             <td class="text-left p-1" style="vertical-align: middle;">{{ $empleado->file->nivelsal }}</td>
                             <td class="text-center p-1" style="vertical-align: middle;">
-                            {{--@can('user_edit')--}}
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle">
                                     <a href="{{ route('planta.listageneral.show',$empleado->idemp) }}" class="btn btn-xs btn-outline-primary">
                                         <i class="fa fa-lg fa-list" aria-hidden="true"></i>
                                     </a>
-                                </span>
-                            {{--@endcan--}}
-                            </td>
+                                </span>                            </td>
                         </tr>
                     @endforeach
                 @endif

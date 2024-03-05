@@ -5,7 +5,7 @@
 <div class="row justify-content-center">
     <div class="col-md-10">
 
-        <div class="row font-verdana-bg">
+        <div class="row font-verdana-12">
             <div class="col-md-4 titulo">
 
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
@@ -42,68 +42,68 @@
                         <div class="form-group row">
 
                             <div class="col-md-2">
-                                <label for="numcompra" class="d-inline font-verdana-bg">
+                                <label for="numcompra" class="d-inline font-verdana-12">
                                     <b>Nro. Compra</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                                 </label>
-                                <input type="text" disabled name="numcompra" id="numcompra" onchange="myFunctiondos()" value="{{$docproveedor->numcompra}}" class="form-control form-control-sm font-verdana-bg" id="numcompra" onkeypress="return valideNumber(event);">
+                                <input type="text" disabled name="numcompra" id="numcompra" onchange="myFunctiondos()" value="{{$docproveedor->numcompra}}" class="form-control form-control-sm font-verdana-12" id="numcompra" onkeypress="return valideNumber(event);">
                             </div>
                             <div class="col-md-2">
-                                <label for="numsolicitud" class="d-inline font-verdana-bg">
+                                <label for="numsolicitud" class="d-inline font-verdana-12">
                                     <b>N solicitud</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                                 </label>
-                                <input type="text" disabled name="numsolicitud" value="{{$docproveedor->numsolicitud}}" class="form-control form-control-sm font-verdana-bg" id="numsolicitud" onkeypress="return valideNumber(event);">
+                                <input type="text" disabled name="numsolicitud" value="{{$docproveedor->numsolicitud}}" class="form-control form-control-sm font-verdana-12" id="numsolicitud" onkeypress="return valideNumber(event);">
                             </div>
                             <div class="col-md-3">
-                                <label for="codigoproducto" class="d-inline font-verdana-bg">
+                                <label for="codigoproducto" class="d-inline font-verdana-12">
                                     <b>Codigo Producto</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                                 </label>
-                                <input disabled name="codigoproducto"  class="form-control form-control-sm font-verdana-bg" id="codigoproducto" value="{{$docproveedor->codigoproducto}}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                <input disabled name="codigoproducto"  class="form-control form-control-sm font-verdana-12" id="codigoproducto" value="{{$docproveedor->codigoproducto}}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                             </div>
                             <div class="col-md-4">
-                                <label for="nombreproducto" class="d-inline font-verdana-bg">
+                                <label for="nombreproducto" class="d-inline font-verdana-12">
                                     <b>Nombre Producto</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                                 </label>
-                                <input disabled name="nombreproducto" cols="1" rows="4" class="form-control form-control-sm font-verdana-bg" id="nombreproducto" value="{{$docproveedor->nombreproducto}}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                <input disabled name="nombreproducto" cols="1" rows="4" class="form-control form-control-sm font-verdana-12" id="nombreproducto" value="{{$docproveedor->nombreproducto}}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                             </div>
                             <div class="col-md-2">
-                                <label for="ingreso" class="d-inline font-verdana-bg">
+                                <label for="ingreso" class="d-inline font-verdana-12">
                                     <b>Ingreso</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                                 </label>
-                                <input type="text" disabled  name="ingreso" id="ingreso" onchange="myFunction()" value="{{$docproveedor->ingreso}}" class="form-control form-control-sm font-verdana-bg" id="ingreso" onkeypress="return valideNumber(event);">
+                                <input type="text" disabled  name="ingreso" id="ingreso" onchange="myFunction()" value="{{$docproveedor->ingreso}}" class="form-control form-control-sm font-verdana-12" id="ingreso" onkeypress="return valideNumber(event);">
                             </div>
                             <div class="col-md-2">
-                                <label for="precio" class="d-inline font-verdana-bg">
+                                <label for="precio" class="d-inline font-verdana-12">
                                     <b>Precio</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                                 </label>
-                                <input type="text"  disabled name="precio" id="precio" onchange="myFunction()" value="{{$docproveedor->precio}}" class="form-control form-control-sm font-verdana-bg" id="precio" onkeypress="return valideNumber(event);">
+                                <input type="text"  disabled name="precio" id="precio" onchange="myFunction()" value="{{$docproveedor->precio}}" class="form-control form-control-sm font-verdana-12" id="precio" onkeypress="return valideNumber(event);">
                             </div>
                             <div class="col-md-2">
-                                <label for="subtotal" class="d-inline font-verdana-bg">
+                                <label for="subtotal" class="d-inline font-verdana-12">
                                     <b>Subtotal</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                                 </label>
-                                <input type="text"  disabled name="subtotal" id="subtotal" onchange="myFunction()" value="{{$docproveedor->subtotal}}" class="form-control form-control-sm font-verdana-bg" id="subtotal" onkeypress="return valideNumber(event);">
+                                <input type="text"  disabled name="subtotal" id="subtotal" onchange="myFunction()" value="{{$docproveedor->subtotal}}" class="form-control form-control-sm font-verdana-12" id="subtotal" onkeypress="return valideNumber(event);">
                             </div>
                             <div class="col-md-3">
-                                <label for="nombreproveedor" class="d-inline font-verdana-bg">
+                                <label for="nombreproveedor" class="d-inline font-verdana-12">
                                     <b>Proveedor</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                                 </label>
-                                <input  disabled name="nombreproveedor"  class="form-control form-control-sm font-verdana-bg" id="nombreproveedor" value="{{$docproveedor->nombreprobeedor}}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                <input  disabled name="nombreproveedor"  class="form-control form-control-sm font-verdana-12" id="nombreproveedor" value="{{$docproveedor->nombreprobeedor}}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                             </div>
                             <div class="col-md-2">
-                                <label for="factura_comprobante" class="d-inline font-verdana-bg">
+                                <label for="factura_comprobante" class="d-inline font-verdana-12">
                                     <b>Factura</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                                 </label>
-                                <input type="text"  disabled name="factura_comprobante" id="factura_comprobante" onchange="myFunction()" value="{{$docproveedor->factura_comprobante}}" class="form-control form-control-sm font-verdana-bg" id="subtotal" onkeypress="return valideNumber(event);">
+                                <input type="text"  disabled name="factura_comprobante" id="factura_comprobante" onchange="myFunction()" value="{{$docproveedor->factura_comprobante}}" class="form-control form-control-sm font-verdana-12" id="subtotal" onkeypress="return valideNumber(event);">
                             </div>
                             <div class="col-md-6">
-                                <label for="detalleingreso" class="d-inline font-verdana-bg">
+                                <label for="detalleingreso" class="d-inline font-verdana-12">
                                     <b>Justificacion</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                                 </label>
-                                <textarea  name="detalleingreso" cols="1" rows="3" class="form-control form-control-sm font-verdana-bg" id="justificacion" onkeyup="javascript:this.value=this.value.toUpperCase();">{{$docproveedor->detalleingreso}}</textarea>
+                                <textarea  name="detalleingreso" cols="1" rows="3" class="form-control form-control-sm font-verdana-12" id="justificacion" onkeyup="javascript:this.value=this.value.toUpperCase();">{{$docproveedor->detalleingreso}}</textarea>
                             </div>
                          
                             {{-- <div class="col-md-5">
-                                <label for="idarea" class="d-inline font-verdana-bg">
+                                <label for="idarea" class="d-inline font-verdana-12">
                                     <b>Area</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                                 </label>
                                 <select disabled name="idarea" id="idarea"  class="form-control form-control-sm select2">

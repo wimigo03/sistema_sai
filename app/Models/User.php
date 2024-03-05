@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Canasta\Dea;
 
 class User extends Authenticatable
 {
@@ -17,9 +18,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role_id',
         'idemp',
         'estadouser',
+        'dea_id'
     ];
 
     protected $hidden = [
@@ -37,26 +38,27 @@ class User extends Authenticatable
         }
     }
 
-    public function role(){
-        return $this->belongsTo(Role::class,'role_id','id');
+    public function hasRole($role)
+    {
+        return $this->roles()->where('title', $role)->exists();
     }
 
-    static function boot(){
-        parent::boot();
-
-        static::created(function(Model $model){
-            if($model->role_id == ""){
-                $model->update([
-                    'role_id' => Role::where('title','user')->first()->id,
-                ]);
-            }
-        });
-
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class,'user_roles','id_user','id_role');
     }
+
+    /*public function permissions(){
+        return $this->belongsToMany('App\Models\Permission', 'role_permissions',  'role_id', 'permission_id');
+    }*/
 
     public function usuariosEmpleados(){
        return $this->belongsTo(EmpleadosModel::class, 'idemp', 'idemp');
     }
+
+    public function dea(){
+        return $this->belongsTo(Dea::class, 'dea_id', 'id');
+     }
 
     public function getNombreCompletoAttribute(){
         if($this->idemp != null){
@@ -84,7 +86,7 @@ class User extends Authenticatable
                     ->whereIn('idemp', function ($subquery) use($nombre) {
                         $subquery->select('idemp')
                             ->from('empleados')
-                            ->where('nombres','like','%'.$nombre.'%');
+                            ->whereRaw('upper(nombres) like ?', ['%'.strtoupper($nombre).'%']);
                     });
         }
     }
@@ -95,7 +97,7 @@ class User extends Authenticatable
                     ->whereIn('idemp', function ($subquery) use($ap_pat) {
                         $subquery->select('idemp')
                             ->from('empleados')
-                            ->where('ap_pat',$ap_pat);
+                            ->whereRaw('upper(ap_pat) like ?', ['%'.strtoupper($ap_pat).'%']);
                     });
         }
     }
@@ -106,20 +108,20 @@ class User extends Authenticatable
                     ->whereIn('idemp', function ($subquery) use($ap_mat) {
                         $subquery->select('idemp')
                             ->from('empleados')
-                            ->where('ap_mat',$ap_mat);
+                            ->whereRaw('upper(ap_mat) like ?', ['%'.strtoupper($ap_mat).'%']);
                     });
         }
     }
 
     public function scopeByUsername($query, $username){
         if($username != null){
-            return $query->where('name','like','%'.$username.'%');
+            return $query->whereRaw('upper(name) like ?', ['%'.strtoupper($username).'%']);
         }
     }
 
     public function scopeByEmail($query, $email){
         if($email != null){
-            return $query->where('email','like','%'.$email.'%');
+            return $query->whereRaw('upper(email) like ?', ['%'.strtoupper($email).'%']);
         }
     }
 
