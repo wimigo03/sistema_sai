@@ -2,10 +2,10 @@
 @section('content')
 @include('layouts.message_alert')
 <br>
-<div class="row font-verdana-12">
+<div class="row font-verdana-bg">
     <div class="col-md-4 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-            <a href="{{ url('/combustibles/pedido/index') }}">
+            <a href="{{ url('/pedidocomb/index') }}">
                 <span class="color-icon-1">
                     &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                 </span>
@@ -13,14 +13,23 @@
         </span>
     </div>
     <div class="col-md-8 text-right titulo">
-        <b>EDITAR FORMULARIO DE SOLICITUD VER</b>
+        <b>FORMULARIO DE SOLICITUD </b><b style='color:red'>APROBADO </b>estado 2
     </div>
     <div class="col-md-12">
         <hr class="hrr">
     </div>
+    <div class="col-md-2 text-right titulo">
+        <b>N° Compra:</b>  <b style='color:red'>{{$idco}}</b>
+    </div> 
+    <div class="col-md-5 text-right titulo">
+        <b>Fecha Solicitud:</b>  <b style='color:red'>{{$Fechayhora}}</b>
+    </div> 
+    <div class="col-md-5 text-right titulo">
+        <b>Fecha Respuesta:</b>  <b style='color:red'>{{$Fechayhorados}}</b>
+    </div> 
 </div>
 <div class="body-border" style="background-color: #FFFFFF;">
-    <form method="post" action="{{ route('combustibles.pedido.update') }}" id="form">
+    <form method="post" action="{{ route('pedidocomb.update') }}" id="form">
         @csrf
         {{--@method('PUT')--}}
         <input type="hidden" name="preventivo2" id="preventivo2">
@@ -28,88 +37,139 @@
         
         <input type="text" hidden name="idcompracomb" value="{{$compras->idcompracomb}}">
 
-      
-
         <div class="form-group row">
-            <div class="col-md-6">
-                <label for="objeto" class="d-inline font-verdana-12">
-                    <b>Objeto</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+            <div class="col-md-4">
+                <label for="oficinade" class="d-inline font-verdana-bg">
+                    <b>Oficina</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
                 </label>
-                <textarea disabled  name="objeto" cols="1" rows="3" class="form-control form-control-sm font-verdana-12" id="objeto" onkeyup="javascript:this.value=this.value.toUpperCase();">{{$compras->objeto}}</textarea>
+                <input type="text"  name="oficinade" onkeyup="convertirAMayusculas(this)" value="{{$compras->oficinade}}" class="form-control form-control-sm font-verdana-bg" id="oficinade">
+                <label for="objeto" class="d-inline font-verdana-bg">
+                    <b>Objeto</b>&nbsp;<span style="font-size:10px; color: red;"></span>
+                </label>
+                <input  name="objeto" cols="1" rows="3" class="form-control form-control-sm font-verdana-bg" onkeyup="convertirAMayusculas(this)" id="objeto" onkeyup="convertirAMayusculas(this)" value="{{$compras->objeto}}">
+               
             </div>
-            <div class="col-md-6">
-                <label for="justificacion" class="d-inline font-verdana-12">
-                    <b>Justificacion</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+
+            <div class="col-md-2">
+                <label for="controlinterno" class="d-inline font-verdana-bg">
+                    <b>N° Solicitud</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
                 </label>
-                <textarea disabled  name="justificacion" cols="1" rows="3" class="form-control form-control-sm font-verdana-12" id="justificacion" onkeyup="javascript:this.value=this.value.toUpperCase();">{{$compras->justificacion}}</textarea>
+                <input type="text"  name="controlinterno" value="{{$compras->controlinterno}}" class="form-control form-control-sm font-verdana-bg" id="controlinterno" onkeypress="return valideNumber(event);">
+            
+                <label for="tipo" class="d-inline font-verdana-bg">
+                    <b>Tipo</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
+                </label>
+                <input type="text"  name="tipo" onkeyup="convertirAMayusculas(this)" value="{{$compras->tipo}}" class="form-control form-control-sm font-verdana-bg" id="tipo" >
+            
+            
+            </div>
+         
+            <div class="col-md-4">
+                <label for="justificacion" class="d-inline font-verdana-bg">
+                    <b>Justificacion</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
+                </label>
+                <textarea  name="justificacion" cols="1" rows="4" class="form-control form-control-sm font-verdana-bg" id="justificacion" onkeyup="convertirAMayusculas(this)" >{{$compras->justificacion}}</textarea>
             </div>
             <div class="col-md-2">
-                <label for="preventivo" class="d-inline font-verdana-12">
+                <label for="preventivo" class="d-inline font-verdana-bg">
                     <b>Preventivo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <input type="text" disabled name="preventivo" id="preventivo" onchange="myFunction()" value="{{$compras->preventivo}}" class="form-control form-control-sm font-verdana-12" id="preventivo">
-            </div>
-            <div class="col-md-2">
-                <label for="tipo" class="d-inline font-verdana-12">
-                    <b>Tipo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                <input type="text"  name="preventivo" id="preventivo" onchange="myFunction()" value="{{$compras->preventivo}}" class="form-control form-control-sm font-verdana-bg" id="preventivo" onkeypress="return valideNumber(event);">
+            
+                <label for="numcompra" class="d-inline font-verdana-bg">
+                    <b>N° Compra</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <select disabled  name="tipo" id="tipo" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
-                   
-                    <option {{old('tipo',$compras->tipo)=="1"? 'selected':''}}  value="1">PRODUCTO</option>
-                    <option {{old('tipo',$compras->tipo)=="2"? 'selected':''}} value="2">SERVICIO</option>
-                                                           
-                </select>
+                <input type="text" name="numcompra" id="numcompra" onchange="myFunctiondos()" value="{{$compras->numcompra}}" class="form-control form-control-sm font-verdana-bg" id="numcompra" onkeypress="return valideNumber(event);">
+           
+
             </div>
-            <div class="col-md-2">
-                <label for="numcompra" class="d-inline font-verdana-12">
-                    <b>Nro. Compra</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+            <div class="col-md-6" >
+                <label for="iddirigidoa" class="d-inline font-verdana-bg">
+                    <b>Dirigido A:</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
                 </label>
-                <input type="text" disabled  name="numcompra" id="numcompra" onchange="myFunctiondos()" value="{{$compras->numcompra}}" class="form-control form-control-sm font-verdana-12" id="numcompra" onkeypress="return valideNumber(event);">
-            </div>
-            <div class="col-md-2">
-                <label for="controlinterno" class="d-inline font-verdana-12">
-                    <b>Control Interno</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input type="text" disabled ="controlinterno" value="{{$compras->controlinterno}}" class="form-control form-control-sm font-verdana-12" id="controlinterno" onkeypress="return valideNumber(event);">
-            </div>
-            <div class="col-md-7">
-                <label for="idarea" class="d-inline font-verdana-12">
-                    <b>Area</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <select disabled name="idarea" id="idarea" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
+                <select  name="iddirigidoa" id="iddirigidoa" placeholder="--Seleccionar--" 
+                class="form-control form-control-sm select2">
                     <option value="">-</option>
-                    @foreach ($areas as $area)
-
-                    @if ($area->idarea==$compras->idarea)
-                    <option value="{{$area->idarea}}" selected>{{$area->nombrearea}}</option>
+                    @foreach ($encargadodos as $area)
+                    @if ($area->idenc==$compras->iddirigidoa)
+                    <option value="{{$area->idenc}}" selected>{{$area->abrev }} {{$area->nombres }} {{$area->ap_pat }} {{$area->ap_mat }}  //CARGO: {{$area->cargo }} //AREA: {{$area->nombrearea }}  </option>
                     @else
-                    <option disabled value="{{$area->idarea}}">{{$area->nombrearea}}</option>
+                    <option disabled value="{{$area->idenc}}">         {{$area->abrev }} {{$area->nombres }} {{$area->ap_pat }} {{$area->ap_mat }} //CARGO: {{$area->cargo }} //AREA: {{$area->nombrearea }} </option>
                     @endif
-
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-4">
-                <label for="idprograma" class="d-inline font-verdana-12">
-                    <b>Programa</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+
+            <div class="col-md-6" >
+                <label for="idviaa" class="d-inline font-verdana-bg">
+                    <b>Via:</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
                 </label>
-                <select  name="idprograma" id="idprograma" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
+                <select name="idviaa" id="idviaa" placeholder="--Seleccionar--" 
+                class="form-control form-control-sm select2">
+                    <option value="">-</option>
+                    @foreach ($encargado as $area)
+                    @if ($area->idenc==$compras->idviaa)
+                    <option  value="{{$area->idenc}}" selected>{{$area->abrev }} {{$area->nombres }} {{$area->ap_pat }} {{$area->ap_mat }} //CARGO: {{$area->cargo }} //AREA: {{$area->nombrearea }} </option>
+                    @else
+                    <option disabled value="{{$area->idenc}}">{{$area->abrev }} {{$area->nombres }} {{$area->ap_pat }} {{$area->ap_mat }} //CARGO: {{$area->cargo }} //AREA: {{$area->nombrearea }}</option>
+                    @endif
+                    @endforeach
+                </select>
+            </div>
+         
+            <div class="col-md-6" >
+                <label for="iddepartede" class="d-inline font-verdana-bg">
+                    <b>De:</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
+                </label>
+                <select name="iddepartede" id="iddepartede" placeholder="--Seleccionar--" 
+                class="form-control form-control-sm select2">
+                    <option value="">-</option>
+                    @foreach ($departede as $area)
+                    @if ($area->idemp==$compras->iddepartede)
+                    <option value="{{$area->idemp}}" selected>{{$area->nombres }} {{$area->ap_pat }} {{$area->ap_mat }} //CARGO: {{$area->cargo }} //CARGO: {{$area->nombrecargo }} //AREA: {{$area->nombrearea }}  </option>
+                    @else
+                    <option disabled value="{{$area->idemp}}">{{$area->nombres }} {{$area->ap_pat }} {{$area->ap_mat }}//CARGO: {{$area->cargo }} //CARGO: {{$area->nombrecargo }} //AREA: {{$area->nombrearea }} </option>
+                    @endif
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="col-md-5">
+                <label for="idarea" class="d-inline font-verdana-bg">
+                    <b>Area</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
+                </label>
+                <select    name="idarea" id="idarea" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
+                    <option value="">-</option>
+                    @foreach ($areas as $area)
+                    @if ($area->idarea==$compras->idarea)
+                    <option  value="{{$area->idarea}}" selected>{{$area->nombrearea}}</option>
+                    @else
+                    <option  value="{{$area->idarea}}">{{$area->nombrearea}}</option>
+                    @endif
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="idprograma" class="d-inline font-verdana-bg">
+                    <b>Ubicacion Fisica</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
+                </label>
+                <select   name="idprograma" id="idprograma" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
                     <option value="">-</option>
                     @foreach ($programas as $programa)
 
                                 @if ($programa->idprogramacomb==$compras->idprogramacomb)
-                                <option value="{{$programa->idprogramacomb}}" selected>{{$programa->nombreprograma}}
+                                <option value="{{$programa->idprogramacomb}}" selected>{{$programa->nombreprograma}} //DIRECCION: {{$programa->direccion}}
                                 </option>
                                 @else
-                                <option disabled value="{{$programa->idprogramacomb}}">{{$programa->nombreprograma}}</option>
+                                <option  disabled value="{{$programa->idprogramacomb}}">{{$programa->nombreprograma}} //DIRECCION: {{$programa->direccion}}</option>
                                 @endif
 
                                 @endforeach
                 </select>
             </div>
-            <div class="col-md-5">
-                <label for="idcatprogramatica" class="d-inline font-verdana-12">
-                    <b>Cat. Programatica</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+            <div class="col-md-6">
+                <label for="idcatprogramatica" class="d-inline font-verdana-bg">
+                    <b>Proyecto</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
                 </label>
                 <select name="idcatprogramatica" id="idcatprogramatica" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
                     <option value="">-</option>
@@ -117,29 +177,27 @@
 
                    
                     @if ($catprogramatica->idcatprogramaticacomb==$compras->idcatprogramaticacomb)
-                    <option value="{{$catprogramatica->idcatprogramaticacomb}}" selected>
-                        {{$catprogramatica->nombrecatprogramatica}}</option>
+                    <option value="{{$catprogramatica->idcatprogramaticacomb}}" selected>COD: {{$catprogramatica->codcatprogramatica}} //NOMB: {{$catprogramatica->nombrecatprogramatica}}</option>
                     @else
-                    <option disabled  value="{{$catprogramatica->idcatprogramaticacomb}}">
-                        {{$catprogramatica->nombrecatprogramatica}}</option>
+                    <option disabled value="{{$catprogramatica->idcatprogramaticacomb}}">COD: {{$catprogramatica->codcatprogramatica}} //NOMB:  {{$catprogramatica->nombrecatprogramatica}}</option>
                     @endif
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-3">
-                <label for="idproveedor" class="d-inline font-verdana-12">
-                    <b>Proveedor</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+            <div class="col-md-6">
+                <label for="idproveedor" class="d-inline font-verdana-bg">
+                    <b>Proveedor</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
                 </label>
                 <select name="idproveedor" id="idproveedor" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
                     <option value="">-</option>
-                    @foreach ($proveedores as $proveedor)
+                    @foreach ($proveedordos as $proveedor)
 
                    
                     @if ($proveedor->idproveedor==$compras->idproveedor)
-                    <option value="{{$proveedor->idproveedor}}" selected>{{$proveedor->nombreproveedor}}
+                    <option value="{{$proveedor->idproveedor}}" selected>COD: {{$proveedor->idproveedor}} //NOMB: {{$proveedor->nombreproveedor}} //DUEÑO: {{$proveedor->representanteproveedor}} //Dir: {{$proveedor->direccionproveedor}} //Tel: {{$proveedor->telefonoproveedor}}
                     </option>
                     @else
-                    <option disabled value="{{$proveedor->idproveedor}}">{{$proveedor->nombreproveedor}}</option>
+                    <option value="{{$proveedor->idproveedor}}">CODIGO: {{$proveedor->idproveedor}} //NOMBRE: {{$proveedor->nombreproveedor}} //DUEÑO: {{$proveedor->representanteproveedor}} //DIRECCION: {{$proveedor->direccionproveedor}} //TELEFONO: {{$proveedor->telefonoproveedor}}</option>
                     @endif
 
                     @endforeach
@@ -148,13 +206,13 @@
         </div>
         {{-- <div class="form-group row">
             <div class="col-md-12 text-right">
-                <button class="btn color-icon-2 font-verdana-12" type="button" onclick="save();">
+                <button class="btn color-icon-2 font-verdana-bg" type="button" onclick="save();">
                     <i class="fa-solid fa-paper-plane"></i>
                     &nbsp;Actualizar
                 </button>
-                <button class="btn btn-danger font-verdana-12" type="button" >
+                <button class="btn btn-danger font-verdana-bg" type="button" >
                     
-                    <a href="{{url()->previous()}}" style="color:white">Cancelar</a>
+                    <a href="{{url('/pedidocomb/index')}}" style="color:white">Cancelar</a>
                 </button>
 
                 <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
@@ -188,10 +246,14 @@
         function cancelar(){
             $(".btn").hide();
             $(".spinner-btn-send").show();
-            window.location.href = "{{url('combustibles/pedido/index')}}";
+            window.location.href = "{{url('/pedidocomb/index')}}";
         }
 
         function validar_formulario(){
+            if($("#idproveedor >option:selected").val() == ""){   
+                message_alert("El campo de seleccion <b>[Proveedor]</b> es un dato obligatorio...");
+                return false;
+            }
             if($("#objeto").val() == ""){   
                 message_alert("El campo <b>[Objeto]</b> es un dato obligatorio...");
                 return false;
@@ -203,17 +265,21 @@
             if($("#preventivo").val() == ""){   
                 message_alert("El campo <b>[Preventivo]</b> es un dato obligatorio...");
                 return false;
-
+            }
+            if($("#preventivo").val() <= 0){  
+                $("#preventivo").val(''); 
+                message_alert("El campo <b>[Preventivo]</b> es un dato incorrecto...");
+                return false;
+            }
                 if ($("#preventivo2").val() == "preventivo") {
                 $("#preventivo2").val('');
                 $("#preventivo").val('');
-                $("#justificacion").val('');
+          
                 message_alert("El numero de <b>[PREVENTIVO]</b> ya existe en nuestros registros...");
                 return false;
+          
             }
-
-            }
-            if($("#tipo >option:selected").val() == ""){   
+            if($("#tipo").val() == ""){   
                 message_alert("El campo de seleccion <b>[Tipo]</b> es un dato obligatorio...");
                 return false;
             }
@@ -221,11 +287,15 @@
                 message_alert("El campo <b>[Nro. Compra]</b> es un dato obligatorio...");
                 return false;
             }
-
+            if($("#numcompra").val() <= 0){ 
+                $("#numcompra").val('');
+                message_alert("El campo <b>[Nro. Compra]</b> es un dato incorrecto...");
+                return false;
+            }
             if ($("#numcompra2").val() == "numcomp") {
                 $("#numcompra2").val('');
                 $("#numcompra").val('');
-                $("#preventivo").val('');
+          
                 message_alert("El numero de <b>[COMPRA]</b> ya existe en nuestros registros...");
                 return false;
             }
@@ -238,17 +308,14 @@
                 return false;
             }
             if($("#idprograma >option:selected").val() == ""){   
-                message_alert("El campo de seleccion <b>[Programa]</b> es un dato obligatorio...");
+                message_alert("El campo de seleccion <b>[Ubicacion]</b> es un dato obligatorio...");
                 return false;
             }
             if($("#idcatprogramatica >option:selected").val() == ""){   
-                message_alert("El campo de seleccion <b>[Cat. Programatica]</b> es un dato obligatorio...");
+                message_alert("El campo de seleccion <b>[Proyecto]</b> es un dato obligatorio...");
                 return false;
             }
-            if($("#idproveedor >option:selected").val() == ""){   
-                message_alert("El campo de seleccion <b>[Proveedor]</b> es un dato obligatorio...");
-                return false;
-            }
+         
             return true;
         }
         function myFunction() {
@@ -257,7 +324,7 @@
         function respuesta() {
             var ot_antigua = $("#preventivo").val();
             $.ajax({
-                url: "{{ route('pregunta5') }}",
+                url: "{{ route('pedidocomb.pregunta5') }}",
                 data: 'ot_antigua=' + ot_antigua,
                 dataType: "html",
                 asycn: false,
@@ -282,7 +349,7 @@
         function respuestados() {
             var ot_antigua = $("#numcompra").val();
             $.ajax({
-                url: "{{ route('pregunta6') }}",
+                url: "{{ route('pedidocomb.pregunta6') }}",
                 data: 'ot_antigua=' + ot_antigua,
                 dataType: "html",
                 asycn: false,
@@ -301,6 +368,15 @@
         }
 
 
+        function convertirAMayusculas(input) {
+    // Guarda la posición actual del cursor
+    var inicioSeleccion = input.selectionStart;
+    var finSeleccion = input.selectionEnd;
+    // Convierte todo el texto a mayúsculas
+    input.value = input.value.toUpperCase();
+    // Restaura la posición del cursor
+    input.setSelectionRange(inicioSeleccion, finSeleccion);
+  }
 
         function valideNumber(evt){
             var code = (evt.which) ? evt.which : evt.keyCode;

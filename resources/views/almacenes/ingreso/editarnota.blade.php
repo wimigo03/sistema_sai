@@ -5,7 +5,7 @@
 <div class="row justify-content-center">
     <div class="col-md-10">
 
-        <div class="row font-verdana-12">
+        <div class="row font-verdana-bg">
             <div class="col-md-4 titulo">
 
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
@@ -30,7 +30,7 @@
 
         <div class="body-border">
             <font size="2" face="Courier New" >
-                    <form method="POST" action="{{ route('IngresoController.updatearchivonota',$docproveedor->idnotaingreso) }}" id="form"
+                    <form method="POST" action="{{ route('ingreso.updatearchivonota',$docproveedor->idnotaingreso) }}" id="form"
                         enctype="multipart/form-data">
                         @csrf
 
@@ -42,68 +42,68 @@
                         <div class="form-group row">
 
                             <div class="col-md-2">
-                                <label for="numcompra" class="d-inline font-verdana-12">
+                                <label for="numcompra" class="d-inline font-verdana-bg">
                                     <b>Nro. Compra</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                                 </label>
-                                <input type="text" disabled name="numcompra" id="numcompra" onchange="myFunctiondos()" value="{{$docproveedor->numcompra}}" class="form-control form-control-sm font-verdana-12" id="numcompra" onkeypress="return valideNumber(event);">
+                                <input type="text" disabled name="numcompra" id="numcompra" onchange="myFunctiondos()" value="{{$docproveedor->numcompra}}" class="form-control form-control-sm font-verdana-bg" id="numcompra" onkeypress="return valideNumber(event);">
                             </div>
                             <div class="col-md-2">
-                                <label for="numsolicitud" class="d-inline font-verdana-12">
+                                <label for="numsolicitud" class="d-inline font-verdana-bg">
                                     <b>N solicitud</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                                 </label>
-                                <input type="text" disabled name="numsolicitud" value="{{$docproveedor->numsolicitud}}" class="form-control form-control-sm font-verdana-12" id="numsolicitud" onkeypress="return valideNumber(event);">
+                                <input type="text" disabled name="numsolicitud" value="{{$docproveedor->numsolicitud}}" class="form-control form-control-sm font-verdana-bg" id="numsolicitud" onkeypress="return valideNumber(event);">
                             </div>
                             <div class="col-md-3">
-                                <label for="codigoproducto" class="d-inline font-verdana-12">
+                                <label for="codigoproducto" class="d-inline font-verdana-bg">
                                     <b>Codigo Producto</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                                 </label>
-                                <input disabled name="codigoproducto"  class="form-control form-control-sm font-verdana-12" id="codigoproducto" value="{{$docproveedor->codigoproducto}}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                <input disabled name="codigoproducto"  class="form-control form-control-sm font-verdana-bg" id="codigoproducto" value="{{$docproveedor->codigoproducto}}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                             </div>
                             <div class="col-md-4">
-                                <label for="nombreproducto" class="d-inline font-verdana-12">
+                                <label for="nombreproducto" class="d-inline font-verdana-bg">
                                     <b>Nombre Producto</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                                 </label>
-                                <input disabled name="nombreproducto" cols="1" rows="4" class="form-control form-control-sm font-verdana-12" id="nombreproducto" value="{{$docproveedor->nombreproducto}}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                <input disabled name="nombreproducto" cols="1" rows="4" class="form-control form-control-sm font-verdana-bg" id="nombreproducto" value="{{$docproveedor->nombreproducto}}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                             </div>
                             <div class="col-md-2">
-                                <label for="ingreso" class="d-inline font-verdana-12">
+                                <label for="ingreso" class="d-inline font-verdana-bg">
                                     <b>Ingreso</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                                 </label>
-                                <input type="text" disabled  name="ingreso" id="ingreso" onchange="myFunction()" value="{{$docproveedor->ingreso}}" class="form-control form-control-sm font-verdana-12" id="ingreso" onkeypress="return valideNumber(event);">
+                                <input type="text" disabled  name="ingreso" id="ingreso" onchange="myFunction()" value="{{$docproveedor->ingreso}}" class="form-control form-control-sm font-verdana-bg" id="ingreso" onkeypress="return valideNumber(event);">
                             </div>
                             <div class="col-md-2">
-                                <label for="precio" class="d-inline font-verdana-12">
+                                <label for="precio" class="d-inline font-verdana-bg">
                                     <b>Precio</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                                 </label>
-                                <input type="text"  disabled name="precio" id="precio" onchange="myFunction()" value="{{$docproveedor->precio}}" class="form-control form-control-sm font-verdana-12" id="precio" onkeypress="return valideNumber(event);">
+                                <input type="text"  disabled name="precio" id="precio" onchange="myFunction()" value="{{$docproveedor->precio}}" class="form-control form-control-sm font-verdana-bg" id="precio" onkeypress="return valideNumber(event);">
                             </div>
                             <div class="col-md-2">
-                                <label for="subtotal" class="d-inline font-verdana-12">
+                                <label for="subtotal" class="d-inline font-verdana-bg">
                                     <b>Subtotal</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                                 </label>
-                                <input type="text"  disabled name="subtotal" id="subtotal" onchange="myFunction()" value="{{$docproveedor->subtotal}}" class="form-control form-control-sm font-verdana-12" id="subtotal" onkeypress="return valideNumber(event);">
+                                <input type="text"  disabled name="subtotal" id="subtotal" onchange="myFunction()" value="{{$docproveedor->subtotal}}" class="form-control form-control-sm font-verdana-bg" id="subtotal" onkeypress="return valideNumber(event);">
                             </div>
                             <div class="col-md-3">
-                                <label for="nombreproveedor" class="d-inline font-verdana-12">
+                                <label for="nombreproveedor" class="d-inline font-verdana-bg">
                                     <b>Proveedor</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                                 </label>
-                                <input  disabled name="nombreproveedor"  class="form-control form-control-sm font-verdana-12" id="nombreproveedor" value="{{$docproveedor->nombreprobeedor}}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                <input  disabled name="nombreproveedor"  class="form-control form-control-sm font-verdana-bg" id="nombreproveedor" value="{{$docproveedor->nombreprobeedor}}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                             </div>
                             <div class="col-md-2">
-                                <label for="factura_comprobante" class="d-inline font-verdana-12">
+                                <label for="factura_comprobante" class="d-inline font-verdana-bg">
                                     <b>Factura</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                                 </label>
-                                <input type="text"  disabled name="factura_comprobante" id="factura_comprobante" onchange="myFunction()" value="{{$docproveedor->factura_comprobante}}" class="form-control form-control-sm font-verdana-12" id="subtotal" onkeypress="return valideNumber(event);">
+                                <input type="text"  disabled name="factura_comprobante" id="factura_comprobante" onchange="myFunction()" value="{{$docproveedor->factura_comprobante}}" class="form-control form-control-sm font-verdana-bg" id="subtotal" onkeypress="return valideNumber(event);">
                             </div>
                             <div class="col-md-6">
-                                <label for="detalleingreso" class="d-inline font-verdana-12">
+                                <label for="detalleingreso" class="d-inline font-verdana-bg">
                                     <b>Justificacion</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                                 </label>
-                                <textarea  name="detalleingreso" cols="1" rows="3" class="form-control form-control-sm font-verdana-12" id="justificacion" onkeyup="javascript:this.value=this.value.toUpperCase();">{{$docproveedor->detalleingreso}}</textarea>
+                                <textarea  name="detalleingreso" cols="1" rows="3" class="form-control form-control-sm font-verdana-bg" id="justificacion" onkeyup="javascript:this.value=this.value.toUpperCase();">{{$docproveedor->detalleingreso}}</textarea>
                             </div>
                          
                             {{-- <div class="col-md-5">
-                                <label for="idarea" class="d-inline font-verdana-12">
+                                <label for="idarea" class="d-inline font-verdana-bg">
                                     <b>Area</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                                 </label>
                                 <select disabled name="idarea" id="idarea"  class="form-control form-control-sm select2">
@@ -125,7 +125,7 @@
 
                         <div class="form-group row">
                             <label for="documento" style="color:black;font-weight: bold;"
-                                class=" required col-md-4 col-form-label text-md-right"><b style="color: red">Limite 200 mb.(solo.pdf):</b></label>
+                                class=" required col-md-4 col-form-label text-md-right"><b style="color: red">Limite 80 mb.(solo.pdf):</b></label>
 
                             <div class="col-md-6">
                                 <input type="file" required name="documento" id="file">
@@ -136,10 +136,10 @@
                         <div align='center'>
                             <div class="col-md-12 text-right">
 
-                                <input type="button" id="cancelar" value="Cancelar">
+                                <input class="btn btn-danger font-verdana-bg" type="button" id="cancelar" value="Cancelar">
                 
                                 &nbsp;&nbsp;&nbsp;&nbsp;
-                                <input type="button" value="Guardar" onclick="uploadFile()" id="insertar_item_material">
+                                <input  class="btn color-icon-2 font-verdana-bg" type="button" value="Guardar" onclick="uploadFile()" id="insertar_item_material">
                 
                                 </br></br>
                                 <progress id="progressBar" value="0" max="100"
@@ -184,16 +184,35 @@
         $("#cancelar").click(function() {
 $(".btn").hide();
 $(".spinner-btn-send").show();
-window.location.href = "{{ url('almacenes/ingreso/index') }}";
+window.location.href =  "{{url()->previous()}}";
 
 });
          
         function validar_detalle_material() {
+            var filedos = document.getElementById("file").files[0];
+            var maxSize = 8 * 1024 * 1024;
 
-            if($("#detalleingreso").val() == ""){
+            if($("#justificacion").val() == ""){
                 message_alert("El campo <b>[Justificacion]</b> es un dato obligatorio...");
                 return false;
             }
+            if ($("#file").val() == "") {
+                return true;  
+                message_alert('---SE DEBE CARGAR OBLIGATORIAMENTE UN ARCHIVO---');
+                 
+            } else
+            if (filedos.size > maxSize) {
+                console.log(filedos.size,"verificar");
+                $("#file").val('');
+                message_alert('El tamaño del archivo no puede superar los 8 megabytes.');
+                return false;
+             }
+             if (filedos.type !== "application/pdf") {
+                console.log(filedos.size,"verificar");
+                $("#file").val('');
+                message_alert('El archivo no es un archivo pdf.');
+                return false;
+             }
             return true;
         };
 

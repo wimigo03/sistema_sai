@@ -53,8 +53,9 @@ class ProgramaCombController extends Controller
     public function store(Request $request)
     {
         $programas = new ProgramaCombModel();
-        $programas->nombreprograma = $request->input('nombre');
         $programas -> codigoprogr = $request->input('codigoprogr');
+        $programas->nombreprograma = $request->input('nombre');
+        $programas->direccion = $request->input('direccion');
 
 
         $programas->estadoprograma = 1;
@@ -94,15 +95,28 @@ class ProgramaCombController extends Controller
         $programas = ProgramaCombModel::find($idprogramacomb);
         $programas->nombreprograma = $request->input('nombre');
         $programas -> codigoprogr = $request->input('codigoprogr');
-
+        $programas->direccion = $request->input('direccion');
         if ($programas->save()) {
             $request->session()->flash('message', 'Registro Procesado');
         } else {
             $request->session()->flash('message', 'Error al Procesar Registro');
         }
-        return redirect('combustibles/programa/index');
+        return redirect()->route('programa.index');
     }
 
    
+    public function respuesta10(Request $request)    {
+        $ot_antigua=$_POST['ot_antigua'];
+            $data = "hola";
+            $data2 = "holaSSSS";
+            $validarci = DB::table('programacomb as s')
+            ->select('s.codigoprogr')
+           ->where('s.codigoprogr', $ot_antigua)
+            ->get();
+               if($validarci->count()>0){
+            return ['success' => true, 'data' => $data];
+        } else  return ['success' => false, 'data' => $data2];
+    }
+
 }
 

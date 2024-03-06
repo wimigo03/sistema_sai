@@ -3,8 +3,16 @@
 @include('layouts.message_alert')
 
 <br>
-<div class="row font-verdana-12">
-
+<div class="row font-verdana-bg">
+    <div class="col-md-2 titulo">
+        <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
+            <a href="{{ url('/adetalle/index2') }}">
+                <span class="color-icon-1">
+                    &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
+                </span>
+            </a>
+        </span>
+    </div>
       <div class="col-md-10 text-right titulo">
         <b>Devolucion de combustible</b>
     </div>
@@ -13,21 +21,14 @@
         <hr class="hrr">
     </div>
 
-    <div class="col-md-12 text-right">
-
-
-     
-        <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
-
-      
-
-    </div>
+   
+    
 
 </div>
 
 
 <div class="body-border" style="background-color: #FFFFFF;">
-    <form method="POST" action="{{ route('almacenes.detalle.update') }}" id="form">
+    <form method="POST" action="{{ route('adetalle.update') }}" id="form">
         @csrf
         <br>
         <input type="text" hidden name="iddetallevale" value="{{$detalles->iddetallevale}}">
@@ -35,29 +36,29 @@
         <div class="form-group row">
           
             <div class="col-md-3">
-                <label for="aproxgas" class="d-inline font-verdana-12">
+                <label for="aproxgas" class="d-inline font-verdana-bg">
                     <b>Cantidad Solicitada :</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
               {{-- el disabled es para que no se pueda editar --}}
                 <input type="text" disabled name="aproxgas" value="{{$detalles->cantidadsol}}" 
-                class="form-control form-control-sm font-verdana-12" >
+                class="form-control form-control-sm font-verdana-bg" >
             </div>
          
             <div class="col-md-3">
-                <label for="cantidad" class="d-inline font-verdana-12">
+                <label for="cantidad" class="d-inline font-verdana-bg">
                     <b>Cantidad Cargada :</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="cantidad"  
-                class="form-control form-control-sm font-verdana-12" id="cantidad" 
+                class="form-control form-control-sm font-verdana-bg" id="cantidad" 
                 onkeypress="return valideNumber(event);" value="{{$detalles->devolucionresta}}">
             </div>
             <div class="col-md-2 text-right">
                 <div class="col-md-12 text-right">
-                    <button class="btn color-icon-2 font-verdana-12" type="button" onclick="save();">
+                    <button class="btn color-icon-2 font-verdana-bg" type="button" onclick="save();">
                         <i class="fa-solid fa-paper-plane"></i>
                         &nbsp;Actualizar
                     </button>
-                    <button class="btn btn-danger font-verdana-12" type="button" >
+                    <button class="btn btn-danger font-verdana-bg" type="button" >
     
                         <a href="{{url()->previous()}}" style="color:white">Cancelar</a>
                     </button>

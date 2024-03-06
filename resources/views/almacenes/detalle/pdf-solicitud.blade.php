@@ -55,7 +55,7 @@
                     </td>
                     <td width="500" valign="top">
                         <p>
-                            {{$ingresos->nombreprograma}} <br>
+                            {{$vales->nombrecatprogramatica}}   &nbsp;/&nbsp; {{$vales->codcatprogramatica}}  <br>
                             {{-- <strong> {{$detalle->viaunocargo}}</strong> --}}
                         </p>
                     </td>
@@ -75,14 +75,14 @@
                     
                     <td width="104" valign="top">
                         <p>
-                            Lts. Solicita: <strong>{{$detalle->cantidadsol}}</strong>
+                            Lts. Solicita: <strong>{{$Cantidaddev}}</strong>
                         <p>
                     </td>
 
                     <td width="104" valign="top">
                         <p>
 
-                            Lts. Saldo actual:<strong>{{$detalle->cantidadresta}}</strong>
+                            Lts. Saldo actual:<strong>{{$Cantidaddevdos}}</strong>
                         <p>
                     </td>
                 </tr>              
@@ -148,7 +148,7 @@
                 <td width="104" valign="top">
                     <p>
 
-                        Recibido por:<strong>{{$vales->usuarionombre}}</strong>
+                        Recibido por:&nbsp;<strong>{{$vales->usuarionombre}}</strong>
                     <p>
                 </td>
 

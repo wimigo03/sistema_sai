@@ -126,7 +126,7 @@ public function store(Request $request)
             $detalle->update();
         }
 
-        return redirect()->route('almacenes.reporte.index');
+        return redirect()->route('reporte.index');
     }
 
 
@@ -292,7 +292,7 @@ $valor_total6 = $parte_entera_formateada . ',' . $parte_decimaldos;
         }
         catch (Exception $ex) {
             \Log::error("Orden Error: {$ex->getMessage()}");
-            return redirect()->route('almacenes.reporte.index')->with('message', $ex->getMessage());
+            return redirect()->route('reporte.index')->with('message', $ex->getMessage());
         } finally {
             ini_restore('memory_limit');
             ini_restore('max_execution_time');
@@ -310,7 +310,7 @@ $valor_total6 = $parte_entera_formateada . ',' . $parte_decimaldos;
         $id2 = $detalle->idingreso;
         $id3 = $detalle->fechaini;
         $id4 = $detalle->fechafi;
-
+        $id5 = $detalle->idproducto;
        // $prodserv = DB::table('reportarea as rr')
 
 
@@ -331,53 +331,45 @@ $valor_total6 = $parte_entera_formateada . ',' . $parte_decimaldos;
     //    $Subtotalsalida=$ingreso -> subtotalsalida;
        $SPrecio=$ingreso -> precio;
 
-       $detalle = DB::table('detallevale as d')
-   
-                   ->join('ingreso as ing', 'ing.idingreso', '=', 'd.idingreso') 
-                   ->join('vale as v', 'v.idvale', '=', 'd.idvale')
-   
-                   ->join('areas as a', 'a.idarea', '=', 'v.idarea')
-   
-                   ->select('d.idvale','d.cantidadsol','d.preciosol','d.subtotalsol','d.cantidadresta',
-                   
-                   'v.usuarionombre','v.usuariocargo','v.estadovale','v.fechaaprob',
-   
-                   'a.nombrearea',
-                   'ing.precio') 
-                //    'ing.precio','ing.subtotalsalida') 
-   
-                   ->where('d.idingreso', '=', $id2)
-                   ->whereBetween('v.fechaaprob',[$id3, $id4])
-                   ->orderBy('v.fechaaprob', 'asc')
+       $detalle = DB::table('detallecomegreso as d')
+                  ->join('detallecomingreso as det', 'det.iddetallecomingreso', '=', 'd.iddetallecomingreso') 
+                  ->join('comegreso as eg', 'eg.idcomegreso', '=', 'd.idcomegreso') 
+
+                   ->join('comingreso as ing', 'ing.idcomingreso', '=', 'eg.idcomingreso') 
+                   ->join('prodcomb as prod', 'prod.idprodcomb', '=', 'det.idproducto') 
+                   ->join('area as ar', 'ar.idarea', '=', 'eg.idarea') 
+
+                   ->select('eg.fechaegreso','eg.idvale','ar.nombrearea','d.cantidadegreso','d.subtotalegreso',
+                   'det.cantidad','det.subtotal','det.precio') 
+                   ->where('eg.idcomingreso', '=', $id2)
+                   ->where('det.idproducto', '=', $id5)
+                   ->whereBetween('eg.fechaegreso',[$id3, $id4])
+                   ->orderBy('eg.fechaegreso', 'asc')
                    ->get();
                
                    $valor_total = $detalle->sum('cantidadsol');
                    $valor_total2 = $valor_total* $SPrecio;
        
-                   //modificacion para la parte decimal
-                //    $parte_entera = floor($Subtotalsalida); 
-                //    $parte_decimal = ($Subtotalsalida - $parte_entera) * 100;
-       
-                //    $parte_entera_en_letras = NumerosEnLetras::convertir($parte_entera, 'Bolivianos', false);
-                //    $parte_decimal_en_letras = NumerosEnLetras::convertir($parte_decimal, 'Centavos', false);
-       
-                //    $valor_total5 = $parte_entera_en_letras . ' con ' . $parte_decimal_en_letras;
-       
-               
-    //    $parte_entera_formateada = number_format($Subtotalsalida, 0, '', '.');
-       
-    //    $parte_decimaldos = floor($parte_decimal);
-    //    $valor_total6 = $parte_entera_formateada . ',' . $parte_decimaldos;
-       
-       
-  
                     $valor_total3 = NumerosEnLetras::convertir($valor_total2, 'Bolivianos', true);
              
-    $ingresoso = DB::table('ingreso')
-    ->where('estadocompracomb', 2)
-    ->select(DB::raw("concat(idingreso,' // ',nombreproducto,' // ',nombreprograma,' // salida LTRS. ',cantidadsalida) as prodservicio"), 'idingreso')
-    ->pluck('prodservicio', 'idingreso');  
-           
+    $ingresoso = DB::table('comingreso as comin')
+
+    ->join('catprogramaticacomb as cat', 'cat.idcatprogramaticacomb', '=', 'comin.idcatprogramaticacomb')
+    ->where('comin.idcomingreso', '!=', 0)
+    ->where('comin.estadoingreso',2)
+    ->orderBy('comin.idcomingreso', 'asc')
+    ->select(DB::raw("concat(' Codigo: ',cat.codcatprogramatica,' ',' // Nombre: ',cat.nombrecatprogramatica)
+as comin"), 'comin.idcomingreso')
+    ->pluck('comin', 'comin.idcomingreso');
+
+    $productos = DB::table('prodcomb')
+    ->where('estadoprodcomb',1)
+    ->orderBy('idprodcomb', 'asc')
+    ->select(DB::raw("concat(' CODIGO: ',detalleprodcomb,' //NOMBRE: ',nombreprodcomb,
+    ' //PRECIO BS: ',precioprodcomb) as prodservicio"),'idprodcomb')
+    ->pluck('prodservicio','idprodcomb');
+
+
            return view('almacenes/reporte/index2',
            [
             'valor_total' => $valor_total,
@@ -393,6 +385,7 @@ $valor_total6 = $parte_entera_formateada . ',' . $parte_decimaldos;
           
             'ingresos' => $ingresos,
             'ingresoso' => $ingresoso,
+            'productos' => $productos,
             'detalle'=>$detalle,
         
            'idingreso'=>$id2,
@@ -408,6 +401,7 @@ public function store2(Request $request)
         $detalle = Temporal7Model::find($id);
 
         $prod = $request->get('ingreso');
+        $proddos = $request->get('producto');
         $prodfi = Carbon::createFromFormat('d/m/Y', $request->input('fechainicio'))->format('Y-m-d');
         $prodffi =Carbon::createFromFormat('d/m/Y', $request->input('fechafin'))->format('Y-m-d');
 
@@ -415,6 +409,7 @@ public function store2(Request $request)
         
         $detallereport = new ReporteAreaModel();
         $detallereport->idingreso = $request->get('ingreso');
+        $detallereport->idproducto = $request->get('producto');
         $detallereport->fechainicio = $request->get('fechainicio');
         $detallereport->fechafin = $request->get('fechafin');
         $detallereport->save();
@@ -425,6 +420,7 @@ public function store2(Request $request)
             $detalle->idtemporal7=$id;
             $detalle->idusuario=$id;
             $detalle->idingreso=$prod;
+            $detalle->idproducto=$proddos;
             $detalle->fechaini=$prodfi;
             $detalle->fechafi=$prodffi;
             $detalle->save();
@@ -433,12 +429,13 @@ public function store2(Request $request)
             $detalle->idtemporal7 = $id;
             $detalle->idusuario = $id;
            $detalle->idingreso = $prod;
+           $detalle->idproducto = $proddos;
            $detalle->fechaini=$prodfi;
            $detalle->fechafi=$prodffi;
             $detalle->update();
         }
 
-        return redirect()->route('almacenes.reporte.index2');
+        return redirect()->route('reporte.index2');
     }
 
     public function solicituddos($id)
@@ -564,7 +561,7 @@ $valor_total6 = $parte_entera_formateada . ',' . $parte_decimaldos;
         }
         catch (Exception $ex) {
             \Log::error("Orden Error: {$ex->getMessage()}");
-            return redirect()->route('almacenes.reporte.index2')->with('message', $ex->getMessage());
+            return redirect()->route('reporte.index2')->with('message', $ex->getMessage());
         } finally {
             ini_restore('memory_limit');
             ini_restore('max_execution_time');

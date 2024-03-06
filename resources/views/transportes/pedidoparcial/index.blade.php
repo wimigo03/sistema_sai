@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
 <br>
-<div class="row font-verdana-12">
+<div class="row font-verdana-bg">
     <div class="col-md-8 titulo">
         <b>SOLICITUD DE UNIDAD -- </b><b style='color:red'>{{$idd->nombrearea}} </b>--
     </div>
@@ -9,7 +9,7 @@
         
    
 
-        <a href="{{route('transportes.pedidoparcial.create')}}" class="tts:left tts-slideIn tts-custom" 
+        <a href="{{route('upedidoparcial.create')}}" class="tts:left tts-slideIn tts-custom" 
         aria-label="  Solicitud">
             <button class="btn btn-sm btn-success font-verdana" type="button" >Agreg.Solic.
                 &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
@@ -33,7 +33,8 @@
                         <td class="text-justify p-1"><b>AREA</b></td>
                         <td class="text-justify p-1"><b>ESTADO</b></td>
                          <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td> 
-                         
+                         <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td> 
+
                    
                     </tr>
                 </thead>
@@ -52,10 +53,13 @@
 
                             @if($sol->estadosoluconsumo == '1')
                             <td class="text-justify p-1">
-                            <b style="color: green">Pendiente</b></td>
+                            <b style="color: red">Pendiente</b></td>
+                            @elseif($sol->estadosoluconsumo == '2')
+                            <td class="text-justify p-1">
+                            <b style="color: green">Aprobada dir.</b></td>
                             @elseif($sol->estadosoluconsumo == '3')
                             <td class="text-justify p-1">
-                            <b style="color: blue">Aprobada</b></td>
+                            <b style="color: blue">Aprobada tra.</b></td>
                             @elseif($sol->estadosoluconsumo == '10')
                             <td class="text-justify p-1">
                                 <b style="color: red">Rechazada</b></td>
@@ -64,8 +68,8 @@
                             @if($sol->estadosoluconsumo == '1')
                             <td style="padding: 0;" class="text-center p-1">
                                
-                                    <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Solicitud">
-                                        <a href="{{route('transportes.pedidoparcial.editar',$sol->idsoluconsumo)}}">
+                                    <span class="tts:left tts-slideIn tts-custom" aria-label="MODIFICAR SOLICITUD">
+                                        <a href="{{route('upedidoparcial.editar',$sol->idsoluconsumo)}}">
                                             <span class="text-warning">
                                                 <i class="fa-solid fa-2xl fa-square-pen"></i>
                                             </span>
@@ -73,14 +77,35 @@
                                     </span>
                              
                                 </td>
-
-
-                                @elseif($sol->estadosoluconsumo == '3')
-
                                 <td style="padding: 0;" class="text-center p-1">
                                     
-                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Compra">
-                                            <a href="{{route('transportes.pedidoparcial.solicitud',$sol->idsoluconsumo)}}">
+                                    <span class="tts:left tts-slideIn tts-custom" aria-label="IMPRIMIR SOLICITUD">
+                                        <a href="{{route('upedidoparcial.solicitud',$sol->idsoluconsumo)}}">
+                                            <span class="text-primary">
+                                                <i class="fa-solid fa-2xl fa-print"></i>
+                                            </span>
+                                        </a>
+                                    </span>
+                                
+                                </td>
+
+                                @elseif($sol->estadosoluconsumo == '2')
+
+                                <td style="padding: 0;" class="text-center p-1">
+                                        
+                                    <span class="tts:left tts-slideIn tts-custom" aria-label="VER DETALLE">
+                                        <a href="{{route('upedidoparcial.editaprobado',$sol->idsoluconsumo)}}">
+                                            <span class="text-warning">
+                                                <i class="fa-solid fa-2xl fa-square-pen"></i>
+                                            </span>
+                                        </a>
+                                    </span>
+                                 
+                                   </td>
+                                    <td style="padding: 0;" class="text-center p-1">
+                                    
+                                        <span class="tts:left tts-slideIn tts-custom" aria-label="IMPRIMIR SOLICITUD">
+                                            <a href="{{route('upedidoparcial.solicitud',$sol->idsoluconsumo)}}">
                                                 <span class="text-primary">
                                                     <i class="fa-solid fa-2xl fa-print"></i>
                                                 </span>
@@ -89,19 +114,54 @@
                                     
                                     </td>
 
+                                @elseif($sol->estadosoluconsumo == '3')
+
+                                <td style="padding: 0;" class="text-center p-1">
+                                        
+                                    <span class="tts:left tts-slideIn tts-custom" aria-label="VER DETALLE">
+                                        <a href="{{route('upedidoparcial.editaprobado',$sol->idsoluconsumo)}}">
+                                            <span class="text-warning">
+                                                <i class="fa-solid fa-2xl fa-square-pen"></i>
+                                            </span>
+                                        </a>
+                                    </span>
+                                 
+                                   </td>
+                                    <td style="padding: 0;" class="text-center p-1">
+                                    
+                                        <span class="tts:left tts-slideIn tts-custom" aria-label="IMPRIMIR SOLICITUD">
+                                            <a href="{{route('upedidoparcial.solicituduno',$sol->idsoluconsumo)}}">
+                                                <span class="text-primary">
+                                                    <i class="fa-solid fa-2xl fa-print"></i>
+                                                </span>
+                                            </a>
+                                        </span>
+                                    
+                                    </td>
 
                                     @elseif($sol->estadosoluconsumo == '10')
 
                                     <td style="padding: 0;" class="text-center p-1">
                                         
-                                             <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Compra">
-                                                 <a href="{{route('transportes.pedidoparcial.editrechazado',$sol->idsoluconsumo)}}">
+                                             <span class="tts:left tts-slideIn tts-custom" aria-label="VER DETALLE">
+                                                 <a href="{{route('upedidoparcial.editrechazado',$sol->idsoluconsumo)}}">
                                                      <span class="text-warning">
                                                          <i class="fa-solid fa-2xl fa-square-pen"></i>
                                                      </span>
                                                  </a>
                                              </span>
                                           
+                                            </td>
+                                            <td style="padding: 0;" class="text-center p-1">
+                                    
+                                                <span class="tts:left tts-slideIn tts-custom" aria-label="IMPRIMIR SOLICITUD">
+                                                    <a href="{{route('upedidoparcial.solicitud',$sol->idsoluconsumo)}}">
+                                                        <span class="text-primary">
+                                                            <i class="fa-solid fa-2xl fa-print"></i>
+                                                        </span>
+                                                    </a>
+                                                </span>
+                                            
                                             </td>
                                     @endif 
                               
@@ -122,7 +182,7 @@
                         <th></th>
                         <th></th>
                         <th></th>
-                      
+                        <th></th>
                       
                     </tr>
 
@@ -132,6 +192,7 @@
         </center>
     </div>
 </div>
+@endsection
 @section('scripts')
 <script>
     $(document).ready(function() {
@@ -188,7 +249,7 @@
                 this.api().columns(5).every(function() {
                     var column = this;
                     var input = document.createElement("input");
-                    input.style.width = input.style.width = "120px";
+                    input.style.width = input.style.width = "100px";
                     $(input).appendTo($(column.footer()).empty())
                         .on('change', function() {
                             var val = $.fn.dataTable.util.escapeRegex($(this).val());
@@ -218,10 +279,10 @@ language: {
     "previous": "Anterior"
 }
 },
-order: [[ 0, "desc" ]],
+order: [[ 0, "asc" ]],
         });
     });
    
 </script>
-@endsection
+
 @endsection

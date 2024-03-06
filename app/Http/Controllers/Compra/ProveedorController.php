@@ -39,7 +39,8 @@ class ProveedorController extends Controller
     {
         $data = DB::table('proveedor')
             ->where('idproveedor', '!=', 1)
-            ->where('estadoproveedor', '=', 1);
+            ->where('estadoproveedor', '=', 1)
+            ->orderBy('idproveedor', 'desc');
       
         return Datatables::of($data)
             ->addIndexColumn()
@@ -111,7 +112,7 @@ class ProveedorController extends Controller
         } else {
             $request->session()->flash('message', 'Error al Procesar Registro');
         }
-        return redirect('combustibles/proveedor/index');
+        return redirect()->route('proveedor.index');
     }
 
 
@@ -121,7 +122,9 @@ class ProveedorController extends Controller
         $docproveedor = DB::table('docproveedores as d')
             ->join('proveedor as p', 'p.idproveedor', '=', 'd.idproveedor')
             ->select('d.nombredocumento', 'd.iddocproveedores', 'd.documento')
+            ->orderBy('d.iddocproveedores', 'desc')
             ->where('d.idproveedor', '=', $idproveedor)->get();
+            
         // dd($docproveedor);
         return view('combustibles.proveedor.docproveedor', ["docproveedor" => $docproveedor, "idproveedor" => $idproveedor]);
     }
@@ -166,7 +169,7 @@ class ProveedorController extends Controller
         $docproveedor->idproveedor = $idproveedor;
         $docproveedor->estadodocproveedores = 1;
         $docproveedor->save();
-        return redirect()->action('App\Http\Controllers\Compra\ProveedorController@editardoc', [$idproveedor]);
+        return redirect()->route('proveedor.editardoc', [$idproveedor]);
     } catch (\Throwable $th){
         return '[ERROR_500]';
        }finally{
@@ -231,7 +234,7 @@ class ProveedorController extends Controller
             $docproveedor->nombredocumento = $request->input('nombredocumento');
             $docproveedor->save();
         }
-        return redirect()->action('App\Http\Controllers\Compra\ProveedorController@editardoc', [$idproveedor]);
+        return redirect()->route('proveedor.editardoc', [$idproveedor]);
     }
 
 

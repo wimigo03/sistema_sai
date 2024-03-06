@@ -4,11 +4,11 @@
 <div class="row justify-content-center">
     <div class="col-md-10">
 
-        <div class="row font-verdana-12">
+        <div class="row font-verdana-bg">
             <div class="col-md-4 titulo">
 
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-                    <a href="{{ url('/almacenes/ingreso/index')}}">
+                    <a href="{{ url('/ingreso/index')}}">
                         <span class="color-icon-1">
                             &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                         </span>
@@ -73,7 +73,7 @@
                             <td>
                               
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Archivo">
-                                    <a href="{{route('IngresoController.editararchivo',$docprov ->idnotaingreso)}}">
+                                    <a href="{{route('ingreso.editararchivo',$docprov ->idnotaingreso)}}">
                                         <span class="text-warning">
                                             <i class="fas fa-xl fa-edit" style="color:rgb(26, 162, 16)"></i>
                                         </span>

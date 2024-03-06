@@ -34,7 +34,7 @@ class CompraCombController extends Controller
                         ->join('catprogramaticacomb as cat', 'cat.idcatprogramaticacomb', '=', 'c.idcatprogramaticacomb')
                         ->join('programacomb as prog', 'prog.idprogramacomb', '=', 'c.idprogramacomb')
                         ->join('areas as a', 'a.idarea', '=', 'c.idarea')
-
+                        ->where('c.estadocompracomb', '!=', 0)
                         // ->where('c.estadocompracomb',1)
 
                         ->select(['c.estadocompracomb','c.idcompracomb','c.estado1','c.estado2','c.estado3',
@@ -48,7 +48,9 @@ class CompraCombController extends Controller
 
                         return DataTables::of($compras)
                         ->addIndexColumn()
-
+                        ->addColumn('idcompracomb', function ($compras) {
+                            return $compras->idcompracomb;
+                        })
                         ->addColumn('fechasoli', function ($compras) {
                             return $compras->fechasoli;
                         })
@@ -61,17 +63,13 @@ class CompraCombController extends Controller
                         ->addColumn('nombrearea', function ($compras) {
                             return $compras->nombrearea;
                         })
-                        ->addColumn('nombreproveedor', function ($compras) {                                
-                        return $compras->nombreproveedor;  
-
+                        ->addColumn('nombreproveedor', function ($compras) {    
+                                    return $compras->nombreproveedor;  
                         })
                         ->addColumn('preventivo', function ($compras) {
                             return $compras->preventivo;
                         })
-                        ->addColumn('numcompra', function ($compras) {
-                            return $compras->numcompra;
-                        })
-                     
+                                         
                         ->addColumn('estadocompracomb', function ($compras) {
 
                             if ($compras->estadocompracomb == '1') {
@@ -99,39 +97,47 @@ class CompraCombController extends Controller
                 ->addColumn('actions', function ($compras) {
                     // $buttonHtml = '';
                     if ($compras->estadocompracomb == 1) {
-                         $buttonHtml = '<form action="' . route('combustibles.pedido.edit', $compras->idcompracomb) . '" method="GET" style="display: inline">' .
+                         $buttonHtml = '<form action="' . route('pedidocomb.edit', $compras->idcompracomb) . '" method="GET" style="display: inline">' .
                             csrf_field() .
                             method_field('GET') .
-                            '<button class="btn btn-sm btn-success font-verdana" type="submit" aria-label="Activar/Desactivar Horario">
-                                Detalle
+                            '<button class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle" style="border: none;">
+                            <span class="text-primary" >
+                            <i class="fa-solid fa-2xl fa-list" ></i>
+                                </span>
                                 </button>
                                 </form>';
                     } else {
                         if ($compras->estadocompracomb == 2) {
-                         $buttonHtml = '<form action="' . route('combustibles.pedido.editabledos', $compras->idcompracomb) . '" method="GET" style="display: inline">' .
+                         $buttonHtml = '<form action="' . route('pedidocomb.editabledos', $compras->idcompracomb) . '" method="GET" style="display: inline">' .
                             csrf_field() .
                             method_field('GET') .
-                            '<button class="btn btn-sm btn-primary font-verdana" type="submit" aria-label="Activar/Desactivar Horario">
-                                Aprovado
+                            '<button class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle" style="border: none;">
+                            <span class="text-primary" >
+                            <i class="fa-solid fa-2xl fa-list" ></i>
+                                </span>
                                 </button>
                                 </form>';
                     } else {
                         if ($compras->estadocompracomb == 5) {
 
-                         $buttonHtml = '<form action="' . route('combustibles.pedido.editabledos', $compras->idcompracomb) . '" method="GET" style="display: inline">' .
+                         $buttonHtml = '<form action="' . route('pedidocomb.editabledos', $compras->idcompracomb) . '" method="GET" style="display: inline">' .
                             csrf_field() .
                             method_field('GET') .
-                            '<button class="btn btn-sm btn-secondary font-verdana" type="submit" aria-label="Activar/Desactivar Horario">
-                                Almacen
+                            '<button class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle" style="border: none;">
+                            <span class="text-primary" >
+                            <i class="fa-solid fa-2xl fa-list" ></i>
+                                </span>
                                 </button>
                                </form>';
                     }else {
                         if ($compras->estadocompracomb == 10) {
-                            $buttonHtml = '<form action="' . route('combustibles.pedido.editabletres', $compras->idcompracomb) . '" method="GET" style="display: inline">' .
+                            $buttonHtml = '<form action="' . route('pedidocomb.editabletres', $compras->idcompracomb) . '" method="GET" style="display: inline">' .
                             csrf_field() .
                             method_field('GET') .
-                            '<button class="btn btn-sm btn-danger font-verdana" type="submit" aria-label="Activar/Desactivar Horario">
-                                Rechazado
+                            '<button class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle" style="border: none;">
+                            <span class="text-primary" >
+                            <i class="fa-solid fa-2xl fa-list" ></i>
+                                </span>
                                 </button>
                                 </form>';
                     }else {
@@ -139,17 +145,11 @@ class CompraCombController extends Controller
                     return
                         
 
-                    '<a class="tts:left tts-slideIn tts-custom" aria-label=" boton uno" href="' . route('combustibles.pedido.ver', $compras->idcompracomb) . '">
-                    <button class="btn btn-sm btn-primary font-verdana" type="button">
+                    '<a class="tts:left tts-slideIn tts-custom" aria-label=" Editar" href="' . route('pedidocomb.ver', $compras->idcompracomb) . '">
+                    <span class="text-primary" >
                     <i class="fa fa-pencil fa-fw"></i>
-                    </button>
-                    </a>' . ' '.$buttonHtml;
-                    
-                    '<a class="tts:left tts-slideIn tts-custom" aria-label=" boton dos" href="' . route('combustibles.pedido.editar', $compras->idcompracomb) . '">
-                    <button class="btn btn-sm btn-primary font-verdana" type="button">
-                    <i class="fa fa-pencil fa-fw"></i>
-                    </button>
-                    </a>' . ' '.$buttonHtml;
+                </span>
+                         </a>'. ' ' .$buttonHtml;
 
                 })
                 ->rawColumns(['actions', 'estadocompracomb'])
@@ -181,12 +181,16 @@ class CompraCombController extends Controller
                       
                         ->select('c.estadocompracomb','c.idcompracomb','c.controlinterno','c.fechasoli','c.estado1','c.estado2','c.estado3','a.nombrearea','c.objeto', 'c.justificacion','p.nombreproveedor','c.preventivo','c.numcompra','cat.codcatprogramatica','prog.nombreprograma')
                         ->orderBy('c.idcompracomb', 'desc')
-                        ->where('c.estadocompracomb', '!=', 1);
+                        ->where('c.estadocompracomb', '!=', 0)
+                        ->where('c.estadocompracomb', '!=', 1)
+                        ->where('c.estadocompracomb', '!=', 10);
                         //->get();
                         $compras = $compras->get();
                         return Datatables::of($compras)
                         ->addIndexColumn()
-
+                        ->addColumn('idcompracomb', function ($compras) {
+                            return $compras->idcompracomb;
+                        })
                          ->addColumn('fechasoli', function ($compras) {
                              return $compras->fechasoli;
                          })
@@ -206,20 +210,18 @@ class CompraCombController extends Controller
                         ->addColumn('preventivo', function ($compras) {
                             return $compras->preventivo;
                         })
-                        ->addColumn('numcompra', function ($compras) {
-                            return $compras->numcompra;
-                        })
+                    
 
                         ->addColumn('estadocompracomb', function ($compras) {
 
                             switch ($compras->estadocompracomb ) {
                                
                                     case '2':
-                                    return '<b style="color: blue">Aprobada</b>';
+                                    return '<b style="color: green">Pendiente</b>';
                                 case '5':
-                                    return '<b style="color: purple">Almacen</b>';
-                                case '10':
-                                    return '<b style="color: red">Rechazado</b>';
+                                    return '<b style="color: blue">Almacen</b>';
+                                // case '10':
+                                //     return '<b style="color: red">Rechazado</b>';
                                 default:
                                 
                                     break;
@@ -227,12 +229,42 @@ class CompraCombController extends Controller
                         )
                         ->addColumn('actions', function ($compras) {
 
-                            return '<a class="tts:left tts-slideIn tts-custom" aria-label=" boton uno" href="' . route('combustibles.pedido.editable', $compras->idcompracomb) . '">
-                            <button class="btn btn-sm btn-primary font-verdana" type="button">
-                                <i class="fa fa-pencil fa-fw"></i>
-                            </button>
-                        </a>';
-            })
+                        
+                               if ($compras->estadocompracomb == 2) {
+                                $buttonHtml = '<form action="' . route('pedidocomb.editable', $compras->idcompracomb) . '" method="GET" style="display: inline">' .
+                                   csrf_field() .
+                                   method_field('GET') .
+                                   '<button class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle" style="border: none;">
+                                   <span class="text-primary" >
+                                   <i class="fa-solid fa-2xl fa-list" ></i>
+                                       </span>
+                                       </button>
+                                       </form>';
+                           } else {
+                               if ($compras->estadocompracomb == 5) {
+       
+                                $buttonHtml = '<form action="' . route('pedidocomb.editable', $compras->idcompracomb) . '" method="GET" style="display: inline">' .
+                                   csrf_field() .
+                                   method_field('GET') .
+                                   '<button class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle" style="border: none;">
+                                   <span class="text-primary" >
+                                   <i class="fa-solid fa-2xl fa-list" ></i>
+                                       </span>
+                                       </button>
+                                      </form>';
+                           }else {
+                              
+                           } } 
+                           return
+                    
+                           
+                    '<a class="tts:left tts-slideIn tts-custom" aria-label=" Editar" href="' . route('pedidocomb.verr', $compras->idcompracomb) . '">
+                    <span class="text-primary" >
+                    <i class="fa fa-pencil fa-fw"></i>
+                </span>
+                         </a>'. ' ' .$buttonHtml;
+
+                })
 
                           
                         ->rawColumns(['actions', 'estadocompracomb'])
@@ -316,7 +348,7 @@ class CompraCombController extends Controller
             $detalle->update();
         }
        //return Redirect::to('compras/detalle');
-       return redirect()->route('combustibles.detalle.index');
+       return redirect()->route('detalle.index');
     }
 
     public function editable($idcompracomb){//dd($idcomp);
@@ -338,7 +370,7 @@ class CompraCombController extends Controller
             $detalle->update();
         }
        //return Redirect::to('compras/detalle');
-       return redirect()->route('combustibles.detalle.index2');
+       return redirect()->route('detalle.index2');
     }
     public function editabledos($idcompracomb){//dd($idcomp);
         
@@ -359,7 +391,7 @@ class CompraCombController extends Controller
             $detalle->update();
         }
        //return Redirect::to('compras/detalle');
-       return redirect()->route('combustibles.detalle.index5');
+       return redirect()->route('detalle.index5');
     }
 
     public function editabletres($idcompracomb){//dd($idcomp);
@@ -381,7 +413,7 @@ class CompraCombController extends Controller
             $detalle->update();
         }
        //return Redirect::to('compras/detalle');
-       return redirect()->route('combustibles.detalle.index3');
+       return redirect()->route('detalle.index3');
     }
 
     public function editablecuatro($idcompracomb){//dd($idcomp);
@@ -416,15 +448,55 @@ class CompraCombController extends Controller
 
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
-        return view('combustibles.pedido.editar',compact('id','compras','proveedores','areas','catprogramaticas','programas'));
+        return view('combustibles.pedidocomb.editar',compact('id','compras','proveedores','areas','catprogramaticas','programas'));
     }
 
     public function ver($idcompracomb){
         $compras = CompraCombModel::find($idcompracomb);
-        $proveedores = DB::table('proveedor')->get();
-        $areas = DB::table('areas')->get();
-        $catprogramaticas = DB::table('catprogramaticacomb')->get();
-        $programas = DB::table('programacomb')->get();
+        $idco =$compras ->idcompracomb;
+        $id2 = $compras->iddirigidoa;
+        $id3 = $compras->idviaa;
+        $id4 = $compras->iddepartede;
+        $id5 = $compras->idarea;
+        $id6 = $compras->idprogramacomb;
+        $id7 = $compras->idcatprogramaticacomb;
+        $id8 = $compras->idproveedor;
+
+        $Fechaa =$compras ->fechasoli;
+        $fechag = substr($Fechaa, 8, 2);
+        $fecham = substr($Fechaa, 5, 2);
+        $fechad = substr($Fechaa, 0, 4);
+        $Horaa =$compras ->horasoli;
+         $Fechayhora= $fechag . "-" .  $fecham. "-" .  $fechad. " " .  $Horaa;
+
+         $Fechaados =$compras ->fechaaprob;
+         $fechagdos = substr($Fechaados, 8, 2);
+         $fechamdos = substr($Fechaados, 5, 2);
+         $fechaddos = substr($Fechaados, 0, 4);
+         $Horaados =$compras ->horaaprob;
+          $Fechayhorados= $fechagdos . "-" .  $fechamdos. "-" .  $fechaddos. " " .  $Horaados;
+
+
+        $proveedores = DB::table('proveedor')
+        ->where('idproveedor', '!=', 1)
+        ->where('estadoproveedor',1)
+        ->get();
+
+        $proveedordos = DB::table('proveedor')
+        ->where('idproveedor', '!=', 1)
+        ->where('idproveedor',$id8)
+        ->get();
+
+
+        $areas = DB::table('areas')
+        ->where('idarea',$id5)
+        ->get();
+        $catprogramaticas = DB::table('catprogramaticacomb')
+        ->where('idcatprogramaticacomb',$id7)
+        ->get();
+        $programas = DB::table('programacomb')
+        ->where('idprogramacomb',$id6)
+        ->get();
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
 
@@ -434,43 +506,171 @@ class CompraCombController extends Controller
         // $Proveedor = CompraCombModel::find($compras->idcompracomb);
         // $Proveedordd = $Proveedor->idproveedor;
         // $Proveedor=$compras->idproveedor;
+        $encargado = DB::table('encargados as e')
+        ->join('areas as a', 'a.idarea', '=', 'e.idarea')
+        ->join('empleados as emp', 'e.idemp', '=', 'emp.idemp')
+         -> where('e.idenc', $id3)
+        ->select('emp.nombres','emp.ap_pat','emp.ap_mat','e.abrev','e.idenc','e.cargo','a.nombrearea')
+        ->get();
+       
+       $encargadodos = DB::table('encargados as e')
+       ->join('areas as a', 'a.idarea', '=', 'e.idarea')
+       ->join('empleados as emp', 'e.idemp', '=', 'emp.idemp')
+       -> where('e.idenc',$id2)
+       ->select('emp.nombres','emp.ap_pat','emp.ap_mat','e.abrev','e.idenc','e.cargo','a.nombrearea')
+       ->get();
+
+       $departede = DB::table('empleados as e')
+       ->join('areas as a', 'a.idarea', '=', 'e.idarea')
+       ->join('file as fi', 'fi.idfile', '=', 'e.idfile')
+        -> where('e.idemp', $id4)
+       ->select('e.nombres','e.ap_pat','e.ap_mat','fi.cargo','fi.nombrecargo','a.nombrearea','e.idemp')
+       ->get();
 
         if ($Estadoun==1) {
-            return view('combustibles.pedido.editar',compact('id','compras','proveedores','areas','catprogramaticas','programas'));
+            return view('combustibles.pedido.editar',compact('idco','departede','encargadodos','encargado','id','compras','proveedores','areas','catprogramaticas','programas','Fechayhora'));
 
         } else {
-        return view('combustibles.pedido.ver',compact('id','compras','proveedores','areas','catprogramaticas','programas'));
+            if ($Estadoun==2) {    
+        return view('combustibles.pedido.ver',compact('Fechayhorados','idco','departede','encargadodos','encargado','id','compras','proveedordos','areas','catprogramaticas','programas','Fechayhora'));
+    } else {
+        if ($Estadoun==5) { 
+        return view('combustibles.pedido.verdos',compact('Fechayhorados','idco','departede','encargadodos','encargado','id','compras','proveedordos','areas','catprogramaticas','programas','Fechayhora'));
+  } else {
+    if ($Estadoun==10) { 
+        return view('combustibles.pedido.veruno',compact('Fechayhorados','idco','departede','encargadodos','encargado','id','compras','proveedordos','areas','catprogramaticas','programas','Fechayhora'));      
+    } else {
+        return view('combustibles.pedido.ver',compact('Fechayhorados','idco','departede','encargadodos','encargado','id','compras','proveedordos','areas','catprogramaticas','programas','Fechayhora'));
 
-        }
-        
+        }    
+        } 
+    } } 
     }
 
-    
+    public function verr($idcompracomb){
+        $compras = CompraCombModel::find($idcompracomb);
+        $idco =$compras ->idcompracomb;
+        $id2 = $compras->iddirigidoa;
+        $id3 = $compras->idviaa;
+        $id4 = $compras->iddepartede;
+        $id5 = $compras->idarea;
+        $id6 = $compras->idprogramacomb;
+        $id7 = $compras->idcatprogramaticacomb;
+        $id8 = $compras->idproveedor;
+
+        $Fechaa =$compras ->fechasoli;
+        $fechag = substr($Fechaa, 8, 2);
+        $fecham = substr($Fechaa, 5, 2);
+        $fechad = substr($Fechaa, 0, 4);
+        $Horaa =$compras ->horasoli;
+         $Fechayhora= $fechag . "-" .  $fecham. "-" .  $fechad. " " .  $Horaa;
+
+         $Fechaados =$compras ->fechaaprob;
+         $fechagdos = substr($Fechaados, 8, 2);
+         $fechamdos = substr($Fechaados, 5, 2);
+         $fechaddos = substr($Fechaados, 0, 4);
+         $Horaados =$compras ->horaaprob;
+          $Fechayhorados= $fechagdos . "-" .  $fechamdos. "-" .  $fechaddos. " " .  $Horaados;
+
+          $Fechaatres =$compras ->fechaalmacen;
+          $fechagtres = substr($Fechaatres, 8, 2);
+          $fechamtres = substr($Fechaatres, 5, 2);
+          $fechadtres = substr($Fechaatres, 0, 4);
+          $Horaatres =$compras ->horaalmacen;
+           $Fechayhoratres= $fechagtres . "-" .  $fechamtres. "-" .  $fechadtres. " " .  $Horaatres;
+
+
+
+        $proveedores = DB::table('proveedor')
+        ->where('idproveedor', '!=', 1)
+        ->get();
+
+        $proveedordos = DB::table('proveedor')
+        ->where('idproveedor', '!=', 1)
+        ->where('idproveedor',$id8)
+        ->get();
+
+
+        $areas = DB::table('areas')
+        ->where('idarea',$id5)
+        ->get();
+        $catprogramaticas = DB::table('catprogramaticacomb')
+        ->where('idcatprogramaticacomb',$id7)
+        ->get();
+        $programas = DB::table('programacomb')
+        ->where('idprogramacomb',$id6)
+        ->get();
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+
+        $comprasestado = CompraCombModel::find($idcompracomb);
+        $EstadoCOM = $comprasestado->estadocompracomb;
+        $Estadoun = $EstadoCOM;
+        // $Proveedor = CompraCombModel::find($compras->idcompracomb);
+        // $Proveedordd = $Proveedor->idproveedor;
+        // $Proveedor=$compras->idproveedor;
+        $encargado = DB::table('encargados as e')
+        ->join('areas as a', 'a.idarea', '=', 'e.idarea')
+        ->join('empleados as emp', 'e.idemp', '=', 'emp.idemp')
+         -> where('e.idenc', $id3)
+        ->select('emp.nombres','emp.ap_pat','emp.ap_mat','e.abrev','e.idenc','e.cargo','a.nombrearea')
+        ->get();
+       
+       $encargadodos = DB::table('encargados as e')
+       ->join('areas as a', 'a.idarea', '=', 'e.idarea')
+       ->join('empleados as emp', 'e.idemp', '=', 'emp.idemp')
+       -> where('e.idenc',$id2)
+       ->select('emp.nombres','emp.ap_pat','emp.ap_mat','e.abrev','e.idenc','e.cargo','a.nombrearea')
+       ->get();
+
+       $departede = DB::table('empleados as e')
+       ->join('areas as a', 'a.idarea', '=', 'e.idarea')
+       ->join('file as fi', 'fi.idfile', '=', 'e.idfile')
+        -> where('e.idemp', $id4)
+       ->select('e.nombres','e.ap_pat','e.ap_mat','fi.cargo','fi.nombrecargo','a.nombrearea','e.idemp')
+       ->get();
+
+        if ($Estadoun==2) {
+            return view('combustibles.pedido.vertres',compact('Fechayhorados','idco','departede','encargadodos','encargado','id','compras','proveedordos','areas','catprogramaticas','programas','Fechayhora'));
+
+        } else {
+            if ($Estadoun==5) {    
+                return view('combustibles.pedido.vercinco',compact('Fechayhoratres','Fechayhorados','idco','departede','encargadodos','encargado','id','compras','proveedordos','areas','catprogramaticas','programas','Fechayhora'));
+            } else {
+       
+        return view('combustibles.pedido.verdos',compact('Fechayhorados','idco','departede','encargadodos','encargado','id','compras','proveedordos','areas','catprogramaticas','programas','Fechayhora'));
+          
+    } } 
+    }
+
     
     public function update(Request $request){
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
 
         $compras = CompraCombModel::find($request->idcompracomb);
-        $compras->objeto = $request->input('objeto');
-        $compras->justificacion = $request->input('justificacion');
+        // $compras->oficinade = $request->input('oficinade');
+        // $compras->objeto = $request->input('objeto');
+        // $compras->justificacion = $request->input('justificacion');
+        // $compras->controlinterno = $request->input('controlinterno');
+        //$compras->tipo = $request->input('tipo');
+        //$compras->iddirigidoa = $request->input('iddirigidoa');
+        //$compras->idviaa = $request->input('idviaa');
+        //$compras->iddepartede = $request->input('iddepartede');
+
         $compras->preventivo = $request->input('preventivo');
-       
         $compras->numcompra =$request->input('numcompra');
-        $compras->controlinterno = $request->input('controlinterno');
         $compras->idproveedor = $request->input('idproveedor');
-        $compras->idarea = $request->input('idarea');
-        $compras->idcatprogramaticacomb = $request->input('idcatprogramatica');
-        $compras->idprogramacomb = $request->input('idprograma');
-        $compras->idproveedor = $request->input('idproveedor');
+        //  $compras->idarea = $request->input('idarea');
+        //$compras->idcatprogramaticacomb = $request->input('idcatprogramatica');
+        //$compras->idprogramacomb = $request->input('idprograma');
         $compras->iduseredit = $id;
-        $compras->idarea = $request->input('idarea');
         if($compras->save()){
             $request->session()->flash('message', 'Registro Procesado');
         }else{
             $request->session()->flash('message', 'Error al Procesar Registro');
         }
-        return redirect()->route('combustibles.pedido.index');
+        return redirect()->route('pedidocomb.index');
     }
 
     public function destroy($id){

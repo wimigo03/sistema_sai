@@ -1,12 +1,12 @@
 @extends('layouts.admin')
 @section('content')
-<div class="row font-verdana-12">
+<div class="row font-verdana-bg">
     <div class="col-md-8 titulo">
         <b>SOLICITUDES APROVADAS</b><b style='color:red'>{{$idd->nombrearea}} </b>--
     </div>
     <div class="col-md-4 text-right">
 
-              <a href="{{ route('transportes.pedido.index') }}" class="tts:left tts-slideIn tts-custom" 
+              <a href="{{ route('upedido.index') }}" class="tts:left tts-slideIn tts-custom" 
             aria-label="ir a solicitudes pendientes">
                 <button class="btn btn-sm btn-warning font-verdana" type="button" >VOLVER A PENDIENTES
                     &nbsp;<i class="fa-sharp fa-solid fa-thumbs-down" style="font-size:14px"></i>&nbsp;
@@ -74,7 +74,7 @@ $('#users-table').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
-        ajax: "{{ route('transportes.pedido.index2') }}",
+        ajax: "{{ route('upedido.index2') }}",
         columns: [
             {data: 'DT_RowIndex',orderable: false,searchable: false,class:'text-justify p-1 font-verdana'},
 

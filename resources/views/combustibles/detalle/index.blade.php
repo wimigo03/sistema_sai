@@ -7,10 +7,10 @@
     </div>
 @endif
 <br>
-<div class="row font-verdana-12">
+<div class="row font-verdana-bg">
     <div class="col-md-2 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-            <a href="{{ url('/combustibles/pedido/index') }}">
+            <a href="{{ url('/pedidocomb/index') }}">
                 <span class="color-icon-1">
                     &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                 </span>
@@ -23,57 +23,54 @@
     <div class="col-md-12"  >
         <hr class="hrr">
     </div>
-    <div class="col-md-12 text-right">
-
-        @if ($estado == 1)
-        <a href="{{route('combustibles.detalle.aprovar',$compras->idcompracomb)}}" 
-          onclick="return confirm('Se va a aprovar la compra..esta seguro ?..')">
+    <div class="col-md-2 text-right titulo">
+        <b>N° Compra</b> <b style='color:red'>{{ $idcompracomb }}</b>
+    </div>
+    <div class="col-md-10 text-right">
+        @if ($compras->idproveedor== 1)
+        <b style="color: orange">Seleccione un Proveedor   </b>
+    
+        @elseif ($estado == 1)
+        <a href="{{route('detalle.aprovar',$compras->idcompracomb)}}" 
+          onclick="return confirm('Se va a aprobar la compra..esta seguro ?..')">
           <button class="btn btn-sm  btn-info   font-verdana" type="button" >
-              &nbsp;<i class="fa fa-lg fa-thumbs-up" aria-hidden="true"></i>&nbsp;Aprobar Comprasss
+              &nbsp;<i class="fa fa-lg fa-thumbs-up" aria-hidden="true"></i>&nbsp;Aprobar Compra
           </button>
       </a>
-      <a href="{{route('combustibles.detalle.rechazar',$compras->idcompracomb)}}" 
+      <a href="{{route('detalle.rechazar',$compras->idcompracomb)}}" 
         onclick="return confirm('Se va a rechazar la compra..esta seguro ?..')">
         <button class="btn btn-sm btn-warning btn-info   font-verdana" type="button" >
             &nbsp;<i class="fa fa-lg fa-thumbs-down" aria-hidden="true"></i>&nbsp;Rechazar Compra
         </button>
     </a>
-      @endif
-
-        @if ($compras->idproveedor== 1)
-        <b style="color: orange">--Para aprovar la compra seleccione un Proveedor--</b>
-    
-  
-      @endif
-
+ 
+    <b style="color: red"> Aprobar compra para generar orden</b>
+    <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
+    @endif
         <input type="hidden" value="{{$idcompracomb}}" id="idcompra">
         <input type="hidden" value="{{$compras->estadocompracomb}}" id="idcompra2">
         <input type="hidden" value="{{$compras->idproveedor}}" id="idcompra3">
 
-        @if ($compras->estadocompracomb == 1)
-        <b style="color: red">--No puede generar la orden de compra hasta que esta sea aprovada--</b>
-    <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
-    @endif
-
+   
     @if ($estado == 0)
-    <b style="color: rgb(162, 0, 255)">--No hay registro del detalle--</b>
+    <b style="color: rgb(162, 0, 255)"> No hay registro del detalle</b>
 <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
 @endif
     </div>
 </div>
-<div>
-    <hr class="hrr">
-</div>
+
 <div class="row">
     <div class="col-md-12 table-responsive">
         <center>
             <table id="dataTable" class="table display table-bordered responsive font-verdana" style="width:100%">
                 <thead>
                     <tr>
-                        <td class="text-justify p-1"><b>N</b></td>
+                        <td class="text-justify p-1"><b>N°</b></td>
+                        <td class="text-justify p-1"><b>CODIGO</b></td>
                         <td class="text-justify p-1"><b>PRODUCTO</b></td>
-                        <td class="text-right p-1"><b>CANTIDAD</b></td>
+                        <td class="text-justify p-1"><b>UNIDAD</b></td>
                         <td class="text-right p-1"><b>PRECIO</b></td>
+                        <td class="text-right p-1"><b>CANTIDAD</b></td>
                         <td class="text-right p-1"><b>SUBTOTAL</b></td>
                         <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
                     </tr>
@@ -85,16 +82,18 @@
                      @forelse ($prodserv as $key => $prod)
                         <tr>
                             <td class="text-justify p-1">{{$key+1}}</td>
+                            <td class="text-justify p-1">{{$prod->detalleprodcomb}}</td>
                             <td class="text-justify p-1">{{$prod->nombreprodcomb}}</td>
-                            <td class="text-right p-1">{{$prod->cantidad}}</td>
+                            <td class="text-justify p-1">{{$prod->nombremedida}}</td>
                             <td class="text-right p-1">{{$prod->precio}}</td>
+                            <td class="text-right p-1">{{$prod->cantidad}}</td>
                             <td class="text-right p-1">{{$prod->subtotal}}</td>
 
                             <td class="text-center p-1">
                                 @if($compras->estado1 == 1)
 
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Eliminar">
-                                    <a href="{{route('combustibles.detalleparcial.delete',$prod->iddetallecompracomb)}}" 
+                                    <a href="{{route('detalleparcial.delete',$prod->iddetallecompracomb)}}" 
                                         onclick="return confirm('Se va a eliminar el Item...')">
                                         <span class="text-danger">
                                             <i class="fa-solid fa-xl fa-trash" aria-hidden="true"></i>
@@ -114,7 +113,7 @@
                                 @if($compras->estadocompracomb == 2)
 
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Mandar almacen">
-                                    <a href="{{route('combustibles.detalle.almacen',$prod->iddetallecompracomb)}}" 
+                                    <a href="{{route('detalle.almacen',$prod->iddetallecompracomb)}}" 
                                         onclick="return confirm('Este item se mandara a almacen...')">
                                         <span class="text-danger">
                                             <i class="fa-solid fa-xl fa-trash" aria-hidden="true"></i>
@@ -140,13 +139,18 @@
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                          
                             <td class="text-right p-1">
-                                <b>TOTAL:</b>
+                                <b>TOTALES:</b>
                             </td>
                             <td class="text-right p-1">
-                                <b>{{$valor_total}}</b>
+                                <b>{{$CalAdosDecimdos}}</b>
                             </td>
-
+                            <td class="text-right p-1">
+                                <b>{{$CalAdosDecim}}</b>
+                            </td>
+                            <td>&nbsp;</td>
                         </tr>
                     @endif
                 </tfoot>
@@ -196,7 +200,7 @@
             $(".btn").hide();
             $(".spinner-btn-send").show();
             var idcompra = $("#idcompra").val();
-            var url = "{{ route('combustibles.detalle.principalorden',':id') }}";
+            var url = "{{ route('detalle.principalorden',':id') }}";
             url = url.replace(':id',idcompra);
             window.location.href = url;
         }
@@ -205,14 +209,14 @@
             $(".btn").hide();
             $(".spinner-btn-send").show();
 
-            window.location.href = "{{ route('combustibles.detalle.show') }}";
+            window.location.href = "{{ route('detalle.show') }}";
         }
 
         function create(){
             $(".btn").hide();
             $(".spinner-btn-send").show();
             var idcompra = $("#idcompra").val();
-            var url = "{{ route('combustibles.detalle.principal',':id') }}";
+            var url = "{{ route('detalle.principal',':id') }}";
             url = url.replace(':id',idcompra);
             window.location.href = url;
         }
@@ -244,6 +248,8 @@
             }else{
                 return false;
             }
-        } 
+        }
+
+ 
     </script>
 @endsection

@@ -1,8 +1,8 @@
 @extends('layouts.admin')
 @section('content')
-<div class="row font-verdana-12">
+<div class="row font-verdana-bg">
     <div class="col-md-8 titulo">
-        <b>SOLICITUDES PENDIENTES--</b><b style='color:red'>{{$idd->nombrearea}} </b>--
+        <b>SOLICITUDES APROBADAS--</b><b style='color:red'>{{$idd->nombrearea}} </b>--
         
     </div>
 
@@ -76,25 +76,25 @@ $('#users-table').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
-        ajax: "{{ route('transportes.pedido.index') }}",
+        ajax: "{{ route('upedido.index') }}",
         columns: [
             {data: 'DT_RowIndex',orderable: false,searchable: false,class:'text-justify p-1 font-verdana'},
-            { data: 'fechasol',name: 'fechasol',class:'text-justify p-1 font-verdana'},
+            { data: 'fechasol',name: 'fechasol',className:'text-center'},
 
-            { data: 'referencia',name: 'referencia',class:'text-justify p-1 font-verdana'},
+            { data: 'referencia',name: 'referencia',className:'text-center'},
 
-            {data: 'nombrearea',name: 'nombrearea',class:'text-justify p-1 font-verdana'},
+            {data: 'nombrearea',name: 'nombrearea',className:'text-center'},
 
-            {data: 'oficina',name: 'oficina',class:'text-justify p-1 font-verdana'},
+            {data: 'oficina',name: 'oficina',className:'text-center'},
 
-            {data: 'cominterna',name: 'cominterna',class:'text-justify p-1 font-verdana'},
+            {data: 'cominterna',name: 'cominterna',className:'text-center'},
 
-            {data: 'nombrelocalidad',name: 'nombrelocalidad',class:'text-justify p-1 font-verdana'},
+            {data: 'nombrelocalidad',name: 'nombrelocalidad',className:'text-center'},
 
-            {data: 'estadosoluconsumo',name: 'estadosoluconsumo',class:'text-justify p-1 font-verdana'},
+            {data: 'estadosoluconsumo',name: 'estadosoluconsumo',className:'text-center'},
 
 {
-         className: 'text-center',
+         className: 'text-justify p-1 font-verdana',
          data: 'actions',
          name: 'actions',
          orderable: false,

@@ -3,11 +3,22 @@
 @section('content')
 
 
-<div class="row font-verdana-12">
-    <div class="col-md-10 titulo">
+<div class="row font-verdana-bg">
+    <div class="col-md-8 titulo">
         <b>LISTADO DE PARTIDAS--</b><b style='color:red'>{{$idd->nombrearea}} </b>--
     </div>
+    <div class="col-md-4 text-right">
+  
+       
+        <a href="{{ route('partidacomb.create') }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar">
+            <button class="btn btn-sm btn-primary font-verdana" type="button" >
+                &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
+            </button>
+        </a>
 
+        <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
+ 
+</div>
     <div class="col-md-12">
         <hr class="hrr">
     </div>
@@ -20,10 +31,14 @@
                        <table class="table table-bordered  yajra-datatable hoverTable">
                             <thead>
                                <tr>
-                               <th style="color:black">N°</th>
-                               <th style="color:black">CODIGO</th>
-                               <th style="color:black">NOMBRE</th>
-                               <th style="color:black">DETALLE</th>
+                                <td class="text-center p-1 font-weight-bold"><b>N°</b></td>
+                                <td class="text-center p-1 font-weight-bold"><b>CODIGO</b></td>
+                                <td class="text-center p-1 font-weight-bold"><b>NOMBRE</b></td>
+                                <td class="text-center p-1 font-weight-bold"><b>DETALLE</b></td>
+
+                                <td class="text-center p-1 font-weight-bold">
+                                    <i class="fa fa-bars" aria-hidden="true"></i>
+                                </td>
                                </tr>
                             </thead>
                                     <tbody>
@@ -55,7 +70,12 @@ $(function() {
             { data: 'nombrepartida',  name: 'nombrepartida'},
 
             { data: 'detallepartida', name: 'detallepartida' },
-
+            {
+                data: 'btn',
+                name: 'btn',
+                orderable: true,
+                searchable: true
+            },
 
         ],
 

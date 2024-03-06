@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\EmpleadosModel;
 use App\Models\AreasModel;
 use App\Models\User;
+use App\Models\Compra\MedidaCombModel;
 class LocalidadController extends Controller
 {
     public function index()
@@ -32,9 +33,14 @@ class LocalidadController extends Controller
   
     public function listado()
     {
-        $data = DB::table('localidad') 
-        -> where('estadolocalidad','=', 1);
-       // -> get();
+        $data = DB::table('localidad as lo') 
+        ->join('umedidacomb as u', 'u.idmedida', '=', 'lo.idmedidacomb')
+        -> where('lo.estadolocalidad','=', 1)
+        ->select('lo.idlocalidad','lo.codlocalidad','lo.nombrelocalidad', 'lo.distancialocalidad',
+                        
+        'lo.distrito',
+        'u.nombremedida')
+        ->get();
   
         return Datatables::of($data)
                 ->addIndexColumn()
@@ -51,7 +57,10 @@ class LocalidadController extends Controller
      */
     public function create()
     {
-        return view('almacenes.localidad.create');
+        $localidades = DB::table('umedidacomb')->where('estadomedidacomb',1)
+        ->pluck('nombremedida','idmedida');
+        return view('almacenes.localidad.create',
+        compact('localidades'));
     }
     /**
      * Store a newly created resource in storage.
@@ -65,7 +74,8 @@ class LocalidadController extends Controller
         $localidads ->codlocalidad = $request->input('codigo');
         $localidads ->nombrelocalidad = $request->input('nombre');
         $localidads ->distancialocalidad = $request->input('distancia');
-        
+        $localidads ->distrito = $request->input('distrito');
+        $localidads ->idmedidacomb = $request->input('idlocalidad');
         $localidads -> estadolocalidad = 1;
       
       
@@ -99,8 +109,12 @@ class LocalidadController extends Controller
     public function editar($idlocalidad)
     {
         $localidads = LocalidadModel::find($idlocalidad);
+        $areas = DB::table('umedidacomb')->get();
     
-        return view('almacenes/localidad/edit')->with('localidads', $localidads);
+        return view('almacenes.localidad.edit',
+        ["localidads" => $localidads,
+        "areas" => $areas]);
+       
     }
   
     /**
@@ -117,13 +131,16 @@ class LocalidadController extends Controller
         $localidads -> codlocalidad = $request->input('codigo');
         $localidads -> nombrelocalidad = $request->input('nombre');
         $localidads ->distancialocalidad = $request->input('distancia');
+        $localidads ->distrito = $request->input('distrito');
+        $localidads ->idmedidacomb = $request->input('idlocalidad');
+
         //$medida->update();
         if($localidads->save()){
           $request->session()->flash('message', 'Registro Procesado');
       }else{
           $request->session()->flash('message', 'Error al Procesar Registro');
       }
-        return redirect('almacenes/localidad/index');
+      return redirect()->route('localidad.index');
     }
   
     /**

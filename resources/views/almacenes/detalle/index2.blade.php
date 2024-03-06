@@ -7,11 +7,11 @@
     </div>
 @endif
 <br>
-<div class="row font-verdana-12">
+<div class="row font-verdana-bg">
 
     <div class="col-md-2 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-            <a href="{{ url('/almacenes/pedido/index') }}">
+            <a href="{{ url('/apedido/index') }}">
                 <span class="color-icon-1">
                     &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                 </span>
@@ -51,13 +51,14 @@
                     <tr>
                         <td class="text-justify p-1"><b>Nro</b></td>
                         <td class="text-justify p-1"><b>Id Vale</b></td>
-                        <td class="text-justify p-1"><b>Proyecto</b></td>
-                        <td class="text-justify p-1"><b>Partida</b></td>
-                        <td class="text-right p-1"><b>Cantidad restante</b></td>
-                        <td class="text-right p-1"><b>Cantidad solic</b></td>
+                        <td class="text-right p-1"><b>Codigo</b></td>
+                        <td class="text-right p-1"><b>Nombre</b></td>
+                        <td class="text-right p-1"><b>Medida</b></td>
+                      
                         <td class="text-right p-1"><b>Precio</b></td>
+                        <td class="text-right p-1"><b>Cantidad solic</b></td>
                         <td class="text-right p-1"><b>Total</b></td>
-                        <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
+                    
                         <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
 
                     </tr>
@@ -71,28 +72,17 @@
                         <tr>
                             <td class="text-justify p-1">{{$key+1}}</td>
                             <td class="text-justify p-1">{{$prod->idvale}}</td>
-                            <td class="text-justify p-1">{{$prod->nombrecatprogmai}}</td>
-                            <td class="text-justify p-1">{{$prod->nombrepartida}}</td>
-                            <td class="text-right p-1">{{$prod->cantidadsalida}}</td>
-                            <td class="text-right p-1">{{$prod->cantidadsol}}</td>
+                            <td class="text-justify p-1">{{$prod->detalleprodcomb}}</td>
+                            <td class="text-right p-1">{{$prod->nombreprodcomb}}</td>
+                            <td class="text-justify p-1">{{$prod->nombremedida}}</td>
                             <td class="text-right p-1">{{$prod->preciosol}}</td>
+                   
+                            <td class="text-right p-1">{{$prod->cantidadsol}}</td>
                             <td class="text-right p-1">{{$prod->subtotalsol}}</td>
-                            <td class="text-center p-1">
-
-
-                           
-                                <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Vale">
-                                    <a href="{{route('almacenes.detalle.editar',$prod->iddetallevale)}}">
-                                        <span class="text-warning">
-                                            <i class="fa-solid fa-2xl fa-square-pen"></i>
-                                        </span>
-                                    </a>
-                                </span>
-                         
-                            </td>                 
+                                      
                             <td class="text-center p-1">
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Imprimir Solicitud">
-                                    <a href="{{route('almacenes.detalle.solicitud',$prod->iddetallevale)}}">
+                                    <a href="{{route('adetalle.solicitud',$prod->iddetallevale)}}">
                                         <span class="text-primary">
                                             <i class=" fa-2xl fa-solid fa-print"></i>
                                         </span>
@@ -104,7 +94,31 @@
                         </tr>
                     @endforeach
                 </tbody>
-            
+                <tfoot>
+                    @if (count($prodserv) > 0)
+                        <tr>
+                         
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td class="text-right p-1">
+                                <b>TOTALES:</b>
+                            </td>
+                            <td class="text-right p-1">
+                                <b>{{$CalAdosDecim}}</b>
+                            </td>
+                            <td class="text-right p-1">
+                                <b>{{$CalAdosDecimdos}}</b>
+                            </td>
+                        
+                            <td>&nbsp;</td>
+                       
+                        </tr>
+                    @endif
+                </tfoot>
+
             </table>
         </center>
     </div>

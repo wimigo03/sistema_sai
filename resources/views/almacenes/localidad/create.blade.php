@@ -6,11 +6,11 @@
 
     <div class="col-md-8">
 
-        <div class="row font-verdana-12">
+        <div class="row font-verdana-bg">
 
             <div class="col-md-4 titulo">
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-                    <a href="{{ url('/almacenes/localidad/index') }}">
+                    <a href="{{ url('/localidad/index') }}">
                         <span class="color-icon-1">
                             &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                         </span>
@@ -56,7 +56,16 @@
                                 onkeyup="javascript:this.value=this.value.toUpperCase();">
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label for="distrito" class="required col-md-4 col-form-label text-md-right"
+                            style="color:black;font-weight: bold;">Distrito:</label>
 
+                        <div class="col-md-6">
+                            <input type="text" required name="distrito" class="form-control"
+                                placeholder="Escriba el distrito..."
+                                onkeyup="javascript:this.value=this.value.toUpperCase();">
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label for="distancia" class="required col-md-4 col-form-label text-md-right"
                             style="color:black;font-weight: bold;">Distancia:</label>
@@ -68,10 +77,24 @@
                         </div>
                     </div>
 
+                   
+                    <div class="form-group row">
+                        <label for="idlocalidad" class="required col-md-4 col-form-label text-md-right"
+                        style="color:black;font-weight: bold;">Medida:</label>
+                        <div class="col-md-6">
+                        <select name="idlocalidad" id="idlocalidad" placeholder="--Seleccionar--" 
+                        class="form-control form-control-sm select2">
+                            <option value="">-</option>
+                            @foreach ($localidades as $index => $value)
+                                <option value="{{ $index }}">{{ $value }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
 
                     <div align='center'>
                                
-                        <button class="btn color-icon-2 font-verdana-12" type="submit">
+                        <button class="btn color-icon-2 font-verdana-bg" type="submit">
                             <i class="fa-solid fa-paper-plane"></i>
                             &nbsp;Guardar
                         </button>

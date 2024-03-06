@@ -2,7 +2,7 @@
 @section('content')
 @include('layouts.message_alert')
 <br>
-<div class="row font-verdana-12">
+<div class="row font-verdana-bg">
     <div class="col-md-4 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
             <a href="{{url()->previous()}}">
@@ -18,6 +18,16 @@
     <div class="col-md-12">
         <hr class="hrr">
     </div>
+    <div class="col-md-5 text-right titulo">
+        <b>Fecha Solicitud</b>  <b style='color:red'>{{$Fechayhora}}</b> 
+     
+    
+    </div> 
+    <div class="col-md-6 text-right titulo">
+         <b>Fecha Respuesta</b>  <b style='color:red'>{{$Fechayhorar}}</b>
+     
+    
+    </div> 
 </div>
 <div class="body-border" style="background-color: #FFFFFF;">
     <form method="post" action="{{ route('transportes.pedidoparcial.update') }}" id="form">
@@ -31,139 +41,166 @@
         <div class="form-group row">
 
             <div class="col-md-3">
-                <label for="oficina" class="d-inline font-verdana-12">
-                    <b>oficina</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                <label for="cominterna" class="d-inline font-verdana-bg">
+                    <b>Oficina:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <input type="text" disabled name="oficina" 
-    value="{{$NomFci}}" 
-    class="form-control form-control-sm font-verdana-12" 
-    id="oficina">
+                <textarea  name="referencia"  class="form-control form-control-sm font-verdana-bg" 
+                id="referencia" >{{$soluconsumos->oficina}}</textarea>
             </div>
 
-            <div class="col-md-3">
-                <label for="cominterna" class="d-inline font-verdana-12">
-                    <b>coninterna</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+            <div class="col-md-2">
+                <label for="cominterna" class="d-inline font-verdana-bg">
+                    <b>control interno</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <input type="text" disabled name="cominterna" class="form-control form-control-sm font-verdana-12"
+                <input type="text" disabled name="cominterna" class="form-control form-control-sm font-verdana-bg"
                   id="cominterna" onchange="myFunction()"  
                  onkeypress="return valideNumber(event);" value="{{$soluconsumos->cominterna}}">
             </div>
-            
-            <div class="col-md-2">
-                <label for="fechasol" class="d-inline font-verdana-12">
-                    <b> fechasol</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input   type="text" disabled name="fechasol" placeholder="dd/mm/aaaa" data-language="es"
-            
-                class="form-control" id="fechasol" value="{{$soluconsumos->fechasol}}" 
-                >
-            </div>
+
 
             <div class="col-md-4">
-                <label for="referencia" class="d-inline font-verdana-12">
+                <label for="referencia" class="d-inline font-verdana-bg">
                     <b>referencia</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <textarea disabled name="referencia"  class="form-control form-control-sm font-verdana-12" 
+                <textarea name="referencia"  class="form-control form-control-sm font-verdana-bg" 
                 id="referencia" >{{$soluconsumos->referencia}}</textarea>
             </div>
+            <div class="col-md-2">
+                <label for="tipo" class="d-inline font-verdana-bg">
+                    <b>Tipo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <select disabled name="tipo" id="tipo" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
 
-            <div class="col-md-4">
-                <label for="dirigidoa" class="d-inline font-verdana-12">
+                    <option {{old('tipo',$soluconsumos->tiposoluconsumo)=="1"? 'selected':''}}  value="1">GASOLINA</option>
+                    <option {{old('tipo',$soluconsumos->tiposoluconsumo)=="2"? 'selected':''}} value="2">DIESEL</option>
+
+                </select>
+            </div> 
+            <div class="col-md-6">
+                <label for="dirigidoa" class="d-inline font-verdana-bg">
                     <b>Dirigido a:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <input type="text" disabled name="dirigidoa" 
-                value="{{$encargadotres->abrev}} {{$encargadotres->nombres}} {{$encargadotres->ap_pat}} {{$encargadotres->ap_mat}}" 
-               class="form-control form-control-sm font-verdana-12" 
-               id="dirigidoa" data-language="es" autocomplete="off" >
-                <td colspan="8" width="564" style="font-size: 12px;">
-            </div>
-            
-            <div class="col-md-4">
-                <label for="viauno" class="d-inline font-verdana-12">
-                    <b>Via:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input type="text" disabled name="viauno" 
-                value="{{$encargadodos->abrev}} {{$encargadodos->nombres}} {{$encargadodos->ap_pat}} {{$encargadodos->ap_mat}}" 
-               class="form-control form-control-sm font-verdana-12" 
-               id="viauno" data-language="es" autocomplete="off" >
-                <td colspan="8" width="564" style="font-size: 12px;">
-                    
-                </td>
+                <select name="dirigidoa" id="dirigidoa" placeholder="--Seleccionar--"
+                    class="form-control form-control-sm select2">
+                    <option value="">-</option>
+                    @foreach ($encargadotres as $area)
+                        @if ($area->idenc == $soluconsumos->dirigidoa)
+                            <option value="{{ $area->idenc }}" selected>COD: {{ $area->idenc }} //NOMB:
+                                {{ $area->abrev }} {{ $area->nombres }} {{ $area->ap_pat }} {{ $area->ap_mat }}
+                                //AREA: {{ $area->nombrearea }} //CARGO: {{ $area->cargo }} </option>
+                        @else
+                            <option value="{{ $area->idenc }}">CODIGO: {{ $area->idenc }} //NOMBRE:
+                                {{ $area->abrev }} {{ $area->nombres }} {{ $area->ap_pat }} {{ $area->ap_mat }}
+                                //AREA: {{ $area->nombrearea }} //CARGO: {{ $area->cargo }}</option>
+                        @endif
+                    @endforeach
+                </select>
             </div>
 
-            <div class="col-md-4">
-                <label for="viauno" class="d-inline font-verdana-12">
+            <div class="col-md-6">
+                <label for="viados" class="d-inline font-verdana-bg">
                     <b>Via:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <input type="text" disabled name="viauno" 
-                value="{{$encargado->abrev}} {{$encargado->nombres}} {{$encargado->ap_pat}} {{$encargado->ap_mat}}" 
-               class="form-control form-control-sm font-verdana-12" 
-               id="viauno" data-language="es" autocomplete="off" >
-                <td colspan="8" width="564" style="font-size: 12px;">
-                    
-                </td>
+                <select name="viados" id="viados" placeholder="--Seleccionar--"
+                    class="form-control form-control-sm select2">
+                    <option value="">-</option>
+                    @foreach ($encargadodos as $area)
+                        @if ($area->idenc == $soluconsumos->viados)
+                            <option value="{{ $area->idenc }}" selected>COD: {{ $area->idenc }} //NOMB:
+                                {{ $area->abrev }} {{ $area->nombres }} {{ $area->ap_pat }} {{ $area->ap_mat }}
+                                //AREA: {{ $area->nombrearea }} //CARGO: {{ $area->cargo }} </option>
+                        @else
+                            <option value="{{ $area->idenc }}">CODIGO: {{ $area->idenc }} //NOMBRE:
+                                {{ $area->abrev }} {{ $area->nombres }} {{ $area->ap_pat }} {{ $area->ap_mat }}
+                                //AREA: {{ $area->nombrearea }} //CARGO: {{ $area->cargo }}</option>
+                        @endif
+                    @endforeach
+                </select>
             </div>
-           
+
+            <div class="col-md-6">
+                <label for="viauno" class="d-inline font-verdana-bg">
+                    <b>Via:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <select name="viauno" id="viauno" placeholder="--Seleccionar--"
+                    class="form-control form-control-sm select2">
+                    <option value="">-</option>
+                    @foreach ($encargado as $area)
+                        @if ($area->idenc == $soluconsumos->viauno)
+                            <option value="{{ $area->idenc }}" selected>COD: {{ $area->idenc }} //NOMB:
+                                {{ $area->abrev }} {{ $area->nombres }} {{ $area->ap_pat }} {{ $area->ap_mat }}
+                                //AREA: {{ $area->nombrearea }} //CARGO: {{ $area->cargo }} </option>
+                        @else
+                            <option value="{{ $area->idenc }}">CODIGO: {{ $area->idenc }} //NOMBRE:
+                                {{ $area->abrev }} {{ $area->nombres }} {{ $area->ap_pat }} {{ $area->ap_mat }}
+                                //AREA: {{ $area->nombrearea }} //CARGO: {{ $area->cargo }}</option>
+                        @endif
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="col-md-5">
+                <label for="idarea" class="d-inline font-verdana-bg">
+                    <b>idarea</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <select disabled name="idarea" id="idarea" class="form-control form-control-sm select2">
+                    @foreach ($areas as $ar)
+                    @if ($ar->idarea==$soluconsumos->idarea)
+                    <option value="{{$ar->idarea}}" selected>{{$ar->idarea}} - {{$ar->nombrearea}}</option>
+                    @else
+                    <option value="{{$ar->idarea}}">{{$ar->idarea}} - {{$ar->nombrearea}}</option>
+                    @endif
+                    @endforeach
+                </select>
+            </div> 
 
             <div class="col-md-3">
-                <label for="fechasalida" class="d-inline font-verdana-12">
+                <label for="fechasalida" class="d-inline font-verdana-bg">
                     <b> fechasalida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <input   type="text" disabled name="fechasalida" id="fechasalida" placeholder="dd/mm/aaaa"data-language="es"
+                <input   type="date" disabled name="fechasalida" id="fechasalida" placeholder="dd/mm/aaaa"data-language="es"
             
-                class="form-control" value="{{$soluconsumos->fechasalida}}"
-                >
+                class="form-control" value="{{$soluconsumos->fechasalida}}">
+                <label for="tsalidahr" class="d-inline font-verdana-bg">
+                    <b>Salida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="time" disabled name="tsalidahr" id="tsalidahr" placeholder="HH:mm:ss" class="form-control form-control-sm font-verdana-bg" value="{{$soluconsumos->tsalidahr}}">
+ 
             </div>
 
             <div class="col-md-3">
-                <label for="fecharetorno" class="d-inline font-verdana-12">
+                <label for="fecharetorno" class="d-inline font-verdana-bg">
                     <b> fecharetorno</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <input   type="text" disabled name="fecharetorno" id="fecharetorno" placeholder="dd/mm/aaaa" data-language="es"
+                <input   type="date" disabled name="fecharetorno" id="fecharetorno" placeholder="dd/mm/aaaa" data-language="es"
             
-                class="form-control" value="{{$soluconsumos->fecharetorno}}"
-                >
+                class="form-control" value="{{$soluconsumos->fecharetorno}}">
+                <label for="tllegadahr" class="d-inline font-verdana-bg">
+                    <b>Llegada</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="time" disabled name="tllegadahr" id="tllegadahr" placeholder="HH:mm:ss" class="form-control form-control-sm font-verdana-bg" value="{{$soluconsumos->tllegadahr}}">
+ 
             </div>
 
 
             <div class="col-md-6">
-                <label for="detallesouconsumo" class="d-inline font-verdana-12">
+                <label for="detallesouconsumo" class="d-inline font-verdana-bg">
                     <b>detallesouconsumo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <textarea disabled name="detallesouconsumo" cols="1" rows="5" class="form-control form-control-sm font-verdana-12" 
+                <textarea disabled name="detallesouconsumo" cols="1" rows="5" class="form-control form-control-sm font-verdana-bg" 
                 id="detallesouconsumo" >{{$soluconsumos->detallesouconsumo}}</textarea>
             </div>
 
 
-            <div class="col-md-3">
-                <label for="tsalida" class="d-inline font-verdana-12">
-                    <b>tsalida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <select disabled name="tsalida" id="tsalida" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
+           
 
-                    <option {{old('tsalida',$soluconsumos->tsalida)=="1"? 'selected':''}}  value="1">MAÑANA</option>
-                    <option {{old('tsalida',$soluconsumos->tsalida)=="2"? 'selected':''}} value="2">TARDE</option>
-
-                </select>
-            </div>
-
-            <div class="col-md-3">
-                <label for="tllegada" class="d-inline font-verdana-12">
-                    <b>tllegada</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <select disabled name="tllegada" id="tllegada" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
-
-                    <option {{old('tllegada',$soluconsumos->tllegada)=="1"? 'selected':''}}  value="1">MAÑANA</option>
-                    <option {{old('tllegada',$soluconsumos->tllegada)=="2"? 'selected':''}} value="2">TARDE</option>
-
-                </select>
-            </div>
+           
 
 
 
 
             <div class="col-md-4">
-                <label for="idlocalidad" class="d-inline font-verdana-12">
+                <label for="idlocalidad" class="d-inline font-verdana-bg">
                     <b>Localidad</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select disabled name="idlocalidad" id="idlocalidad" class="form-control form-control-sm select2">
@@ -180,20 +217,7 @@
                 </select>
             </div>
 
-            <div class="col-md-7">
-                <label for="idarea" class="d-inline font-verdana-12">
-                    <b>idarea</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <select disabled name="idarea" id="idarea" class="col-md-10 form-control select2 ">
-                    @foreach ($areas as $ar)
-                    @if ($ar->idarea==$soluconsumos->idarea)
-                    <option value="{{$ar->idarea}}" selected>{{$ar->idarea}} - {{$ar->nombrearea}}</option>
-                    @else
-                    <option value="{{$ar->idarea}}">{{$ar->idarea}} - {{$ar->nombrearea}}</option>
-                    @endif
-                    @endforeach
-                </select>
-            </div> 
+          
 
         </div>
       

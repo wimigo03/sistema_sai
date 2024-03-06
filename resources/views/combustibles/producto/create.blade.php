@@ -6,10 +6,10 @@
 <div class="row justify-content-center">
     <div class="col-md-8">
 
-        <div class="row font-verdana-12">
+        <div class="row font-verdana-bg">
             <div class="col-md-4 titulo">
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-                    <a href="{{ url('/combustibles/producto/index') }}">
+                    <a href="{{ url('/producto/index') }}">
                         <span class="color-icon-1">
                             &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                         </span>
@@ -22,6 +22,11 @@
             <div class="col-md-12">
                 <hr color="red">
             </div>
+            <div class="col-md-6 text-right titulo">
+                <b>Fecha</b>  <b style='color:red'>{{$date->format('d/m/Y H:i:s')}}</b>
+            
+            
+            </div> 
         </div>
 
 
@@ -37,8 +42,8 @@
                         <label for="name" style="color:black;font-weight: bold;"
                             class="required col-md-4 col-form-label text-md-right">{{ __('Codigo') }}</label>
                         <div class="col-md-7">
-                            <input type="number" name="codigoprodcomb"
-                            class="form-control form-control-sm font-verdana-12" 
+                            <input type="text" name="codigoprodcomb"
+                            class="form-control form-control-sm font-verdana-bg" 
                             id="codigoprodcomb" onchange="myFunction()" cols="50" rows="2" >
                         </div>
                     </div>
@@ -47,18 +52,18 @@
                             class="required col-md-4 col-form-label text-md-right">{{ __('Nombre') }}</label>
                         <div class="col-md-7">
                             <input id="nombreprodcomb"  required type="text" require name="nombre" placeholder="Nombre..."
-                            class="form-control"  cols="50" rows="2" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                            class="form-control"  cols="50" rows="2" onkeyup="convertirAMayusculas(this)">
                         </div>
                     </div>
-                    <div class="form-group row">
+                    {{-- <div class="form-group row">
                         <label for="detalle" style="color:black;font-weight: bold;"
                             class="required col-md-4 col-form-label text-md-right">{{ __('Detalle') }}</label>
                         <div class="col-md-7">
                             <textarea id="detalleprodcomb" required type="text" name="detalle" cols="50" rows="4"
                                 placeholder="Detalle..." class="form-control"
-                                onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
+                                onkeyup="convertirAMayusculas(this)"></textarea>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="form-group row">
                         <label for="precio" style="color:black;font-weight: bold;"
                             class="required col-md-4 col-form-label text-md-right">{{ __('Precio') }}</label>
@@ -69,10 +74,28 @@
                     </div>
 
                     <div class="form-group row">
+                        <label for="minimo" style="color:black;font-weight: bold;"
+                            class="required col-md-4 col-form-label text-md-right">{{ __('Estock Minimo') }}</label>
+                        <div class="col-md-2">
+                            <input id="cantidadminima" class="form-control" required name="minimo" type="number" placeholder="1,00" step="1,01"
+                                placeholder="Precio...">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="maximo" style="color:black;font-weight: bold;"
+                            class="required col-md-4 col-form-label text-md-right">{{ __('Estock Maximo') }}</label>
+                        <div class="col-md-2">
+                            <input id="cantidadmaxima" class="form-control" required name="maxima" type="number" placeholder="1,00" step="1,01"
+                                placeholder="Precio...">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
                         <label class="required  col-md-4 col-form-label text-md-right"
                             style="color:black;font-weight: bold;">{{ __('Partida') }}</label>
                         <div class="col-md-8" >
-                            <select name="idpartidacomb" id="permissions" class="col-md-6 form-control select2">
+                            <select name="idpartidacomb" id="permissions" class="col-md-10 form-control select2">
                                 @foreach ($partidas as $par)
 
                                 <option value="{{$par->idpartidacomb}}">{{$par->codigopartida}} -
@@ -83,16 +106,29 @@
                         </div>
                     </div> 
 
+                    <div class="form-group row">
+                        <label class="required  col-md-4 col-form-label text-md-right"
+                            style="color:black;font-weight: bold;">{{ __('Medida') }}</label>
+                        <div class="col-md-8" >
+                            <select name="idmedidacomb" id="permissions2" class="col-md-6 form-control select2">
+                                @foreach ($medidas as $para)
+
+                                <option value="{{$para->idmedida}}">{{$para->nombremedida}}</option>
+
+                                @endforeach
+                            </select>
+                        </div>
+                    </div> 
                     
 
                    
             <div align='center'>
                                
-                <button class="btn color-icon-2 font-verdana-12" type="button" onclick="save();">
+                <button class="btn color-icon-2 font-verdana-bg" type="button" onclick="save();">
                     <i class="fa-solid fa-paper-plane"></i>
                     &nbsp;Registrar
                 </button>
-                <button class="btn btn-danger font-verdana-12" type="button" >
+                <button class="btn btn-danger font-verdana-bg" type="button" >
 
                     <a href="{{url()->previous()}}" style="color:white">Cancelar</a>
                 </button>
@@ -157,18 +193,26 @@ $(document).ready(function() {
                 return false;
             }
 
-            if($("#detalleprodcomb").val() == ""){
-                message_alert("El campo <b>[Detalle]</b> es un dato obligatorio...");
-                return false;
-            }
-           
+                     
             if($("#precioprodcomb").val() == ""){
                 message_alert("El campo <b>[Precio]</b> es un dato obligatorio...");
+                return false;
+            }
+            if($("#cantidadminima").val() == ""){
+                message_alert("El campo <b>[Stock Minimo]</b> es un dato obligatorio...");
+                return false;
+            }
+            if($("#cantidadmaxima").val() == ""){
+                message_alert("El campo <b>[Estock Maximo]</b> es un dato obligatorio...");
                 return false;
             }
 
             if($("#permissions >option:selected").val() == ""){
                 message_alert("El campo de seleccion <b>[Partida]</b> es un dato obligatorio...");
+                return false;
+            }
+            if($("#permissions2 >option:selected").val() == ""){
+                message_alert("El campo de seleccion <b>[Medida]</b> es un dato obligatorio...");
                 return false;
             }
             return true;
@@ -179,7 +223,7 @@ $(document).ready(function() {
         function respuesta() {
             var ot_antigua = $("#codigoprodcomb").val();
             $.ajax({
-                url: "{{ route('pregunta3') }}",
+                url: "{{ route('producto.pregunta3') }}",
                 data: 'ot_antigua=' + ot_antigua,
                 dataType: "html",
                 asycn: false,
@@ -196,7 +240,17 @@ $(document).ready(function() {
                 }
             });
         }
+        function convertirAMayusculas(input) {
+  // Guarda la posición actual del cursor
+  var inicioSeleccion = input.selectionStart;
+  var finSeleccion = input.selectionEnd;
 
+  // Convierte todo el texto a mayúsculas
+  input.value = input.value.toUpperCase();
+
+  // Restaura la posición del cursor
+  input.setSelectionRange(inicioSeleccion, finSeleccion);
+}
         function valideNumber(evt){
             var code = (evt.which) ? evt.which : evt.keyCode;
             if(code>=48 && code<=57){

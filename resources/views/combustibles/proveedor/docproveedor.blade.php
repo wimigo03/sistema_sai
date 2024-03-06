@@ -4,11 +4,11 @@
 <div class="row justify-content-center">
     <div class="col-md-10">
 
-        <div class="row font-verdana-12">
+        <div class="row font-verdana-bg">
             <div class="col-md-4 titulo">
 
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-                    <a href="{{ url('/combustibles/proveedor/index')}}">
+                    <a href="{{ url('/proveedor/index') }}">
                         <span class="color-icon-1">
                             &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                         </span>
@@ -18,7 +18,7 @@
                 &nbsp;&nbsp;&nbsp;
 
 
-                    <a href="{{ route('ProveedorController.createdoc', $idproveedor) }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar">
+                    <a href="{{ route('proveedor.createdoc', $idproveedor) }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar">
                             <button class="btn btn-sm btn-info   font-verdana" type="button" >
                                 &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
                             </button>
@@ -47,7 +47,7 @@
 
                             <th>ID</th>
                             <th>NOMBRE DEL DOCUMENTO</th>
-                            <th>DOCUMENO</th>
+                            <th>DOCUMENTO</th>
                             <th style="color:black ;width:10px;"><i class="fa fa-bars" aria-hidden="true"></i></th>
                             <th style="color:black ;width:10px;"><i class="fa fa-bars" aria-hidden="true"></i></th>
 
@@ -73,7 +73,7 @@
                             </td>
                             <td>
                             <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Archivo">
-                                <a href="{{route('ProveedorController.editararchivo',$docprov ->iddocproveedores)}}">
+                                <a href="{{route('proveedor.editararchivo',$docprov ->iddocproveedores)}}">
                                     <span class="text-warning">
                                         <i class="fas fa-xl fa-edit" style="color:rgb(26, 162, 16)"></i>
                                     </span>

@@ -41,6 +41,9 @@ use App\Models\Compra\PartidaCombModel;
 use App\Models\Compra\CatProgModel;
 use App\Models\Compra\ProgramaCombModel;
 
+use App\Models\Almacen\Comprobante\ComingresoModel;
+use App\Models\Almacen\Comprobante\DetalleComingresoModel;
+
 class DetalleCompraCombController extends Controller
 {
     public function index()
@@ -53,12 +56,21 @@ class DetalleCompraCombController extends Controller
         $prodserv = DB::table('detallecompracomb as d')
             ->join('prodcomb as ps', 'ps.idprodcomb', '=', 'd.idprodcomb')
             ->join('compracomb as c', 'c.idcompracomb', '=', 'd.idcompracomb')
-
-            ->select('d.iddetallecompracomb','d.idcompracomb', 'c.idcompracomb', 'ps.nombreprodcomb',
-             'd.cantidad', 'd.subtotal', 'd.precio')
+            ->join('umedidacomb as un', 'un.idmedida', '=', 'ps.idmedidacomb')
+            ->select(
+                'd.iddetallecompracomb',
+                'd.idcompracomb',
+                'un.nombremedida',
+                'c.idcompracomb',
+                'ps.detalleprodcomb',
+                'ps.nombreprodcomb',
+                'd.cantidad',
+                'd.subtotal',
+                'd.precio'
+            )
 
             ->where('d.idcompracomb', $id2)
-            ->orderBy('d.iddetallecompracomb', 'desc')
+            ->orderBy('d.iddetallecompracomb', 'asc')
             ->get();
 
         $productos = DB::table('prodcomb')
@@ -67,24 +79,39 @@ class DetalleCompraCombController extends Controller
              as prodservicio"), 'idprodcomb')
             ->pluck('prodservicio', 'idprodcomb');
 
-            $compras = DB::table('compracomb as c')
+        $compras = DB::table('compracomb as c')
             ->join('proveedor as p', 'p.idproveedor', '=', 'c.idproveedor')
             ->where('c.idcompracomb', $id2)
-            ->select('c.idcompracomb','c.estado1','c.estadocompracomb','p.idproveedor',
-            'p.nombreproveedor')
+            ->select(
+                'c.idcompracomb',
+                'c.estado1',
+                'c.estadocompracomb',
+                'p.idproveedor',
+                'p.nombreproveedor'
+            )
             ->first();
-        $valor_total = $prodserv->sum('subtotal');
-        $valor_total = $prodserv->sum('subtotal');
+
+        $valor_total3 = $prodserv->sum('cantidad');
+        $valor_total2 = $prodserv->sum('subtotal');
+
+        $CalAdosDecimdos = number_format($valor_total3, 2, '.', '');
+        $CalAdosDecim = number_format($valor_total2, 2, '.', '');
+
         $ordencompra = DB::table('ordencompracomb as o')
             ->select('o.nombrecompra', 'o.solicitante', 'o.proveedor')
             ->where('o.compra_idcompra', '=', $id2)->first();
 
-            $prodservdos = DB::table('detallecompracomb as d')
-            ->select('d.iddetallecompracomb','d.idcompracomb',
-             'd.cantidad', 'd.subtotal', 'd.precio')
+        $prodservdos = DB::table('detallecompracomb as d')
+            ->select(
+                'd.iddetallecompracomb',
+                'd.idcompracomb',
+                'd.cantidad',
+                'd.subtotal',
+                'd.precio'
+            )
 
             ->where('d.idcompracomb', '=', $id2)->first();
-           
+
 
         $resultado = $prodservdos;
         $estado = 1;
@@ -93,12 +120,14 @@ class DetalleCompraCombController extends Controller
         }
 
         return view('combustibles.detalle.index', [
-            'prodserv' => $prodserv, 
-            'productos' => $productos, 
-            'valor_total' => $valor_total, 
-            'idcompracomb' => $id2, 
-            'estado' => $estado, 
-            'compras' => $compras]);
+            'prodserv' => $prodserv,
+            'productos' => $productos,
+            'CalAdosDecimdos' => $CalAdosDecimdos,
+            'CalAdosDecim' => $CalAdosDecim,
+            'idcompracomb' => $id2,
+            'estado' => $estado,
+            'compras' => $compras
+        ]);
     }
 
     public function index2()
@@ -111,13 +140,28 @@ class DetalleCompraCombController extends Controller
         $prodserv = DB::table('detallecompracomb as d')
             ->join('prodcomb as ps', 'ps.idprodcomb', '=', 'd.idprodcomb')
             ->join('compracomb as c', 'c.idcompracomb', '=', 'd.idcompracomb')
-
-            ->select('d.iddetallecompracomb', 'c.idcompracomb', 'ps.nombreprodcomb',
-             'd.cantidad', 'd.subtotal', 'd.precio')
+            ->join('umedidacomb as un', 'un.idmedida', '=', 'ps.idmedidacomb')
+            ->select(
+                'd.iddetallecompracomb',
+                'd.idcompracomb',
+                'un.nombremedida',
+                'c.idcompracomb',
+                'ps.detalleprodcomb',
+                'ps.nombreprodcomb',
+                'd.cantidad',
+                'd.subtotal',
+                'd.precio'
+            )
 
             ->where('d.idcompracomb', $id2)
-            ->orderBy('d.iddetallecompracomb', 'desc')
+            ->orderBy('d.iddetallecompracomb', 'asc')
             ->get();
+
+        $valor_total3 = $prodserv->sum('cantidad');
+        $valor_total2 = $prodserv->sum('subtotal');
+
+        $CalAdosDecimdos = number_format($valor_total3, 2, '.', '');
+        $CalAdosDecim = number_format($valor_total2, 2, '.', '');
 
         $productos = DB::table('prodcomb')
             ->where('estadoprodcomb', 1)
@@ -125,14 +169,18 @@ class DetalleCompraCombController extends Controller
              as prodservicio"), 'idprodcomb')
             ->pluck('prodservicio', 'idprodcomb');
 
-            $compras = DB::table('compracomb as c')
+        $compras = DB::table('compracomb as c')
             ->join('proveedor as p', 'p.idproveedor', '=', 'c.idproveedor')
             ->where('c.idcompracomb', $id2)
-            ->select('c.idcompracomb','c.estado1','c.estadocompracomb','p.idproveedor',
-            'p.nombreproveedor')
+            ->select(
+                'c.idcompracomb',
+                'c.estado1',
+                'c.estadocompracomb',
+                'p.idproveedor',
+                'p.nombreproveedor'
+            )
             ->first();
-        $valor_total = $prodserv->sum('subtotal');
-        $valor_total = $prodserv->sum('subtotal');
+
         $ordencompra = DB::table('ordencompracomb as o')
             ->select('o.nombrecompra', 'o.solicitante', 'o.proveedor')
             ->where('o.compra_idcompra', '=', $id2)->first();
@@ -143,12 +191,14 @@ class DetalleCompraCombController extends Controller
         }
 
         return view('combustibles.detalle.index2', [
-            'prodserv' => $prodserv, 
-            'productos' => $productos, 
-            'valor_total' => $valor_total, 
-            'idcompracomb' => $id2, 
-            'estado' => $estado, 
-            'compras' => $compras]);
+            'prodserv' => $prodserv,
+            'productos' => $productos,
+            'CalAdosDecimdos' => $CalAdosDecimdos,
+            'CalAdosDecim' => $CalAdosDecim,
+            'idcompracomb' => $id2,
+            'estado' => $estado,
+            'compras' => $compras
+        ]);
     }
 
     public function index3()
@@ -161,12 +211,21 @@ class DetalleCompraCombController extends Controller
         $prodserv = DB::table('detallecompracomb as d')
             ->join('prodcomb as ps', 'ps.idprodcomb', '=', 'd.idprodcomb')
             ->join('compracomb as c', 'c.idcompracomb', '=', 'd.idcompracomb')
-
-            ->select('d.iddetallecompracomb', 'c.idcompracomb', 'ps.nombreprodcomb',
-             'd.cantidad', 'd.subtotal', 'd.precio')
+            ->join('umedidacomb as un', 'un.idmedida', '=', 'ps.idmedidacomb')
+            ->select(
+                'd.iddetallecompracomb',
+                'd.idcompracomb',
+                'un.nombremedida',
+                'c.idcompracomb',
+                'ps.detalleprodcomb',
+                'ps.nombreprodcomb',
+                'd.cantidad',
+                'd.subtotal',
+                'd.precio'
+            )
 
             ->where('d.idcompracomb', $id2)
-            ->orderBy('d.iddetallecompracomb', 'desc')
+            ->orderBy('d.iddetallecompracomb', 'asc')
             ->get();
 
         $productos = DB::table('prodcomb')
@@ -175,14 +234,23 @@ class DetalleCompraCombController extends Controller
              as prodservicio"), 'idprodcomb')
             ->pluck('prodservicio', 'idprodcomb');
 
-            $compras = DB::table('compracomb as c')
+        $compras = DB::table('compracomb as c')
             ->join('proveedor as p', 'p.idproveedor', '=', 'c.idproveedor')
             ->where('c.idcompracomb', $id2)
-            ->select('c.idcompracomb','c.estado1','c.estadocompracomb','p.idproveedor',
-            'p.nombreproveedor')
+            ->select(
+                'c.idcompracomb',
+                'c.estado1',
+                'c.estadocompracomb',
+                'p.idproveedor',
+                'p.nombreproveedor'
+            )
             ->first();
-        $valor_total = $prodserv->sum('subtotal');
-        $valor_total = $prodserv->sum('subtotal');
+        $valor_total3 = $prodserv->sum('cantidad');
+        $valor_total2 = $prodserv->sum('subtotal');
+
+        $CalAdosDecimdos = number_format($valor_total3, 2, '.', '');
+        $CalAdosDecim = number_format($valor_total2, 2, '.', '');
+
         $ordencompra = DB::table('ordencompracomb as o')
             ->select('o.nombrecompra', 'o.solicitante', 'o.proveedor')
             ->where('o.compra_idcompra', '=', $id2)->first();
@@ -193,12 +261,14 @@ class DetalleCompraCombController extends Controller
         }
 
         return view('combustibles.detalle.index3', [
-            'prodserv' => $prodserv, 
-            'productos' => $productos, 
-            'valor_total' => $valor_total, 
-            'idcompracomb' => $id2, 
-            'estado' => $estado, 
-            'compras' => $compras]);
+            'prodserv' => $prodserv,
+            'productos' => $productos,
+            'CalAdosDecimdos' => $CalAdosDecimdos,
+            'CalAdosDecim' => $CalAdosDecim,
+            'idcompracomb' => $id2,
+            'estado' => $estado,
+            'compras' => $compras
+        ]);
     }
 
     public function index5()
@@ -211,12 +281,21 @@ class DetalleCompraCombController extends Controller
         $prodserv = DB::table('detallecompracomb as d')
             ->join('prodcomb as ps', 'ps.idprodcomb', '=', 'd.idprodcomb')
             ->join('compracomb as c', 'c.idcompracomb', '=', 'd.idcompracomb')
-
-            ->select('d.iddetallecompracomb', 'c.idcompracomb', 'ps.nombreprodcomb',
-             'd.cantidad', 'd.subtotal', 'd.precio')
+            ->join('umedidacomb as un', 'un.idmedida', '=', 'ps.idmedidacomb')
+            ->select(
+                'd.iddetallecompracomb',
+                'd.idcompracomb',
+                'un.nombremedida',
+                'c.idcompracomb',
+                'ps.detalleprodcomb',
+                'ps.nombreprodcomb',
+                'd.cantidad',
+                'd.subtotal',
+                'd.precio'
+            )
 
             ->where('d.idcompracomb', $id2)
-            ->orderBy('d.iddetallecompracomb', 'desc')
+            ->orderBy('d.iddetallecompracomb', 'asc')
             ->get();
 
         $productos = DB::table('prodcomb')
@@ -225,14 +304,23 @@ class DetalleCompraCombController extends Controller
              as prodservicio"), 'idprodcomb')
             ->pluck('prodservicio', 'idprodcomb');
 
-            $compras = DB::table('compracomb as c')
+        $compras = DB::table('compracomb as c')
             ->join('proveedor as p', 'p.idproveedor', '=', 'c.idproveedor')
             ->where('c.idcompracomb', $id2)
-            ->select('c.idcompracomb','c.estado1','c.estadocompracomb','p.idproveedor',
-            'p.nombreproveedor')
+            ->select(
+                'c.idcompracomb',
+                'c.estado1',
+                'c.estadocompracomb',
+                'p.idproveedor',
+                'p.nombreproveedor'
+            )
             ->first();
-        $valor_total = $prodserv->sum('subtotal');
-        $valor_total = $prodserv->sum('subtotal');
+        $valor_total3 = $prodserv->sum('cantidad');
+        $valor_total2 = $prodserv->sum('subtotal');
+
+        $CalAdosDecimdos = number_format($valor_total3, 2, '.', '');
+        $CalAdosDecim = number_format($valor_total2, 2, '.', '');
+
         $ordencompra = DB::table('ordencompracomb as o')
             ->select('o.nombrecompra', 'o.solicitante', 'o.proveedor')
             ->where('o.compra_idcompra', '=', $id2)->first();
@@ -243,12 +331,14 @@ class DetalleCompraCombController extends Controller
         }
 
         return view('combustibles.detalle.index5', [
-            'prodserv' => $prodserv, 
-            'productos' => $productos, 
-            'valor_total' => $valor_total, 
-            'idcompracomb' => $id2, 
-            'estado' => $estado, 
-            'compras' => $compras]);
+            'prodserv' => $prodserv,
+            'productos' => $productos,
+            'CalAdosDecimdos' => $CalAdosDecimdos,
+            'CalAdosDecim' => $CalAdosDecim,
+            'idcompracomb' => $id2,
+            'estado' => $estado,
+            'compras' => $compras
+        ]);
     }
 
     public function store(Request $request)
@@ -270,14 +360,14 @@ class DetalleCompraCombController extends Controller
         $detalle->precio = $precio;
         $detalle->subtotal = $precio * $cantidad;
 
-      
-    
+
+
 
         $detallito = DB::table('detallecompracomb as d')
 
             ->join('prodcomb as ps', 'ps.idprodcomb', 'd.idprodcomb')
             ->join('compracomb as c', 'c.idcompracomb', 'd.idcompracomb')
-            
+
             ->select('d.iddetallecompracomb', 'c.idcompracomb', 'ps.nombreprodcomb', 'd.cantidad', 'd.subtotal', 'd.precio')
             ->orwhere('d.idprodcomb', $prod)
             ->where('d.idcompracomb', $id2)->get();
@@ -295,150 +385,156 @@ class DetalleCompraCombController extends Controller
     {
         $compras = CompraCombModel::find($id);
         $compras->estadocompracomb = 2;
-        $compras->fechaaprob =Carbon::now();
+
+        $fechasolACT = Carbon::now();
+        $hora = $fechasolACT->toTimeString();
+
+        $compras->fechaaprob = $fechasolACT;
+        $compras->horaaprob = $hora;
         $compras->save();
-        return redirect()->route('combustibles.detalle.index2');
+        return redirect()->route('detalle.index5');
     }
-//estadorechazado
+    //estadorechazado
     public function rechazar($id)
     {
         $compras = CompraCombModel::find($id);
         $compras->estadocompracomb = 10;
-        $compras->fechaaprob =Carbon::now();
-        $compras->save();
-        return redirect()->route('combustibles.detalle.index5');
+        $fechasolACT = Carbon::now();
 
-     
+        $hora = $fechasolACT->toTimeString();
+        $compras->fechaaprob = $fechasolACT;
+        $compras->horaaprob = $hora;
+        $compras->save();
+        return redirect()->route('detalle.index3');
     }
 
 
     public function almacen($idcompracomb)
     {
-       
-//idcompracomb es el id de la compracomb
 
+        //idcompracomb es el id de la compracomb
         $compracomb = CompraCombModel::find($idcompracomb);
 
-        if($compracomb){
+        if ($compracomb) {
             $detalleconcompra = $compracomb->comprasdetallecomb;
             foreach ($detalleconcompra as $detalle) {
-               
-                 $iddeTallCompra = $detalle->iddetallecompracomb;
-                 $idCompra=$detalle->idcompracomb;
-                 $idProducto=$detalle->idprodcomb;
 
-                 $CanTidad=$detalle->cantidad;
-                 $PreCios=$detalle->precio;
+                $iddeTallCompra = $detalle->iddetallecompracomb;
+                $idCompra = $detalle->idcompracomb;
+                $idProducto = $detalle->idprodcomb;
 
-
-              //solo producto
-        $producto = ProdCombModel::find($idProducto);
-        $nombreprodser = $producto->nombreprodcomb;
-        $CodiGprodser = $producto->codigoprodcomb;
-        $idPartida = $producto->idpartidacomb;
-
-        $partidai = PartidaCombModel::find($idPartida);
-        $cdpart = $partidai->codigopartida;
-        $nmbpart = $partidai->nombrepartida;
-
-        //solo compra
-        $compra = CompraCombModel::find($idCompra);
-        $idCat = $compra->idcatprogramaticacomb;
-        $idPro = $compra->idprogramacomb;
-        $idProov = $compra->idproveedor;
-        $idEstadoCompra = $compra->estadocompracomb;
-        $NumeroCompra = $compra->numcompra;
-        $PreventiCompra = $compra->preventivo;
-        $IdareaCompra = $compra->idarea;
-
-        //solo catprogramatica
-        $catprogrami = CatProgModel::find($idCat);
-        $cdcatprogm = $catprogrami->codcatprogramatica;
-        $nmbcatprog = $catprogrami->nombrecatprogramatica;
+                $CanTidad = $detalle->cantidad;
+                $PreCios = $detalle->precio;
 
 
+                //solo producto
+                $producto = ProdCombModel::find($idProducto);
+                $nombreprodser = $producto->nombreprodcomb;
+                $CodiGprodser = $producto->codigoprodcomb;
+                $idPartida = $producto->idpartidacomb;
 
-   //solo programa
-   $progrmi = ProgramaCombModel::find($idPro);
-   $nomvpog = $progrmi->nombreprograma;
+                $partidai = PartidaCombModel::find($idPartida);
+                $cdpart = $partidai->codigopartida;
+                $nmbpart = $partidai->nombrepartida;
 
-//solo proveedores
-$proveedori = ProveedorModel::find($idProov);
-$nmbprveri = $proveedori->nombreproveedor;
-     
+                //solo compra
+                $compra = CompraCombModel::find($idCompra);
+                $idCat = $compra->idcatprogramaticacomb;
+                $idPro = $compra->idprogramacomb;
+                $idProov = $compra->idproveedor;
+                $idEstadoCompra = $compra->estadocompracomb;
+                $NumeroCompra = $compra->numcompra;
+                $PreventiCompra = $compra->preventivo;
+                $IdareaCompra = $compra->idarea;
 
-
-$ingreso = new IngresoModel();
-    
-$ingreso->cantidad = $CanTidad;
-
-$ingreso->subtotal = $CanTidad *$PreCios;
-$ingreso->precio = $PreCios;
-
-$ingreso->cantidadsalida = $CanTidad;
-$ingreso->subtotalsalida = $CanTidad *$PreCios;
-
-
-$ingreso->codigocatprogramai = $cdcatprogm;
-$ingreso->nombrecatprogmai = $nmbcatprog;
-
-
-$ingreso->idcompracomb = $idCompra;
-$ingreso->iddetallecompracomb = $iddeTallCompra;
-
-$ingreso->idprodcomb = $idProducto;
-$ingreso->nombreproducto = $nombreprodser;
-$ingreso->codigoprodcomb = $CodiGprodser;
+                //solo catprogramatica
+                $catprogrami = CatProgModel::find($idCat);
+                $cdcatprogm = $catprogrami->codcatprogramatica;
+                $nmbcatprog = $catprogrami->nombrecatprogramatica;
 
 
-$ingreso->idpartidacomb = $idPartida;
-$ingreso->codigopartida = $cdpart;
-$ingreso->nombrepartida = $nmbpart;
 
-$ingreso->idcatprogramaticacomb = $idCat;
+                //solo programa
+                $progrmi = ProgramaCombModel::find($idPro);
+                $nomvpog = $progrmi->nombreprograma;
 
-$ingreso->idprogramacomb = $idPro;
-$ingreso->nombreprograma = $nomvpog;
+                //solo proveedores
+                $proveedori = ProveedorModel::find($idProov);
+                $nmbprveri = $proveedori->nombreproveedor;
 
-$ingreso->idproveedor = $idProov;
-$ingreso->nombreproveedor = $nmbprveri;
 
-$ingreso->estadoingreso = 1;
-$ingreso->estadocompracomb = $idEstadoCompra;
-$ingreso->estado1 = 1;
-$ingreso->estado2 = 1;
-$ingreso->save();
 
-$obtenerId = $ingreso->idingreso;
+                $ingreso = new IngresoModel();
 
-      $notaingreso = new NotaIngresoModel();
-      $notaingreso -> numcompra = $NumeroCompra;
-      $notaingreso -> numsolicitud =$PreventiCompra;
-      $notaingreso -> codigoproducto = $CodiGprodser ;
-      $notaingreso -> nombreproducto = $nombreprodser ;
-      $notaingreso -> ingreso = $CanTidad;
-      $notaingreso -> precio = $PreCios ;
-      $notaingreso -> subtotal = $CanTidad*$PreCios;
-      $notaingreso -> num_comprobante = 10 ;
-      $notaingreso -> factura_comprobante =11;
-      $notaingreso -> nombreprobeedor = $nmbprveri;
-      $notaingreso -> idingreso =$obtenerId;
-      $notaingreso -> idarea =$IdareaCompra;
-      $notaingreso -> idproveedor =$idProov;
-      $notaingreso -> fechaentra =Carbon::now();
-      $notaingreso->save();
+                $ingreso->cantidad = $CanTidad;
 
-      $comprass = CompraCombModel::find($idcompracomb);
-      $comprass->estadocompracomb=5;
-      $comprass->save();
+                $ingreso->subtotal = $CanTidad * $PreCios;
+                $ingreso->precio = $PreCios;
 
-        session()->flash('message', 'Registro Enviado a almacen');
+                $ingreso->cantidadsalida = $CanTidad;
+                $ingreso->subtotalsalida = $CanTidad * $PreCios;
+
+
+                $ingreso->codigocatprogramai = $cdcatprogm;
+                $ingreso->nombrecatprogmai = $nmbcatprog;
+
+
+                $ingreso->idcompracomb = $idCompra;
+                $ingreso->iddetallecompracomb = $iddeTallCompra;
+
+                $ingreso->idprodcomb = $idProducto;
+                $ingreso->nombreproducto = $nombreprodser;
+                $ingreso->codigoprodcomb = $CodiGprodser;
+
+
+                $ingreso->idpartidacomb = $idPartida;
+                $ingreso->codigopartida = $cdpart;
+                $ingreso->nombrepartida = $nmbpart;
+
+                $ingreso->idcatprogramaticacomb = $idCat;
+
+                $ingreso->idprogramacomb = $idPro;
+                $ingreso->nombreprograma = $nomvpog;
+
+                $ingreso->idproveedor = $idProov;
+                $ingreso->nombreproveedor = $nmbprveri;
+
+                $ingreso->estadoingreso = 1;
+                $ingreso->estadocompracomb = $idEstadoCompra;
+                $ingreso->estado1 = 1;
+                $ingreso->estado2 = 1;
+                $ingreso->save();
+
+                $obtenerId = $ingreso->idingreso;
+
+                $notaingreso = new NotaIngresoModel();
+                $notaingreso->numcompra = $NumeroCompra;
+                $notaingreso->numsolicitud = $PreventiCompra;
+                $notaingreso->codigoproducto = $CodiGprodser;
+                $notaingreso->nombreproducto = $nombreprodser;
+                $notaingreso->ingreso = $CanTidad;
+                $notaingreso->precio = $PreCios;
+                $notaingreso->subtotal = $CanTidad * $PreCios;
+                $notaingreso->num_comprobante = 10;
+                $notaingreso->factura_comprobante = 11;
+                $notaingreso->nombreprobeedor = $nmbprveri;
+                $notaingreso->idingreso = $obtenerId;
+                $notaingreso->idarea = $IdareaCompra;
+                $notaingreso->idproveedor = $idProov;
+                $notaingreso->fechaentra = Carbon::now();
+                $notaingreso->save();
+
+                $comprass = CompraCombModel::find($idcompracomb);
+                $comprass->estadocompracomb = 5;
+                $comprass->save();
+
+                session()->flash('message', 'Registro Enviado a almacen');
             }
         } else {
-            session()->flash('message', 'no hay nada');  
+            session()->flash('message', 'no hay nada');
         }
 
-        return redirect()->route('combustibles.detalle.index2');
+        return redirect()->route('detalle.index2');
     }
 
     public function show()
@@ -529,8 +625,8 @@ $obtenerId = $ingreso->idingreso;
             $fechaAceptacion = Carbon::parse($fechaAceptacion)->isoFormat('D \d\e MMMM');
             $responsables = DB::table('responsables')->first();
 
-           $pdf = PDF::loadView('compras.detalle.pdf-invitacion', compact(['ordencompra', 'ordendoc', 'responsables', 'fechaInvitacion', 'fechaAceptacion']));
-           $pdf->setPaper('LETTER', 'portrait'); //landscape
+            $pdf = PDF::loadView('compras.detalle.pdf-invitacion', compact(['ordencompra', 'ordendoc', 'responsables', 'fechaInvitacion', 'fechaAceptacion']));
+            $pdf->setPaper('LETTER', 'portrait'); //landscape
             return $pdf->stream();
         } catch (Exception $ex) {
             \Log::error("Cotizacion Error: {$ex->getMessage()}");
@@ -540,7 +636,7 @@ $obtenerId = $ingreso->idingreso;
             ini_restore('max_execution_time');
         }
 
-       // return view('compras.detalle.invitacion',['ordencompra'=>$ordencompra,'ordendoc'=>$ordendoc,'responsables'=>$responsables,'fechaInvitacion'=>$fechaInvitacion,'fechaAceptacion'=>$fechaAceptacion]);
+        // return view('compras.detalle.invitacion',['ordencompra'=>$ordencompra,'ordendoc'=>$ordendoc,'responsables'=>$responsables,'fechaInvitacion'=>$fechaInvitacion,'fechaAceptacion'=>$fechaAceptacion]);
     }
 
     public function aceptacion($id)
@@ -598,8 +694,10 @@ $obtenerId = $ingreso->idingreso;
             $fechaAceptacion = Carbon::parse($fechaAceptacion)->isoFormat('D \d\e MMMM \d\e\l Y');
             $responsables = DB::table('responsables')->first();
 
-            $pdf = PDF::loadView('compras.detalle.pdf-aceptacion', 
-            compact(['ordencompra', 'ordendoc', 'responsables', 'fechaInvitacion', 'fechaAceptacion']));
+            $pdf = PDF::loadView(
+                'compras.detalle.pdf-aceptacion',
+                compact(['ordencompra', 'ordendoc', 'responsables', 'fechaInvitacion', 'fechaAceptacion'])
+            );
             $pdf->setPaper('LETTER', 'portrait'); //landscape
             return $pdf->stream();
         } catch (Exception $ex) {
@@ -664,8 +762,15 @@ $obtenerId = $ingreso->idingreso;
             $ordendoc = DB::table('ordencompra as o')
                 ->join('ordendoc as od', 'od.idorden', '=', 'o.idorden')
                 ->join('docorden as doc', 'doc.iddoc', '=', 'od.iddoc')
-                ->select('doc.nombredoc','doc.dato1','doc.dato2','doc.dato3',
-                'doc.dato4','doc.original','doc.fotocopia')
+                ->select(
+                    'doc.nombredoc',
+                    'doc.dato1',
+                    'doc.dato2',
+                    'doc.dato3',
+                    'doc.dato4',
+                    'doc.original',
+                    'doc.fotocopia'
+                )
                 ->where('o.compra_idcompra', $id)
                 ->get();
 
@@ -677,18 +782,26 @@ $obtenerId = $ingreso->idingreso;
             $fechaorden = $ordencompra->fechaorden;
             $fechaorden = Carbon::parse($fechaorden)->isoFormat('dddd D \d\e MMMM \d\e\l Y');
 
-            $dateinvitacion= Carbon::parse($ordencompra->fechainvitacion)->format('d-m-Y');
-            $dateaceptacion= Carbon::parse($ordencompra->fechaaceptacion)->format('d-m-Y');
+            $dateinvitacion = Carbon::parse($ordencompra->fechainvitacion)->format('d-m-Y');
+            $dateaceptacion = Carbon::parse($ordencompra->fechaaceptacion)->format('d-m-Y');
 
-          
+
             $prodserv = DB::table('detallecompra as d')
                 ->join('prodserv as ps', 'ps.idprodserv', 'd.idprodserv')
                 ->join('compra as c', 'c.idcompra', 'd.idcompra')
                 ->join('partida as par', 'par.idpartida', 'ps.partida_idpartida')
                 ->join('umedida as u', 'u.idumedida', 'ps.umedida_idumedida')
-                ->select('d.iddetallecompra', 'c.idcompra', 'ps.nombreprodserv',
-                 'ps.detalleprodserv', 'par.codigopartida', 'u.nombreumedida',
-                  'd.cantidad', 'd.subtotal', 'd.precio')
+                ->select(
+                    'd.iddetallecompra',
+                    'c.idcompra',
+                    'ps.nombreprodserv',
+                    'ps.detalleprodserv',
+                    'par.codigopartida',
+                    'u.nombreumedida',
+                    'd.cantidad',
+                    'd.subtotal',
+                    'd.precio'
+                )
                 ->where('d.idcompra', $id)->get();
 
 
@@ -697,10 +810,14 @@ $obtenerId = $ingreso->idingreso;
 
             $valor_total3 = number_format($valor_total, 2, ',', '.');
 
-            $pdf = PDF::loadView('compras.detalle.pdf-cotizacion', 
-            compact(['valor_total2', 'prodserv', 'valor_total', 'ordencompra', 
-            'ordendoc', 'responsables', 'fechaInvitacion', 'fechaAceptacion',
-             'fechaorden', 'valor_total3', 'dateinvitacion', 'dateaceptacion']));
+            $pdf = PDF::loadView(
+                'compras.detalle.pdf-cotizacion',
+                compact([
+                    'valor_total2', 'prodserv', 'valor_total', 'ordencompra',
+                    'ordendoc', 'responsables', 'fechaInvitacion', 'fechaAceptacion',
+                    'fechaorden', 'valor_total3', 'dateinvitacion', 'dateaceptacion'
+                ])
+            );
 
             $pdf->setPaper('LETTER', 'portrait'); //landscape
             return $pdf->stream();
@@ -711,8 +828,6 @@ $obtenerId = $ingreso->idingreso;
             ini_restore('memory_limit');
             ini_restore('max_execution_time');
         }
-
-      
     }
 
     public function adjudicacion($id)
@@ -834,7 +949,7 @@ $obtenerId = $ingreso->idingreso;
                 )
                 ->where('o.compra_idcompra', '=', $id)->first();
 
-                
+
 
             $ordendoc = DB::table('ordencompra as o')
 
@@ -857,7 +972,7 @@ $obtenerId = $ingreso->idingreso;
             $fechaorden = Carbon::parse($fechaorden)->isoFormat('D \d\e MMMM \d\e\l Y');
             $fechainiciosolici = $ordencompra->fechainiciosolproc;
             $fechainiciosolici = Carbon::parse($fechainiciosolici)->isoFormat('D \d\e MMMM');
-         
+
 
             $prodserv = DB::table('detallecompra as d')
                 ->join('prodserv as ps', 'ps.idprodserv', '=', 'd.idprodserv')
@@ -866,9 +981,17 @@ $obtenerId = $ingreso->idingreso;
                 ->join('partida as par', 'par.idpartida', '=', 'ps.partida_idpartida')
                 ->join('umedida as u', 'u.idumedida', '=', 'ps.umedida_idumedida')
 
-                ->select('d.iddetallecompra', 'c.idcompra', 'ps.nombreprodserv',
-                 'ps.detalleprodserv', 'par.codigopartida', 'u.nombreumedida',
-                  'd.cantidad', 'd.subtotal', 'd.precio')
+                ->select(
+                    'd.iddetallecompra',
+                    'c.idcompra',
+                    'ps.nombreprodserv',
+                    'ps.detalleprodserv',
+                    'par.codigopartida',
+                    'u.nombreumedida',
+                    'd.cantidad',
+                    'd.subtotal',
+                    'd.precio'
+                )
                 ->where('d.idcompra', '=', $id)->get();
 
             $valor_total = $prodserv->sum('subtotal');
@@ -878,21 +1001,20 @@ $obtenerId = $ingreso->idingreso;
             //$pdf->setPaper('LETTER', 'portrait'); //landscape
             //return $pdf->stream();
 
-            return view('compras.detalle.orden',[
-                                                'valor_total2' => $valor_total2,
-                                                'responsables' => $responsables,
-                                                'prodserv' => $prodserv,
-                                                'valor_total' => $valor_total,
-                                                'fechainiciosolici' => $fechainiciosolici,
-                                                'ordencompra' => $ordencompra,
-                                                'ordendoc' => $ordendoc,
-                                                'responsables' => $responsables,
-                                                'fechaInvitacion' => $fechaInvitacion,
-                                                'fechaAceptacion' => $fechaAceptacion,
-                                                'fechaorden' => $fechaorden
-                                                ]);
-        }
-        catch (Exception $ex) {
+            return view('compras.detalle.orden', [
+                'valor_total2' => $valor_total2,
+                'responsables' => $responsables,
+                'prodserv' => $prodserv,
+                'valor_total' => $valor_total,
+                'fechainiciosolici' => $fechainiciosolici,
+                'ordencompra' => $ordencompra,
+                'ordendoc' => $ordendoc,
+                'responsables' => $responsables,
+                'fechaInvitacion' => $fechaInvitacion,
+                'fechaAceptacion' => $fechaAceptacion,
+                'fechaorden' => $fechaorden
+            ]);
+        } catch (Exception $ex) {
             \Log::error("Orden Error: {$ex->getMessage()}");
             return redirect()->route('compras.detalle.index')->with('message', $ex->getMessage());
         } finally {
@@ -908,11 +1030,23 @@ $obtenerId = $ingreso->idingreso;
             ->join('catprogramatica as cat', 'cat.idcatprogramatica', 'c.idcatprogramatica')
             ->join('programa as prog', 'prog.idprograma', 'c.idprograma')
             ->join('areas as a', 'a.idarea', 'c.idarea')
-            
-            ->select('c.idcompra', 'a.nombrearea', 'c.objeto', 'c.justificacion',
-             'c.preventivo', 'p.nombreproveedor', 'p.representante', 'p.cedula', 'p.nitci',
-              'p.telefonoproveedor', 'c.preventivo', 'c.numcompra', 'cat.codcatprogramatica',
-               'prog.nombreprograma')
+
+            ->select(
+                'c.idcompra',
+                'a.nombrearea',
+                'c.objeto',
+                'c.justificacion',
+                'c.preventivo',
+                'p.nombreproveedor',
+                'p.representante',
+                'p.cedula',
+                'p.nitci',
+                'p.telefonoproveedor',
+                'c.preventivo',
+                'c.numcompra',
+                'cat.codcatprogramatica',
+                'prog.nombreprograma'
+            )
             ->where('c.idcompra', '=', $id)
             ->first();
 
@@ -924,10 +1058,14 @@ $obtenerId = $ingreso->idingreso;
 
         $subtotal = $prodserv->sum('subtotal');
 
-        return view('compras.detalle.principal', 
-        ['compras' => $compras, 
-        'subtotal' => $subtotal, 
-        'idcompra' => $id]);
+        return view(
+            'compras.detalle.principal',
+            [
+                'compras' => $compras,
+                'subtotal' => $subtotal,
+                'idcompra' => $id
+            ]
+        );
     }
 
     public function crearorden(Request $request)
@@ -1054,8 +1192,10 @@ $obtenerId = $ingreso->idingreso;
             ->select('doc.nombredoc', 'doc.iddoc')
             ->where('doc.estadodoc', '=', 1)->get();
 
-        return view('compras/detalle/principalorden', 
-        compact('ordencompra', 'id', 'ordendoc', 'docorden', 'idordencompra'));
+        return view(
+            'compras/detalle/principalorden',
+            compact('ordencompra', 'id', 'ordendoc', 'docorden', 'idordencompra')
+        );
     }
 
     public function edit($id)
@@ -1097,7 +1237,152 @@ $obtenerId = $ingreso->idingreso;
         return back();
     }
 
+    public function almacendos($idcompracomb)
+    {
+
+        //idcompracomb es el id de la compracomb
+
+        $compracomb = CompraCombModel::find($idcompracomb);
+        //solo compra
+        $compra = CompraCombModel::find($idcompracomb);
+
+        $IdareaCompra = $compra->idarea;
+        $idProov = $compra->idproveedor;
+        $idPro = $compra->idprogramacomb;
+        $idCat = $compra->idcatprogramaticacomb;
+        $IdCompra = $compra->idcompracomb;
+
+        $iduno = $compra->iddirigidoa;
+        $iddos = $compra->idviaa;
+        $Idtres = $compra->iddepartede;
 
 
+        $NumeroCompra = $compra->numcompra;
+        $PreventiCompra = $compra->preventivo;
+        $Numerocontrolin = $compra->controlinterno;
 
+        $fechasoli = $compra->fechasoli;
+        $horasoli = $compra->horasoli;
+        $gestionsoli = $compra->gestionsoli;
+
+        $justificacion = $compra->justificacion;
+        $objeto = $compra->objeto;
+
+        $tipo = $compra->tipo;
+        $oficinade = $compra->oficinade;
+        $comingreso = new ComingresoModel();
+        $fechasolACT = Carbon::now();
+        $gesti = $fechasolACT->year;
+        $hora = $fechasolACT->toTimeString();
+
+        $comingreso->fechaingreso = $fechasolACT;
+        $comingreso->horaingreso = $hora;
+        $comingreso->gestion = $gesti;
+
+
+        $comingreso->fechasolicitud = $fechasoli;
+        $comingreso->horasolicitud = $horasoli;
+        $comingreso->gestionsolicitud = $gestionsoli;
+
+        $comingreso->numcompra = $NumeroCompra;
+        $comingreso->numsolicitud = $Numerocontrolin;
+        $comingreso->numpreventivo = $PreventiCompra;
+        $comingreso->numfactura = 0;
+        $comingreso->detallecomingreso = $justificacion;
+        $comingreso->objeto = $objeto;
+
+
+        $comingreso->idarea = $IdareaCompra;
+        $comingreso->idproveedor = $idProov;
+        $comingreso->idprogramacomb = $idPro;
+        $comingreso->idcatprogramaticacomb = $idCat;
+        $comingreso->idcompracomb = $IdCompra;
+        $comingreso->idtipocomin = 1;  //estado 1 balance inial
+
+        $comingreso->iddirigidoa = $iduno;
+        $comingreso->idviaa = $iddos;
+        $comingreso->iddepartede = $Idtres;
+
+
+        $comingreso->estadoingreso = 2;  //Estado 2 aprobado
+        $comingreso->estado1 = 1;
+        $comingreso->estado2 = 1;
+
+        $comingreso->tipo = $tipo;
+        $comingreso->oficinade = $oficinade;
+
+        $comingreso->save();
+
+        $IdcomINGREso = $comingreso->idcomingreso;
+
+        if ($compracomb) {
+            $detalleconcompra = $compracomb->comprasdetallecomb;
+            foreach ($detalleconcompra as $detalle) {
+
+                $idProducto = $detalle->idprodcomb;
+                $CanTidad = $detalle->cantidad;
+                $PreCios = $detalle->precio;
+                $subtotal = $detalle->subtotal;
+
+                $comprasss = ProdCombModel::find($idProducto);
+                $CanTidaddd = $comprasss->cantidadproducto;
+                $Stotalproducto = $comprasss->subtotalproducto;
+                $CanTidaddde = $CanTidaddd + $CanTidad;
+                $Stotalproductodos = $Stotalproducto + $subtotal;
+                $cantidaduno = number_format($CanTidaddde, 10, '.', '');
+                $cantidaddos = number_format($Stotalproductodos, 10, '.', '');
+
+                $comprasss->cantidadproducto = $cantidaduno;
+                $comprasss->subtotalproducto = $cantidaddos;
+                $comprasss->save();
+
+                $detalleingreso = new DetalleComingresoModel();
+
+                $detalleingreso->cantidad = $CanTidad;
+                $detalleingreso->subtotal = $subtotal;
+                $detalleingreso->precio = $PreCios;
+
+                $detalleingreso->cantidadsalida = $CanTidad;
+                $detalleingreso->subtotalsalida = $subtotal;
+
+                $detalleingreso->cantidadentrada = 0;
+                $detalleingreso->subtotalentrada = 0;
+
+                $detalleingreso->difcantidad = $CanTidad;
+                $detalleingreso->subtdifcantidad = $subtotal;
+
+                $detalleingreso->cantidadingreso = 0;
+                $detalleingreso->subtotalcantidadingreso = 0;
+
+                $detalleingreso->difcantidadingreso = 0;
+                $detalleingreso->subdifcantidadingreso = 0;
+
+                $detalleingreso->idcomingreso = $IdcomINGREso;
+                $detalleingreso->idproducto = $idProducto;
+
+                $detalleingreso->estado1 = 1;
+                $detalleingreso->estado2 = 1;
+
+                $detalleingreso->save();
+
+                $comprass = CompraCombModel::find($idcompracomb);
+                $fechasolACT = Carbon::now();
+                $gesti = $fechasolACT->year;
+                $hora = $fechasolACT->toTimeString();
+
+                $comprass->fechaalmacen = $fechasolACT;
+                $comprass->horaalmacen = $hora;
+                $comprass->gestionalmacen = $gesti;
+
+                $comprass->estadocompracomb = 5;
+                $comprass->save();
+
+                session()->flash('message', 'Registro Enviado a almacen');
+            }
+        } else {
+            session()->flash('message', 'no hay nada');
+        }
+
+        return redirect()->route('detalle.index2');
+    }
 }

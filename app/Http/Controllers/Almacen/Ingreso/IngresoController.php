@@ -237,7 +237,7 @@ class IngresoController extends Controller
    
    
       return redirect()
-      ->action('App\Http\Controllers\Almacen\Ingreso\IngresoController@editardoc',
+      ->action('ingreso.editardoc',
        [$idingreso]);
    }
    
@@ -355,7 +355,7 @@ class IngresoController extends Controller
            }
            catch (Exception $ex) {
                \Log::error("Orden Error: {$ex->getMessage()}");
-               return redirect()->route('almacenes.ingreso.index')->with('message', $ex->getMessage());
+               return redirect()->route('ingreso.index')->with('message', $ex->getMessage());
            } finally {
                ini_restore('memory_limit');
                ini_restore('max_execution_time');
@@ -427,7 +427,7 @@ class IngresoController extends Controller
            }else{
              
            }
-           return redirect()->route('almacenes.ingreso.reporte');
+           return redirect()->route('ingreso.reporte');
    
    
    }
@@ -451,7 +451,7 @@ class IngresoController extends Controller
        $detalle->idvale = $idval;
         $detalle->update();
     }
-      return redirect()->route('almacenes.detalle.index2');
+      return redirect()->route('detalle.index2');
  }
 
  public function deletedos($idval){
@@ -471,7 +471,7 @@ class IngresoController extends Controller
        $detalle->idvale = $idval;
         $detalle->update();
     }
-      return redirect()->route('almacenes.detalle.index3');
+      return redirect()->route('detalle.index3');
  }
 
 
@@ -526,7 +526,7 @@ class IngresoController extends Controller
             $docproveedor->detalleingreso = $request->input('detalleingreso');
             $docproveedor->save();
         }
-        return redirect()->action('App\Http\Controllers\Almacen\Ingreso\IngresoController@editardoc', [$Idingr]);
+        return redirect()->route('ingreso.editardoc', [$Idingr]);
     }
 
    }

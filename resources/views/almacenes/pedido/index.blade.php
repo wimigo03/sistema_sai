@@ -1,10 +1,18 @@
 @extends('layouts.admin')
 @section('content')
-<div class="row font-verdana-12">
+<div class="row font-verdana-bg">
     <div class="col-md-8 titulo">
         <b>SOLICITUDES PENDIENTES--</b><b style='color:red'>{{$idd->nombrearea}} </b>--
     </div>
-  
+    <div class="col-md-4 text-right titulo">
+        
+        <a href="{{route('apedido.create')}}" class="tts:left tts-slideIn tts-custom" 
+        aria-label="  Solicitud">
+            <button class="btn btn-sm btn-success font-verdana" type="button" >Agreg.Solic.
+                &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
+            </button>
+        </a>
+    </div>
 
   
 
@@ -17,13 +25,13 @@
 <div class="row">
     <div class="col-md-12 ">
         <center>
-            <table   class="table-bordered  hoverTable  responsive  font-verdana" id="users-table">
-                <thead >
+            <table   class="table-bordered  hoverTable  responsive  font-verdana" id="users-table" style="width:100%;">
+                <thead class="font-courier">
                                 <tr>
                                     <td class="text-justify p-1"><b>N°</b></td>
-                                    <td class="text-justify p-1"><b>FECHA SOL.</b></td>
-                                    <td class="text-justify p-1"><b>ID VALE</b></td>
-                                    <td class="text-justify p-1"><b>AREA PE.</b></td>
+                                    <td class="text-justify p-1"><b>FECHA</b></td>
+                                    <td class="text-justify p-1"><b>VALE</b></td>
+                                    <td class="text-justify p-1"><b>AREA</b></td>
                                     <td class="text-justify p-1"><b>FUNCIONARIO</b></td>
                                     <td class="text-justify p-1"><b>CARGO</b></td>
                                     <td class="text-justify p-1"><b>UNIDAD</b></td>
@@ -51,10 +59,6 @@
                                     <th></th>
                                     <th></th>
                                     <th></th>
-                                   
-                                  
-                                 
-        
                                 </tr>
         
                             </tfoot>
@@ -73,7 +77,7 @@ $('#users-table').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
-        ajax: "{{ route('almacenes.pedido.index') }}",
+        ajax: "{{ route('apedido.index') }}",
         columns: [
             {data: 'DT_RowIndex',orderable: false,searchable: false,class:'text-justify p-1 font-verdana'},
             { data: 'fechasolicitud',name: 'fechasolicitud',class:'text-justify p-1 font-verdana'},
@@ -97,7 +101,7 @@ $('#users-table').DataTable({
          
 
          {
-                    className: 'text-center',
+            className: 'text-justify p-1 font-verdana',
                     data: 'actions',
                     name: 'actions',
                     orderable: false,
@@ -106,12 +110,11 @@ $('#users-table').DataTable({
 
         ],
 
-
         initComplete: function() {
                 this.api().columns(1).every(function() {
                     var column = this;
                     var input = document.createElement("input");
-                    input.style.width = input.style.width = "30px";
+                    input.style.width = input.style.width = "80px";
                     $(input).appendTo($(column.footer()).empty())
                         .on('change', function() {
                             var val = $.fn.dataTable.util.escapeRegex($(this).val());
@@ -124,7 +127,7 @@ $('#users-table').DataTable({
                 this.api().columns(2).every(function() {
                     var column = this;
                     var input = document.createElement("input");
-                    input.style.width = input.style.width = "150px";
+                    input.style.width = input.style.width = "40px";
                     $(input).appendTo($(column.footer()).empty())
                         .on('change', function() {
                             var val = $.fn.dataTable.util.escapeRegex($(this).val());

@@ -328,160 +328,277 @@
                     </li>
                     <hr style="margin-top:0; margin-bottom:0;">
                     {{-- COMPRAS combustible --}}
-                    <li class="font-verdana-12">
-                        <a href="" data-toggle="collapse" data-target="#dashboard_combustiblescomb"
-                            class="active collapsed" aria-expanded="false">
+                    <li class="font-verdana-bg">
+                        <a href="" data-toggle="collapse" data-target="#dashboard_combustiblescomb" class="active collapsed" aria-expanded="false">
                             <i class="fa fa-shopping-cart" style="color:green"></i>
                             <span class="nav-label mr-3">COMBUSTIBLES</span>
                             <span class="fa fa-arrow-circle-left float-right"></span>
                         </a>
                         <ul class="sub-menu collapse" id="dashboard_combustiblescomb">
-                            <li>
-                                <a href="{{ route('combustibles.pedidoparcial.index') }}">
+                        <a href="" data-toggle="collapse" data-target="#dashboard_combustiblescomb" class="active collapsed" aria-expanded="false">
+                            <i class="fa fa-shopping-cart" style="color:green"></i>
+                            <span class="nav-label mr-3">SOLICITUD</span>
+                            <span class="fa fa-arrow-circle-left float-right"></span>
+                        </a>
+                            <li class="sub-menu collapse" id="dashboard_combustiblescomb">
+                                <a href="{{ route('pedidoparcialcomb.index') }}">
                                     &nbsp; &nbsp; &nbsp;
                                     <span class="nav-label mr-4">Solicitud de Combustible</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="{{ route('combustibles.pedido.index') }}">
+    
+                            <li class="sub-menu collapse" id="dashboard_combustiblescomb">
+                                <a href="{{ route('pedidocomb.index') }}">
                                     &nbsp; &nbsp; &nbsp;
                                     <span class="nav-label mr-4">Combustible Solicitados</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="{{ route('partidacomb.index') }}">
+                            <li class="sub-menu collapse" id="dashboard_combustiblescomb">
+                                <a href="{{ route('pedidocomb.index2') }}">
                                     &nbsp; &nbsp; &nbsp;
-                                    <span class="nav-label mr-4">Partidas</span>
+                                    <span class="nav-label mr-4">Compras Aprobadas</span>
                                 </a>
                             </li>
-                            <li>
+                            </ul>
+                            <ul class="sub-menu collapse" id="dashboard_combustiblescomb">
+                        <a href="" data-toggle="collapse" data-target="#dashboard_combustiblescomb" class="active collapsed" aria-expanded="false">
+                            <i class="fa fa-shopping-cart" style="color:green"></i>
+                            <span class="nav-label mr-3">PRODUCTO</span>
+                            <span class="fa fa-arrow-circle-left float-right"></span>
+                        </a>
+                        <li class="sub-menu collapse" id="dashboard_combustiblescomb">
                                 <a href="{{ route('producto.index') }}">
                                     &nbsp; &nbsp; &nbsp;
                                     <span class="nav-label mr-4">Productos-Items</span>
                                 </a>
                             </li>
-                            <li>
+                        <li class="sub-menu collapse" id="dashboard_combustiblescomb">
+                                <a href="{{ route('partidacomb.index') }}">
+                                    &nbsp; &nbsp; &nbsp;
+                                    <span class="nav-label mr-4">Partidas</span>
+                                </a>
+                            </li>
+                           
+    
+                            <li class="sub-menu collapse" id="dashboard_combustiblescomb">
+                                <a href="{{ route('medidacomb.index') }}">
+                                    &nbsp; &nbsp; &nbsp;
+                                    <span class="nav-label mr-4">Medidas</span>
+                                </a>
+                            </li>
+                            </ul>
+    
+                            <ul class="sub-menu collapse" id="dashboard_combustiblescomb">
+                        <a href="" data-toggle="collapse" data-target="#dashboard_combustiblescomb" class="active collapsed" aria-expanded="false">
+                            <i class="fa fa-shopping-cart" style="color:green"></i>
+                            <span class="nav-label mr-3">PROVEEDORES</span>
+                            <span class="fa fa-arrow-circle-left float-right"></span>
+                        </a>
+                        <li class="sub-menu collapse" id="dashboard_combustiblescomb">
                                 <a href="{{ route('proveedor.index') }}">
                                     &nbsp; &nbsp; &nbsp;
                                     <span class="nav-label mr-4">Proveedores</span>
                                 </a>
                             </li>
-                            <li>
+                            </ul>
+                            <ul class="sub-menu collapse" id="dashboard_combustiblescomb">
+                        <a href="" data-toggle="collapse" data-target="#dashboard_combustiblescomb" class="active collapsed" aria-expanded="false">
+                            <i class="fa fa-shopping-cart" style="color:green"></i>
+                            <span class="nav-label mr-3">PROGRAMA</span>
+                            <span class="fa fa-arrow-circle-left float-right"></span>
+                        </a>
+                        <li class="sub-menu collapse" id="dashboard_combustiblescomb">
                                 <a href="{{ route('programa.index') }}">
                                     &nbsp; &nbsp; &nbsp;
                                     <span class="nav-label mr-4">Programas</span>
                                 </a>
                             </li>
-                            <li>
+                            </ul>
+                            <ul class="sub-menu collapse" id="dashboard_combustiblescomb">
+                                <a href="" data-toggle="collapse" data-target="#dashboard_combustiblescomb" class="active collapsed" aria-expanded="false">
+                                    <i class="fa fa-shopping-cart" style="color:green"></i>
+                                    <span class="nav-label mr-3">CAT. PROGRAMATICA</span>
+                                    <span class="fa fa-arrow-circle-left float-right"></span>
+                                </a>
+                      
+                        <li class="sub-menu collapse" id="dashboard_combustiblescomb">
                                 <a href="{{ route('catprogcomb.index') }}">
                                     &nbsp; &nbsp; &nbsp;
                                     <span class="nav-label mr-4">Categ. Programaticas</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="{{ route('combustibles.pedido.index2') }}">
-                                    &nbsp; &nbsp; &nbsp;
-                                    <span class="nav-label mr-4">Compras Aprovadas</span>
-                                </a>
-                            </li>
-                        </ul>
+                            </ul>
+                       
                     </li>
-                    <hr style="margin-top:0; margin-bottom:0;">
+    
+                            
                     {{-- ALMACEN --}}
-                    <li class="font-verdana-12">
+    
+                    <li class="font-verdana-bg">
                         <a href="" data-toggle="collapse" data-target="#dashboard_almacen"
                             class="active collapsed" aria-expanded="false">
                             <i class="fa fa-th-list" style="color:green"></i>
                             <span class="nav-label mr-3">ALMACEN</span>
                             <span class="fa fa-arrow-circle-left float-right"></span>
                         </a>
-                        <ul class="sub-menu collapse" id="dashboard_almacen">
-                            <li>
-                                <a href="{{ route('almacenes.ingreso.index') }}">
+                        {{-- ALMACEN COMPROBANTES INGRESO EGRESO BALANCE--}}
+                        <ul class="sub-menu collapse" id="dashboard_almacen" >
+                        <a href="" data-toggle="collapse" data-target="#dashboard_almacen"
+                            class="active collapsed" aria-expanded="false">
+                            <i class="fa fa-th-list" style="color:green"></i>
+                            <span class="nav-label mr-3">COMPROBANTE</span>
+                            <span class="fa fa-arrow-circle-left float-right"></span>
+                        </a>
+                            {{-- <li class="sub-menu collapse" id="dashboard_almacen">
+                                <a href="{{ route('ingreso.index') }}">
                                     &nbsp; &nbsp; &nbsp;
                                     <span class="nav-label mr-4">Ingreso.</span>
                                 </a>
-                            </li>
-                        </ul>
-                        <ul class="sub-menu collapse" id="dashboard_almacen">
-                            <li>
-                                <a href="{{ route('almacenes.ingreso.grafico') }}">
+                            </li> --}}
+                            <li class="sub-menu collapse" id="dashboard_almacen">
+                                <a href="{{ route('comingreso.index') }}">
                                     &nbsp; &nbsp; &nbsp;
-                                    <span class="nav-label mr-4">Grafico.</span>
+                                    <span class="nav-label mr-4">Balance.</span>
+                                </a>
+                            </li>
+    
+                            <li class="sub-menu collapse" id="dashboard_almacen">
+                                <a href="{{ route('comegreso.index') }}">
+                                    &nbsp; &nbsp; &nbsp;
+                                    <span class="nav-label mr-4">Comprobante.</span>
+                                </a>
+                            </li>
+                            <li class="sub-menu collapse" id="dashboard_almacen">
+                            <a href="{{ route('tipocomingreso.index') }}">
+                                    &nbsp; &nbsp; &nbsp;
+                                    <span class="nav-label mr-4">Tipo Comprobante.</span>
                                 </a>
                             </li>
                         </ul>
+                     
+                        {{-- ALMACEN REPORTE--}}
                         <ul class="sub-menu collapse" id="dashboard_almacen">
-                            <li>
-                                <a href="{{ route('almacenes.pedido.index') }}">
+                        <a href="" data-toggle="collapse" data-target="#dashboard_almacen"
+                            class="active collapsed" aria-expanded="false">
+                            <i class="fa fa-th-list" style="color:green"></i>
+                            <span class="nav-label mr-3">REPORTE</span>
+                            <span class="fa fa-arrow-circle-left float-right"></span>
+                        </a>
+                            <li class="sub-menu collapse" id="dashboard_almacen">
+                            <a href="{{ route('reporte.index') }}">
+                                    &nbsp; &nbsp; &nbsp;
+                                    <span class="nav-label mr-4">Reporte.</span>
+                                </a>
+                            </li>
+                            <li class="sub-menu collapse" id="dashboard_almacen">
+                            <a href="{{ route('reporte.index2') }}">
+                                    &nbsp; &nbsp; &nbsp;
+                                    <span class="nav-label mr-4">Reporte por fecha.</span>
+                                </a>
+                            </li>
+    
+                        </ul>
+    
+                        <ul class="sub-menu collapse" id="dashboard_almacen">
+                            <a href="" data-toggle="collapse" data-target="#dashboard_almacen"
+                            class="active collapsed" aria-expanded="false">
+                            <i class="fa fa-th-list" style="color:green"></i>
+                            <span class="nav-label mr-3">VALE</span>
+                            <span class="fa fa-arrow-circle-left float-right"></span>
+                        </a>
+                            <li class="sub-menu collapse" id="dashboard_almacen">
+                                <a href="{{ route('apedido.index') }}">
                                     &nbsp; &nbsp; &nbsp;
                                     <span class="nav-label mr-4">Solicitudes Pend.</span>
                                 </a>
                             </li>
                         </ul>
                         <ul class="sub-menu collapse" id="dashboard_almacen">
-                            <li>
-                                <a href="{{ route('almacenes.reporte.index') }}">
-                                    &nbsp; &nbsp; &nbsp;
-                                    <span class="nav-label mr-4">Reporte.</span>
-                                </a>
-                            </li>
-                        </ul>
-                        <ul class="sub-menu collapse" id="dashboard_almacen">
-                            <li>
-                                <a href="{{ route('almacenes.reporte.index2') }}">
-                                    &nbsp; &nbsp; &nbsp;
-                                    <span class="nav-label mr-4">Reporte por fecha.</span>
-                                </a>
-                            </li>
-                        </ul>
-                        <ul class="sub-menu collapse" id="dashboard_almacen">
-                            <li>
+                            <a href="" data-toggle="collapse" data-target="#dashboard_almacen"
+                            class="active collapsed" aria-expanded="false">
+                            <i class="fa fa-th-list" style="color:green"></i>
+                            <span class="nav-label mr-3">LOCALIDAD</span>
+                            <span class="fa fa-arrow-circle-left float-right"></span>
+                        </a>
+                            <li class="sub-menu collapse" id="dashboard_almacen">
                                 <a href="{{ route('localidad.index') }}">
                                     &nbsp; &nbsp; &nbsp;
                                     <span class="nav-label mr-4">Localidad</span>
                                 </a>
                             </li>
                         </ul>
-                    </li>
-                    <hr style="margin-top:0; margin-bottom:0;">
-                    {{-- todo trasnporte --}}
-                    <li class="font-verdana-12">
-                        <a href="" data-toggle="collapse" data-target="#dashboard_transportes"
+    
+                        <ul class="sub-menu collapse" id="dashboard_almacen">
+                            <a href="" data-toggle="collapse" data-target="#dashboard_almacen"
                             class="active collapsed" aria-expanded="false">
                             <i class="fa fa-th-list" style="color:green"></i>
-                            <span class="nav-label mr-3">Transporte</span>
+                            <span class="nav-label mr-3">GRAFICO</span>
+                            <span class="fa fa-arrow-circle-left float-right"></span>
+                        </a>
+                            <li class="sub-menu collapse" id="dashboard_almacen">
+                                <a href="{{ route('ingreso.grafico') }}">
+                                    &nbsp; &nbsp; &nbsp;
+                                    <span class="nav-label mr-4">Grafico.</span>
+                                </a>
+                            </li>
+                        </ul>
+    
+                    </li>
+    
+                       {{--todo trasnporte --}}
+                       <li class="font-verdana-bg">
+                        <a href="" data-toggle="collapse" data-target="#dashboard_transportes" class="active collapsed" aria-expanded="false">
+                            <i class="fa fa-th-list" style="color:green"></i>
+                            <span class="nav-label mr-3">TRANSPORTE</span>
                             <span class="fa fa-arrow-circle-left float-right"></span>
                         </a>
                         <ul class="sub-menu collapse" id="dashboard_transportes">
-                            <li>
-                                <a href="{{ route('transportes.pedidoparcial.index') }}">
+                        <a href="" data-toggle="collapse" data-target="#dashboard_transportes" class="active collapsed" aria-expanded="false">
+                            <i class="fa fa-th-list" style="color:green"></i>
+                            <span class="nav-label mr-3">SOLICITUDES</span>
+                            <span class="fa fa-arrow-circle-left float-right"></span>
+                        </a>
+                            <li class="sub-menu collapse" id="dashboard_transportes">
+                                <a href="{{ route('upedidoparcial.index') }}">
                                     &nbsp;<i class="fa fa-data base"></i>
                                     <span class="nav-label mr-4">Solicitud</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="{{ route('transportes.pedido.index3') }}">
+                            <li class="sub-menu collapse" id="dashboard_transportes">
+                                <a href="{{ route('upedido.index3') }}">
                                     &nbsp;<i class="fa fa-data base"></i>
-                                    <span class="nav-label mr-4">Por aprovar</span>
+                                    <span class="nav-label mr-4">Por aprobar</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="{{ route('transportes.pedido.index') }}">
+                            <li class="sub-menu collapse" id="dashboard_transportes">
+                                <a href="{{ route('upedido.index') }}">
                                     &nbsp;<i class="fa fa-data base"></i>
                                     <span class="nav-label mr-4">Pendientes</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="{{ route('transportes.uconsumo.index') }}">
+                            </ul>
+                            <ul class="sub-menu collapse" id="dashboard_transportes">
+                        <a href="" data-toggle="collapse" data-target="#dashboard_transportes" class="active collapsed" aria-expanded="false">
+                            <i class="fa fa-th-list" style="color:green"></i>
+                            <span class="nav-label mr-3">VEHICULOS</span>
+                            <span class="fa fa-arrow-circle-left float-right"></span>
+                        </a>
+                            <li class="sub-menu collapse" id="dashboard_transportes">
+                                <a href="{{ route('uconsumo.index') }}">
                                     &nbsp;<i class="fa fa-data base"></i>
                                     <span class="nav-label mr-4">vehiculo</span>
                                 </a>
                             </li>
-                            <li>
+                            <li class="sub-menu collapse" id="dashboard_transportes">
                                 <a href="{{ route('tipo.index') }}">
                                     &nbsp;<i class="fa fa-data base"></i>
                                     <span class="nav-label mr-4">Tipo</span>
+                                </a>
+                            </li>
+                            <li class="sub-menu collapse" id="dashboard_transportes">
+                                <a href="{{ route('marca.index') }}">
+                                    &nbsp;<i class="fa fa-data base"></i>
+                                    <span class="nav-label mr-4">Marca</span>
                                 </a>
                             </li>
                         </ul>

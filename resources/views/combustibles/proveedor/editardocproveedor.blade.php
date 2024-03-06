@@ -5,7 +5,7 @@
 <div class="row justify-content-center">
     <div class="col-md-10">
 
-        <div class="row font-verdana-12">
+        <div class="row font-verdana-bg">
             <div class="col-md-4 titulo">
 
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
@@ -30,7 +30,7 @@
 
         <div class="body-border">
             <font size="2" face="Courier New" >
-                    <form method="POST" action="{{ route('ProveedorController.updatearchivoproveedor',$docproveedor->iddocproveedores) }}" id="form"
+                    <form method="POST" action="{{ route('proveedor.updatearchivoproveedor',$docproveedor->iddocproveedores) }}" id="form"
                         enctype="multipart/form-data">
                         @csrf
 
@@ -45,7 +45,7 @@
 
                             <div class="col-md-6">
                                 <input type="text" name="nombredocumento" id="nombredocumento" class="form-control" placeholder="Nombre..."
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();" required value="{{ $docproveedor->nombredocumento}}">
+                                onkeyup="convertirAMayusculas(this)" required value="{{ $docproveedor->nombredocumento}}">
                             </div>
                         </div>
 
@@ -53,7 +53,7 @@
 
                         <div class="form-group row">
                             <label for="documento" style="color:black;font-weight: bold;"
-                                class=" required col-md-4 col-form-label text-md-right"><b style="color: red">Limite 200 mb.(solo.pdf):</b></label>
+                                class=" required col-md-4 col-form-label text-md-right"><b style="color: red">Limite 8 mb.(solo.pdf):</b></label>
 
                             <div class="col-md-6">
                                 <input type="file" required name="documento" id="file">
@@ -64,10 +64,10 @@
                         <div align='center'>
                             <div class="col-md-12 text-right">
 
-                                <input type="button" id="cancelar" value="Cancelar">
+                                <input class="btn btn-danger font-verdana-bg" type="button" id="cancelar" value="Cancelar">
                 
                                 &nbsp;&nbsp;&nbsp;&nbsp;
-                                <input type="button" value="Guardar" onclick="uploadFile()" id="insertar_item_material">
+                                <input class="btn color-icon-2 font-verdana-bg" type="button" value="Guardar" onclick="uploadFile()" id="insertar_item_material">
                 
                                 </br></br>
                                 <progress id="progressBar" value="0" max="100"
@@ -112,19 +112,49 @@
         $("#cancelar").click(function() {
 $(".btn").hide();
 $(".spinner-btn-send").show();
-window.location.href = "{{ url('combustibles/proveedor/index') }}";
+window.location.href =  "{{url()->previous()}}";
 
 });
          
         function validar_detalle_material() {
 
+            var filedos = document.getElementById("file").files[0];
+            var maxSize = 8 * 1024 * 1024;
+
             if($("#nombredocumento").val() == ""){
                 message_alert("El campo <b>[Nombre]</b> es un dato obligatorio...");
                 return false;
             }
+            if ($("#file").val() == "") {
+                return true;  
+                message_alert('---SE DEBE CARGAR OBLIGATORIAMENTE UN ARCHIVO---');
+                 
+            } else
+            if (filedos.size > maxSize) {
+                console.log(filedos.size,"verificar");
+                $("#file").val('');
+                message_alert('El tamaño del archivo no puede superar los 8 megabytes.');
+                return false;
+             }
+             if (filedos.type !== "application/pdf") {
+                console.log(filedos.size,"verificar");
+                $("#file").val('');
+                message_alert('El archivo no es un pdf.');
+                return false;
+             }
             return true;
         };
-
+        function convertirAMayusculas(input) {
+    // Guarda la posición actual del cursor
+    var inicioSeleccion = input.selectionStart;
+    var finSeleccion = input.selectionEnd;
+  
+    // Convierte todo el texto a mayúsculas
+    input.value = input.value.toUpperCase();
+  
+    // Restaura la posición del cursor
+    input.setSelectionRange(inicioSeleccion, finSeleccion);
+  }
         function uploadFile() {
             // get the file
             let file = document.getElementById("file").files[0];
@@ -155,8 +185,8 @@ window.location.href = "{{ url('combustibles/proveedor/index') }}";
 
             let totalSize = ev.total; // total size of the file in bytes
             let loadedSize = ev.loaded; // loaded size of the file in bytes
-
-            document.getElementById("loaded_n_total").innerHTML = "Uploaded " + loadedSize + " bytes of " + totalSize +
+            let percentd = loadedSize/1048576;
+            document.getElementById("loaded_n_total").innerHTML = "Uploaded " + percentd + " bytes of " + totalSize +
                 " bytes.";
 
           

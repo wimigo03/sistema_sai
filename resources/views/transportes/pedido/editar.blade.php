@@ -2,10 +2,10 @@
 @section('content')
     @include('layouts.message_alert')
     <br>
-    <div class="row font-verdana-12">
+    <div class="row font-verdana-bg">
         <div class="col-md-4 titulo">
             <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-                <a href="{{ url()->previous() }}">
+                <a href="{{url()->previous()}}">
                     <span class="color-icon-1">
                         &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                     </span>
@@ -18,138 +18,138 @@
         <div class="col-md-12">
             <hr class="hrr">
         </div>
+        <div class="col-md-4 text-right titulo">
+            <b>Fecha Sol.</b>  <b style='color:red'>{{$Fechayhora}}</b>
+         
+        
+        </div> 
+        @if($consumos->estadosoluconsumo == '2')
+        <div class="col-md-6 text-right titulo">
+            <b>Fecha Aprobacion Dir.</b>  <b style='color:red'>{{$Fechayhorar}}</b></div> 
+            @elseif($consumos->estadosoluconsumo == '3')
+         
+            <div class="col-md-6 text-right titulo">
+                <b>Fecha Aprobacion Trans.</b>  <b style='color:red'>{{$Fechayhorartra}}</b>
+               
+            </div> 
+            @elseif($consumos->estadosoluconsumo == '10')
+         
+            <div class="col-md-6 text-right titulo">
+                <b>Fecha Respuesta.</b>  <b style='color:red'>{{$Fechayhorar}}</b>
+               
+            </div> 
+        @endif
+        
+       
     </div>
     <div class="body-border" style="background-color: #FFFFFF;">
 
         <input type="text" hidden name="idsoluconsumo" value="{{ $soluconsumos->idsoluconsumo }}">
         <div class="form-group row">
             <div class="col-md-3">
-                <label for="oficina" class="d-inline font-verdana-12">
-                    <b>oficina</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                <label for="oficina" class="d-inline font-verdana-bg">
+                    <b>Oficina</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <textarea disabled name="oficina" class="form-control form-control-sm font-verdana-12" id="oficina">{{ $soluconsumos->oficina }}</textarea>
-            </div>
-            <div class="col-md-3">
-                <label for="cominterna" class="d-inline font-verdana-12">
-                    <b>coninterna</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <textarea disabled name="cominterna" class="form-control form-control-sm font-verdana-12" id="cominterna">{{ $soluconsumos->cominterna }}</textarea>
+                <textarea  name="oficina" class="form-control form-control-sm font-verdana-bg" id="oficina">{{ $soluconsumos->oficina }}</textarea>
             </div>
             <div class="col-md-2">
-                <label for="fechasol" class="d-inline font-verdana-12">
-                    <b> fechasol</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                <label for="cominterna" class="d-inline font-verdana-bg">
+                    <b>Control Interno</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="text" disabled name="cominterna" class="form-control form-control-sm font-verdana-bg" id="cominterna"  value="{{ $soluconsumos->cominterna }}">
+            </div>
+            {{-- <div class="col-md-3">
+                <label for="fechasol" class="d-inline font-verdana-bg">
+                    <b> Fecha de solicitud </b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" disabled name="fechasol" id="fechasol" placeholder="dd/mm/aaaa" data-language="es"
-                    class="form-control" value="{{ $soluconsumos->fechasol }}">
-            </div>
+                    class="form-control" value="{{ $soluconsumos->fechasol }} &nbsp;&nbsp;{{ $soluconsumos->horasol }} ">
+            </div> --}}
             <div class="col-md-4">
-                <label for="referencia" class="d-inline font-verdana-12">
-                    <b>referencia</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                <label for="referencia" class="d-inline font-verdana-bg">
+                    <b>Referencia</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <textarea disabled name="referencia" class="form-control form-control-sm font-verdana-12" id="referencia">{{ $soluconsumos->referencia }}</textarea>
+                <textarea  name="referencia" class="form-control form-control-sm font-verdana-bg" id="referencia">{{ $soluconsumos->referencia }}</textarea>
             </div>
-            <div class="col-md-4">
-                <label for="dirigidoa" class="d-inline font-verdana-12">
+            <div class="col-md-2">
+                <label for="tipo" class="d-inline font-verdana-bg">
+                    <b>Tipo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <select disabled name="tipo" id="tipo" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
+
+                    <option {{old('tipo',$soluconsumos->tiposoluconsumo)=="1"? 'selected':''}}  value="1">GASOLINA</option>
+                    <option {{old('tipo',$soluconsumos->tiposoluconsumo)=="2"? 'selected':''}} value="2">DIESEL</option>
+
+                </select>
+            </div> 
+            <div class="col-md-6">
+                <label for="dirigidoa" class="d-inline font-verdana-bg">
                     <b>Dirigido a:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-
-                <input type="text" disabled name="dirigidoa" value="{{ $soluconsumos->dirnombre }} "
-                    class="form-control form-control-sm font-verdana-12" id="dirigidoa" data-language="es"
-                    autocomplete="off">
-
-            </div>
-
-            <div class="col-md-4">
-                <label for="viauno" class="d-inline font-verdana-12">
-                    <b>Via:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input type="text" disabled name="dirigidoa" value="{{ $soluconsumos->viaunonombre }} "
-                    class="form-control form-control-sm font-verdana-12" id="dirigidoa" data-language="es"
-                    autocomplete="off">
-            </div>
-            <div class="col-md-4">
-                <label for="viados" class="d-inline font-verdana-12">
-                    <b>Via:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input type="text" disabled name="dirigidoa" value="{{ $soluconsumos->viadosnombre }} "
-                    class="form-control form-control-sm font-verdana-12" id="dirigidoa" data-language="es"
-                    autocomplete="off">
-            </div>
-            <div class="col-md-3">
-                <label for="fechasalida" class="d-inline font-verdana-12">
-                    <b> fechasalida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input type="text" disabled name="fechasalida" id="fechasalida" placeholder="dd/mm/aaaa"
-                    data-language="es" class="form-control" value="{{ $soluconsumos->fechasalida }}">
-            </div>
-            <div class="col-md-3">
-                <label for="fecharetorno" class="d-inline font-verdana-12">
-                    <b> fecharetorno</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input type="text" disabled name="fecharetorno" id="fecharetorno" placeholder="dd/mm/aaaa"
-                    data-language="es" class="form-control" value="{{ $soluconsumos->fecharetorno }}">
-            </div>
-            <div class="col-md-6">
-                <label for="detallesouconsumo" class="d-inline font-verdana-12">
-                    <b>detallesouconsumo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <textarea disabled name="detallesouconsumo" cols="1" rows="5"
-                    class="form-control form-control-sm font-verdana-12" id="detallesouconsumo">{{ $soluconsumos->detallesouconsumo }}</textarea>
-            </div>
-            <div class="col-md-3">
-                <label for="tsalida" class="d-inline font-verdana-12">
-                    <b>tsalida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <select disabled name="tsalida" id="tsalida" placeholder="--Seleccionar--"
+                <select name="dirigidoa" id="dirigidoa" placeholder="--Seleccionar--"
                     class="form-control form-control-sm select2">
-
-                    <option {{ old('tsalida', $soluconsumos->tsalida) == '1' ? 'selected' : '' }} value="1">MAÑANA</option>
-                    <option {{ old('tsalida', $soluconsumos->tsalida) == '2' ? 'selected' : '' }} value="2">TARDE</option>
-
-                </select>
-            </div>
-
-            <div class="col-md-3">
-                <label for="tllegada" class="d-inline font-verdana-12">
-                    <b>tllegada</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <select disabled name="tllegada" id="tllegada" placeholder="--Seleccionar--"
-                    class="form-control form-control-sm select2">
-
-                    <option {{ old('tllegada', $soluconsumos->tllegada) == '1' ? 'selected' : '' }} value="1">MAÑANA
-                    </option>
-                    <option {{ old('tllegada', $soluconsumos->tllegada) == '2' ? 'selected' : '' }} value="2">TARDE
-                    </option>
-
-                </select>
-            </div>
-
-
-
-
-            <div class="col-md-4">
-                <label for="idlocalidad" class="d-inline font-verdana-12">
-                    <b>Localidad</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <select disabled name="idlocalidad" id="idlocalidad" class="form-control form-control-sm select2">
-
-                    @foreach ($localidades as $local)
-                        @if ($local->idlocalidad == $soluconsumos->idlocalidad)
-                            <option value="{{ $local->idlocalidad }}" selected>
-                                {{ $local->nombrelocalidad }}</option>
+                    <option value="">-</option>
+                    @foreach ($encargadotres as $area)
+                        @if ($area->idenc == $soluconsumos->dirigidoa)
+                            <option value="{{ $area->idenc }}" selected>COD: {{ $area->idenc }} //NOMB:
+                                {{ $area->abrev }} {{ $area->nombres }} {{ $area->ap_pat }} {{ $area->ap_mat }}
+                                //AREA: {{ $area->nombrearea }} //CARGO: {{ $area->cargo }} </option>
                         @else
-                            <option value="{{ $local->idlocalidad }}">
-                                {{ $local->nombrelocalidad }}</option>
+                            <option value="{{ $area->idenc }}">CODIGO: {{ $area->idenc }} //NOMBRE:
+                                {{ $area->abrev }} {{ $area->nombres }} {{ $area->ap_pat }} {{ $area->ap_mat }}
+                                //AREA: {{ $area->nombrearea }} //CARGO: {{ $area->cargo }}</option>
                         @endif
                     @endforeach
                 </select>
             </div>
 
-            <div class="col-md-7">
-                <label for="idarea" class="d-inline font-verdana-12">
-                    <b>idarea</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+            <div class="col-md-6">
+                <label for="viados" class="d-inline font-verdana-bg">
+                    <b>Via:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <select disabled name="idarea" id="idarea" class="col-md-10 form-control select2 ">
+                <select name="viados" id="viados" placeholder="--Seleccionar--"
+                    class="form-control form-control-sm select2">
+                    <option value="">-</option>
+                    @foreach ($encargadodos as $area)
+                        @if ($area->idenc == $soluconsumos->viados)
+                            <option value="{{ $area->idenc }}" selected>COD: {{ $area->idenc }} //NOMB:
+                                {{ $area->abrev }} {{ $area->nombres }} {{ $area->ap_pat }} {{ $area->ap_mat }}
+                                //AREA: {{ $area->nombrearea }} //CARGO: {{ $area->cargo }} </option>
+                        @else
+                            <option value="{{ $area->idenc }}">CODIGO: {{ $area->idenc }} //NOMBRE:
+                                {{ $area->abrev }} {{ $area->nombres }} {{ $area->ap_pat }} {{ $area->ap_mat }}
+                                //AREA: {{ $area->nombrearea }} //CARGO: {{ $area->cargo }}</option>
+                        @endif
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label for="viauno" class="d-inline font-verdana-bg">
+                    <b>Via:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <select name="viauno" id="viauno" placeholder="--Seleccionar--"
+                    class="form-control form-control-sm select2">
+                    <option value="">-</option>
+                    @foreach ($encargado as $area)
+                        @if ($area->idenc == $soluconsumos->viauno)
+                            <option value="{{ $area->idenc }}" selected>COD: {{ $area->idenc }} //NOMB:
+                                {{ $area->abrev }} {{ $area->nombres }} {{ $area->ap_pat }} {{ $area->ap_mat }}
+                                //AREA: {{ $area->nombrearea }} //CARGO: {{ $area->cargo }} </option>
+                        @else
+                            <option value="{{ $area->idenc }}">CODIGO: {{ $area->idenc }} //NOMBRE:
+                                {{ $area->abrev }} {{ $area->nombres }} {{ $area->ap_pat }} {{ $area->ap_mat }}
+                                //AREA: {{ $area->nombrearea }} //CARGO: {{ $area->cargo }}</option>
+                        @endif
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="col-md-5">
+                <label for="idarea" class="d-inline font-verdana-bg">
+                    <b>Area</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <select  name="idarea" id="idarea" class="form-control form-control select2 ">
                     @foreach ($areas as $ar)
                         @if ($ar->idarea == $soluconsumos->idarea)
                             <option value="{{ $ar->idarea }}" selected>{{ $ar->idarea }} - {{ $ar->nombrearea }}
@@ -160,37 +160,141 @@
                     @endforeach
                 </select>
             </div>
+            <div class="col-md-3">
+                <label for="fechasalida" class="d-inline font-verdana-bg">
+                    <b> Fecha de salida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="date" disabled name="fechasalida" id="fechasalida" placeholder="dd/mm/aaaa"
+                    data-language="es" class="form-control" value="{{ $soluconsumos->fechasalida }}">
+
+                    <label for="tsalida" class="d-inline font-verdana-bg">
+                        <b>Salida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                    </label>
+                  
+                    <input type="text" disabled name="oficina" 
+                    value="{{$NmBraa}}" 
+                    class="form-control form-control-sm font-verdana-bg" 
+                    id="oficina">
+
+            </div>
+            <div class="col-md-3">
+                <label for="fecharetorno" class="d-inline font-verdana-bg">
+                    <b> Fecha de retorno</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="date" disabled name="fecharetorno" id="fecharetorno" placeholder="dd/mm/aaaa"
+                    data-language="es" class="form-control" value="{{ $soluconsumos->fecharetorno }}">
+
+                    <label for="tllegada" class="d-inline font-verdana-bg">
+                        <b>Llegada</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                    </label>
+                    <input type="text" disabled name="oficina" 
+                    value="{{$NmBraad}}" 
+                    class="form-control form-control-sm font-verdana-bg" 
+                    id="oficina">
+            </div>
+            <div class="col-md-6">
+                <label for="detallesouconsumo" class="d-inline font-verdana-bg">
+                    <b>Detalle de solicitud</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <textarea  name="detallesouconsumo" cols="1" rows="5"
+                    class="form-control form-control-sm font-verdana-bg" id="detallesouconsumo">{{ $soluconsumos->detallesouconsumo }}</textarea>
+            </div>
+         
+            <div class="col-md-6">
+                <label for="idlocalidad" class="d-inline font-verdana-bg">
+                    <b>Localidad</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <select name="idlocalidad" id="idlocalidad" class="form-control form-control-sm select2">
+                
+                    @foreach ($localidades as $local)
+                    @if ($local->idlocalidad==$soluconsumos->idlocalidad)
+                    <option value="{{$local->idlocalidad}}" selected>COD: {{$local->idlocalidad}} //NOMB: {{$local->nombrelocalidad}} //DISTA: {{$local->distancialocalidad}} KLM //DITRIT: {{$local->distrito}}</option>
+                    @else
+                    <option value="{{$local->idlocalidad}}">CODIGO: {{$local->idlocalidad}} //NOMBRE: {{$local->nombrelocalidad}} //DISTANCIA: {{$local->distancialocalidad}} KLM //DITRITO: {{$local->distrito}}</option>
+                    @endif
+                    @endforeach
+                </select>
+            </div>
+
 
         </div>
-        <<<<<<< HEAD=======>>>>>>> master
+       
             @if ($soluconsumos->estadosoluconsumo == 1)
                 <div class="form-group row">
-                    <div class="col-md-12 text-right">
-                        <a href="{{ route('transportes.pedido.aprovar', $soluconsumos->idsoluconsumo) }}">
-                            <button type="button" class="btn btn-success font-verdana-12">
+                    <div class="col-md-4 text-right">
+                        <a href="{{ route('upedido.aprovar', $soluconsumos->idsoluconsumo) }}"
+                            onclick="return confirm('Se va a aprobar la solicitud...')">
+                            <button type="button" class="btn btn-success font-verdana-bg">
                                 <i class="fa fa-check" aria-hidden="true"></i>&nbsp;Aprobar&nbsp;
                             </button>
                         </a>
-                        <a href="{{ route('transportes.pedido.rechazar', $soluconsumos->idsoluconsumo) }}">
-                            <button type="button" class="btn btn-danger font-verdana-12">
+                    </div>
+
+                        <div class="col-md-4 text-right">
+                        <a href="{{ route('upedido.rechazar', $soluconsumos->idsoluconsumo) }}"
+                            onclick="return confirm('Se va a rechazar la solicitud...')">
+                            <button type="button" class="btn btn-danger font-verdana-bg">
                                 <i class="fa fa-close" aria-hidden="true"></i>&nbsp;Rechazar&nbsp;
                             </button>
                         </a>
                     </div>
+                        <div class="col-md-4 text-right">
+                        <a href="{{ route('upedido.solicitud', $soluconsumos->idsoluconsumo) }}">
+                            <button type="button" class="btn btn-success font-verdana-bg">
+                                <i class="fa fa-check" aria-hidden="true"></i>&nbsp;Imprimir&nbsp;
+                            </button>
+                        </a>
+
+                    </div>
+
+                 
                 </div>
+            @endif
+            <div class="form-group row">
+            @if ($soluconsumos->estadosoluconsumo == 2)
+            <div class="col-md-4 text-right titulo">
+                
+                <b><span style="font-size:20px; color: red;">FORMULARIO APROBADO</span></b>
+            </div>
+            <div class="col-md-4 text-right">
+                <a href="{{ route('upedido.solicitud', $soluconsumos->idsoluconsumo) }}">
+                    <button type="button" class="btn btn-success font-verdana-bg">
+                        <i class="fa fa-check" aria-hidden="true"></i>&nbsp;Imprimir&nbsp;
+                    </button>
+                </a>
+
+            </div>
+      
+            @endif
+
+            @if ($soluconsumos->estadosoluconsumo == 10)
+            <div class="col-md-4 text-right titulo">
+                
+                <b><span style="font-size:20px; color: red;">FORMULARIO RECHAZADO</span></b>
+
+            </div>
+            <div class="col-md-4 text-right">
+                <a href="{{ route('upedido.solicitud', $soluconsumos->idsoluconsumo) }}">
+                    <button type="button" class="btn btn-success font-verdana-bg">
+                        <i class="fa fa-check" aria-hidden="true"></i>&nbsp;Imprimir&nbsp;
+                    </button>
+                </a>
+
+            </div>
+        </div>
             @endif
             {{-- <div class="form-group row">
             <div class="col-md-12 text-right">
                 <a href="{{route('transportes.pedido.aprovar',$soluconsumos->idsoluconsumo)}}" target="_blank">
 
-                <button class="btn color-icon-2 font-verdana-12" type="button" onclick="save();">
+                <button class="btn color-icon-2 font-verdana-bg" type="button" onclick="save();">
                     <i class="fa-solid fa-paper-plane"></i>
                     &nbsp;Aprovar
                 </button>
             </a>
             <a href="{{route('transportes.pedido.rechazar',$soluconsumos->idsoluconsumo)}}" target="_blank">
 
-                <button class="btn btn-danger font-verdana-12" type="button" >
+                <button class="btn btn-danger font-verdana-bg" type="button" >
                     <i class="fa-solid fa-paper-plane"></i>
                     &nbsp;Rechazar
                 </button>

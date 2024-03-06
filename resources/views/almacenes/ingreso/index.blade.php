@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="row font-verdana-12">
+<div class="row font-verdana-bg">
     <div class="col-md-8 titulo">
         <b>ALMACEN--</b><b style='color:red'>{{$idd->nombrearea}} </b>--
     </div>
@@ -80,7 +80,7 @@
             processing: true,
             serverSide: true,
             autoWidth: false,
-            ajax: "{{ route('almacenes.ingreso.index') }}",
+            ajax: "{{ route('ingreso.index') }}",
             columns: [
                 {data: 'DT_RowIndex',orderable: false,searchable: false,class:'text-justify p-1 font-verdana'},
                 {data: 'nombreproducto',name: 'ing.nombreproducto',class:'text-justify p-1 font-verdana'},

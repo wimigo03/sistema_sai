@@ -12,7 +12,7 @@ class ProdCombModel extends Model
     
     protected $primaryKey= 'idprodcomb';
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
  

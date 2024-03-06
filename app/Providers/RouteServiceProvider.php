@@ -106,5 +106,112 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
             ->namespace($this->namespace)
             ->group(base_path('routes/informatica/informatica-route.php'));
+
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Combustibles/proveedor-route.php'));
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Combustibles/producto-route.php'));
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Combustibles/medida-route.php'));
+
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Combustibles/programa-route.php'));
+
+         
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Combustibles/partida-route.php'));
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Combustibles/catprogcomb-route.php'));
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Combustibles/pedido-route.php'));
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Combustibles/pedidoparcial-route.php'));
+
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Combustibles/detalle-route.php'));
+
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Combustibles/detalleparcial-route.php'));  
+            
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Transportes/uconsumo-route.php')); 
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Transportes/tipo-route.php')); 
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Transportes/marca-route.php')); 
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Transportes/pedidoparcial-route.php')); 
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Transportes/pedido-route.php')); 
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Transportes/detalle-route.php')); 
+
+
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Almacenes/ingreso-route.php')); 
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Almacenes/comingreso-route.php')); 
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Almacenes/comegreso-route.php')); 
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Almacenes/tipocomingreso-route.php')); 
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Almacenes/detalle-route.php')); 
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Almacenes/pedido-route.php')); 
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Almacenes/localidad-route.php')); 
+
+            Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/Almacenes/reporte-route.php')); 
+
+
+
+            
     }
 }

@@ -43,36 +43,41 @@ class DetalleCompraCombController2 extends Controller
         $id2 = $detalle->idcompra;
 
         $prodserv = DB::table('detallecompracomb as d')
-
                         ->join('prodcomb as ps', 'ps.idprodcomb', '=', 'd.idprodcomb')
                         ->join('compracomb as c', 'c.idcompracomb', '=', 'd.idcompracomb')
-
-                        ->select('d.iddetallecompracomb', 'c.idcompracomb','ps.nombreprodcomb','d.cantidad',
+                        ->join('umedidacomb as un', 'un.idmedida', '=', 'ps.idmedidacomb')
+                        ->select('d.iddetallecompracomb', 'c.idcompracomb','ps.nombreprodcomb','un.nombremedida','ps.detalleprodcomb','d.cantidad',
                         'd.subtotal','d.precio')
-
                         ->where('d.idcompracomb', $id2)
-                        ->orderBy('d.iddetallecompracomb', 'desc')
+                        ->orderBy('d.iddetallecompracomb', 'asc')
                         ->get();
-
 
         $productos = DB::table('prodcomb')
                         ->where('estadoprodcomb',1)
-                        ->select(DB::raw("concat(codigoprodcomb,' // ',nombreprodcomb,' // ',detalleprodcomb,' 
-                        // PRECIO BS. ',precioprodcomb) as prodservicio"),'idprodcomb')
+                        ->orderBy('idprodcomb', 'asc')
+                        ->select(DB::raw("concat(' CODIGO: ',detalleprodcomb,' //NOMBRE: ',nombreprodcomb,
+                        ' //PRECIO BS: ',precioprodcomb) as prodservicio"),'idprodcomb')
                         ->pluck('prodservicio','idprodcomb');
 
-        $valor_total2 = $prodserv->sum('subtotal');
+         $valor_total3 = $prodserv->sum('cantidad');
+         $valor_total2 = $prodserv->sum('subtotal');
 
-        $ordencompra = DB::table('ordencompracomb as o')
-                            ->select('o.nombrecompra','o.solicitante','o.proveedor')
-                            -> where('o.compra_idcompra','=', $id2)->first();
-        $resultado = $ordencompra;
+        $CalAdosDecimdos = number_format($valor_total3, 2, '.', '');
+        $CalAdosDecim = number_format($valor_total2, 2, '.', '');
 
-        $estado = 1;
-
-        if(is_null($resultado)){
-            $estado = 0;
-        }
+        $prodservdos = DB::table('detallecompracomb as d')
+        ->select(
+            'd.iddetallecompracomb',
+            'd.idcompracomb',
+            'd.cantidad',
+            'd.subtotal',
+            'd.precio'
+        )->where('d.idcompracomb', '=', $id2)->first();
+    $resultado = $prodservdos;
+    $estado = 1;
+    if (is_null($resultado)) {
+        $estado = 0;
+    }
 
         $compras = DB::table('compracomb as c')
             ->join('proveedor as p', 'p.idproveedor', 'c.idproveedor')
@@ -93,7 +98,8 @@ class DetalleCompraCombController2 extends Controller
         return view('combustibles.detalleparcial.index',
         ['prodserv'=>$prodserv,
         'productos'=>$productos,
-        'valor_total2'=>$valor_total2,
+        'CalAdosDecim'=>$CalAdosDecim,
+        'CalAdosDecimdos'=>$CalAdosDecimdos,
         'idcompracomb'=>$id2,
         'estado'=>$estado,
         
@@ -109,15 +115,15 @@ class DetalleCompraCombController2 extends Controller
 
         $prodserv = DB::table('detallecompracomb as d')
 
-                        ->join('prodcomb as ps', 'ps.idprodcomb', '=', 'd.idprodcomb')
-                        ->join('compracomb as c', 'c.idcompracomb', '=', 'd.idcompracomb')
+        ->join('prodcomb as ps', 'ps.idprodcomb', '=', 'd.idprodcomb')
+        ->join('compracomb as c', 'c.idcompracomb', '=', 'd.idcompracomb')
+        ->join('umedidacomb as un', 'un.idmedida', '=', 'ps.idmedidacomb')
+        ->select('d.iddetallecompracomb', 'c.idcompracomb','ps.nombreprodcomb','un.nombremedida','ps.detalleprodcomb','d.cantidad',
+        'd.subtotal','d.precio')
 
-                        ->select('d.iddetallecompracomb', 'c.idcompracomb','ps.nombreprodcomb','d.cantidad',
-                        'd.subtotal','d.precio')
-
-                        ->where('d.idcompracomb', $id2)
-                        ->orderBy('d.iddetallecompracomb', 'desc')
-                        ->get();
+        ->where('d.idcompracomb', $id2)
+        ->orderBy('d.iddetallecompracomb', 'asc')
+        ->get();
 
 
         $productos = DB::table('prodcomb')
@@ -126,7 +132,11 @@ class DetalleCompraCombController2 extends Controller
                         // PRECIO BS. ',precioprodcomb) as prodservicio"),'idprodcomb')
                         ->pluck('prodservicio','idprodcomb');
 
-        $valor_total2 = $prodserv->sum('subtotal');
+                        $valor_total3 = $prodserv->sum('cantidad');
+                        $valor_total2 = $prodserv->sum('subtotal');
+               
+                       $CalAdosDecimdos = number_format($valor_total3, 2, '.', '');
+                       $CalAdosDecim = number_format($valor_total2, 2, '.', '');
 
         $ordencompra = DB::table('ordencompracomb as o')
                             ->select('o.nombrecompra','o.solicitante','o.proveedor')
@@ -161,7 +171,8 @@ class DetalleCompraCombController2 extends Controller
         return view('combustibles.detalleparcial.index2',
         ['prodserv'=>$prodserv,
         'productos'=>$productos,
-        'valor_total2'=>$valor_total2,
+        'CalAdosDecimdos'=>$CalAdosDecimdos,
+        'CalAdosDecim'=>$CalAdosDecim,
         'idcompracomb'=>$id2,
         'estado'=>$estado,
         'consumos'=>$consumos,
@@ -177,16 +188,21 @@ class DetalleCompraCombController2 extends Controller
 
         $prodserv = DB::table('detallecompracomb as d')
 
-                        ->join('prodcomb as ps', 'ps.idprodcomb', '=', 'd.idprodcomb')
-                        ->join('compracomb as c', 'c.idcompracomb', '=', 'd.idcompracomb')
+        ->join('prodcomb as ps', 'ps.idprodcomb', '=', 'd.idprodcomb')
+        ->join('compracomb as c', 'c.idcompracomb', '=', 'd.idcompracomb')
+        ->join('umedidacomb as un', 'un.idmedida', '=', 'ps.idmedidacomb')
+        ->select('d.iddetallecompracomb', 'c.idcompracomb','ps.nombreprodcomb','un.nombremedida','ps.detalleprodcomb','d.cantidad',
+        'd.subtotal','d.precio')
 
-                        ->select('d.iddetallecompracomb', 'c.idcompracomb','ps.nombreprodcomb','d.cantidad',
-                        'd.subtotal','d.precio')
+        ->where('d.idcompracomb', $id2)
+        ->orderBy('d.iddetallecompracomb', 'asc')
+        ->get();
 
-                        ->where('d.idcompracomb', $id2)
-                        ->orderBy('d.iddetallecompracomb', 'desc')
-                        ->get();
+        $valor_total3 = $prodserv->sum('cantidad');
+        $valor_total2 = $prodserv->sum('subtotal');
 
+       $CalAdosDecimdos = number_format($valor_total3, 2, '.', '');
+       $CalAdosDecim = number_format($valor_total2, 2, '.', '');
 
         $productos = DB::table('prodcomb')
                         ->where('estadoprodcomb',1)
@@ -194,7 +210,7 @@ class DetalleCompraCombController2 extends Controller
                         // PRECIO BS. ',precioprodcomb) as prodservicio"),'idprodcomb')
                         ->pluck('prodservicio','idprodcomb');
 
-        $valor_total2 = $prodserv->sum('subtotal');
+ 
 
         $ordencompra = DB::table('ordencompracomb as o')
                             ->select('o.nombrecompra','o.solicitante','o.proveedor')
@@ -229,7 +245,8 @@ class DetalleCompraCombController2 extends Controller
         return view('combustibles.detalleparcial.index3',
         ['prodserv'=>$prodserv,
         'productos'=>$productos,
-        'valor_total2'=>$valor_total2,
+        'CalAdosDecimdos'=>$CalAdosDecimdos,
+        'CalAdosDecim'=>$CalAdosDecim,
         'idcompracomb'=>$id2,
         'estado'=>$estado,
         'consumos'=>$consumos,
@@ -244,17 +261,21 @@ class DetalleCompraCombController2 extends Controller
         $id2 = $detalle->idcompra;
 
         $prodserv = DB::table('detallecompracomb as d')
+        ->join('prodcomb as ps', 'ps.idprodcomb', '=', 'd.idprodcomb')
+        ->join('compracomb as c', 'c.idcompracomb', '=', 'd.idcompracomb')
+        ->join('umedidacomb as un', 'un.idmedida', '=', 'ps.idmedidacomb')
+        ->select('d.iddetallecompracomb', 'c.idcompracomb','ps.nombreprodcomb','un.nombremedida','ps.detalleprodcomb','d.cantidad',
+        'd.subtotal','d.precio')
 
-                        ->join('prodcomb as ps', 'ps.idprodcomb', '=', 'd.idprodcomb')
-                        ->join('compracomb as c', 'c.idcompracomb', '=', 'd.idcompracomb')
+        ->where('d.idcompracomb', $id2)
+        ->orderBy('d.iddetallecompracomb', 'asc')
+        ->get();
 
-                        ->select('d.iddetallecompracomb', 'c.idcompracomb','ps.nombreprodcomb','d.cantidad',
-                        'd.subtotal','d.precio')
+        $valor_total3 = $prodserv->sum('cantidad');
+        $valor_total2 = $prodserv->sum('subtotal');
 
-                        ->where('d.idcompracomb', $id2)
-                        ->orderBy('d.iddetallecompracomb', 'desc')
-                        ->get();
-
+       $CalAdosDecimdos = number_format($valor_total3, 2, '.', '');
+       $CalAdosDecim = number_format($valor_total2, 2, '.', '');
 
         $productos = DB::table('prodcomb')
                         ->where('estadoprodcomb',1)
@@ -262,7 +283,7 @@ class DetalleCompraCombController2 extends Controller
                         // PRECIO BS. ',precioprodcomb) as prodservicio"),'idprodcomb')
                         ->pluck('prodservicio','idprodcomb');
 
-        $valor_total2 = $prodserv->sum('subtotal');
+   
 
         $ordencompra = DB::table('ordencompracomb as o')
                             ->select('o.nombrecompra','o.solicitante','o.proveedor')
@@ -297,7 +318,8 @@ class DetalleCompraCombController2 extends Controller
         return view('combustibles.detalleparcial.index4',
         ['prodserv'=>$prodserv,
         'productos'=>$productos,
-        'valor_total2'=>$valor_total2,
+        'CalAdosDecimdos'=>$CalAdosDecimdos,
+        'CalAdosDecim'=>$CalAdosDecim,
         'idcompracomb'=>$id2,
         'estado'=>$estado,
         'consumos'=>$consumos,
@@ -320,17 +342,21 @@ class DetalleCompraCombController2 extends Controller
 
 //requiere la cantidad para detalle compra
         $cantidad = $request->get('cantidad');
+        $cantidaduno = number_format($cantidad, 10, '.', '');
 
+        $SubTotalsol = $cantidaduno*$precio;
+        $SubTotalsolresu = number_format($SubTotalsol, 10, '.', '');
 
         $detalle = new DetalleCompraCombModel;
 
         $detalle->idprodcomb = $request->get('producto');
         $detalle->idcompracomb = $id2;
-        $detalle->cantidad = $request->get('cantidad');
+        // $detalle->cantidad = $request->get('cantidad');
+        $detalle->cantidad = $cantidaduno;
 //la variable precio lo trae aqui
         $detalle->precio = $precio;
         //la cantidad del detalle lo multi x cantidad
-        $detalle->subtotal = $precio * $cantidad;
+        $detalle->subtotal = $SubTotalsolresu;
 
         // para productos obtendremos el nombre y la partida
         $detallito = DB::table('detallecompracomb as d')
@@ -345,13 +371,21 @@ class DetalleCompraCombController2 extends Controller
                             -> where('d.idcompracomb', $id2)->get();
 
         if($detallito->isEmpty()){
-            $detalle->save();     
-            
+            $detalle->save();
+
+            $idco = $detalle->idcompracomb;
+            $productocom = CompraCombModel::find($idco);
+            $estadouno = $productocom->estado3;
+            $estadodos =$estadouno+1;
+            $productocom->estadocompracomb = 1;
+            $productocom->estado3 = $estadodos;
+            $productocom->save();
+
             $request->session()->flash('message', 'Registro Agregado');
         }else{
             $request->session()->flash('message', 'El Item Ya existe en la Planilla');
         }
-        return redirect()->route('combustibles.detalleparcial.index');
+        return redirect()->route('detalleparcial.index');
     }
 
     public function show($idcompracomb){
@@ -443,8 +477,23 @@ class DetalleCompraCombController2 extends Controller
     public function delete($id){
 
         $detalle = DetalleCompraCombModel::find($id);
+
+        $idco = $detalle->idcompracomb;
+            $productocom = CompraCombModel::find($idco);
+            $estadouno = $productocom->estado3;
+            $estadodos =$estadouno-1;
+            $productocom->estado3 = $estadodos;
+            if ($estadodos <=  0) {
+                $productocom->estadocompracomb = 0;
+            } else {
+                $productocom->estadocompracomb = 1;
+            }
+            $productocom->save();
+
         $detalle->delete();
-        return redirect()->route('combustibles.detalleparcial.index');
+
+      
+        return redirect()->route('detalleparcial.index');
     }
 
     public function destroyed2($id){

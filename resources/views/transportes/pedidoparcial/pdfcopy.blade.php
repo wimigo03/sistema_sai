@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
 <br>
-<div class="row font-verdana-12">
+<div class="row font-verdana-bg">
     <div class="col-md-8 titulo">
         <b>SOLICITUD DE UNIDAD -- </b><b style='color:red'>{{$idd->nombrearea}} </b>--
     </div>
