@@ -36,12 +36,12 @@
                     <div class="form-group row">
                         <label for="codigoprogr" style="color:black;font-weight: bold;"
                             class="required col-md-2 col-form-label text-md-right">
-                            Codigo:
+                            Nombre:
                         </label>
                         <div class="col-md-2">
-                            <input type="text"  required name="codigoprogr" id="codigoprogr" class="form-control" 
-                                placeholder="Codigo del Programa..."
-                                onchange="myFunction()" >
+                            <input type="text"  required name="codigo" id="codigo" class="form-control" 
+                                placeholder="Nombre del Programa..."
+                                onchange="myFunction()" onkeyup="convertirAMayusculas(this)">
                         </div>
                     </div>
                     
@@ -49,31 +49,17 @@
                     <div class="form-group row">
                         <label for="nombre" style="color:black;font-weight: bold;"
                             class="required col-md-2 col-form-label text-md-right">
-                            Nombre:
+                            Descripcion:
                         </label>
 
                         <div class="col-md-8">
                             <input type="text" required name="nombre" id="nombre" class="form-control"
-                                placeholder="Nombre del Programa..."
+                                placeholder="Descripcion del Programa..."
                                 onkeyup="convertirAMayusculas(this)">
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <label for="direccion" style="color:black;font-weight: bold;"
-                            class="required col-md-2 col-form-label text-md-right">
-                            Direccion:
-                        </label>
-
-                        <div class="col-md-8">
-                            <input type="text" required name="direccion" id="direccion" class="form-control"
-                                placeholder="Direccion del Programa..."
-                                onkeyup="convertirAMayusculas(this)">
-                        </div>
-                    </div>
-
-
-                    </br>
+                                    </br>
 
                     <div align='center'>
                                
@@ -84,8 +70,9 @@
                     &nbsp;Registrar
                 </button>
                 <button class="btn btn-danger font-verdana-bg" type="button" >
+                  
 
-                    <a href="{{url()->previous()}}" style="color:white">Cancelar</a>
+                    <a href="{{url('/programa/index')}}" style="color:white">Cancelar</a>
                 </button>
                 <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" 
                 style="display: none;"></i>
@@ -94,10 +81,6 @@
 
                 </form>
             </font>
-
-
-
-
         </div>
        
     </div>
@@ -134,26 +117,22 @@
         function validar_formulario(){
 
             if($("#nombre").val() == ""){
-                message_alert("El campo <b>[NOMBRE]</b> es un dato obligatorio...");
+                message_alert("El campo <b>[DESCRIPCION]</b> es un dato obligatorio...");
                 return false;
 
             }
-            if($("#codigoprogr").val() == ""){
-                message_alert("El campo <b>[CODIGO]</b> es un dato obligatorio...");
+            if($("#codigo").val() == ""){
+                message_alert("El campo <b>[NOMBRE]</b> es un dato obligatorio...");
                 return false;
             }
             if ($("#codigoprogr2").val() == "comunicacion") {
                 $("#codigoprogr2").val('');
-                $("#nombre").val('');
-                $("#codigoprogr").val('');
-                message_alert("El <b>[CODIGO ]</b> ya existe en nuestros registros...");
+                $("#codigo").val('');
+           
+                message_alert("El <b>[NOMBRE ]</b> ya existe en nuestros registros...");
                 return false;
             }
-            if($("#direccion").val() == ""){
-                message_alert("El campo <b>[DIRECCION]</b> es un dato obligatorio...");
-                return false;
-
-            }
+         
             return true;
         }
    
@@ -161,7 +140,7 @@
             respuesta();
         }
         function respuesta() {
-            var ot_antigua = $("#codigoprogr").val();
+            var ot_antigua = $("#codigo").val();
             $.ajax({
                 url: "{{ route('programa.pregunta10') }}",
                 data: 'ot_antigua=' + ot_antigua,

@@ -46,7 +46,7 @@ use App\Models\Almacen\ValeModel;
 use App\Models\Almacen\DetalleValeModel;
 use Carbon\Carbon;
 use App\Models\Compra\ProdCombModel;
-
+use App\Models\Canasta\Dea;
 class ComegresoController extends Controller
 {
     public function index(Request $request)
@@ -246,7 +246,7 @@ class ComegresoController extends Controller
         $userdate = User::find($id)->usuariosempleados;
         $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
         $id4 = $personalArea->idarea;
-        $id3 = $personal->idprogramacomb;
+        $id3 = $personal->dea_id;
 
         $comingreso = new ComegresoModel();
 
@@ -263,7 +263,7 @@ class ComegresoController extends Controller
         $comingreso->detallecomegreso = $request->input('detalle');
         $comingreso->idusuario = $request->input('idusuario');
 
-        $comingreso->idprogramacomb = $id3;
+        $comingreso->iddea = $id3;
         $comingreso->idarea = $id4;
         $comingreso->idproveedor = 1;
         $comingreso->estadoegreso = 5;
@@ -276,13 +276,14 @@ class ComegresoController extends Controller
         $comegresos = ComegresoModel::find($idcomegreso);
 
         $id2 = $comegresos->idcomegreso;
-        $id4 = $comegresos->idprogramacomb;
+        $id4 = $comegresos->iddea;
         $id5 = $comegresos->idarea;
         $id6 = $comegresos->idpartidacomb;
         $id7 = $comegresos->idcomingreso;
         $id8 = $comegresos->idusuario;
         $id9 = $comegresos->idtipocomin;
         $id10 = $comegresos->fechaegreso;
+        $id11 = $comegresos->idproveedor;
         $Fechaaretra = $comegresos->fechaegreso;
         $Horaartra = $comegresos->horaegreso;
         $Idvale = $comegresos->idvale;
@@ -301,9 +302,13 @@ class ComegresoController extends Controller
         $fechadrtraaprob = substr($Fechaaprob, 0, 4);
         $Fechayhorartraaprob = $fechagrtraaprob . "-" .  $fechamrtraaprob . "-" .  $fechadrtraaprob . " " .  $Horaartraaprob;
 
-        $programados = DB::table('programacomb')
-            ->where('idprogramacomb', $id4)
-            ->select('codigoprogr', 'nombreprograma', 'idprogramacomb')
+        $programauno = DB::table('deas')
+        ->where('estado', 1)
+        ->orderBy('id', 'asc')
+        ->get();
+
+        $programados = DB::table('deas')
+            ->where('id', $id4)
             ->get();
 
         $programacinco = DB::table('programacomb')
@@ -373,6 +378,21 @@ class ComegresoController extends Controller
             })
             ->get();
 
+            $empleadodos = DB::table('empleados as emp')
+            ->join('areas as a', 'a.idarea', '=', 'emp.idarea')
+            ->join('file as fi', 'fi.idfile', '=', 'emp.idfile')
+            ->select(
+                'emp.estadoemp1',
+                'emp.idemp',
+                'emp.nombres',
+                'emp.ap_pat',
+                'emp.ap_mat',
+                'fi.nombrecargo',
+                'a.nombrearea'
+            )
+            ->where('emp.idemp',  $id8)
+            ->get();
+
         $empleadocinco = DB::table('empleados as emp')
             ->join('areas as a', 'a.idarea', '=', 'emp.idarea')
             ->join('file as fi', 'fi.idfile', '=', 'emp.idfile')
@@ -392,6 +412,12 @@ class ComegresoController extends Controller
             ->where('idproveedor', '!=', 1)
             ->get();
 
+            $proveedordos = DB::table('proveedor')
+          
+            ->where('idproveedor', $id11)
+            ->get();
+
+
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
 
@@ -400,7 +426,7 @@ class ComegresoController extends Controller
                 'id',
                 'comegresos',
                 'tipos',
-                'programados',
+                'programauno',
                 'areados',
                 'Fechayhorartra',
                 'Fechayhorartraaprob',
@@ -413,7 +439,7 @@ class ComegresoController extends Controller
             ));
         } else {
             if ($estadoegreso == 2) {
-                return view('almacenes.comegreso.editar', compact(
+                return view('almacenes.comegreso.editardos', compact(
                     'id',
                     'comegresos',
                     'tipos',
@@ -425,8 +451,8 @@ class ComegresoController extends Controller
                     'Idvale',
                     'comingresotres',
                     'partidados',
-                    'empleados',
-                    'proveedores'
+                    'empleadodos',
+                    'proveedordos'
                 ));
             } else {
                 if ($estadoegreso == 5) {
@@ -435,7 +461,7 @@ class ComegresoController extends Controller
                         'id10',
                         'comegresos',
                         'tipos',
-                        'programacinco',
+                        'programauno',
                         'areacinco',
                         'Fechayhorartra',
                         'Fechayhorartraaprob',
@@ -496,7 +522,7 @@ class ComegresoController extends Controller
         $comingreso = ComegresoModel::find($request->idcomegreso);
         $comingreso->idtipocomin = $request->input('tipo');
         $comingreso->detallecomegreso = $request->input('detalle');
-        $comingreso->idprogramacomb = $request->input('idprograma');
+        $comingreso->iddea = $request->input('idprograma');
         $comingreso->idcomingreso = $request->input('idcomingreso');
         $comingreso->idarea = $request->input('idarea');
         $comingreso->idpartidacomb = $request->input('idpartida');
@@ -530,7 +556,7 @@ class ComegresoController extends Controller
         $comingreso = ComegresoModel::find($request->idcomegreso);
         $comingreso->idtipocomin = $request->input('tipo');
         $comingreso->detallecomegreso = $request->input('detalle');
-        $comingreso->idprogramacomb = $request->input('idprograma');
+        $comingreso->iddea = $request->input('idprograma');
         $comingreso->idcomingreso = $request->input('idcomingreso');
         $comingreso->idarea = $request->input('idarea');
         $comingreso->idpartidacomb = $request->input('idpartida');

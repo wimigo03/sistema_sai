@@ -1,5 +1,5 @@
 <center>
-   
+    @can('partidacomb.edit')
     <td style="padding: 0;" class="text-center p-1">
 
      
@@ -14,5 +14,5 @@
 
 
     </td>
-         
+    @endcan     
 </center>

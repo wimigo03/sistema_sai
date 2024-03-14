@@ -37,19 +37,17 @@
             <div class="form-group row">
                 <div class="col-md-7">
                     <label for="idprograma" class="d-inline font-verdana-bg">
-                        <b>Programa</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
+                        <b>Ubicacion Fisica</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                     </label>
                     <select name="idprograma" id="idprograma" placeholder="--Seleccionar--"
                         class="form-control form-control-sm select2">
                         <option value="">-</option>
-                        @foreach ($programados as $area)
-                            @if ($area->idprogramacomb == $comegresos->idprogramacomb)
-                                <option value="{{ $area->idprogramacomb }}" selected>Nombre:&nbsp;{{ $area->codigoprogr }}&nbsp;{{ $area->nombreprograma }}&nbsp;{{ $area->idprogramacomb }}
-                                </option>
-                            @else
-                                <option value="{{ $area->idprogramacomb }}"> Nombre:&nbsp;{{ $area->codigoprogr }}&nbsp;{{ $area->nombreprograma }}&nbsp;{{ $area->idprogramacomb }}
-                                </option>
-                            @endif
+                        @foreach ($programauno as $catprogramatica)
+                        @if ($catprogramatica->id==$comegresos->iddea)
+                        <option value="{{$catprogramatica->id}}" selected>CODIGO: {{$catprogramatica->id}} //NOMBRE: {{$catprogramatica->nombre}} //DESCRIPCION: {{$catprogramatica->descripcion}}</option>
+                        @else
+                        <option value="{{$catprogramatica->id}}">CODIGO: {{$catprogramatica->id}} //NOMBRE: {{$catprogramatica->nombre}} //DESCRIPCION: {{$catprogramatica->descripcion}}</option>
+                        @endif
                         @endforeach
                     </select>
                 </div>
@@ -90,11 +88,11 @@
                         @foreach ($comingresotres as $area)
                             @if ($area->idcomingreso == $comegresos->idcomingreso)
                                 <option value="{{ $area->idcomingreso }}" selected>
-                                    Nombre:&nbsp;{{ $area->codcatprogramatica }}&nbsp;{{ $area->nombrecatprogramatica }}
+                                    CODIGO:&nbsp;{{ $area->codcatprogramatica }} //NOMBRE: {{ $area->nombrecatprogramatica }}
                                 </option>
                             @else
                                 <option value="{{ $area->idcomingreso }}">
-                                    Nombre:&nbsp;{{ $area->codcatprogramatica }}&nbsp;{{ $area->nombrecatprogramatica }}
+                                    CODIGO:&nbsp;{{ $area->codcatprogramatica }} //NOMBRE: {{ $area->nombrecatprogramatica }}
                                 </option>
                             @endif
                         @endforeach
@@ -110,9 +108,9 @@
                         <option value="">-</option>
                         @foreach ($areados as $area)
                             @if ($area->idarea == $comegresos->idarea)
-                                <option value="{{ $area->idarea }}" selected>Nombre:&nbsp;{{ $area->idarea }}&nbsp;{{ $area->nombrearea }}</option>
+                                <option value="{{ $area->idarea }}" selected>CODIGO:&nbsp;{{ $area->idarea }}&nbsp;//NOMBRE: {{ $area->nombrearea }}</option>
                             @else
-                                <option value="{{ $area->idarea }}"> Nombre:&nbsp;{{ $area->idarea }}&nbsp;{{ $area->nombrearea }}</option>
+                                <option value="{{ $area->idarea }}"> CODIGO:&nbsp;{{ $area->idarea }}&nbsp;//NOMBRE: {{ $area->nombrearea }}</option>
                             @endif
                         @endforeach
                     </select>
@@ -128,10 +126,10 @@
                         @foreach ($partidados as $area)
                             @if ($area->idpartidacomb == $comegresos->idpartidacomb)
                                 <option value="{{ $area->idpartidacomb }}" selected>
-                                    Nombre:&nbsp;{{ $area->codigopartida }}&nbsp;{{ $area->nombrepartida }}</option>
+                                    CODIGO:&nbsp;{{ $area->codigopartida }}&nbsp;//NOMBRE: {{ $area->nombrepartida }}</option>
                             @else
                                 <option value="{{ $area->idpartidacomb }}">
-                                    Nombre:&nbsp;{{ $area->codigopartida }}&nbsp;{{ $area->nombrepartida }}</option>
+                                    CODIGO:&nbsp;{{ $area->codigopartida }}&nbsp;//NOMBRE: {{ $area->nombrepartida }}</option>
                             @endif
                         @endforeach
                     </select>
@@ -160,19 +158,20 @@
                     </label>
                     <textarea name="detalle" cols="1" rows="3" class="form-control form-control-sm font-verdana-bg" id="detalle" onkeyup="convertirAMayusculas(this)">{{$comegresos->detallecomegreso}}</textarea>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <label for="idproveedor" class="d-inline font-verdana-bg">
                         <b>Proveedor</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                     </label>
                     <select  name="idproveedor" id="idproveedor" placeholder="--Seleccionar--"
                         class="form-control form-control-sm select2">
                         <option value="">-</option>
-                        @foreach ($proveedores as $area)
-                            @if ($area->idproveedor == $comegresos->idproveedor)
-                                <option value="{{ $area->idproveedor }}" selected>{{ $area->nombreproveedor }}</option>
-                            @else
-                                <option value="{{ $area->idproveedor }}">{{ $area->nombreproveedor }}</option>
-                            @endif
+                        @foreach ($proveedores as $proveedor)
+                        @if ($proveedor->idproveedor==$comegresos->idproveedor)
+                        <option value="{{$proveedor->idproveedor}}" selected>COD: {{$proveedor->idproveedor}} //NOMB: {{$proveedor->nombreproveedor}} //DUEÑO: {{$proveedor->representanteproveedor}} //Dir: {{$proveedor->direccionproveedor}} //Tel: {{$proveedor->telefonoproveedor}}
+                        </option>
+                        @else
+                        <option value="{{$proveedor->idproveedor}}">CODIGO: {{$proveedor->idproveedor}} //NOMBRE: {{$proveedor->nombreproveedor}} //DUEÑO: {{$proveedor->representanteproveedor}} //DIRECCION: {{$proveedor->direccionproveedor}} //TELEFONO: {{$proveedor->telefonoproveedor}}</option>
+                        @endif
                         @endforeach
                     </select>
                 </div>

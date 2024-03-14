@@ -52,8 +52,8 @@
     </style>
     @include('layouts.modal.alerta')
     @include('layouts.modal.confirmar')
-    @include('layouts.modal.no-confirmar')
-    @include('layouts.modal.confirmar_compra')
+     @include('layouts.modal.no-confirmar')
+    @include('layouts.modal.confirmar_compra') 
     @yield('styles')
 </head>
 <body style="background-color: #fafafa;" {{--onLoad="document.getElementById('alx').click();"--}}>

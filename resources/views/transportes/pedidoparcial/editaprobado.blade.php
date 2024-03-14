@@ -5,7 +5,8 @@
 <div class="row font-verdana-bg">
     <div class="col-md-4 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-            <a href="{{url()->previous()}}">
+            <a href="{{url('/upedidoparcial/index')}}">
+
                 <span class="color-icon-1">
                     &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                 </span>
@@ -37,12 +38,12 @@
     @endif
 </div>
 <div class="body-border" style="background-color: #FFFFFF;">
-    <form method="post" action="{{ route('transportes.pedidoparcial.update') }}" id="form">
+    <form method="post" action="{{ route('upedidoparcial.update') }}" id="form">
         @csrf
         {{--@method('PUT')--}}
-        <input type="hidden" name="cominterna3" id="cominterna3">
         <input type="text" hidden name="idsoluconsumo" 
         value="{{$soluconsumos->idsoluconsumo}}">
+        <input type="hidden" name="cominterna3" id="cominterna3">
    
 
         <div class="form-group row">

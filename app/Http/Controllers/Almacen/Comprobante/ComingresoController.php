@@ -44,7 +44,7 @@ use App\Models\Almacen\Comprobante\DetalleComingresoModel;
 use App\Models\Compra\ProdCombModel;
 use App\Models\Compra\CatProgModel;
 use Carbon\Carbon;
-
+use App\Models\Canasta\Dea;
 class ComingresoController extends Controller
 {
     public function index()
@@ -59,7 +59,7 @@ class ComingresoController extends Controller
             ->join('proveedor as p', 'p.idproveedor', '=', 'ing.idproveedor')
             ->join('areas as ar', 'ar.idarea', '=', 'ing.idarea')
             ->join('catprogramaticacomb as cat', 'cat.idcatprogramaticacomb', '=', 'ing.idcatprogramaticacomb')
-            ->join('programacomb as pro', 'pro.idprogramacomb', '=', 'ing.idprogramacomb')
+            ->join('deas as da', 'da.id', '=', 'ing.iddea')
             // ->where('ing.estadoingreso',1)
 
             ->select(
@@ -213,7 +213,7 @@ class ComingresoController extends Controller
         $id2 = $comingresos->iddirigidoa;
         $id3 = $comingresos->idviaa;
         $id4 = $comingresos->iddepartede;
-        $id6 = $comingresos->idprogramacomb;
+        $id6 = $comingresos->iddea;
         $id7 = $comingresos->idcatprogramaticacomb;
 
         $Fechaa = $comingresos->fechaingreso;
@@ -234,8 +234,8 @@ class ComingresoController extends Controller
             ->where('idproveedor', '!=', 1)
             ->where('idproveedor', $id8)
             ->get();
-        $programas = DB::table('programacomb')
-            ->where('idprogramacomb', $id6)
+        $programas = DB::table('deas')
+            ->where('id', $id6)
             ->get();
 
         $encargado = DB::table('encargados as e')
@@ -259,8 +259,7 @@ class ComingresoController extends Controller
             ->select('e.nombres', 'e.ap_pat', 'e.ap_mat', 'fi.cargo', 'fi.nombrecargo', 'a.nombrearea', 'e.idemp')
             ->get();
 
-        return view(
-            'almacenes.comingreso.editar',
+        return view('almacenes.comingreso.editar',
             compact('encargado', 'encargadodos', 'departede', 'idco', 'comingresos', 'proveedores', 'areas', 'catprogramaticas', 'Fechayhora', 'programas')
         );
     }
@@ -271,7 +270,7 @@ class ComingresoController extends Controller
         $idco = $comingresos->idcomingreso;
         $id4 = $comingresos->fechaingreso;
         $id5 = $comingresos->idcatprogramaticacomb;
-        $id6 = $comingresos->idcatprogramaticacomb;
+     
         $Fechaa = $comingresos->fechaingreso;
         $fechag = substr($Fechaa, 8, 2);
         $fecham = substr($Fechaa, 5, 2);
@@ -304,8 +303,8 @@ class ComingresoController extends Controller
             ->where('idproveedor', '!=', 1)
             ->where('estadoproveedor', 1)
             ->get();
-        $programas = DB::table('programacomb')
-            ->where('estadoprograma', 1)
+        $programas = DB::table('deas')
+            ->where('estado', 1)
             ->get();
 
         $encargado = DB::table('encargados as e')
@@ -333,14 +332,15 @@ class ComingresoController extends Controller
             ->get();
 
         return view('almacenes.comingreso.editarn',
-            compact('id4','id6', 'encargado', 'encargadodos', 'departede', 'idco', 'comingresos', 'proveedores', 'areas', 'catprogramaticas', 'Fechayhora', 'programas')
+            compact('id4','id5','encargado', 'encargadodos', 'departede', 'idco', 'comingresos', 'proveedores', 'areas', 'catprogramaticas', 'Fechayhora', 'programas')
         );
     }
     public function updaten(Request $request)
     {
 
         $id6fech = $request->input('id4');
-        $idcatprog = $request->input('id6');
+        $idcatprog = $request->input('id5');
+
         $gestionant = substr($id6fech, 0, 4);
         $mesant = substr($id6fech, 5, 2);
         $diaant = substr($id6fech, 8, 2);
@@ -375,7 +375,7 @@ class ComingresoController extends Controller
         $comingreso->idproveedor = $request->input('idproveedor');
         $comingreso->idcatprogramaticacomb = $request->input('idcategoria');
         $comingreso->idarea = $request->get('idarea');
-        $comingreso->idprogramacomb = $request->input('idprograma');
+        $comingreso->iddea = $request->input('idprograma');
 
         $fechasolACTe = Carbon::now();
         $hora = $fechasolACTe->toTimeString();
@@ -429,7 +429,7 @@ class ComingresoController extends Controller
         $comingreso->idarea = $request->input('area');
         $comingreso->idcatprogramaticacomb = $request->input('idcategoria');
         $comingreso->idproveedor = $request->input('proveedor');
-        $comingreso->idprogramacomb = $request->input('idprograma');
+        $comingreso->iddea = $request->input('idprograma');
 
         if ($comingreso->save()) {
             $request->session()->flash('message', 'Registro Procesado');

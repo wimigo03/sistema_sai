@@ -32,7 +32,7 @@
 
         <input type="text" hidden name="idcomingreso" value="{{$comingresos->idcomingreso}}">
         <input type="hidden" class="form-control" name="id4" placeholder="" value="{{$id4}}">
-        <input type="hidden" class="form-control" name="id6" placeholder="" value="{{$id6}}">
+        <input type="hidden" class="form-control" name="id5" placeholder="" value="{{$id5}}">
         <div class="form-group row">
 
             <div class="col-md-4">
@@ -154,14 +154,13 @@
                 <select  name="idprograma" id="idprograma" placeholder="--Seleccionar--" 
                 class="form-control form-control-sm select2">
                     <option value="">-</option>
-                    @foreach ($programas as $local)
+                    @foreach ($programas as $catprogramatica)
 
-                                @if ($local->idprogramacomb==$comingresos->idprogramacomb)
-                                <option value="{{$local->idprogramacomb}}" selected> {{$local->idprogramacomb}}  :  {{$local->nombreprograma}}  :  {{$local->direccion}}
-                                </option>
-                                @else
-                                <option value="{{$local->idprogramacomb}}">CODIGO: {{$local->idprogramacomb}} //NOMBRE: {{$local->nombreprograma}} //DIRECCION: {{$local->direccion}}</option>
-                                @endif
+                    @if ($catprogramatica->id==$comingresos->iddea)
+                    <option value="{{$catprogramatica->id}}" selected>CODIGO: {{$catprogramatica->id}} //NOMBRE: {{$catprogramatica->nombre}} //DESCRIPCION: {{$catprogramatica->descripcion}}</option>
+                    @else
+                    <option value="{{$catprogramatica->id}}">CODIGO: {{$catprogramatica->id}} //NOMBRE: {{$catprogramatica->nombre}} //DESCRIPCION: {{$catprogramatica->descripcion}}</option>
+                    @endif
 
                                 @endforeach
                 </select>

@@ -7,7 +7,7 @@
 
     <div class="col-md-4 text-right">
   
-       
+        @can('programa.create')
             <a href="{{ route('programa.create') }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar">
                 <button class="btn btn-sm btn-primary font-verdana" type="button" >
                     &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
@@ -15,7 +15,7 @@
             </a>
 
             <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
-     
+            @endcan
     </div>
 
     <div class="col-md-12">
@@ -33,8 +33,8 @@
                             <thead class="font-courier">
                                 <tr>
                                     <td class="text-center p-1 font-weight-bold"><b>N°</b></td>
-                                    <td class="text-center p-1 font-weight-bold"><b>CODIGO</b></td>
-                                    <td class="text-center p-1 font-weight-bold"><b>NOMBRE DEL PROGRAMA</b></td>
+                                    <td class="text-center p-1 font-weight-bold"><b>NOMBRE</b></td>
+                                    <td class="text-center p-1 font-weight-bold"><b>DESCRIPCION DEL PROGRAMA</b></td>
                                     <td class="text-center p-1 font-weight-bold">
                                         <i class="fa fa-bars" aria-hidden="true"></i>
                                     </td>
@@ -67,9 +67,9 @@ $(function() {
         ajax: "{{ route('programa.list') }}",
         columns: [
             {data: 'DT_RowIndex',orderable: false,searchable: false,class:'text-justify p-1 font-verdana'},
-            { data: 'codigoprogr', name: 'codigoprogr',class:'text-justify p-1 font-verdana' },
+            { data: 'nombre', name: 'nombre',class:'text-justify p-1 font-verdana' },
            
-            { data: 'nombreprograma', name: 'nombreprograma',class:'text-justify p-1 font-verdana' },
+            { data: 'descripcion', name: 'descripcion',class:'text-justify p-1 font-verdana' },
 
             {
                 data: 'btn',

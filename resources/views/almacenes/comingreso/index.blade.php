@@ -7,12 +7,14 @@
         {{-- <b>COMPROBANTE DE INGRESO--</b><b style='color:red'>{{$idd->nombrearea}} </b> --}}
     </div>
     <div class="col-md-4 text-right titulo">
+        @can('comingreso.create')
         <a href="{{route('comingreso.create')}}" class="tts:left tts-slideIn tts-custom" 
         aria-label="  Solicitud">
             <button class="btn btn-sm btn-success font-verdana" type="button" >Agreg.Regist.
                 &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
             </button>
         </a>
+        @endcan
     </div>
     <div class="col-md-12">
         <hr class="hrr">
@@ -77,6 +79,7 @@
                                             @endif
                 
                                             @if($comp->estadoingreso == '1')
+                                            @can('comingreso.editarn')
                                             <td style="padding: 0;" class="text-center p-1">
                                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar">
                                                         <a href="{{route('comingreso.editarn',$comp->idcomingreso)}}">
@@ -86,6 +89,8 @@
                                                         </a>
                                                     </span>
                                                 </td>
+                                                @endcan
+                                                @can('comingreso.editardoc')
                                                  <td style="padding: 0;" class="text-center p-1">
                                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle">
                                                     <a href="{{route('comingreso.editardoc',$comp->idcomingreso)}}">
@@ -95,8 +100,9 @@
                                                     </a>
                                                 </span>
                                             </td>
-                
+                                            @endcan
                                             @elseif($comp->estadoingreso == '2')
+                                            @can('comingreso.editar')
                                             <td style="padding: 0;" class="text-center p-1">
                                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar">
                                                         <a href="{{route('comingreso.editar',$comp->idcomingreso)}}">
@@ -106,6 +112,8 @@
                                                         </a>
                                                     </span>
                                                 </td>
+                                                @endcan
+                                                @can('comingreso.editardocn')
                                             <td style="padding: 0;" class="text-center p-1">
                                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle">
                                                     <a href="{{route('comingreso.editardocn',$comp->idcomingreso)}}">
@@ -115,7 +123,7 @@
                                                     </a>
                                                 </span>
                                             </td>
-                                       
+                                            @endcan
                                             @endif 
                 
                 

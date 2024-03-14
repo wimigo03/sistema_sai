@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Redirect;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use App\Models\EmpleadosModel;
-
+use App\Models\Canasta\Dea;
 
 class CompraCombController extends Controller
 {
@@ -32,15 +32,16 @@ class CompraCombController extends Controller
         $compras = DB::table('compracomb as c')
                         ->join('proveedor as p', 'p.idproveedor', '=', 'c.idproveedor')
                         ->join('catprogramaticacomb as cat', 'cat.idcatprogramaticacomb', '=', 'c.idcatprogramaticacomb')
-                        ->join('programacomb as prog', 'prog.idprogramacomb', '=', 'c.idprogramacomb')
+                      
                         ->join('areas as a', 'a.idarea', '=', 'c.idarea')
+                        ->join('deas as da', 'da.id', '=', 'c.iddea')
                         ->where('c.estadocompracomb', '!=', 0)
                         // ->where('c.estadocompracomb',1)
 
                         ->select(['c.estadocompracomb','c.idcompracomb','c.estado1','c.estado2','c.estado3',
                         'c.objeto', 'c.justificacion','c.preventivo','c.numcompra','c.fechasoli','c.controlinterno',
                         
-                        'p.nombreproveedor','a.nombrearea','cat.codcatprogramatica','prog.nombreprograma'])
+                        'p.nombreproveedor','a.nombrearea','cat.codcatprogramatica','da.descripcion'])
 
                          ->orderBy('c.idcompracomb', 'desc');
                         
@@ -97,6 +98,7 @@ class CompraCombController extends Controller
                 ->addColumn('actions', function ($compras) {
                     // $buttonHtml = '';
                     if ($compras->estadocompracomb == 1) {
+                       
                          $buttonHtml = '<form action="' . route('pedidocomb.edit', $compras->idcompracomb) . '" method="GET" style="display: inline">' .
                             csrf_field() .
                             method_field('GET') .
@@ -106,6 +108,7 @@ class CompraCombController extends Controller
                                 </span>
                                 </button>
                                 </form>';
+                             
                     } else {
                         if ($compras->estadocompracomb == 2) {
                          $buttonHtml = '<form action="' . route('pedidocomb.editabledos', $compras->idcompracomb) . '" method="GET" style="display: inline">' .
@@ -176,10 +179,10 @@ class CompraCombController extends Controller
         $compras = DB::table('compracomb as c')
                         ->join('proveedor as p', 'p.idproveedor', '=', 'c.idproveedor')
                         ->join('catprogramaticacomb as cat', 'cat.idcatprogramaticacomb', '=', 'c.idcatprogramaticacomb')
-                        ->join('programacomb as prog', 'prog.idprogramacomb', '=', 'c.idprogramacomb')
+                     
                         ->join('areas as a', 'a.idarea', '=', 'c.idarea')
-                      
-                        ->select('c.estadocompracomb','c.idcompracomb','c.controlinterno','c.fechasoli','c.estado1','c.estado2','c.estado3','a.nombrearea','c.objeto', 'c.justificacion','p.nombreproveedor','c.preventivo','c.numcompra','cat.codcatprogramatica','prog.nombreprograma')
+                        ->join('deas as da', 'da.id', '=', 'c.iddea')
+                        ->select('c.estadocompracomb','c.idcompracomb','c.controlinterno','c.fechasoli','c.estado1','c.estado2','c.estado3','a.nombrearea','c.objeto', 'c.justificacion','p.nombreproveedor','c.preventivo','c.numcompra','cat.codcatprogramatica','da.descripcion')
                         ->orderBy('c.idcompracomb', 'desc')
                         ->where('c.estadocompracomb', '!=', 0)
                         ->where('c.estadocompracomb', '!=', 1)
@@ -458,7 +461,7 @@ class CompraCombController extends Controller
         $id3 = $compras->idviaa;
         $id4 = $compras->iddepartede;
         $id5 = $compras->idarea;
-        $id6 = $compras->idprogramacomb;
+        $id6 = $compras->iddea;
         $id7 = $compras->idcatprogramaticacomb;
         $id8 = $compras->idproveedor;
 
@@ -494,8 +497,8 @@ class CompraCombController extends Controller
         $catprogramaticas = DB::table('catprogramaticacomb')
         ->where('idcatprogramaticacomb',$id7)
         ->get();
-        $programas = DB::table('programacomb')
-        ->where('idprogramacomb',$id6)
+        $programas = DB::table('deas')
+        ->where('id',$id6)
         ->get();
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
@@ -528,8 +531,9 @@ class CompraCombController extends Controller
        ->get();
 
         if ($Estadoun==1) {
+           
             return view('combustibles.pedido.editar',compact('idco','departede','encargadodos','encargado','id','compras','proveedores','areas','catprogramaticas','programas','Fechayhora'));
-
+           
         } else {
             if ($Estadoun==2) {    
         return view('combustibles.pedido.ver',compact('Fechayhorados','idco','departede','encargadodos','encargado','id','compras','proveedordos','areas','catprogramaticas','programas','Fechayhora'));
@@ -554,7 +558,7 @@ class CompraCombController extends Controller
         $id3 = $compras->idviaa;
         $id4 = $compras->iddepartede;
         $id5 = $compras->idarea;
-        $id6 = $compras->idprogramacomb;
+        $id6 = $compras->iddea;
         $id7 = $compras->idcatprogramaticacomb;
         $id8 = $compras->idproveedor;
 
@@ -597,8 +601,8 @@ class CompraCombController extends Controller
         $catprogramaticas = DB::table('catprogramaticacomb')
         ->where('idcatprogramaticacomb',$id7)
         ->get();
-        $programas = DB::table('programacomb')
-        ->where('idprogramacomb',$id6)
+        $programas = DB::table('deas')
+        ->where('id',$id6)
         ->get();
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;

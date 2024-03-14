@@ -17,6 +17,8 @@ use App\Models\User;
 use App\Models\EmpleadosModel;
 use Illuminate\Support\Facades\Auth;
 
+use App\Models\Canasta\Dea;
+
 class ProgramaCombController extends Controller
 {
     public function index()
@@ -32,8 +34,9 @@ class ProgramaCombController extends Controller
 
     public function listado()
     {
-        $data = DB::table('programacomb')
-            ->where('estadoprograma', '=', 1);
+        $data = DB::table('deas')
+            ->where('estado', '=', 1)
+            ->orderBy('id', 'asc');
        
 
         return DataTables::of($data)
@@ -52,13 +55,10 @@ class ProgramaCombController extends Controller
 
     public function store(Request $request)
     {
-        $programas = new ProgramaCombModel();
-        $programas -> codigoprogr = $request->input('codigoprogr');
-        $programas->nombreprograma = $request->input('nombre');
-        $programas->direccion = $request->input('direccion');
-
-
-        $programas->estadoprograma = 1;
+        $programas = new Dea();
+        $programas -> nombre = $request->input('codigo');
+        $programas->descripcion = $request->input('nombre');
+        $programas->estado = 1;
 
 
         if ($programas->save()) {
@@ -83,19 +83,19 @@ class ProgramaCombController extends Controller
     }
 
    
-    public function edit($idprogramacomb)
+    public function edit($id)
     {
-        $programas = ProgramaCombModel::find($idprogramacomb);
+        $programas = Dea::find($id);
 
         return view('combustibles/programa/edit')->with('programas', $programas);
     }
 
-    public function update(Request $request, $idprogramacomb)
+    public function update(Request $request, $id)
     {
-        $programas = ProgramaCombModel::find($idprogramacomb);
-        $programas->nombreprograma = $request->input('nombre');
-        $programas -> codigoprogr = $request->input('codigoprogr');
-        $programas->direccion = $request->input('direccion');
+        $programas = Dea::find($id);
+        $programas->nombre = $request->input('codigo');
+        $programas -> descripcion = $request->input('nombre');
+      
         if ($programas->save()) {
             $request->session()->flash('message', 'Registro Procesado');
         } else {
@@ -109,9 +109,9 @@ class ProgramaCombController extends Controller
         $ot_antigua=$_POST['ot_antigua'];
             $data = "hola";
             $data2 = "holaSSSS";
-            $validarci = DB::table('programacomb as s')
-            ->select('s.codigoprogr')
-           ->where('s.codigoprogr', $ot_antigua)
+            $validarci = DB::table('deas as s')
+            ->select('s.nombre')
+           ->where('s.nombre', $ot_antigua)
             ->get();
                if($validarci->count()>0){
             return ['success' => true, 'data' => $data];

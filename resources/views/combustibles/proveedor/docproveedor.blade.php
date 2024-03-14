@@ -17,7 +17,7 @@
 
                 &nbsp;&nbsp;&nbsp;
 
-
+                @can('proveedor.createdoc')
                     <a href="{{ route('proveedor.createdoc', $idproveedor) }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar">
                             <button class="btn btn-sm btn-info   font-verdana" type="button" >
                                 &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
@@ -25,7 +25,7 @@
                         </a>
 
                         <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
-
+                        @endcan
 
 
             </div>
@@ -61,17 +61,18 @@
 
 
                             <td>
-                             
+                                @can('proveedor.verdoc')
                                 <span class="tts:right tts-slideIn tts-custom" aria-label="Ver Documento">
                                 <a href="/../Documentos/{{$docprov ->documento}}" target="blank_"
                                 class="fa fa-eye fa-lg " ></a>
 
                             </span>
 
-                           
+                            @endcan
 
                             </td>
                             <td>
+                                @can('proveedor.editararchivo')
                             <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Archivo">
                                 <a href="{{route('proveedor.editararchivo',$docprov ->iddocproveedores)}}">
                                     <span class="text-warning">
@@ -80,7 +81,8 @@
                                 </a>
                             </span>
 
-                                
+                            @endcan   
+                        </td>
                         </tr>
                         @empty
                         <tr>

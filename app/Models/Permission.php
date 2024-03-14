@@ -12,8 +12,7 @@ class Permission extends Model
     protected $fillable = [
         'name',
         'descripcion',
-        'estado',
-        'dea_id'
+        'estado'
     ];
 
     const ESTADOS = [

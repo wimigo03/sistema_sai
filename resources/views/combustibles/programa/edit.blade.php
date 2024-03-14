@@ -27,39 +27,30 @@
         
         <div class="body-border">
             <font size="2" face="Courier New" >
-                <form method="POST" id="form" action="{{ route('programa.update', $programas->idprogramacomb) }}">
+                <form method="POST" id="form" action="{{ route('programa.update', $programas->id) }}">
                     @csrf
                     @method('POST')
                     <input type="hidden" name="codigoprogr2" id="codigoprogr2">
                     <div class="form-group row">
-                        <label for="codigoprogr" style="color:black;font-weight: bold;"
-                            class="required col-md-2 col-form-label text-md-right">CODIGO:</label>
+                        <label for="codigo" style="color:black;font-weight: bold;"
+                            class="required col-md-2 col-form-label text-md-right">NOMBRE:</label>
                         <div class="col-md-2">
-                            <input type="text" required class="form-control" name="codigoprogr" id="codigoprogr" placeholder=""
-                                value="{{$programas->codigoprogr}}"
-                                onchange="myFunction()" >
+                            <input type="text" required class="form-control" name="codigo" id="codigo" placeholder=""
+                                value="{{$programas->nombre}}"
+                                onchange="myFunction()" onkeyup="convertirAMayusculas(this)" >
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label for="nombre" style="color:black;font-weight: bold;"
-                            class="required col-md-2 col-form-label text-md-right">Nombre:</label>
+                            class="required col-md-2 col-form-label text-md-right">DESCRIPCION:</label>
                         <div class="col-md-10">
                             <input type="text" required class="form-control" name="nombre" id="nombre" placeholder=""
-                                value="{{$programas->nombreprograma}}"
-                                onkeyup="convertirAMayusculas(this)">
+                                value="{{$programas->descripcion}}" onkeyup="convertirAMayusculas(this)">
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <label for="direccion" style="color:black;font-weight: bold;"
-                            class="required col-md-2 col-form-label text-md-right">direccion:</label>
-                        <div class="col-md-10">
-                            <input type="text" required class="form-control" name="direccion" id="direccion" placeholder=""
-                                value="{{$programas->direccion}}"
-                                onkeyup="convertirAMayusculas(this)">
-                        </div>
-                    </div>
+                 
 
 
                     <div align='center'>
@@ -71,7 +62,7 @@
                             </button>
                             <button class="btn btn-danger font-verdana-bg" type="button" >
             
-                                <a href="{{url()->previous()}}" style="color:white">Cancelar</a>
+                                <a href="{{url('/programa/index')}}" style="color:white">Cancelar</a>
                             </button>
                             <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" 
                             style="display: none;"></i>
@@ -122,33 +113,29 @@
 
 
             if($("#nombre").val() == ""){
-                message_alert("El campo <b>[NOMBRE]</b> es un dato obligatorio...");
+                message_alert("El campo <b>[DESCRIPCION]</b> es un dato obligatorio...");
                 return false;
 
             }
-            if($("#codigoprogr").val() == ""){
-                message_alert("El campo <b>[CODIGO]</b> es un dato obligatorio...");
+            if($("#codigo").val() == ""){
+                message_alert("El campo <b>[NOMBRE]</b> es un dato obligatorio...");
                 return false;
             }
             if ($("#codigoprogr2").val() == "comunicacion") {
                 $("#codigoprogr2").val('');
-                $("#nombre").val('');
-                $("#codigoprogr").val('');
-                message_alert("El <b>[CODIGO ]</b> ya existe en nuestros registros...");
+                $("#codigo").val('');
+                message_alert("El <b>[NOMBRE ]</b> ya existe en nuestros registros...");
                 return false;
             }
-            if($("#direccion").val() == ""){
-                message_alert("El campo <b>[DIRECCION]</b> es un dato obligatorio...");
-                return false;
-
-            }
+           
+         
             return true;
         }
         function myFunction() {
             respuesta();
         }
         function respuesta() {
-            var ot_antigua = $("#codigoprogr").val();
+            var ot_antigua = $("#codigo").val();
             $.ajax({
                 url: "{{ route('programa.pregunta10') }}",
                 data: 'ot_antigua=' + ot_antigua,

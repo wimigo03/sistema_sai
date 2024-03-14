@@ -7,13 +7,14 @@
     </div>
 
     <div class="col-md-4 text-right titulo">
+        @can('pedidoparcialcomb.create')
         <a href="{{route('pedidoparcialcomb.create')}}" class="tts:left tts-slideIn tts-custom" 
         aria-label="Agregar Solicitud">
             <button class="btn btn-sm btn-success font-verdana" type="button" >Agreg. Solic.
                 &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
             </button>
         </a>
-
+        @endcan 
 
 
      </div>
@@ -65,7 +66,7 @@
 
                             @if($comp->estadocompracomb == '0')
                             <td class="text-justify p-1">
-                            <b style="color: green">cero</b></td>
+                            <b style="color: green">Pendiente</b></td>
 
                             @elseif($comp->estadocompracomb == '1')
                             <td class="text-justify p-1">
@@ -86,6 +87,7 @@
                             @endif
 
                             @if($comp->estadocompracomb == '0')
+                            @can('pedidoparcialcomb.editaruno') 
                             <td style="padding: 0;" class="text-center p-1">
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Compra">
                                         <a href="{{route('pedidoparcialcomb.editaruno',$comp->idcompracomb)}}">
@@ -95,6 +97,8 @@
                                         </a>
                                     </span>
                                 </td>
+                                @endcan 
+                                    @can('pedidoparcialcomb.edit') 
                                  <td style="padding: 0;" class="text-center p-1">
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle">
                                     <a href="{{route('pedidoparcialcomb.edit',$comp->idcompracomb)}}">
@@ -104,7 +108,9 @@
                                     </a>
                                 </span>
                             </td>
+                            @endcan 
                             @elseif($comp->estadocompracomb == '1')
+                            @can('pedidoparcialcomb.editar') 
                             <td style="padding: 0;" class="text-center p-1">
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Compra">
                                     <a href="{{route('pedidoparcialcomb.editar',$comp->idcompracomb)}}">
@@ -114,6 +120,8 @@
                                     </a>
                                 </span>
                             </td>
+                            @endcan 
+                            @can('pedidoparcialcomb.edit') 
                             <td style="padding: 0;" class="text-center p-1">
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle">
                                     <a href="{{route('pedidoparcialcomb.edit',$comp->idcompracomb)}}">
@@ -123,7 +131,9 @@
                                     </a>
                                 </span>
                             </td>
+                            @endcan 
                             @elseif($comp->estadocompracomb == '2')
+                            @can('pedidoparcialcomb.ver') 
                             <td style="padding: 0;" class="text-center p-1">
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Compra">
                                         <a href="{{route('pedidoparcialcomb.ver',$comp->idcompracomb)}}">
@@ -133,6 +143,9 @@
                                         </a>
                                     </span>
                                 </td>
+                                @endcan 
+                              
+                                @can('pedidoparcialcomb.editable') 
                             <td style="padding: 0;" class="text-center p-1">
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle">
                                     <a href="{{route('pedidoparcialcomb.editable',$comp->idcompracomb)}}">
@@ -143,8 +156,11 @@
                                 </span>
                             </td>
                        
+                            @endcan 
                             
                             @elseif($comp->estadocompracomb == '5')
+                        
+                            @can('pedidoparcialcomb.vercinco') 
                             <td style="padding: 0;" class="text-center p-1">
                                      <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Compra">
                                          <a href="{{route('pedidoparcialcomb.vercinco',$comp->idcompracomb)}}">
@@ -154,6 +170,9 @@
                                          </a>
                                      </span>
                                  </td>
+                                 @endcan 
+                             
+                                 @can('pedidoparcialcomb.editalma') 
                              <td style="padding: 0;" class="text-center p-1">
                                  <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle">
                                      <a href="{{route('pedidoparcialcomb.editalma',$comp->idcompracomb)}}">
@@ -163,9 +182,11 @@
                                      </a>
                                  </span>
                              </td>
-                           
+                             @endcan 
+                             
                              @elseif($comp->estadocompracomb == '10')
-
+                             
+                             @can('pedidoparcialcomb.verdiez') 
                            <td style="padding: 0;" class="text-center p-1">
                              
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Compra">
@@ -176,6 +197,8 @@
                                         </a>
                                     </span>
                                 </td>
+                                @endcan 
+                                 @can('pedidoparcialcomb.editrecha') 
                             <td style="padding: 0;" class="text-center p-1">
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle">
                                     <a href="{{route('pedidoparcialcomb.editrecha',$comp->idcompracomb)}}">
@@ -185,7 +208,7 @@
                                     </a>
                                 </span>
                             </td>
-
+                            @endcan 
                             @endif 
 
 
