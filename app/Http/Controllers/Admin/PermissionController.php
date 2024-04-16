@@ -18,7 +18,7 @@ class PermissionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {
+    {dd("ok");
         abort_if(Gate::denies('permissions_access'), Response::HTTP_FORBIDDEN, 'Forbidden');
 
         $permissions = Permission::paginate(5)->appends($request->query());;

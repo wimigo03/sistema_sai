@@ -21,7 +21,7 @@
                     <li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_canasta_v1"
                             class="active collapsed" aria-expanded="false">
-                            <i class="fa-duotone fa-user" style="color:green">></i>
+                            <i class="fa-duotone fa-user" style="color:green"></i>
                             <span class="nav-label mr-3">Canasta (V1)</span>
                             <span class="fa fa-arrow-circle-left float-right"></span>
                         </a>
@@ -60,7 +60,7 @@
                     <li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_canasta_v2"
                             class="active collapsed" aria-expanded="false">
-                            <i class="fa-solid fa-gift" style="color:green">></i>
+                            <i class="fa-solid fa-gift" style="color:green"></i>
                             <span class="nav-label mr-3">Canasta (V2)</span>
                             <span class="fa fa-arrow-circle-left float-right"></span>
                         </a>
@@ -99,106 +99,151 @@
                     </li>
                     <hr style="margin-top:0; margin-bottom:0;">
                     {{-- USUARIOS --}}
-                    <li class="font-verdana-12">
-                        <a href="" data-toggle="collapse" data-target="#dashboard_users" class="active collapsed"
-                            aria-expanded="false">
-                            <i class="fa fa-users" style="color:green">></i>
-                            <span class="nav-label mr-3">Usuarios</span>
-                            <span class="fa fa-arrow-circle-left float-right"></span>
-                        </a>
-                        <ul class="sub-menu collapse" id="dashboard_users">
-                            @can('users.index')
-                                <li>
-                                    <a href="{{ route('users.index') }}">
-                                        <span class="nav-label mr-4">
-                                            <i class="fa-solid fa-people-arrows"></i>&nbsp;Listar
-                                        </span>
-                                    </a>
-                                </li>
-                            @endcan
-
-                            <li>
-                                <a href="{{ route('roles.index') }}">
-                                    <span class="nav-label mr-4">
-                                        <i class="fa-solid fa-list"></i>&nbsp;Roles
-                                    </span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="{{ route('permissions.index') }}">
-                                    <span class="nav-label mr-4">
-                                        &nbsp; &nbsp; &nbsp;
-                                        <i class="fa-solid fa-layer-group"></i>&nbsp;Permisos
-                                    </span>
-                                </a>
-                            </li>
-
-                        </ul>
-                    </li>
-                    <hr style="margin-top:0; margin-bottom:0;">
+                    @canany(['users.index','roles.index','permissions.index'])
+                        <li class="font-roboto-12">
+                            <a href="" data-toggle="collapse" data-target="#dashboard_adm" class="active collapsed" aria-expanded="false">
+                                <i class="fa-solid fa-gears fa-fw"></i>
+                                <span class="nav-label">Administracion</span>
+                                <span class="fa fa-arrow-circle-left float-right fa-fw"></span>
+                            </a>
+                            <ul class="sub-menu collapse" id="dashboard_adm">
+                                @can('users.index')
+                                    <li>
+                                        <a href="{{ route('users.index') }}">
+                                            &nbsp;&nbsp;&nbsp;<i class="fa fa-users fa-fw"></i>&nbsp;Usuarios
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('roles.index')
+                                    <li>
+                                        <a href="{{ route('roles.index') }}">
+                                            &nbsp;&nbsp;&nbsp;<i class="fa-solid fa-list fa-fw"></i>&nbsp;Roles
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('permissions.index')
+                                    <li>
+                                        <a href="{{ route('permissions.index') }}">
+                                            &nbsp;&nbsp;&nbsp;<i class="fa-solid fa-layer-group fa-fw"></i>&nbsp;Permisos
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </li>
+                        <hr style="margin-top:0; margin-bottom:0;">
+                    @endcanany
                     {{-- COMPRAS --}}
-                    <li class="font-verdana-12">
-                        <a href="" data-toggle="collapse" data-target="#dashboard_compras"
-                            class="active collapsed" aria-expanded="false">
-                            <i class="fa fa-shopping-cart" style="color:green"></i>
-                            <span class="nav-label mr-3">COMPRAS</span>
-                            <span class="fa fa-arrow-circle-left float-right"></span>
-                        </a>
-                        <ul class="sub-menu collapse" id="dashboard_compras">
-                            <li>
-                                <a href="{{ route('compras.pedidoparcial.index') }}">
-                                    &nbsp; &nbsp; &nbsp;
-                                    <span class="nav-label mr-4">Solicitudes de Compra</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('compras.pedido.index') }}">
-                                    &nbsp; &nbsp; &nbsp;
-                                    <span class="nav-label mr-4">Compras Solicitadas</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('medidas.index') }}">
-                                    &nbsp; &nbsp; &nbsp;
-                                    <span class="nav-label mr-4">Medidas</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('partida.index') }}">
-                                    &nbsp; &nbsp; &nbsp;
-                                    <span class="nav-label mr-4">Partidas</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('productos.index') }}">
-                                    &nbsp; &nbsp; &nbsp;
-                                    <span class="nav-label mr-4">Productos-Items</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('proveedores.index') }}">
-                                    &nbsp; &nbsp; &nbsp;
-                                    <span class="nav-label mr-4">Proveedores</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('programas.index') }}">
-                                    &nbsp; &nbsp; &nbsp;
-                                    <span class="nav-label mr-4">Programas</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('catprog.index') }}">
-                                    &nbsp; &nbsp; &nbsp;
-                                    <span class="nav-label mr-4">Categ. Programaticas</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <hr style="margin-top:0; margin-bottom:0;">
-                    {{-- EXPOCHACO --}}
-                    <li class="font-verdana-12">
+                    @canany(['solicitud.compra.index','orden.compra.index','proveedor.index','programa.index','categoria.programatica.index','item.index','unidad.medida.index','partida.index'])
+                        <li class="font-verdana-12">
+                            <a href="" data-toggle="collapse" data-target="#dashboard_compras" class="active collapsed" aria-expanded="false">
+                                <i class="fa fa-shopping-cart"></i>
+                                <span class="nav-label">Compras</span>
+                                <span class="fa fa-arrow-circle-left float-right"></span>
+                            </a>
+                            <ul class="sub-menu collapse" id="dashboard_compras">
+                                @can('solicitud.compra.index')
+                                    <li>
+                                        <a href="{{ route('solicitud.compra.index') }}">
+                                            &nbsp;&nbsp;&nbsp;<i class="fa-solid fa-list fa-fw"></i>&nbsp;Solicitudes de Compra
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('orden.compra.index')
+                                    <li>
+                                        <a href="{{ route('orden.compra.index') }}">
+                                            &nbsp;&nbsp;&nbsp;<i class="fa-solid fa-file-lines fa-fw"></i>&nbsp;Ordenes de Compra
+                                        </a>
+                                    </li>
+                                @endcan
+                                {{--<li>
+                                    <a href="{{ route('compras.pedidoparcial.index') }}">
+                                        &nbsp;&nbsp;&nbsp;<i class="fa-solid fa-file-lines fa-fw"></i>&nbsp;Solicitudes
+                                    </a>
+                                </li>--}}
+                                @can('proveedor.index')
+                                    <li>
+                                        <a href="{{ route('proveedor.index') }}">
+                                            &nbsp;&nbsp;&nbsp;<i class="fa-solid fa-person-carry fa-fw"></i>&nbsp;Proveedores
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('programa.index')
+                                    <li>
+                                        <a href="{{ route('programa.index') }}">
+                                            &nbsp;&nbsp;&nbsp;<i class="fa-solid fa-list fa-fw"></i>&nbsp;Programas
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('categoria.programatica.index')
+                                    <li>
+                                        <a href="{{ route('categoria.programatica.index') }}">
+                                            &nbsp;&nbsp;&nbsp;<i class="fa-solid fa-list fa-fw"></i>&nbsp;Categorias Programaticas
+                                        </a>
+                                    </li>
+                                @endcan
+                                @canany(['item.index','unidad.medida.index','partida.index'])
+                                    <li class="font-verdana-12">
+                                        <a href="" data-toggle="collapse" data-target="#dashboard_productos" class="active collapsed" aria-expanded="false">
+                                            &nbsp;&nbsp;&nbsp;<i class="fa fa-shopping-cart"></i>
+                                            <span class="nav-label">Productos</span>
+                                            <span class="fa fa-arrow-circle-left float-right"></span>
+                                        </a>
+                                        <ul class="sub-menu collapse" id="dashboard_productos">
+                                            @can('item.index')
+                                                <li>
+                                                    <a href="{{ route('item.index') }}">
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-gifts fa-fw"></i>&nbsp;Items
+                                                    </a>
+                                                </li>
+                                            @endcan
+                                            @can('unidad.medida.index')
+                                                <li>
+                                                    <a href="{{ route('unidad.medida.index') }}">
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-balance-scale fa-fw"></i>&nbsp;Unidades de Medida
+                                                    </a>
+                                                </li>
+                                            @endcan
+                                            @can('partida.index')
+                                                <li>
+                                                    <a href="{{ route('partida.index') }}">
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-file-invoice fa-fw"></i>&nbsp;Partidas Presupuestarias
+                                                    </a>
+                                                </li>
+                                            @endcan
+                                        </ul>
+                                    </li>
+                                @endcanany
+                            </ul>
+                        </li>
+                    @endcanany
+                    {{-- ALMACENES --}}
+                    @canany(['almacen.index','ingreso_compra.index'])
+                        <li class="font-verdana-12">
+                            <a href="" data-toggle="collapse" data-target="#dashboard_almacenes" class="active collapsed" aria-expanded="false">
+                                <i class="fa fa-shopping-cart"></i>
+                                <span class="nav-label">Almacenes</span>
+                                <span class="fa fa-arrow-circle-left float-right"></span>
+                            </a>
+                            <ul class="sub-menu collapse" id="dashboard_almacenes">
+                                @can('almacen.index')
+                                    <li>
+                                        <a href="{{ route('almacen.index') }}">
+                                            &nbsp;&nbsp;&nbsp;<i class="fa-solid fa-list fa-fw"></i>&nbsp;Ir a almacenes
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('ingreso.compra.index')
+                                    <li>
+                                        <a href="{{ route('ingreso.compra.index') }}">
+                                            &nbsp;&nbsp;&nbsp;<i class="fa-solid fa-file-lines fa-fw"></i>&nbsp;Ingresos por Compra
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </li>
+                    @endcanany
+
+                    {{--<li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_expochaco"
                             class="active collapsed" aria-expanded="false">
                             <i class="fa-duotone fa-user" style="color:green"></i>
@@ -215,7 +260,7 @@
                         </ul>
                     </li>
                     <hr style="margin-top:0; margin-bottom:0;">
-                    {{-- EXPOCHACO3 --}}
+
                     <li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_expochaco3"
                             class="active collapsed" aria-expanded="false">
@@ -231,7 +276,7 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>
+                    </li>--}}
                     <hr style="margin-top:0; margin-bottom:0;">
                     {{-- PERSONALIDADES JURIDICAS --}}
                     <li class="font-verdana-12">
@@ -628,36 +673,6 @@
                         </ul>
                     </li>
 
-                    </li>
-                    <hr style="margin-top:0; margin-bottom:0;">
-                    {{-- Usuarios --}}
-                    <li class="font-verdana-12">
-                        <a href="" data-toggle="collapse" data-target="#dashboard_users"
-                            class="active collapsed" aria-expanded="false">
-                            <i class="fa fa-users" style="color:green"></i>
-                            <span class="nav-label mr-3">USUARIOS</span>
-                            <span class="fa fa-arrow-circle-left float-right"></span>
-                        </a>
-                        <ul class="sub-menu collapse" id="dashboard_users">
-                            <li>
-                                <a href="{{ route('users.index') }}">
-                                    &nbsp; &nbsp; &nbsp;
-                                    <span class="nav-label mr-4">Usuarios</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{-- route('admin.roles.index') --}}">
-                                    &nbsp; &nbsp; &nbsp;
-                                    <span class="nav-label mr-4">Roles</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{-- route('admin.permissions.index') --}}">
-                                    &nbsp; &nbsp; &nbsp;
-                                    <span class="nav-label mr-4">Permisos</span>
-                                </a>
-                            </li>
-                        </ul>
                     </li>
                     <hr style="margin-top:0; margin-bottom:0;">
                     <li class="font-verdana-12">

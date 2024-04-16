@@ -239,36 +239,65 @@ main {
 .bg-gradient-warning {background-color: #f6c23e;background-image: linear-gradient(180deg,#f6c23e 10%,#dda20a 100%);background-size: cover;}
 .bg-gradient-secondary {background-color: #6c757d;background-image: linear-gradient(180deg,#6c757d 10%,#807e7e 100%);background-size: cover;}
 .row-reverse{flex-direction: row-reverse;}
-.font-verdana-xs {font-size: 10px; font-family: verdana,arial,helvetica;}
-.font-verdana-sm {font-size: 11px; font-family: verdana,arial,helvetica;}
-.font-verdana {font-size: 12px; font-family: verdana,arial,helvetica;}
-.font-verdana-12 {font-size: 13px; font-family: verdana,arial,helvetica;}
+.font-verdana-08 {font-size: 8px; font-family: verdana,arial,helvetica;}
+.font-verdana-09 {font-size: 9px; font-family: verdana,arial,helvetica;}
+.font-verdana-10 {font-size: 10px; font-family: verdana,arial,helvetica;}
+.font-verdana-11 {font-size: 11px; font-family: verdana,arial,helvetica;}
+.font-verdana-12 {font-size: 12px; font-family: verdana,arial,helvetica;}
+.font-verdana-13 {font-size: 13px; font-family: verdana,arial,helvetica;}
+.font-verdana-14 {font-size: 14px; font-family: verdana,arial,helvetica;}
+.font-verdana-15 {font-size: 15px; font-family: verdana,arial,helvetica;}
+/*Roboto*/
+.font-roboto-08 {font-size: 8px; font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";}
+.font-roboto-09 {font-size: 9px; font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";}
+.font-roboto-10 {font-size: 10px; font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";}
+.font-roboto-11 {font-size: 11px; font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";}
+.font-roboto-12 {font-size: 12px; font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";}
+.font-roboto-13 {font-size: 13px; font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";}
+.font-roboto-14 {font-size: 14px; font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";}
+.font-roboto-15 {font-size: 15px; font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";}
+
 .font-courier{font-size:11px;font-family: Courier New,Courier,Lucida Sans Typewriter,Lucida Typewriter,monospace;}
+
 .btn-color-primary{background:#2962FF;}
 .btn-color-success{background:#28a745;}
 .hoverTable tr:hover {background-color: #CAE3FF;}
+
 .btn-xs {
 	padding: 0.25rem 0.5rem;
 	font-size: 0.5rem;
 	line-height: 1.5;
 	border-radius: 0.2rem;
 }
-.badge-with-padding {
-	padding: 7px 4px;
+
+.header{
+    color: #003d75;
+    /*background-color: #fafafa;*/
+    background-color: #ffffff;
+    font-weight: 900;
+    padding: 0em 0em 0em 1em !important;
+    font-size: 17px;
+    font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
-.form-control{
-	height: 30px;
+
+.subheader{
+    color: #003d75;
+    font-weight: 900;
 }
-.titulo {
-	color: #003d75;
-	font-weight: 700;
-	font-family: var(--roboto);
-	font-size: large;
+/**SELECT2 CONTENIDO*/
+.select2 + .select2-container .select2-selection__rendered {
+  font-size: 11px;
 }
-.hrr {
-	border: #003d75 solid 0.5px;
-	padding: 0px;
+
+.select2-results__option {
+  font-size: 11px;
 }
+/***/
+.body{
+	/*background-color: #fafafa;*/
+    background-color: #ffffff;
+}
+
 .body-border {
 	border: 1px groove #003d75 !important;
 	padding: 1em 1em 1em 1em !important;
@@ -277,6 +306,11 @@ main {
 	margin-top: 10px !important;
 	border-radius: 10px 10px 10px 10px !important;
 }
+
+.hover-orange tbody tr:hover{
+	background: #ffd54f !important;
+}
+
 .color-icon-1{
 	color: #003d75;
 }
@@ -291,5 +325,46 @@ main {
 	/*color: #003d75;*/
 	color: #003d75;
 	background: #abcbd9;
+}
+
+.tts-custom {
+	--tts-shadow: 0 5px 10px rgb(0 0 0 / 20%);
+	--tts-radius: 0.5em;
+	--tts-size: 12px;
+}
+
+.input-group {
+	height: 28px;
+}
+
+.input-group-prepend{
+	height: 28px;
+}
+
+.group{
+	height: 28px;
+}
+
+.body-table {
+    background-color: #FFFFFF;
+}
+
+.input-sm {
+	height: 28px;
+}
+
+.label-show {
+	font-weight: 700;
+	opacity: 1.0;
+}
+
+.badge-with-padding {
+	padding: 7px;
+	font-weight: normal;
+}
+
+.abs-center {
+	display: flex;
+	justify-content: center;
 }
 

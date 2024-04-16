@@ -9,18 +9,20 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Canasta\Dea;
+use App\Models\AreasModel;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
     protected $fillable = [
+        'idarea',
+        'dea_id',
         'name',
         'email',
         'password',
         'idemp',
-        'estadouser',
-        'dea_id'
+        'estadouser'
     ];
 
     protected $hidden = [
@@ -36,6 +38,11 @@ class User extends Authenticatable
         if ($input) {
             $this->attributes['password'] = app('hash')->needsRehash($input) ? Hash::make($input) : $input;
         }
+    }
+
+    public function area()
+    {
+        return $this->belongsTo(AreasModel::class,'idarea','idarea');
     }
 
     public function hasRole($role)
@@ -71,7 +78,7 @@ class User extends Authenticatable
     }
 
     public function getIconoEstadoAttribute() {
-        $status_icono = ['badge-secondary','badge-success'];
+        $status_icono = ['badge-with-padding badge badge-secondary','badge-with-padding badge badge-success'];
         return $status_icono[$this->estadouser];
     }
 

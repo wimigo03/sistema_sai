@@ -89,22 +89,62 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::middleware('web')
             ->namespace($this->namespace)
-            ->group(base_path('routes/Compras/pedido-parcial-route.php'));
+            ->group(base_path('routes/compras/pedido-parcial-route.php'));
 
         Route::middleware('web')
             ->namespace($this->namespace)
-            ->group(base_path('routes/Compras/orden-compras-route.php'));
+            ->group(base_path('routes/compras/orden-compras-route.php'));
+
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/compras/proveedor-route.php'));
+
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/compras/partida-route.php'));
+
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/compras/item-route.php'));
+
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/compras/unidad-medida-route.php'));
+
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/compras/programa-route.php'));
+
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/compras/categoria-programatica-route.php'));
+
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/compras/solicitud-compra-route.php'));
+
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/compras/orden-compra-route.php'));
+
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/compras/ingreso-compra-route.php'));
 
         Route::middleware('web')
             ->namespace($this->namespace)
             ->group(base_path('routes/Expochaco/solicitud-route.php'));
 
-            Route::middleware('web')
+        Route::middleware('web')
             ->namespace($this->namespace)
             ->group(base_path('routes/sereges/sereges-route.php'));
 
-            Route::middleware('web')
+        Route::middleware('web')
             ->namespace($this->namespace)
             ->group(base_path('routes/informatica/informatica-route.php'));
+
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/almacenes/almacen-route.php'));
     }
 }

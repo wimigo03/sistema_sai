@@ -10,13 +10,13 @@
         </button>
       </div>
       <div class="modal-body">
-        Estas por <span class="text-success">[Confirmar]</span> este proceso. ¿Esta seguro que desea continuar...?
+        Estas por <b>[Confirmar]</b> este proceso. ¿Esta seguro que desea continuar?
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary font-verdana" type="button" onclick="confirmar();">
+        <button class="btn btn-primary font-verdana-12" type="button" onclick="confirmar();">
           <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>&nbsp;Confirmar
         </button>
-        <button class="btn btn-secondary font-verdana text-white" type="button" data-dismiss="modal">
+        <button class="btn btn-secondary font-verdana-12 text-white" type="button" data-dismiss="modal">
             <i class="fa-solid fa-xmark"></i>&nbsp;Cancelar
         </button>
         <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>

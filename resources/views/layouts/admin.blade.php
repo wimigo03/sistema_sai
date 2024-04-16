@@ -9,12 +9,11 @@
     <title>G.A.R.G.CH. | S.A.I.</title>
     <link rel="canonical" href="https://www.wrappixel.com/templates/monster-admin-lite/" />
     <link rel="icon" type="image/png" sizes="18x18" href="{{ asset('logos/logo2.png') }}">
-    {{--<link href="{{ asset('admin_assets/css/style.min.css') }}" rel="stylesheet">--}}
     <link rel="stylesheet" href="{{ asset('admin_assets/plugins/slim-select/slimselect.min.css') }}">
     <link rel="stylesheet" href="{{ asset('dataTable_1.10.22/css/jquery.dataTables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('dataTable_1.10.22/css/responsive.dataTables.min.css') }}">
     <link href="{{ asset('dashboard/css/select2.min.css') }}" rel="stylesheet">
-    {{--<link rel="stylesheet" href="{{ asset('plugins2/datatables/dataTables.css') }}" />--}}
+    <link href="{{ asset('dashboard/css/select2-bootstrap4.css') }}" rel="stylesheet">
     <link href="{{ asset('dashboard/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('dashboard/css/fonts/roboto.css') }}" rel="stylesheet">
     <link href="{{ asset('dashboard/css/fonts/poppins.css') }}" rel="stylesheet">
@@ -26,6 +25,7 @@
     <link href="{{ asset('dashboard/css/tooltips.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/notificaciones/Lobibox.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/notificaciones/notifications.css') }}" rel="stylesheet">
+    {{--<link href="{{ asset('css/font-verdana.css') }}" rel="stylesheet">--}}
     <style>
         #customers-table tbody td.details-control {
             background-image: url('{{ asset('admin_assets/images/details_open.png') }}');
@@ -45,10 +45,6 @@
             background-size: 20px;
             padding: 7px;
         }
-        .hrrr {
-            border: rgb(102, 100, 100) solid 1px;
-            padding: 0px;
-        }
     </style>
     @include('layouts.modal.alerta')
     @include('layouts.modal.confirmar')
@@ -56,23 +52,17 @@
     @include('layouts.modal.confirmar_compra')
     @yield('styles')
 </head>
-<body style="background-color: #fafafa;" {{--onLoad="document.getElementById('alx').click();"--}}>
-{{--<body style="background-color: #f8f8f8;">--}}
+<body style="background-color: #ffffff;">
     @include('partial.admin.dashboard')
     <main>
-        {{--<div class="site-section">--}}
-            <div class="container-xl">
-                <br>
-                <br>
-                {{--@include('components.flash_alerts')--}}
-                @yield('content')
-                <form action="{{ route('logout') }}" method="POST" id="logout-form">
-                    @csrf
-                </form>
-            </div>
-        {{--</div>
-             //url: "{{ route('pregunta/id') }}",
-            --}}
+        <div class="container-xl">
+            <br>
+            {{--@include('components.flash_alerts')--}}
+            @yield('content')
+            <form action="{{ route('logout') }}" method="POST" id="logout-form">
+                @csrf
+            </form>
+        </div>
     </main>
     <script src="{{ asset('admin_assets/plugins/slim-select/slimselect.min.js') }}"></script>
     <script src="{{ asset('admin_assets/js/handlebars.js') }}"></script>
@@ -87,13 +77,20 @@
     <script src="{{ asset('datepicker/datepicker.es.js') }}"></script>
     <script src="{{ asset('js/notificaciones/Lobibox.js') }}"></script>
     <script src="{{ asset('js/notificaciones/notification-active.js') }}"></script>
-    <script src="{{ asset('js/auxiliares.js') }}"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/cleave.min.js"
+        integrity="sha512-KaIyHb30iXTXfGyI9cyKFUIRSSuekJt6/vqXtyQKhQP6ozZEGY8nOtRS6fExqE4+RbYHus2yGyYg1BrqxzV6YA=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    ></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/addons/cleave-phone.us.js"
+        integrity="sha512-sYKXH+IAMtg7mVursFAH+Xu1mIvmSqTd8LTEhKdRmvJhtX2IKUFpkZBZ9pigORvIR6Nt5klEF/P+psiJRa6crQ=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    ></script>
 
     @include('layouts.modal.notificaciones')
-
-    <script>
-      //
-    </script>
 @yield('scripts')
 </body>
 {{--<footer class="text-center">

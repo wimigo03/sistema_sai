@@ -1,93 +1,74 @@
 @extends('layouts.admin')
-
 @section('content')
-
-
-<div class="row font-verdana-12">
-    <div class="col-md-10 titulo">
-        <b>LISTADO DE PARTIDAS</b>
-    </div>
-
-    <div class="col-md-12">
-        <hr class="hrr">
-    </div>
-</div>
-
-            <div class="row">
-                <div class="col-md-12 table-responsive">
-                <font size="2" face="Courier New" >
-                    <center>
-                       <table class="table table-bordered  yajra-datatable hoverTable">
-                            <thead>
-                               <tr>
-                               <th style="color:black">N°</th>
-                               <th style="color:black">CODIGO</th>
-                               <th style="color:black">NOMBRE</th>
-                               <th style="color:black">DETALLE</th>
-                               </tr>
-                            </thead>
-                                    <tbody>
-                                    </tbody>
-                        </table>
-                    </center>
-                </font>
-                </div>
+    <div class="card-header header">
+        <div class="row">
+            <div class="col-md-12 pr-1 pl-1 text-center">
+                <b>PARTIDAS PRESUPUESTARIAS</b>
             </div>
-
+        </div>
+    </div>
+    <div class="card-body body">
+        @include('compras.partida.partials.search')
+        @include('compras.partida.partials.table')
+    </div>
 @section('scripts')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#estado').select2({
+                theme: "bootstrap4",
+                placeholder: "--Estado--",
+                width: '100%'
+            });
 
-<script type="text/javascript">
-$(function() {
+            var cleave = new Cleave('#codigo', {
+                numeral: true,
+                numeralDecimalMark: '',
+                numeralThousandsGroupStyle: 'none',
+                rawValueTrimPrefix: true
+            });
 
-    var table = $('.yajra-datatable').DataTable({
-      
+            var cleave = new Cleave('#fecha_registro', {
+                date: true,
+                datePattern: ['d', 'm', 'Y']
+            });
 
-        responsive: true,
-        processing: true,
-        serverSide: true,
-        autoWidth: false,
-        ajax: "{{ route('partida.list') }}",
-        columns: [
-            {data: 'DT_RowIndex',orderable: false,searchable: false},
+            $("#fecha_registro").datepicker({
+                inline: false,
+                dateFormat: "dd/mm/yyyy",
+                autoClose: true,
+            });
+        });
 
-            { data: 'codigopartida', name: 'codigopartida' },
+        $('.intro').on('keypress', function(event) {
+            if (event.which === 13) {
+                search();
+                event.preventDefault();
+            }
+        });
 
-            { data: 'nombrepartida',  name: 'nombrepartida'},
+        function create(){
+            $(".btn").hide();
+            $(".spinner-btn").show();
+            var dea_id = $("#dea_id").val()
+            var url = "{{ route('partida.create',':dea_id') }}";
+            url = url.replace(':dea_id',dea_id);
+            window.location.href = url;
+        }
 
-            { data: 'detallepartida', name: 'detallepartida' },
+        function search(){
+            $(".btn").hide();
+            $(".spinner-btn").show();
+            var url = "{{ route('partida.search') }}";
+            $("#form").attr('action', url);
+            $("#form").submit();
+        }
 
-
-        ],
-
-
-            
-language: {
-"decimal": "",
-"emptyTable": "No hay información",
-"info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
-"infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-"infoFiltered": "(Filtrado de _MAX_ total entradas)",
-"infoPostFix": "",
-"thousands": ",",
-"lengthMenu": "Mostrar _MENU_ Entradas",
-"loadingRecords": "Cargando...",
-"processing": "Procesando...",
-"search": "Buscar:",
-"zeroRecords": "Sin resultados encontrados",
-"paginate": {
-    "first": "Primero",
-    "last": "Ultimo",
-    "next": "Siguiente",
-    "previous": "Anterior"
-}
-},
-
-
-    });
-
-});
-</script>
-
+        function limpiar(){
+            $(".btn").hide();
+            $(".spinner-btn").show();
+            var url = "{{ route('partida.index') }}";
+            window.location.href = url;
+        }
+    </script>
 @endsection
-
 @endsection

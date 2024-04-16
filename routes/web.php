@@ -14,7 +14,7 @@ use App\Http\Controllers\ProdServController;
 use App\Http\Controllers\EmpleadosController;
 use App\Http\Controllers\PlantaController;
 use App\Http\Controllers\ContratoController;
-use App\Http\Controllers\ProveedoresController;
+//use App\Http\Controllers\ProveedoresController;
 use App\Http\Controllers\AreasController;
 use App\Http\Controllers\ProgramaController;
 use App\Http\Controllers\CatProgController;
@@ -186,8 +186,8 @@ Route::get('compras/detalle/orden/{id}', [DetalleCompraController::class,'orden'
 
 ///////////////////////////--COMPRAS PARTIDA--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('compras/partida/index', [PartidaController::class,'index'])->name('partida.index');
-Route::get('compras/partida/listado', [PartidaController::class,'listado'])->name('partida.list');
+//dilsonRoute::get('compras/partida/index', [PartidaController::class,'index'])->name('partida.index');
+//dilsonRoute::get('compras/partida/listado', [PartidaController::class,'listado'])->name('partida.list');
 
 ////////////////////////////--COMPRAS PRODUCTO--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -234,7 +234,7 @@ Route::get('compras/empleados/list', [EmpleadosController::class,'list'])->name(
 
 
     /*COMPRAS PROVEEDORES*/
-    Route::get('compras/proveedores/index', [ProveedoresController::class,'index'])->name('proveedores.index')->middleware('can:proveedores_access');
+    /*Route::get('compras/proveedores/index', [ProveedoresController::class,'index'])->name('proveedores.index')->middleware('can:proveedores_access');
     Route::get('compras/proveedores/list', [ProveedoresController::class,'list'])->name('proveedores.list')->middleware('can:proveedores_access');
     Route::get('compras/proveedores/{id}/edit', [ProveedoresController::class,'edit'])->name('proveedores.edit')->middleware('can:proveedores_access');
     Route::POST('compras/proveedores/{id}/update', [ProveedoresController::class,'update'])->name('proveedores.update')->middleware('can:proveedores_access');
@@ -242,7 +242,7 @@ Route::get('compras/empleados/list', [EmpleadosController::class,'list'])->name(
     Route::POST('compras/proveedores/store', [ProveedoresController::class,'store'])->name('proveedores.store')->middleware('can:proveedores_access');
     Route::get('compras/proveedores/{id}/editardoc', ['uses' => 'ProveedoresController@editardoc','as' => 'Proveedores.editdoc'])->middleware('can:proveedores_access');
     Route::get('compras/proveedores/{id}/createdocproveedor', [ProveedoresController::class,'createdoc'])->name('ProveedoresController.createdoc')->middleware('can:proveedores_access');
-    Route::POST('compras/proveedores/insertar', [ProveedoresController::class,'insertar'])->name('ProveedoresController.insertar')->middleware('can:proveedores_access');
+    Route::POST('compras/proveedores/insertar', [ProveedoresController::class,'insertar'])->name('ProveedoresController.insertar')->middleware('can:proveedores_access');*/
 
         /*COMPRAS AREAS*/
         Route::get('compras/areas/index', [AreasController::class,'index'])->name('areas.index')->middleware('can:areas_access');

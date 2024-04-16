@@ -18,6 +18,7 @@ use App\Http\Requests\UpdateUserPhotoRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Models\Canasta\Dea;
+use App\Models\AreasModel;
 use DB;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests;
@@ -25,7 +26,24 @@ use App\Http\Requests;
 
 class UserController extends Controller
 {
-    public function index(){
+    private function completar_areas()
+    {
+        $users = User::get();
+        foreach($users as $user){
+            $user = User::find($user->id);
+            $empleado = DB::table('empleados')->where('idemp',$user->idemp)->first();
+            if($empleado != null){
+                $user->update([
+                    'idarea' => $empleado->idarea
+                ]);
+            }
+        }
+        dd("Finalizado...");
+    }
+
+    public function index()
+    {
+        //$this->completar_areas();
         $users = User::orderBy('id', 'desc')->paginate(10);
         return view('admin.users.index', compact('users'));
     }
@@ -70,28 +88,59 @@ class UserController extends Controller
     public function create(){
         $deas = Dea::pluck('descripcion','id');
         $roles = Role::all()->pluck('title','id');
-        $empleados = EmpleadosModel::select(DB::raw("concat(nombres,' ',ap_pat,' ',ap_mat) as nombre_completo"),'idemp as id')->pluck('nombre_completo','id');
-        return view('admin.users.create', compact('deas','roles', 'empleados'));
+        return view('admin.users.create', compact('deas','roles'));
+    }
+
+    public function getAreas(Request $request){
+        try{
+            $input = $request->all();
+            $id = $input['id'];
+            $areas = AreasModel::where('dea_id',$id)->where('estadoarea','1')->orderBy('idarea','asc')->get()->toJson();
+            if($areas){
+                return response()->json([
+                    'areas' => $areas
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function getEmpleados(Request $request){
+        try{
+            $input = $request->all();
+            $id = $input['id'];
+            $empleados = EmpleadosModel::select(DB::raw("concat(nombres,' ',ap_pat,' ',ap_mat) as nombre_completo"),'idemp as id')->where('idarea',$id)->orderBy('id','asc')->get()->toJson();
+            if($empleados){
+                return response()->json([
+                    'empleados' => $empleados
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'idemp' => 'required',
-            'name' => 'required|unique:users,name',
-            'email' => 'required|email',
-            'password' => 'required|min:6|confirmed',
             'dea' => 'required',
+            'area_id' => 'required',
+            'empleado_id' => 'required|unique:users,idemp,null,id,dea_id,' . $request->dea,
+            'name' => 'required|unique:users,name,null,id,dea_id,' . $request->dea,
+            'email' => 'required',
+            'password' => 'required|min:6|confirmed',
             'roles' => 'required|array|min:1'
         ]);
         try{
             $user = User::create([
+                'idarea' => $request->area_id,
+                'dea_id' => $request->dea,
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => $request->password,
-                'idemp' => $request->idemp,
-                'estadouser' => 1,
-                'dea_id' => $request->dea
+                'idemp' => $request->empleado_id,
+                'estadouser' => 1
             ]);
             $user->roles()->sync($request->roles);
             return redirect()->route('users.index')->with('success_message', 'Se agrego un usuario al registro.');
@@ -111,20 +160,16 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
-        $deas = Dea::select('descripcion','id')->get();
         $roles = Role::all()->pluck('title','id');
-        $empleados = EmpleadosModel::select(DB::raw("concat(nombres,' ',ap_pat,' ',ap_mat) as nombre_completo"),'idemp as id')->get();
-        return view('admin.users.editar', compact('user','deas','roles', 'empleados'));
+        return view('admin.users.editar', compact('user','roles'));
     }
 
     public function update(Request $request)
     {
         $request->validate([
-            'idemp' => 'required',
             'name' => 'required|unique:users,name,' . $request->user_id,
-            'email' => 'required|email',
+            'email' => 'required',
             'password' => 'nullable|min:6|confirmed',
-            'dea' => 'required',
             'roles' => 'required|array|min:1'
         ]);
         try{
@@ -132,9 +177,7 @@ class UserController extends Controller
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => $request->password,
-                'idemp' => $request->idemp,
-                'dea_id' => $request->dea
+                'password' => $request->password
             ]);
             $user->roles()->sync($request->roles);
             return redirect()->route('users.index')->with('success_message', 'Se modifico un usuario en el registro.');

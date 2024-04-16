@@ -1,39 +1,14 @@
 @extends('layouts.admin')
 @section('content')
-<link rel="stylesheet" href="/css/font-verdana.css" rel="stylesheet">
 <div class="card card-custom">
-    <div class="card-header font-verdana-15">
+    <div class="card-header font-verdana-13 bg-secondary text-white">
         <b>FORMULARIO DE SOLICITUD DE COMPRA - {{ $dea->descripcion }}</b>
     </div>
     <div class="card-body">
-        <div class="form-group row">
-            <div class="col-md-12 font-verdana-12">
-                Los campos <i class="fa-solid fa-xs fa-asterisk"></i> son obligatorios
-            </div>
-        </div>
         <form action="#" method="post" id="form">
             @csrf
             @include('compras.pedidoparcial.partials.form-create')
-            <div class="row font-verdana-12">
-                <div class="col-md-12 font-verdana-12 text-center">
-                    <br>
-                    <span class="text-dark"><b>DETALLE DE LA COMPRA</b></span>
-                </div>
-            </div>
-            <div class="card card-body bg-light">
-                @include('compras.pedidoparcial.partials.form-create-detalle')
-                <div class="form-group row">
-                    <div class="col-md-12 text-right">
-                        <button class="btn btn-outline-primary font-verdana" id="btn-registro" type="button" onclick="procesar();">
-                            <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>&nbsp;Registrar
-                        </button>
-                        <button class="btn btn-outline-danger font-verdana" type="button" onclick="cancelar();">
-                            &nbsp;<i class="fa-solid fa-xmark"></i>&nbsp;Cancelar
-                        </button>
-                        <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-                    </div>
-                </div>
-            </div>
+            @include('compras.pedidoparcial.partials.form-create-detalle')
         </form>
     </div>
 </div>

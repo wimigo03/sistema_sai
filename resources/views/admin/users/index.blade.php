@@ -1,44 +1,50 @@
 @extends('layouts.admin')
 @section('content')
-<link rel="stylesheet" href="/css/font-verdana.css" rel="stylesheet">
-<div class="card card-custom">
-    <div class="card-header font-verdana-15">
-        <b>USUARIOS</b>
+    <div class="card-header header">
+        <div class="row">
+            <div class="col-md-12 pr-1 pl-1 text-center">
+                <b>USUARIOS</b>
+            </div>
+        </div>
     </div>
-    <div class="card-body">
+    <div class="card-body body">
         @include('admin.users.partials.search')
         @include('admin.users.partials.table')
     </div>
-</div>
 @endsection
 @section('scripts')
     <script>
         $(document).ready( function () {
             $('#estado').select2({
-                placeholder: "--Estado--"
+                theme: "bootstrap4",
+                placeholder: "--Estado--",
+                width: '100%'
             });
         });
 
+        $('.intro').on('keypress', function(event) {
+            if (event.which === 13) {
+                search();
+                event.preventDefault();
+            }
+        });
+
         function create(){
-            $(".btn").hide();
-            $(".btn-importar").hide();
-            $(".spinner-btn").show();
-            window.location.href = "{{ route('users.create') }}";
+            var url = "{{ route('users.create') }}";
+            window.location.href = url;
         }
-        function procesar(){
+
+        function search(){
             var url = "{{ route('users.search') }}";
             $("#form").attr('action', url);
-            $(".btn").hide();
-            $(".btn-importar").hide();
-            $(".spinner-btn").show();
             $("#form").submit();
         }
+
         function limpiar(){
-            $(".btn").hide();
-            $(".btn-importar").hide();
-            $(".spinner-btn").show();
-            window.location.href = "{{ route('users.index') }}";
+            var url = "{{ route('users.index') }}";
+            window.location.href = url;
         }
+
         function excel(){
             var url = "{{ route('users.excel') }}";
             $("#form").attr('action', url);

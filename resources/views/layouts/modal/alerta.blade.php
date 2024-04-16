@@ -9,12 +9,12 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body font-verdana-12">
+      <div class="modal-body font-verdana-12 text-center">
         ...
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary font-verdana-12" type="button" data-dismiss="modal">
-          OK
+        <button class="btn btn-primary font-roboto-12" type="button" data-dismiss="modal">
+          <i class="fas fa-paper-plane fa-fw"></i> Aceptar
         </button>
       </div>
     </div>

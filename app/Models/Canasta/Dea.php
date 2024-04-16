@@ -10,6 +10,7 @@ class Dea extends Model
     protected $table = 'deas';
     protected $fillable = [
         'nombre',
+        'descripcion',
         'estado'
     ];
 
@@ -20,9 +21,9 @@ class Dea extends Model
 
     public function getStatusAttribute(){
         switch ($this->estado) {
-            case '0': 
+            case '0':
                 return "HABILITADO";
-            case '1': 
+            case '1':
                 return "NO HABILITADO";
         }
     }

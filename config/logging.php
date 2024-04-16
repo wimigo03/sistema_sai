@@ -99,6 +99,60 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+
+        'proveedores' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/proveedores.log'),
+            'level' => 'debug',
+        ],
+
+        'partidas' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/partidas.log'),
+            'level' => 'debug',
+        ],
+
+        'items' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/items.log'),
+            'level' => 'debug',
+        ],
+
+        'programas' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/programas.log'),
+            'level' => 'debug',
+        ],
+
+        'categorias_programaticas' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/categorias_programaticas.log'),
+            'level' => 'debug',
+        ],
+
+        'solicitudes_compras' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/solicitudes_compras.log'),
+            'level' => 'debug',
+        ],
+
+        'orden_compras' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/orden_compras.log'),
+            'level' => 'debug',
+        ],
+
+        'unidades' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/unidades.log'),
+            'level' => 'debug',
+        ],
+
+        'ingresos_compras' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/ingresos_compras.log'),
+            'level' => 'debug',
+        ],
     ],
 
 ];
