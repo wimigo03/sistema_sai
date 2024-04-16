@@ -1,9 +1,8 @@
 @extends('layouts.admin')
 @section('content')
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-8 titulo">
-     
-         <b>SOLICITUDES PENDIENTES--</b><b style='color:red'>{{$idd->nombrearea}} </b>-- 
+        <b>SOLICITUDES PENDIENTES--</b><b style='color:red'>{{$idd->nombrearea}} </b>--
     </div>
  
     <div class="col-md-12">
@@ -13,21 +12,21 @@
 </div>
 
 <div class="row">
-    <div class="col-md-12 table-responsive">
+    <div class="col-md-12">
         <center>
-                        <table  id="users-table" class="table display table-bordered responsive font-verdana" style="width:100%;">
+                        <table  id="users-table" class="table-bordered yajra-datatable hoverTable responsive font-verdana" style="width:100%;">
                             <thead class="font-courier">
                                 <tr>
                                     <td class="text-justify p-1"><b>N°</b></td>
-                                    <td class="text-justify p-1"><b>N° COMPRA</b></td>
                                     <td class="text-justify p-1"><b>FECHA SOL.</b></td>
                                     <td class="text-justify p-1"><b>N° CONTROL</b></td>
                                     <td class="text-justify p-1"><b>OBJETO</b></td>
                                     <td class="text-justify p-1"><b>AREA</b></td>
                                     <td class="text-justify p-1"><b>PROVEEDOR</b></td>
                                     <td class="text-justify p-1"><b>PREVENTIVO</b></td>
+                                    <td class="text-justify p-1"><b>NRO.COMPRA</b></td>
                                     <td class="text-justify p-1"><b>ESTADO</b></td>
-                                    <td class="text-justify p-1"><b>ACCIONES</b></td>
+                                    <td class="text-justify p-1"><b>Acciones</b></td>
                                 
                                 </tr>
                             </thead>
@@ -62,17 +61,11 @@ $('#users-table').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
-            ajax: "{{ route('pedidocomb.index') }}",
+            ajax: "{{ route('combustibles.pedido.index') }}",
 
             columns: [
             
             {data: 'DT_RowIndex',orderable: false,searchable: false,class:'text-justify p-1 font-verdana'},
-
-            {
-                    className: 'text-center',
-                    data: 'idcompracomb',
-                    name: 'idcompracomb'
-                },
 
             {
                     className: 'text-center',
@@ -104,7 +97,11 @@ $('#users-table').DataTable({
                     data: 'preventivo',
                     name: 'preventivo'
                 },
-            
+                {
+                    className: 'text-center',
+                    data: 'numcompra',
+                    name: 'numcompra'
+                },
                 {
                     className: 'text-center',
                     data: 'estadocompracomb',
@@ -112,7 +109,7 @@ $('#users-table').DataTable({
                 },
                 
                  {
-                     className: 'text-justify p-1 font-verdana',
+                     className: 'text-center',
                      data: 'actions',
                      name: 'actions',
                      orderable: false,

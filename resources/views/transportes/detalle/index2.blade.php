@@ -7,11 +7,11 @@
     </div>
 @endif
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
 
     <div class="col-md-2 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-            <a href="{{ url('/upedido/index') }}">
+            <a href="{{ url('/transportes/pedido/index') }}">
                 <span class="color-icon-1">
                     &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                 </span>
@@ -50,12 +50,10 @@
                 <thead>
                     <tr>
                         <td class="text-justify p-1"><b>Nro</b></td>
-                        <td class="text-justify p-1"><b>Codigo</b></td>
-                        <td class="text-justify p-1"><b>Nombre</b></td>
-                        <td class="text-justify p-1"><b>Marca</b></td>
-                        <td class="text-justify p-1"><b>Placa</b></td>
-                        <td class="text-justify p-1"><b>Chofer</b></td>
-                        <td class="text-justify p-1"><b>klm actual</b></td>
+                        <td class="text-justify p-1"><b>Vehiculo</b></td>
+                        <td class="text-right p-1"><b>Marca</b></td>
+                        <td class="text-right p-1"><b>placa</b></td>
+                        <td class="text-right p-1"><b>klm actual</b></td>
                     </tr>
                 </thead>
                 <tbody>
@@ -67,11 +65,9 @@
                         <tr>
                             <td class="text-justify p-1">{{$key+1}}</td>
                             <td class="text-justify p-1">{{$prod->codigoconsumo}}</td>
-                            <td class="text-justify p-1">{{$prod->nombreuconsumo}}</td>
-                            <td class="text-justify p-1">{{$prod->nombremarca}}</td>
-                            <td class="text-justify p-1">{{$prod->placaconsum}}</td>
-                            <td class="text-justify p-1">{{$prod->chofernombre}}</td>
-                            <td class="text-justify p-1">{{$prod->kilometrajeactual}}</td>
+                            <td class="text-right p-1">{{$prod->marcaconsumo}}</td>
+                            <td class="text-right p-1">{{$prod->placaconsum}}</td>
+                            <td class="text-right p-1">{{$prod->kilometrajeactual}}</td>
                           
                         </tr>
                     @endforeach

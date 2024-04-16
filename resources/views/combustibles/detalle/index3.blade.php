@@ -7,11 +7,11 @@
     </div>
 @endif
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
 
     <div class="col-md-2 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-            <a href="{{ url('/pedidocomb/index') }}">
+            <a href="{{ url('/combustibles/pedido/index') }}">
                 <span class="color-icon-1">
                     &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                 </span>
@@ -26,10 +26,8 @@
     <div class="col-md-12">
         <hr class="hrr">
     </div>
-    <div class="col-md-2 text-right titulo">
-        <b>N° Compra</b> <b style='color:red'>{{ $idcompracomb }}</b>
-    </div>
-    <div class="col-md-10 text-right">
+
+    <div class="col-md-12 text-right">
 
 
         <input type="hidden" value="{{$idcompracomb}}" id="idcompracomb">
@@ -48,12 +46,10 @@
             <table id="dataTable" class="table display table-bordered responsive font-verdana" style="width:100%">
                 <thead>
                     <tr>
-                        <td class="text-justify p-1"><b>N°</b></td>
-                        <td class="text-justify p-1"><b>CODIGO</b></td>
+                        <td class="text-justify p-1"><b>Nro</b></td>
                         <td class="text-justify p-1"><b>PRODUCTO</b></td>
-                        <td class="text-justify p-1"><b>UNIDAD</b></td>
-                        <td class="text-right p-1"><b>PRECIO</b></td>
                         <td class="text-right p-1"><b>CANTIDAD</b></td>
+                        <td class="text-right p-1"><b>PRECIO</b></td>
                         <td class="text-right p-1"><b>SUBTOTAL</b></td>
                         {{-- <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td> --}}
                     </tr>
@@ -65,12 +61,11 @@
                      @forelse ($prodserv as $key => $prod)
                         <tr>
                             <td class="text-justify p-1">{{$key+1}}</td>
-                            <td class="text-justify p-1">{{$prod->detalleprodcomb}}</td>
                             <td class="text-justify p-1">{{$prod->nombreprodcomb}}</td>
-                            <td class="text-justify p-1">{{$prod->nombremedida}}</td>
-                            <td class="text-right p-1">{{$prod->precio}}</td>
                             <td class="text-right p-1">{{$prod->cantidad}}</td>
+                            <td class="text-right p-1">{{$prod->precio}}</td>
                             <td class="text-right p-1">{{$prod->subtotal}}</td>
+                        
                         </tr>
                     @endforeach
                 </tbody>
@@ -80,15 +75,13 @@
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
-                            <td>&nbsp;</td>
+
                             <td class="text-right p-1">
-                                <b>TOTALES:</b>
+                                <b>TOTAL:</b>
                             </td>
+
                             <td class="text-right p-1">
-                                <b>{{$CalAdosDecimdos}}</b>
-                            </td>
-                            <td class="text-right p-1">
-                                <b>{{$CalAdosDecim}}</b>
+                                <b>{{$valor_total}}</b>
                             </td>
                         
                         </tr>

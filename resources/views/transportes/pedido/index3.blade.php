@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('content')
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-8 titulo">
         <b>SOLICITUDES PENDIENTES--</b><b style='color:red'>{{$idd->nombrearea}} </b>
         
@@ -64,7 +64,7 @@ $('#users-table').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
-        ajax: "{{ route('upedido.index3') }}",
+        ajax: "{{ route('transportes.pedido.index3') }}",
         columns: [
             {data: 'DT_RowIndex',orderable: false,searchable: false,class:'text-justify p-1 font-verdana'},
 

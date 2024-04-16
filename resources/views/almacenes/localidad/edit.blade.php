@@ -6,10 +6,10 @@
 
     <div class="col-md-8">
 
-        <div class="row font-verdana-bg">
+        <div class="row font-verdana-12">
             <div class="col-md-4 titulo">
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-                    <a href="{{ url('/localidad/index') }}">
+                    <a href="{{ url('/combustibles/localidad/index') }}">
                         <span class="color-icon-1">
                             &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                         </span>
@@ -34,7 +34,7 @@
                 <form method="POST" action="{{ route('localidad.update', $localidads->idlocalidad) }}">
                     @csrf
                     @method('POST')
-                   
+
                     <div class="form-group row">
                         <label for="codigo" style="color:black;font-weight: bold;"
                             class="required col-md-4 col-form-label text-md-right">Codigo:</label>
@@ -54,14 +54,7 @@
                                 onkeyup="javascript:this.value=this.value.toUpperCase();">
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="distrito" style="color:black;font-weight: bold;"
-                            class="required col-md-4 col-form-label text-md-right">distrito:</label>
-                        <div class="col-md-6">
-                            <input type="number" required class="form-control" name="distrito" placeholder=""
-                                value="{{$localidads->distrito}}">
-                        </div>
-                    </div>
+                  
                     <div class="form-group row">
                         <label for="distancia" style="color:black;font-weight: bold;"
                             class="required col-md-4 col-form-label text-md-right">Distancia:</label>
@@ -72,28 +65,11 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <label for="idlocalidad" class="required col-md-4 col-form-label text-md-right">
-                            <b>Medida:</b>&nbsp;<span style="font-size:10px; color: red;"></span>
-                        </label>
-                        <div class="col-md-6">
-                        <select name="idlocalidad" id="idlocalidad" class="form-control form-control-sm select2">
-                        
-                            @foreach ($areas as $local)
-                            @if ($local->idmedida==$localidads->idmedidacomb)
-                            <option value="{{$local->idmedida}}" selected>{{$local->nombremedida}}</option>
-                            @else
-                            <option value="{{$local->idmedida}}">{{$local->nombremedida}}</option>
-                            @endif
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
 
 
                     <div align='center'>
                                
-                        <button class="btn color-icon-2 font-verdana-bg" type="submit">
+                        <button class="btn color-icon-2 font-verdana-12" type="submit">
                             <i class="fa-solid fa-paper-plane"></i>
                             &nbsp;Actualizar
                         </button>

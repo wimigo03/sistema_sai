@@ -2,10 +2,10 @@
 @section('content')
 @include('layouts.message_alert')
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-4 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-            <a href="{{ url('/uconsumo/index') }}">
+            <a href="{{ url('/transportes/uconsumo/index') }}">
                 <span class="color-icon-1">
                     &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                 </span>
@@ -13,7 +13,7 @@
         </span>
     </div>
     <div class="col-md-8 text-right titulo">
-        <b>EDITAR REGISTRO </b>
+        <b>EDITAR FORMULARIO </b>
     </div>
     <div class="col-md-12">
         <hr class="hrr">
@@ -21,32 +21,134 @@
 </div>
 <div class="body-border" style="background-color: #FFFFFF;">
 
-     <form method="post" action="{{ route('uconsumo.update') }}" id="form"  enctype="multipart/form-data">
+     <form method="post" action="{{ route('transportes.uconsumo.update') }}" id="form"  enctype="multipart/form-data">
     
         @csrf
         {{--@method('PUT')--}}
         <input type="text" hidden name="idunidadconsumo" 
         value="{{$consumos->idunidadconsumo}}">
-        <input type="hidden" name="codigoc2" id="codigoc2">
-
+       
         <div class="form-group row">
-            <div class="col-md-2">
-                <label for="codigoc" class="d-inline font-verdana-bg">
+            <div class="col-md-3">
+                <label for="codigoc" class="d-inline font-verdana-12">
                     <b>Codigo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <input type="text" name="codigoc"  
-                class="form-control form-control-sm font-verdana-bg" id="codigoc"value="{{$consumos->codigoconsumo}}" onchange="myFunction()">
+                <textarea name="codigoc" cols="1" rows="3" 
+                class="form-control form-control-sm font-verdana-12" id="codigoc">{{$consumos->codigoconsumo}}</textarea>
             </div>
 
             <div class="col-md-3">
-                <label for="nombreuconsumo" class="d-inline font-verdana-bg">
+                <label for="nombreuconsumo" class="d-inline font-verdana-12">
                     <b>Nombre</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <input type="text" name="nombreuconsumo" 
-                class="form-control form-control-sm font-verdana-bg" id="nombreuconsumo" value="{{$consumos->nombreuconsumo}}" onkeyup="convertirAMayusculas(this)">
+                <textarea name="nombreuconsumo" cols="1" rows="3" 
+                class="form-control form-control-sm font-verdana-12" id="nombreuconsumo">{{$consumos->nombreuconsumo}}</textarea>
             </div>
+
+
+            <div class="col-md-6">
+                <label for="desconsumo" class="d-inline font-verdana-12">
+                    <b>Descripción</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <textarea name="desconsumo" cols="1" rows="3" 
+                class="form-control form-control-sm font-verdana-12" id="desconsumo" 
+                >{{$consumos->desconsumo}}</textarea>
+            </div>
+
+
             <div class="col-md-2">
-                <label for="idtipomovilidad" class="d-inline font-verdana-bg">
+                <label for="modeloc" class="d-inline font-verdana-12">
+                    <b>Modelo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="text" name="modeloc" value="{{$consumos->modeloconsumo}}" 
+                class="form-control form-control-sm font-verdana-12" id="modeloc">
+            </div>
+
+            <div class="col-md-2">
+                <label for="colorc" class="d-inline font-verdana-12">
+                    <b>Color</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="color" name="colorc" value="{{$consumos->colorconsumo}}" 
+                class="form-control form-control-sm font-verdana-12" id="colorc">
+            </div>
+
+            <div class="col-md-2">
+                <label for="placac" class="d-inline font-verdana-12">
+                    <b>Placa</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="text" name="placac" value="{{$consumos->placaconsumo}}" 
+                class="form-control form-control-sm font-verdana-12" id="placac">
+            </div>
+
+
+            <div class="col-md-2">
+                <label for="marcac" class="d-inline font-verdana-12">
+                    <b>Marca</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="text" name="marcac" value="{{$consumos->marcaconsumo}}" 
+                class="form-control form-control-sm font-verdana-12" id="marcac" >
+            </div>
+
+            <div class="col-md-2">
+                <label for="klminicialc" class="d-inline font-verdana-12">
+                    <b>klm inicial</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="number" name="klminicialc" value="{{$consumos->kilometrajeinicialconsumo}}"
+                 class="form-control form-control-sm font-verdana-12" id="klminicialc">
+            </div>
+
+            <div class="col-md-2">
+                <label for="klmfinal" class="d-inline font-verdana-12">
+                    <b>Klm final</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="text" name="klmfinal" value="{{$consumos->kilometrajefinalconsumo}}"
+                 class="form-control form-control-sm font-verdana-12" id="klmfinal">
+            </div>
+
+
+            <div class="col-md-7">
+                <label  class="d-inline font-verdana-12">
+                    <b>Area</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <select name="idarea" id="idarea"  
+                class="form-control form-control-sm select2" placeholder="--Seleccionar--">
+                <option value="">-</option>
+                    @foreach ($areas as $area)
+
+                    @if ($area->idarea==$consumos->idarea)
+                    <option value="{{$area->idarea}}" selected>{{$area->nombrearea}}</option>
+                    @else
+                    <option  value="{{$area->idarea}}">{{$area->nombrearea}}</option>
+                    @endif
+
+                    @endforeach
+                </select>
+            </div>
+ 
+            <div class="col-md-5">
+                <label for="idprograma" class="d-inline font-verdana-12">
+                    <b>Programa</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+               
+                <select name="idprograma" id="idprograma" class="col-md-10 form-control select2 " placeholder="--Seleccionar--">
+                    <option value="">-</option>
+                    @foreach ($programas as $programa)
+
+                    @if ($programa->idprogramacomb==$consumos->idprogramacomb)
+                    <option value="{{$programa->idprogramacomb}}" selected>{{$programa->nombreprograma}}</option>
+                    @else
+                    <option value="{{$programa->idprogramacomb}}">{{$programa->nombreprograma}}</option>
+                    @endif
+
+                    @endforeach
+                </select>
+           
+            </div> 
+
+         
+
+            <div class="col-md-5">
+                <label for="idtipomovilidad" class="d-inline font-verdana-12">
                     <b>Tipo Movilidad</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="idtipomovilidad" id="idtipomovilidad" 
@@ -65,159 +167,35 @@
                     @endforeach
                 </select>
             </div>
-
             <div class="col-md-2">
-                <label for="idmarcamovilidad" class="d-inline font-verdana-bg">
-                    <b>Marca</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <select name="idmarcamovilidad" id="idmarcamovilidad" 
-                placeholder="--Seleccionar--" class="form-control form-control-sm select2">
-                    <option value="">-</option>
-                    @foreach ($marcas as $marca)
-
-                   
-                    @if ($marca->idmarcamovilidad==$consumos->idmarcamovilidad)
-                    <option value="{{$marca->idmarcamovilidad}}" selected>
-                        {{$marca->nombremarca}}</option>
-                    @else
-                    <option value="{{$marca->idmarcamovilidad}}">
-                        {{$marca->nombremarca}}</option>
-                    @endif
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label for="fechaingreso" class="d-inline font-verdana-bg">
-                    <b>Fecha de ingreso</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input type="text" name="fechaingreso" placeholder="dd/mm/aaaa"
-                value="{{$consumos->fechaingreso}}" 
-                class="form-control form-control-sm font-verdana-bg" 
-                id="fechaingreso" data-language="es" autocomplete="off" > 
-            </div>
-            <div class="col-md-4">
-                <label for="desconsumo" class="d-inline font-verdana-bg">
-                    <b>Descripción</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <textarea name="desconsumo" cols="2" rows="4" 
-                class="form-control form-control-sm font-verdana-bg" id="desconsumo" onkeyup="convertirAMayusculas(this)"
-                >{{$consumos->desconsumo}}</textarea>
-            </div>
-
-
-            <div class="col-md-2">
-                <label for="modeloc" class="d-inline font-verdana-bg">
-                    <b>Modelo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input type="text" name="modeloc" value="{{$consumos->modeloconsumo}}" 
-                class="form-control form-control-sm font-verdana-bg" id="modeloc" onkeyup="convertirAMayusculas(this)">
-
-                <label for="klminicialc" class="d-inline font-verdana-bg">
-                    <b>klm inicial</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input type="number" name="klminicialc" value="{{$consumos->kilometrajeinicialconsumo}}"
-                 class="form-control form-control-sm font-verdana-bg" id="klminicialc">
-            </div>
-
-            <div class="col-md-2">
-                <label for="text" class="d-inline font-verdana-bg">
-                    <b>Color</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input type="text" name="colorc" value="{{$consumos->colorconsumo}}" 
-                class="form-control form-control-sm font-verdana-bg" id="colorc" onkeyup="convertirAMayusculas(this)">
-
-                <label for="klmfinal" class="d-inline font-verdana-bg">
-                    <b>Klm final</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input type="number" name="klmfinal" value="{{$consumos->kilometrajefinalconsumo}}"
-                 class="form-control form-control-sm font-verdana-bg" id="klmfinal">
-            </div>
-
-            <div class="col-md-2">
-                <label for="placac" class="d-inline font-verdana-bg">
-                    <b>Placa</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input type="text" name="placac" value="{{$consumos->placaconsumo}}" 
-                class="form-control form-control-sm font-verdana-bg" id="placac" onkeyup="javascript:this.value=this.value.toUpperCase();" onkeypress="return validarPlaca(placa);">
-            </div>
-
-
-            <div class="col-md-2">
-                <label for="gasklm" class="d-inline font-verdana-bg">
+                <label for="gasklm" class="d-inline font-verdana-12">
                     <b>Gas x klm</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="number" name="gasklm" value="{{$consumos->gasporklm}}"
-                 class="form-control form-control-sm font-verdana-bg" id="gasklm">
+                 class="form-control form-control-sm font-verdana-12" id="gasklm">
             </div>
-            {{-- <div class="col-md-2">
-                <label for="marcac" class="d-inline font-verdana-bg">
-                    <b>Marca</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input type="text" name="marcac" value="{{$consumos->marcaconsumo}}" 
-                class="form-control form-control-sm font-verdana-bg" id="marcac" >
-            </div> --}}
 
          
-            <div class="col-md-6">
-                <label for="idprograma" class="d-inline font-verdana-bg">
-                    <b>Ubicacion Fisica</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-               
-                <select name="idprograma" id="idprograma" class="form-control form-control select2 " placeholder="--Seleccionar--">
-                    <option value="">-</option>
-                    @foreach ($programas as $programa)
-
-                    @if ($programa->idprogramacomb==$consumos->idprogramacomb)
-                    <option value="{{$programa->idprogramacomb}}" selected>CODIGO: {{$programa->idprogramacomb}}&nbsp;// NOMBRE: {{$programa->nombreprograma}}</option>
-                    @else
-                    <option value="{{$programa->idprogramacomb}}">CODIGO: {{$programa->idprogramacomb}}&nbsp;// NOMBRE: {{$programa->nombreprograma}}</option>
-                    @endif
-
-                    @endforeach
-                </select>
-           
-            </div> 
-
-            <div class="col-md-6">
-                <label  class="d-inline font-verdana-bg">
-                    <b>Area</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <select name="idarea" id="idarea"  
-                class="form-control form-control-sm select2" placeholder="--Seleccionar--">
-                <option value="">-</option>
-                    @foreach ($areas as $area)
-
-                    @if ($area->idarea==$consumos->idarea)
-                    <option value="{{$area->idarea}}" selected>CODIGO: {{$area->idarea}}  // NOMBRE: {{$area->nombrearea}}</option>
-                    @else
-                    <option  value="{{$area->idarea}}">CODIGO: {{$area->idarea}}  // NOMBRE: {{$area->nombrearea}}</option>
-                    @endif
-
-                    @endforeach
-                </select>
-            </div>
- 
-         
-                        <div class="col-md-6">
+                        <div class="form-group row">
                             <label for="documento" style="color:black;font-weight: bold;"
                                 class=" required col-md-4 col-form-label text-md-right">
-                                <b style="color: red">Limite 80 mb.(solo.imagen):</b></label>
+                                <b style="color: red">Limite 200 mb.(solo.pdf):</b></label>
 
-                          
-                                <input type="file" required name="documento" id="file" >
-                         
+                            <div class="col-md-6">
+                                <input type="file" required name="documento" id="file">
+                            </div>
                         </div>
         </div>
     
         <div align='center'>
 
 
-            <input class="btn btn-danger font-verdana-bg" type="button" id="cancelar" value="Cancelar">
+            <input  type="button" id="cancelar" value="Cancelar">
 
 
 
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="button" class="btn color-icon-2 font-verdana-bg" value="Guardar" onclick="uploadFile()" id="insertar_item_material">
+            <input type="button" value="Guardar" onclick="uploadFile()" id="insertar_item_material">
 
         </br></br>
         <progress id="progressBar" value="0" max="100" style="width:300px;display:none"></progress>
@@ -260,66 +238,52 @@
 
             $(".btn").hide();
             $(".spinner-btn-send").show();
-            window.location.href = "{{url()->previous()}}";
+            window.location.href = "{{ url('transportes/uconsumo/index') }}";
 
         });
 
 
 
         function validar_detalle_material() {
-            var descripcion = $("#desconsumo").val();
-            var filedos = document.getElementById("file").files[0];
-            var maxSize = 8 * 1024 * 1024;
 
-            if($("#nombreuconsumo").val() == ""){
-                message_alert("El campo <b>[NOMBRE]</b> es un dato obligatorio...");
-                return false;
-            }
             if($("#codigoc").val() == ""){
                 message_alert("El campo <b>[CODIGO]</b> es un dato obligatorio...");
                 return false;
             }
-            if ($("#codigoc2").val() == "comunicacion") {
-                $("#codigoc2").val('');
-                $("#codigoc").val('');
-                $("#nombreuconsumo").val('');
-                message_alert("El numero de <b>[Control Interno]</b> ya existe en nuestros registros...");
-                return false;
-            }
-          
+
+             if($("#nombreuconsumo").val() == ""){
+                 message_alert("El campo <b>[NOMBRE]</b> es un dato obligatorio...");
+                 return false;
+             }
+
+    //         if (!regex.test(nombreuconsumo)) {
+    //     message_alert("Por favor, ingrese solo letras mayúsculas en el campo [nombreuconsumo]...");
+    //     return false;
+    // }
 
             if($("#desconsumo").val() == ""){
                 message_alert("El campo <b>[DESCRIPCION]</b> es un dato obligatorio...");
                 return false;
             }
-            if(descripcion.length > 200){
-                $("#descripcion").val('');
-                $("#desconsumo").val('');
-                message_alert("El campo <b>[DESCRIPCION]</b> tiene muchos caracteres...");
+
+            if($("#modeloc").val() == ""){
+                message_alert("El campo <b>[MODELO]</b> es un dato obligatorio...");
                 return false;
             }
-
-             if($("#modeloc").val() == ""){
-                 message_alert("El campo <b>[MODELO]</b> es un dato obligatorio...");
-                 return false;
-             }
 
             if($("#colorc").val() == ""){
                 message_alert("El campo <b>[COLOR]</b> es un dato obligatorio...");
                 return false;
             }
             if($("#placac").val() == ""){
-                
                 message_alert("El campo <b>[PLACA]</b> es un dato obligatorio...");
                 return false;
             }
-            if(!validarPlaca($("#placac").val())){
-                $("#placac").val('');
-               message_alert("El campo <b>[PLACA]</b> no es una placa valida...");
-               return false;
-               }
+            if($("#marcac").val() == ""){
+                message_alert("El campo <b>[MARCA]</b> es un dato obligatorio...");
+                return false;
+            }
 
-         
             if($("#klminicialc").val() == ""){
                 message_alert("El campo <b>[KLM INICIAL]</b> es un dato obligatorio...");
                 return false;
@@ -329,77 +293,27 @@
                 message_alert("El campo <b>[KLM FINAL]</b> es un dato obligatorio...");
                 return false;
             }
-            if($("#idtipomovilidad >option:selected").val() == ""){
-                message_alert("El campo de seleccion <b>[TIPO]</b> es un dato obligatorio...");
-                return false;
-            }
             if($("#idarea >option:selected").val() == ""){
                 message_alert("El campo de seleccion <b>[AREA]</b> es un dato obligatorio...");
                 return false;
             }
             if($("#idprograma >option:selected").val() == ""){
-                message_alert("El campo de seleccion <b>[UBICACION]</b> es un dato obligatorio...");
+                message_alert("El campo de seleccion <b>[PROGRAMA]</b> es un dato obligatorio...");
                 return false;
             }
-         
-            if($("#idmarcamovilidad >option:selected").val() == ""){
-                message_alert("El campo de seleccion <b>[Marca]</b> es un dato obligatorio...");
+            if($("#idtipomovilidad >option:selected").val() == ""){
+                message_alert("El campo de seleccion <b>[Tipo]</b> es un dato obligatorio...");
                 return false;
             }
-            if($("#fechaingreso").val() == ""){
-                message_alert("El campo <b>[Fecha Ingreso]</b> es un dato obligatorio...");
-                return false;
-            }
+          
+
             if($("#gasklm").val() == ""){
                 message_alert("El campo <b>[Gas x Kml]</b> es un dato obligatorio...");
                 return false;
             }
-           if ($("#file").val() == "") {
-            return true;  
-                message_alert('---SE DEBE CARGAR OBLIGATORIAMENTE UN ARCHIVO---');
-                 
-            }else
-            if (filedos.size > maxSize) {
-                console.log(filedos.size,"verificar");
-                $("#file").val('');
-                message_alert('El tamaño del archivo no puede superar los 8 megabytes.');
-                return false;
-             }
-             if (filedos.type == "application/pdf") {
-                console.log(filedos.size,"verificar");
-                $("#file").val('');
-                message_alert('El archivo no es una imagen.');
-                return false;
-             }
-             
+
             return true;
         };
-
-        function myFunction() {
-            respuesta();
-        }
-        function respuesta() {
-            var ot_antigua = $("#cominterna").val();
-            $.ajax({
-                url: "{{ route('uconsumo.pregunta9') }}",
-                data: 'ot_antigua=' + ot_antigua,
-                dataType: "html",
-                asycn: false,
-                type: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                dataType: 'JSON',
-                success: function(data) {
-                  
-                    if (data.success == true) {
-                        $("#codigoc2").val('comunicacion');
-                    }
-                }
-            });
-        }
-
-
         function uploadFile() {
         // get the file
         let file = document.getElementById("file").files[0];
@@ -439,35 +353,7 @@
 
       }
 
-  function convertirAMayusculas(input) {
-    // Guarda la posición actual del cursor
-    var inicioSeleccion = input.selectionStart;
-    var finSeleccion = input.selectionEnd;
-  
-    // Convierte todo el texto a mayúsculas
-    input.value = input.value.toUpperCase();
-  
-    // Restaura la posición del cursor
-    input.setSelectionRange(inicioSeleccion, finSeleccion);
-  }
-  function valideNumber(evt){
-            var code = (evt.which) ? evt.which : evt.keyCode;
-            if(code>=48 && code<=57){
-                return true;
-            }else{
-                return false;
-            }
-        } 
-  $("#fechaingreso").datepicker({
-            inline: false,
-            dateFormat: "dd/mm/yyyy",
-            autoClose: true
-        });
-        function validarPlaca(placa) {
 
-var regex =  /^[A-Z]{4}-\d{4}$/;
-return regex.test(placa);
-
-}
+        var regex = /^[A-Z]+$/;
     </script>
 @endsection

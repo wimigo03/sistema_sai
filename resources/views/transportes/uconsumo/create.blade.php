@@ -2,10 +2,10 @@
 @section('content')
 @include('layouts.message_alert')
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-4 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-            <a href="{{url('/uconsumo/index')}}">
+            <a href="{{url('/transportes/uconsumo/index')}}">
                 <span class="color-icon-1">
                     &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                 </span>
@@ -13,7 +13,7 @@
         </span>
     </div>
     <div class="col-md-8 text-right titulo">
-        <b style='color:red'>{{$personalArea->nombrearea}}</b>- <b>NUEVO REGISTRO</b>
+        <b style='color:red'>{{$personalArea->nombrearea}}</b>- <b>CREATE NUEVO</b>
     </div>
     <div class="col-md-12">
         <hr class="hrr">
@@ -22,33 +22,116 @@
 
 
 <div class="body-border" style="background-color: #FFFFFF;">
-    <form action="{{ route('uconsumo.store') }}" method="post" id="form" enctype="multipart/form-data">
+    <form action="{{ route('transportes.uconsumo.store') }}" method="post" id="form" enctype="multipart/form-data">
         @csrf
-
-        <input type="hidden" name="codigoc2" id="codigoc2">
-
         <div class="form-group row">
 
 
             <div class="col-md-3">
-                <label  class="d-inline font-verdana-bg">
+                <label  class="d-inline font-verdana-12">
                     <b>Codigo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <input type="text" name="codigoc"
-                class="form-control form-control-sm font-verdana-bg" 
-                id="codigoc" onchange="myFunction()"  >
+                <textarea type="text" name="codigoc" cols="1" rows="3" 
+                class="form-control form-control-sm font-verdana-12" 
+                 id="codigoc"  onkeypress="return valideNumber(event);"></textarea>
             </div>
+
+
             <div class="col-md-3">
-                <label for="nombreuconsumo" class="d-inline font-verdana-bg">
+                <label for="nombreuconsumo" class="d-inline font-verdana-12">
                     <b>Nombre</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <input type="text"  name="nombreuconsumo" 
-                class="form-control form-control-sm font-verdana-bg" 
-                id="nombreuconsumo"  onkeyup="convertirAMayusculas(this)">
+                <textarea name="nombreuconsumo" cols="1" rows="3" 
+                class="form-control form-control-sm font-verdana-12" 
+                id="nombreuconsumo" onkeyup="javascript:this.value=this.value.toUpperCase();">{{request('nombreuconsumo')}}</textarea>
             </div>
-            <div class="col-md-3">
-                <label for="idtipomovilidad" class="d-inline font-verdana-bg">
-                    <b>Tipo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+
+
+            <div class="col-md-6">
+                <label for="desconsumo" class="d-inline font-verdana-12">
+                <b>Descripcion</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <textarea name="desconsumo" cols="1" rows="3" 
+                class="form-control form-control-sm font-verdana-12" id="desconsumo" onkeyup="javascript:this.value=this.value.toUpperCase();">{{request('desconsumo')}}</textarea>
+            </div>
+
+
+            <div class="col-md-2">
+                <label for="modeloc" class="d-inline font-verdana-12">
+                    <b>Modelo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="text" name="modeloc" value="{{request('modeloc')}}" 
+                class="form-control form-control-sm font-verdana-12" id="modeloc" onkeyup="javascript:this.value=this.value.toUpperCase();">
+            </div>
+
+            <div class="col-md-2">
+                <label for="colorc" class="d-inline font-verdana-12">
+                    <b>Color</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="color" name="colorc" value="{{request('colorc')}}" 
+                class="form-control form-control-sm font-verdana-12" id="colorc">
+            </div>
+
+            <div class="col-md-2">
+                <label for="placac" class="d-inline font-verdana-12">
+                    <b>Placa</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="text" name="placac" value="{{request('placac')}}" 
+                class="form-control form-control-sm font-verdana-12" id="placac" onkeyup="javascript:this.value=this.value.toUpperCase();" onkeypress="return validarPlaca(placa);">
+            </div>
+
+            <div class="col-md-2">
+                <label for="marcac" class="d-inline font-verdana-12">
+                    <b>Marca</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="text" name="marcac" value="{{request('marcac')}}" 
+                class="form-control form-control-sm font-verdana-12" id="marcac" onkeyup="javascript:this.value=this.value.toUpperCase();">
+            </div>
+
+            <div class="col-md-2">
+                <label for="klminicialc" class="d-inline font-verdana-12">
+                    <b>klm inicial</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="number" name="klminicialc" value="{{request('klminicialc')}}" 
+                class="form-control form-control-sm font-verdana-12" id="klminicialc">
+            </div>
+
+
+            <div class="col-md-2">
+                <label for="klmfinal" class="d-inline font-verdana-12">
+                    <b>klm final</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="number" name="klmfinal" value="{{request('klmfinal')}}" 
+                class="form-control form-control-sm font-verdana-12" id="klmfinal">
+            </div>
+
+
+            <div class="col-md-7">
+                <label for="idarea" class="d-inline font-verdana-12">
+                    <b>Area</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <select name="idarea" id="idarea" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
+                    <option value="">-</option>
+                    @foreach ($areas as $index => $value)
+                        <option value="{{ $index }}">{{ $value }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="idprograma" class="d-inline font-verdana-12">
+                    <b>Programa</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <select name="idprograma" id="idprograma" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
+                    <option value="">-</option>
+                    @foreach ($programas as $index => $value)
+                        <option value="{{ $index }}">{{ $value }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="col-md-5">
+                <label for="idtipomovilidad" class="d-inline font-verdana-12">
+                    <b>Tipo Movilidad</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="idtipomovilidad" id="idtipomovilidad" placeholder="--Seleccionar--" 
                 class="form-control form-control-sm select2">
@@ -59,155 +142,42 @@
                 </select>
             </div>
 
-            {{-- <div class="col-md-2">
-                <label for="idmarcamovilidad" class="d-inline font-verdana-bg">
-                    <b>Marca</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <select name="idmarcamovilidad" id="idmarcamovilidad" placeholder="--Seleccionar--" 
-                class="form-control form-control-sm select2">
-                    <option value="">-</option>
-                    @foreach ($marcas as $index => $value)
-                        <option value="{{ $index }}">{{ $value }}</option>
-                    @endforeach
-                </select>
-            </div> --}}
-
-          {{-- <div class="col-md-3">
-                <label for="fechaingreso" class="d-inline font-verdana-bg">
-                    <b> Fecha de ingreso</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input type="text" name="fechaingreso" placeholder="dd/mm/aaaa"
-                value="{{request('fechaingreso')}}" 
-                class="form-control form-control-sm font-verdana-bg" 
-                id="fechaingreso" data-language="es" autocomplete="off" >  
-            </div> --}}
-            <div class="col-md-3">
-                <label for="placac" class="d-inline font-verdana-bg">
-                    <b>Placa</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input type="text" name="placac" value="{{request('placac')}}" placeholder="Ejemplo: ABCD-1234" 
-                class="form-control form-control-sm font-verdana-bg" id="placac" onkeyup="javascript:this.value=this.value.toUpperCase();" onkeypress="return validarPlaca(placa);">
-            </div>
-            
-            <div class="col-md-4">
-                <label for="desconsumo" class="d-inline font-verdana-bg">
-                <b>Descripcion</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <textarea name="desconsumo" cols="2" rows="4" 
-                class="form-control form-control-sm font-verdana-bg" id="desconsumo"  onkeyup="convertirAMayusculas(this)">{{request('desconsumo')}}</textarea>
-           
-            </div>
-
-
-            {{-- <div class="col-md-2">
-                <label for="modeloc" class="d-inline font-verdana-bg">
-                    <b>Modelo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input type="text" name="modeloc" value="{{request('modeloc')}}" 
-                class="form-control form-control-sm font-verdana-bg" id="modeloc" onkeyup="javascript:this.value=this.value.toUpperCase();">
-            </div> --}}
-
             <div class="col-md-2">
-                <label for="colorc" class="d-inline font-verdana-bg">
-                    <b>Color</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input type="text" name="colorc" value="{{request('colorc')}}" 
-                class="form-control form-control-sm font-verdana-bg" id="colorc"  onkeyup="convertirAMayusculas(this)"  >
-
-                
-            </div>
-
-            <div class="col-md-2">
-                <label for="klminicialc" class="d-inline font-verdana-bg">
-                    <b>klm inicial</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input type="number" name="klminicialc" value="{{request('klminicialc')}}" 
-                class="form-control form-control-sm font-verdana-bg" id="klminicialc">
-            </div>
-
-
-            <div class="col-md-2">
-                <label for="klmfinal" class="d-inline font-verdana-bg">
-                    <b>klm final</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input type="number" name="klmfinal" value="{{request('klmfinal')}}" 
-                class="form-control form-control-sm font-verdana-bg" id="klmfinal">
-            </div>
-
-            <div class="col-md-2">
-                <label for="gasklm" class="d-inline font-verdana-bg">
+                <label for="gasklm" class="d-inline font-verdana-12">
                     <b>Gas por kilometro</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <input type="number" name="gasklm" id="gasklm" value="{{request('gasklm')}}" 
-                class="form-control form-control-sm font-verdana-bg" id="gasklm">
+                <input type="number" name="gasklm" value="{{request('gasklm')}}" 
+                class="form-control form-control-sm font-verdana-12" id="gasklm">
             </div>
-
-            {{-- <div class="col-md-2">
-                <label for="marcac" class="d-inline font-verdana-bg">
-                    <b>Marca</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input type="text" name="marcac" value="{{request('marcac')}}" 
-                class="form-control form-control-sm font-verdana-bg" id="marcac" onkeyup="javascript:this.value=this.value.toUpperCase();">
-            </div> --}}
-
-           
-
-            {{-- <div class="col-md-5">
-                <label for="idprograma" class="d-inline font-verdana-bg">
-                    <b>Ubicacion Fisica</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <select name="idprograma" id="idprograma" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
-                    <option value="">-</option>
-                    @foreach ($programas as $index => $value)
-                        <option value="{{ $index }}">{{ $value }}</option>
-                    @endforeach
-                </select>
-            </div> --}}
-
-            {{-- <div class="col-md-6">
-                <label for="idarea" class="d-inline font-verdana-bg">
-                    <b>Area</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <select name="idarea" id="idarea" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
-                    <option value="">-</option>
-                    @foreach ($areas as $index => $value)
-                        <option value="{{ $index }}">{{ $value }}</option>
-                    @endforeach
-                </select>
-            </div> --}}
-          
-         
-
-            &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
             
             &nbsp;&nbsp;&nbsp;
-            <div class="col-md-8">
-                <label for="documento" class="d-inline font-verdana-bg" style="color:black;font-weight: bold; margin-left: 105px;">
-                
-                    <b style="color: red">Limite 80&nbsp;
-                        mb.(solo.imagen):</b></label>
+            <div class="form-group row">
+                <label for="documento" style="color:black;font-weight: bold;"
+                    class=" required col-md-4 col-form-label text-md-right">
+                    <b style="color: red">Limite 200
+                        mb.(solo.pdf):</b></label>
 
-             
-                    <input type="file" required name="documento" id="file" cols="2" rows="3"  >
+                <div class="col-md-4">
+                    <input type="file" required name="documento" id="file" cols="1" rows="3"  >
                     <span style="margin-left: 15px; width: 480px;" class="custom-file-control"></span>
 
-               
+                </div>
             </div>
         </div>
         
-        <div class="col-md-12 text-right">
-           
+        <div class="form-group row">
+            <div class="col-md-12 text-right">
 
-                <input class="btn btn-danger font-verdana-bg" type="button" id="cancelar" value="Cancelar">
+                <input type="button" id="cancelar" value="Cancelar">
 
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <input  class="btn color-icon-2 font-verdana-bg"  type="button" value="Guardar" onclick="uploadFile()" id="insertar_item_material">
+                <input type="button" value="Guardar" onclick="uploadFile()" id="insertar_item_material">
 
                 </br></br>
                 <progress id="progressBar" value="0" max="100"
                     style="width:300px;display:none"></progress>
                 <p id="loaded_n_total"></p>
-         
+            </div>
         </div>
     </form>
 </div>
@@ -240,48 +210,32 @@
 
 $(".btn").hide();
 $(".spinner-btn-send").show();
-window.location.href = "{{url()->previous()}}";
+window.location.href = "{{ url('transporte/uconsumo/index') }}";
 
 });
          
         function validar_detalle_material() {
-            var descripcion = $("#desconsumo").val();
-            var filedos = document.getElementById("file").files[0];
-         
 
-            var maxSize = 8 * 1024 * 1024;
+            if($("#codigoc").val() == ""){
+                message_alert("El campo <b>[CODIGO]</b> es un dato obligatorio...");
+                return false;
+            }
 
             if($("#nombreuconsumo").val() == ""){
                 message_alert("El campo <b>[NOMBRE]</b> es un dato obligatorio...");
                 return false;
             }
-            if($("#codigoc").val() == ""){
-                message_alert("El campo <b>[CODIGO]</b> es un dato obligatorio...");
-                return false;
-            }
-            if ($("#codigoc2").val() == "comunicacion") {
-                $("#codigoc2").val('');
-                $("#codigoc").val('');
-                $("#nombreuconsumo").val('');
-                message_alert("El numero de <b>[Codigo]</b> ya existe en nuestros registros...");
-                return false;
-            }
-          
+
             if($("#desconsumo").val() == ""){
                 message_alert("El campo <b>[DESCRIPCION]</b> es un dato obligatorio...");
                 return false;
             }
 
-            // if($("#modeloc").val() == ""){
-            //     message_alert("El campo <b>[MODELO]</b> es un dato obligatorio...");
-            //     return false;
-            // }
-            if(descripcion.length > 200){
-                $("#descripcion").val('');
-                $("#desconsumo").val('');
-                message_alert("El campo <b>[DESCRIPCION]</b> tiene muchos caracteres...");
+            if($("#modeloc").val() == ""){
+                message_alert("El campo <b>[MODELO]</b> es un dato obligatorio...");
                 return false;
             }
+
             if($("#colorc").val() == ""){
                 message_alert("El campo <b>[COLOR]</b> es un dato obligatorio...");
                 return false;
@@ -291,12 +245,16 @@ window.location.href = "{{url()->previous()}}";
                 return false;
             }
             if(!validarPlaca($("#placac").val())){
-                $("#placac").val('');
+
                message_alert("El campo <b>[PLACA]</b> no es una placa valida...");
                return false;
                }
 
-         
+            if($("#marcac").val() == ""){
+                message_alert("El campo <b>[MARCA]</b> es un dato obligatorio...");
+                return false;
+            }
+
             if($("#klminicialc").val() == ""){
                 message_alert("El campo <b>[KLM INICIAL]</b> es un dato obligatorio...");
                 return false;
@@ -306,13 +264,20 @@ window.location.href = "{{url()->previous()}}";
                 message_alert("El campo <b>[KLM FINAL]</b> es un dato obligatorio...");
                 return false;
             }
-         
+            if($("#idarea >option:selected").val() == ""){
+                message_alert("El campo de seleccion <b>[AREA]</b> es un dato obligatorio...");
+                return false;
+            }
+            if($("#idprograma >option:selected").val() == ""){
+                message_alert("El campo de seleccion <b>[PROGRAMA]</b> es un dato obligatorio...");
+                return false;
+            }
             if($("#idtipomovilidad >option:selected").val() == ""){
                 message_alert("El campo de seleccion <b>[Tipo]</b> es un dato obligatorio...");
                 return false;
             }
-        
-         
+          
+
             if($("#gasklm").val() == ""){
                 message_alert("El campo <b>[Gas x Kml]</b> es un dato obligatorio...");
                 return false;
@@ -321,43 +286,8 @@ window.location.href = "{{url()->previous()}}";
                 message_alert('---SE DEBE CARGAR OBLIGATORIAMENTE UN ARCHIVO---');
                 return false;   
             }
-            if (filedos.size > maxSize) {
-                console.log(filedos.size,"verificar");
-                $("#file").val('');
-                message_alert('El tamaño del archivo no puede superar los 8 megabytes.');
-                return false;
-             }
-             if (filedos.type == "application/pdf") {
-                console.log(filedos.size,"verificar");
-                $("#file").val('');
-                message_alert('El archivo no es una imagen.');
-                return false;
-             }
             return true;
         };
-        function myFunction() {
-            respuesta();
-        }
-        function respuesta() {
-            var ot_antigua = $("#cominterna").val();
-            $.ajax({
-                url: "{{ route('uconsumo.pregunta9') }}",
-                data: 'ot_antigua=' + ot_antigua,
-                dataType: "html",
-                asycn: false,
-                type: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                dataType: 'JSON',
-                success: function(data) {
-                  
-                    if (data.success == true) {
-                        $("#codigoc2").val('comunicacion');
-                    }
-                }
-            });
-        }
 
         function uploadFile() {
             // get the file
@@ -390,7 +320,7 @@ window.location.href = "{{url()->previous()}}";
             let totalSize = ev.total; // total size of the file in bytes
             let loadedSize = ev.loaded; // loaded size of the file in bytes
 
-            document.getElementById("loaded_n_total").innerHTML = "Cargado " + loadedSize + " bytes de " + totalSize +
+            document.getElementById("loaded_n_total").innerHTML = "Uploaded " + loadedSize + " bytes of " + totalSize +
                 " bytes.";
 
           
@@ -401,17 +331,7 @@ window.location.href = "{{url()->previous()}}";
             
 
         }
-        function convertirAMayusculas(input) {
-    // Guarda la posición actual del cursor
-    var inicioSeleccion = input.selectionStart;
-    var finSeleccion = input.selectionEnd;
-  
-    // Convierte todo el texto a mayúsculas
-    input.value = input.value.toUpperCase();
-  
-    // Restaura la posición del cursor
-    input.setSelectionRange(inicioSeleccion, finSeleccion);
-  }
+    
         function valideNumber(evt){
             var code = (evt.which) ? evt.which : evt.keyCode;
             if(code>=48 && code<=57){
@@ -420,7 +340,7 @@ window.location.href = "{{url()->previous()}}";
                 return false;
             }
         } 
-     
+
         function validarPlaca(placa) {
 
 var regex =  /^[A-Z]{4}-\d{4}$/;

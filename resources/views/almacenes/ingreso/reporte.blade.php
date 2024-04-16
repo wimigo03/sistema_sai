@@ -7,7 +7,7 @@
     </div>
 @endif
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
 
     <div class="col-md-2 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
@@ -42,7 +42,7 @@
 
 
 <div class="body-border" style="background-color: #FFFFFF;">
-    <form action="{{ route('ingreso.store2') }}" method="post" id="form">
+    <form action="{{ route('almacenes.ingreso.store2') }}" method="post" id="form">
         @csrf
         <br>
 
@@ -50,7 +50,7 @@
 
 
             <div class="col-md-8">
-                <label for="ingreso" class="d-inline font-verdana-bg">
+                <label for="ingreso" class="d-inline font-verdana-12">
                     <b>ALMACEN PROGRAMA PRODUCTO</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="ingreso" id="ingreso" placeholder="--Seleccionar--" 
@@ -64,7 +64,7 @@
             </div>
 
             <div class="col-md-8">
-                <label for="area" class="d-inline font-verdana-bg">
+                <label for="area" class="d-inline font-verdana-12">
                     <b>ALMACEN PROGRAMA PRODUCTO</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="area" id="area" placeholder="--Seleccionar--" 
@@ -86,7 +86,7 @@
             
 
 
-                <button class="btn btn-success font-verdana-bg" type="button" 
+                <button class="btn btn-success font-verdana-12" type="button" 
                 onclick="save();">
                     <i class="fa-solid fa-plus"></i>
                     &nbsp;Adicionar

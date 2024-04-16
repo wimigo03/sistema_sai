@@ -7,11 +7,11 @@
     </div>
 @endif
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
 
     <div class="col-md-2 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-            <a href="{{ url('/apedido/index') }}">
+            <a href="{{ url('/almacenes/pedido/index') }}">
                 <span class="color-icon-1">
                     &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                 </span>
@@ -78,7 +78,7 @@
                                                 
                             <td class="text-center p-1">
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Imprimir Solicitud">
-                                    <a href="{{route('adetalle.solicitud',$prod->iddetallevale)}}">
+                                    <a href="{{route('almacenes.detalle.solicitud',$prod->iddetallevale)}}">
                                         <span class="text-primary">
                                             <i class=" fa-2xl fa-solid fa-print"></i>
                                         </span>

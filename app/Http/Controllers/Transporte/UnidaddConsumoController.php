@@ -13,16 +13,13 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
-use Yajra\DataTables\DataTables;
-use Illuminate\Support\Facades\DB;
+use DB;
+use DataTables;
 use PDF;
 
 use App\Models\Transporte\UnidaddConsumoModel;
 use App\Models\Transporte\DoUconsumoModel;
 
-use App\Models\Transporte\MarcaMovilidadModel;
-
-use Carbon\Carbon;
 
 class UnidaddConsumoController extends Controller
 {
@@ -48,9 +45,9 @@ class UnidaddConsumoController extends Controller
 
                         't.nombremovilidad','a.nombrearea','prog.nombreprograma'                      
                         
-                        )->orderBy('u.idunidadconsumo', 'asc');
+                        )->orderBy('u.idunidadconsumo', 'desc');
 
-                        return DataTables::of($consumos)
+                        return Datatables::of($consumos)
                         ->addIndexColumn()
                         ->addColumn('btn', 'transportes.uconsumo.btn')
                         ->addColumn('btn2', 'transportes.uconsumo.btn2')
@@ -125,27 +122,26 @@ $personal = User::find(Auth::user()->id);
         $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
    
 
-        //  $areas = DB::table('areas')
-        //  ->where('estadoarea',1)
-        //  ->pluck('nombrearea','idarea');
+         $areas = DB::table('areas')
+         ->where('estadoarea',1)
+         ->pluck('nombrearea','idarea');
        
 
          $tipos = DB::table('tipomovilidad')
          ->where('estadomovilidad',1)
          ->pluck('nombremovilidad','idtipomovilidad');
 
-        //  $marcas = DB::table('marcamovilidad')
-        //  ->where('estadomarca',1)
-        //  ->pluck('nombremarca','idmarcamovilidad');
 
-        //  $programas = DB::table('programacomb')
-        //  ->where('estadoprograma',1)
-        //  ->pluck('nombreprograma','idprogramacomb');
+
+         $programas = DB::table('programacomb')
+         ->where('estadoprograma',1)
+         ->pluck('nombreprograma','idprogramacomb');
        
 
 
          return view('transportes.uconsumo.create',
-         compact('tipos','personalArea'));
+         compact('areas','tipos',
+         'programas','personalArea'));
 
 
 
@@ -158,12 +154,10 @@ $personal = User::find(Auth::user()->id);
            ini_set('max_execution_time','-1');
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
-        $IdProg=$personal->idprogramacomb;
         $userdate = User::find($id)->usuariosempleados;
         $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
 
 
-         
         if ($request->hasFile("documento")) {
             $file = $request->file("documento");
             
@@ -187,49 +181,26 @@ $personal = User::find(Auth::user()->id);
      
         $consumos->colorconsumo = $request->input('colorc');
      
-        $consumos->modeloconsumo = "PENDIENTE";
+        $consumos->marcaconsumo = $request->input('marcac');
+        $consumos->modeloconsumo = $request->input('modeloc');
         $consumos->placaconsumo = $request->input('placac');
         $consumos->kilometrajeinicialconsumo = $request->input('klminicialc');
-        $consumos->kilometrajefinalconsumo = $request->input('klmfinal');
-        
+      
+        $consumos->idarea = $personalArea->idarea;
         $consumos->idtipomovilidad = $request->input('idtipomovilidad');
+        $consumos->idprogramacomb = $request->input('idprograma');
         $consumos->idusuario = $personal->id;
         $consumos->estadoconsumo = 1;
-        $consumos->estado1 = 1;
+        
+        $consumos->kilometrajefinalconsumo = $request->input('klmfinal');
         $consumos->gasporklm = $request->input('gasklm');
-        
+
         $consumos->documento = $personalArea->nombrearea . '/' . $nombre;
-        $consumos->idarea = $personalArea->idarea;
-        
-        // $consumos->marcaconsumo = $request->input('marcac');
-        // $consumos->idprogramacomb = $request->input('idprograma');
-        // $consumos->idmarcamovilidad = $request->input('idmarcamovilidad');
-        // $consumos->fechaingreso = $request->input('fechaingreso');
-        $consumos->idmarcamovilidad = 7;   //el id 7 el nombre es pendiente
-        $consumos->idprogramacomb = $IdProg;
-      
-
-        $fechasolACT = Carbon::now();
-        $gesti = $fechasolACT->year;
-        $hora = $fechasolACT->toTimeString();
-
-        $consumos->fechaingreso = $fechasolACT;
-        $consumos->horaingresou = $hora;
-        $consumos->gestionuni = $gesti;
-
-        $consumos->marcaconsumo = "PENDIENTE";
-
-   
-
-        $consumos->fechasalida = $fechasolACT;
-        $consumos->fecharetorno = $fechasolACT;
-        $consumos->horasalida = $hora;
-        $consumos->horaretorno = $hora;
 
 
         $consumos->save();
 
-        return redirect()->route('uconsumo.index');
+        return redirect()->action('App\Http\Controllers\Transporte\UnidaddConsumoController@index');
 
         } catch (\Throwable $th){
          return '[ERROR_500]';
@@ -248,8 +219,7 @@ $personal = User::find(Auth::user()->id);
         $areas = DB::table('areas')->get();
         $programas = DB::table('programacomb')->get();
 
-        $marcas = DB::table('marcamovilidad')->get();
-       
+           
 
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
@@ -260,8 +230,7 @@ $personal = User::find(Auth::user()->id);
         "consumos" => $consumos,
         "tipos" => $tipos,
         "areas" => $areas,
-        "programas" => $programas,
-        "marcas" => $marcas]);
+        "programas" => $programas]);
     }
 
     public function update(Request $request){
@@ -271,8 +240,6 @@ $personal = User::find(Auth::user()->id);
         $userdate = User::find($id)->usuariosempleados;
         $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
 
-        $fechasolACT = Carbon::now();
-        $hora = $fechasolACT->toTimeString();
 
         $consumos = UnidaddConsumoModel::find($request->idunidadconsumo);
 
@@ -292,52 +259,51 @@ $personal = User::find(Auth::user()->id);
             }
 
         $consumos->codigoconsumo = $request->input('codigoc');
+
         $consumos->nombreuconsumo = $request->input('nombreuconsumo');
+
         $consumos->desconsumo = $request->input('desconsumo');
         $consumos->colorconsumo = $request->input('colorc');
+        $consumos->marcaconsumo = $request->input('marcac');
         $consumos->modeloconsumo = $request->input('modeloc');
         $consumos->placaconsumo = $request->input('placac');
         $consumos->kilometrajeinicialconsumo = $request->input('klminicialc');
-        $consumos->kilometrajefinalconsumo = $request->input('klmfinal');
       
         $consumos->gasporklm = $request->input('gasklm');
+        $consumos->kilometrajefinalconsumo = $request->input('klmfinal');
 
-        $consumos->idarea = $request->input('idarea');
+        $consumos->idarea = $personalArea->idarea;
         $consumos->idtipomovilidad = $request->input('idtipomovilidad');
         $consumos->idprogramacomb = $request->input('idprograma');
         $consumos->idusuario =$personal->id;
         $consumos->documento = $personalArea->nombrearea . '/' . $nombre;
-        $consumos->idmarcamovilidad = $request->input('idmarcamovilidad');
-        $consumos->fechaingreso = $request->input('fechaingreso');
-        $consumos->horaingresou =$hora;
 
         $consumos->save();
     } else {
 
         $consumos->codigoconsumo = $request->input('codigoc');
+
         $consumos->nombreuconsumo = $request->input('nombreuconsumo');
+
         $consumos->desconsumo = $request->input('desconsumo');
         $consumos->colorconsumo = $request->input('colorc');
- 
+        $consumos->marcaconsumo = $request->input('marcac');
         $consumos->modeloconsumo = $request->input('modeloc');
         $consumos->placaconsumo = $request->input('placac');
         $consumos->kilometrajeinicialconsumo = $request->input('klminicialc');
-        $consumos->kilometrajefinalconsumo = $request->input('klmfinal');
       
         $consumos->gasporklm = $request->input('gasklm');
+        $consumos->kilometrajefinalconsumo = $request->input('klmfinal');
 
-        $consumos->idarea = $request->input('idarea');
+        $consumos->idarea = $personalArea->idarea;
         $consumos->idtipomovilidad = $request->input('idtipomovilidad');
         $consumos->idprogramacomb = $request->input('idprograma');
         $consumos->idusuario =$personal->id; 
-        $consumos->idmarcamovilidad = $request->input('idmarcamovilidad');
-        $consumos->fechaingreso = $request->input('fechaingreso');
-        $consumos->horaingresou =$hora;
         $consumos->save();
 
     }
 
-    return redirect()->route('uconsumo.index');
+    return redirect()->action('App\Http\Controllers\Transporte\UnidaddConsumoController@index');
 }
     
 
@@ -409,36 +375,17 @@ public function insertar(Request $request){
    $docuconsumo->save();
 
   
-   return redirect()->route('uconsumo.editardoc',
+   return redirect()->action('App\Http\Controllers\Transporte\UnidadConsumoController@editardoc',
     [$idunidadconsumo]);
 }
 
 
 public function aprovar($id)
 {
-    $detalledos = UnidaddConsumoModel::find($id);
-    $idcho=$detalledos->idchofer;
-    $detalletres = EmpleadosModel::find($idcho);
-    $detalletres->estadoemp1=1;
-    $detalletres->save();
-
     $detalle = UnidaddConsumoModel::find($id);
     $detalle->estadoconsumo = 1;
-    $detalle->estado1 = 1;
     $detalle->save();
-    return redirect()->route('uconsumo.index2');
-}
-public function respuesta9(Request $request)    {
-    $ot_antigua=$_POST['ot_antigua'];
-        $data = "hola";
-        $data2 = "holaSSSS";
-        $validarci = DB::table('unidadconsumo as s')
-        ->select('s.codigoconsumo')
-       ->where('s.codigoconsumo', $ot_antigua)
-        ->get();
-           if($validarci->count()>0){
-        return ['success' => true, 'data' => $data];
-    } else  return ['success' => false, 'data' => $data2];
+    return redirect()->route('transportes.uconsumo.index2');
 }
 }
 

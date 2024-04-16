@@ -1,15 +1,19 @@
 @extends('layouts.admin')
 @section('content')
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-8 titulo">
-        <b>SOLICITUD DE COMBUSTIBLE -- </b><b style='color:red'>{{$idd->nombrearea}} </b>--
+        <b>COMPRA DE COMBUSTIBLE -- </b><b style='color:red'>{{$idd->nombrearea}} </b>--
     </div>
 
+   
+
     <div class="col-md-4 text-right titulo">
-        <a href="{{route('pedidoparcialcomb.create')}}" class="tts:left tts-slideIn tts-custom" 
+       
+
+        <a href="{{route('combustibles.pedidoparcial.create')}}" class="tts:left tts-slideIn tts-custom" 
         aria-label="Agregar Solicitud">
-            <button class="btn btn-sm btn-success font-verdana" type="button" >Agreg. Solic.
+            <button class="btn btn-sm btn-success font-verdana" type="button" >Agreg.Solic.
                 &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
             </button>
         </a>
@@ -29,11 +33,10 @@
             <table id="dataTable"  class="table display table-bordered responsive font-verdana" style="width:100%">
                 <thead>
                     <tr>
-                        <td class="text-justify p-1"><b>N°</b></td>
-                        <td class="text-justify p-1"><b>N° COMPRA</b></td>
+                        <td class="text-justify p-1"><b>Nro</b></td>
                         <td class="text-justify p-1"><b>FECHA SOL.</b></td>
                         <td class="text-justify p-1"><b>FECHA RESP.</b></td>
-                        <td class="text-justify p-1"><b>N° SOL.</b></td>
+                        <td class="text-justify p-1"><b>CONT.INTERNO</b></td>
                         <td class="text-justify p-1"><b>OBJETO</b></td>
                         <td class="text-justify p-1"><b>AREA</b></td>
                         <td class="text-justify p-1"><b>ESTADO</b></td>
@@ -50,140 +53,137 @@
                     @forelse ($compras as $key => $comp)
                         <tr>
                             <td class="text-justify p-1">{{$key+1}}</td>
-                            <td class="text-justify p-1">{{$comp->idcompracomb}}</td>
                             <td class="text-justify p-1">{{$comp->fechasoli}}</td>
-                            @if($comp->fechaaprob == '')
-                            <td class="text-justify p-1">
-                            <b style="color: green">Pendiente</b></td>
-                            @elseif($comp->fechaaprob !== '')
                             <td class="text-justify p-1">{{$comp->fechaaprob}}</td>
-                            @endif
-
                             <td class="text-justify p-1">{{$comp->controlinterno}}</td>
                             <td class="text-justify p-1">{{$comp->objeto}}</td>
                             <td class="text-justify p-1">{{$comp->nombrearea}}</td>
 
-                            @if($comp->estadocompracomb == '0')
-                            <td class="text-justify p-1">
-                            <b style="color: green">cero</b></td>
-
-                            @elseif($comp->estadocompracomb == '1')
+                            @if($comp->estadocompracomb == '1')
                             <td class="text-justify p-1">
                             <b style="color: green">Pendiente</b></td>
 
                             @elseif($comp->estadocompracomb == '2')
                             <td class="text-justify p-1">
-                            <b style="color: blue">Aprobado</b></td>
+                            <b style="color: blue">Aprovada</b></td>
 
                             
                             @elseif($comp->estadocompracomb == '5')
                             <td class="text-justify p-1">
-                                <b style="color: purple">Almacen</b></td>
+                                <b style="color: red">Almacen</b></td>
 
                             @elseif($comp->estadocompracomb == '10')
                             <td class="text-justify p-1">
                                 <b style="color: red">Rechazada</b></td>
                             @endif
 
-                            @if($comp->estadocompracomb == '0')
+
+
+                            @if($comp->estadocompracomb == '1')
                             <td style="padding: 0;" class="text-center p-1">
+                            
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Compra">
-                                        <a href="{{route('pedidoparcialcomb.editaruno',$comp->idcompracomb)}}">
+                                        <a href="{{route('combustibles.pedidoparcial.editar',$comp->idcompracomb)}}">
                                             <span class="text-warning">
                                                 <i class="fa-solid fa-2xl fa-square-pen"></i>
                                             </span>
                                         </a>
                                     </span>
+                            
                                 </td>
+
+
                                  <td style="padding: 0;" class="text-center p-1">
+                            
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle">
-                                    <a href="{{route('pedidoparcialcomb.edit',$comp->idcompracomb)}}">
+                                    <a href="{{route('combustibles.pedidoparcial.edit',$comp->idcompracomb)}}">
                                         <span class="text-primary">
                                             <i class="fa-solid fa-2xl fa-square-info"></i>
                                         </span>
                                     </a>
                                 </span>
+                              
                             </td>
-                            @elseif($comp->estadocompracomb == '1')
-                            <td style="padding: 0;" class="text-center p-1">
-                                <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Compra">
-                                    <a href="{{route('pedidoparcialcomb.editar',$comp->idcompracomb)}}">
-                                        <span class="text-warning">
-                                            <i class="fa-solid fa-2xl fa-square-pen"></i>
-                                        </span>
-                                    </a>
-                                </span>
-                            </td>
-                            <td style="padding: 0;" class="text-center p-1">
-                                <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle">
-                                    <a href="{{route('pedidoparcialcomb.edit',$comp->idcompracomb)}}">
-                                        <span class="text-primary">
-                                            <i class="fa-solid fa-2xl fa-square-info"></i>
-                                        </span>
-                                    </a>
-                                </span>
-                            </td>
+
                             @elseif($comp->estadocompracomb == '2')
+
                             <td style="padding: 0;" class="text-center p-1">
+                             
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Compra">
-                                        <a href="{{route('pedidoparcialcomb.ver',$comp->idcompracomb)}}">
+                                        <a href="{{route('combustibles.pedidoparcial.ver',$comp->idcompracomb)}}">
                                             <span class="text-warning">
                                                 <i class="fa-solid fa-2xl fa-square-pen"></i>
                                             </span>
                                         </a>
                                     </span>
+                              
                                 </td>
+
                             <td style="padding: 0;" class="text-center p-1">
+                              
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle">
-                                    <a href="{{route('pedidoparcialcomb.editable',$comp->idcompracomb)}}">
+                                    <a href="{{route('combustibles.pedidoparcial.editable',$comp->idcompracomb)}}">
                                         <span class="text-primary">
                                             <i class="fa-solid fa-2xl fa-square-info"></i>
                                         </span>
                                     </a>
                                 </span>
+                             
                             </td>
                        
                             
                             @elseif($comp->estadocompracomb == '5')
+
                             <td style="padding: 0;" class="text-center p-1">
+                                 
                                      <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Compra">
-                                         <a href="{{route('pedidoparcialcomb.vercinco',$comp->idcompracomb)}}">
+                                         <a href="{{route('combustibles.pedidoparcial.ver',$comp->idcompracomb)}}">
                                              <span class="text-warning">
                                                  <i class="fa-solid fa-2xl fa-square-pen"></i>
                                              </span>
                                          </a>
                                      </span>
+                                
                                  </td>
+ 
                              <td style="padding: 0;" class="text-center p-1">
+                             
                                  <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle">
-                                     <a href="{{route('pedidoparcialcomb.editalma',$comp->idcompracomb)}}">
+                                     <a href="{{route('combustibles.pedidoparcial.editalma',$comp->idcompracomb)}}">
                                          <span class="text-primary">
                                              <i class="fa-solid fa-2xl fa-square-info"></i>
                                          </span>
                                      </a>
                                  </span>
+                            
                              </td>
                            
+                        
+
                              @elseif($comp->estadocompracomb == '10')
 
                            <td style="padding: 0;" class="text-center p-1">
                              
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Compra">
-                                        <a href="{{route('pedidoparcialcomb.verdiez',$comp->idcompracomb)}}">
+                                        <a href="{{route('combustibles.pedidoparcial.ver',$comp->idcompracomb)}}">
                                             <span class="text-warning">
                                                 <i class="fa-solid fa-2xl fa-square-pen"></i>
                                             </span>
                                         </a>
                                     </span>
+                            
                                 </td>
+
                             <td style="padding: 0;" class="text-center p-1">
+                             
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle">
-                                    <a href="{{route('pedidoparcialcomb.editrecha',$comp->idcompracomb)}}">
+                                    <a href="{{route('combustibles.pedidoparcial.editrecha',$comp->idcompracomb)}}">
                                         <span class="text-primary">
                                             <i class="fa-solid fa-2xl fa-square-info"></i>
                                         </span>
                                     </a>
                                 </span>
+                           
                             </td>
 
                             @endif 
@@ -199,7 +199,6 @@
 
                 <tfoot>
                     <tr>
-                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -229,7 +228,7 @@
                 this.api().columns(1).every(function() {
                     var column = this;
                     var input = document.createElement("input");
-                    input.style.width = input.style.width = "40px";
+                    input.style.width = input.style.width = "80px";
                     $(input).appendTo($(column.footer()).empty())
                         .on('change', function() {
                             var val = $.fn.dataTable.util.escapeRegex($(this).val());
@@ -250,18 +249,8 @@
                             column.search(val ? val : '', true, false).draw();
                         });
                 });
-                this.api().columns(3).every(function() {
-                    var column = this;
-                    var input = document.createElement("input");
-                    input.style.width = input.style.width = "80px";
-                    $(input).appendTo($(column.footer()).empty())
-                        .on('change', function() {
-                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
 
-                            column.search(val ? val : '', true, false).draw();
-                        });
-                });
-                this.api().columns(4).every(function() {
+                this.api().columns(3).every(function() {
                     var column = this;
                     var input = document.createElement("input");
                     input.style.width = input.style.width = "50px";
@@ -272,10 +261,10 @@
                             column.search(val ? val : '', true, false).draw();
                         });
                 });
-                this.api().columns(5).every(function() {
+                this.api().columns(4).every(function() {
                     var column = this;
                     var input = document.createElement("input");
-                    input.style.width = input.style.width = "190px";
+                    input.style.width = input.style.width = "100px";
                     $(input).appendTo($(column.footer()).empty())
                         .on('change', function() {
                             var val = $.fn.dataTable.util.escapeRegex($(this).val());
@@ -283,7 +272,7 @@
                             column.search(val ? val : '', true, false).draw();
                         });
                 });
-                this.api().columns(7).every(function() {
+                this.api().columns(5).every(function() {
                     var column = this;
                     var input = document.createElement("input");
                     input.style.width = input.style.width = "100px";

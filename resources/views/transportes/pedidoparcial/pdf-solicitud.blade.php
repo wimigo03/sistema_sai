@@ -1,34 +1,34 @@
 <!DOCTYPE html>
 <html lang="es">
 
-{{-- <head>
+<head>
     <link rel="stylesheet" href="style.css" />
-  </head> --}}
+  </head>
 
   <body>
     
     <div>
-        <p align="center"  style="text-decoration: underline;font-size: 12px;">
+        <p align="center"  style="text-decoration: underline;">
             <strong>COMUNICACION INTERNA</strong>
         </p>
-        <p align="center" style="text-decoration: underline;font-size: 12px;">
-            <strong>N° {{$soluconsumos->cominterna}}/2024</strong>
+        <p align="center" style="text-decoration: underline;">
+            <strong>N° {{$soluconsumos->cominterna}}/2023</strong>
         </p>
-        <p align="center" style="text-decoration: underline;font-size: 12px;">
+        <p align="center" style="text-decoration: underline;">
             <strong>{{$soluconsumos->oficina}}</strong>
         </p>
 
-        <table border="0" cellspacing="0" cellpadding="0" style="font-size: 12px;">
+        <table border="0" cellspacing="0" cellpadding="0">
 
             <tbody>
-                <tr >
+                <tr>
                     <td width="34" valign="top">
                         <p>
                             <strong>A:</strong>
                            
                         </p>
                     </td>
-                    <td width="500" valign="top" >
+                    <td width="500" valign="top">
                         <p>
                             {{$soluconsumos->dirnombre}}<br>
                             <strong>{{$soluconsumos->diracargo}} </strong>
@@ -42,7 +42,7 @@
 
 
        
-        <table border="0" cellspacing="0" cellpadding="0" style="font-size: 12px;">
+        <table border="0" cellspacing="0" cellpadding="0">
             <tbody>
                 <tr>
                     <td width="37" valign="top">
@@ -62,7 +62,7 @@
             </tbody>
         </table>
 
-        <table border="0" cellspacing="0" cellpadding="0" style="font-size: 12px;">
+        <table border="0" cellspacing="0" cellpadding="0">
             <tbody>
                 <tr>
                     <td width="37" valign="top">
@@ -82,7 +82,7 @@
             </tbody>
         </table>
 
-        <table border="0" cellspacing="0" cellpadding="0" style="font-size: 12px;">
+        <table border="0" cellspacing="0" cellpadding="0">
             <tbody>
                 <tr>
                     <td width="37" valign="top">
@@ -103,7 +103,7 @@
         </table>
 
        
-        <table border="0" cellspacing="0" cellpadding="0" style="font-size: 12px;">
+        <table border="0" cellspacing="0" cellpadding="0">
             <tbody>
                 <tr>
                     <td width="37" valign="top">
@@ -127,54 +127,54 @@
     </div>
 
     <div>
-        <p style="font-size: 12px;">
+        <p>
             <strong>Fecha: </strong>
             Yacuiba, {{$fechaSol}}
         </p>
 
         
-        <p style="font-size: 12px;">
+        <p>
             De mi mayor consideración:
         </p>
-        <p style="font-size: 12px;">
-            El motivo de la presente, es para solicitar a su persona, instruya a quien conrresponda la asignacion de una camioneta mas su combustible para mi persona,
+        <p>
+            El motivo de la presente, es para solicitar a su persona, instruya a quien conrresponda
             {{$soluconsumos->detallesouconsumo}}.
         </p>
        
        
       
-        <table border="5" cellspacing="0" cellpadding="0" width="40%" 
-        style=" border: 1px solid black;border-collapse: collapse;font-size: 12px;">
+        <table border="1" cellspacing="0" cellpadding="0" width="100%" 
+        style=" border: 1px solid black;border-collapse: collapse;">
             <tbody>
 
 
-                <tr width="244" >
+                <tr style="font-size: 12px;">
 
-                    <td width="44" valign="top">
+                    <td width="104" valign="top">
                         <p>
-                            <strong>DIA</strong>
+                            <strong>Dia</strong>
                         <p>
                     </td>
 
-                    <td width="54" valign="top">
+                    <td width="104" valign="top">
                         <p>
                             <strong>FECHA SALIDA</strong>
                         <p>
                     </td>
 
-                    <td width="54" valign="top">
+                    <td width="104" valign="top">
                         <p>
 
                             <strong>FECHA RETORNO</strong>
                         <p>
                     </td>
-                    <td width="54" valign="top">
+                    <td width="104" valign="top">
                         <p>
 
                             <strong>DESTINO</strong>
                         <p>
                     </td>
-                    <td width="54" valign="top">
+                    <td width="104" valign="top">
                         <p>
 
                             <strong>TIPO</strong>
@@ -183,9 +183,9 @@
                 </tr>
 
 
-                <tr style="font-size: 12px;" width="244">
+                <tr style="font-size: 12px;">
 
-                    <td width="44" valign="top">
+                    <td width="104" valign="top">
                         <p>
                             <strong>{{$diaSemana}}</strong><br>
 
@@ -193,12 +193,9 @@
                         <p>
                     </td>
                     
-                    <td width="54" valign="top">
+                    <td width="104" valign="top">
                         <p>
-                            <strong>{{$fechaSalida}}</strong>
-                            
-                            
-                            <br>
+                            <strong>{{$fechaSalida}}</strong><br>
 
                             @if($soluconsumos->tsalida == 1)
                            En la mañana
@@ -210,7 +207,7 @@
                                                 
                         <p>
                     </td>
-                    <td width="54" valign="top">
+                    <td width="104" valign="top">
                         <p>
 
                             <strong> {{$fechaRetorno}}</strong>
@@ -227,26 +224,17 @@
                          @endif
                         <p>
                     </td>
-                    <td width="54" valign="top">
+                    <td width="104" valign="top">
                         <p>
 
-                            <strong>{{$localidades->nombrelocalidad}}</strong> &nbsp;Distrito
-                            <strong>{{$localidades->distrito}}</strong>
+                            <strong>{{$localidades->nombrelocalidad}}</strong>
+                            
                         <p>
                     </td>
-                    <td width="54" valign="top">
+                    <td width="104" valign="top">
                         <p>
 
-                            @if($soluconsumos->tiposoluconsumo == 1)
-                            <strong>GASOLINA</strong>
-                     
-                         @elseif($soluconsumos->tiposoluconsumo == 2)
-                         <strong>DIESEL</strong>
-                       
-                         @else
-                             -
-                         @endif
-                        <p>
+                            <strong>{{$soluconsumos->tipo}}</strong>
                         <p>
                     </td>
                 </tr>
@@ -254,33 +242,14 @@
             </tbody>
         </table>
 
-        <p style="font-size: 12px;">
+        <p>
             Sin otro particular motivo saludo a usted.
         </p>
-        <p style="font-size: 12px;">
+        <p>
             Atentamente.
         </p>
    
-      
-        <table border="0" cellspacing="0" cellpadding="0" style="font-size: 12px;">
-            <tbody>
-                <tr>
-                    <td width="207" valign="top">
-                        <p>
-                            
-
-                        </p>
-                    </td>
-                    <td width="500" valign="top">
-                        <p>
-                            {{$soluconsumos->usuarionombre}}<br>
-                            <strong> {{$soluconsumos->usuariocargo}}</strong>
-                        </p>
-                    </td>
-                </tr>
              
-            </tbody>
-        </table>    
       
     </div>
 

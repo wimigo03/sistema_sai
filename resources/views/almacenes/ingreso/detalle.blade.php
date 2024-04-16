@@ -7,11 +7,11 @@
     </div>
 @endif
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
 
     <div class="col-md-2 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-            <a href="{{ url('/ingreso/index') }}">
+            <a href="{{ url('/almacenes/ingreso/index') }}">
                 <span class="color-icon-1">
                     &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                 </span>
@@ -108,7 +108,7 @@
                             <td style="padding: 0;" class="text-center p-1">
                             
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Solicitud">
-                                        <a href="{{route('ingreso.delete',$prod->idvale)}}">
+                                        <a href="{{route('almacenes.ingreso.delete',$prod->idvale)}}">
                                             <span class="text-warning">
                                                 <i class="fa-solid fa-2xl fa-square-pen"></i>
                                             </span>
@@ -123,7 +123,7 @@
                                 <td style="padding: 0;" class="text-center p-1">
                                
                                         <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Compra">
-                                            <a href="{{route('ingreso.deletedos',$prod->idvale)}}">
+                                            <a href="{{route('almacenes.ingreso.deletedos',$prod->idvale)}}">
                                                 <span class="text-primary">
                                                     <i class="fa-solid fa-2xl fa-print"></i>
                                                 </span>

@@ -1,8 +1,8 @@
 @extends('layouts.admin')
 @section('content')
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-8 titulo">
-        <b>TIPO MOVIILIDAD </b><b style='color:red'>UNIDAD TRANSPORTE</b>
+        <b>TIPO MOVIILIDAD</b>
     </div>
     <div class="col-md-4 text-right">
       
@@ -34,9 +34,11 @@
 
                                     <td class="text-center p-1 font-weight-bold"><b>NOMBRE</b></td>
 
-                                    <td class="text-center p-1 font-weight-bold"><b>ESTADO</b></td>
-                                    <td class="text-center p-1 font-weight-bold"><b>ACCIONES</b></td>
-                                    
+                                    <td class="text-center p-1 font-weight-bold"><b>DESCRIPCION</b></td>
+
+                                    <td class="text-center p-1 font-weight-bold">
+                                         <i class="fa fa-bars" aria-hidden="true"></i>
+                                    </td>
                             </tr>
                     </thead>
                     <tbody>
@@ -65,17 +67,15 @@ $(function() {
             {
                 data: 'nombremovilidad',name: 'nombremovilidad',class:'text-justify p-1 font-verdana'},
                 {
-                data: 'estadomovilidad',name: 'estadomovilidad',class:'text-justify p-1 font-verdana'},
+                data: 'descripcionmovilidad',name: 'descripcionmovilidad',class:'text-justify p-1 font-verdana'},
 
           
-                {
-                     className: 'text-center',
-                     data: 'actions',
-                     name: 'actions',
-                     orderable: false,
-                     searchable: false
-                 }
-
+            {
+                data: 'btn',
+                name: 'btn',
+                orderable: true,
+                searchable: true
+            },
         ],
 
 

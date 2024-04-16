@@ -7,38 +7,44 @@
     </div>
 @endif
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
   
     <div class="col-md-2 titulo">
-        <span class="tts:right tts-slideIn tts-custom" aria-label="Vista almacen">
-            {{-- <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder"> --}}
-
-            <a href="{{ url('/pedidocomb/index2') }}">
+        <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
+            <a href="{{ url('/combustibles/pedido/index2') }}">
                 <span class="color-icon-1">
                     &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                 </span>
             </a>
         </span>
     </div>
+
+
+    <div class="col-md-2 titulo">
+        <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
+            <a href="{{ url('/combustibles/pedido/index') }}">
+                <span class="color-icon-1">
+                    &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
+                </span>
+            </a>
+        </span>
+    </div>
+ 
     <div class="col-md-10 text-right titulo">
         <b>DETALLE DE LA COMPRA</b>
     </div>
     <div class="col-md-12"  >
         <hr class="hrr">
     </div>
-    <div class="col-md-2 text-right titulo">
-        <b>N° Compra: </b> <b style='color:red'>{{ $idcompracomb }}</b>
-
-    </div>
-    <div class="col-md-10 text-right">
+    <div class="col-md-12 text-right">
 
         @if ($compras->estadocompracomb== 1)
         <b style="color: orange">--Para aprovar la compra seleccione un Proveedor--</b>
       @elseif ($compras->estadocompracomb == 2)
 
     
-      <a href="{{route('detalle.almacendos',$compras->idcompracomb)}}" 
-        onclick="return confirm('Se va a enviar la compra a almacen..esta seguro ?..')">
+      <a href="{{route('combustibles.detalle.almacen',$compras->idcompracomb)}}" 
+        onclick="return confirm('Se va a enviar la compra a almace..esta seguro ?..')">
         <button class="btn btn-sm btn-info   font-verdana" type="button" >
             &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;Ingresar a almacen
         </button>
@@ -55,9 +61,9 @@
 
     </div>
 </div>
- <div>
+<div>
     <hr class="hrr">
-</div> 
+</div>
 <div class="row">
     <div class="col-md-12 table-responsive">
         <center>
@@ -65,11 +71,9 @@
                 <thead>
                     <tr>
                         <td class="text-justify p-1"><b>N</b></td>
-                        <td class="text-justify p-1"><b>CODIGO</b></td>
                         <td class="text-justify p-1"><b>PRODUCTO</b></td>
-                        <td class="text-justify p-1"><b>UNIDAD</b></td>
-                        <td class="text-right p-1"><b>PRECIO</b></td>
                         <td class="text-right p-1"><b>CANTIDAD</b></td>
+                        <td class="text-right p-1"><b>PRECIO</b></td>
                         <td class="text-right p-1"><b>SUBTOTAL</b></td>
                     </tr>
                 </thead>
@@ -80,11 +84,9 @@
                      @forelse ($prodserv as $key => $prod)
                         <tr>
                             <td class="text-justify p-1">{{$key+1}}</td>
-                            <td class="text-justify p-1">{{$prod->detalleprodcomb}}</td>
                             <td class="text-justify p-1">{{$prod->nombreprodcomb}}</td>
-                            <td class="text-justify p-1">{{$prod->nombremedida}}</td>
-                            <td class="text-right p-1">{{$prod->precio}}</td>
                             <td class="text-right p-1">{{$prod->cantidad}}</td>
+                            <td class="text-right p-1">{{$prod->precio}}</td>
                             <td class="text-right p-1">{{$prod->subtotal}}</td>
 
                                                 
@@ -94,19 +96,14 @@
                     <tfoot>
                     @if (count($prodserv) > 0)
                         <tr>
-                         
-                            <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td class="text-right p-1">
-                                <b>TOTALES:</b>
+                                <b>TOTAL:</b>
                             </td>
                             <td class="text-right p-1">
-                                <b>{{$CalAdosDecimdos}}</b>
-                            </td>
-                            <td class="text-right p-1">
-                                <b>{{$CalAdosDecim}}</b>
+                                <b>{{$valor_total}}</b>
                             </td>
 
                         </tr>
@@ -158,7 +155,7 @@
             $(".btn").hide();
             $(".spinner-btn-send").show();
             var idcompra = $("#idcompra").val();
-            var url = "{{ route('detalle.principalorden',':id') }}";
+            var url = "{{ route('combustibles.detalle.principalorden',':id') }}";
             url = url.replace(':id',idcompra);
             window.location.href = url;
         }
@@ -167,14 +164,14 @@
             $(".btn").hide();
             $(".spinner-btn-send").show();
 
-            window.location.href = "{{ route('detalle.show') }}";
+            window.location.href = "{{ route('combustibles.detalle.show') }}";
         }
 
         function create(){
             $(".btn").hide();
             $(".spinner-btn-send").show();
             var idcompra = $("#idcompra").val();
-            var url = "{{ route('detalle.principal',':id') }}";
+            var url = "{{ route('combustibles.detalle.principal',':id') }}";
             url = url.replace(':id',idcompra);
             window.location.href = url;
         }

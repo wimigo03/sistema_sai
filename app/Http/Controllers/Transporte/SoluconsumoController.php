@@ -23,8 +23,8 @@ use Illuminate\Support\Facades\Redirect;
 
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
-use PDF;
+
+
 
 class SoluconsumoController extends Controller
 {
@@ -90,7 +90,7 @@ class SoluconsumoController extends Controller
                         ->addColumn('actions', function ($soluconsumos) {
 
                             if ($soluconsumos->estadosoluconsumo == 2) {
-                                $buttonHtml = '<form action="' . route('upedido.edit', $soluconsumos->idsoluconsumo) . '" method="GET" style="display: inline">' .
+                                $buttonHtml = '<form action="' . route('transportes.pedido.edit', $soluconsumos->idsoluconsumo) . '" method="GET" style="display: inline">' .
                                    csrf_field() .
                                    method_field('GET') .
                                    '<button class="tts:left tts-slideIn tts-custom" aria-label="Detalle" style="border: none;">
@@ -101,7 +101,7 @@ class SoluconsumoController extends Controller
                                        </form>';
                            } else {
                                if ($soluconsumos->estadosoluconsumo == 3) {
-                                $buttonHtml = '<form action="' . route('upedido.editable', $soluconsumos->idsoluconsumo) . '" method="GET" style="display: inline">' .
+                                $buttonHtml = '<form action="' . route('transportes.pedido.editable', $soluconsumos->idsoluconsumo) . '" method="GET" style="display: inline">' .
                                    csrf_field() .
                                    method_field('GET') .
                                    '<button class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle" style="border: none;">
@@ -115,7 +115,7 @@ class SoluconsumoController extends Controller
 
                             return 
 
-                            '<a class="tts:left tts-slideIn tts-custom" aria-label=" Visualizar" href="' . route('upedido.editar', $soluconsumos->idsoluconsumo) . '">
+                            '<a class="tts:left tts-slideIn tts-custom" aria-label=" Visualizar" href="' . route('transportes.pedido.editar', $soluconsumos->idsoluconsumo) . '">
                             <span class="text-primary" >
                    <i class="fa fa-eye fa-lg" style="color:rgb(87, 58, 231)"></i>
                </span>
@@ -195,7 +195,7 @@ class SoluconsumoController extends Controller
         $soluconsumos = DB::table('soluconsumo as s')
         ->join('localidad as lo', 'lo.idlocalidad', '=', 's.idlocalidad')
         ->join('areas as a', 'a.idarea', '=', 's.idarea')
-   
+        ->where('s.estadosoluconsumo', '!=',3)
         ->select(['s.estadosoluconsumo','s.idsoluconsumo','s.cominterna','s.fechasol',
         // 's.referencia', 's.oficina',
                            
@@ -235,8 +235,8 @@ class SoluconsumoController extends Controller
                                     return '<b style="color: green">Pendiente</b>';
                                 case '2':
                                     return '<b style="color: blue">Aprobada</b>';
-                                case '3':
-                                    return '<b style="color: purple">Transporte</b>';
+                                case '5':
+                                    return '<b style="color: purple">Almacen</b>';
                                 case '10':
                                     return '<b style="color: red">Rechazado</b>';
                                 default:
@@ -246,9 +246,9 @@ class SoluconsumoController extends Controller
                         )
                         ->addColumn('actions', function ($soluconsumos) {
 
-                            return '<a class="tts:left tts-slideIn tts-custom" aria-label=" detalle"  href="' . route('upedido.editar', $soluconsumos->idsoluconsumo) . '">
-                            <button class="text-warning" type="button" style="border: none;">
-                                <i class="fa-solid fa-2xl fa-square-pen"></i>
+                            return '<a class="tts:left tts-slideIn tts-custom" aria-label=" boton uno" href="' . route('transportes.pedido.editar', $soluconsumos->idsoluconsumo) . '">
+                            <button class="btn btn-sm btn-primary font-verdana" type="button">
+                                <i class="fa fa-pencil fa-fw"></i>
                             </button>
                         </a>';
             })
@@ -314,109 +314,19 @@ class SoluconsumoController extends Controller
 
      public function editar($idsoluconsumo){
         $soluconsumos = SoluconsumoModel::find($idsoluconsumo);
-        $ida1 =$soluconsumos ->viauno;
-        $ida2 =$soluconsumos ->viados;
-        $ida3 =$soluconsumos ->dirigidoa;
-        $ida4 =$soluconsumos ->idarea;
-        $ida5 =$soluconsumos ->idlocalidad;
-        $Fechaa =$soluconsumos ->fechasol;
-       
-       
-        $fechag = substr($Fechaa, 8, 2);
-        $fecham = substr($Fechaa, 5, 2);
-        $fechad = substr($Fechaa, 0, 4);
 
-        $Horaa =$soluconsumos ->horasol;
-         $Fechayhora= $fechag . "-" .  $fecham. "-" .  $fechad. " " .  $Horaa;
-
-         $Fechaare =$soluconsumos ->fechaprob;
-         $fechagr = substr($Fechaare, 8, 2);
-         $fechamr = substr($Fechaare, 5, 2);
-         $fechadr = substr($Fechaare, 0, 4);
- 
-         $Horaar =$soluconsumos ->horaprob;
-          $Fechayhorar= $fechagr . "-" .  $fechamr. "-" .  $fechadr. " " .  $Horaar;
-
-          $Fechaaretra =$soluconsumos ->fechaprotrans;
-          $fechagrtra = substr($Fechaaretra, 8, 2);
-          $fechamrtra = substr($Fechaaretra, 5, 2);
-          $fechadrtra = substr($Fechaaretra, 0, 4);
-  
-          $Horaartra =$soluconsumos ->horaprobtrans;
-           $Fechayhorartra= $fechagrtra . "-" .  $fechamrtra. "-" .  $fechadrtra. " " .  $Horaartra;
-
-
-        $Areanm = SoluconsumoModel::find($idsoluconsumo);
-$Tsalida =$Areanm ->tsalida;
-$Tsalidahora =$Areanm ->tsalidahr;
-$Tsalidama ="MAÑANA";
-$Tsalidatar ="TARDE";
-
-$Tllegada =$Areanm ->tllegada;
-$Tllegadahora =$Areanm ->tllegadahr;
-
-$Tllegadama ="MAÑANA";
-$Tllegadatar ="TARDE";
-      
-        if ($Tsalida== '1') {
-            $NmBraa =$Tsalidahora . " " .  $Tsalidama;
-           
-        } else {
-            $NmBraa =$Tsalidahora . " " .  $Tsalidatar;
-        }
-
-        if ($Tllegada== '1') {
-            $NmBraad =$Tllegadahora . " " .  $Tllegadama;
-           
-        } else {
-            $NmBraad =$Tllegadahora . " " .  $Tllegadatar;
-        }
-
-       
-        $encargado = DB::table('encargados as e')
-            ->join('areas as a', 'a.idarea', '=', 'e.idarea')
-            ->join('empleados as emp', 'e.idemp', '=', 'emp.idemp')
-            ->where('e.idenc', $ida1)
-            ->select('emp.nombres', 'emp.ap_pat', 'emp.ap_mat', 'e.abrev', 'e.idenc', 'a.nombrearea', 'e.cargo')
-            ->get();
-
-        $encargadodos = DB::table('encargados as e')
-            ->join('areas as a', 'a.idarea', '=', 'e.idarea')
-            ->join('empleados as emp', 'e.idemp', '=', 'emp.idemp')
-            ->where('e.idenc', $ida2)
-            ->select('emp.nombres', 'emp.ap_pat', 'emp.ap_mat', 'e.abrev', 'e.idenc', 'a.nombrearea', 'e.cargo')
-            ->get();
-
-        $encargadotres = DB::table('encargados as e')
-            ->join('areas as a', 'a.idarea', '=', 'e.idarea')
-            ->join('empleados as emp', 'e.idemp', '=', 'emp.idemp')
-            ->where('e.idenc', $ida3)
-            // -> where('a.idarea',11)  el idarea 11 es unidad administrativa
-            ->select('emp.nombres', 'emp.ap_pat', 'emp.ap_mat', 'e.abrev', 'e.idenc', 'a.nombrearea', 'e.cargo')
-            ->get();
-
-        $areas = DB::table('areas')
-        ->where('idarea', $ida4)
-        ->get();
-
-        $localidades = DB::table('localidad')
-        ->where('idlocalidad', $ida5)
-        ->get();
+        $areas = DB::table('areas')->get();
+        $localidades = DB::table('localidad')->get();
         $empleados = DB::table('empleados')->get();
    
-        $consumos = DB::table('soluconsumo as s')
-                     
-        ->where('s.idsoluconsumo', $idsoluconsumo)
-        ->select('s.idsoluconsumo','s.estadosoluconsumo','s.fechaprotrans','s.horaprobtrans')
-        ->first();
 
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
 
         return view('transportes.pedido.editar',
 
-        compact('id','soluconsumos','areas','encargado','encargadodos','encargadotres',
-        'empleados','localidades','NmBraa','NmBraad','Fechayhora','Fechayhorar','consumos','Fechayhorartra'));
+        compact('id','soluconsumos','areas',
+        'empleados','localidades'));
     }
 
     public function update(Request $request){
@@ -511,7 +421,7 @@ $Nombreviacargo = $productocuatro->nombrecargo;
         }else{
             $request->session()->flash('message', 'Error al Procesar Registro');
         }
-        return redirect()->route('upedido.index');
+        return redirect()->route('transportes.pedido.index');
     }
 
     public function edit($idsoluconsumo){//dd($idcomp);
@@ -533,7 +443,7 @@ $Nombreviacargo = $productocuatro->nombrecargo;
             $detalle->update();
         }
       
-       return redirect()->route('udetalle.index');
+       return redirect()->route('transportes.detalle.index');
     }
 
     public function editable($idsoluconsumo){//dd($idcomp);
@@ -555,7 +465,7 @@ $Nombreviacargo = $productocuatro->nombrecargo;
             $detalle->update();
         }
       
-       return redirect()->route('udetalle.index2');
+       return redirect()->route('transportes.detalle.index2');
     }
 
     
@@ -573,18 +483,13 @@ $Nombreviacargo = $productocuatro->nombrecargo;
         //dd($idsoluconsumo);
         $detalle = SoluconsumoModel::find($idsoluconsumo);
         $detalle->estadosoluconsumo =2;
-        $fechasolACT = Carbon::now();
-      
-        $detalle->fechaprob = $fechasolACT;
-        $hora = $fechasolACT->toTimeString();
-        $detalle->horaprob = $hora;
-       
+    
         if($detalle->save()){
             session()->flash('message', 'Registro Procesado');
         }else{
             session()->flash('message', 'Error al Procesar Registro');
         }
-        return redirect()->route('upedido.index3');
+        return redirect()->route('transportes.pedido.index3');
 
     }
 
@@ -592,18 +497,13 @@ $Nombreviacargo = $productocuatro->nombrecargo;
     {
         $detalle = SoluconsumoModel::find($idsoluconsumo);
         $detalle->estadosoluconsumo =10;
-        $fechasolACT = Carbon::now();
-      
-        $detalle->fechaprob = $fechasolACT;
-        $hora = $fechasolACT->toTimeString();
-        $detalle->horaprob = $hora;
-        
+    
         if($detalle->save()){
             session()->flash('message', 'Registro Procesado');
         }else{
             session()->flash('message', 'Error al Procesar Registro');
         }
-        return redirect()->route('upedido.index3');
+        return redirect()->route('transportes.pedido.index3');
 
     }
 
@@ -617,99 +517,8 @@ $Nombreviacargo = $productocuatro->nombrecargo;
         }else{
             session()->flash('message', 'Error al Procesar Registro');
         }
-        return redirect()->route('upedido.index3');
+        return redirect()->route('transportes.pedido.index3');
 
-    }
-
-    public function solicitud($id)
-    {
-        try {
-            ini_set('memory_limit', '-1');
-            ini_set('max_execution_time', '-1');
-            $soluconsumos = SoluconsumoModel::find($id);
-            $soluconsumos = DB::table('soluconsumo as s')
-                ->select(
-
-
-                    's.cominterna',
-                    's.idarea', //de forma automatica del que tiene acceso
-                    's.idusuario',  //de forma automatica del que tiene acceso
-                    's.idlocalidad',  //el lugar de ida
-
-                    //via
-                    's.dirnombre',    //via
-                    's.diracargo',    //via
-
-
-                    //departe de 
-                    's.viaunonombre', //departe de 
-                    's.viaunocargo', //departe de 
-
-                    's.viadosnombre', //departe de 
-                    's.viadoscargo', //departe de 
-
-                    's.usuarionombre',  //de forma automatica del que tiene acceso
-                    's.usuariocargo',  //de forma automatica del que tiene acceso
-
-                    's.oficina', //nombre de la oficina
-                    's.referencia',
-                    's.fechasol',
-                    's.detallesouconsumo',
-                    's.fechasalida',
-                    's.fecharetorno',
-                    's.tiposoluconsumo',
-                    's.tsalida',
-                    's.tllegada'
-                )
-                ->where('s.idsoluconsumo', $id)
-
-                ->first();
-
-
-            $fechaSol = $soluconsumos->fechasol;
-            $fechaSol = Carbon::parse($fechaSol)->isoFormat('D \d\e MMMM \d\e\l Y');
-
-            $fechaSalida = $soluconsumos->fechasalida;
-            $fechaSalida = Carbon::parse($fechaSalida)->isoFormat('D \d\e MMMM \d\e\l Y');
-
-
-            $diaSemana = $soluconsumos->fechasalida;
-            $diaSemana = Carbon::parse($diaSemana);
-            $diaSemana = $diaSemana->isoFormat('dddd');
-
-
-            // $diaSemana = $soluconsumos->fechasalida;
-            // $diaSemana = Carbon::parse($diaSemana);
-            // $diaSemana = $diaSemana->format('l');
-
-
-            $fechaRetorno = $soluconsumos->fecharetorno;
-            $fechaRetorno = Carbon::parse($fechaRetorno)->isoFormat('D \d\e MMMM \d\e\l Y');
-
-            $idlocalidadess = $soluconsumos->idlocalidad;
-            $localidades = DB::table('localidad')
-            ->where('idlocalidad', $idlocalidadess)
-            ->first();
-
-
-
-            $pdf = PDF::loadView('transportes.pedido.pdf-solicitud',
-                compact([
-                    'soluconsumos', 'localidades',
-                    'fechaSol', 'fechaRetorno',
-                    'fechaSalida', 'diaSemana'
-                ])
-            );
-
-            $pdf->setPaper('LETTER', 'portrait'); //landscape
-            return $pdf->stream();
-        } catch (Exception $ex) {
-            \Log::error("Cotizacion Error: {$ex->getMessage()}");
-            return redirect()->route('upedido.index3')->with('message', $ex->getMessage());
-        } finally {
-            ini_restore('memory_limit');
-            ini_restore('max_execution_time');
-        }
     }
 }
 

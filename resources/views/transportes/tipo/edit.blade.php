@@ -7,10 +7,10 @@
 
     <div class="col-md-8">
 
-        <div class="row font-verdana-bg">
+        <div class="row font-verdana-12">
             <div class="col-md-4 titulo">
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-                    <a href="{{ url('/tipo/index') }}">
+                    <a href="{{ url('/transportes/tipo/index') }}">
                         <span class="color-icon-1">
                             &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                         </span>
@@ -47,38 +47,25 @@
                     </div>
                   
                     <div class="form-group row">
-                        <label for="estadomovilidad" style="color:black;font-weight: bold;"
-                            class="required col-md-4 col-form-label text-md-right">Estado:</label>
-                        <div class="col-md-6">
-                        <select name="estadomovilidad" id="estadomovilidad" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
-        
-                            <option {{old('estadomovilidad',$tipomovilidads->estadomovilidad)=="1"? 'selected':''}}  value="1">ACTIVO</option>
-                            <option {{old('estadomovilidad',$tipomovilidads->estadomovilidad)=="2"? 'selected':''}} value="2">INACTIVO</option>
-        
-                        </select>
-                    </div>
-                    </div>
-{{-- 
-                    <div class="form-group row">
-                        <label for="estadomovilidad" style="color:black;font-weight: bold;"
+                        <label for="descripcionmo" style="color:black;font-weight: bold;"
                             class="required col-md-4 col-form-label text-md-right">descripcion:</label>
                         <div class="col-md-6">
-                            <input type="text" required class="form-control" name="estadomovilidad" id="estadomovilidad" placeholder=""
-                                value="{{$tipomovilidads->estadomovilidad}}"
+                            <input type="text" required class="form-control" name="descripcionmo" id="descripcionmo" placeholder=""
+                                value="{{$tipomovilidads->descripcionmovilidad}}"
                                 onkeyup="javascript:this.value=this.value.toUpperCase();">
                         </div>
-                    </div> --}}
+                    </div>
 
 
 
                     <div align='center'>
                                
                         <div class="col-md-12 text-right">
-                            <button class="btn color-icon-2 font-verdana-bg" type="button" onclick="save();">
+                            <button class="btn color-icon-2 font-verdana-12" type="button" onclick="save();">
                                 <i class="fa-solid fa-paper-plane"></i>
                                 &nbsp;Actualizar
                             </button>
-                            <button class="btn btn-danger font-verdana-bg" type="button" >
+                            <button class="btn btn-danger font-verdana-12" type="button" >
             
                                 <a href="{{url()->previous()}}" style="color:white">Cancelar</a>
                             </button>

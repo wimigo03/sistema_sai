@@ -5,7 +5,7 @@
 <div class="row justify-content-center">
     <div class="col-md-10">
 
-        <div class="row font-verdana-bg">
+        <div class="row font-verdana-12">
             <div class="col-md-4 titulo">
 
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
@@ -30,7 +30,7 @@
 
         <div class="body-border">
             <font size="2" face="Courier New" >
-                    <form method="POST" action="{{ route('proveedor.insertar') }}" id="form"
+                    <form method="POST" action="{{ route('ProveedorController.insertar') }}" id="form"
                         enctype="multipart/form-data">
                         @csrf
 
@@ -45,7 +45,7 @@
 
                             <div class="col-md-6">
                                 <input type="text" name="nombredocumento" id="nombredocumento" class="form-control" placeholder="Nombre..."
-                                onkeyup="convertirAMayusculas(this)">
+                                    onkeyup="javascript:this.value=this.value.toUpperCase();">
                             </div>
                         </div>
 
@@ -54,7 +54,7 @@
                         <div class="form-group row">
                             <label for="documento" style="color:black;font-weight: bold;"
                                 class=" required col-md-4 col-form-label text-md-right">
-                                <b style="color: red">Limite 8
+                                <b style="color: red">Limite 200
                                     mb.(solo.pdf):</b></label>
             
                             <div class="col-md-6">
@@ -68,17 +68,15 @@
                         <div align='center'>
                             <div class="col-md-12 text-right">
 
-                                <input class="btn btn-danger font-verdana-bg" type="button" id="cancelar" value="Cancelar">
+                                <input type="button" id="cancelar" value="Cancelar">
                 
                                 &nbsp;&nbsp;&nbsp;&nbsp;
-                                <input class="btn color-icon-2 font-verdana-bg" type="button" value="Guardar" onclick="uploadFile()" id="insertar_item_material">
+                                <input type="button" value="Guardar" onclick="uploadFile()" id="insertar_item_material">
                 
                                 </br></br>
-                                <progress id="progressBar" value="0" max="100" 
-                                    style="width:850px; height: 20px; 
-                                    background-color: #4CAF50; 
-                                    border-radius: 5px; display:none"></progress>
-                                <p id="loaded_n_total" style="margin-top: 10px"></p>
+                                <progress id="progressBar" value="0" max="100"
+                                    style="width:300px;display:none"></progress>
+                                <p id="loaded_n_total"></p>
                             </div>
 
                         </div>
@@ -90,7 +88,7 @@
 
         </div>
     </div>
-    
+
 @endsection
 @section('scripts')
     <script>
@@ -118,13 +116,12 @@
         $("#cancelar").click(function() {
 $(".btn").hide();
 $(".spinner-btn-send").show();
-window.location.href = "{{url()->previous()}}";
+window.location.href = "{{ url('combustibles/proveedor/index') }}";
 
 });
          
         function validar_detalle_material() {
-            var filedos = document.getElementById("file").files[0];
-         var maxSize = 8 * 1024 * 1024;
+
             if($("#nombredocumento").val() == ""){
                 message_alert("El campo <b>[Nombre]</b> es un dato obligatorio...");
                 return false;
@@ -135,31 +132,9 @@ window.location.href = "{{url()->previous()}}";
                 message_alert('---SE DEBE CARGAR OBLIGATORIAMENTE UN ARCHIVO---');
                 return false;   
             }
-            if (filedos.size > maxSize) {
-                console.log(filedos.size,"verificar");
-                $("#file").val('');
-                message_alert('El tamaño del archivo no puede superar los 8 megabytes.');
-                return false;
-             }
-             if (filedos.type !== "application/pdf") {
-                console.log(filedos.size,"verificar");
-                $("#file").val('');
-                message_alert('El archivo no es un pdf.');
-                return false;
-             }
             return true;
         };
-        function convertirAMayusculas(input) {
-    // Guarda la posición actual del cursor
-    var inicioSeleccion = input.selectionStart;
-    var finSeleccion = input.selectionEnd;
-  
-    // Convierte todo el texto a mayúsculas
-    input.value = input.value.toUpperCase();
-  
-    // Restaura la posición del cursor
-    input.setSelectionRange(inicioSeleccion, finSeleccion);
-  }
+
         function uploadFile() {
             // get the file
             let file = document.getElementById("file").files[0];
@@ -190,8 +165,8 @@ window.location.href = "{{url()->previous()}}";
 
             let totalSize = ev.total; // total size of the file in bytes
             let loadedSize = ev.loaded; // loaded size of the file in bytes
-          
-            document.getElementById("loaded_n_total").innerHTML = "Cargado " + loadedSize + " bytes de " + totalSize +
+
+            document.getElementById("loaded_n_total").innerHTML = "Uploaded " + loadedSize + " bytes of " + totalSize +
                 " bytes.";
 
           
@@ -199,12 +174,7 @@ window.location.href = "{{url()->previous()}}";
             document.getElementById("progressBar").style.display = "";
             document.getElementById("progressBar").value = Math.round(percent);
 
-            // if (percent === 100) {
-  // Oculta la barra de progreso si la carga está completa
-//   document.getElementById("progressBar").style.display = "none";
-  // Actualiza el texto según sea necesario
-//   document.getElementById("loaded_n_total").innerText = "Carga completa: 100%";
-// }
+            
 
         }
     

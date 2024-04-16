@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('content')
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-8 titulo">
         <b>LOCALIDADES</b><b style='color:red'>{{$idd->nombrearea}} </b>--
     </div>
@@ -34,9 +34,8 @@
                                     <td class="text-center p-1 font-weight-bold"><b>CODIGO</b></td>
 
                                     <td class="text-center p-1 font-weight-bold"><b>NOMBRE</b></td>
-                                    <td class="text-center p-1 font-weight-bold"><b>DISTRITO</b></td>
+
                                     <td class="text-center p-1 font-weight-bold"><b>DISTANCIA</b></td>
-                                    <td class="text-center p-1 font-weight-bold"><b>MEDIDA</b></td>
 
                                     <td class="text-center p-1 font-weight-bold">
                                          <i class="fa fa-bars" aria-hidden="true"></i>
@@ -66,16 +65,12 @@ $(function() {
         columns: [
             {data: 'DT_RowIndex',orderable: false,searchable: false,class:'text-justify p-1 font-verdana'},
             {
-                data: 'codlocalidad',name: 'lo.codlocalidad',class:'text-justify p-1 font-verdana'},
+                data: 'codlocalidad',name: 'codlocalidad',class:'text-justify p-1 font-verdana'},
             {
-                data: 'nombrelocalidad',name: 'lo.nombrelocalidad',class:'text-justify p-1 font-verdana'},
+                data: 'nombrelocalidad',name: 'nombrelocalidad',class:'text-justify p-1 font-verdana'},
                 {
-                data: 'distrito',name: 'lo.distrito',class:'text-justify p-1 font-verdana'},
-                {
-                data: 'distancialocalidad',name: 'lo.distancialocalidad',class:'text-justify p-1 font-verdana'},
-                {
-                data: 'nombremedida',name: 'u.nombremedida',class:'text-justify p-1 font-verdana'},
-               
+                data: 'distancialocalidad',name: 'distancialocalidad',class:'text-justify p-1 font-verdana'},
+
           
             {
                 data: 'btn',

@@ -2,35 +2,25 @@
 @section('content')
 @include('layouts.message_alert')
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-4 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-            <a href="{{ url('/pedidoparcialcomb/index') }}">
-         
+            <a href="{{url()->previous()}}">
                 <span class="color-icon-1">
-                    &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left">atras</i>&nbsp;
+                    &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                 </span>
             </a>
         </span>
     </div>
     <div class="col-md-8 text-right titulo">
-        <b>FORMULARIO DE SOLICITUD </b><b style='color:red'>APROBADO </b>  estado 2
+        <b>DETALLES DE LA SOLICITUD</b>
     </div>
     <div class="col-md-12">
         <hr class="hrr">
     </div>
-    <div class="col-md-2 text-right titulo">
-        <b>N° Compra:</b>  <b style='color:red'>{{$idco}}</b> 
-    </div> 
-    <div class="col-md-5 text-right titulo">
-        <b>Fecha Solicitud:</b>  <b style='color:red'>{{$Fechayhora}}</b> 
-    </div>   
-    <div class="col-md-5 text-right titulo">
-        <b>Fecha Respuesta:</b>  <b style='color:red'>{{$Fechayhorados}}</b> 
-    </div>  
 </div>
 <div class="body-border" style="background-color: #FFFFFF;">
-    <form method="post" action="{{ route('pedidoparcialcomb.update') }}" id="form">
+    <form method="post" action="{{ route('combustibles.pedidoparcial.update') }}" id="form">
         @csrf
         {{--@method('PUT')--}}
         <input type="hidden" name="controlinterno2" id="controlinterno2">
@@ -41,157 +31,100 @@
         <input type="text" hidden name="preventivo" id="preventivo" value="{{$compras->preventivo}}">
         
         <div class="form-group row">
-            <div class="col-md-3">
-                <label for="oficinade" class="d-inline font-verdana-bg">
-                    <b>Oficina</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
+            <div class="col-md-6">
+                <label for="objeto" class="d-inline font-verdana-12">
+                    <b>Objeto</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <textarea  name="oficinade" cols="1" rows="4" class="form-control form-control-sm font-verdana-bg" id="oficinade" onkeyup="convertirAMayusculas(this)" >{{$compras->oficinade}}</textarea>
+                <textarea disabled name="objeto" cols="1" rows="3" class="form-control form-control-sm font-verdana-12" id="objeto" onkeyup="javascript:this.value=this.value.toUpperCase();">{{$compras->objeto}}</textarea>
+            </div>
+            <div class="col-md-6">
+                <label for="justificacion" class="d-inline font-verdana-12">
+                    <b>Justificacion</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <textarea disabled name="justificacion" cols="1" rows="10" class="form-control form-control-sm font-verdana-12" id="justificacion" onkeyup="javascript:this.value=this.value.toUpperCase();">{{$compras->justificacion}}</textarea>
+            </div>
+            <div class="col-md-2">
+                <label for="controlinterno" class="d-inline font-verdana-12">
+                    <b>Control Interno</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <input type="text"  disabled name="controlinterno" id="controlinterno" onchange="myFunction()" value="{{$compras->controlinterno}}" class="form-control form-control-sm font-verdana-12" id="controlinterno" onkeypress="return valideNumber(event);">
             </div>
 
             <div class="col-md-2">
-                <label for="objeto" class="d-inline font-verdana-bg">
-                    <b>Objeto</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
+                <label for="tipo" class="d-inline font-verdana-12">
+                    <b>Tipo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <textarea name="objeto" cols="1" rows="4" class="form-control form-control-sm font-verdana-bg" id="objeto" onkeyup="convertirAMayusculas(this)">{{$compras->objeto}}</textarea>
+                <select disabled name="tipo" id="tipo" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
+
+                    <option {{old('tipo',$compras->tipo)=="1"? 'selected':''}}  value="1">PRODUCTO</option>
+                    <option {{old('tipo',$compras->tipo)=="2"? 'selected':''}} value="2">SERVICIO</option>
+
+                </select>
             </div>
 
+
+            <div class="col-md-7">
+                <label for="idarea" class="d-inline font-verdana-12">
+                    <b>Area</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <select name="idarea" id="idarea" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
+                    <option value="">-</option>
+                    @foreach ($areas as $area)
+
+                    @if ($area->idarea==$compras->idarea)
+                    <option value="{{$area->idarea}}" selected>{{$area->nombrearea}}</option>
+                    @else
+                    <option disabled value="{{$area->idarea}}">{{$area->nombrearea}}</option>
+                    @endif
+
+                    @endforeach
+                </select>
+            </div>
             <div class="col-md-4">
-                <label for="justificacion" class="d-inline font-verdana-bg">
-                    <b>Justificacion</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
+                <label for="idprograma" class="d-inline font-verdana-12">
+                    <b>Programa</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <textarea name="justificacion" cols="1" rows="4" class="form-control form-control-sm font-verdana-bg" id="justificacion" onkeyup="convertirAMayusculas(this)">{{$compras->justificacion}}</textarea>
-            </div>
-            <div class="col-md-3">
-                <label for="controlinterno" class="d-inline font-verdana-bg">
-                    <b>N° Solicitud</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
-                </label>
-                <input type="text"   name="controlinterno" id="controlinterno" onchange="myFunction()" value="{{$compras->controlinterno}}" class="form-control form-control-sm font-verdana-bg" id="controlinterno" onkeypress="return valideNumber(event);">
-           
-                <label for="tipo" class="d-inline font-verdana-bg">
-                    <b>Tipo</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
-                </label>
-                <input type="text"  name="tipo" value="{{$compras->tipo}}" onkeyup="convertirAMayusculas(this)"
-                class="form-control form-control-sm font-verdana-bg" id="tipo">
-           
-            </div>
-            <div class="col-md-5" >
-                <label for="iddirigidoa" class="d-inline font-verdana-bg">
-                    <b>Dirigido A:</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
-                </label>
-                <select name="iddirigidoa" id="iddirigidoa" placeholder="--Seleccionar--" 
-                class="form-control form-control-sm select2">
+                <select name="idprograma" id="idprograma" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
                     <option value="">-</option>
-                    @foreach ($encargadodos as $area)
-                    @if ($area->idenc==$compras->iddirigidoa)
-                    <option value="{{$area->idenc}}" selected>CODIGO: {{$area->idenc}} //NOMBRE: {{$area->abrev }} {{$area->nombres }} {{$area->ap_pat }} {{$area->ap_mat }} //AREA: {{$area->nombrearea }} //CARGO: {{$area->cargo }} </option>
-                    @else
-                    <option value="{{$area->idenc}}">CODIGO: {{$area->idenc}} //NOMBRE: {{$area->abrev }} {{$area->nombres }} {{$area->ap_pat }} {{$area->ap_mat }} //AREA: {{$area->nombrearea }} //CARGO: {{$area->cargo }}</option>
-                    @endif
-                    @endforeach
+                    @foreach ($programas as $programa)
+
+                                @if ($programa->idprogramacomb==$compras->idprogramacomb)
+                                <option value="{{$programa->idprogramacomb}}" selected>{{$programa->nombreprograma}}
+                                </option>
+                                @else
+                                <option disabled value="{{$programa->idprogramacomb}}">{{$programa->nombreprograma}}</option>
+                                @endif
+
+                                @endforeach
                 </select>
             </div>
-
-            <div class="col-md-5" >
-                <label for="idviaa" class="d-inline font-verdana-bg">
-                    <b>Via:</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
-                </label>
-                <select name="idviaa" id="idviaa" placeholder="--Seleccionar--" 
-                class="form-control form-control-sm select2">
-                    <option value="">-</option>
-                    @foreach ($encargado as $area)
-                    @if ($area->idenc==$compras->idviaa)
-                    <option value="{{$area->idenc}}" selected>CODIGO: {{$area->idenc}} //NOMBRE: {{$area->abrev }} {{$area->nombres }} {{$area->ap_pat }} {{$area->ap_mat }} //AREA: {{$area->nombrearea }} //CARGO: {{$area->cargo }} </option>
-                    @else
-                    <option value="{{$area->idenc}}">CODIGO: {{$area->idenc}} //NOMBRE: {{$area->abrev }} {{$area->nombres }} {{$area->ap_pat }} {{$area->ap_mat }} //AREA: {{$area->nombrearea }} //CARGO: {{$area->cargo }}</option>
-                    @endif
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-md-2">
-                <label for="fechasoli" class="d-inline font-verdana-bg">
-                    <b> Fecha</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
-                </label>
-                <input   type="text" name="fechasoli" id="fechasoli" placeholder="dd/mm/aaaa" data-language="es"
-                class="form-control" value="{{date('d/m/Y', strtotime($compras->fechasoli))}}">
-            </div>
-            <div class="col-md-5" >
-                <label for="iddepartede" class="d-inline font-verdana-bg">
-                    <b>De:</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
-                </label>
-                <select name="iddepartede" id="iddepartede" placeholder="--Seleccionar--" 
-                class="form-control form-control-sm select2">
-                    <option value="">-</option>
-                    @foreach ($departede as $area)
-                    @if ($area->idemp==$compras->iddepartede)
-                    <option value="{{$area->idemp}}" selected>CODIGO: {{$area->idemp}} //NOMBRE: {{$area->nombres }} {{$area->ap_pat }} {{$area->ap_mat }} //AREA: {{$area->nombrearea }} //CARGO: {{$area->cargo }} //CARGO: {{$area->nombrecargo }} </option>
-                    @else
-                    <option value="{{$area->idemp}}">CODIGO: {{$area->idemp}} //NOMBRE: {{$area->nombres }} {{$area->ap_pat }} {{$area->ap_mat }} //AREA: {{$area->nombrearea }} //CARGO: {{$area->cargo }} //CARGO: {{$area->nombrecargo }}</option>
-                    @endif
-                    @endforeach
-                </select>
-            </div>
-
-<div class="col-md-5">
-    <label for="idarea" class="d-inline font-verdana-bg">
-        <b>Area</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
-    </label>
-    <select name="idarea" id="idarea" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
-        <option value="">-</option>
-        @foreach ($areas as $catprogramatica)
-
-        @if ($catprogramatica->idarea==$compras->idarea)
-        <option value="{{$catprogramatica->idarea}}" selected>CODIGO: {{$catprogramatica->idarea}} //NOMBRE: {{$catprogramatica->nombrearea}}</option>
-        @else
-        <option value="{{$catprogramatica->idarea}}">CODIGO: {{$catprogramatica->idarea}} //NOMBRE: {{$catprogramatica->nombrearea}}</option>
-        @endif
-        @endforeach
-    </select>
-</div>
-
-
-
-<div class="col-md-5">
-    <label for="idprograma" class="d-inline font-verdana-bg">
-        <b>Ubicacion Fisica</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
-    </label>
-    <select name="idprograma" id="idprograma" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
-        <option value="">-</option>
-        @foreach ($programas as $catprogramatica)
-
-        @if ($catprogramatica->idprogramacomb==$compras->idprogramacomb)
-        <option value="{{$catprogramatica->idprogramacomb}}" selected>CODIGO: {{$catprogramatica->idprogramacomb}} //NOMBRE: {{$catprogramatica->nombreprograma}}</option>
-        @else
-        <option value="{{$catprogramatica->idprogramacomb}}">CODIGO: {{$catprogramatica->idprogramacomb}} //NOMBRE: {{$catprogramatica->nombreprograma}}</option>
-        @endif
-        @endforeach
-    </select>
-</div>
             <div class="col-md-5">
-                <label for="idcatprogramatica" class="d-inline font-verdana-bg">
-                    <b>Proyecto</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
+                <label for="idcatprogramatica" class="d-inline font-verdana-12">
+                    <b>Cat. Programatica</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="idcatprogramatica" id="idcatprogramatica" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
                     <option value="">-</option>
                     @foreach ($catprogramaticas as $catprogramatica)
 
                     @if ($catprogramatica->idcatprogramaticacomb==$compras->idcatprogramaticacomb)
-                    <option value="{{$catprogramatica->idcatprogramaticacomb}}" selected> CODIGO: {{$catprogramatica->codcatprogramatica}} //NOMBRE: {{$catprogramatica->nombrecatprogramatica}}</option>
+                    <option value="{{$catprogramatica->idcatprogramaticacomb}}" selected>
+                        {{$catprogramatica->nombrecatprogramatica}}</option>
                     @else
-                    <option value="{{$catprogramatica->idcatprogramaticacomb}}"> CODIGO: {{$catprogramatica->codcatprogramatica}} //NOMBRE: {{$catprogramatica->nombrecatprogramatica}}</option>
+                    <option disabled value="{{$catprogramatica->idcatprogramaticacomb}}">
+                        {{$catprogramatica->nombrecatprogramatica}}</option>
                     @endif
                     @endforeach
                 </select>
             </div>
 
-
         </div>
         {{-- <div class="form-group row">
             <div class="col-md-12 text-right">
-                <button class="btn color-icon-2 font-verdana-bg" type="button" onclick="save();">
+                <button class="btn color-icon-2 font-verdana-12" type="button" onclick="save();">
                     <i class="fa-solid fa-paper-plane"></i>
                     &nbsp;Actualizar
                 </button>
-                <button class="btn btn-danger font-verdana-bg" type="button" >
+                <button class="btn btn-danger font-verdana-12" type="button" >
 
                     <a href="{{url()->previous()}}" style="color:white">Cancelar</a>
                 </button>
@@ -282,7 +215,7 @@
         function respuesta() {
             var ot_antigua = $("#controlinterno").val();
             $.ajax({
-                url: "{{ route('pedidoparcialcomb.pregunta4') }}",
+                url: "{{ route('pregunta4') }}",
                 data: 'ot_antigua=' + ot_antigua,
                 dataType: "html",
                 asycn: false,
@@ -308,16 +241,6 @@
                 return false;
             }
         }
-        function convertirAMayusculas(input) {
-    // Guarda la posición actual del cursor
-    var inicioSeleccion = input.selectionStart;
-    var finSeleccion = input.selectionEnd;
-  
-    // Convierte todo el texto a mayúsculas
-    input.value = input.value.toUpperCase();
-  
-    // Restaura la posición del cursor
-    input.setSelectionRange(inicioSeleccion, finSeleccion);
-  }
+
     </script>
 @endsection

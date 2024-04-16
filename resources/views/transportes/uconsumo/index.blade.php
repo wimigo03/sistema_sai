@@ -1,21 +1,20 @@
 @extends('layouts.admin')
 @section('content')
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-8 titulo">
-        <b>UNIDAD DE TRANSPORTE -- </b><b style='color:red'>UNIDAD TRANSPORTE</b>
-        {{-- <b style='color:red'>{{$idd->nombrearea}} </b> --}}
+        <b>UNIDAD DE TRANSPORTE -- </b><b style='color:red'>{{$idd->nombrearea}} </b>--
     </div>
     <div class="col-md-4 text-right">
      
 
-            <a href="{{ route('uconsumo.create') }}" class="tts:left tts-slideIn tts-custom" aria-label="CREAR NUEVO">
+            <a href="{{ route('transportes.uconsumo.create') }}" class="tts:left tts-slideIn tts-custom" aria-label="CREAR NUEVO">
                 <button class="btn btn-sm btn-success font-verdana" type="button" >create nuevo
                     &nbsp;<i class="fa-solid fa-thumbs-up" style="font-size:14px"></i>&nbsp;
                 </button>
             </a>
             <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
            
-            <a href="{{ route('uconsumo.index2') }}" class="tts:left tts-slideIn tts-custom" aria-label="CREAR NUEVO">
+            <a href="{{ route('transportes.uconsumo.index2') }}" class="tts:left tts-slideIn tts-custom" aria-label="CREAR NUEVO">
                 <button class="btn btn-sm btn-primary font-verdana" type="button" >Ocupados
                     &nbsp;<i class="fa-solid fa-xmark" style="font-size:14px"></i>&nbsp;
                 </button>
@@ -93,7 +92,7 @@
             processing: true,
             serverSide: true,
             autoWidth: false,
-            ajax: "{{ route('uconsumo.index') }}",
+            ajax: "{{ route('transportes.uconsumo.index') }}",
             columns: [
                 {data: 'DT_RowIndex',orderable: false,searchable: false,class:'text-justify p-1 font-verdana'},
     

@@ -7,11 +7,11 @@
     </div>
 @endif
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
 
     <div class="col-md-2 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-            <a href="{{ url('/pedidoparcialcomb/index') }}">
+            <a href="{{ url('/combustibles/pedidoparcial/index') }}">
                 <span class="color-icon-1">
                     &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                 </span>
@@ -20,34 +20,20 @@
     </div>
 
     <div class="col-md-10 text-right titulo">
-        <b>SOLICITUD </b><b style='color:red'>RECHAZADA</b>
+        <b>COMPRA RECHAZADA</b>
     </div>
 
     <div class="col-md-12">
         <hr class="hrr">
     </div>
-    <div class="col-md-2 text-right titulo">
-        <b>N° Compra</b> <b style='color:red'>{{ $idcompracomb }}</b>
-    </div>
-    <div class="col-md-10 text-right">
+
+    <div class="col-md-12 text-right">
 
 
         <input type="hidden" value="{{$idcompracomb}}" id="idcompracomb">
 
         <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
-        @if($consumos->estadocompracomb == 10)
-        <b style="color:rgb(11, 170, 34);font-weight: bold;">SOLICITUD RECHAZADA</b>
 
-        <a href="{{ route('detalleparcial.show',$idcompracomb) }}" class="tts:left tts-slideIn tts-custom" aria-label="Imprimir">
-            <button class="btn btn-sm btn-secondary   font-verdana" type="button" >
-                &nbsp;<i class="fa fa-print" aria-hidden="true"></i>&nbsp;Imprimir
-            </button>
-        </a>
-       @else
-
-       <p style="color:red;font-weight: bold;">
-        Una vez que la compra sea aprovada la Compra se habilitará la impresión de la solicitud</p>
-       @endif
 
     </div>
 
@@ -60,12 +46,10 @@
             <table id="dataTable" class="table display table-bordered responsive font-verdana" style="width:100%">
                 <thead>
                     <tr>
-                        <td class="text-justify p-1"><b>N°</b></td>
-                        <td class="text-justify p-1"><b>CODIGO</b></td>
+                        <td class="text-justify p-1"><b>Nro</b></td>
                         <td class="text-justify p-1"><b>PRODUCTO</b></td>
-                        <td class="text-justify p-1"><b>UNIDAD</b></td>
-                        <td class="text-right p-1"><b>PRECIO</b></td>
                         <td class="text-right p-1"><b>CANTIDAD</b></td>
+                        <td class="text-right p-1"><b>PRECIO</b></td>
                         <td class="text-right p-1"><b>SUBTOTAL</b></td>
                         {{-- <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td> --}}
                     </tr>
@@ -77,11 +61,9 @@
                      @forelse ($prodserv as $key => $prod)
                         <tr>
                             <td class="text-justify p-1">{{$key+1}}</td>
-                            <td class="text-justify p-1">{{$prod->detalleprodcomb}}</td>
                             <td class="text-justify p-1">{{$prod->nombreprodcomb}}</td>
-                            <td class="text-justify p-1">{{$prod->nombremedida}}</td>
-                            <td class="text-right p-1">{{$prod->precio}}</td>
                             <td class="text-right p-1">{{$prod->cantidad}}</td>
+                            <td class="text-right p-1">{{$prod->precio}}</td>
                             <td class="text-right p-1">{{$prod->subtotal}}</td>
                         
                         </tr>
@@ -90,19 +72,16 @@
                 <tfoot>
                     @if (count($prodserv) > 0)
                         <tr>
-                           
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
-                            <td>&nbsp;</td>
+
                             <td class="text-right p-1">
-                                <b>TOTALES:</b>
+                                <b>TOTAL:</b>
                             </td>
+
                             <td class="text-right p-1">
-                                <b>{{$CalAdosDecimdos}}</b>
-                            </td>
-                            <td class="text-right p-1">
-                                <b>{{$CalAdosDecim}}</b>
+                                <b>{{$valor_total2}}</b>
                             </td>
                         
                         </tr>

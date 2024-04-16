@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('content')
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-8 titulo">
         <b>CATEGORIAS PROGRAMATICAS--</b><b style='color:red'>{{$idd->nombrearea}} </b>
     </div>
@@ -29,34 +29,19 @@
                 <table  class="table hoverTable yajra-datatable table-bordered responsive font-verdana" style="width:100%;">
                     <thead class="font-courier">
                             <tr>
-                                    <td class="text-justify p-1"><b>N°</b></td>
-                                    <td class="text-justify p-1"><b>FECHA</b></td>
-                                    <td class="text-justify p-1"><b>GESTION</b></td>
-                                    <td class="text-justify p-1"><b>N° ID</b></td>
-                                    <td class="text-justify p-1"><b>CODIGO</b></td>
+                                    <td class="text-center p-1 font-weight-bold"><b>N°</b></td>
 
-                                    <td class="text-justify p-1"><b>NOMBRE</b></td>
-                                    <td class="text-justify p-1"><b>ESTADO</b></td>
-                                    <td class="text-justify p-1"><b>ACCIONES</b></td>
-                                   
+                                    <td class="text-center p-1 font-weight-bold"><b>CODIGO</b></td>
+
+                                    <td class="text-center p-1 font-weight-bold"><b>NOMBRE</b></td>
+
+                                    <td class="text-center p-1 font-weight-bold">
+                                         <i class="fa fa-bars" aria-hidden="true"></i>
+                                    </td>
                             </tr>
                     </thead>
                     <tbody>
                     </tbody>
-                    
-                    <tfoot>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-
-                    </tfoot>
                 </table>
         </center>
     </div>           
@@ -72,86 +57,23 @@ $(function() {
         processing: true,
         serverSide: true,
         autoWidth: false,
-        ajax: "{{ route('catprogcomb.listado') }}",
+        ajax: "{{ route('catprogcomb.list') }}",
         columns: [
             {data: 'DT_RowIndex',orderable: false,searchable: false,class:'text-justify p-1 font-verdana'},
-            {data: 'fechacat',name: 'fechacat',class:'text-justify p-1 font-verdana'},
-            {data: 'gestioncat',name: 'gestioncat',class:'text-justify p-1 font-verdana'},
-            {data: 'idcatprogramaticacomb',name: 'idcatprogramaticacomb',class:'text-justify p-1 font-verdana'},
-            {data: 'codcatprogramatica',name: 'codcatprogramatica',class:'text-justify p-1 font-verdana'},
-            {data: 'nombrecatprogramatica',name: 'nombrecatprogramatica',class:'text-justify p-1 font-verdana'},
-                {data: 'estadocatprogramatica',name: 'estadocatprogramatica',class:'text-justify p-1 font-verdana'},
-         
-                {
-                     className: 'text-center',
-                     data: 'actions',
-                     name: 'actions',
-                     orderable: false,
-                     searchable: false
-                 }
+            {
+                data: 'codcatprogramatica',name: 'codcatprogramatica',class:'text-justify p-1 font-verdana'},
+            {
+                data: 'nombrecatprogramatica',name: 'nombrecatprogramatica',class:'text-justify p-1 font-verdana'},
+
+            {
+                data: 'btn',
+                name: 'btn',
+                orderable: true,
+                searchable: true
+            },
         ],
 
-        initComplete: function() {
-                this.api().columns(1).every(function() {
-                    var column = this;
-                    var input = document.createElement("input");
-                    input.style.width = input.style.width = "110px";
-                    $(input).appendTo($(column.footer()).empty())
-                        .on('change', function() {
-                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
 
-                            column.search(val ? val : '', true, false).draw();
-                        });
-                });
-
-                this.api().columns(3).every(function() {
-                    var column = this;
-                    var input = document.createElement("input");
-                    input.style.width = input.style.width = "70px";
-                    $(input).appendTo($(column.footer()).empty())
-                        .on('change', function() {
-                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
-
-                            column.search(val ? val : '', true, false).draw();
-                        });
-                });  
-                
-                
-                this.api().columns(4).every(function() {
-                    var column = this;
-                    var input = document.createElement("input");
-                    input.style.width = input.style.width = "110px";
-                    $(input).appendTo($(column.footer()).empty())
-                        .on('change', function() {
-                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
-
-                            column.search(val ? val : '', true, false).draw();
-                        });
-                });
-                this.api().columns(5).every(function() {
-                    var column = this;
-                    var input = document.createElement("input");
-                    input.style.width = input.style.width = "260px";
-                    $(input).appendTo($(column.footer()).empty())
-                        .on('change', function() {
-                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
-
-                            column.search(val ? val : '', true, false).draw();
-                        });
-                });
-                this.api().columns(6).every(function() {
-                    var column = this;
-                    var input = document.createElement("input");
-                    input.style.width = input.style.width = "110px";
-                    $(input).appendTo($(column.footer()).empty())
-                        .on('change', function() {
-                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
-
-                            column.search(val ? val : '', true, false).draw();
-                        });
-                });
-              
-            },     
             
 language: {
 "decimal": "",

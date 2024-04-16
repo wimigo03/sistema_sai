@@ -7,11 +7,11 @@
     </div>
 @endif
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
 
     <div class="col-md-2 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-            <a href="{{url('/upedido/index')}}">
+            <a href="{{ url('/transportes/pedido/index') }}">
                 <span class="color-icon-1">
                     &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                 </span>
@@ -26,7 +26,7 @@
     <div class="col-md-12">
         <hr class="hrr">
     </div>
-   
+
     <div class="col-md-12 text-right">
 
 
@@ -43,7 +43,7 @@
 
 
 <div class="body-border" style="background-color: #FFFFFF;">
-    <form action="{{ route('udetalle.store') }}" method="post" id="form">
+    <form action="{{ route('transportes.detalle.store') }}" method="post" id="form">
         @csrf
         <br>
 
@@ -51,7 +51,7 @@
 
 
             <div class="col-md-8">
-                <label for="chofer" class="d-inline font-verdana-bg">
+                <label for="chofer" class="d-inline font-verdana-12">
                     <b>Personal o conductor</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="chofer" id="chofer" placeholder="--Seleccionar--" 
@@ -67,7 +67,7 @@
            
 
             <div class="col-md-8">
-                <label for="producto" class="d-inline font-verdana-bg">
+                <label for="producto" class="d-inline font-verdana-12">
                     <b>Unidad o Vehiculo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="producto" id="producto"  placeholder="--Seleccionar--" 
@@ -82,11 +82,11 @@
 
 
             <div class="col-md-2">
-                <label for="cantidad" class="d-inline font-verdana-bg">
+                <label for="cantidad" class="d-inline font-verdana-12">
                     <b>kilometraje Actual</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="cantidad" value="{{request('cantidad')}}" 
-                class="form-control form-control-sm font-verdana-bg" id="cantidad" 
+                class="form-control form-control-sm font-verdana-12" id="cantidad" 
                 onkeypress="return valideNumber(event);">
             </div>
 
@@ -96,7 +96,7 @@
                 @if($consumos->estado3 == 1)
 
 
-                <button class="btn btn-success font-verdana-bg" type="button" 
+                <button class="btn btn-success font-verdana-12" type="button" 
                 onclick="save();">
                     <i class="fa-solid fa-plus"></i>
                     &nbsp;Adicionar
@@ -136,7 +136,7 @@
                             <td class="text-justify p-1">{{$key+1}}</td>
                             <td class="text-justify p-1">{{$prod->codigoconsumo}}</td>
                             <td class="text-justify p-1">{{$prod->nombreuconsumo}}</td>
-                            <td class="text-justify p-1">{{$prod->nombremarca}}</td>
+                            <td class="text-justify p-1">{{$prod->marcaconsumo}}</td>
                             <td class="text-justify p-1">{{$prod->placaconsum}}</td>
                             <td class="text-justify p-1">{{$prod->chofernombre}}</td>
                             <td class="text-justify p-1">{{$prod->kilometrajeactual}}</td>
@@ -146,8 +146,8 @@
                            
 
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Eliminar">
-                                    <a href="{{route('udetalle.delete',$prod->iddetallesoluconsumo)}}" 
-                                        onclick="return confirm('Se va a eliminar el registro...Esta seguro?')">
+                                    <a href="{{route('transportes.detalle.delete',$prod->iddetallesoluconsumo)}}" 
+                                        onclick="return confirm('Se va a eliminar el Item...')">
                                         <span class="text-danger">
                                             <i class="fa-solid fa-xl fa-trash" aria-hidden="true"></i>
                                         </span>
@@ -156,8 +156,8 @@
                             </td>
                                 <td class="text-center p-1">
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Aprobar">
-                                    <a href="{{route('udetalle.aprovar',$prod->iddetallesoluconsumo)}}" 
-                                        onclick="return confirm('Se va a aprobar la solicitud...')">
+                                    <a href="{{route('transportes.detalle.aprovar',$prod->iddetallesoluconsumo)}}" 
+                                        onclick="return confirm('Se va a Aprobar la solicitud...')">
                                         <span class="text-success">
                                             <i class="fa-solid fa-xl fa-cart-plus" aria-hidden="true"></i>
                                         </span>

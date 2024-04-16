@@ -31,48 +31,17 @@ class TipoMovilidadController extends Controller
   
     public function listado()
     {
-        $data = DB::table('tipomovilidad'); 
-
-        // -> where('estadomovilidad','=', 1);
-        $data =$data-> get();
+        $data = DB::table('tipomovilidad') 
+        -> where('estadomovilidad','=', 1);
+       // -> get();
   
         return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('nombremovilidad', function ($data) {
-                    return $data->nombremovilidad;
-                })
-                
-                ->addColumn('estadomovilidad', function ($data) {
-
-                    switch ($data->estadomovilidad ) {
-                       
-                            case '1':
-                            return '<b style="color: blue">ACTIVO</b>';
-                        case '2':
-                            return '<b style="color: purple">INACTIVO</b>';
-                       
-                        default:
-                        
-                            break;
-                        }   
-                    }   
-
-                    )
-                    ->addColumn('actions', function ($data) {
-
-                        return '<a class="tts:left tts-slideIn tts-custom" aria-label=" Editar" href="' . route('tipo.edit', $data->idtipomovilidad) . '">
-                        <button class="btn btn-sm btn-primary font-verdana" type="button">
-                            <i class="fa fa-pencil fa-fw"></i>
-                        </button>
-                    </a>';
-        })
-
-                      
-                    ->rawColumns(['actions', 'estadomovilidad'])
-                    ->make(true);
-
-                }
-    
+                ->addColumn('btn','transportes.tipo.btn')
+                ->rawColumns(['btn'])
+                ->make(true);
+  
+    }
   
  
     public function create()
@@ -85,7 +54,7 @@ class TipoMovilidadController extends Controller
         $tipomovilidads = new TipomovilidadModel();
 
         $tipomovilidads ->nombremovilidad = $request->input('nombremo');
-        // $tipomovilidads ->descripcionmovilidad = $request->input('descripcionmo');
+        $tipomovilidads ->descripcionmovilidad = $request->input('descripcionmo');
         
         $tipomovilidads -> estadomovilidad = 1;
       
@@ -120,15 +89,14 @@ class TipoMovilidadController extends Controller
         $tipomovilidads = TipomovilidadModel::find($idtipomovilidad);
         
         $tipomovilidads -> nombremovilidad = $request->input('nombremo');
-        $tipomovilidads -> estadomovilidad = $request->input('estadomovilidad');
-        // $tipomovilidads ->descripcionmovilidad = $request->input('descripcionmo');
+        $tipomovilidads ->descripcionmovilidad = $request->input('descripcionmo');
         //$medida->update();
         if($tipomovilidads->save()){
           $request->session()->flash('message', 'Registro Procesado');
       }else{
           $request->session()->flash('message', 'Error al Procesar Registro');
       }
-      return redirect()->route('tipo.index');;
+        return redirect('transportes/tipo/index');
     }
   
    

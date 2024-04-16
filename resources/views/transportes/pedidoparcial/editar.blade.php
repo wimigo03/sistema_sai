@@ -2,7 +2,7 @@
 @section('content')
 @include('layouts.message_alert')
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-4 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
             <a href="{{url()->previous()}}">
@@ -18,211 +18,193 @@
     <div class="col-md-12">
         <hr class="hrr">
     </div>
-    <div class="col-md-5 text-right titulo">
-        <b>Fecha Solicitud</b>  <b style='color:red'>{{$Fechayhora}}</b>
-    </div>
 </div>
 <div class="body-border" style="background-color: #FFFFFF;">
-    <form method="post" action="{{ route('upedidoparcial.update') }}" id="form">
+    <form method="post" action="{{ route('transportes.pedidoparcial.update') }}" id="form">
         @csrf
         {{--@method('PUT')--}}
         <input type="hidden" name="cominterna3" id="cominterna3">
-        <input type="text" hidden name="idsoluconsumo" value="{{$soluconsumos->idsoluconsumo}}">
+        <input type="text" hidden name="idsoluconsumo" 
+        value="{{$soluconsumos->idsoluconsumo}}">
    
 
         <div class="form-group row">
 
             <div class="col-md-3">
-                <label for="oficina" class="d-inline font-verdana-bg">
+                <label for="oficina" class="d-inline font-verdana-12">
                     <b>Oficina</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-              
-                <textarea name="oficina" onkeyup="convertirAMayusculas(this)" class="form-control form-control-sm font-verdana-bg" 
-                id="referencia" >{{$soluconsumos->oficina}}</textarea>
-            
-            </div>
-                <div class="col-md-2">
-                    <label for="cominterna" class="d-inline font-verdana-bg">
+                <input type="text" disabled name="oficina" 
+                value="{{$NomFci}}" 
+                class="form-control form-control-sm font-verdana-12" 
+                id="oficina">
+                </div>
+                <div class="col-md-3">
+                    <label for="cominterna" class="d-inline font-verdana-12">
                         <b>Control Interno</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                     </label>
-                    <input type="number" name="cominterna" class="form-control form-control-sm font-verdana-bg"
+                    <input type="number" name="cominterna" class="form-control form-control-sm font-verdana-12"
                       id="cominterna" onchange="myFunction()" value="{{$soluconsumos->cominterna}}"  >
                 </div>
 
             <div class="col-md-4">
-                <label for="referencia" class="d-inline font-verdana-bg">
+                <label for="referencia" class="d-inline font-verdana-12">
                     <b>Referencia</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <textarea name="referencia" onkeyup="convertirAMayusculas(this)" class="form-control form-control-sm font-verdana-bg" 
+                <textarea name="referencia"  class="form-control form-control-sm font-verdana-12" 
                 id="referencia" >{{$soluconsumos->referencia}}</textarea>
-            </div>   
-{{--             
-            <div class="col-md-3">
-                <label for="fechasol" class="d-inline font-verdana-bg">
-                    <b> Fecha de solicitud</b>&nbsp;<span style="font-size:10px; color: red;"></span>
-                </label>
-                <input   type="text" disabled name="fechasol" placeholder="dd/mm/aaaa HH:mm:ss" data-language="es"
+            </div>
+
+
+          
             
-                class="form-control" id="fechasol" value="{{$date->format('d/m/Y H:i:s')}}" >
-            </div> --}}
-
             <div class="col-md-2">
-                <label for="tipo" class="d-inline font-verdana-bg">
-                    <b>Tipo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                <label for="fechasol" class="d-inline font-verdana-12">
+                    <b> Fecha de solicitud</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <select name="tipo" id="tipo" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
-                    <option {{old('tipo',$soluconsumos->tiposoluconsumo)=="1"? 'selected':''}}  value="1">GASOLINA</option>
-                    <option {{old('tipo',$soluconsumos->tiposoluconsumo)=="2"? 'selected':''}} value="2">DIESEL</option>
-                </select>
-            </div> 
+                <input   type="date" disabled name="fechasol" placeholder="dd/mm/aaaa" data-language="es"
+            
+                class="form-control" id="fechasol" value="{{$soluconsumos->fechasol}}">
+            </div>
 
-            <div class="col-md-6">
-                <label for="dirigidoa" class="d-inline font-verdana-bg">
+              
+
+            <div class="col-md-4">
+                <label for="dirigidoa" class="d-inline font-verdana-12">
                     <b>Dirigido a:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <select name="dirigidoa" id="dirigidoa" placeholder="--Seleccionar--"
-                    class="form-control form-control-sm select2">
-                    <option value="">-</option>
-                    @foreach ($encargadotres as $area)
-                        @if ($area->idenc == $soluconsumos->dirigidoa)
-                            <option value="{{ $area->idenc }}" selected>COD: {{ $area->idenc }} //NOMB:
-                                {{ $area->abrev }} {{ $area->nombres }} {{ $area->ap_pat }} {{ $area->ap_mat }}
-                                //AREA: {{ $area->nombrearea }} //CARGO: {{ $area->cargo }} </option>
-                        @else
-                            <option value="{{ $area->idenc }}">CODIGO: {{ $area->idenc }} //NOMBRE:
-                                {{ $area->abrev }} {{ $area->nombres }} {{ $area->ap_pat }} {{ $area->ap_mat }}
-                                //AREA: {{ $area->nombrearea }} //CARGO: {{ $area->cargo }}</option>
-                        @endif
-                    @endforeach
-                </select>
+                <input type="text" disabled name="dirigidoa" 
+                value="{{$encargadotres->abrev}} {{$encargadotres->nombres}} {{$encargadotres->ap_pat}} {{$encargadotres->ap_mat}}" 
+               class="form-control form-control-sm font-verdana-12" 
+               id="dirigidoa" data-language="es" autocomplete="off" >
+                <td colspan="8" width="564" style="font-size: 12px;">
             </div>
             
-            <div class="col-md-6">
-                <label for="viados" class="d-inline font-verdana-bg">
+            <div class="col-md-4">
+                <label for="viauno" class="d-inline font-verdana-12">
                     <b>Via:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <select name="viados" id="viados" placeholder="--Seleccionar--"
-                    class="form-control form-control-sm select2">
-                    <option value="">-</option>
-                    @foreach ($encargadodos as $area)
-                        @if ($area->idenc == $soluconsumos->viados)
-                            <option value="{{ $area->idenc }}" selected>COD: {{ $area->idenc }} //NOMB:
-                                {{ $area->abrev }} {{ $area->nombres }} {{ $area->ap_pat }} {{ $area->ap_mat }}
-                                //AREA: {{ $area->nombrearea }} //CARGO: {{ $area->cargo }} </option>
-                        @else
-                            <option value="{{ $area->idenc }}">CODIGO: {{ $area->idenc }} //NOMBRE:
-                                {{ $area->abrev }} {{ $area->nombres }} {{ $area->ap_pat }} {{ $area->ap_mat }}
-                                //AREA: {{ $area->nombrearea }} //CARGO: {{ $area->cargo }}</option>
-                        @endif
-                    @endforeach
-                </select>
+                <input type="text" disabled name="viauno" 
+                value="{{$encargadodos->abrev}} {{$encargadodos->nombres}} {{$encargadodos->ap_pat}} {{$encargadodos->ap_mat}}" 
+               class="form-control form-control-sm font-verdana-12" 
+               id="viauno" data-language="es" autocomplete="off" >
+                <td colspan="8" width="564" style="font-size: 12px;">
+                    
+                </td>
             </div>
 
-
-            <div class="col-md-6">
-                <label for="viauno" class="d-inline font-verdana-bg">
+            <div class="col-md-4">
+                <label for="viauno" class="d-inline font-verdana-12">
                     <b>Via:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <select name="viauno" id="viauno" placeholder="--Seleccionar--"
-                    class="form-control form-control-sm select2">
-                    <option value="">-</option>
-                    @foreach ($encargado as $area)
-                        @if ($area->idenc == $soluconsumos->viauno)
-                            <option value="{{ $area->idenc }}" selected>COD: {{ $area->idenc }} //NOMB:
-                                {{ $area->abrev }} {{ $area->nombres }} {{ $area->ap_pat }} {{ $area->ap_mat }}
-                                //AREA: {{ $area->nombrearea }} //CARGO: {{ $area->cargo }} </option>
-                        @else
-                            <option value="{{ $area->idenc }}">CODIGO: {{ $area->idenc }} //NOMBRE:
-                                {{ $area->abrev }} {{ $area->nombres }} {{ $area->ap_pat }} {{ $area->ap_mat }}
-                                //AREA: {{ $area->nombrearea }} //CARGO: {{ $area->cargo }}</option>
-                        @endif
-                    @endforeach
-                </select>
+                <input type="text" disabled name="viauno" 
+                value="{{$encargado->abrev}} {{$encargado->nombres}} {{$encargado->ap_pat}} {{$encargado->ap_mat}}" 
+               class="form-control form-control-sm font-verdana-12" 
+               id="viauno" data-language="es" autocomplete="off" >
+                <td colspan="8" width="564" style="font-size: 12px;">
+                    
+                </td>
             </div>
-
-            <div class="col-md-5">
-                <label for="idarea" class="d-inline font-verdana-bg">
-                    <b>Area</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <select name="idarea" id="idarea" placeholder="--Seleccionar--"
-                    class="form-control form-control-sm select2">
-                    <option value="">-</option>
-                    @foreach ($areas as $catprogramatica)
-                        @if ($catprogramatica->idarea == $soluconsumos->idarea)
-                            <option value="{{ $catprogramatica->idarea }}" selected>COD:
-                                {{ $catprogramatica->idarea }} //NOMB: {{ $catprogramatica->nombrearea }}</option>
-                        @else
-                            <option value="{{ $catprogramatica->idarea }}">CODIGO: {{ $catprogramatica->idarea }}
-                                //NOMBRE: {{ $catprogramatica->nombrearea }}</option>
-                        @endif
-                    @endforeach
-                </select>
-            </div>
+           
 
             <div class="col-md-3">
-                <label for="fechasalida" class="d-inline font-verdana-bg">
+                <label for="fechasalida" class="d-inline font-verdana-12">
                     <b> Fecha de salida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input   type="text" name="fechasalida" id="fechasalida" placeholder="dd/mm/aaaa" data-language="es"
                 class="form-control" value="{{date('d/m/Y', strtotime($soluconsumos->fechasalida))}}">
-
-                <label for="tsalidahr" class="d-inline font-verdana-bg">
-                    <b>Salida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input type="time" name="tsalidahr" id="tsalidahr" placeholder="HH:mm:ss" class="form-control form-control-sm font-verdana-bg" value="{{$soluconsumos->tsalidahr}}">
- 
             </div>
 
             <div class="col-md-3">
-                <label for="fecharetorno" class="d-inline font-verdana-bg">
+                <label for="fecharetorno" class="d-inline font-verdana-12">
                     <b> Fecha de retorno</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input   type="text" name="fecharetorno" id="fecharetorno" placeholder="dd/mm/aaaa" data-language="es" autocomplete="off"
             
-                class="form-control " value="{{date('d/m/Y', strtotime($soluconsumos->fecharetorno))}}">
-
-                <label for="tllegadahr" class="d-inline font-verdana-bg">
-                    <b>Llegada</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <input type="time" name="tllegadahr" id="tllegadahr" placeholder="HH:mm:ss" class="form-control form-control-sm font-verdana-bg" value="{{$soluconsumos->tllegadahr}}">
- 
+                class="form-control " value="{{date('d/m/Y', strtotime($soluconsumos->fecharetorno))}}"
+                >
             </div>
 
 
             <div class="col-md-6">
-                <label for="detallesouconsumo" class="d-inline font-verdana-bg">
+                <label for="detallesouconsumo" class="d-inline font-verdana-12">
                     <b>Detalle de solicitud</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <textarea name="detallesouconsumo" cols="1" rows="5" class="form-control form-control-sm font-verdana-bg" 
-                id="detallesouconsumo" onkeyup="convertirAMayusculas(this)" >{{$soluconsumos->detallesouconsumo}}</textarea>
+                <textarea name="detallesouconsumo" cols="1" rows="5" class="form-control form-control-sm font-verdana-12" 
+                id="detallesouconsumo" >{{$soluconsumos->detallesouconsumo}}</textarea>
             </div>
 
-            <div class="col-md-6">
-                <label for="idlocalidad" class="d-inline font-verdana-bg">
+
+            <div class="col-md-3">
+                <label for="tsalida" class="d-inline font-verdana-12">
+                    <b>Salida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <select name="tsalida" id="tsalida" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
+
+                    <option {{old('tsalida',$soluconsumos->tsalida)=="1"? 'selected':''}}  value="1">MAÑANA</option>
+                    <option {{old('tsalida',$soluconsumos->tsalida)=="2"? 'selected':''}} value="2">TARDE</option>
+
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label for="tllegada" class="d-inline font-verdana-12">
+                    <b>Llegada</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <select name="tllegada" id="tllegada" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
+
+                    <option {{old('tllegada',$soluconsumos->tllegada)=="1"? 'selected':''}}  value="1">MAÑANA</option>
+                    <option {{old('tllegada',$soluconsumos->tllegada)=="2"? 'selected':''}} value="2">TARDE</option>
+
+                </select>
+            </div>
+
+
+
+
+            <div class="col-md-4">
+                <label for="idlocalidad" class="d-inline font-verdana-12">
                     <b>Localidad</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="idlocalidad" id="idlocalidad" class="form-control form-control-sm select2">
                 
                     @foreach ($localidades as $local)
                     @if ($local->idlocalidad==$soluconsumos->idlocalidad)
-                    <option value="{{$local->idlocalidad}}" selected>COD: {{$local->idlocalidad}} //NOMB: {{$local->nombrelocalidad}} //DISTA: {{$local->distancialocalidad}} KLM //DITRIT: {{$local->distrito}}</option>
+                    <option value="{{$local->idlocalidad}}" selected>
+                        {{$local->nombrelocalidad}}</option>
                     @else
-                    <option value="{{$local->idlocalidad}}">CODIGO: {{$local->idlocalidad}} //NOMBRE: {{$local->nombrelocalidad}} //DISTANCIA: {{$local->distancialocalidad}} KLM //DITRITO: {{$local->distrito}}</option>
+                    <option value="{{$local->idlocalidad}}">
+                        {{$local->nombrelocalidad}}</option>
                     @endif
                     @endforeach
                 </select>
             </div>
 
+            <div class="col-md-7">
+                <label for="idarea" class="d-inline font-verdana-12">
+                    <b>Area</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                </label>
+                <select  disabled name="idarea" id="idarea" class="form-control form-control-sm select2">
+                    @foreach ($areas as $ar)
+                    @if ($ar->idarea==$soluconsumos->idarea)
+                    <option value="{{$ar->idarea}}" selected>{{$ar->idarea}} - {{$ar->nombrearea}}</option>
+                    @else
+                    <option value="{{$ar->idarea}}">{{$ar->idarea}} - {{$ar->nombrearea}}</option>
+                    @endif
+                    @endforeach
+                </select>
+            </div> 
+
         </div>
         <div class="form-group row">
             <div class="col-md-12 text-right">
-                <button class="btn color-icon-2 font-verdana-bg" type="button" onclick="save();">
+                <button class="btn color-icon-2 font-verdana-12" type="button" onclick="save();">
                     <i class="fa-solid fa-paper-plane"></i>
                     &nbsp;Actualizar
                 </button>
-                <button class="btn btn-danger font-verdana-bg" type="button" >
+                <button class="btn btn-danger font-verdana-12" type="button" >
 
-                    <a href="{{url('/upedidoparcial/index')}}"style="color:white">Cancelar</a>
+                    <a href="{{url()->previous()}}" style="color:white">Cancelar</a>
                 </button>
 
                 <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" 
@@ -340,17 +322,7 @@
             return true;
         }
 
-        function convertirAMayusculas(input) {
-    // Guarda la posición actual del cursor
-    var inicioSeleccion = input.selectionStart;
-    var finSeleccion = input.selectionEnd;
-  
-    // Convierte todo el texto a mayúsculas
-    input.value = input.value.toUpperCase();
-  
-    // Restaura la posición del cursor
-    input.setSelectionRange(inicioSeleccion, finSeleccion);
-  } 
+        
     function myFunction() {
         
         respuesta();

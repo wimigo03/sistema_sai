@@ -7,7 +7,7 @@
     </div>
 @endif
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
 
     <div class="col-md-2 titulo">
         {{-- <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
@@ -33,14 +33,14 @@
 
 
 <div class="body-border" style="background-color: #FFFFFF;">
-    <form action="{{ route('reporte.store2') }}" method="post" id="form">
+    <form action="{{ route('almacenes.reporte.store2') }}" method="post" id="form">
         @csrf
         <br>
 
         <div class="form-group row">
             <div class="col-md-8">
-                <label for="ingreso" class="d-inline font-verdana-bg">
-                    <b>Proyecto</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                <label for="ingreso" class="d-inline font-verdana-12">
+                    <b>Ingreso-Item</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="ingreso" id="ingreso" placeholder="--Seleccionar--" 
                 class="form-control form-control-sm select2">
@@ -52,39 +52,25 @@
                 </select>
             </div>
 
-            <div class="col-md-8">
-                <label for="producto" class="d-inline font-verdana-bg">
-                    <b>Producto</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
-                </label>
-                <select name="producto" id="producto" placeholder="--Seleccionar--" 
-                class="form-control form-control-sm select2">
-                    <option value="">-</option>
-
-                    @foreach ($productos as $index => $value)
-                        <option value="{{ $index }}">{{ $value }}</option>
-                    @endforeach
-                </select>
-            </div>
-
 
             
             <div class="col-md-3">
-                <label for="fechainicio" class="d-inline font-verdana-bg">
+                <label for="fechainicio" class="d-inline font-verdana-12">
                     <b> fechainicio</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="fechainicio" placeholder="dd/mm/aaaa"
                 value="{{request('fechainicio')}}" 
-                class="form-control form-control-sm font-verdana-bg" 
+                class="form-control form-control-sm font-verdana-12" 
                 id="fechainicio" data-language="es" autocomplete="off" >
             </div>
 
             <div class="col-md-3">
-                <label for="fechafin" class="d-inline font-verdana-bg" cols="2" rows="3">
+                <label for="fechafin" class="d-inline font-verdana-12" cols="2" rows="3">
                     <b> fechafin</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="fechafin" placeholder="dd/mm/aaaa"
                 value="{{request('fechafin')}}" 
-                class="form-control form-control-sm font-verdana-bg" 
+                class="form-control form-control-sm font-verdana-12" 
                 id="fechafin" data-language="es" autocomplete="off" >
             </div>
 
@@ -97,7 +83,7 @@
            
 
 
-                <button class="btn btn-success font-verdana-bg" type="button" 
+                <button class="btn btn-success font-verdana-12" type="button" 
                 onclick="save();">
                     <i class="fa-solid fa-plus"></i>
                     &nbsp;Adicionar
@@ -114,7 +100,7 @@
 <div class="col-md-2 text-right">
     <br>
     <span class="tts:left tts-slideIn tts-custom" aria-label="imprimir ">
-        <a href="{{ route('reporte.solicituddos', $id) }}">
+        <a href="{{ route('almacenes.reporte.solicituddos', $id) }}">
             <span class="text-primary">
                 <i class="fa-2xl fa-solid fa-print"></i>
             </span>

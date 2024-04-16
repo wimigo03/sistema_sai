@@ -1,12 +1,12 @@
 @extends('layouts.admin')
 @section('content')
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-8 titulo">
        
     </div>
     <div class="col-md-4 text-right">
 
-            <a href="{{ route('uconsumo.index') }}" class="tts:left tts-slideIn tts-custom" 
+            <a href="{{ route('transportes.uconsumo.index') }}" class="tts:left tts-slideIn tts-custom" 
             aria-label="Volver atras..">
                 <button class="btn btn-sm btn-warning font-verdana" type="button" >Volver atras
                     &nbsp;<i class="fa-sharp fa-solid fa-arrow-left" style="font-size:14px"></i>&nbsp;
@@ -82,7 +82,7 @@
             processing: true,
             serverSide: true,
             autoWidth: false,
-            ajax: "{{ route('uconsumo.index2') }}",
+            ajax: "{{ route('transportes.uconsumo.index2') }}",
             columns: [
                 {data: 'DT_RowIndex',orderable: false,searchable: false,class:'text-justify p-1 font-verdana'},
     

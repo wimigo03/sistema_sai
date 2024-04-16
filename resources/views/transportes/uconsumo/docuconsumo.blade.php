@@ -4,11 +4,11 @@
 <div class="row justify-content-center">
     <div class="col-md-10">
 
-        <div class="row font-verdana-bg">
+        <div class="row font-verdana-12">
             <div class="col-md-4 titulo">
 
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-                    <a href="{{ url('/uconsumo/index')}}">
+                    <a href="{{ url('/transportes/uconsumo/index')}}">
                         <span class="color-icon-1">
                             &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                         </span>
@@ -19,7 +19,7 @@
 
                
                    
-                    <a href="{{ route('uconsumo.createdoc', $idunidadconsumo) }}" 
+                    <a href="{{ route('UnidadConsumoController.createdoc', $idunidadconsumo) }}" 
                     class="tts:left tts-slideIn tts-custom" aria-label="Agregar">
                             <button class="btn btn-sm btn-info   font-verdana" type="button" >
                                 &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;

@@ -6,10 +6,10 @@
 <div class="row justify-content-center">
     <div class="col-md-8">
 
-        <div class="row font-verdana-bg">
+        <div class="row font-verdana-12">
             <div class="col-md-4 titulo">
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-                    <a href="{{ url('/programa/index')}}">
+                    <a href="{{ url('/combustibles/programa/index')}}">
                         <span class="color-icon-1">
                             &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                         </span>
@@ -29,8 +29,7 @@
             <font size="2" face="Courier New" >
                 <form method="POST" action="{{ route('programa.store') }}" id="form">
                     @csrf
-                    @method('POST')
-                    <input type="hidden" name="codigoprogr2" id="codigoprogr2">
+
 
               
                     <div class="form-group row">
@@ -38,10 +37,10 @@
                             class="required col-md-2 col-form-label text-md-right">
                             Codigo:
                         </label>
-                        <div class="col-md-2">
+                        <div class="col-md-8">
                             <input type="text"  required name="codigoprogr" id="codigoprogr" class="form-control" 
                                 placeholder="Codigo del Programa..."
-                                onchange="myFunction()" >
+                                onkeypress="return valideNumber(event);">
                         </div>
                     </div>
                     
@@ -55,22 +54,10 @@
                         <div class="col-md-8">
                             <input type="text" required name="nombre" id="nombre" class="form-control"
                                 placeholder="Nombre del Programa..."
-                                onkeyup="convertirAMayusculas(this)">
+                                onkeyup="javascript:this.value=this.value.toUpperCase();">
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <label for="direccion" style="color:black;font-weight: bold;"
-                            class="required col-md-2 col-form-label text-md-right">
-                            Direccion:
-                        </label>
-
-                        <div class="col-md-8">
-                            <input type="text" required name="direccion" id="direccion" class="form-control"
-                                placeholder="Direccion del Programa..."
-                                onkeyup="convertirAMayusculas(this)">
-                        </div>
-                    </div>
 
 
                     </br>
@@ -79,11 +66,11 @@
                                
                       
             <div class="col-md-12 text-right">
-                <button class="btn color-icon-2 font-verdana-bg" type="button" onclick="save();">
+                <button class="btn color-icon-2 font-verdana-12" type="button" onclick="save();">
                     <i class="fa-solid fa-paper-plane"></i>
                     &nbsp;Registrar
                 </button>
-                <button class="btn btn-danger font-verdana-bg" type="button" >
+                <button class="btn btn-danger font-verdana-12" type="button" >
 
                     <a href="{{url()->previous()}}" style="color:white">Cancelar</a>
                 </button>
@@ -133,65 +120,19 @@
 
         function validar_formulario(){
 
+
+            if($("#codigoprogr").val() == ""){
+                message_alert("El campo <b>[CODIGO]</b> es un dato obligatorio...");
+                return false;
+            }
             if($("#nombre").val() == ""){
                 message_alert("El campo <b>[NOMBRE]</b> es un dato obligatorio...");
                 return false;
 
             }
-            if($("#codigoprogr").val() == ""){
-                message_alert("El campo <b>[CODIGO]</b> es un dato obligatorio...");
-                return false;
-            }
-            if ($("#codigoprogr2").val() == "comunicacion") {
-                $("#codigoprogr2").val('');
-                $("#nombre").val('');
-                $("#codigoprogr").val('');
-                message_alert("El <b>[CODIGO ]</b> ya existe en nuestros registros...");
-                return false;
-            }
-            if($("#direccion").val() == ""){
-                message_alert("El campo <b>[DIRECCION]</b> es un dato obligatorio...");
-                return false;
-
-            }
             return true;
         }
-   
-        function myFunction() {
-            respuesta();
-        }
-        function respuesta() {
-            var ot_antigua = $("#codigoprogr").val();
-            $.ajax({
-                url: "{{ route('programa.pregunta10') }}",
-                data: 'ot_antigua=' + ot_antigua,
-                dataType: "html",
-                asycn: false,
-                type: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                dataType: 'JSON',
-                success: function(data) {
-                  
-                    if (data.success == true) {
-                        $("#codigoprogr2").val('comunicacion');
-                    }
-                }
-            });
-        }
-        function convertirAMayusculas(input) {
-  // Guarda la posición actual del cursor
-  var inicioSeleccion = input.selectionStart;
-  var finSeleccion = input.selectionEnd;
-
-  // Convierte todo el texto a mayúsculas
-  input.value = input.value.toUpperCase();
-
-  // Restaura la posición del cursor
-  input.setSelectionRange(inicioSeleccion, finSeleccion);
-}      
-
+        
         function valideNumber(evt){
             var code = (evt.which) ? evt.which : evt.keyCode;
             if(code>=48 && code<=57){

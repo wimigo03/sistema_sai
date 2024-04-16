@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-8 titulo">
         <b>--APROBADA POR DIR. ADMIN. -- </b><b style='color:red'>{{$idd->nombrearea}} </b>--
     </div>
@@ -9,14 +9,14 @@
         
          
 
-        <a href="{{route('upedidoparcial.index')}}" class="tts:left tts-slideIn tts-custom" 
+        <a href="{{route('transportes.pedidoparcial.index')}}" class="tts:left tts-slideIn tts-custom" 
         aria-label="  Solicitud">
             <button class="btn btn-sm btn-success font-verdana" type="button" >Volver Atras.
                 &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
             </button>
         </a>
 
-        <a href="{{route('upedidoparcial.index3')}}" class="tts:left tts-slideIn tts-custom" 
+        <a href="{{route('transportes.pedidoparcial.index3')}}" class="tts:left tts-slideIn tts-custom" 
         aria-label="  Solicitud">
             <button class="btn btn-sm btn-primary font-verdana" type="button" >Solicitudes Aprovadas.
                 &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
@@ -25,7 +25,7 @@
        
 
              {{-- PASO UNO PDF --}}
-             {{-- <a href="{{route('upedidoparcial.pdf')}}" class="tts:left tts-slideIn tts-custom" aria-label="Pdf">
+             {{-- <a href="{{route('transportes.pedidoparcial.pdf')}}" class="tts:left tts-slideIn tts-custom" aria-label="Pdf">
                 <button class="btn btn-sm btn-primary font-verdana" type="button" >
                     &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true">PDF</i>&nbsp;
                 </button>
@@ -69,7 +69,7 @@
                             @endif
                                 <td style="padding: 0;" class="text-center p-1">
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Imprimir Solicitud">
-                                    <a href="{{route('upedidoparcial.solicitud',$sol->idsoluconsumo)}}">
+                                    <a href="{{route('transportes.pedidoparcial.solicitud',$sol->idsoluconsumo)}}">
                                         <span class="text-primary">
                                             <i class=" fa-2xl fa-solid fa-print"></i>
                                         </span>

@@ -7,11 +7,11 @@
     </div>
 @endif
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
 
     <div class="col-md-2 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-            <a href="{{ url('/apedido/index') }}">
+            <a href="{{ url('/almacenes/pedido/index') }}">
                 <span class="color-icon-1">
                     &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                 </span>
@@ -27,29 +27,6 @@
         <hr class="hrr">
     </div>
 
-    @if($vales->idcomingreso == 0)
-
-    <div class="col-md-6 text-right titulo">
-        <b>DEBE DE TENER UNA CATEGORIA PROGRAMATICA</b> 
-    
-    </div>
-
-    @else
-
-
-    <div class="col-md-1 text-right titulo">
-        <b>N°</b>  <b style='color:red'>{{$idvale}}</b>
-    
-    </div>
-    <div class="col-md-8 text-right titulo">
-        <b>//</b>  <b style='color:red'>{{$id5}}</b>
-    
-    </div>
-    <div class="col-md-3 text-right titulo">
-        <b>//</b>  <b style='color:blue'>{{$id4}}</b>
-    
-    </div>
-    @endif
     <div class="col-md-12 text-right">
 
 
@@ -66,22 +43,22 @@
 
 
 <div class="body-border" style="background-color: #FFFFFF;">
-    <form action="{{ route('adetalle.store') }}" method="post" id="form">
+    <form action="{{ route('almacenes.detalle.store') }}" method="post" id="form">
         @csrf
         <br>
 
         <div class="form-group row">
 
 
-            <div class="col-md-7" >
-                <label for="producto" class="d-inline font-verdana-bg">
-                    <b>PRODUCTO</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+            <div class="col-md-12" >
+                <label for="almacen" class="d-inline font-verdana-12">
+                    <b>ALMACEN PROGRAMA PRODUCTO</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <select name="producto" id="producto" placeholder="--Seleccionar--" 
+                <select name="almacen" id="almacen" placeholder="--Seleccionar--" 
                 class="form-control form-control-sm select2">
                     <option value="">-</option>
 
-                    @foreach ($detallecomingresos as $index => $value)
+                    @foreach ($productos as $index => $value)
                         <option value="{{ $index }}">{{ $value }}</option>
                     @endforeach
                 </select>
@@ -89,21 +66,21 @@
 
 
             <div class="col-md-3">
-                <label for="cantidad" class="d-inline font-verdana-bg">
+                <label for="cantidad" class="d-inline font-verdana-12">
                     <b>Cantidad Solicitada :</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="cantidad" value="{{request('cantidad')}}" 
-                class="form-control form-control-sm font-verdana-bg" id="cantidad" 
+                class="form-control form-control-sm font-verdana-12" id="cantidad" 
                 onkeypress="return valideNumber(event);">
             </div>
 
-            <div class="col-md-2">
-                <label for="aproxgas" class="d-inline font-verdana-bg">
+            <div class="col-md-3">
+                <label for="aproxgas" class="d-inline font-verdana-12">
                     <b>Calculo Aprox.:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
               {{-- el disabled es para que no se pueda editar --}}
                 <input type="text" disabled name="aproxgas" value="{{$vales->aproxgas}}" 
-                class="form-control form-control-sm font-verdana-bg" >
+                class="form-control form-control-sm font-verdana-12" >
             </div>
 
 
@@ -111,18 +88,18 @@
             <div class="col-md-2 text-right">
                 <br>
             
-                @if($vales->idcomingreso == 0)
+                @if($vales->estadotemp == 1)
 
-               
-                @elseif($vales->estadotemp == 1)
-
-                <button class="btn btn-success font-verdana-bg" type="button" 
+                <button class="btn btn-success font-verdana-12" type="button" 
                 onclick="save();">
                     <i class="fa-solid fa-plus"></i>
                     &nbsp;Adicionar
                 </button>
+
+                @else
+
                 @endif
-             
+
 
             </div>
         </div>
@@ -136,14 +113,13 @@
             <table id="dataTable" class="table display table-bordered responsive font-verdana" style="width:100%">
                 <thead>
                     <tr>
-                        <td class="text-justify p-1"><b>N°</b></td>
+                        <td class="text-justify p-1"><b>Nro</b></td>
                         <td class="text-justify p-1"><b>Id Vale</b></td>
-                        <td class="text-right p-1"><b>Codigo</b></td>
-                        <td class="text-right p-1"><b>Nombre</b></td>
-                        <td class="text-right p-1"><b>Medida</b></td>
-                    
-                        <td class="text-right p-1"><b>Precio</b></td>
+                        <td class="text-justify p-1"><b>Proyecto</b></td>
+                        <td class="text-justify p-1"><b>Partida</b></td>
+                        <td class="text-right p-1"><b>Cantidad restante</b></td>
                         <td class="text-right p-1"><b>Cantidad solic</b></td>
+                        <td class="text-right p-1"><b>Precio</b></td>
                         <td class="text-right p-1"><b>Total</b></td>
                         <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
                         <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
@@ -158,19 +134,18 @@
                         <tr>
                             <td class="text-justify p-1">{{$key+1}}</td>
                             <td class="text-justify p-1">{{$prod->idvale}}</td>
-                            <td class="text-justify p-1">{{$prod->detalleprodcomb}}</td>
-                            <td class="text-right p-1">{{$prod->nombreprodcomb}}</td>
-                            <td class="text-right p-1">{{$prod->nombremedida}}</td>
-                       
-                            <td class="text-right p-1">{{$prod->preciosol}}</td>
+                            <td class="text-justify p-1">{{$prod->nombrecatprogmai}}</td>
+                            <td class="text-justify p-1">{{$prod->nombrepartida}}</td>
+                            <td class="text-right p-1">{{$prod->cantidadsalida}}</td>
                             <td class="text-right p-1">{{$prod->cantidadsol}}</td>
+                            <td class="text-right p-1">{{$prod->preciosol}}</td>
                             <td class="text-right p-1">{{$prod->subtotalsol}}</td>
                             
 
                             <td class="text-center p-1">
-                                <span class="tts:left tts-slideIn tts-custom" aria-label="Aprobar">
-                                    <a href="{{route('adetalle.aprovar',$prod->iddetallevale)}}" 
-                                        onclick="return confirm('Se va a Aprobar la solicitud del vale...')">
+                                <span class="tts:left tts-slideIn tts-custom" aria-label="Aprovar">
+                                    <a href="{{route('almacenes.detalle.aprovar',$prod->iddetallevale)}}" 
+                                        onclick="return confirm('Se va a Aprovar la solicitud del vale...')">
                                         <span class="text-success">
                                             <i class="fa-solid fa-xl fa-cart-plus" aria-hidden="true"></i>
                                         </span>
@@ -178,11 +153,10 @@
                                 </span> 
                             </td>
                             <td class="text-center p-1">
-                                <span class="tts:left tts-slideIn tts-custom" aria-label="Eliminar">
-                                    <a href="{{route('adetalle.delete',$prod->iddetallevale)}}" 
-                                        onclick="return confirm('Se va a eliminar el registro...Esta seguro?')">
-                                        <span class="text-danger">
-                                            <i class="fa-solid fa-xl fa-trash" aria-hidden="true"></i>
+                                <span class="tts:left tts-slideIn tts-custom" aria-label="Imprimir Solicitud">
+                                    <a href="{{route('almacenes.detalle.solicitud',$prod->iddetallevale)}}">
+                                        <span class="text-primary">
+                                            <i class=" fa-2xl fa-solid fa-print"></i>
                                         </span>
                                     </a>
                                 </span>
@@ -192,31 +166,7 @@
                         </tr>
                     @endforeach
                 </tbody>
-                <tfoot>
-                    @if (count($prodserv) > 0)
-                        <tr>
-                         
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td class="text-right p-1">
-                                <b>TOTALES:</b>
-                            </td>
-                            <td class="text-right p-1">
-                                <b>{{$CalAdosDecim}}</b>
-                            </td>
-                            <td class="text-right p-1">
-                                <b>{{$CalAdosDecimdos}}</b>
-                            </td>
-                        
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                        </tr>
-                    @endif
-                </tfoot>
-
+            
             </table>
         </center>
     </div>
