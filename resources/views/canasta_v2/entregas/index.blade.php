@@ -10,7 +10,6 @@
         @include('canasta_v2.entregas.partials.table')
     </div>
 </div>
-@include('canasta_v2.entregas.partials.paquete_edit_delete_create')
 @endsection
 @section('scripts')
     <script type="text/javascript">
@@ -55,7 +54,7 @@
         function create(){
             $(".btn").hide();
             $(".spinner-btn-send").show();
-            window.location.href = "{{ route('beneficiarios.create') }}";
+            window.location.href = "{{ route('entregas.create_paquete') }}";
         }
     </script>
 @endsection

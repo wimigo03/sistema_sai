@@ -10,6 +10,7 @@ class Distrito extends Model
 {
     protected $table = 'distritos';
     protected $fillable = [
+
         'nombre',
         'user_id',
         'dea_id',
@@ -23,9 +24,9 @@ class Distrito extends Model
 
     public function getStatusAttribute(){
         switch ($this->estado) {
-            case '1': 
+            case '1':
                 return "HABILITADO";
-            case '2': 
+            case '2':
                 return "NO HABILITADO";
         }
     }
@@ -43,7 +44,7 @@ class Distrito extends Model
             return $query->where('id', $codigo);
         }
     }
-    
+
     public function scopeByNombre($query, $nombre){
         if($nombre){
             return $query->whereRaw('upper(nombre) like ?', ['%'.strtoupper($nombre).'%']);

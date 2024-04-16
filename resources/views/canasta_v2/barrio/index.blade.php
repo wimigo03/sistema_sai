@@ -8,8 +8,13 @@
     <div class="card-body">
         @include('canasta_v2.barrio.partials.search')
         @include('canasta_v2.barrio.partials.table')
-        @include('canasta_v2.barrio.partials.barrio_edit_delete_create')
+
     </div>
+
+    @foreach ($barrios as $datos)
+
+    @include('canasta_v2.barrio.partials.barrio_edit_delete_create')
+    @endforeach
 </div>
 @endsection
 @section('scripts')

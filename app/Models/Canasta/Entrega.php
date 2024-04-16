@@ -22,7 +22,19 @@ class Entrega extends Model
         'updated_at',
         'estado'
     ];
+    const ESTADOS = [
+        '1' => 'SIN ENTREGA',
+        '2' => 'ENTREGADO'
+    ];
 
+    public function getStatusAttribute(){
+        switch ($this->estado) {
+            case '1':
+                return "SIN ENTREGA";
+            case '2':
+                return "ENTREGADO";
+        }
+    }
 
     public function user(){
         return $this->belongsTo(User::class,'user_id','id');
@@ -144,5 +156,11 @@ class Entrega extends Model
 
     public function paquete(){
         return $this->belongsTo(Paquetes::class,'id_paquete','id');
+    }
+
+    public function scopeByEstado($query, $estado){
+        if($estado){
+            return $query->where('estado',$estado);
+        }
     }
 }

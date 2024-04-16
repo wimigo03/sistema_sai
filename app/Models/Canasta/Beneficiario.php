@@ -13,7 +13,9 @@ class Beneficiario extends Model
 {
     protected $table = 'beneficiarios';
     protected $primaryKey= 'id';
-    public $timestamps = false;
+    //public $timestamps = false;
+    const CREATED_AT = 'created_att';
+    const UPDATED_AT = 'updated_att';
     protected $fillable = [
         'id',
         'nombres',

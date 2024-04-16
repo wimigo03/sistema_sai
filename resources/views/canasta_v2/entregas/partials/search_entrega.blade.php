@@ -23,10 +23,18 @@
             <select name="barrio"  id="barrio2" class="form-control form-control-sm">
                 <option value="">-</option>
                 @foreach ($barrios2 as $barrio)
-                <option value="{{ $barrio->nombre }}">{{ $barrio->nombre }}</option>
+                <option value="{{ $barrio->nombre }}" @if(request('barrio') == $barrio->nombre) selected @endif>{{ $barrio->nombre }}</option>
             @endforeach
             </select>
 
+        </div>
+        <div class="col-md-2 pl-1">
+            <select name="estado" id="estado" class="form-control form-control-sm">
+                <option value="">-</option>
+                @foreach ($estados as $index => $value)
+                    <option value="{{ $index }}" @if(request('estado') == $index) selected @endif >{{ $value }}</option>
+                @endforeach
+            </select>
         </div>
 
     </div>

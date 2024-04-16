@@ -324,6 +324,12 @@
                                     <span class="nav-label mr-4">Institucional</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{ asset('facebook') }}">
+                                    &nbsp; &nbsp; &nbsp;
+                                    <span class="nav-label mr-4">Facebook</span>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <hr style="margin-top:0; margin-bottom:0;">

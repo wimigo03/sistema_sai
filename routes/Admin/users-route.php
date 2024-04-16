@@ -1,6 +1,6 @@
 <?php
 
-Route::prefix('users')->name('users.')->middleware(['auth'])->group(function () { 
+Route::prefix('users')->name('users.')->middleware(['auth'])->group(function () {
     Route::get('/index', 'Admin\UserController@index')->name('index')->middleware('can:users.index');
     Route::get('/search', 'Admin\UserController@search')->name('search')->middleware('can:users.index');
     Route::get('/excel', 'Admin\UserController@excel')->name('excel')->middleware('can:users.excel');

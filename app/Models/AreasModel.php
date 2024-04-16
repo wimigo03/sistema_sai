@@ -4,18 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\NivelModel;
 
 class AreasModel extends Model
 {
     use HasFactory;
-    
+
     protected $table = 'areas';
-    
+
     protected $primaryKey= 'idarea';
 
     public $timestamps = false;
 
     protected $fillable = [
+        'idarea',
         'nombrearea',
         'estadoarea',
         'idnivel'
@@ -23,7 +25,7 @@ class AreasModel extends Model
 
     protected $guarded = [
 
-        
+
     ];
 
     public function purchases()
@@ -40,5 +42,9 @@ class AreasModel extends Model
     public function empleados()
     {
         return $this->hasMany(EmpleadosModel::class, 'idarea');
+    }
+
+    public function nivel(){
+        return $this->belongsTo(NivelModel::class,'idnivel','idnivel');
     }
 }

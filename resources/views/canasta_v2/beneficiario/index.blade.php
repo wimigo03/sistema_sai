@@ -29,6 +29,9 @@
             $('#estado').select2({
                 placeholder: "--Estado--"
             });
+            $('#ocupacion').select2({
+                placeholder: "--Estado--"
+            });
         });
 
         function procesar(){

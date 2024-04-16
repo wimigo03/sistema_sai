@@ -52,9 +52,9 @@
             </div>
             <div class="col-md-2 text-right">
                 <br>
-                <button class="btn btn-success font-verdana-bg" type="button">
+                <button class="btn btn-success font-verdana-bg" type="button" >
                     <a href="{{ route('entregas.finalizar',$idPaquete) }}" class="btn btn-xs btn-success">
-                        <i class="fa-regular fa-lg fa-circle-up">&nbsp;Finalizar</i>
+                        <i class="fa-regular fa-lg fa-circle-up">&nbsp;Procesar</i>
                     </a>
                 </button>
             </div>

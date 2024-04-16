@@ -8,18 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class NivelModel extends Model
 {
     protected $table = 'niveles';
-    
+
     protected $primaryKey= 'idnivel';
 
     public $timestamps = false;
 
     protected $fillable = [
+        'idnivel',
         'nivel',
         'nombrenivel'
     ];
 
     protected $guarded = [
 
-        
+
     ];
 }

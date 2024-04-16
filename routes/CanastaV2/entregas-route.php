@@ -15,10 +15,16 @@ Route::prefix('entregas')->name('entregas.')->middleware(['auth'])->group(functi
     //Route::get('index_beneficiario', 'Canasta_v2\EntregasV2Controller@index_beneficiario')->name('index_beneficiario');
     Route::get('search_entrega{id1}', 'Canasta_v2\EntregasV2Controller@search_entrega')->name('search_entrega');
     //Route::get('entrega_index/{id1}/{id2}', 'Canasta_v2\EntregasV2Controller@elegirBeneficiario')->name('elegirBeneficiario');
-    Route::post('entrega_index', 'Canasta_v2\EntregasV2Controller@createEntrega')->name('createEntrega');
+    Route::get('create_paquete', 'Canasta_v2\EntregasV2Controller@create_paquete')->name('create_paquete');
+    Route::post('store_paquete', 'Canasta_v2\EntregasV2Controller@store_paquete')->name('store_paquete');
+
+    Route::get('edit_paquete/{id}', 'Canasta_v2\EntregasV2Controller@edit_paquete')->name('edit_paquete');
+    Route::post('update_paquete', 'Canasta_v2\EntregasV2Controller@update_paquete')->name('update_paquete');
 
     Route::post('agregarporbarrio/{id}', 'Canasta_v2\EntregasV2Controller@agregarporbarrio')->name('agregarporbarrio');
     Route::get('generarboleta', 'Canasta_v2\EntregasV2Controller@generarboleta')->name('generarboleta');
+
+    Route::get('generarboleta2/{id}', 'Canasta_v2\EntregasV2Controller@generarboleta2')->name('generarboleta2');
     //Route::get('imprimir_boleta', 'Canasta_v2\EntregasV2Controller@imprimirboleta')->name('imprimir_boleta');
     Route::get('paquete_periodo/{id}', 'Canasta_v2\EntregasV2Controller@paquete_periodo')->name('paquete_periodo');
     Route::post('paquete_periodo_agregar/{id}', 'Canasta_v2\EntregasV2Controller@paquete_periodo_agregar')->name('paquete_periodo_agregar');
