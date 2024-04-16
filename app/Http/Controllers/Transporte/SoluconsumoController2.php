@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\DB;
 use PDF;
 use App\Http\Requests;
 
-use App\Models\Canasta\Dea;
+
 class SoluconsumoController2 extends Controller
 {
     public function index()
@@ -232,7 +232,7 @@ class SoluconsumoController2 extends Controller
 
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
-        $IdProg = $personal->dea_id;
+        $IdProg = $personal->idprogramacomb;
 
         $userdate = User::find($id)->usuariosempleados;
         $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
@@ -387,7 +387,7 @@ class SoluconsumoController2 extends Controller
         $soluconsumos->estado1 = 1;
         $soluconsumos->estado2 = 1;
         $soluconsumos->estado3 = 1;
-        $soluconsumos->iddea = $IdProg;
+        $soluconsumos->idprogramacomb = $IdProg;
         if ($soluconsumos->save()) {
             $request->session()->flash('message', 'Registro Procesado');
         } else {

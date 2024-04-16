@@ -30,15 +30,15 @@
                             {{--</span>--}}
                         </td>
                         <td class="text-center p-1">
-                            {{-- @can('users.editar') f--}}
+                            @can('users.editar')
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar">
                                     <a href="{{ route('users.edit',$user->id) }}" class="btn btn-xs btn-warning">
                                         <i class="fa fa-lg fa-edit" aria-hidden="true"></i>
                                     </a>
                                 </span>
-                            {{-- @endcan f--}}
+                            @endcan
                                 @if ($user->estadouser == 1)
-                                    {{-- @can('users.deshabilitar') g--}}
+                                    @can('users.deshabilitar')
                                         <form action="{{ route('users.baja',$user->id) }}" class="d-inline-block" method="get">
                                             @csrf
                                             <span class="tts:left tts-slideIn tts-custom" aria-label="Deshabilitar">
@@ -47,9 +47,9 @@
                                                 </button>
                                             </span>
                                         </form>
-                                    {{-- @endcan g--}}
+                                    @endcan
                                 @else
-                                    {{-- @can('users.habilitar') h--}}
+                                    @can('users.habilitar')
                                         <form action="{{ route('users.alta', $user->id) }}" class="d-inline-block" method="get">
                                             @csrf
                                             <span class="tts:left tts-slideIn tts-custom" aria-label="Habilitar">
@@ -58,7 +58,7 @@
                                                 </button>
                                             </span>
                                         </form>
-                                    {{-- @endcan h--}}
+                                    @endcan
                                 @endif
 
                         </td>

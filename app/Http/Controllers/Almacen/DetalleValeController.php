@@ -34,7 +34,7 @@ use App\Models\Transporte\UnidaddConsumoModel;
 use App\Models\Compra\ProdCombModel;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
-use App\Models\Canasta\Dea;
+
 class DetalleValeController extends Controller
 {
     public function index()
@@ -748,7 +748,7 @@ class DetalleValeController extends Controller
         $klmant = $valese->kiloanterior;
         $klmfin = $valese->kilometrajeactualconsumo;
         $motivo = $valese->detallesouconsumo;
-        $idprogramacombd = $valese->iddea;
+        $idprogramacombd = $valese->idprogramacomb;
         $idpartidacombd = $valese->idpartidacomb;
         $idaread = $valese->idarea;
         $idusuariod = $valese->idusuario;
@@ -781,7 +781,7 @@ class DetalleValeController extends Controller
         $comingreso->estadoegreso = 1;
         $comingreso->detallecomegreso = $motivo;
 
-        $comingreso->iddea = $idprogramacombd;
+        $comingreso->idprogramacomb = $idprogramacombd;
         $comingreso->idpartidacomb = $idpartidacombd;
         $comingreso->idarea = $idaread;
         $comingreso->idusuario = $idusuariod;
@@ -816,13 +816,9 @@ class DetalleValeController extends Controller
 
         $CanTidaddde = $CanTidaddd + $Idcat;
         $Stotalproductodos = $Stotalproducto + $Idst;
-        $varcinco = number_format($CanTidaddde, 10, '.', '');
-        $varseis = number_format($Stotalproductodos, 10, '.', '');
-
-        $comprasssn = ProdCombModel::find($idpro);
-        $comprasssn->cantidadproducto = $varcinco;
-        $comprasssn->subtotalproducto = $varseis;
-        $comprasssn->save();
+        $comprasss->cantidadproducto = $CanTidaddde;
+        $comprasss->subtotalproducto = $Stotalproductodos;
+        $comprasss->save();
 
         return redirect()->route('adetalle.index2');
     }

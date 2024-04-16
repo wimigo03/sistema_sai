@@ -21,7 +21,7 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 
 use Carbon\Carbon;
-use App\Models\Canasta\Dea;
+
 class CompraCombController2 extends Controller
 {
     public function index(){
@@ -34,14 +34,13 @@ class CompraCombController2 extends Controller
         $compras = DB::table('compracomb as c')
                         ->join('proveedor as p', 'p.idproveedor', '=', 'c.idproveedor')
                         ->join('catprogramaticacomb as cat', 'cat.idcatprogramaticacomb', '=', 'c.idcatprogramaticacomb')
-                     
+                        ->join('programacomb as prog', 'prog.idprogramacomb', '=', 'c.idprogramacomb')
                         ->join('areas as a', 'a.idarea', '=', 'c.idarea')
-                        ->join('deas as da', 'da.id', '=', 'c.iddea')
 
                         ->select('c.idcompracomb','c.estado1','c.controlinterno','c.estadocompracomb','c.fechasoli'
                         ,'c.fechaaprob','a.nombrearea',
                         'c.objeto', 'c.justificacion','p.nombreproveedor','c.preventivo','c.tipo',
-                        'c.numcompra','cat.codcatprogramatica','da.descripcion')
+                        'c.numcompra','cat.codcatprogramatica','prog.nombreprograma')
                         //añadir despues para que solo puedan ver sus areas
                         // ->where('a.idarea',$personalArea->idarea)
                         ->orderBy('c.idcompracomb', 'desc')
@@ -66,12 +65,12 @@ class CompraCombController2 extends Controller
                         ->join('catprogramaticacomb as cat', 'cat.idcatprogramaticacomb', '=', 'c.idcatprogramaticacomb')
                         ->join('programacomb as prog', 'prog.idprogramacomb', '=', 'c.idprogramacomb')
                         ->join('areas as a', 'a.idarea', '=', 'c.idarea')
-                        ->join('deas as da', 'da.id', '=', 'c.iddea')
+
                        
                         
                         ->select('c.idcompracomb','c.estado1','c.controlinterno','a.nombrearea',
                         'c.objeto', 'c.justificacion','p.nombreproveedor','c.preventivo',
-                        'c.numcompra','c.estadocompracomb','cat.codcatprogramatica','da.descripcion')
+                        'c.numcompra','c.estadocompracomb','cat.codcatprogramatica','prog.nombreprograma')
                         ->where('a.idarea',$personalArea->idarea)
                         ->where('c.estadocompracomb',2)
                         ->get();
@@ -151,9 +150,7 @@ class CompraCombController2 extends Controller
 
         $userdate = User::find($id)->usuariosempleados;
         $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
-     
-        $Iddea=$personal->dea_id;
-
+        $IdProg=$personal->idprogramacomb;
         $id3 = $personalArea->idarea;
         $id4 = $personal->idemp;
         $Areanm = AreasModel::find($id3);
@@ -186,7 +183,8 @@ class CompraCombController2 extends Controller
         $proddos = $encargadodos->idenc;
 
 
-       
+        $programas = ProgramaCombModel::find($IdProg);
+        $nombrePro=$programas->idprogramacomb;
 
         $compras = new CompraCombModel();
         $fechasolACT = Carbon::now();
@@ -213,7 +211,8 @@ class CompraCombController2 extends Controller
         $compras->numcompra =0;
         $compras->idproveedor = 1;
         $compras->idarea = $personalArea->idarea;
-        $compras->iddea = $Iddea;
+        $compras->idprogramacomb = $nombrePro;
+
         $compras->idusuario =$id;
         // $compras->estadocompracomb = 1;
         $compras->estadocompracomb = 0;
@@ -259,10 +258,6 @@ class CompraCombController2 extends Controller
          ->orderBy('idprogramacomb', 'asc')
         ->get();
 
-        $deas = DB::table('deas')
-        ->where('estado',1)
-        ->orderBy('id', 'asc')
-       ->get();
 
 
         $proveedores = DB::table('proveedor')->get();
@@ -302,7 +297,7 @@ class CompraCombController2 extends Controller
         return view('combustibles.pedidoparcial.editaruno',
 
         compact('id','id4','id5','compras','proveedores','areas',
-        'catprogramaticas','programas','encargadodos','encargado','departede','Fechayhora','deas'));
+        'catprogramaticas','programas','encargadodos','encargado','departede','Fechayhora'));
     }
     public function editar($idcompracomb){
         $compras = CompraCombModel::find($idcompracomb);
@@ -312,7 +307,7 @@ class CompraCombController2 extends Controller
         $id3 = $compras->idviaa;
         $id8 = $compras->iddepartede;
         $id9 = $compras->idarea;
-        $id6 = $compras->iddea;
+        $id6 = $compras->idprogramacomb;
         $id7 = $compras->idcatprogramaticacomb;
 
         $Fechaa =$compras ->fechasoli;
@@ -331,11 +326,10 @@ class CompraCombController2 extends Controller
         $catprogramaticas = DB::table('catprogramaticacomb')
         ->where('idcatprogramaticacomb',$id7)
         ->get();
-        $programas = DB::table('deas')
-        ->where('id',$id6)
+        $programas = DB::table('programacomb')
+        ->where('idprogramacomb',$id6)
         ->get();
-
-       
+     
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
@@ -408,7 +402,7 @@ class CompraCombController2 extends Controller
              $compras->gestionsoli = $gestion;
          }
         $compras->idarea = $request->input('idarea');
-        $compras->iddea = $request->input('idprograma');
+        $compras->idprogramacomb = $request->input('idprograma');
         $compras->idcatprogramaticacomb = $request->input('idcatprogramatica');
 
         $compras->idproveedor = $request->input('idproveedor');
@@ -527,7 +521,7 @@ class CompraCombController2 extends Controller
         $id3 = $compras->idviaa;
         $id4 = $compras->iddepartede;
         $id5 = $compras->idarea;
-        $id6 = $compras->iddea;
+        $id6 = $compras->idprogramacomb;
         $id7 = $compras->idcatprogramaticacomb;
 
 
@@ -563,8 +557,8 @@ class CompraCombController2 extends Controller
         $catprogramaticas = DB::table('catprogramaticacomb')
         ->where('idcatprogramaticacomb',$id7)
         ->get();
-        $programas = DB::table('deas')
-        ->where('id',$id6)
+        $programas = DB::table('programacomb')
+        ->where('idprogramacomb',$id6)
         ->get();
 
         $personal = User::find(Auth::user()->id);
@@ -604,7 +598,7 @@ class CompraCombController2 extends Controller
         $id3 = $compras->idviaa;
         $id4 = $compras->iddepartede;
         $id5 = $compras->idarea;
-        $id6 = $compras->iddea;
+        $id6 = $compras->idprogramacomb;
         $id7 = $compras->idcatprogramaticacomb;
 
 
@@ -640,8 +634,8 @@ class CompraCombController2 extends Controller
         $catprogramaticas = DB::table('catprogramaticacomb')
         ->where('idcatprogramaticacomb',$id7)
         ->get();
-        $programas = DB::table('deas')
-        ->where('id',$id6)
+        $programas = DB::table('programacomb')
+        ->where('idprogramacomb',$id6)
         ->get();
 
         $personal = User::find(Auth::user()->id);
@@ -681,7 +675,7 @@ class CompraCombController2 extends Controller
         $id3 = $compras->idviaa;
         $id4 = $compras->iddepartede;
         $id5 = $compras->idarea;
-        $id6 = $compras->iddea;
+        $id6 = $compras->idprogramacomb;
         $id7 = $compras->idcatprogramaticacomb;
 
 
@@ -717,8 +711,8 @@ class CompraCombController2 extends Controller
         $catprogramaticas = DB::table('catprogramaticacomb')
         ->where('idcatprogramaticacomb',$id7)
         ->get();
-        $programas = DB::table('deas')
-        ->where('id',$id6)
+        $programas = DB::table('programacomb')
+        ->where('idprogramacomb',$id6)
         ->get();
 
         $personal = User::find(Auth::user()->id);

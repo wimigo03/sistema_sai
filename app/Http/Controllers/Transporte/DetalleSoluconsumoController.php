@@ -30,7 +30,7 @@ use PDF;
 use App\Models\EmpleadosModel;
 use App\Models\FileModel;
 use App\Models\AreasModel;
-use App\Models\Canasta\Dea;
+
 
 class DetalleSoluconsumoController extends Controller
 {
@@ -93,7 +93,8 @@ class DetalleSoluconsumoController extends Controller
 
 
 
-        return view('transportes.detalle.index',
+        return view(
+            'transportes.detalle.index',
             [
                 'prodserv' => $prodserv,
                 'productos' => $productos,
@@ -350,7 +351,7 @@ class DetalleSoluconsumoController extends Controller
 
         // para vale
         $Idarea = $productoS->idarea;
-        $Idprogram = $productoS->iddea;
+        $Idprogram = $productoS->idprogramacomb;
         // $Idusuario = $productoS->idusuario;
         // $Usuariocargo = $productoS->usuariocargo;
         // $Usuarionombre = $productoS->usuarionombre;
@@ -433,7 +434,7 @@ class DetalleSoluconsumoController extends Controller
         //todo id comingreso
         $vales->idcomingreso = 0;
         //todo id programa
-        $vales->iddea = $Idprogram;
+        $vales->idprogramacomb = $Idprogram;
         $vales->idpartidacomb = 1;
         //todo numero preventivo
         $vales->numpreventivo = $numprev;

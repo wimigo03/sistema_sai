@@ -24,7 +24,6 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\Transporte\UnidaddConsumoModel;
 use Carbon\Carbon;
-use App\Models\Canasta\Dea;
 class ValeController extends Controller
 {
     public function index(Request $request)
@@ -537,17 +536,16 @@ $CalAproxdos = number_format($CalAprox, 2);
         $id4 = $vales->idunidad;
         $id5 = $vales->idusuario;
         $id6 = $vales->fechasolicitud;
-        $id7 = $vales->iddea;
+        $id7 = $vales->idprogramacomb;
         $id8 = $vales->idarea;
         $id9 = $vales->idpartidacomb;
         $id10 = $vales->idlocalidad;
 
         $Estado = $vales->estadovale;
         $Estadouno = $Estado;
-        $programas = DB::table('deas')
-        ->where('estado',1)
-        ->orderBy('id', 'asc')
-
+        $programas = DB::table('programacomb')
+        ->where('estadoprograma',1)
+        ->select('codigoprogr','nombreprograma','idprogramacomb')
         ->get();
         
         $areas = DB::table('areas')->get();
@@ -593,9 +591,9 @@ $CalAproxdos = number_format($CalAprox, 2);
                 })     
         ->get();
 
-        $programados = DB::table('deas')
-        ->where('id',$id7)
-      
+        $programados = DB::table('programacomb')
+        ->where('idprogramacomb',$id7)
+        ->select('codigoprogr','nombreprograma','idprogramacomb')
         ->get();
 
         $areados = DB::table('areas')
@@ -730,7 +728,7 @@ $CalAproxdos = number_format($CalAprox, 2);
         $vales->usuariocargo = $Nombreviacargo;
 
         $vales->idarea = $request->input('idarea');
-        $vales->iddea =$request->input('idprograma');
+        $vales->idprogramacomb =$request->input('idprograma');
         $vales->idcomingreso = $request->input('idcomingreso');
         $vales->idpartidacomb = $request->input('idpartida');
 

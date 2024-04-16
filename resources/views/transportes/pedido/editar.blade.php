@@ -6,7 +6,6 @@
         <div class="col-md-4 titulo">
             <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
                 <a href="{{url()->previous()}}">
-                   
                     <span class="color-icon-1">
                         &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                     </span>
@@ -51,7 +50,7 @@
                 <label for="oficina" class="d-inline font-verdana-bg">
                     <b>Oficina</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <textarea  name="oficina" onkeyup="convertirAMayusculas(this)" class="form-control form-control-sm font-verdana-bg" id="oficina">{{ $soluconsumos->oficina }}</textarea>
+                <textarea  name="oficina" class="form-control form-control-sm font-verdana-bg" id="oficina">{{ $soluconsumos->oficina }}</textarea>
             </div>
             <div class="col-md-2">
                 <label for="cominterna" class="d-inline font-verdana-bg">
@@ -70,7 +69,7 @@
                 <label for="referencia" class="d-inline font-verdana-bg">
                     <b>Referencia</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <textarea  name="referencia" onkeyup="convertirAMayusculas(this)" class="form-control form-control-sm font-verdana-bg" id="referencia">{{ $soluconsumos->referencia }}</textarea>
+                <textarea  name="referencia" class="form-control form-control-sm font-verdana-bg" id="referencia">{{ $soluconsumos->referencia }}</textarea>
             </div>
             <div class="col-md-2">
                 <label for="tipo" class="d-inline font-verdana-bg">
@@ -198,7 +197,7 @@
                     <b>Detalle de solicitud</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <textarea  name="detallesouconsumo" cols="1" rows="5"
-                    class="form-control form-control-sm font-verdana-bg" onkeyup="convertirAMayusculas(this)" id="detallesouconsumo">{{ $soluconsumos->detallesouconsumo }}</textarea>
+                    class="form-control form-control-sm font-verdana-bg" id="detallesouconsumo">{{ $soluconsumos->detallesouconsumo }}</textarea>
             </div>
          
             <div class="col-md-6">
@@ -412,17 +411,7 @@
                 return false;
             }
         }
-        function convertirAMayusculas(input) {
-    // Guarda la posición actual del cursor
-    var inicioSeleccion = input.selectionStart;
-    var finSeleccion = input.selectionEnd;
-  
-    // Convierte todo el texto a mayúsculas
-    input.value = input.value.toUpperCase();
-  
-    // Restaura la posición del cursor
-    input.setSelectionRange(inicioSeleccion, finSeleccion);
-  } 
+
         $("#fechasol").datepicker({
             inline: false,
             dateFormat: "dd/mm/yyyy",

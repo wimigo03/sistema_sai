@@ -24,7 +24,6 @@ use App\Models\Transporte\MarcaMovilidadModel;
 
 use Carbon\Carbon;
 
-use App\Models\Canasta\Dea;
 class UnidaddConsumoController extends Controller
 {
     public function index(Request $request){
@@ -159,7 +158,7 @@ $personal = User::find(Auth::user()->id);
            ini_set('max_execution_time','-1');
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
-        $IdProg=$personal->dea_id;
+        $IdProg=$personal->idprogramacomb;
         $userdate = User::find($id)->usuariosempleados;
         $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
 
@@ -207,7 +206,7 @@ $personal = User::find(Auth::user()->id);
         // $consumos->idmarcamovilidad = $request->input('idmarcamovilidad');
         // $consumos->fechaingreso = $request->input('fechaingreso');
         $consumos->idmarcamovilidad = 7;   //el id 7 el nombre es pendiente
-        $consumos->iddea = $IdProg;
+        $consumos->idprogramacomb = $IdProg;
       
 
         $fechasolACT = Carbon::now();
@@ -247,7 +246,7 @@ $personal = User::find(Auth::user()->id);
         $tipos = DB::table('tipomovilidad')->get();
 
         $areas = DB::table('areas')->get();
-        $programas = DB::table('deas')->get();
+        $programas = DB::table('programacomb')->get();
 
         $marcas = DB::table('marcamovilidad')->get();
        
@@ -305,7 +304,7 @@ $personal = User::find(Auth::user()->id);
 
         $consumos->idarea = $request->input('idarea');
         $consumos->idtipomovilidad = $request->input('idtipomovilidad');
-        $consumos->iddea = $request->input('idprograma');
+        $consumos->idprogramacomb = $request->input('idprograma');
         $consumos->idusuario =$personal->id;
         $consumos->documento = $personalArea->nombrearea . '/' . $nombre;
         $consumos->idmarcamovilidad = $request->input('idmarcamovilidad');
@@ -329,7 +328,7 @@ $personal = User::find(Auth::user()->id);
 
         $consumos->idarea = $request->input('idarea');
         $consumos->idtipomovilidad = $request->input('idtipomovilidad');
-        $consumos->iddea = $request->input('idprograma');
+        $consumos->idprogramacomb = $request->input('idprograma');
         $consumos->idusuario =$personal->id; 
         $consumos->idmarcamovilidad = $request->input('idmarcamovilidad');
         $consumos->fechaingreso = $request->input('fechaingreso');

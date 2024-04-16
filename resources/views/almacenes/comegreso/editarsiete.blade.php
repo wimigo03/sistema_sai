@@ -42,12 +42,14 @@
                     <select name="idprograma" id="idprograma" placeholder="--Seleccionar--"
                         class="form-control form-control-sm select2">
                         <option value="">-</option>
-                        @foreach ($programados as $catprogramatica)
-                        @if ($catprogramatica->id==$comegresos->iddea)
-                        <option value="{{$catprogramatica->id}}" selected>CODIGO: {{$catprogramatica->id}} //NOMBRE: {{$catprogramatica->nombre}} //DESCRIPCION: {{$catprogramatica->descripcion}}</option>
-                        @else
-                        <option value="{{$catprogramatica->id}}">CODIGO: {{$catprogramatica->id}} //NOMBRE: {{$catprogramatica->nombre}} //DESCRIPCION: {{$catprogramatica->descripcion}}</option>
-                        @endif
+                        @foreach ($programados as $area)
+                        @if ($area->idprogramacomb == $comegresos->idprogramacomb)
+                        <option value="{{ $area->idprogramacomb }}" selected>COD:&nbsp;{{ $area->codigoprogr }}  //NOMBR: {{ $area->nombreprograma }} //ID: {{ $area->idprogramacomb }}
+                        </option>
+                    @else
+                        <option value="{{ $area->idprogramacomb }}"> CODIGO:&nbsp;{{ $area->codigoprogr }}  //NOMBRE: {{ $area->nombreprograma }} //ID: {{ $area->idprogramacomb }}
+                        </option>
+                            @endif
                         @endforeach
                     </select>
                 </div>

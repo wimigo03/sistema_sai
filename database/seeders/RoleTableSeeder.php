@@ -14,25 +14,13 @@ class RoleTableSeeder extends Seeder
      */
     public function run()
     {
-         Role::create([
-             'title' => 'Unidad_administrativa_combustible',
-             'short_code' => 'Uadmincombustible',
-             'estado' => '1',
-             'dea_id' => '1'
-         ]);
+        Role::create([
+            'title' => 'Administrator',
+            'short_code' => 'Admin',
+        ]);
 
-          Role::create([
-              'title' => 'Unidad_administrativa_almacen',
-              'short_code' => 'Uadminalmacen',
-              'estado' => '1',
-              'dea_id' => '1'
-          ]);
-
-          Role::create([
-             'title' => 'Unidad_administrativa_transporte',
-             'short_code' => 'Uadmintransporte',
-             'estado' => '1',
-             'dea_id' => '1'
-         ]);
+        Role::create([
+            'title' => 'User',
+        ]);
     }
 }

@@ -5,7 +5,7 @@
 <div class="row font-verdana-bg">
     <div class="col-md-4 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-            <a href="{{url('/upedidoparcial/index')}}">
+            <a href="{{url()->previous()}}">
                 <span class="color-icon-1">
                     &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                 </span>
@@ -26,8 +26,8 @@
     <form method="post" action="{{ route('upedidoparcial.update') }}" id="form">
         @csrf
         {{--@method('PUT')--}}
-        <input type="text" hidden name="idsoluconsumo" value="{{$soluconsumos->idsoluconsumo}}">
         <input type="hidden" name="cominterna3" id="cominterna3">
+        <input type="text" hidden name="idsoluconsumo" value="{{$soluconsumos->idsoluconsumo}}">
    
 
         <div class="form-group row">
@@ -38,7 +38,7 @@
                 </label>
               
                 <textarea name="oficina" onkeyup="convertirAMayusculas(this)" class="form-control form-control-sm font-verdana-bg" 
-                id="oficina" >{{$soluconsumos->oficina}}</textarea>
+                id="referencia" >{{$soluconsumos->oficina}}</textarea>
             
             </div>
                 <div class="col-md-2">
@@ -263,7 +263,7 @@
 
         function validar_formulario(){
             
-            if($("#oficina").val() == ""){
+            if($("#referencia").val() == ""){
                 message_alert("El campo <b>[OFICINA]</b> es un dato obligatorio...");
                 return false;
             }
@@ -275,12 +275,13 @@
             if ($("#cominterna3").val() == "comunicacion") {
                 $("#cominterna3").val('');
                 $("#cominterna").val('');
-             
+                $("#referencia").val('');
+
                 message_alert("El numero de <b>[Control Interno]</b> ya existe en nuestros registros...");
                 return false;
             }
-            if($("#referencia").val() == ""){
-                message_alert("El campo <b>[REFERENCIA]</b> es un dato obligatorio...");
+            if($("#fechasol").val() == ""){
+                message_alert("El campo <b>[OFICINA]</b> es un dato obligatorio...");
                 return false;
             }
            
@@ -317,11 +318,11 @@
 
 
             if($("#tsalida").val() == ""){
-                message_alert("El campo <b>[HORA DE SALIDA]</b> es un dato obligatorio...");
+                message_alert("El campo <b>[CONTROL INTERNO]</b> es un dato obligatorio...");
                 return false;
             }
             if($("#tllegada").val() == ""){
-                message_alert("El campo <b>[HORA DE RETORNO]</b> es un dato obligatorio...");
+                message_alert("El campo <b>[CONTROL INTERNO]</b> es un dato obligatorio...");
                 return false;
             }
 
@@ -331,7 +332,7 @@
             }
 
             if($("#idarea >option:selected").val() == ""){
-                message_alert("El campo de seleccion <b>[AREA]</b> es un dato obligatorio...");
+                message_alert("El campo de seleccion <b>[enc]</b> es un dato obligatorio...");
                 return false;
             }
           
@@ -356,11 +357,13 @@
         
     }
 
+  
+
     function respuesta() {
         var ot_antigua = $("#cominterna").val();
 
         $.ajax({
-            url: "{{ route('upedidoparcial.pregunta7') }}",
+            url: "{{ route('pregunta7') }}",
 
             data: 'ot_antigua=' + ot_antigua,
          

@@ -53,11 +53,12 @@
                 class="form-control form-control-sm select2">
                     <option value="">-</option>
 
-                    @foreach ($programados as $catprogramatica)
-                    @if ($catprogramatica->id==$vales->iddea)
-                    <option value="{{$catprogramatica->id}}" selected>CODIGO: {{$catprogramatica->id}} //NOMBRE: {{$catprogramatica->nombre}} //DESCRIPCION: {{$catprogramatica->descripcion}}</option>
+                    @foreach ($programados as $area)
+
+                    @if ($area->idprogramacomb ==$vales->idprogramacomb)
+                    <option value="{{$area->idprogramacomb }}" selected>COD:&nbsp;&nbsp;{{$area->codigoprogr}}&nbsp;&nbsp;NOMB:&nbsp;&nbsp;{{$area->nombreprograma}}</option>
                     @else
-                    <option value="{{$catprogramatica->id}}">CODIGO: {{$catprogramatica->id}} //NOMBRE: {{$catprogramatica->nombre}} //DESCRIPCION: {{$catprogramatica->descripcion}}</option>
+                    <option value="{{$area->idprogramacomb}}">COD:&nbsp;&nbsp;{{$area->codigoprogr}}&nbsp;&nbsp;NOMB:&nbsp;&nbsp;{{$area->nombreprograma}}</option>
                     @endif
 
                     @endforeach

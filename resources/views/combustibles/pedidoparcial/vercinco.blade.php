@@ -158,10 +158,10 @@
         <option value="">-</option>
         @foreach ($programas as $catprogramatica)
 
-        @if ($catprogramatica->id==$compras->iddea)
-        <option value="{{$catprogramatica->id}}" selected>COD: {{$catprogramatica->id}} //NOMB: {{$catprogramatica->nombre}} //DESCRIPCION: {{$catprogramatica->descripcion}}</option>
+        @if ($catprogramatica->idprogramacomb==$compras->idprogramacomb)
+        <option value="{{$catprogramatica->idprogramacomb}}" selected>CODIGO: {{$catprogramatica->idprogramacomb}} //NOMBRE: {{$catprogramatica->nombreprograma}}</option>
         @else
-        <option value="{{$catprogramatica->id}}">CODIGO: {{$catprogramatica->id}} //NOMBRE: {{$catprogramatica->nombre}} //DESCRIPCION: {{$catprogramatica->descripcion}}</option>
+        <option value="{{$catprogramatica->idprogramacomb}}">CODIGO: {{$catprogramatica->idprogramacomb}} //NOMBRE: {{$catprogramatica->nombreprograma}}</option>
         @endif
         @endforeach
     </select>

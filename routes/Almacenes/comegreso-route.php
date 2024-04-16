@@ -11,7 +11,6 @@ Route::prefix('comegreso')->name('comegreso.')->middleware(['auth'])->group(func
    Route::get('editar/{id}', 'Almacen\Comprobante\ComegresoController@editar')->name('editar');
    Route::get('editarcinco/{id}', 'Almacen\Comprobante\ComegresoController@editarcinco')->name('editarcinco');
    Route::get('editarseis/{id}', 'Almacen\Comprobante\ComegresoController@editarseis')->name('editarseis');
-   Route::get('editarsiete/{id}', 'Almacen\Comprobante\ComegresoController@editarsiete')->name('editarsiete');
 
    Route::get('editardos/{id}', 'Almacen\Comprobante\ComegresoController@editardos')->name('editardos');
 

@@ -1248,7 +1248,7 @@ class DetalleCompraCombController extends Controller
 
         $IdareaCompra = $compra->idarea;
         $idProov = $compra->idproveedor;
-        $idPro = $compra->iddea;
+        $idPro = $compra->idprogramacomb;
         $idCat = $compra->idcatprogramaticacomb;
         $IdCompra = $compra->idcompracomb;
 
@@ -1294,7 +1294,7 @@ class DetalleCompraCombController extends Controller
 
         $comingreso->idarea = $IdareaCompra;
         $comingreso->idproveedor = $idProov;
-        $comingreso->iddea = $idPro;
+        $comingreso->idprogramacomb = $idPro;
         $comingreso->idcatprogramaticacomb = $idCat;
         $comingreso->idcompracomb = $IdCompra;
         $comingreso->idtipocomin = 1;  //estado 1 balance inial

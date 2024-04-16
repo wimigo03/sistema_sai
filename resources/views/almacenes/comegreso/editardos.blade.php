@@ -37,17 +37,19 @@
             <div class="form-group row">
                 <div class="col-md-7">
                     <label for="idprograma" class="d-inline font-verdana-bg">
-                        <b>Ubicacion Fisica</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
+                        <b>Programa</b>&nbsp;<span style="font-size:10px; color: red;">validado</span>
                     </label>
                     <select name="idprograma" id="idprograma" placeholder="--Seleccionar--"
                         class="form-control form-control-sm select2">
                         <option value="">-</option>
-                        @foreach ($programados as $catprogramatica)
-                        @if ($catprogramatica->id==$comegresos->iddea)
-                        <option value="{{$catprogramatica->id}}" selected>CODIGO: {{$catprogramatica->id}} //NOMBRE: {{$catprogramatica->nombre}} //DESCRIPCION: {{$catprogramatica->descripcion}}</option>
-                        @else
-                        <option value="{{$catprogramatica->id}}">CODIGO: {{$catprogramatica->id}} //NOMBRE: {{$catprogramatica->nombre}} //DESCRIPCION: {{$catprogramatica->descripcion}}</option>
-                        @endif
+                        @foreach ($programados as $area)
+                            @if ($area->idprogramacomb == $comegresos->idprogramacomb)
+                                <option value="{{ $area->idprogramacomb }}" selected>Nombre:&nbsp;{{ $area->codigoprogr }}&nbsp;{{ $area->nombreprograma }}&nbsp;{{ $area->idprogramacomb }}
+                                </option>
+                            @else
+                                <option value="{{ $area->idprogramacomb }}"> Nombre:&nbsp;{{ $area->codigoprogr }}&nbsp;{{ $area->nombreprograma }}&nbsp;{{ $area->idprogramacomb }}
+                                </option>
+                            @endif
                         @endforeach
                     </select>
                 </div>
@@ -142,7 +144,7 @@
                     <select name="idempleado" id="idempleado" placeholder="--Seleccionar--"
                         class="form-control form-control-sm select2">
                         <option value="">-</option>
-                        @foreach ($empleadodos as $area)
+                        @foreach ($empleados as $area)
                             @if ($area->idemp == $comegresos->idusuario)
                             <option value="{{$area->idemp }}" selected>COD:&nbsp;&nbsp;{{$area->idemp }}&nbsp;&nbsp;NOMB:&nbsp;&nbsp;{{$area->nombres }}&nbsp;{{$area->ap_pat }}&nbsp;{{$area->ap_mat }}&nbsp;Cargo: {{$area->nombrecargo }}&nbsp;Area: {{$area->nombrearea }}</option>
                             @else
@@ -158,20 +160,19 @@
                     </label>
                     <textarea name="detalle" cols="1" rows="3" class="form-control form-control-sm font-verdana-bg" id="detalle" onkeyup="convertirAMayusculas(this)">{{$comegresos->detallecomegreso}}</textarea>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <label for="idproveedor" class="d-inline font-verdana-bg">
                         <b>Proveedor</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                     </label>
                     <select  name="idproveedor" id="idproveedor" placeholder="--Seleccionar--"
                         class="form-control form-control-sm select2">
                         <option value="">-</option>
-                        @foreach ($proveedordos as $proveedor)
-                        @if ($proveedor->idproveedor==$comegresos->idproveedor)
-                        <option value="{{$proveedor->idproveedor}}" selected>COD: {{$proveedor->idproveedor}} //NOMB: {{$proveedor->nombreproveedor}} //DUEÑO: {{$proveedor->representanteproveedor}} //Dir: {{$proveedor->direccionproveedor}} //Tel: {{$proveedor->telefonoproveedor}}
-                        </option>
-                        @else
-                        <option value="{{$proveedor->idproveedor}}">CODIGO: {{$proveedor->idproveedor}} //NOMBRE: {{$proveedor->nombreproveedor}} //DUEÑO: {{$proveedor->representanteproveedor}} //DIRECCION: {{$proveedor->direccionproveedor}} //TELEFONO: {{$proveedor->telefonoproveedor}}</option>
-                        @endif
+                        @foreach ($proveedores as $area)
+                            @if ($area->idproveedor == $comegresos->idproveedor)
+                                <option value="{{ $area->idproveedor }}" selected>{{ $area->nombreproveedor }}</option>
+                            @else
+                                <option value="{{ $area->idproveedor }}">{{ $area->nombreproveedor }}</option>
+                            @endif
                         @endforeach
                     </select>
                 </div>
@@ -180,10 +181,10 @@
             </div>
             <div class="form-group row">
                 <div class="col-md-12 text-right">
-                    {{-- <button class="btn color-icon-2 font-verdana-bg" type="button" onclick="save();">
+                    <button class="btn color-icon-2 font-verdana-bg" type="button" onclick="save();">
                         <i class="fa-solid fa-paper-plane"></i>
                         &nbsp;Actualizar
-                    </button> --}}
+                    </button>
                     <button class="btn btn-danger font-verdana-bg" type="button">
 
                         <a href="{{ url('/comegreso/index') }}" style="color:white">Cancelar</a>

@@ -6,8 +6,8 @@
         <div class="card-header">MODULO PERMISOS</div>
 
         <div class="card-body table-responsive">
-    
-            <a href="{{ route('permissions.create') }}" class="btn btn-outline-primary">Agregar nuevo permiso</a>
+    )
+            <a href="{{ route('admin.permissions.create') }}" class="btn btn-outline-primary">Agregar nuevo permiso</a>
 
 
             <br /><br />
@@ -28,9 +28,9 @@
                             <td>{{$permission->name}}</td>
                             <td>
   
-                                        <a href="{{ route('permissions.edit', $permission->id) }}" class="btn btn-sm btn-outline-warning">Editar</a>
+                                        <a href="{{ route('admin.permissions.edit', $permission->id) }}" class="btn btn-sm btn-outline-warning">Editar</a>
  
-                                <form action="{{ route('permissions.destroy', $permission->id) }}" class="d-inline-block" method="post">
+                                <form action="{{ route('admin.permissions.destroy', $permission->id) }}" class="d-inline-block" method="post">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" onclick="return confirm('Esta Ud. seguro?')" class="btn btn-sm btn-outline-danger">Borrar</button>

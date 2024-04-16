@@ -6,7 +6,7 @@
         <div class="card-header">{{ __('Agregar nuevo permiso') }}</div>
 
         <div class="card-body">
-            <form method="POST" action="{{ route('permissions.store') }}">
+            <form method="POST" action="{{ route('admin.permissions.store') }}">
                 @csrf
                 <div class="form-group row">
                     <label for="name" class="required col-md-4 col-form-label text-md-right">{{ __('Nombre') }}</label>

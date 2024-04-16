@@ -22,7 +22,7 @@ class PermissionController extends Controller
         abort_if(Gate::denies('permissions_access'), Response::HTTP_FORBIDDEN, 'Forbidden');
 
         $permissions = Permission::paginate(5)->appends($request->query());;
-        return view('admin.permissions.index',compact('permissions'));
+        return view('permissions.index',compact('permissions'));
     }
 
     /**
@@ -47,7 +47,7 @@ class PermissionController extends Controller
     {
         Permission::create($request->validated());
 
-        return redirect()->route('permissions.index')->with('status-success','New Permission Created');
+        return redirect()->route('admin.permissions.index')->with('status-success','New Permission Created');
     }
 
 
@@ -75,7 +75,7 @@ class PermissionController extends Controller
     {
         $permission->update($request->validated());
 
-        return redirect()->route('permissions.index')->with('status-success','Permission Updated');
+        return redirect()->route('admin.permissions.index')->with('status-success','Permission Updated');
     }
 
     /**

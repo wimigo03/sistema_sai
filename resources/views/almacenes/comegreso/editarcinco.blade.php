@@ -37,17 +37,19 @@
             <div class="form-group row">
                 <div class="col-md-7">
                     <label for="idprograma" class="d-inline font-verdana-bg">
-                        <b>Ubicacion Fisica</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                        <b>Programa</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                     </label>
                     <select name="idprograma" id="idprograma" placeholder="--Seleccionar--"
                         class="form-control form-control-sm select2">
                         <option value="">-</option>
-                        @foreach ($programauno as $catprogramatica)
-                        @if ($catprogramatica->id==$comegresos->iddea)
-                        <option value="{{$catprogramatica->id}}" selected>CODIGO: {{$catprogramatica->id}} //NOMBRE: {{$catprogramatica->nombre}} //DESCRIPCION: {{$catprogramatica->descripcion}}</option>
-                        @else
-                        <option value="{{$catprogramatica->id}}">CODIGO: {{$catprogramatica->id}} //NOMBRE: {{$catprogramatica->nombre}} //DESCRIPCION: {{$catprogramatica->descripcion}}</option>
-                        @endif
+                        @foreach ($programacinco as $area)
+                            @if ($area->idprogramacomb == $comegresos->idprogramacomb)
+                                <option value="{{ $area->idprogramacomb }}" selected>COD:&nbsp;{{ $area->codigoprogr }}  //NOMBR: {{ $area->nombreprograma }} //ID: {{ $area->idprogramacomb }}
+                                </option>
+                            @else
+                                <option value="{{ $area->idprogramacomb }}"> CODIGO:&nbsp;{{ $area->codigoprogr }}  //NOMBRE: {{ $area->nombreprograma }} //ID: {{ $area->idprogramacomb }}
+                                </option>
+                            @endif
                         @endforeach
                     </select>
                 </div>

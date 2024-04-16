@@ -155,13 +155,14 @@
                 <select  name="idprograma" id="idprograma" placeholder="--Seleccionar--" 
                 class="form-control form-control-sm select2">
                     <option value="">-</option>
-                    @foreach ($programas as $catprogramatica)
+                    @foreach ($programas as $local)
 
-                    @if ($catprogramatica->id==$comingresos->iddea)
-                    <option value="{{$catprogramatica->id}}" selected>CODIGO: {{$catprogramatica->id}} //NOMBRE: {{$catprogramatica->nombre}} //DESCRIPCION: {{$catprogramatica->descripcion}}</option>
-                    @else
-                    <option value="{{$catprogramatica->id}}">CODIGO: {{$catprogramatica->id}} //NOMBRE: {{$catprogramatica->nombre}} //DESCRIPCION: {{$catprogramatica->descripcion}}</option>
-                    @endif
+                                @if ($local->idprogramacomb==$comingresos->idprogramacomb)
+                                <option value="{{$local->idprogramacomb}}" selected>{{$local->nombreprograma}} //DIRECCION: {{$local->direccion}}
+                                </option>
+                                @else
+                                <option value="{{$local->idprogramacomb}}">{{$local->nombreprograma}} //DIRECCION: {{$local->direccion}}</option>
+                                @endif
 
                                 @endforeach
                 </select>
