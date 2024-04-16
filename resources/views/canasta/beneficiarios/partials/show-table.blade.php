@@ -1,6 +1,6 @@
 <div class="body body-table">
     @if (isset($historial_bajas) && count($historial_bajas) > 0)
-        <div class="form-group row font-verdana-bg">
+        <div class="form-group row font-verdana-12">
             <div class="col-md-12 text-center">
                 <b>BAJAS</b>
             </div>
@@ -33,7 +33,7 @@
         </div>
     @endif
     @if (isset($historial_mod) && count($historial_mod) > 0)
-        <div class="form-group row font-verdana-bg">
+        <div class="form-group row font-verdana-12">
             <div class="col-md-12 text-center">
                 <b>MODIFICACIONES</b>
             </div>

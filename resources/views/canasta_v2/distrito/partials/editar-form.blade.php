@@ -1,10 +1,10 @@
 <form action="#" method="post" id="form">
     @csrf
     <input type="hidden" name="distrito_id" value="{{ $distrito->id }}">
-    <div class="form-group row font-verdana-bg">
+    <div class="form-group row font-verdana-12">
         <div class="col-md-4 pr-1">
             <label for="nombre" class="d-inline">Nombre</label>
-            <input type="text" name="nombre" id="nombre" value="{{ $distrito->nombre }}" oninput="this.value = this.value.toUpperCase()" class="form-control form-control-sm font-verdana-bg intro {{ $errors->has('nombre') ? ' is-invalid' : '' }}">
+            <input type="text" name="nombre" id="nombre" value="{{ $distrito->nombre }}" oninput="this.value = this.value.toUpperCase()" class="form-control form-control-sm font-verdana-12 intro {{ $errors->has('nombre') ? ' is-invalid' : '' }}">
         </div>
         <div class="col-md-3 pr-1 pl-1">
             <label for="dea" class="d-inline">DEA</label>

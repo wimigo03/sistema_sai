@@ -51,7 +51,7 @@
                         @endforeach
                     </tbody>
                     <tfoot>
-                        <tr class="font-verdana">
+                        <tr class="font-verdana-11">
                             <td colspan="12">
                                 {{ $entrega->appends(Request::all())->links() }}
                                 <p class="text-muted">Mostrando

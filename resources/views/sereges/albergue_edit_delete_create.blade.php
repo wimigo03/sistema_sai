@@ -24,7 +24,7 @@
                     </div>
 
                     <div class="col-md-5 pl-1">
-                        <label for="tipo" class="d-inline font-verdana-bg">
+                        <label for="tipo" class="d-inline font-verdana-12">
                             <b>Tipo:</b>
                         </label>
 
@@ -99,7 +99,7 @@
 
 
                     <div class="col-md-5 pl-1">
-                        <label for="tipo" class="d-inline font-verdana-bg">
+                        <label for="tipo" class="d-inline font-verdana-12">
                             <b>Tipo:</b>
                         </label>
 

@@ -2,7 +2,7 @@
     <div class="col-md-12 table-responsive">
         <table class="table display table-bordered responsive" style="width:100%;">
             <thead>
-                <tr class="font-verdana">
+                <tr class="font-verdana-11">
                     <td class="text-center p-1"><b>CODIGO</b></td>
                     <td class="text-left p-1"><b>NOMBRES</b></td>
                     <td class="text-left p-1"><b>AP_PAT</b></td>
@@ -22,7 +22,7 @@
             </thead>
             <tbody>
                 @foreach ($beneficiarios as $datos)
-                    <tr class="font-verdana">
+                    <tr class="font-verdana-11">
                         <td class="text-center p-1">{{ $datos->id }}</td>
                         <td class="text-left p-1">{{ $datos->nombres }}</td>
                         <td class="text-left p-1">{{ $datos->ap }}</td>
@@ -58,7 +58,7 @@
                 @endforeach
             </tbody>
             <tfoot>
-                <tr class="font-verdana">
+                <tr class="font-verdana-11">
                     <td colspan="12">
                         {{ $beneficiarios->appends(Request::all())->links() }}
                         <p class="text-muted">Mostrando

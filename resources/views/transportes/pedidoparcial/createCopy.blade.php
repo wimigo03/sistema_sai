@@ -7,7 +7,7 @@
     </div>
 @endif
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-4 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
             <a href="{{url()->previous()}}">
@@ -33,38 +33,38 @@
         <div class="form-group row">
 
             <div class="col-md-5">
-                <label for="oficina" class="d-inline font-verdana-bg">
+                <label for="oficina" class="d-inline font-verdana-12">
                     <b>Oficina </b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="oficina" 
                 value="{{request('oficina')}}" 
-                class="form-control form-control-sm font-verdana-bg" 
+                class="form-control form-control-sm font-verdana-12" 
                 id="oficina">
             </div>
 
             <div class="col-md-4">
-                <label for="cominterna" class="d-inline font-verdana-bg">
+                <label for="cominterna" class="d-inline font-verdana-12">
                     <b>Control Interno</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="cominterna" 
                 value="{{request('cominterna')}}" 
-                class="form-control form-control-sm font-verdana-bg" 
+                class="form-control form-control-sm font-verdana-12" 
                 id="cominterna" onkeypress="return valideNumber(event);" onchange="myFunction()" >
             </div>
 
             
             <div class="col-md-2">
-                <label for="fechasol" class="d-inline font-verdana-bg">
+                <label for="fechasol" class="d-inline font-verdana-12">
                     <b> fechasol</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="fechasol" placeholder="dd/mm/aaaa"
                 value="{{request('fechasol')}}" 
-                class="form-control form-control-sm font-verdana-bg" 
+                class="form-control form-control-sm font-verdana-12" 
                 id="fechasol" data-language="es" autocomplete="off" >
             </div>
 
             <div class="col-md-5">
-                <label for="dirigidoa" class="d-inline font-verdana-bg">
+                <label for="dirigidoa" class="d-inline font-verdana-12">
                     <b>Dirigido A:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="dirigidoa" id="dirigidoa" placeholder="--Seleccionar--" 
@@ -77,7 +77,7 @@
             </div>
 
             <div class="col-md-4">
-                <label for="viauno" class="d-inline font-verdana-bg">
+                <label for="viauno" class="d-inline font-verdana-12">
                     <b>VIA:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="viauno" id="viauno" placeholder="--Seleccionar--" 
@@ -93,33 +93,33 @@
 
 
             <div class="col-md-2">
-                <label for="referencia" class="d-inline font-verdana-bg">
+                <label for="referencia" class="d-inline font-verdana-12">
                     <b> referencia</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="referencia" 
                 value="{{request('referencia')}}" 
-                class="form-control form-control-sm font-verdana-bg" 
+                class="form-control form-control-sm font-verdana-12" 
                 id="referencia" >
             </div>
 
 
             <div class="col-md-3">
-                <label for="fechasalida" class="d-inline font-verdana-bg">
+                <label for="fechasalida" class="d-inline font-verdana-12">
                     <b> fechasalida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="fechasalida" placeholder="dd/mm/aaaa"
                 value="{{request('fechasalida')}}" 
-                class="form-control form-control-sm font-verdana-bg" 
+                class="form-control form-control-sm font-verdana-12" 
                 id="fechasalida" data-language="es" autocomplete="off" >
             </div>
 
             <div class="col-md-3">
-                <label for="fecharetorno" class="d-inline font-verdana-bg" cols="2" rows="3">
+                <label for="fecharetorno" class="d-inline font-verdana-12" cols="2" rows="3">
                     <b> fecharetorno</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="fecharetorno" placeholder="dd/mm/aaaa"
                 value="{{request('fecharetorno')}}" 
-                class="form-control form-control-sm font-verdana-bg" 
+                class="form-control form-control-sm font-verdana-12" 
                 id="fecharetorno" data-language="es" autocomplete="off" >
             </div>
 
@@ -128,19 +128,19 @@
 
 
             <div class="col-md-6">
-                <label for="detallesouconsumo" class="d-inline font-verdana-bg">
+                <label for="detallesouconsumo" class="d-inline font-verdana-12">
                     <b>detallesouconsumo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
 
                 <textarea name="detallesouconsumo" cols="1" rows="5" 
-                class="form-control form-control-sm font-verdana-bg" 
+                class="form-control form-control-sm font-verdana-12" 
                 id="detallesouconsumo">{{request('detallesouconsumo')}}</textarea>
             </div>
 
 
             
             <div class="col-md-3">
-                <label for="tsalida" class="d-inline font-verdana-bg">
+                <label for="tsalida" class="d-inline font-verdana-12">
                     <b> tsalida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select type="text" id="tsalida" name="tsalida" placeholder="--Seleccionar--" 
@@ -154,7 +154,7 @@
             </div>
 
             <div class="col-md-3">
-                <label for="tllegada" class="d-inline font-verdana-bg">
+                <label for="tllegada" class="d-inline font-verdana-12">
                     <b> t llegada</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select type="text" name="tllegada"  id="tllegada"  placeholder="--Seleccionar--" 
@@ -169,7 +169,7 @@
 
 
             <div class="col-md-4">
-                <label for="idlocalidad" class="d-inline font-verdana-bg">
+                <label for="idlocalidad" class="d-inline font-verdana-12">
                     <b>localidad::</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="idlocalidad" id="idlocalidad" placeholder="--Seleccionar--" 
@@ -182,7 +182,7 @@
             </div>
             
             <div class="col-md-7">
-                <label for="idarea" class="d-inline font-verdana-bg">
+                <label for="idarea" class="d-inline font-verdana-12">
                     <b>Area</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
 
@@ -201,11 +201,11 @@
         </div>
         <div class="form-group row">
             <div class="col-md-12 text-right">
-                <button class="btn color-icon-2 font-verdana-bg" type="button" onclick="save();">
+                <button class="btn color-icon-2 font-verdana-12" type="button" onclick="save();">
                     <i class="fa-solid fa-paper-plane"></i>
                     &nbsp;Registrar
                 </button>
-                <button class="btn btn-danger font-verdana-bg" type="button" >
+                <button class="btn btn-danger font-verdana-12" type="button" >
 
                     <a href="{{url()->previous()}}" style="color:white">Cancelar</a>
                 </button>

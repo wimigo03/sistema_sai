@@ -17,9 +17,28 @@
                                     <option value="2030" @if ($paquetes->gestion == '2030') selected @endif>2030</option>
                                 </select>
         </div>
-        <div class="col-md-9 pl-1">
-            <label for="nombre" class="d-inline">Items</label>
-            <textarea type="text" rows="10" class="form-control form-control-sm font-verdana-bg" id="items" name="items" required>{{ $paquetes->items }}</textarea>
+        <div class="col-md-5 pl-1">
+            <label for="nombre" class="d-inline">Nombre</label>
+            <input type="text" name="nombre" id="nombre" value="{{ $barrio->nombre}}" oninput="this.value = this.value.toUpperCase()" class="form-control form-control-sm font-verdana-12 intro {{ $errors->has('nombre') ? ' is-invalid' : '' }}">
+        </div>
+    </div>
+    <div class="form-group row font-verdana-12">
+        <div class="col-md-3 pr-1">
+            <label for="dea" class="d-inline">DEA</label>
+            <input type="text" value="{{ Auth::user()->dea->nombre }}" class="form-control form-control-sm font-verdana-12" disabled>
+        </div>
+        <div class="col-md-5 pl-1">
+            <label for="distrito" class="d-inline">Distrito</label>
+            <select name="distrito" id="distrito" class="form-control form-control-sm select2">
+                @foreach ($distritos as $distrito)
+                    <option value="{{ $distrito->id }}"
+                        @if($distrito->id == request('distrito') || (isset($barrio) && $barrio->distrito_id == $distrito->id))
+                            selected
+                        @endif>
+                        {{ $distrito->nombre }}
+                    </option>
+                @endforeach
+            </select>
         </div>
     </div>
 

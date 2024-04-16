@@ -2,7 +2,7 @@
 @section('content')
     @include('layouts.message_alert')
     <br>
-    <div class="row font-verdana-bg">
+    <div class="row font-verdana-12">
         <div class="col-md-4 titulo">
             <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
                 <a href="{{ url()->previous() }}">
@@ -24,80 +24,80 @@
         <input type="text" hidden name="idsoluconsumo" value="{{ $soluconsumos->idsoluconsumo }}">
         <div class="form-group row">
             <div class="col-md-3">
-                <label for="oficina" class="d-inline font-verdana-bg">
+                <label for="oficina" class="d-inline font-verdana-12">
                     <b>oficina</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <textarea disabled name="oficina" class="form-control form-control-sm font-verdana-bg" id="oficina">{{ $soluconsumos->oficina }}</textarea>
+                <textarea disabled name="oficina" class="form-control form-control-sm font-verdana-12" id="oficina">{{ $soluconsumos->oficina }}</textarea>
             </div>
             <div class="col-md-3">
-                <label for="cominterna" class="d-inline font-verdana-bg">
+                <label for="cominterna" class="d-inline font-verdana-12">
                     <b>coninterna</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <textarea disabled name="cominterna" class="form-control form-control-sm font-verdana-bg" id="cominterna">{{ $soluconsumos->cominterna }}</textarea>
+                <textarea disabled name="cominterna" class="form-control form-control-sm font-verdana-12" id="cominterna">{{ $soluconsumos->cominterna }}</textarea>
             </div>
             <div class="col-md-2">
-                <label for="fechasol" class="d-inline font-verdana-bg">
+                <label for="fechasol" class="d-inline font-verdana-12">
                     <b> fechasol</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" disabled name="fechasol" id="fechasol" placeholder="dd/mm/aaaa" data-language="es"
                     class="form-control" value="{{ $soluconsumos->fechasol }}">
             </div>
             <div class="col-md-4">
-                <label for="referencia" class="d-inline font-verdana-bg">
+                <label for="referencia" class="d-inline font-verdana-12">
                     <b>referencia</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <textarea disabled name="referencia" class="form-control form-control-sm font-verdana-bg" id="referencia">{{ $soluconsumos->referencia }}</textarea>
+                <textarea disabled name="referencia" class="form-control form-control-sm font-verdana-12" id="referencia">{{ $soluconsumos->referencia }}</textarea>
             </div>
             <div class="col-md-4">
-                <label for="dirigidoa" class="d-inline font-verdana-bg">
+                <label for="dirigidoa" class="d-inline font-verdana-12">
                     <b>Dirigido a:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
 
                 <input type="text" disabled name="dirigidoa" value="{{ $soluconsumos->dirnombre }} "
-                    class="form-control form-control-sm font-verdana-bg" id="dirigidoa" data-language="es"
+                    class="form-control form-control-sm font-verdana-12" id="dirigidoa" data-language="es"
                     autocomplete="off">
 
             </div>
 
             <div class="col-md-4">
-                <label for="viauno" class="d-inline font-verdana-bg">
+                <label for="viauno" class="d-inline font-verdana-12">
                     <b>Via:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" disabled name="dirigidoa" value="{{ $soluconsumos->viaunonombre }} "
-                    class="form-control form-control-sm font-verdana-bg" id="dirigidoa" data-language="es"
+                    class="form-control form-control-sm font-verdana-12" id="dirigidoa" data-language="es"
                     autocomplete="off">
             </div>
             <div class="col-md-4">
-                <label for="viados" class="d-inline font-verdana-bg">
+                <label for="viados" class="d-inline font-verdana-12">
                     <b>Via:</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" disabled name="dirigidoa" value="{{ $soluconsumos->viadosnombre }} "
-                    class="form-control form-control-sm font-verdana-bg" id="dirigidoa" data-language="es"
+                    class="form-control form-control-sm font-verdana-12" id="dirigidoa" data-language="es"
                     autocomplete="off">
             </div>
             <div class="col-md-3">
-                <label for="fechasalida" class="d-inline font-verdana-bg">
+                <label for="fechasalida" class="d-inline font-verdana-12">
                     <b> fechasalida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" disabled name="fechasalida" id="fechasalida" placeholder="dd/mm/aaaa"
                     data-language="es" class="form-control" value="{{ $soluconsumos->fechasalida }}">
             </div>
             <div class="col-md-3">
-                <label for="fecharetorno" class="d-inline font-verdana-bg">
+                <label for="fecharetorno" class="d-inline font-verdana-12">
                     <b> fecharetorno</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" disabled name="fecharetorno" id="fecharetorno" placeholder="dd/mm/aaaa"
                     data-language="es" class="form-control" value="{{ $soluconsumos->fecharetorno }}">
             </div>
             <div class="col-md-6">
-                <label for="detallesouconsumo" class="d-inline font-verdana-bg">
+                <label for="detallesouconsumo" class="d-inline font-verdana-12">
                     <b>detallesouconsumo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <textarea disabled name="detallesouconsumo" cols="1" rows="5"
-                    class="form-control form-control-sm font-verdana-bg" id="detallesouconsumo">{{ $soluconsumos->detallesouconsumo }}</textarea>
+                    class="form-control form-control-sm font-verdana-12" id="detallesouconsumo">{{ $soluconsumos->detallesouconsumo }}</textarea>
             </div>
             <div class="col-md-3">
-                <label for="tsalida" class="d-inline font-verdana-bg">
+                <label for="tsalida" class="d-inline font-verdana-12">
                     <b>tsalida</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select disabled name="tsalida" id="tsalida" placeholder="--Seleccionar--"
@@ -110,7 +110,7 @@
             </div>
 
             <div class="col-md-3">
-                <label for="tllegada" class="d-inline font-verdana-bg">
+                <label for="tllegada" class="d-inline font-verdana-12">
                     <b>tllegada</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select disabled name="tllegada" id="tllegada" placeholder="--Seleccionar--"
@@ -128,7 +128,7 @@
 
 
             <div class="col-md-4">
-                <label for="idlocalidad" class="d-inline font-verdana-bg">
+                <label for="idlocalidad" class="d-inline font-verdana-12">
                     <b>Localidad</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select disabled name="idlocalidad" id="idlocalidad" class="form-control form-control-sm select2">
@@ -146,7 +146,7 @@
             </div>
 
             <div class="col-md-7">
-                <label for="idarea" class="d-inline font-verdana-bg">
+                <label for="idarea" class="d-inline font-verdana-12">
                     <b>idarea</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select disabled name="idarea" id="idarea" class="col-md-10 form-control select2 ">
@@ -167,12 +167,12 @@
                 <div class="form-group row">
                     <div class="col-md-12 text-right">
                         <a href="{{ route('transportes.pedido.aprovar', $soluconsumos->idsoluconsumo) }}">
-                            <button type="button" class="btn btn-success font-verdana-bg">
+                            <button type="button" class="btn btn-success font-verdana-12">
                                 <i class="fa fa-check" aria-hidden="true"></i>&nbsp;Aprobar&nbsp;
                             </button>
                         </a>
                         <a href="{{ route('transportes.pedido.rechazar', $soluconsumos->idsoluconsumo) }}">
-                            <button type="button" class="btn btn-danger font-verdana-bg">
+                            <button type="button" class="btn btn-danger font-verdana-12">
                                 <i class="fa fa-close" aria-hidden="true"></i>&nbsp;Rechazar&nbsp;
                             </button>
                         </a>
@@ -183,14 +183,14 @@
             <div class="col-md-12 text-right">
                 <a href="{{route('transportes.pedido.aprovar',$soluconsumos->idsoluconsumo)}}" target="_blank">
 
-                <button class="btn color-icon-2 font-verdana-bg" type="button" onclick="save();">
+                <button class="btn color-icon-2 font-verdana-12" type="button" onclick="save();">
                     <i class="fa-solid fa-paper-plane"></i>
                     &nbsp;Aprovar
                 </button>
             </a>
             <a href="{{route('transportes.pedido.rechazar',$soluconsumos->idsoluconsumo)}}" target="_blank">
 
-                <button class="btn btn-danger font-verdana-bg" type="button" >
+                <button class="btn btn-danger font-verdana-12" type="button" >
                     <i class="fa-solid fa-paper-plane"></i>
                     &nbsp;Rechazar
                 </button>

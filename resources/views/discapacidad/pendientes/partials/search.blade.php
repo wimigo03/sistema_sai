@@ -9,10 +9,10 @@
         </select>
     </div>
     <div class="col-md-2">
-        <input type="text" name="anho" value="{{request('anho')}}" placeholder="--Gestion--" class="form-control form-control-sm font-verdana-bg" id="anho" onkeypress="return valideNumberSinDecimal(event);">
+        <input type="text" name="anho" value="{{request('anho')}}" placeholder="--Gestion--" class="form-control form-control-sm font-verdana-12" id="anho" onkeypress="return valideNumberSinDecimal(event);">
     </div>
     <div class="col-md-6 text-right">
-        <button class="btn btn-primary font-verdana-bg" type="button" onclick="search();">
+        <button class="btn btn-primary font-verdana-12" type="button" onclick="search();">
             <i class="fa fa-search" aria-hidden="true"></i>
             &nbsp;Buscar Pendientes
         </button>

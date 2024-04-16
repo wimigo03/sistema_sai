@@ -1,7 +1,7 @@
 <form action="#" method="get" id="form">
     <div class="form-group row">
         <div class="col-md-2 pr-1">
-            <input type="text" name="periodo" placeholder="--Periodo--" value="{{request('periodo')}}" class="form-control form-control-sm font-verdana-bg">
+            <input type="text" name="periodo" placeholder="--Periodo--" value="{{request('periodo')}}" class="form-control form-control-sm font-verdana-12">
         </div>
         <div class="col-md-3 pr-1 pl-1">
             <select name="gestion" id="gestion" class="form-control form-control-sm">
@@ -20,7 +20,7 @@
             </select>
         </div>
         <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="nro_entrega" placeholder="--Nro. Entrega--" value="{{request('nro_entrega')}}" class="form-control form-control-sm font-verdana-bg">
+            <input type="text" name="nro_entrega" placeholder="--Nro. Entrega--" value="{{request('nro_entrega')}}" class="form-control form-control-sm font-verdana-12">
         </div>
         <div class="col-md-2 pl-1">
             <select name="estado" id="estado" class="form-control form-control-sm">

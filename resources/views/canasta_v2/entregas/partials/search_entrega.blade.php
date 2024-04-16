@@ -2,19 +2,19 @@
     <div class="form-group row">
 
         <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="nombres" placeholder="-- Nombres --" value="{{request('nombres')}}" class="form-control form-control-sm font-verdana-bg intro">
+            <input type="text" name="nombres" placeholder="-- Nombres --" value="{{request('nombres')}}" class="form-control form-control-sm font-verdana-12 intro">
         </div>
 
         <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="ap" placeholder="-- Ap.Paterno --" value="{{request('ap')}}" class="form-control form-control-sm font-verdana-bg intro">
+            <input type="text" name="ap" placeholder="-- Ap.Paterno --" value="{{request('ap')}}" class="form-control form-control-sm font-verdana-12 intro">
         </div>
 
         <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="am" placeholder="-- Ap.Materno --" value="{{request('am')}}" class="form-control form-control-sm font-verdana-bg intro">
+            <input type="text" name="am" placeholder="-- Ap.Materno --" value="{{request('am')}}" class="form-control form-control-sm font-verdana-12 intro">
         </div>
 
         <div class="col-md-1 pr-1 pl-1">
-            <input type="text" name="ci" placeholder="-- C.i. --" value="{{request('ci')}}" class="form-control form-control-sm font-verdana-bg intro">
+            <input type="text" name="ci" placeholder="-- C.i. --" value="{{request('ci')}}" class="form-control form-control-sm font-verdana-12 intro">
         </div>
 
 

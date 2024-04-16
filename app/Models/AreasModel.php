@@ -20,7 +20,8 @@ class AreasModel extends Model
         'idarea',
         'nombrearea',
         'estadoarea',
-        'idnivel'
+        'idnivel',
+        'alias'
     ];
 
     protected $guarded = [

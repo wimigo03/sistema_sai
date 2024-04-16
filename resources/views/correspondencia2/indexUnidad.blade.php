@@ -3,7 +3,7 @@
 
 
     <br>
-    <div class="row font-verdana-bg">
+    <div class="row font-verdana-12">
 
         <div class="titulo">
             <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">

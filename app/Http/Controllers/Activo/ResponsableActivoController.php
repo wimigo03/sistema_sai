@@ -11,6 +11,7 @@ use App\Models\ActualModel as ModelsActualModel;
 use App\Models\Model_Activos\ActualModel;
 use App\Models\AreasModel;
 use App\Models\EmpleadosModel;
+use App\Models\Model_Activos\AuxiliarModel;
 use App\Models\Model_Activos\UnidadadminModel;
 use App\Models\Model_Activos\Transferencia;
 use Svg\Tag\Rect;
@@ -19,10 +20,68 @@ class ResponsableActivoController extends Controller
 {
     public function index($id)
     {
-        $this->listado($id);
-        $areas = AreasModel::all();
+        $unidad = UnidadadminModel::where('estadouni', 1)->first();
         $empleado = EmpleadosModel::find($id);
-        return view('activo.responsableActivo.index', compact('areas', 'id', 'empleado'));
+        $areas = AreasModel::all();
+        $activos = ActualModel::orderBy('id', 'desc')
+        ->with([
+            'codconts',
+            'ambiente'
+        ])
+        ->where('unidad', $unidad->unidad)
+        ->where('codemp', $id)
+        ->get();
+
+        foreach ($activos as $activo) {
+            $activo->load(['auxiliar' => function ($query) use ($activo) {
+                $query->where('codcont', $activo->codcont)
+                      ->where('codaux', $activo->codaux);
+            }]);
+        }
+
+        return view('activo.responsableActivo.index', compact('unidad', 'activos','empleado','areas'));
+    }
+
+    public function search(Request $request, $id)
+    {
+        $unidad = UnidadadminModel::where('estadouni', 1)->first();
+        $empleado = EmpleadosModel::find($id);
+        $areas = AreasModel::all();
+        $auxiliar = null;
+       if ($request->has('auxiliar') && !empty($request->auxiliar)) {
+           $auxiliar = AuxiliarModel::query()
+               ->where('unidad', $unidad->unidad)
+               ->where('nomaux', 'like', strtoupper($request->auxiliar) . '%')
+               ->first();
+       }
+        $activos = ActualModel::query()
+        ->with([
+            'codconts',
+            'ambiente'
+        ])
+        ->byCodigo($request->codigo)
+        ->byCi($request->ci)
+        ->byIdBien($request->id_bien)
+        ->byEstado($request->estado)
+        ->byAmbiente($request->ambiente)
+        ->byGrupo(strtoupper($request->grupo))
+        ->byAuxiliar($auxiliar)
+        ->byKardex($request->kardex)
+        ->byPreventivo($request->cod_rube)
+        ->where('unidad', $unidad->unidad)
+        ->where('codemp', $id)
+        ->orderBy('id', 'desc')
+        ->get();
+
+        foreach ($activos as $activo) {
+            $activo->load(['auxiliar' => function ($query) use ($activo, $unidad) {
+                $query->where('codcont', $activo->codcont)
+                        ->where('codaux', $activo->codaux)
+                      ->where('unidad', $unidad->unidad);
+            }]);
+        }
+
+        return view('activo.responsableActivo.index', compact('activos', 'unidad','empleado','areas'));
     }
 
 
@@ -38,7 +97,7 @@ class ResponsableActivoController extends Controller
             
         return DataTables::of($data)
             ->addIndexColumn()
-            ->addColumn('btn', 'activo.gestionactivo.btn')
+            ->addColumn('btn', 'activo.responsableActivo.btn')
             ->addColumn('estado_texto', function (ActualModel $activo) {
                 if ($activo->codestado == 1) {
                     return 'Bueno';

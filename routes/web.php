@@ -42,7 +42,10 @@ use App\Http\Controllers\ProdServController;
 use App\Http\Controllers\DetalleCompraController;*/
 use App\Http\Controllers\Activo\ActivoArchivoController;
 use App\Http\Controllers\Activo\ActualController;
+use App\Http\Controllers\Activo\AdeudoController;
 use App\Http\Controllers\Activo\UbicacionController;
+use App\Http\Controllers\Activo\FormularioController;
+use App\Http\Controllers\Activo\FormularioActivoController;
 
 use App\Http\Controllers\Activo\ReportesController;
 use App\Http\Controllers\Activo\CodigoBarrasController;
@@ -56,13 +59,14 @@ use App\Http\Controllers\Activo\UnidadAdminController;
 use App\Http\Controllers\Activo\CodcontController;
 use App\Http\Controllers\Activo\GrupocontController;
 use App\Http\Controllers\Activo\CargoController;
+use App\Http\Controllers\Activo\CheckListController;
 use App\Http\Controllers\Activo\FiltrosController;
 use App\Http\Controllers\Activo\ResponsableActivoController;
 use App\Http\Controllers\Activo\ResponsableArchivoController;
 use App\Http\Controllers\Activo\ResponsableController;
 use App\Http\Controllers\Activo\ResponsableImagenController;
 use App\Http\Controllers\Activo\UbicacionesController;
-
+use App\Http\Controllers\Activo\VehiculoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -354,6 +358,7 @@ Route::get('activosFijos/activos', [ActivosController::class,'index'])->name('ac
 
     // Activos del responsable
     Route::get('Activo/responsable/index/{id}/activo', [ResponsableActivoController::class, 'index'])->name('activo.responsable.activo.index')->middleware('can:oficina_access');
+    Route::get('Activo/responsable/search/{id}/activo', [ResponsableActivoController::class, 'search'])->name('activo.responsable.activo.search')->middleware('can:oficina_access');
     Route::get('Activo/responsable/listado/{id}/activo', [ResponsableActivoController::class, 'listado'])->name('activo.responsable.activo.listado')->middleware('can:oficina_access');
     Route::POST('Activo/responsable/update/activo', [ResponsableActivoController::class, 'update'])->name('activo.responsable.activo.update')->middleware('can:oficina_access');
     // Archivos del responsable
@@ -434,6 +439,7 @@ Route::get('activosFijos/activos', [ActivosController::class,'index'])->name('ac
 
 
     Route::get('Activo/gestionactivo/index', [ActualController::class, 'index'])->name('activo.gestionactivo.index')->middleware('can:actual_access');
+    Route::get('Activo/gestionactivo/search', [ActualController::class, 'search'])->name('activo.gestionactivo.search')->middleware('can:actual_access');
     Route::get('Activo/gestionactivo/list', [ActualController::class, 'listado'])->name('activo.gestionactivo.list')->middleware('can:actual_access');
     Route::get('Activo/gestionactivo/{id}/edit', [ActualController::class, 'editar'])->name('activo.gestionactivo.edit')->middleware('can:actual_access');
     Route::get('Activo/gestionactivo/{id}/show', [ActualController::class, 'show'])->name('activo.gestionactivo.show')->middleware('can:actual_access');
@@ -445,8 +451,51 @@ Route::get('activosFijos/activos', [ActivosController::class,'index'])->name('ac
     Route::get('/gestionactivo/getResponsables', [ActualController::class, 'getResponsables'])->name('activo.gestionactivo.getResponsables');
     Route::get('/gestionactivo/getCargo', [ActualController::class, 'getCargo'])->name('activo.gestionactivo.getCargo');
 
+    // VEHICULO
+    Route::get('Activo/vehiculo/index', [VehiculoController::class, 'index'])->name('activo.vehiculo.index')->middleware('can:actual_access');
+    Route::get('Activo/vehiculo/search', [VehiculoController::class, 'search'])->name('activo.vehiculo.search')->middleware('can:actual_access');
+    Route::get('Activo/vehiculo/list', [VehiculoController::class, 'listado'])->name('activo.vehiculo.list')->middleware('can:actual_access');
+    Route::get('Activo/vehiculo/{id}/edit', [VehiculoController::class, 'editar'])->name('activo.vehiculo.edit')->middleware('can:actual_access');
+    Route::get('Activo/vehiculo/{id}/show', [VehiculoController::class, 'show'])->name('activo.vehiculo.show')->middleware('can:actual_access');
+    Route::POST('Activo/vehiculo/{id}/update', [VehiculoController::class, 'update'])->name('activo.vehiculo.update')->middleware('can:actual_access');
+    Route::get('Activo/vehiculo/create', [VehiculoController::class, 'create'])->name('activo.vehiculo.create')->middleware('can:actual_access');
+    Route::POST('Activo/vehiculo\store', [VehiculoController::class, 'store'])->name('activo.vehiculo.store')->middleware('can:actual_access');
+    Route::get('/Activo/vehiculo/getCodigo', [VehiculoController::class, 'getCodigo'])->name('activo.vehiculo.getCodigo')->middleware('can:actual_access');
+
+    // CHECKLIST
+    Route::get('Activo/index/{id}/checklist', [CheckListController::class, 'index'])->name('vehiculo.checklist.index')->middleware('can:oficina_access');
+    Route::get('Activo/listado/{id}/checklist', [CheckListController::class, 'listado'])->name('vehiculo.checklist.listado')->middleware('can:oficina_access');
+    Route::POST('Activo/store/checklist', [CheckListController::class, 'store'])->name('vehiculo.checklist.store')->middleware('can:oficina_access');
+    Route::POST('Activo/update/{id}/checklist', [CheckListController::class, 'update'])->name('vehiculo.checklist.update')->middleware('can:oficina_access');
+
+    // NO ADEUDO
+    Route::get('Activo/adeudo/index', [AdeudoController::class, 'index'])->name('activo.adeudo.index')->middleware('can:actual_access');
+    Route::get('Activo/adeudo/search', [AdeudoController::class, 'search'])->name('activo.adeudo.search')->middleware('can:actual_access');
+    Route::get('Activo/adeudo/list', [AdeudoController::class, 'listado'])->name('activo.adeudo.list')->middleware('can:actual_access');
+    Route::get('Activo/adeudo/{id}/edit', [AdeudoController::class, 'editar'])->name('activo.adeudo.edit')->middleware('can:actual_access');
+    Route::get('Activo/adeudo/{id}/show', [AdeudoController::class, 'show'])->name('activo.adeudo.show')->middleware('can:actual_access');
+    Route::POST('Activo/adeudo/{id}/update', [AdeudoController::class, 'update'])->name('activo.adeudo.update')->middleware('can:actual_access');
+    Route::get('Activo/adeudo/create', [AdeudoController::class, 'create'])->name('activo.adeudo.create')->middleware('can:actual_access');
+    Route::POST('Activo/adeudo/store', [AdeudoController::class, 'store'])->name('activo.adeudo.store')->middleware('can:actual_access');
+    Route::get('/Activo/adeudo/getCi', [AdeudoController::class, 'getCi'])->name('activo.adeudo.getCi')->middleware('can:actual_access');
 
 
+        // FORMULARIO
+        Route::get('Activo/formulario/index', [FormularioController::class, 'index'])->name('activo.formulario.index')->middleware('can:actual_access');
+        Route::get('Activo/formulario/search', [FormularioController::class, 'search'])->name('activo.formulario.search')->middleware('can:actual_access');
+        Route::get('Activo/formulario/list', [FormularioController::class, 'listado'])->name('activo.formulario.list')->middleware('can:actual_access');
+        Route::get('Activo/formulario/{id}/edit', [FormularioController::class, 'editar'])->name('activo.formulario.edit')->middleware('can:actual_access');
+        Route::get('Activo/formulario/{id}/show', [FormularioController::class, 'show'])->name('activo.formulario.show')->middleware('can:actual_access');
+        Route::POST('Activo/formulario/{id}/update', [FormularioController::class, 'update'])->name('activo.formulario.update')->middleware('can:actual_access');
+        Route::get('Activo/formulario/create', [FormularioController::class, 'create'])->name('activo.formulario.create')->middleware('can:actual_access');
+        Route::POST('Activo/formulario/store', [FormularioController::class, 'store'])->name('activo.formulario.store')->middleware('can:actual_access');
+        Route::get('/Activo/formulario/getCi', [FormularioController::class, 'getEmleadoByCi'])->name('activo.formulario.getCi')->middleware('can:actual_access');
+        // Activos del formulario
+        Route::get('Activo/listado/{id}/formulario', [FormularioActivoController::class, 'listado'])->name('activo.formulario.activo.listado')->middleware('can:oficina_access');
+        Route::POST('Activo/store/formulario', [FormularioActivoController::class, 'store'])->name('activo.formulario.activo.store')->middleware('can:oficina_access');
+        Route::POST('Activo/update/{id}/formulario', [FormularioActivoController::class, 'update'])->name('activo.formulario.activo.update')->middleware('can:oficina_access');
+        Route::POST('Activo/destroy/{id}/formulario', [FormularioActivoController::class, 'destroy'])->name('activo.formulario.activo.destroy')->middleware('can:oficina_access');
+        
     Route::get('/reportes/rep1-pdf', [ReportesController::class, 'reporte1Pdf'])->name('rep1.pdf');
     Route::get('/reportes/rep2-pdf', [ReportesController::class, 'reporte2Pdf'])->name('rep2.pdf');
     Route::get('/reportes/rep3-pdf', [ReportesController::class, 'reporte3Pdf'])->name('rep3.pdf');
@@ -462,6 +511,15 @@ Route::get('activosFijos/activos', [ActivosController::class,'index'])->name('ac
     Route::get('/reportes/rep17-pdf', [ReportesController::class, 'reporte17Pdf'])->name('rep17.pdf');
     Route::get('/reportes/rep18-pdf', [ReportesController::class, 'reporte18Pdf'])->name('rep18.pdf');
 
+
+
+    Route::get('/reportes/asignacion', [ReportesController::class, 'asignacion'])->name('asignacion');
+    Route::get('/reportes/devolucion', [ReportesController::class, 'devolucion'])->name('devolucion');
+    Route::get('/reportes/kardex', [ReportesController::class, 'kardex'])->name('kardex');
+    Route::get('/reportes/certificado/{empleado_id}', [ReportesController::class, 'certificado'])->name('certificado');
+    Route::get('/reportes/formulario/{empleado_id}', [ReportesController::class, 'formulario'])->name('formulario');
+
+
     Route::get('/reportes/rep1-excel', [ReportesController::class, 'reporte1Excel'])->name('rep1.excel');
     Route::get('/reportes/rep5-excel', [ReportesController::class, 'reporte5Excel'])->name('rep5.excel');
     Route::get('/reportes/rep7-excel', [ReportesController::class, 'reporte7Excel'])->name('rep7.excel');
@@ -474,6 +532,7 @@ Route::get('activosFijos/activos', [ActivosController::class,'index'])->name('ac
     Route::get('activo/archivoadjunto/create', [ArchivoAdjuntoController::class, 'create'])->name('activo.archivoadjunto.create');
     Route::post('activo/archivoadjunto', [ArchivoAdjuntoController::class, 'store'])->name('activo.archivoadjunto.store');
     Route::delete('activo/archivoadjunto/{archivo}', [ArchivoAdjuntoController::class, 'destroy'])->name('activo.archivoadjunto.destroy');
+
 
 
 
@@ -1127,7 +1186,6 @@ Route::group(['namespace' => 'App\Http\Controllers\Almacen\Ingreso'], function()
  ->name('almacenes.reporte.store2')->middleware('can:almacen_ingreso_access');
 
  Route::get('almacenes/reporte/solicituddos/{id}', 'ReporteAreasController@solicituddos')->name('almacenes.reporte.solicituddos')->middleware('can:almacen_ingreso_access');
-
 
 });
 

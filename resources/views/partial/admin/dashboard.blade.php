@@ -11,14 +11,14 @@
             {{-- <span class="country" style="color:green">Yacuiba - Carapari - Villamontes</span> --}}
             <a href="javascript:void(0)" onclick="$('#logout-form').submit();" class="dropdown-item">
                 <i class="fa fa-sign-out" aria-hidden="true" style="color:red"></i>
-                <span class="font-verdana-bg" style="color:red;">Cerrar Sesion</span>
+                <span class="font-verdana-12" style="color:red;">Cerrar Sesion</span>
             </a>
         </div>
         <div class="nav-menu">
             <div class="sidebar left">
                 <ul class="list-sidebar bg-defoult">
                     {{-- CANASTA --}}
-                    <li class="font-verdana-bg">
+                    <li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_canasta_v1"
                             class="active collapsed" aria-expanded="false">
                             <i class="fa-duotone fa-user" style="color:green">></i>
@@ -57,7 +57,7 @@
                         </ul>
                     </li>
                     <hr style="margin-top:0; margin-bottom:0;">
-                    <li class="font-verdana-bg">
+                    <li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_canasta_v2"
                             class="active collapsed" aria-expanded="false">
                             <i class="fa-solid fa-gift" style="color:green">></i>
@@ -99,7 +99,7 @@
                     </li>
                     <hr style="margin-top:0; margin-bottom:0;">
                     {{-- USUARIOS --}}
-                    <li class="font-verdana-bg">
+                    <li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_users" class="active collapsed"
                             aria-expanded="false">
                             <i class="fa fa-users" style="color:green">></i>
@@ -138,7 +138,7 @@
                     </li>
                     <hr style="margin-top:0; margin-bottom:0;">
                     {{-- COMPRAS --}}
-                    <li class="font-verdana-bg">
+                    <li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_compras"
                             class="active collapsed" aria-expanded="false">
                             <i class="fa fa-shopping-cart" style="color:green"></i>
@@ -198,7 +198,7 @@
                     </li>
                     <hr style="margin-top:0; margin-bottom:0;">
                     {{-- EXPOCHACO --}}
-                    <li class="font-verdana-bg">
+                    <li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_expochaco"
                             class="active collapsed" aria-expanded="false">
                             <i class="fa-duotone fa-user" style="color:green"></i>
@@ -216,7 +216,7 @@
                     </li>
                     <hr style="margin-top:0; margin-bottom:0;">
                     {{-- EXPOCHACO3 --}}
-                    <li class="font-verdana-bg">
+                    <li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_expochaco3"
                             class="active collapsed" aria-expanded="false">
                             <i class="fa-duotone fa-user" style="color:green"></i>
@@ -234,7 +234,7 @@
                     </li>
                     <hr style="margin-top:0; margin-bottom:0;">
                     {{-- PERSONALIDADES JURIDICAS --}}
-                    <li class="font-verdana-bg">
+                    <li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_personerias"
                             class="active collapsed" aria-expanded="false">
                             <i class="fa-duotone fa-book-user" style="color:green"></i>
@@ -252,7 +252,7 @@
                     </li>
                     <hr style="margin-top:0; margin-bottom:0;">
                     {{-- SEREGES --}}
-                    <li class="font-verdana-bg">
+                    <li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_sereges"
                             class="active collapsed" aria-expanded="false">
                             <i class="fa-duotone fa-book-user" style="color:green"></i>
@@ -281,7 +281,7 @@
 
                     <hr style="margin-top:0; margin-bottom:0;">
                      {{-- INFORMATICA --}}
-                     <li class="font-verdana-bg">
+                     <li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_infor"
                             class="active collapsed" aria-expanded="false">
                             <i class="fa-duotone fa-book-user" style="color:green"></i>
@@ -304,7 +304,7 @@
                     </li>
                     <hr style="margin-top:0; margin-bottom:0;">
                     {{-- EVENTO --}}
-                    <li class="font-verdana-bg">
+                    <li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_agenda"
                             class="active collapsed" aria-expanded="false">
                             <i class="fa-sharp fa-solid fa-calendar fa-beat" style="color:green"></i>
@@ -334,7 +334,7 @@
                     </li>
                     <hr style="margin-top:0; margin-bottom:0;">
                     {{-- COMPRAS combustible --}}
-                    <li class="font-verdana-bg">
+                    <li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_combustiblescomb"
                             class="active collapsed" aria-expanded="false">
                             <i class="fa fa-shopping-cart" style="color:green"></i>
@@ -394,7 +394,7 @@
                     </li>
                     <hr style="margin-top:0; margin-bottom:0;">
                     {{-- ALMACEN --}}
-                    <li class="font-verdana-bg">
+                    <li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_almacen"
                             class="active collapsed" aria-expanded="false">
                             <i class="fa fa-th-list" style="color:green"></i>
@@ -452,7 +452,7 @@
                     </li>
                     <hr style="margin-top:0; margin-bottom:0;">
                     {{-- todo trasnporte --}}
-                    <li class="font-verdana-bg">
+                    <li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_transportes"
                             class="active collapsed" aria-expanded="false">
                             <i class="fa fa-th-list" style="color:green"></i>
@@ -494,7 +494,7 @@
                     </li>
                     <hr style="margin-top:0; margin-bottom:0;">
                     {{-- CORRESPONDENCIA --}}
-                    <li class="font-verdana-bg">
+                    <li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_ventanilla"
                             class="active collapsed" aria-expanded="false">
                             <i class="fa fa-folder-open" style="color:green"></i>
@@ -512,7 +512,7 @@
                     </li>
                     <hr style="margin-top:0; margin-bottom:0;">
                     {{-- CORRESPONDENCIA LOCAL --}}
-                    <li class="font-verdana-bg">
+                    <li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_ventanilla2"
                             class="active collapsed" aria-expanded="false">
                             <i class="fa fa-envelope" style="color:green"></i>
@@ -530,7 +530,7 @@
                     </li>
                     <hr style="margin-top:0; margin-bottom:0;">
                     {{-- CORRESPONDENCIA LOCAL 2 --}}
-                    <li class="font-verdana-bg">
+                    <li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_ventanilla22"
                             class="active collapsed" aria-expanded="false">
                             <i class="fa fa-envelope" style="color:green"></i>
@@ -548,7 +548,7 @@
                     </li>
                     <hr style="margin-top:0; margin-bottom:0;">
                     {{-- ARCHIVOS --}}
-                    <li class="font-verdana-bg">
+                    <li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_archivos2"
                             class="active collapsed" aria-expanded="false">
                             <i class="fa fa-file-pdf" style="color:green"></i>
@@ -574,7 +574,7 @@
                     </li>
                     <hr style="margin-top:0; margin-bottom:0;">
                     {{-- RRHH --}}
-                    <li class="font-verdana-bg">
+                    <li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_rrhh"
                             class="active collapsed" aria-expanded="false">
                             <i class="fa fa-users" style="color:green"></i>
@@ -616,7 +616,7 @@
                     </li>
                     <hr style="margin-top:0; margin-bottom:0;">
                     {{-- Personerias --}}
-                    <li class="font-verdana-bg">
+                    <li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_personeria"
                             class="active collapsed" aria-expanded="false">
                             <i class="fa fa-file-text" style="color:green"></i>
@@ -637,7 +637,7 @@
                     </li>
                     <hr style="margin-top:0; margin-bottom:0;">
                     {{-- Usuarios --}}
-                    <li class="font-verdana-bg">
+                    <li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_users"
                             class="active collapsed" aria-expanded="false">
                             <i class="fa fa-users" style="color:green"></i>
@@ -665,56 +665,108 @@
                             </li>
                         </ul>
                     </li>
-                    <hr style="margin-top:0; margin-bottom:0;">
                     <li class="font-verdana-bg">
                         <a href="" data-toggle="collapse" data-target="#dashboard_activos_fijos"
-                            class="active collapsed" aria-expanded="false">
-                            <i class="fa fa-users" style="color:green"></i>
-                            <span class="nav-label mr-3">ACTIVOS FIJOS</span>
-                            <span class="fa fa-arrow-circle-left float-right"></span>
-                        </a>
-                        <ul class="sub-menu collapse" id="dashboard_activos_fijos"
-                            @if (request()->is('users') || request()->is('users/*')) in @endif>
-                            <li>
-                                <a href="{{ route('activo.unidadadmin.index') }}">
-                                    &nbsp;<i class="fa fa-building"></i>
-                                    <span class="nav-label mr-4"> unidad administrativa</span>
-                                </a>
+                                class="active collapsed" aria-expanded="false">
+                                <i class="fa fa-users" style="color:green"></i>
+                                <span class="nav-label mr-3">ACTIVOS FIJOS</span>
+                                <span class="fa fa-arrow-circle-left float-right"></span>
+                            </a>
+                            <ul class="sub-menu collapse" id="dashboard_activos_fijos"
+                                @if (request()->is('admin/users') || request()->is('admin/users/*')) in @endif>
+                                <a href="" data-toggle="collapse" data-target="#activos__fijjos"
+                                            class="active collapsed" aria-expanded="false">
+                                            <i class="fa fa-users"></i>
+                                            <span class="nav-label mr-3">Gestiónar</span>
+                                            <span class="fa fa-arrow-circle-left float-right"></span>
+                                        </a>
+                                            <ul class="sub-menu collapse" id="activos__fijjos">
+                                                @can('unidadadmin_access')
+                                                <li>
+                                                    <a href="{{ route('activo.unidadadmin.index') }}">
+                                                        &nbsp;<i class="fa fa-building"></i>
+                                                        <span class="nav-label mr-4"> unidad administrativa</span>
+                                                    </a>
+            
+                                                </li>
+                                                @endcan
+                                                @can('organismo_access')
+                                                <li>
+                                                    <a href="{{ route('activo.organismo.index') }}">
+                                                        &nbsp;<i class="fa fa-building"></i>
+                                                        <span class="nav-label mr-4"> Organismo Financiero</span>
+                                                    </a>
+            
+                                                </li>
+                                            @endcan
+            
+                                            <li>
+                                                <a href="{{ route('activo.codcont.index') }}">
+                                                    &nbsp;<i class="fas fa-money-check-alt"></i>
+                                                    <span class="nav-label mr-4"> Grupo Contable</span>
+                                                </a>
+            
+                                            </li>
+            
+                                                {{-- Gestión de Activos Fijos--}}
+                                            <li>
+                                                <a href="{{ route('activo.gestionactivo.index') }}">
+                                                    &nbsp;<i class="fa fa-database"></i>
+                                                    <span class="nav-label mr-4"> Listado </span>
+                                                </a>
+                                            </li> 
+                                            
+                                    
+                                            <li>
+                                                <a href="{{ route('oficina.index') }}">
+                                                    &nbsp;<i class="fa fa-building"></i>
+                                                    <span class="nav-label mr-4"> Oficinas y Responsables</span>
+                                                </a>
+            
+                                            </li>
+                                         </ul>
 
-                            </li>
-                            <li>
-                                <a href="{{ route('activo.organismo.index') }}">
-                                    &nbsp;<i class="fa fa-building"></i>
-                                    <span class="nav-label mr-4"> Organismo Financiero</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('activo.codcont.index') }}">
-                                    &nbsp;<i class="fas fa-money-check-alt"></i>
-                                    <span class="nav-label mr-4"> Grupo Contable</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('activo.gestionactivo.index') }}">
-                                    &nbsp;<i class="fa fa-database"></i>
-                                    <span class="nav-label mr-4"> Gestión de Activos Fijos</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('oficina.index') }}">
-                                    &nbsp; <i class="fa fa-building"></i>
-                                    <span class="nav-label mr-4"> Oficinas y Responsables</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('activo.reportes.index') }}">
-                                    &nbsp;<i class="fa fa-chart-bar"></i>
-                                    <span class="nav-label mr-4"> Reportes</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
+                                    
+                               
+
+                                <li>
+                                    <li>
+                                        <a href="{{ route('activo.vehiculo.index') }}">
+                                            &nbsp;<i class="fa fa-database"></i>
+                                            <span class="nav-label mr-4">Parque Automotor</span>
+                                        </a>
+                                    </li>
+                                    <a href="" data-toggle="collapse" data-target="#sub_reportes"
+                                            class="active collapsed" aria-expanded="false">
+                                            <i class="fa fa-users"></i>
+                                            <span class="nav-label mr-3">Reportes</span>
+                                            <span class="fa fa-arrow-circle-left float-right"></span>
+                                        </a>
+                                            <ul class="sub-menu collapse" id="sub_reportes">
+                                            <li>
+                                                
+                                        {{--       <li>
+                                                    <a href="{{ route('activo.reportes.index') }}">
+                                                        &nbsp;<i class="fa fa-chart-bar"></i>
+                                                        <span class="nav-label mr-4"> Reportes</a>
+                                                </li> --}}
+                                                <li>
+                                                    <a href="{{ route('activo.formulario.index') }}">
+                                                        &nbsp;<i class="fa fa-database"></i>
+                                                        <span class="nav-label mr-4">Formulario de Inventario Físico</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{ route('activo.adeudo.index') }}">
+                                                        &nbsp;<i class="fa fa-database"></i>
+                                                        <span class="nav-label mr-4">No Adeudo</span>
+                                                    </a>
+                                                </li> 
+                                              
+                                            </li>
+                                       
+    </ul>
+</div>
+</div>
+</div>
 </aside>

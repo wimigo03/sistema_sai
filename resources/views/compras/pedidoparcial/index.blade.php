@@ -2,7 +2,7 @@
 @section('content')
 <link rel="stylesheet" href="/css/font-verdana.css" rel="stylesheet">
 <div class="card card-custom">
-    <div class="card-header font-verdana-bgt">
+    <div class="card-header font-verdana-15">
         <b>SOLICITUD COMPRA</b>
     </div>
     <div class="card-body">
@@ -13,7 +13,23 @@
 @section('scripts')
 <script>
     $(document).ready(function() {
-       
+        $('#estado').select2({
+            placeholder: "--Estado--"
+        });
+        $('#area_id').select2({
+            placeholder: "--Area--"
+        });
+        $('#programa_id').select2({
+            placeholder: "--Programa--"
+        });
+        $('#programatica_id').select2({
+            placeholder: "--Categoria Programatica--"
+        });
+        $("#fecha").datepicker({
+            inline: false, 
+            dateFormat: "dd/mm/yyyy",
+            autoClose: true
+        });
     });
 
     function create(){

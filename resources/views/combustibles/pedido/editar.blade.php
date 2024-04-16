@@ -2,7 +2,7 @@
 @section('content')
 @include('layouts.message_alert')
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-4 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
             <a href="{{ url('/combustibles/pedido/index') }}">
@@ -32,48 +32,48 @@
 
         <div class="form-group row">
             <div class="col-md-6">
-                <label for="objeto" class="d-inline font-verdana-bg">
+                <label for="objeto" class="d-inline font-verdana-12">
                     <b>Objeto</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <textarea name="objeto" cols="1" rows="3" class="form-control form-control-sm font-verdana-bg" id="objeto" onkeyup="javascript:this.value=this.value.toUpperCase();">{{$compras->objeto}}</textarea>
+                <textarea name="objeto" cols="1" rows="3" class="form-control form-control-sm font-verdana-12" id="objeto" onkeyup="javascript:this.value=this.value.toUpperCase();">{{$compras->objeto}}</textarea>
             </div>
             <div class="col-md-6">
-                <label for="justificacion" class="d-inline font-verdana-bg">
+                <label for="justificacion" class="d-inline font-verdana-12">
                     <b>Justificacion</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <textarea name="justificacion" cols="1" rows="3" class="form-control form-control-sm font-verdana-bg" id="justificacion" onkeyup="javascript:this.value=this.value.toUpperCase();">{{$compras->justificacion}}</textarea>
+                <textarea name="justificacion" cols="1" rows="3" class="form-control form-control-sm font-verdana-12" id="justificacion" onkeyup="javascript:this.value=this.value.toUpperCase();">{{$compras->justificacion}}</textarea>
             </div>
             <div class="col-md-2">
-                <label for="preventivo" class="d-inline font-verdana-bg">
+                <label for="preventivo" class="d-inline font-verdana-12">
                     <b>Preventivo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <input type="text"  name="preventivo" id="preventivo" onchange="myFunction()" value="{{$compras->preventivo}}" class="form-control form-control-sm font-verdana-bg" id="preventivo">
+                <input type="text"  name="preventivo" id="preventivo" onchange="myFunction()" value="{{$compras->preventivo}}" class="form-control form-control-sm font-verdana-12" id="preventivo">
             </div>
             <div class="col-md-2">
-                <label for="tipo" class="d-inline font-verdana-bg">
+                <label for="tipo" class="d-inline font-verdana-12">
                     <b>Tipo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
     <input type="text" disabled name="tipo" 
     value="{{$compras->tipo}}" 
-   class="form-control form-control-sm font-verdana-bg" 
+   class="form-control form-control-sm font-verdana-12" 
    id="tipo" data-language="es" autocomplete="off" >
     
 
             </div>
             <div class="col-md-2">
-                <label for="numcompra" class="d-inline font-verdana-bg">
+                <label for="numcompra" class="d-inline font-verdana-12">
                     <b>Nro. Compra</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <input type="text" name="numcompra" id="numcompra" onchange="myFunctiondos()" value="{{$compras->numcompra}}" class="form-control form-control-sm font-verdana-bg" id="numcompra" onkeypress="return valideNumber(event);">
+                <input type="text" name="numcompra" id="numcompra" onchange="myFunctiondos()" value="{{$compras->numcompra}}" class="form-control form-control-sm font-verdana-12" id="numcompra" onkeypress="return valideNumber(event);">
             </div>
             <div class="col-md-2">
-                <label for="controlinterno" class="d-inline font-verdana-bg">
+                <label for="controlinterno" class="d-inline font-verdana-12">
                     <b>Control Interno</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
-                <input type="text" name="controlinterno" value="{{$compras->controlinterno}}" class="form-control form-control-sm font-verdana-bg" id="controlinterno" onkeypress="return valideNumber(event);">
+                <input type="text" name="controlinterno" value="{{$compras->controlinterno}}" class="form-control form-control-sm font-verdana-12" id="controlinterno" onkeypress="return valideNumber(event);">
             </div>
             <div class="col-md-5">
-                <label for="idarea" class="d-inline font-verdana-bg">
+                <label for="idarea" class="d-inline font-verdana-12">
                     <b>Area</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="idarea" id="idarea" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
@@ -91,7 +91,7 @@
 
             </div>
             <div class="col-md-6">
-                <label for="idprograma" class="d-inline font-verdana-bg">
+                <label for="idprograma" class="d-inline font-verdana-12">
                     <b>Programa</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select  name="idprograma" id="idprograma" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
@@ -109,7 +109,7 @@
                 </select>
             </div>
             <div class="col-md-5">
-                <label for="idcatprogramatica" class="d-inline font-verdana-bg">
+                <label for="idcatprogramatica" class="d-inline font-verdana-12">
                     <b>Cat. Programatica</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="idcatprogramatica" id="idcatprogramatica" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
@@ -128,7 +128,7 @@
                 </select>
             </div>
             <div class="col-md-3">
-                <label for="idproveedor" class="d-inline font-verdana-bg">
+                <label for="idproveedor" class="d-inline font-verdana-12">
                     <b>Proveedor</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="idproveedor" id="idproveedor" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
@@ -149,11 +149,11 @@
         </div>
         <div class="form-group row">
             <div class="col-md-12 text-right">
-                <button class="btn color-icon-2 font-verdana-bg" type="button" onclick="save();">
+                <button class="btn color-icon-2 font-verdana-12" type="button" onclick="save();">
                     <i class="fa-solid fa-paper-plane"></i>
                     &nbsp;Actualizar
                 </button>
-                <button class="btn btn-danger font-verdana-bg" type="button" >
+                <button class="btn btn-danger font-verdana-12" type="button" >
                     
                     <a href="{{url()->previous()}}" style="color:white">Cancelar</a>
                 </button>

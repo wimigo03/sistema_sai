@@ -4,7 +4,7 @@
     <div class="col-md-12">
         <div class="card rounded">
             <div class="card-header bg-gradient-secondary text-white rounded">
-                <div class="card-title"><b class="font-verdana-bg">LISTA DE SOLICITUDES DE COMPRAS</b></div>
+                <div class="card-title"><b class="font-verdana-12">LISTA DE SOLICITUDES DE COMPRAS</b></div>
             </div>
             <div class="card-body">
                 <div class="form-group row">

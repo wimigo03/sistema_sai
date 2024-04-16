@@ -6,13 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\AreasModel;
 use App\Models\EmpleadosModel;
 use App\Models\Model_Activos\ActualModel;
+use App\Models\Model_Activos\Adeudo;
 use App\Models\Model_Activos\AuxiliarModel;
 use App\Models\Model_Activos\CodcontModel;
 use App\Models\Model_Activos\EntidadesModel;
+use App\Models\Model_Activos\Formulario;
 use App\Models\Model_Activos\Ufv;
 use App\Models\Model_Activos\UnidadadminModel;
 use App\Traits\DepreciationCalculations;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -36,6 +39,162 @@ class ReportesController extends Controller
 
         return view('activo.reportes.index', compact('entidad', 'unidad', 'unidades', 'codcont', 'areas', 'activos'));
     }
+
+    public function asignacion(Request $request)
+    {
+        $empleado = EmpleadosModel::find($request->input('empleado'));
+        $unidad = UnidadadminModel::where('estadouni', 1)->first();
+        $entidad = EntidadesModel::where('entidad', 4601)->first();
+        $activosSeleccionados = json_decode($request->input('activos'), true);
+        $activos = ActualModel::query()
+            ->where('entidad', 4601)
+            ->where('unidad', $unidad->unidad)
+            ->whereIn('id', $activosSeleccionados)
+            ->orderBy('codigo')
+            ->get();
+            foreach ($activos as $activo) {
+                $activo->load(['auxiliars' => function ($query) use ($activo) {
+                    $query->where('codcont', $activo->codcont)
+                          ->where('codaux', $activo->codaux);
+                }])
+                ->toArray();
+            }
+        $pdf = PDF::loadView('activo.reportes.asignacion', [
+            'activos' => $activos,
+            'entidad' => $entidad,
+            'unidad' => $unidad,
+            'responsable' => $empleado
+        ]);
+
+        $this->configureSSLContext($pdf);
+
+        $pdf->setPaper('A4', 'portrait');
+
+        $fileName = "ASIGNACION DE ACTIVO -" . date('Y-m-d') . ".pdf";
+
+        return $pdf->stream($fileName);
+    }
+
+
+    public function formulario($id)
+    {
+        $formulario = Formulario::with('formularios','user.usuariosEmpleados','empleado','empleado.empleadosareas','empleado.file')->find($id);
+        $pdf = PDF::loadView('activo.reportes.formulario', [
+            'formulario' => $formulario,
+        ]);
+
+        $this->configureSSLContext($pdf);
+
+        $pdf->setPaper('A4', 'portrait');
+
+        $fileName = "FORMULARIO TOMA DE INVENTARIO FÍSICO -" . date('Y-m-d') . ".pdf";
+
+        return $pdf->stream($fileName);
+    }
+
+    public function devolucion(Request $request)
+    {
+        $empleado = EmpleadosModel::find($request->input('empleado'));
+        $unidad = UnidadadminModel::where('estadouni', 1)->first();
+        $entidad = EntidadesModel::where('entidad', 4601)->first();
+        $activosSeleccionados = json_decode($request->input('activos'), true);
+        $activos = ActualModel::query()
+            ->where('entidad', 4601)
+            ->where('unidad', $unidad->unidad)
+            ->whereIn('id', $activosSeleccionados)
+            ->orderBy('codigo')
+            ->get();
+            foreach ($activos as $activo) {
+                $activo->load(['auxiliars' => function ($query) use ($activo) {
+                    $query->where('codcont', $activo->codcont)
+                          ->where('codaux', $activo->codaux);
+                }])
+                ->toArray();
+            }
+        $pdf = PDF::loadView('activo.reportes.devolucion', [
+            'activos' => $activos,
+            'entidad' => $entidad,
+            'unidad' => $unidad,
+            'responsable' => $empleado
+        ]);
+
+        $this->configureSSLContext($pdf);
+
+        $pdf->setPaper('A4', 'portrait');
+
+        $fileName = "DEVOLUCION DE ACTIVO -" . date('Y-m-d') . ".pdf";
+
+        return $pdf->stream($fileName);
+    }
+
+    public function kardex(Request $request)
+    {
+        $empleado = EmpleadosModel::find($request->input('empleado'));
+        $unidad = UnidadadminModel::where('estadouni', 1)->first();
+        $entidad = EntidadesModel::where('entidad', 4601)->first();
+        $activosSeleccionados = json_decode($request->input('activos'), true);
+        $activos = ActualModel::query()
+            ->where('entidad', 4601)
+            ->where('unidad', $unidad->unidad)
+            ->whereIn('id', $activosSeleccionados)
+            ->where('observaciones', '!=', '')
+            ->orderBy('codigo')
+            ->get();
+            foreach ($activos as $activo) {
+                $activo->load(['auxiliars' => function ($query) use ($activo) {
+                    $query->where('codcont', $activo->codcont)
+                          ->where('codaux', $activo->codaux);
+                }])
+                ->toArray();
+            }
+        $pdf = PDF::loadView('activo.reportes.kardex', [
+            'activos' => $activos,
+            'entidad' => $entidad,
+            'unidad' => $unidad,
+            'responsable' => $empleado
+        ]);
+
+        $this->configureSSLContext($pdf);
+
+        $pdf->setPaper('A4', 'portrait');
+
+        $fileName = "KARDEX DE ACTIVOS -" . date('Y-m-d') . ".pdf";
+
+        return $pdf->stream($fileName);
+    }
+
+    public function certificado($id)
+    {
+        $meses = array("enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre");
+        $dias = array("domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado");
+
+        $fecha = Carbon::now();
+        $dia_semana = $dias[$fecha->dayOfWeek];
+        $mes = $meses[($fecha->format('n')) - 1];
+        $fecha_hoy = ucfirst($dia_semana) . ' ' . $fecha->format('d') . ' de ' . $mes . ' del ' . $fecha->format('Y') . ' Hora: ' . $fecha->format('H:i:s');
+        $adeudo = Adeudo::find($id);
+        $empleado = EmpleadosModel::find($adeudo->empleado_id);
+        $fecha_inicio = \Carbon\Carbon::parse($empleado->adeudo->fecha_inicio)->format('d/m/Y');
+        $fecha_fin = \Carbon\Carbon::parse($empleado->adeudo->fecha_fin)->format('d/m/Y');
+
+        $pdf = PDF::loadView('activo.reportes.certificado', [
+            'responsable' => $empleado,
+            'fecha_inicio' => $fecha_inicio,
+            'fecha_fin' => $fecha_fin,
+            'fecha_hoy' => $fecha_hoy,
+            'adeudo' => $adeudo,
+        ]);
+
+        $this->configureSSLContext($pdf);
+
+        $pdf->setPaper('A4', 'portrait');
+
+        $fileName = "CERTIFICADO DE NO ADEUDO -" . date('Y-m-d') . ".pdf";
+
+        return $pdf->stream($fileName);
+    }
+
+    
     public function reporte1Pdf(Request $request)
     {
         $unidadSeleccionado = $request->input('unidad');

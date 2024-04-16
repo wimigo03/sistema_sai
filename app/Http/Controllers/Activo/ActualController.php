@@ -25,9 +25,69 @@ class ActualController extends Controller
 {
     public function index()
     {
-        return view('activo.gestionactivo.index', [
-            'unidad' => UnidadadminModel::where('estadouni', 1)->first(),
-        ]);
+        $unidad = UnidadadminModel::where('estadouni', 1)->first();
+        $activos = ActualModel::orderBy('id', 'desc')
+            ->with([
+                'codconts',
+                'areas',
+                'empleados',
+                'empleados.file'
+            ])
+            ->where('unidad', $unidad->unidad)
+            ->paginate(10);
+            foreach ($activos as $activo) {
+                $activo->load(['auxiliars' => function ($query) use ($activo) {
+                    $query->where('codcont', $activo->codcont)
+                          ->where('codaux', $activo->codaux);
+                }]);
+            }
+        return view('activo.gestionactivo.index', compact('unidad', 'activos'));
+    }
+
+    public function search(Request $request)
+    {
+        $unidad = UnidadadminModel::where('estadouni', 1)->first();
+        $auxiliar = null;
+
+       if ($request->has('auxiliar') && !empty($request->auxiliar)) {
+           $auxiliar = AuxiliarModel::query()
+               ->where('unidad', $unidad->unidad)
+               ->where('nomaux', 'like', strtoupper($request->auxiliar) . '%')
+               ->first();
+       }
+        $activos = ActualModel::query()
+        ->with([
+            'codconts',
+            'areas',
+            'empleados',
+            'ambiente'
+        ])
+        ->byCodigo($request->codigo)
+        ->byCi($request->ci)
+        ->byIdBien($request->id_bien)
+        ->byEstado($request->estado)
+        ->byAmbiente($request->ambiente)
+        ->byNombre(strtoupper($request->nombre))
+        ->byApPaterno(strtoupper($request->ap_pat))
+        ->byApMaterno(strtoupper($request->ap_mat))
+        ->byGrupo(strtoupper($request->grupo))
+        ->byAuxiliar($auxiliar)
+        ->byOficina(strtoupper($request->oficina))
+        ->byPreventivo($request->cod_rube)
+        ->where('unidad', $unidad->unidad)
+        ->orderBy('id', 'desc')
+        ->paginate(10);
+
+        foreach ($activos as $activo) {
+            $activo->load(['auxiliar' => function ($query) use ($activo, $unidad) {
+                $query->where('codcont', $activo->codcont)
+                        ->where('codaux', $activo->codaux)
+                      ->where('unidad', $unidad->unidad);
+            }]);
+        }
+
+        $activos->appends($request->except('page'));
+        return view('activo.gestionactivo.index', compact('activos', 'unidad'));
     }
 
     public function listado()
@@ -152,6 +212,7 @@ class ActualController extends Controller
     public function getCargo(Request $request)
     {
         $id = $request->input('emp_id');
+        $empleado = EmpleadosModel::find($id);
         $file = DB::table('empleados')->where('idemp', $id)->select('idfile')->first();
 
         $files = DB::table('file')->where('idfile', $file->idfile)->get();
@@ -159,6 +220,7 @@ class ActualController extends Controller
             ['idemp', '=', $id]
         ])->get();
         return response()->json([
+            'empleado' => $empleado,
             'files' => $files,
             'activos' => $activos
         ]);
@@ -169,7 +231,6 @@ class ActualController extends Controller
         DB::beginTransaction();
         try {
             $actual = new ActualModel();
-            $this->fillActualModel($actual, $request);
             $fechaActual = now();
 
             $actual->dia = $fechaActual->format('d');
@@ -190,7 +251,36 @@ class ActualController extends Controller
             $actual->codarea = $request->input('codarea');
             $actual->codemp = $request->input('codemp');
             $actual->org_fin = $request->input('org_fin');
+            $actual->codigo = $request->input('codigo');
+            $actual->ambiente_id = $request->input('ambiente_id');
+            $actual->vidautil = $request->input('vidautil');
+            $actual->descrip = $request->input('descrip');
+            $actual->costo = $request->input('costo');
+            $actual->depacu = $request->input('depacu');
+            $actual->mes = $request->input('mes');
+            $actual->observaciones = $request->input('observaciones');
+            // $actual->ano = $request->input('ano');
+            // $actual->b_rev = $request->input('b_rev');
+            $actual->dia = $request->input('dia');
 
+
+
+
+
+            // $actual->dia_ant = $request->input('dia_ant');
+            // $actual->mes_ant = $request->input('mes_ant');
+            // $actual->ano_ant = $request->input('ano_ant');
+            // $actual->vut_ant = $request->input('vul_ant');
+            // $actual->costo_ant = $request->input('costo_ant');
+            // $actual->band_ufv = $request->input('band_ufv');
+            // $actual->codestado = $request->input('codestado');
+            $actual->cod_rube = $request->input('cod_rube');
+            // $actual->nro_conv = $request->input('nro_conv');
+            //  $actual->org_fin = $request->input('org_fin');
+            $actual->feul = $request->input('feul');
+            $actual->usuar = auth()->user()->name;
+            // $actual->codigosec = $request->input('codigosec');
+            //  $actual->banderas = $request->input('banderas');
             $actual->depacu = 0;
             $actual->b_rev = 0;
             $actual->dia_ant = 0;
@@ -200,7 +290,6 @@ class ActualController extends Controller
             $actual->costo_ant = 0;
             $actual->band_ufv = 0;
             $actual->codestado = $request->input('codestado');
-            $actual->cod_rube = 0;
             $actual->codigosec = 0;
             $actual->banderas = 0;
             if (!is_numeric($actual->ambiente_id)) {
@@ -261,8 +350,6 @@ class ActualController extends Controller
             ->where('codaux', $actual->codaux)
             ->where('unidad', $unidad->unidad)
             ->first();
-        $organismoFin = OrganismofinModel::where('idorganismofin', $actual->org_fin)->first();
-        
             if($actual->ano > 2022){
                 $ufInicial =  Ufv::query()
                 ->orderBy('id', 'DESC')
@@ -282,7 +369,6 @@ class ActualController extends Controller
         return view('activo.gestionactivo.show', [
             'actual' => $actual,
             'auxiliar' => $auxiliar,
-            'organismoFin' => $organismoFin,
             'entidad' => $entidad,
             'ufInicial' => $ufInicial->indice_ufv,
             'ufActual' => $ufActual->indice_ufv,
@@ -327,11 +413,41 @@ class ActualController extends Controller
         try {
             $actual = ActualModel::find($id);
 
-            $this->fillActualModel($actual, $request);
+            $actual->codigo = $request->input('codigo');
+            $actual->ambiente_id = $request->input('ambiente_id');
+            $actual->vidautil = $request->input('vidautil');
+            $actual->descrip = $request->input('descrip');
+            $actual->costo = $request->input('costo');
+            $actual->depacu = $request->input('depacu');
+            $actual->observaciones = $request->input('observaciones');
+            // $actual->ano = $request->input('ano');
+            // $actual->b_rev = $request->input('b_rev');
+
+            // $actual->dia_ant = $request->input('dia_ant');
+            // $actual->mes_ant = $request->input('mes_ant');
+            // $actual->ano_ant = $request->input('ano_ant');
+            // $actual->vut_ant = $request->input('vul_ant');
+            // $actual->costo_ant = $request->input('costo_ant');
+            // $actual->band_ufv = $request->input('band_ufv');
+            // $actual->codestado = $request->input('codestado');
+            $actual->cod_rube = $request->input('cod_rube');
+            // $actual->nro_conv = $request->input('nro_conv');
+            //  $actual->org_fin = $request->input('org_fin');
+            $actual->feul = $request->input('feul');
+            $actual->usuar = auth()->user()->name;
+            // $actual->codigosec = $request->input('codigosec');
+            //  $actual->banderas = $request->input('banderas');
             $actual->estadoactual = 1;
             $actual->identidades = $request->input('identidades');
 
             $actual->codestado = $request->input('codestado');
+            if (!is_numeric($actual->ambiente_id)) {
+                $ambiente = Ambiente::create([
+                    'unidad' => $actual->unidad,
+                    'nombre' => $actual->ambiente_id
+                ]);
+                $actual->ambiente_id = $ambiente->id;
+            }
             $actual->save();
 
             if ($request->file('fotografia')) {

@@ -2,7 +2,7 @@
 @section('content')
 @include('layouts.message_alert')
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-4 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
             <a href="{{ url('/almacenes/pedido/index') }}">
@@ -29,40 +29,40 @@
         <div class="form-group row">
 
             <div class="col-md-6">
-                <label for="objeto" class="d-inline font-verdana-bg">
+                <label for="objeto" class="d-inline font-verdana-12">
                     <b>Objeto</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <textarea disabled name="objeto" cols="1" rows="3" 
-                class="form-control form-control-sm font-verdana-bg" 
+                class="form-control form-control-sm font-verdana-12" 
                 id="objeto" onkeyup="javascript:this.value=this.value.toUpperCase();">
                 {{$vales->objeto}}</textarea>
             </div>
 
 
             <div class="col-md-6">
-                <label for="motivosoli" class="d-inline font-verdana-bg">
+                <label for="motivosoli" class="d-inline font-verdana-12">
                     <b>Justificacion</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <textarea disabled name="motivosoli" cols="1" rows="3" 
-                class="form-control form-control-sm font-verdana-bg" 
+                class="form-control form-control-sm font-verdana-12" 
                 id="motivosoli" onkeyup="javascript:this.value=this.value.toUpperCase();">
                 {{$vales->motivosoli}}</textarea>
             </div>
 
 
             <div class="col-md-2">
-                <label for="controlinterno" class="d-inline font-verdana-bg">
+                <label for="controlinterno" class="d-inline font-verdana-12">
                     <b>controlinterno</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" disabled name="controlinterno" value="{{$vales->controlinterno}}" 
-                class="form-control form-control-sm font-verdana-bg" id="controlinterno">
+                class="form-control form-control-sm font-verdana-12" id="controlinterno">
             </div>
 
 
            
 
             <div class="col-md-7">
-                <label for="idarea" class="d-inline font-verdana-bg">
+                <label for="idarea" class="d-inline font-verdana-12">
                     <b>Area</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select disabled name="idarea" id="idarea" placeholder="--Seleccionar--" 
@@ -81,7 +81,7 @@
             </div>
 
             <div class="col-md-4">
-                <label for="idlocalidad" class="d-inline font-verdana-bg">
+                <label for="idlocalidad" class="d-inline font-verdana-12">
                     <b>Localidad</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select disabled name="idlocalidad" id="idlocalidad" placeholder="--Seleccionar--" 
@@ -101,7 +101,7 @@
             </div>
 
             <div class="col-md-5">
-                <label for="idunidadconsumo" class="d-inline font-verdana-bg">
+                <label for="idunidadconsumo" class="d-inline font-verdana-12">
                     <b>Unidad Consumo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select disabled name="idunidadconsumo" id="idunidadconsumo" placeholder="--Seleccionar--" 
@@ -125,11 +125,11 @@
         </div>
         <div class="form-group row">
             <div class="col-md-12 text-right">
-                <button class="btn color-icon-2 font-verdana-bg" type="button" onclick="save();">
+                <button class="btn color-icon-2 font-verdana-12" type="button" onclick="save();">
                     <i class="fa-solid fa-paper-plane"></i>
                     &nbsp;Actualizar
                 </button>
-                <button class="btn btn-danger font-verdana-bg" type="button" >
+                <button class="btn btn-danger font-verdana-12" type="button" >
                     
                     <a href="{{url()->previous()}}" style="color:white">Cancelar</a>
                 </button>

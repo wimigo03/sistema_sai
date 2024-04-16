@@ -2,7 +2,7 @@
 @section('content')
 @include('layouts.message_alert')
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-4 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
             <a href="{{ url('/transportes/uconsumo/index') }}">
@@ -30,84 +30,84 @@
        
         <div class="form-group row">
             <div class="col-md-3">
-                <label for="codigoc" class="d-inline font-verdana-bg">
+                <label for="codigoc" class="d-inline font-verdana-12">
                     <b>Codigo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <textarea name="codigoc" cols="1" rows="3" 
-                class="form-control form-control-sm font-verdana-bg" id="codigoc">{{$consumos->codigoconsumo}}</textarea>
+                class="form-control form-control-sm font-verdana-12" id="codigoc">{{$consumos->codigoconsumo}}</textarea>
             </div>
 
             <div class="col-md-3">
-                <label for="nombreuconsumo" class="d-inline font-verdana-bg">
+                <label for="nombreuconsumo" class="d-inline font-verdana-12">
                     <b>Nombre</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <textarea name="nombreuconsumo" cols="1" rows="3" 
-                class="form-control form-control-sm font-verdana-bg" id="nombreuconsumo">{{$consumos->nombreuconsumo}}</textarea>
+                class="form-control form-control-sm font-verdana-12" id="nombreuconsumo">{{$consumos->nombreuconsumo}}</textarea>
             </div>
 
 
             <div class="col-md-6">
-                <label for="desconsumo" class="d-inline font-verdana-bg">
+                <label for="desconsumo" class="d-inline font-verdana-12">
                     <b>Descripción</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <textarea name="desconsumo" cols="1" rows="3" 
-                class="form-control form-control-sm font-verdana-bg" id="desconsumo" 
+                class="form-control form-control-sm font-verdana-12" id="desconsumo" 
                 >{{$consumos->desconsumo}}</textarea>
             </div>
 
 
             <div class="col-md-2">
-                <label for="modeloc" class="d-inline font-verdana-bg">
+                <label for="modeloc" class="d-inline font-verdana-12">
                     <b>Modelo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="modeloc" value="{{$consumos->modeloconsumo}}" 
-                class="form-control form-control-sm font-verdana-bg" id="modeloc">
+                class="form-control form-control-sm font-verdana-12" id="modeloc">
             </div>
 
             <div class="col-md-2">
-                <label for="colorc" class="d-inline font-verdana-bg">
+                <label for="colorc" class="d-inline font-verdana-12">
                     <b>Color</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="color" name="colorc" value="{{$consumos->colorconsumo}}" 
-                class="form-control form-control-sm font-verdana-bg" id="colorc">
+                class="form-control form-control-sm font-verdana-12" id="colorc">
             </div>
 
             <div class="col-md-2">
-                <label for="placac" class="d-inline font-verdana-bg">
+                <label for="placac" class="d-inline font-verdana-12">
                     <b>Placa</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="placac" value="{{$consumos->placaconsumo}}" 
-                class="form-control form-control-sm font-verdana-bg" id="placac">
+                class="form-control form-control-sm font-verdana-12" id="placac">
             </div>
 
 
             <div class="col-md-2">
-                <label for="marcac" class="d-inline font-verdana-bg">
+                <label for="marcac" class="d-inline font-verdana-12">
                     <b>Marca</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="marcac" value="{{$consumos->marcaconsumo}}" 
-                class="form-control form-control-sm font-verdana-bg" id="marcac" >
+                class="form-control form-control-sm font-verdana-12" id="marcac" >
             </div>
 
             <div class="col-md-2">
-                <label for="klminicialc" class="d-inline font-verdana-bg">
+                <label for="klminicialc" class="d-inline font-verdana-12">
                     <b>klm inicial</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="number" name="klminicialc" value="{{$consumos->kilometrajeinicialconsumo}}"
-                 class="form-control form-control-sm font-verdana-bg" id="klminicialc">
+                 class="form-control form-control-sm font-verdana-12" id="klminicialc">
             </div>
 
             <div class="col-md-2">
-                <label for="klmfinal" class="d-inline font-verdana-bg">
+                <label for="klmfinal" class="d-inline font-verdana-12">
                     <b>Klm final</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="klmfinal" value="{{$consumos->kilometrajefinalconsumo}}"
-                 class="form-control form-control-sm font-verdana-bg" id="klmfinal">
+                 class="form-control form-control-sm font-verdana-12" id="klmfinal">
             </div>
 
 
             <div class="col-md-7">
-                <label  class="d-inline font-verdana-bg">
+                <label  class="d-inline font-verdana-12">
                     <b>Area</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="idarea" id="idarea"  
@@ -126,7 +126,7 @@
             </div>
  
             <div class="col-md-5">
-                <label for="idprograma" class="d-inline font-verdana-bg">
+                <label for="idprograma" class="d-inline font-verdana-12">
                     <b>Programa</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                
@@ -148,7 +148,7 @@
          
 
             <div class="col-md-5">
-                <label for="idtipomovilidad" class="d-inline font-verdana-bg">
+                <label for="idtipomovilidad" class="d-inline font-verdana-12">
                     <b>Tipo Movilidad</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="idtipomovilidad" id="idtipomovilidad" 
@@ -168,11 +168,11 @@
                 </select>
             </div>
             <div class="col-md-2">
-                <label for="gasklm" class="d-inline font-verdana-bg">
+                <label for="gasklm" class="d-inline font-verdana-12">
                     <b>Gas x klm</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="number" name="gasklm" value="{{$consumos->gasporklm}}"
-                 class="form-control form-control-sm font-verdana-bg" id="gasklm">
+                 class="form-control form-control-sm font-verdana-12" id="gasklm">
             </div>
 
          

@@ -2,7 +2,7 @@
     <div class="col-md-12 table-responsive">
         <table class="table display table-bordered responsive" style="width:100%;">
             <thead>
-                <tr class="font-verdana">
+                <tr class="font-verdana-11">
                     <td class="text-left p-1"><b>ID</b></td>
                     <td class="text-left p-1"><b>UNIDAD ADMINSTRATIVA</b></td>
                     <td class="text-left p-1"><b>TITULO</b></td>
@@ -13,7 +13,7 @@
             </thead>
             <tbody>
                 @foreach ($roles as $datos)
-                    <tr class="font-verdana">
+                    <tr class="font-verdana-11">
                         <td class="text-left p-1">{{ $datos->id }}</td>
                         <td class="text-left p-1">{{ $datos->dea != null ? $datos->dea->descripcion :'[Error]' }}</td>
                         <td class="text-left p-1">{{ $datos->title }}</td>
@@ -48,7 +48,7 @@
                 @endforeach
             </tbody>
             <tfoot>
-                <tr class="font-verdana">
+                <tr class="font-verdana-11">
                     <td colspan="12">
                         {{ $roles->appends(Request::all())->links() }}
                         <p class="text-muted">Mostrando

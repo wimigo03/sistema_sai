@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
 
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
     <div class="col-md-8 titulo">
         <b>MEDIDAS</b>
     </div>
@@ -28,7 +28,7 @@
         <center>
             <table  class="table  yajra-datatable table-bordered hoverTable responsive font-verdana" style="width:80%;">
                 <thead>
-                    <tr class="font-verdana">
+                    <tr class="font-verdana-11">
                         <td class="text-justify p-1"><b>N°</b></td>
                         <td class="text-justify p-1"><b>NOMBRE</b></td>
                         <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>

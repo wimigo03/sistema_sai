@@ -2,7 +2,7 @@
 @section('content')
 <link rel="stylesheet" href="/css/font-verdana.css" rel="stylesheet">
 <div class="header">
-    <div class="row font-verdana-bg">
+    <div class="row font-verdana-12">
         <div class="col-md-10 titulo">
             <b>CANASTA - HISTORIAL BENEFICIARIO</b>
         </div>

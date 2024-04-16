@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('content')
-    <div class="row font-verdana-bg">
+    <div class="row font-verdana-12">
         <div class="col-md-12 text-center titulo">
             <b>GESTIONAR PERSONAL-P/{{strtoupper($area_actual->nombrearea)}}/REGISTRAR</b>
         </div>

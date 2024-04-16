@@ -4,7 +4,7 @@
         if (successMessage) {
             Lobibox.notify('success', {
                 icon: false,
-                delay: 2000,
+                delay: 3000,
                 position: 'top right',
                 title: '<i class="fa-solid fa-lg fa-circle-check"></i> Éxito',
                 msg: successMessage
@@ -19,7 +19,7 @@
         if (errorMessage) {
             Lobibox.notify('error', {
                 icon: false,
-                delay: 2000,
+                delay: 3000,
                 position: 'top right',
                 title: '<i class="fa-solid fa-lg fa-circle-xmark"></i> Error',
                 msg: errorMessage
@@ -34,7 +34,7 @@
         if (infoMessage) {
             Lobibox.notify('info', {
                 icon: false,
-                delay: 2000,
+                delay: 3000,
                 position: 'top right',
                 title: '<i class="fa-solid fa-lg fa-circle-info"></i> Informacion',
                 msg: infoMessage
@@ -49,7 +49,7 @@
         if (warningMessage) {
             Lobibox.notify('warning', {
                 icon: false,
-                delay: 2000,
+                delay: 3000,
                 position: 'top right',
                 title: '<i class="fa-solid fa-lg fa-circle-exclamation"></i> Advertencia',
                 msg: warningMessage
@@ -63,7 +63,7 @@
     if (errors.length > 0) {
         Lobibox.notify('error', {
             icon: false,
-            delay: 2000,
+            delay: 3000,
             position: 'top right',
             title: '<i class="fa-solid fa-lg fa-circle-exclamation"></i> Error de validacion',
             msg: errors.join('<br>')

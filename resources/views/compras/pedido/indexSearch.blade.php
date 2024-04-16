@@ -20,7 +20,7 @@
                         <div class="table-responsive table-striped table-bordered">
                             <table class="display responsive" style="width:100%">
                                 <thead>
-                                    <tr class="font-verdana-bg">
+                                    <tr class="font-verdana-12">
                                         <td class="text-center p-1"><b>ID</b></td>
                                         <td class="text-center p-1"><b>OBJETO</b></td>
                                         <td class="text-center p-1"><b>AREA</b></td>
@@ -32,7 +32,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($compras as $comp)
-                                        <tr class="font-verdana-bg">
+                                        <tr class="font-verdana-12">
                                             <td class="text-center p-1">{{$comp->idcompra}}</td>
                                             <td class="text-justify p-1">{{$comp->objeto}}</td>
                                             <td class="text-center p-1">{{$comp->nombrearea}}</td>

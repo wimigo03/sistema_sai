@@ -130,7 +130,7 @@
                             <div class="form-group mt-2">
                                 <label style="color:black;font-weight: bold;">AMBIENTE:</label>
                                 <select class="form-control js-example-basic-multiple" id="ambiente" name="ambiente_id"
-                                    disabled>
+                                    >
                                     <option value="">Seleccione un ambiente</option>
                                     @foreach ($ambientes as $ambiente)
                                         <option value="{{ $ambiente->id }}"
@@ -138,6 +138,7 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                {{ $actual->ambiente_id }}
                             </div>
 
                         </div>
@@ -220,6 +221,15 @@
                                 </span>
                             @enderror
 
+                            <label for="cod_rube" style="color:black;font-weight: bold;">ID PREVENTIVO :</label>
+                            <div class="input-group">
+                                <input type="text" name="cod_rube" value="{{ old('cod_rube', $actual->cod_rube) }}" class="form-control" placeholder="Preventivo">
+                            </div>
+                            @error('cod_rube')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                             {{-- <div class="form-check-inline">
                                 <label for="depreciar" style="color:black;font-weight: bold;"
                                     class="required col-md-12 col-form-label text-md-right">DEPRECIAR</label>
@@ -259,7 +269,7 @@
                                 </div>
                                 <select name="codemp" id="empleado" class="form-control" disabled>
                                     <option value="{{ $actual->codemp }}" selected>
-                                        {{ $actual->empleados->full_name }}
+                                        {{ optional($actual->empleados)->full_name }}
                                     </option>
                                 </select>
                             </div>
@@ -357,7 +367,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"></span>
                                         </div>
-                                        <input type="text" readonly name="depacu" id="factor_actual"
+                                        <input type="text" readonly id="factor_actual"
                                             class="form-control" value="00" required>
                                     </div>
                                 </div>
@@ -424,6 +434,16 @@
                                             class="form-control" value="00" required>
                                     </div>
                                 </div>
+                                <div class="col-md-2 form-group">
+                                    <label style="color:black;font-weight: bold;">VALOR ACTUAL:</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Bs </span>
+                                        </div>
+                                        <input type="text" readonly id="valor_neto"
+                                            class="form-control" value="00" required>
+                                    </div>
+                                </div>
                                 <div class="col-12">
                                     <div class="row">
                                         <div class="col-md-3 form-group">
@@ -466,7 +486,7 @@
                         </div>
                     </div>
                     <div class="text-center">
-                        <button class="btn color-icon-2 font-verdana-bg" type="submit">
+                        <button class="btn color-icon-2 font-verdana-12" type="submit">
                             <i class="fa-solid fa-paper-plane mr-2"></i>Actualizar
                         </button>
                     </div>
@@ -475,7 +495,6 @@
         </div>
     </div>
 @section('styles')
-    <link rel="stylesheet" href="{{ asset('admin_assets/plugins/select2/css/select2.min.css') }}">
     <style>
         .select2-search__field:focus {
             outline: none;
@@ -484,12 +503,17 @@
     </style>
 @endsection
 @section('scripts')
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD73WmrwkgvJi5CLHprURygkrcTJerWGIk&callback=initMap" async
-        defer></script>
-    <script src="{{ asset('admin_assets/plugins/select2/js/select2.min.js') }}"></script>
+<script>
+    function initMap() {
+
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD73WmrwkgvJi5CLHprURygkrcTJerWGIk&callback=initMap">
+    </script>
     <script src="{{ asset('js/depreciar.js') }}"></script>
     <script>
         $(document).ready(function() {
+            initMap()
             $('#ambiente').select2({
                 tags: true,
                 language: {
@@ -513,22 +537,35 @@
             var formattedDate = fechaInicial.toISOString().split('T')[0];
             $('#feul').val(formattedDate);
             $('#factor_actual').val(
-                factorActual(ufInicial, ufActual).toFixed(2)
+                getTwoDecimals(
+                    factorActual(ufInicial, ufActual)
+                )
             );
             $('#depre_acumulada').val(
-                depreciacionAcumulada(costoInicial, vidaUtil, fechaInicial, ufInicial, ufActual).toFixed(2)
+                getTwoDecimals(
+                    depreciacionAcumulada(costoInicial, vidaUtil, fechaInicial, ufInicial, ufActual)
+                )
             );
             $('#valor_actual').val(
-                valorActual(costoInicial, vidaUtil, fechaInicial, ufInicial, ufActual).toFixed(2)
+                valorNeto(costoInicial, vidaUtil, fechaInicial, ufInicial,ufActual).toFixed(2)
+            );
+            $('#valor_neto').val(
+                valorActual(costoInicial, ufInicial,ufActual).toFixed(2)
             );
             $('#depre_gestion').val(
-                depreciacionAcumuladaGestion(costoInicial, vidaUtil, ufInicial, ufActual).toFixed(2)
+                getTwoDecimals(
+                    depreciacionAcumuladaGestion(costoInicial, vidaUtil, ufInicial, ufActual)
+                )
             );
             $('#depre_acumulada_inicial').val(
-                depreciacionAcumuladaInicial(costoInicial, vidaUtil, fechaInicial, ufInicial, ufActual).toFixed(
-                    2)
+                getTwoDecimals(
+                    depreciacionAcumuladaInicial(costoInicial, vidaUtil, fechaInicial, ufInicial, ufActual)
+                )
             );
         });
+        function getTwoDecimals(num) {
+                return Math.floor(num * 100) / 100;
+            }
 
         $('#gallery-input').on('change', function() {
             const numFiles = this.files.length;

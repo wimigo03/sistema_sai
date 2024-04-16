@@ -6,7 +6,7 @@
 </style>
 <br>
 <div class="header">
-    <div class="row font-verdana-bg">
+    <div class="row font-verdana-12">
         <div class="col-md-10 titulo">
             <b>ACTIVOS VSIAF</b>
         </div>
@@ -90,7 +90,7 @@
 @else
 <div class="body">
     <div class="row">
-        <div class="col-md-12 font-verdana-bg text-center">
+        <div class="col-md-12 font-verdana-12 text-center">
             ... No existen resultados ...
         </div>
     </div>

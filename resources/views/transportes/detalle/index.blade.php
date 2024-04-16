@@ -7,7 +7,7 @@
     </div>
 @endif
 <br>
-<div class="row font-verdana-bg">
+<div class="row font-verdana-12">
 
     <div class="col-md-2 titulo">
         <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
@@ -51,7 +51,7 @@
 
 
             <div class="col-md-8">
-                <label for="chofer" class="d-inline font-verdana-bg">
+                <label for="chofer" class="d-inline font-verdana-12">
                     <b>Personal o conductor</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="chofer" id="chofer" placeholder="--Seleccionar--" 
@@ -67,7 +67,7 @@
            
 
             <div class="col-md-8">
-                <label for="producto" class="d-inline font-verdana-bg">
+                <label for="producto" class="d-inline font-verdana-12">
                     <b>Unidad o Vehiculo</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <select name="producto" id="producto"  placeholder="--Seleccionar--" 
@@ -82,11 +82,11 @@
 
 
             <div class="col-md-2">
-                <label for="cantidad" class="d-inline font-verdana-bg">
+                <label for="cantidad" class="d-inline font-verdana-12">
                     <b>kilometraje Actual</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
                 </label>
                 <input type="text" name="cantidad" value="{{request('cantidad')}}" 
-                class="form-control form-control-sm font-verdana-bg" id="cantidad" 
+                class="form-control form-control-sm font-verdana-12" id="cantidad" 
                 onkeypress="return valideNumber(event);">
             </div>
 
@@ -96,7 +96,7 @@
                 @if($consumos->estado3 == 1)
 
 
-                <button class="btn btn-success font-verdana-bg" type="button" 
+                <button class="btn btn-success font-verdana-12" type="button" 
                 onclick="save();">
                     <i class="fa-solid fa-plus"></i>
                     &nbsp;Adicionar

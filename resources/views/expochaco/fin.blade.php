@@ -13,7 +13,7 @@
     <div align='center'>
 
         <div class="body-border col-md-7" style="background-color: #FFFFFF;">
-            <label for="cantidad" class="d-inline font-verdana-bg">
+            <label for="cantidad" class="d-inline font-verdana-12">
                 <H5><b>..SU REGISTRO FUE PROCESADO EXITOSAMENTE..</b></H5><p></p><b>DIRIJASE A OFICINAS PARA COMPLETAR EL
                     PROCESO.
 
@@ -25,7 +25,7 @@
             <div class="form-group row">
                 <div class="col-md-12 text-center">
                     <p></p>
-                    <button class="btn color-icon-2 font-verdana-bg" type="button" onclick="save();">
+                    <button class="btn color-icon-2 font-verdana-12" type="button" onclick="save();">
                         <i class="fa-solid fa-paper-plane"></i>
                         Aceptar
                     </button>
