@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Support\Facades\Auth;
-
+//use App\Providers\RouteServiceProvider;
+//use Illuminate\Foundation\Auth\AuthenticatesUsers;
+//use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Auth;
+
 class LoginController extends Controller
 {
     /*
@@ -21,32 +22,38 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
-
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = RouteServiceProvider::HOME;
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
+    public function showLoginForm(){
+        return view('auth.login');
     }
 
-    public function username()
+    public function login(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'password' => 'required|string',
+        ]);
+
+        $credentials = $request->only('name', 'password');
+        if (Auth::attempt($credentials)) {
+            return redirect()->route('home.index');
+        }
+
+        return redirect()->route('login')->with(['danger_message' => 'Credenciales inválidas']);
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect('/login');
+    }
+
+    /*public function username()
     {
         return 'name';
-    }
+    }*/
 
-    protected function credentials(Request $request){
+    /*protected function credentials(Request $request){
         $request['estadouser'] = 1;
         return $request->only($this->username(), 'password', 'estadouser');
-    }
+    }*/
 }

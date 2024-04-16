@@ -7,7 +7,8 @@
           <div class="card-group mb-0">
             <div class="card p-4 body-border" >
             <form class="form-horizontal was-validated" method="POST" action="{{ route('login') }}">
-            {{ csrf_field() }}
+                {{-- csrf_field() --}}
+                @csrf
                 <div class="body-border">
                 <h1>Acceder</h1>
                 <p class="text-muted">Control de acceso al sistema</p>

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\MedidaController;
@@ -79,10 +80,15 @@ use App\Http\Controllers\Activo\VehiculoController;
 |
 */
 
-Route::get('/', function () {
-    //return view('welcome');
+/*Route::get('/', function () {
     return view('/auth/login');
+});*/
+
+Route::get('/', function () {
+    return view('auth.login');
 });
+Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
+Route::post('/login', 'Auth\LoginController@login');
 
 Route::middleware(['auth'])->group(function () {
     Route::group(['name' => 'admin.'], function () {
@@ -495,7 +501,7 @@ Route::get('activosFijos/activos', [ActivosController::class,'index'])->name('ac
         Route::POST('Activo/store/formulario', [FormularioActivoController::class, 'store'])->name('activo.formulario.activo.store')->middleware('can:oficina_access');
         Route::POST('Activo/update/{id}/formulario', [FormularioActivoController::class, 'update'])->name('activo.formulario.activo.update')->middleware('can:oficina_access');
         Route::POST('Activo/destroy/{id}/formulario', [FormularioActivoController::class, 'destroy'])->name('activo.formulario.activo.destroy')->middleware('can:oficina_access');
-        
+
     Route::get('/reportes/rep1-pdf', [ReportesController::class, 'reporte1Pdf'])->name('rep1.pdf');
     Route::get('/reportes/rep2-pdf', [ReportesController::class, 'reporte2Pdf'])->name('rep2.pdf');
     Route::get('/reportes/rep3-pdf', [ReportesController::class, 'reporte3Pdf'])->name('rep3.pdf');
