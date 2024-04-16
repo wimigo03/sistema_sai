@@ -2,11 +2,11 @@
 @section('content')
 <link rel="stylesheet" href="/css/font-verdana.css" rel="stylesheet">
 <div class="card card-custom">
-    <div class="card-header font-verdana-15">
-        <b>FORMULARIO REGISTRAR BARRIO</b>
+    <div class="card-header font-verdana-bgt">
+        <b>FORMULARIO EDITAR PAQUETE</b>
     </div>
     <div class="card-body">
-        @include('canasta_v2.barrio.partials.editar-form')
+        @include('canasta_v2.entregas.partials.editar-form')
     </div>
 </div>
 @endsection
@@ -17,9 +17,15 @@
                 keyboard: false
             })
         }
+        function message_alert(mensaje) {
+            $("#modal-alert .modal-body").html(mensaje);
+            $('#modal-alert').modal({
+                keyboard: false
+            });
+        }
 
         function confirmar(){
-            var url = "{{ route('barrios.update') }}";
+            var url = "{{ route('barrios.store') }}";
             $("#form").attr('action', url);
             $(".btn").hide();
             $(".spinner-btn").show();
@@ -29,7 +35,33 @@
         function cancelar(){
             $(".btn").hide();
             $(".spinner-btn").show();
-            window.location.href = "{{ route('barrios.index') }}";
+            window.location.href = "{{ route('entregas.index') }}";
+        }
+
+        function save() {
+            if (validar_formulario() == true) {
+                $(".btn").hide();
+                $(".spinner-btn-send").show();
+                $("#form").submit();
+            }
+        }
+
+        function validar_formulario() {
+
+            if ($("#gestion>option:selected").val() == "") {
+                message_alert("El campo <b>[Gestion]</b> es un dato obligatorio...");
+                return false;
+            }
+
+
+            if ($("#items").val() == "") {
+                message_alert("El campo <b>[Items]</b> es un dato obligatorio...");
+                return false;
+            }
+
+
+
+            return true;
         }
     </script>
 @endsection

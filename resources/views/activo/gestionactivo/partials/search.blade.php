@@ -29,19 +29,28 @@
             <input type="text" name="grupo" value="{{ request('grupo') }}" placeholder="--Grupo Contable--"
                 class="form-control font-verdana">
         </div>
+
     </div>
     <div class="form-group row">
-        <div class="col-md-3">
+        <div class="col-md-2">
+            <input type="text" name="auxiliar" value="{{ request('auxiliar') }}" placeholder="--Auxiliar--"
+                class="form-control font-verdana">
+        </div>
+        <div class="col-md-2">
             <input type="text" name="oficina" value="{{ request('oficina') }}" placeholder="--Oficina--"
                 class="form-control font-verdana">
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <input type="text" name="cargo" value="{{ request('cargo') }}" placeholder="--Cargo Responsable--"
                 class="form-control font-verdana">
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
+            <input type="text" name="cod_rube" value="{{ request('cod_rube') }}" placeholder="--Preventivo--"
+                class="form-control font-verdana">
+        </div>
+        <div class="col-md-2">
             <select name="estado" id="estado" class="form-control">
-                <option value="">-</option>
+                <option value="">-Estado-</option>
                 <option value="1" @if (request('estado') == '1') selected @endif>BUENO</option>
                 <option value="2" @if (request('estado') == '2') selected @endif>REGULAR</option>
                 <option value="3" @if (request('estado') == '3') selected @endif>MALO</option>

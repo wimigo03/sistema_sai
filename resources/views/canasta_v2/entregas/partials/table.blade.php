@@ -23,9 +23,11 @@
 
                         <td align="center" style="width:3%" >
                             <span class="tts:left tts-slideIn tts-custom" aria-label="Editar Paquete">
-                                <a href=""
+                                <a href="{{ route('entregas.edit_paquete', $datos->id) }}"
                                     class="btn btn-sm edit btn-flat"><i class="fa-sharp fa-regular fa-pen-to-square"></i>
                             </span>
+
+
                         </td>
                         <td align="center" style="width:3%">
                             <span class="tts:left tts-slideIn tts-custom" aria-label="Agregar Periodos">
@@ -57,7 +59,5 @@
         </table>
     </div>
 
-    @foreach ($paquetes as $datos)
-        @include('canasta_v2.entregas.partials.paquete_edit_delete_create')
-    @endforeach
+
 </div>

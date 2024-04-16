@@ -12,9 +12,7 @@
                     <td class="text-left p-1"><b>DIRECCION</b></td>
                     <td class="text-center p-1"><b>ESTADO</b></td>
 
-                    <td class="text-center p-1 font-weight-bold">
-                        <i class="fa fa-bars" aria-hidden="true"></i>
-                    </td>
+
 
                     <td class="text-center p-1 font-weight-bold">
                         <i class="fa fa-bars" aria-hidden="true"></i>
@@ -42,22 +40,12 @@
                         @elseif(strtoupper($datos->status) == 'PENDIENTE')
                         <td class="text-left p-1" style="color: blue;font-weight: bold;">{{ strtoupper($datos->status) }}</td>
                         @endif
-                        <td style="padding: 0;" class="text-center p-1">
 
-                            <span class="tts:left tts-slideIn tts-custom" aria-label="Previsualizar foto">
-                                <a href="{{ $datos->dirFoto }}" target="blank_">
-                                    <span class="text-primary">
-                                        <i class="fa-regular fa-image fa-lg" style="color:rgb(102, 14, 234)"></i>
-                                    </span>
-                                </a>
-                            </span>
-
-                        </td>
 
                         <td style="padding: 0;" class="text-center p-1">
 
-                            <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Archivo">
-                                <a href="">
+                            <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Beneficiario">
+                                <a href="{{ route('beneficiarios.editar', $datos->id) }}">
                                     <span class="text-warning">
                                         <i class="fas fa-lg fa-edit" style="color:rgb(26, 162, 16)"></i>
                                     </span>

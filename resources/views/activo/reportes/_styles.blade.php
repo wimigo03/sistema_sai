@@ -31,9 +31,9 @@
 
     body {
         margin-top: 1cm;
-        margin-left: .3cm;
-        margin-right: .3cm;
-        margin-bottom: .1cm;
+        margin-left: 1cm;
+        margin-right: 1cm;
+        margin-bottom: 1cm;
     }
 
     header {

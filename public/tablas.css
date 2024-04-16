@@ -1,0 +1,68 @@
+﻿.tabla1 {
+	border-top:1px solid #ADADAD;
+	border-left:1px solid #ADADAD;
+	border-right: 1px solid #ADADAD;
+	border-bottom: 1px solid #ADADAD;
+	color: #000;
+	text-align:center;
+	margin: 0 auto;
+	/*background-color:#dcdcdc; *//*fondo de tabla*/
+	/*font-family:arial,verdana,times;*/
+	font-size:14px;
+	/*width: 650px;*/ /*tamaño de la tabla  width: 50%;*/
+}
+.tr1 {
+	padding: 4px;
+	/* font-family:arial,verdana,times;*/
+	/* float:left;width:100px;*/
+	border-left:1px solid #ADADAD;
+	border-right: 1px solid #ADADAD;
+	border-bottom: 1px solid #ADADAD;
+	border-top:1px solid #ADADAD;
+	/* font-weight:bold;*/
+}
+
+.td1 {
+	padding: 4px;
+	text-align:right;
+	border-top:1px solid #ADADAD;
+	border-left:1px solid #ADADAD;
+	border-right: 1px solid #ADADAD;
+	border-bottom: 1px solid #ADADAD;
+	width: 35%;
+	/*float:left;*/
+	/*width:100px;*/
+}
+.td2 {
+	padding: 4px;
+	text-align:left;
+	border-top:1px solid #ADADAD;
+	border-left:1px solid #ADADAD;
+	border-right: 1px solid #ADADAD;
+	border-bottom: 1px solid #ADADAD;
+	/*float:left;*/
+	/*width:100px;*/
+}
+.image_fondo{
+	background-image: url("../../imagenes/historia.png");
+	width: 300px;
+	height: 300px;
+}
+.fondo_tabla{
+	background-image: url("../../imagenes/historia.png");
+	background-size: 300px;
+	background-repeat: no-repeat;
+	background-position: 140px;
+}
+.header_left{
+	width: 15%;
+	float: left;
+}
+.header_center{
+	width: 75%;
+	float: left;
+	margin-top:10px !important;
+}
+.header_right{
+	float: left;
+}

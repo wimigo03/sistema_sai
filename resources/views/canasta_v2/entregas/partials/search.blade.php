@@ -20,13 +20,9 @@
     <div class="form-group row">
         <div class="col-md-6">
 
-
-            <a href="#create" data-toggle="modal">
-                <button class="btn btn-outline-primary font-verdana" type="button" >
-                    &nbsp;<i class="fa fa-plus"></i>&nbsp;Crear Nuevo Paquete
-                </button>
-                <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn-send" style="display: none;"></i>
-            </a>
+            <button class="btn btn-outline-primary font-verdana" type="button" onclick="create();">
+                &nbsp;<i class="fa fa-plus"></i>&nbsp;Crear
+            </button>
 
 
 

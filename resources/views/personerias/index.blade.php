@@ -111,6 +111,7 @@
     </div> <!-- end row -->
 
     @foreach ($personerias as $personeria)
+    
     @include('personerias.edit_delete_create')
     @endforeach
 @endsection

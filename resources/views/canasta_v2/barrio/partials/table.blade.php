@@ -2,11 +2,10 @@
     <div class="col-md-12 table-responsive">
         <table class="table display responsive" style="width:100%;">
             <thead>
-                <tr class="font-verdana-11">
-                    <td class="text-center p-1"><b>TIPO</b></td>
-                    <td class="text-center p-1"><b>NOMBRE</b></td>
-                    <td class="text-center p-1"><b>DISTRITO</b></td>
-                    <td class="text-center p-1"><b>USUARIO</b></td>
+                <tr class="font-verdana">
+                    <td class="text-left p-1"><b>TIPO</b></td>
+                    <td class="text-left p-1"><b>NOMBRE</b></td>
+                    <td class="text-left p-1"><b>DISTRITO</b></td>
                     <td class="text-center p-1"><b>HABILITADOS</b></td>
                     <td class="text-center p-1"><b>BAJAS</b></td>
                     <td class="text-center p-1"><b>FALLECIDOS</b></td>
@@ -20,7 +19,6 @@
                         <td class="text-left p-1">{{ $datos->tipo_b }}</td>
                         <td class="text-left p-1">{{ $datos->nombre }}</td>
                         <td class="text-left p-1">{{ $datos->distrito->nombre }}</td>
-                        <td class="text-left p-1">{{ strtoupper($datos->user->name) }}</td>
                         <td class="text-center p-1" style="color: green;font-weight: bold;">{{ $datos->beneficiariosA()->count() }}</td>
                         <td class="text-center p-1" style="color: red;font-weight: bold;">{{ $datos->beneficiariosB()->count() }}</td>
                         <td class="text-center p-1" style="color: orange;font-weight: bold;">{{ $datos->beneficiariosF()->count() }}</td>
@@ -52,7 +50,13 @@
                 @endforeach
             </tbody>
             <tfoot>
-                <tr class="font-verdana-11">
+                <th class="text-right p-1" style="background-color:#E1FFFF" colspan="3">Total :</th>
+                <td class="text-center p-1" style="background-color:#E1FFFF">{{ $beneficiariosA }}</td>
+                <td class="text-center p-1" style="background-color:#E1FFFF">{{ $beneficiariosB }}</td>
+                <td class="text-center p-1" style="background-color:#E1FFFF">{{ $beneficiariosF }}</td>
+                <td class="text-center p-1" style="background-color:#E1FFFF">{{ $beneficiariosX }}</td>
+                <th style="background-color:#E1FFFF" colspan="2"></th>
+                <tr class="font-verdana">
                     <td colspan="12">
                         {{ $barrios->appends(Request::all())->links() }}
                         <p class="text-muted">Mostrando

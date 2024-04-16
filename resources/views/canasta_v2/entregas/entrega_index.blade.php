@@ -137,10 +137,14 @@
             });
 
             $('#barrio2').select2({
-                placeholder: "--Seleccionar--"
+                placeholder: "-------------- Barrio --------------"
             });
             $('#barrio3').select2({
-                placeholder: "--Seleccionar--"
+                placeholder: "---------- Seleccionar un Barrio ----------"
+            });
+
+            $('#estado').select2({
+                placeholder: "---- Estado ----"
             });
         });
 

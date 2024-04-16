@@ -369,6 +369,12 @@
                                     <span class="nav-label mr-4">Institucional</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{ asset('facebook') }}">
+                                    &nbsp; &nbsp; &nbsp;
+                                    <span class="nav-label mr-4">Facebook</span>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <hr style="margin-top:0; margin-bottom:0;">
@@ -677,53 +683,106 @@
                     <hr style="margin-top:0; margin-bottom:0;">
                     <li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_activos_fijos"
-                            class="active collapsed" aria-expanded="false">
-                            <i class="fa fa-users" style="color:green"></i>
-                            <span class="nav-label mr-3">ACTIVOS FIJOS</span>
-                            <span class="fa fa-arrow-circle-left float-right"></span>
-                        </a>
-                        <ul class="sub-menu collapse" id="dashboard_activos_fijos"
-                            @if (request()->is('users') || request()->is('users/*')) in @endif>
-                            <li>
-                                <a href="{{ route('activo.unidadadmin.index') }}">
-                                    &nbsp;<i class="fa fa-building"></i>
-                                    <span class="nav-label mr-4"> unidad administrativa</span>
-                                </a>
+                                class="active collapsed" aria-expanded="false">
+                                <i class="fa fa-users" style="color:green"></i>
+                                <span class="nav-label mr-3">ACTIVOS FIJOS</span>
+                                <span class="fa fa-arrow-circle-left float-right"></span>
+                            </a>
+                            <ul class="sub-menu collapse" id="dashboard_activos_fijos"
+                                @if (request()->is('admin/users') || request()->is('admin/users/*')) in @endif>
+                                <a href="" data-toggle="collapse" data-target="#activos__fijjos"
+                                            class="active collapsed" aria-expanded="false">
+                                            <i class="fa fa-users"></i>
+                                            <span class="nav-label mr-3">Gestiónar</span>
+                                            <span class="fa fa-arrow-circle-left float-right"></span>
+                                        </a>
+                                            <ul class="sub-menu collapse" id="activos__fijjos">
+                                                @can('unidadadmin_access')
+                                                <li>
+                                                    <a href="{{ route('activo.unidadadmin.index') }}">
+                                                        &nbsp;<i class="fa fa-building"></i>
+                                                        <span class="nav-label mr-4"> unidad administrativa</span>
+                                                    </a>
 
-                            </li>
-                            <li>
-                                <a href="{{ route('activo.organismo.index') }}">
-                                    &nbsp;<i class="fa fa-building"></i>
-                                    <span class="nav-label mr-4"> Organismo Financiero</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('activo.codcont.index') }}">
-                                    &nbsp;<i class="fas fa-money-check-alt"></i>
-                                    <span class="nav-label mr-4"> Grupo Contable</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('activo.gestionactivo.index') }}">
-                                    &nbsp;<i class="fa fa-database"></i>
-                                    <span class="nav-label mr-4"> Gestión de Activos Fijos</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('oficina.index') }}">
-                                    &nbsp; <i class="fa fa-building"></i>
-                                    <span class="nav-label mr-4"> Oficinas y Responsables</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('activo.reportes.index') }}">
-                                    &nbsp;<i class="fa fa-chart-bar"></i>
-                                    <span class="nav-label mr-4"> Reportes</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
+                                                </li>
+                                                @endcan
+                                                @can('organismo_access')
+                                                <li>
+                                                    <a href="{{ route('activo.organismo.index') }}">
+                                                        &nbsp;<i class="fa fa-building"></i>
+                                                        <span class="nav-label mr-4"> Organismo Financiero</span>
+                                                    </a>
+
+                                                </li>
+                                            @endcan
+
+                                            <li>
+                                                <a href="{{ route('activo.codcont.index') }}">
+                                                    &nbsp;<i class="fas fa-money-check-alt"></i>
+                                                    <span class="nav-label mr-4"> Grupo Contable</span>
+                                                </a>
+
+                                            </li>
+
+                                                {{-- Gestión de Activos Fijos--}}
+                                            <li>
+                                                <a href="{{ route('activo.gestionactivo.index') }}">
+                                                    &nbsp;<i class="fa fa-database"></i>
+                                                    <span class="nav-label mr-4"> Listado </span>
+                                                </a>
+                                            </li>
+
+
+                                            <li>
+                                                <a href="{{ route('oficina.index') }}">
+                                                    &nbsp;<i class="fa fa-building"></i>
+                                                    <span class="nav-label mr-4"> Oficinas y Responsables</span>
+                                                </a>
+
+                                            </li>
+                                         </ul>
+
+
+
+
+                                <li>
+                                    <li>
+                                        <a href="{{ route('activo.vehiculo.index') }}">
+                                            &nbsp;<i class="fa fa-database"></i>
+                                            <span class="nav-label mr-4">Parque Automotor</span>
+                                        </a>
+                                    </li>
+                                    <a href="" data-toggle="collapse" data-target="#sub_reportes"
+                                            class="active collapsed" aria-expanded="false">
+                                            <i class="fa fa-users"></i>
+                                            <span class="nav-label mr-3">Reportes</span>
+                                            <span class="fa fa-arrow-circle-left float-right"></span>
+                                        </a>
+                                            <ul class="sub-menu collapse" id="sub_reportes">
+                                            <li>
+
+                                        {{--       <li>
+                                                    <a href="{{ route('activo.reportes.index') }}">
+                                                        &nbsp;<i class="fa fa-chart-bar"></i>
+                                                        <span class="nav-label mr-4"> Reportes</a>
+                                                </li> --}}
+                                                <li>
+                                                    <a href="{{ route('activo.formulario.index') }}">
+                                                        &nbsp;<i class="fa fa-database"></i>
+                                                        <span class="nav-label mr-4">Formulario de Inventario Físico</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{ route('activo.adeudo.index') }}">
+                                                        &nbsp;<i class="fa fa-database"></i>
+                                                        <span class="nav-label mr-4">No Adeudo</span>
+                                                    </a>
+                                                </li>
+
+                                            </li>
+
+    </ul>
+</div>
+</div>
+</div>
 </aside>

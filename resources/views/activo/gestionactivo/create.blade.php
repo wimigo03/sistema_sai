@@ -207,6 +207,16 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
+                            
+                            <label for="cod_rube" style="color:black;font-weight: bold;">ID PREVENTIVO :</label>
+                            <div class="input-group">
+                                <input type="text" name="cod_rube" value="{{ old('cod_rube') }}" class="form-control" placeholder="Preventivo">
+                            </div>
+                            @error('cod_rube')
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
                         <div class="col-md-5 mb-3">
                             <label style="color:black;font-weight: bold;">OFICINA:</label>
@@ -435,7 +445,6 @@
         </div>
     </div>
 @section('styles')
-    <link rel="stylesheet" href="{{ asset('admin_assets/plugins/select2/css/select2.min.css') }}">
     <style>
         .select2-search__field:focus {
             outline: none;
@@ -444,7 +453,6 @@
     </style>
 @endsection
 @section('scripts')
-    <script src="{{ asset('admin_assets/plugins/select2/js/select2.min.js') }}"></script>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD73WmrwkgvJi5CLHprURygkrcTJerWGIk&callback=initMap" async
         defer></script>
@@ -452,6 +460,30 @@
     <script>
         $(document).ready(function() {
             $('#ambiente').select2({
+                tags: true,
+                language: {
+                    noResults: function() {
+                        return "No se encontraron resultados";
+                    }
+                }
+            });
+            $('#organismofin').select2({
+                tags: true,
+                language: {
+                    noResults: function() {
+                        return "No se encontraron resultados";
+                    }
+                }
+            });
+            $('#area').select2({
+                tags: true,
+                language: {
+                    noResults: function() {
+                        return "No se encontraron resultados";
+                    }
+                }
+            });
+            $('#codcont').select2({
                 tags: true,
                 language: {
                     noResults: function() {

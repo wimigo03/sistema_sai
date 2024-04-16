@@ -25,13 +25,10 @@ class StoreVehiculoRequest extends FormRequest
     {
         return [
             'codigo' => 'required|string|max:255',
-            'codigo_interno' => 'required|string|max:255',
-            'da' => 'required|string|max:255',
-            'costo_historico' => 'required|integer',
-            'documento' => 'required|mimes:pdf',
-            'documentos' => 'required',
-            'documentos.*' => 'required|mimes:pdf',
-            'estado' => 'required|in:BUENO,REGULAR,MALO',
+            'codigo_interno' => 'nullable|string|max:255',
+            'documento' => 'nullable|mimes:pdf',
+            'documentos' => 'nullable',
+            'documentos.*' => 'nullable|mimes:pdf',
             'nombre_propietario' => 'required|string|max:255',
             'municipio_radicatoria' => 'required|string|max:255',
             'clase_vehiculo' => 'required|string|max:255',
@@ -57,7 +54,7 @@ class StoreVehiculoRequest extends FormRequest
             'ultima_itv' => 'required|integer',
             'b_sisa' => 'required|string|max:255',
             'nro_ruat' => 'required|string|max:255',
-            'documento_ruat' =>  'required|mimes:pdf',
+            'documento_ruat' =>  'nullable|mimes:pdf',
             'nro_crpva' => 'required|string|max:255',
             'nro_poliza_seguro' => 'required|string|max:255',
             'vencimiento_poliza_seguro' => 'required|date',
@@ -70,9 +67,8 @@ class StoreVehiculoRequest extends FormRequest
             'comunidad' => 'required|string|max:255',
             'zona' => 'required|string|max:255',
             'direccion' => 'required|string|max:255',
-            'kardex_aclaracion' => 'required|string|max:255',
-            'ubicacion_satelital' => 'required|string|max:255',
-            'imagen' =>  'required|mimes:jpg,jpeg,bmp,png',
+            'kardex_aclaracion' => 'nullable|string|max:255',
+            'imagen' =>  'nullable|mimes:jpg,jpeg,bmp,png',
             'actual_id' => 'required|exists:actual,id',
         ];
     }

@@ -70,7 +70,7 @@
         </div>
         <div class="col-md-3">
             <b>ORGANIZMO FINANCIERO:</b>
-            <h6>{{ optional($organismoFin)->des }}</h6>
+            <h6>{{ optional($actual->organismofins)->des }}</h6>
         </div>
         <div class="col-md-3">
             <b>ESTADO:</b>
@@ -133,6 +133,10 @@
             <b>VALOR NETO:</b>
             <h6 id="valor_actual"></h6>
         </div>
+        <div class="col-md-2">
+            <b>VALOR ACTUAL:</b>
+            <h6 id="valor_neto"></h6>
+        </div>
         <div class="col-md-3">
             <b>CALCULADO A:</b>
             <h6>{{ date('d-m-Y') }}</h6>
@@ -192,21 +196,36 @@
                 var ufInicial = '{{ $ufInicial }}';
                 var ufActual = '{{ $ufActual }}';
                 $('#factor_actual').html(
-                    factorActual(ufInicial, ufActual).toFixed(2)
+                    factorActual(ufInicial, ufActual).toFixed(6)
                 );
+                function roundToTwoDecimals(num) {
+                    return Math.ceil(num * 100) / 100;
+                }
                 $('#depre_acumulada').html(
-                    depreciacionAcumulada(costoInicial, vidaUtil, fechaInicial, ufInicial, ufActual).toFixed(2)
+                    getTwoDecimals(
+                        depreciacionAcumulada(costoInicial, vidaUtil, fechaInicial, ufInicial, ufActual)
+                    )
                 );
                 $('#valor_actual').html(
-                    valorActual(costoInicial, vidaUtil, fechaInicial, ufInicial,ufActual).toFixed(2)
+                    valorNeto(costoInicial, vidaUtil, fechaInicial, ufInicial,ufActual).toFixed(2)
+                );
+                $('#valor_neto').html(
+                    valorActual(costoInicial, ufInicial,ufActual).toFixed(2)
                 );
                 $('#depre_gestion').html(
-                    depreciacionAcumuladaGestion(costoInicial, vidaUtil, ufInicial,ufActual).toFixed(2)
+                    getTwoDecimals(
+                        depreciacionAcumuladaGestion(costoInicial, vidaUtil, ufInicial,ufActual)
+                    )
                 );
                 $('#depre_acumulada_inicial').html(
-                    depreciacionAcumuladaInicial(costoInicial, vidaUtil, fechaInicial, ufInicial,ufActual).toFixed(2)
+                    getTwoDecimals(
+                        depreciacionAcumuladaInicial(costoInicial, vidaUtil, fechaInicial, ufInicial,ufActual)
+                    )
                 );
             });
+            function getTwoDecimals(num) {
+                return Math.floor(num * 100) / 100;
+            }
         </script>
 
         <script>

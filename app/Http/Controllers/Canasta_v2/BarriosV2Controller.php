@@ -12,6 +12,9 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Log;
 use App\Models\Canasta\Barrio;
 use App\Models\Canasta\Distrito;
+use App\Models\Canasta\HistorialMod;
+use App\Models\Canasta\HistorialBaja;
+use App\Models\Canasta\Beneficiario;
 use App\Models\Canasta\Dea;
 use App\Http\Requests;
 use Maatwebsite\Excel\Facades\Excel;
@@ -84,18 +87,102 @@ class BarriosV2Controller extends Controller
         //dd($barrios);
 
     }
+    private function copiarhistorialMod()
+    {
+         $historialM = DB::connection('mysql_canasta')->table("historialMod")
+         //->where('distrito','!=',null)
+         //->where('estado','=','A')
+         //->where('tipo','=','Comunidad')
+         ->where('idHistorialMod','>',8641)
+         ->get();
+
+         //dd($ocupaciones);
+         foreach ($historialM as $data){
+
+
+            $datos=([
+                'id'=>$data->idHistorialMod,
+                'observacion'=>$data->observacion,
+                'id_beneficiario'=>$data->idUsuario,
+                'dea_id'=>1,
+                'user_id'=>16,
+                'created_at'=>$data->fecha     ]
+
+
+                     );
+              $historialMod=HistorialMod::CREATE($datos);
+    }
+        //dd($barrios);
+
+    }
+
+
+    private function copiarhistorialBaja()
+    {
+         $historialB = DB::connection('mysql_canasta')->table("historialbaja")
+         //->where('distrito','!=',null)
+         //->where('estado','=','A')
+         //->where('tipo','=','Comunidad')
+         ->where('idHistorialBaja','>',3269)
+         ->get();
+
+         //dd($ocupaciones);
+         foreach ($historialB as $data){
+
+
+            $datos=([
+                'id'=>$data->idHistorialBaja,
+                'observacion'=>$data->obs,
+                'id_beneficiario'=>$data->idUsuario,
+                'dea_id'=>1,
+                'user_id'=>16,
+                'created_at'=>$data->fecha     ]
+
+
+                     );
+              $historialBaja=HistorialBaja::CREATE($datos);
+    }
+        //dd($barrios);
+
+    }
+
 
     public function index()
     {
-       //$this->copiarBarrios();
+       //$this->copiarhistorialBaja();
         $tipos = Barrio::TIPOS;
         $distritos = Distrito::where('dea_id',Auth::user()->dea->id)->pluck('nombre','id');
-        $deas = Dea::where('id',Auth::user()->dea->id)->pluck('nombre','id');
+        $distritos2 = Distrito::where('dea_id',Auth::user()->dea->id)->get();
+        $deas = Dea::where('id',Auth::user()->dea->id)->get('nombre','id');
+
+        // total habilitados//
+        $beneficiariosA = Beneficiario::where('dea_id',Auth::user()->dea->id)
+        ->where('estado','=','A')
+         ->count();
+
+         // total dados de baja//
+         $beneficiariosB = Beneficiario::where('dea_id',Auth::user()->dea->id)
+         ->where('estado','=','B')
+          ->count();
+
+          // total fallecidos//
+          $beneficiariosF = Beneficiario::where('dea_id',Auth::user()->dea->id)
+          ->where('estado','=','F')
+           ->count();
+
+          // total pendientes//
+         $beneficiariosX = Beneficiario::where('dea_id',Auth::user()->dea->id)
+         ->where('estado','=','X')
+          ->count();
+
+       // dd($beneficiariosX);
+
         $estados = Barrio::ESTADOS;
+//dd($distritos2->nombre);
         $barrios = Barrio::where('dea_id',Auth::user()->dea->id)
                             ->orderBy('id', 'desc')
                             ->paginate(10);
-        return view('canasta_v2.barrio.index', compact('tipos','distritos','deas','estados','barrios'));
+        return view('canasta_v2.barrio.index', compact('tipos','distritos','distritos2','deas','estados','barrios','beneficiariosA','beneficiariosB','beneficiariosF','beneficiariosX'));
     }
 
     public function search(Request $request)
@@ -103,7 +190,28 @@ class BarriosV2Controller extends Controller
         $tipos = Barrio::TIPOS;
         $distritos = Distrito::where('dea_id',Auth::user()->dea->id)->pluck('nombre','id');
         $deas = Dea::where('id',Auth::user()->dea->id)->pluck('nombre','id');
+        $distritos2 = Distrito::where('dea_id',Auth::user()->dea->id)->get();
         $estados = Barrio::ESTADOS;
+        // total habilitados//
+        $beneficiariosA = Beneficiario::where('dea_id',Auth::user()->dea->id)
+        ->where('estado','=','A')
+         ->count();
+
+         // total dados de baja//
+         $beneficiariosB = Beneficiario::where('dea_id',Auth::user()->dea->id)
+         ->where('estado','=','B')
+          ->count();
+
+          // total fallecidos//
+          $beneficiariosF = Beneficiario::where('dea_id',Auth::user()->dea->id)
+          ->where('estado','=','F')
+           ->count();
+
+          // total pendientes//
+         $beneficiariosX = Beneficiario::where('dea_id',Auth::user()->dea->id)
+         ->where('estado','=','X')
+          ->count();
+
         $barrios = Barrio::query()
                             ->byCodigo($request->codigo)
                             ->byTipo($request->tipo)
@@ -115,8 +223,8 @@ class BarriosV2Controller extends Controller
                             ->where('dea_id',Auth::user()->dea->id)
                             ->orderBy('id', 'desc')
                             ->paginate(10);
-        return view('canasta_v2.barrio.index', compact('tipos','distritos','deas','estados','barrios'));
-    }
+                            return view('canasta_v2.barrio.index', compact('tipos','distritos','distritos2','deas','estados','barrios','beneficiariosA','beneficiariosB','beneficiariosF','beneficiariosX'));
+                        }
 
     public function excel(Request $request)
     {
@@ -190,6 +298,9 @@ class BarriosV2Controller extends Controller
 
     public function update(Request $request)
     {
+
+
+        //dd($request->distrito);
         $request->validate([
             'tipo' => ['required'],
             'distrito' => ['required'],

@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Style-Type" content="text/css" />
     <meta name="generator" content="Aspose.Words for .NET 23.12.0" />
     <title></title>
+    <link href="{{ asset('tablas.css') }}" rel="stylesheet" type="text/css">
     <style type="text/css">
         body {
             line-height: 108%;
@@ -55,179 +56,166 @@
 <body>
     <div>
         @forelse ($entregas as $entrega)
-            <table cellspacing="0" cellpadding="0" class="TableGrid"
-                style="margin-bottom:0pt; -aw-border-insideh:0.5pt single #000000; -aw-border-insidev:0.5pt single #000000; border-collapse:collapse">
-                <tr style="height:28.2pt">
-                    <td
-                        style="width:57.65pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border:0.5pt single">
-                        <p style="margin-bottom:0pt; text-align:center; font-size:9pt"><span
-                                style="-aw-import:ignore">&#xa0;</span></p>
-                        <p style="margin-bottom:0pt; text-align:center; font-size:9pt"><span>LOGO</span></p>
-                    </td>
-                    <td colspan="4"
-                        style="width:363.6pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border:0.5pt single">
-                        <p style="margin-bottom:0pt; text-align:center; font-size:9pt"><span
-                                style="font-weight:bold">BOLETA
-                                DE ENTREGA Y CONFORMIDAD DE LA CANASTA ALIMENTARIA</span></p>
-                        <p style="margin-bottom:0pt; text-align:center; font-size:9pt"><span
-                                style="font-weight:bold">PROGRAMA INTEGRAL DE LAS PERSONAS DE LA TERCERA
-                                EDAD-YACUIBA</span>
-                        </p>
-                    </td>
-                    <td
-                        style="width:69.2pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border:0.5pt single">
+            <table width="900" align="center" HEIGHT="410" class="tabla1 fondo_tabla">
+                <tr>
 
-                        <img src="{{ asset('logos/logoderecha2.png') }}" width="60" />
+                    <td colspan="3" class="td1">
+
+                        <table width="100%" align="center" HEIGHT="100%">
+
+                            <tr>
+                                <td width="20%" align="center">
+                                    <img src="{{ asset('logos/gobiernoregional.jpg') }}" width="120"
+                                        HEIGHT="60" />
+
+                                </td>
+                                <td align="center">
+                                    <b>
+                                        BOLETA DE ENTREGA Y CONFORMIDAD DE LA CANASTA ALIMENTARIA
+                                        <br>
+                                        PROGRAMA INTEGRAL DE LAS PERSONAS DE LA TERCERA EDAD - YACUIBA
+                                    </b>
+
+
+                                </td>
+                                <td width="20%" align="center">
+                                    <img src="{{ asset('logos/mapa.jpg') }}" width="120" HEIGHT="60" />
+
+                                </td>
+                            </tr>
+
+                        </table>
                     </td>
                 </tr>
-                <tr style="height:13.05pt">
-                    <td colspan="2"
-                        style="width:255pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border:0.5pt single">
-                        <p style="margin-bottom:0pt; font-size:9pt"><span>BARRIO COMUNIDAD</span></p>
+                <!-- FORMULARIO  DEL CENTRO -->
+                <tr vAlign="top">
+                    <td width="53%">
+                        <table width="100%" height="320" class="tabla1">
+                            <tr width="100%">
+                                <td>
+                                    <center><b>BARRIO/COMUNIDAD</b></center>
+                                </td>
+                            </TR>
+                            <tr>
+                                <td class="td1">
+                                    <center>
+                                        {{ $entrega->barrio->nombre }}
+                                    </center>
+                                </td>
+
+                            </TR>
+                            <tr>
+                                <td>
+                                    <center><b>ENTREGA DEL MES</b></center>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td class="td1">
+                                    <center>
+                                        {{ $entrega->paquete->periodo }} - {{ $entrega->paquete->gestion }}
+                                    </center>
+                                </td>
+
+                            </tr>
+
+                            <tr>
+                                <td class="td1">
+                                    <div align="justify"> <b>Productos por Canasta Alimentaria:</b>&nbsp;
+                                        {{ $entrega->paquete->items }}
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+
+                                <td class="td2"><b>Fecha de Impresion:</b>&nbsp;&nbsp; {{ \Carbon\Carbon::now()->formatLocalized('%B - %Y') }}</td>
+                            </tr>
+                        </table>
+
                     </td>
-                    <td colspan="2" rowspan="4"
-                        style="width:120.05pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border:0.5pt single;">
+                    <td width="25%" vAlign="top">
+                        <table width="100%" height="320" class="tabla1">
+                            <tr height="150">
+                                <td colspan="2">
+                                    <center><img src="{{ $entrega->beneficiario->dirFoto }}" width='120'
+                                            height='120' />
+                                    </center>
+                                </td>
+                            </TR>
+                            <tr>
+                                <td class="td1"><b>C.I.:</b></td>
+                                <td class="td2">
+                                    {{ $entrega->beneficiario->ci }}
+                                </td>
 
-                        <div align='center'>
-                            <img src="{{ $entrega->beneficiario->dirFoto }}" width="90" height="90" />
+                            </TR>
+                            <tr>
+                                <td class="td1"><b>Nombres:</b></td>
+                                <td class="td2">
+                                    {{ $entrega->beneficiario->nombres }} {{ $entrega->beneficiario->ap }}
+                                {{ $entrega->beneficiario->am }}
+                                </td>
 
+                            </tr>
+                            <tr>
+                                <td class="td1"><b>Edad:</b></td>
+                                <td class="td2">
+                                    {{ $entrega->beneficiario->age() }}
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td class="td1"><b>Fecha de Afiliación:</b></td>
+                                <td class="td2">
+                                    {{ \Carbon\Carbon::parse($entrega->beneficiario->created_att)->format('d/m/Y') }}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td width="22%" vAlign="top">
+                        <table width="100%" class="tabla1">
+                            <tr>
+                                <td>
+                                    <strong>
+                                        Firma en Conformidad
+                                    </strong>
+                                </td>
+                            </tr>
+                            <tr height="164" vAlign="top">
+                                <td class="td1" style="text-align: center;">Beneficiario: Firma&nbsp;&nbsp;
+                                    <strong>
+                                        {{ $entrega->beneficiario->firma }}
+                                    </strong>
+                                </td>
+
+                            </tr>
+                            <tr height="130" vAlign="top">
+                                <td class="td1">
+                                    <div style="font-size: 12px; text-align: center;">
+                                        <br><br><br><br><br><br>
+                                        {{ $userdate->nombres }} {{ $userdate->ap_pat }} {{ $userdate->ap_mat }}
+                                        <br>
+                                        <strong>
+                                            {{ $userdate->file->nombrecargo }}
+                                        </strong>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+
+                    </td>
+                </tr>
+                <!-- FORMULARIO  DEL CENTRO -->
+                <tr>
+                    <td colspan="3" class="td1">
+                        <div align="center">
+                            <strong>
+                                UNA NUEVA HISTORIA...JOSÉ LUIS ABREGO GOBERNADOR - <em style="color: #00a139;">RUMBO AL BICENTENARIO</em>
+                            </strong>
                         </div>
+                    </td>
 
-                    </td>
-                    <td colspan="2"
-                        style="width:115.4pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border:0.5pt single">
-                        <p style="margin-bottom:0pt; text-align:center; font-size:9pt"><span>FIRMA DE CONFORMIDAD</span>
-                        </p>
-                    </td>
-                </tr>
-                <tr style="height:21pt">
-                    <td colspan="2"
-                        style="width:255pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border:0.5pt single">
-
-                        <p style="margin-bottom:0pt; font-size:9pt"><span>BARRIO OBRERO</span></p>
-                    </td>
-                    <td colspan="2"
-                        style="width:115.4pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border:0.5pt single">
-                        <p style="margin-bottom:0pt; text-align:center; font-size:9pt"><span>Beneficiario Firma:
-                                SI</span>
-                        </p>
-                    </td>
-                </tr>
-                <tr style="height:22.6pt">
-                    <td colspan="2"
-                        style="width:255pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border:0.5pt single">
-                        <p style="margin-bottom:0pt; font-size:9pt"><span>INFORMACIÓN DE ENTREGA</span></p>
-                    </td>
-                    <td colspan="2" rowspan="3"
-                        style="width:115.4pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border:0.5pt single">
-                        <p style="margin-bottom:0pt; font-size:9pt"><span style="-aw-import:ignore">&#xa0;</span></p>
-                        <p style="margin-bottom:0pt; font-size:9pt"><span style="-aw-import:ignore">&#xa0;</span></p>
-                        <p style="margin-bottom:0pt; font-size:9pt"><span style="-aw-import:ignore">&#xa0;</span></p>
-                        <p style="margin-bottom:0pt; font-size:9pt"><span style="-aw-import:spaces">&#xa0; </span></p>
-                        <p style="margin-bottom:0pt; font-size:9pt"><span style="-aw-import:ignore">&#xa0;</span></p>
-                    </td>
-                </tr>
-                <tr style="height:9.6pt">
-                    <td colspan="2"
-                        style="width:255pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border:0.5pt single">
-                        <p style="margin-bottom:0pt; font-size:9pt"><span>Entrega del mes: DICIEMBRE 2023</span></p>
-                    </td>
-                </tr>
-                <tr style="height:23.4pt">
-                    <td colspan="2" rowspan="5"
-                        style="width:255pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border:0.5pt single">
-                        <p style="margin-bottom:0pt; font-size:9pt"><span style="font-weight:bold">Productos por Canasta
-                                Alimentaria:</span><span> Arroz grano largo 3 bolsa de 1kg, Fideo 2 Bolsa de</span><span
-                                style="-aw-import:spaces">&#xa0; </span><span>1kg, Leche Entera en polvo instantánea 2
-                                bolsa
-                                de 760 g, Harina de Trigo bolsa de 1Kg,Trigo Pelado 500 g, Aceite 2 Botella de 900 ml,
-                                Azúcar Blanca Extra Fina 5Kg, Yerba Mate Compuesta bolsa de 250 g, Maíz de Frangollo
-                                grano
-                                grande bolsa de 1 kg, Avena instantánea en hojuela caja de 400 g, Duraznos mitades en
-                                almíbar lata de 820 g, Arroz con leche envase de 300 g, Sémola bolsa de 1kg, Lenteja
-                                bolsa
-                                de 500 g, Sardina agua y sal</span><span style="-aw-import:spaces">&#xa0;
-                            </span><span>lata
-                                de 165 g,</span><span style="-aw-import:spaces">&#xa0; </span><span>Avena con Chía bolsa
-                                de
-                                300 g, 2 paquetes de Galleta de agua.</span></p>
-                    </td>
-                    <td
-                        style="width:36.25pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border:0.5pt single">
-                        <p style="margin-bottom:0pt; text-align:center; font-size:9pt"><span>C.I.:</span></p>
-                    </td>
-                    <td
-                        style="width:73pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border:0.5pt single">
-                        <p style="margin-bottom:0pt; text-align:center; font-size:9pt"><span>{{ $entrega->beneficiario->ci }}</span></p>
-                    </td>
-                </tr>
-                <tr style="height:27.3pt">
-                    <td
-                        style="width:36.25pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border:0.5pt single">
-                        <p style="margin-bottom:0pt; text-align:center; font-size:9pt"><span>Nombres:</span></p>
-                    </td>
-                    <td
-                        style="width:73pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border:0.5pt single">
-                        <p style="margin-bottom:0pt; text-align:center; font-size:9pt"><span>{{ $entrega->beneficiario->nombres }} {{ $entrega->beneficiario->ap }} {{ $entrega->beneficiario->am }}</span>
-                        </p>
-                    </td>
-                    <td colspan="2" rowspan="3"
-                        style="width:115.4pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border:0.5pt single">
-                        <p style="margin-bottom:0pt; font-size:9pt"><span style="-aw-import:ignore">&#xa0;</span></p>
-                    </td>
-                </tr>
-                <tr style="height:21.3pt">
-                    <td
-                        style="width:36.25pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border:0.5pt single">
-                        <p style="margin-bottom:0pt; text-align:center; font-size:9pt"><span>Edad:</span></p>
-                    </td>
-                    <td
-                        style="width:73pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border:0.5pt single">
-                        <p style="margin-bottom:0pt; text-align:center; font-size:9pt"><span>{{ $entrega->beneficiario->age() }} </span></p>
-                    </td>
-                </tr>
-                <tr style="height:11pt">
-                    <td rowspan="3"
-                        style="width:36.25pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border-left:0.5pt single; -aw-border-right:0.5pt single; -aw-border-top:0.5pt single">
-                        <p style="margin-bottom:0pt; text-align:center; font-size:9pt"><span>Fecha de
-                                Afiliación:</span>
-                        </p>
-                    </td>
-                    <td rowspan="3"
-                        style="width:73pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border:0.5pt single">
-                        <p style="margin-bottom:0pt; text-align:center; font-size:9pt"><span>{{ $entrega->beneficiario->created_att }}</span></p>
-                    </td>
-                </tr>
-                <tr style="height:11pt">
-                    <td colspan="2" rowspan="2"
-                        style="width:115.4pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border:0.5pt single">
-                        <p style="margin-bottom:0pt; text-align:center; font-size:9pt"><span>SILVANA RAMOS
-                                RODRÍGUEZ</span>
-                        </p>
-                        <p style="margin-bottom:0pt; text-align:center; font-size:9pt"><span>TEC. ESP. I-BRIGADA
-                                URBANO</span></p>
-                    </td>
-                </tr>
-                <tr style="height:7.85pt">
-                    <td colspan="2"
-                        style="width:255pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border:0.5pt single">
-                        <p style="margin-bottom:0pt; font-size:9pt"><span>Fecha de Impresión: Dic. -2023</span></p>
-                    </td>
-                </tr>
-                <tr style="height:1.85pt">
-                    <td colspan="6"
-                        style="width:512.05pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border:0.5pt single">
-                        <p style="margin-bottom:0pt; text-align:center; font-size:9pt"><span>UNA NUEVA HISTORIA</span>
-                        </p>
-                    </td>
-                </tr>
-                <tr style="height:0pt">
-                    <td style="width:68.45pt"></td>
-                    <td style="width:197.35pt"></td>
-                    <td style="width:47.05pt"></td>
-                    <td style="width:83.8pt"></td>
-                    <td style="width:46.2pt"></td>
-                    <td style="width:80pt"></td>
                 </tr>
             </table>
             <div class="page-break"></div>

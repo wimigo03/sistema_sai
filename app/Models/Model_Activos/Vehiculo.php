@@ -2,7 +2,6 @@
 
 namespace App\Models\Model_Activos;
 
-use App\Models\ActualModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,10 +12,8 @@ class Vehiculo extends Model
     protected $fillable = [
         'codigo',
         'codigo_interno',
-        'da',
         'costo_historico',
         'documento',
-        'estado',
         'nombre_propietario',
         'municipio_radicatoria',
         'clase_vehiculo',

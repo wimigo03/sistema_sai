@@ -13,12 +13,13 @@ use App\Models\Model_Activos\Transferencia;
 class EmpleadosModel extends Model
 {
     use HasFactory;
-    
+
     protected $table = 'empleados';
     protected $primaryKey = 'idemp';
     public $timestamps = true;
 
     protected $fillable = [
+        'idemp',
         'numfile',
         'nombres',
         'ap_pat',
