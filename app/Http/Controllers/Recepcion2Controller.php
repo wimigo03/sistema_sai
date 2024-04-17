@@ -443,7 +443,7 @@ class Recepcion2Controller extends Controller
                 return back()->with(["error" => "File not available!"]);
             }
         }
-
+       // dd($request->input('idrecepcion'));
         $archivos = new ArchivoCorrespModel();
         $archivos->id_recepcion = $request->input('idrecepcion');
         $archivos->documento = $nombre;
