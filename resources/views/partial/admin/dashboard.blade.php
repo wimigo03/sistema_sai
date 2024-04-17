@@ -100,7 +100,7 @@
                     <hr style="margin-top:0; margin-bottom:0;">
                     {{-- USUARIOS --}}
                     @canany(['users.index','roles.index','permissions.index'])
-                        <li class="font-roboto-12">
+                        <li class="font-roboto-14">
                             <a href="" data-toggle="collapse" data-target="#dashboard_adm" class="active collapsed" aria-expanded="false">
                                 <i class="fa-solid fa-gears fa-fw"></i>
                                 <span class="nav-label">Administracion</span>
