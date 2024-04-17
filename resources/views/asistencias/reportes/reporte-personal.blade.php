@@ -80,7 +80,7 @@
         <input type="hidden" id="data3" name="fecha_final" value="{{ $fechaFinal }}" class="form-control" required>
 
         <div class="col-md-12">
-            <table class="table-bordered  font-verdana   yajra-datatable hoverTable font-verdana" id="retrasos-table" style="width:100%">
+            <table class="table-bordered  font-verdana   yajra-datatable hoverTable font-verdana" id="customers-table" style="width:100%">
                 <thead class="table-light">
                     <tr>
                         <th></th>
@@ -110,7 +110,7 @@
 </div>
 <script id="details-template" type="text/x-handlebars-template">
     @verbatim
-        <table class="display compact hoverTable" id="registros-{{idemp}}" style="width:100%">
+        <table class="display compact hoverTable" id="purchases-{{idemp}}" style="width:100%">
                 <thead>
                     <tr>
                         <th>Fecha</th>
@@ -139,7 +139,7 @@
     $(document).ready(function() {
         var template = Handlebars.compile($("#details-template").html());
 
-        var dataTable = $('#retrasos-table').DataTable({
+        var dataTable = $('#customers-table').DataTable({
 
             processing: false,
             serverSide: false,
@@ -202,12 +202,12 @@
             ]
         });
 
-        $('#retrasos-table tbody').on('click', 'td.details-control', function() {
+        $('#customers-table tbody').on('click', 'td.details-control', function() {
             var tr = $(this).closest('tr');
             var row = dataTable.row(tr);
             //  console.log(row.data());
 
-            var tableId = 'registros-' + row.data().idemp;
+            var tableId = 'purchases-' + row.data().idemp;
             if (row.child.isShown()) {
                 // This row is already open - close it
                 row.child.hide();
@@ -301,7 +301,7 @@
         };
 
 
-        $('#retrasos-table').on('draw.dt', function() {
+        $('#customers-table').on('draw.dt', function() {
             $('ul.pagination').addClass('pagination-sm');
         }).DataTable();
     });

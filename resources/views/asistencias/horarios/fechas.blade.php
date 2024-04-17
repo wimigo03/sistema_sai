@@ -3,7 +3,7 @@
 @section('content')
 <div class="container ">
     <div class="row font-verdana-bg">
-        <div class="col-md-8 titulo">
+        <div class="col-md-9 titulo">
             <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
                 <a href="{{ route('horarios.index') }}" class="color-icon-1">
                     <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
@@ -22,9 +22,9 @@
             </span>
         </div>
 
-        <div class="col-md-4 text-right">
-            <div class="btn-group">
-                <input type="month" id="selectedMonth" name="selected_month" class="form-control" value="{{$vistaselectedMonth}}">
+        <div class="col-md-3 text-right">
+            <div class="btn-group text-right">
+                <input type="month" id="selectedMonth" name="selected_month" class="form-control  form-control-sm" value="{{$vistaselectedMonth}}">
 
             </div>
 
@@ -34,6 +34,9 @@
                 </button>
             </a>
         </div>
+    </div>
+    <div class="row font-verdana-bg">
+
 
         <div class="container">
             <ul class="nav nav-tabs" id="myTabs">
@@ -48,8 +51,8 @@
 
             <div class="col-md-12">
                 <hr>
-                <div class="alert alert-info">
-                <b class="card-text">Fecha de hoy: <strong><?php echo $fechaHoy; ?></strong></b>
+                <div class="alert alert-success">
+                    <b class="card-text">Fecha de hoy: <strong><?php echo $fechaHoy; ?></strong></b>
 
                 </div>
 
@@ -59,16 +62,16 @@
                 <div class="tab-content font-verdana">
                     <div class="tab-pane fade show active" id="tab1">
                         <div class="row font-verdana-bg">
-                            <div class="col-md-8">
+                            <div class="col-md-6">
                                 <table id="calendar" class="table-bordered  font-verdana" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th></th>
-                                            <th>Lun</th>
-                                            <th>Mar</th>
-                                            <th>Mier</th>
-                                            <th>Jue</th>
-                                            <th>Vier</th>
+                                            <th>L</th>
+                                            <th>M</th>
+                                            <th>M</th>
+                                            <th>J</th>
+                                            <th>V</th>
                                             <th>S</th>
                                             <th>D</th>
                                         </tr>
@@ -123,22 +126,29 @@
             </div>
 
         </div>
+    </div>
+    <div class="row font-verdana-bg">
 
+        <div class="col-md-12">
 
+            <hr class="hrr">
+        </div>
 
     </div>
-    <div class="col-md-12">
-
-        <hr class="hrr">
-    </div>
-
-
 
 </div>
 
 @section('scripts')
 <script>
+    // Manejar el cambio de mes
+
     $(document).ready(function() {
+
+        $('#selectedMonth').change(function() {
+            // Actualizar la tabla cuando cambie la fecha
+            dataTable.ajax.reload();
+            dataTable2.ajax.reload();
+        });
         var dataTable;
         dataTable = $('#calendar').DataTable({
             processing: true,
@@ -212,7 +222,7 @@
         // Función para personalizar la visualización de la celda
         function renderCell(data, type, row) {
             // Verificar si hay datos y personalizar la visualización
-            if (data.actual) {
+            if (data && data.actual) {
                 let additionalInfo = '';
                 var hora = data.horario;
 
@@ -258,7 +268,7 @@
 
         function renderCell2(data, type, row) {
             // Verificar si hay datos y personalizar la visualización
-            if (data.actual) {
+            if (data && data.actual) {
                 let additionalInfo = '';
                 return data.day + '<br>' + additionalInfo;
             }
@@ -274,12 +284,8 @@
                 mostrarInformacionHorario(cellData);
             }
         });
-        // Manejar el cambio de mes
-        $('#selectedMonth').change(function() {
-            // Actualizar la tabla cuando cambie la fecha
-            dataTable.ajax.reload();
-            dataTable2.ajax.reload();
-        });
+
+
 
         dataTable2 = $('#calendar2').DataTable({
             processing: true,
@@ -351,7 +357,7 @@
         // Función para personalizar la visualización de la celda
         function renderCell3(data, type, row) {
             // Verificar si hay datos y personalizar la visualización
-            if (data.actual) {
+            if (data && data.actual) {
                 let additionalInfo = '';
                 var hora = data.horario;
 
@@ -413,7 +419,7 @@
 
         function renderCell4(data, type, row) {
             // Verificar si hay datos y personalizar la visualización
-            if (data.actual) {
+            if (data && data.actual) {
                 let additionalInfo = '';
                 return data.day + '<br>' + additionalInfo;
             }
@@ -421,7 +427,10 @@
         }
 
 
+
+
     });
+
 
     function mostrarInformacionHorario(cellData) {
         // Aquí debes implementar la lógica para mostrar la información del horario al lado de la tabla

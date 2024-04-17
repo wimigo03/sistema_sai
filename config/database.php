@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', 'pgsql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -76,6 +76,11 @@ return [
             'prefix_indexes' => true,
             'schema' => 'public',
             'sslmode' => 'prefer',
+            'pgsql_bin_path' => env('PGSQL_BIN_PATH', 'C:\Program Files (x86)\PostgreSQL\9.2\bin'),
+            'dump' => [
+                'add_extra_option' => '--format=c'
+            ]
+
         ],
 
         'pgsql_discapacidad' => [

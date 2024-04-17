@@ -67,6 +67,9 @@
                                 <div class="form-group">
                                     <label for="fecha_solicitud">Fecha de Solicitud:</label>
                                     <input type="date" name="fecha_solicitud" id="fecha_solicitud" value="{{ $licencia->fecha_solicitud }}" required class="form-control">
+                                    @error('fecha_solicitud')
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
 
                             </div>
@@ -97,10 +100,18 @@
                                             }
                                             @endphp
                                             <option value="{{ $i }}" {{ (isset($licencia->dias_utilizados) && $i == $licencia->dias_utilizados) ? 'selected' : '' }}>
-                                            {{ $durationText }}
-                                            @endfor
-                                       
+                                                {{ $durationText }}
+                                                @endfor
+
                                             </option>
+                                            @if(session('fecha'))
+                                    <span class="text-danger"> {{ session('fecha') }}</span>
+
+
+                                    @endif
+                                    @error('fecha_solicitud')
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                     </select>
                                 </div>
                             </div>
@@ -109,22 +120,23 @@
                                     <label for="asunto">Fraccionamiento:</label>
                                     <select name="asunto" id="asuntoSelector" class="form-control" required>
                                         <option value="">Seleccionar </option>
-                                        <option value="Mañana">MAÑANA</option>
-                                        <option value="Tarde">TARDE</option>
-                                        <option value="Otro">DIA COMPLETO</option>
+                                        <option value="Mañana" {{ $licencia->asunto == "Mañana" ? 'selected' : '' }}>MAÑANA</option>
+                                        <option value="Tarde" {{ $licencia->asunto == "Tarde" ? 'selected' : '' }}>TARDE</option>
+                                        <option value="Otro" {{ $licencia->asunto == "Otro" ? 'selected' : '' }}>DIA COMPLETO</option>
                                         <!-- Agrega más opciones según sea necesario -->
                                     </select>
+
                                 </div>
                             </div>
 
                         </div>
 
-                       
+
 
 
                         <div class="form-group text-right">
-                                <button type="submit" class="btn btn-success"> Guardar Cambios</button>
-                            </div>
+                            <button type="submit" class="btn btn-success"> Guardar Cambios</button>
+                        </div>
                     </form>
                 </div>
             </div>

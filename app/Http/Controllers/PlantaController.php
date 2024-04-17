@@ -10,9 +10,11 @@ use App\Models\FileModel;
 use App\Models\MovimientosPtModel;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests;
+use App\Http\Requests\PlantaEmpleadoRequest;
 use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Datatables;
 use Carbon\Carbon;
+use Illuminate\Validation\Rule;
 use NumerosEnLetras;
 
 
@@ -105,8 +107,10 @@ class PlantaController extends Controller
     }
 
 
-    public function guardarplanta(Request $request)
+    public function guardarplanta(PlantaEmpleadoRequest $request)
     {
+        
+        
         $ci = $request->input('ci');
 
         $file = FileModel::find($request->input('idfile'));
@@ -127,7 +131,7 @@ class PlantaController extends Controller
         $empleados->nombres = $request->input('nombres');
         $empleados->ap_pat = $request->input('ap_pat');
         $empleados->ap_mat = $request->input('ap_mat');
-        $empleados->fechingreso = $request->input('fechingreso');
+        $empleados->fechingreso = $request->input('fecha_ingreso');
         $empleados->natalicio = $request->input('natalicio');
         $empleados->procedencia = $request->input('procedencia');
         $edad = Carbon::parse($request->input('natalicio'))->age;

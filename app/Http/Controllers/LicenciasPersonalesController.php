@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateLicenciasPersonalesRequest;
+use App\Models\ConfigHorario;
 use App\Models\EmpleadoLicenciasModel;
 use App\Models\EmpleadoPermisoModel;
 use App\Models\EmpleadosModel;
@@ -21,6 +23,104 @@ class LicenciasPersonalesController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+    public function config(Request $request)
+    {
+        $request->validate([
+
+            'licenciasmensuales' => 'required|numeric',
+        ]);
+        $horas = $request->input('licenciasmensuales');
+        $horarioConfig = ConfigHorario::first();
+        // dd($horarioConfig);
+        if ($horarioConfig) {
+            // Actualizar los campos utilizando el método update()
+            $horarioConfig->update([
+                'licenciasrip' => $horas,
+
+                // Puedes agregar más campos aquí si es necesario
+            ]);
+            // dd($horas);
+            $año = Carbon::now()->format('Y');
+            $licencia = LicenciasRipModel::where('licencia', $año)->first();
+            // dd($licencia);
+            if ($licencia) {
+
+                // Actualizar los campos directamente utilizando el método update()
+                LicenciasRipModel::where('licencia', $año)
+                    ->update([
+                        'dias_permitidos' => $horas,
+                        // ... y así sucesivamente
+                    ]);
+
+                // Redirigir o realizar otras acciones según sea necesario
+                return redirect()->back()->with('success', 'Licencia actualizada exitosamente.');
+            } else {
+                $licencia = $this->obtenerOCrearLicencia($año);
+                // Actualizar los campos directamente utilizando el método update()
+                LicenciasRipModel::where('licencia', $año)
+                    ->update([
+                        'dias_permitidos' => $horas,
+                        // ... y así sucesivamente
+                    ]);
+
+                // Redirigir o realizar otras acciones según sea necesario
+                return redirect()->back()->with('success', 'Licencia actualizada exitosamente.');
+            }
+        } else {    // Manejar el caso en el que no se encuentre ninguna configuración de horario
+            return redirect()->back()->with('error', 'No se encontró ninguna configuración de horario.');
+        }
+    }
+    public function configUpdate(Request $request)
+    {
+        $request->validate([
+
+            'licenciasrip' => 'required|numeric',
+        ]);
+
+        // dd($horas);
+        $horas = $request->input('licenciasrip');
+        $horarioConfig = ConfigHorario::first();
+        //  dd($horarioConfig);
+        if ($horarioConfig) {
+            // Actualizar los campos utilizando el método update()
+            $horarioConfig->update([
+                'licenciasrip' => $horas,
+
+                // Puedes agregar más campos aquí si es necesario
+            ]);
+            // dd($horas);
+            $año = Carbon::now()->format('Y');
+            $licencia = LicenciasRipModel::where('licencia', $año)->first();
+            // dd($licencia);
+            if ($licencia) {
+
+                // Actualizar los campos directamente utilizando el método update()
+                LicenciasRipModel::where('licencia', $año)
+                    ->update([
+                        'dias_permitidos' => $horas,
+                        // ... y así sucesivamente
+                    ]);
+
+                // Redirigir o realizar otras acciones según sea necesario
+                return redirect()->back()->with('success', 'Licencia actualizada exitosamente.');
+            } else {
+                $licencia = $this->obtenerOCrearLicencia($año);
+                // Actualizar los campos directamente utilizando el método update()
+                LicenciasRipModel::where('licencia', $año)
+                    ->update([
+                        'dias_permitidos' => $horas,
+                        // ... y así sucesivamente
+                    ]);
+
+                // Redirigir o realizar otras acciones según sea necesario
+                return redirect()->back()->with('success', 'Licencia actualizada exitosamente.');
+            }
+        } else {
+            // Manejar el caso en el que no se encuentre ninguna configuración de horario
+            return redirect()->back()->with('error', 'No se encontró ninguna configuración de horario.');
+        }
+    }
+
 
 
 
@@ -29,8 +129,17 @@ class LicenciasPersonalesController extends Controller
         $licencia = LicenciasRipModel::where('licencia', $añoActual)->first();
 
         if (!$licencia) {
-            $licencia = LicenciasRipModel::create(['licencia' => $añoActual, 'dias_permitidos' => 48]);
+            dd($licencia);
+            $config = ConfigHorario::first();
+            if (!$config) {
+                $licencia = LicenciasRipModel::create(['licencia' => $añoActual, 'dias_permitidos' =>  48]);
+            }
+            $licencia = LicenciasRipModel::create(['licencia' => $añoActual, 'dias_permitidos' =>  $config->licenciasrip]);
+        } else {
+
+            $licencia = LicenciasRipModel::where('licencia', $añoActual)->first();
         }
+
         return $licencia;
     }
 
@@ -162,8 +271,21 @@ class LicenciasPersonalesController extends Controller
 
     public function nuevo($id, $licencia_id)
     {
+
         $empleado = EmpleadosModel::find($id);
+        if (!$empleado) {
+            // Puedes manejar la situación en la que el permiso no existe, por ejemplo, redirigir o mostrar un error.
+            // Aquí simplemente redirijo a alguna ruta, puedes ajustarlo según tus necesidades.
+            abort(404); // o maneja de alguna manera el caso en que no se encuentre el registro
+
+        }
         $licencia = LicenciasRipModel::find($licencia_id);
+        if (!$licencia) {
+            // Puedes manejar la situación en la que el permiso no existe, por ejemplo, redirigir o mostrar un error.
+            // Aquí simplemente redirijo a alguna ruta, puedes ajustarlo según tus necesidades.
+            abort(404); // o maneja de alguna manera el caso en que no se encuentre el registro
+
+        }
         return view('permisos.licencias.create', compact('empleado', 'licencia'));
     }
 
@@ -178,11 +300,16 @@ class LicenciasPersonalesController extends Controller
             abort(404); // o maneja de alguna manera el caso en que no se encuentre el registro
 
         }
-
-        return view('permisos.licencias.edit', compact('licencia'));
+        $sumaLicencias = EmpleadoLicenciasModel::where('licencia_id',  $licencia->licencia->id)
+            ->where('empleado_id', $licencia->empleado->idemp)
+            ->sum('dias_utilizados');
+        //dd($sumaLicencias);
+        $disponible = 48 - $sumaLicencias;
+        //dd($disponible);
+        return view('permisos.licencias.edit', compact('sumaLicencias', 'licencia'));
     }
 
-    public function actualizarLicencias(Request $request, $id)
+    public function actualizarLicencias(UpdateLicenciasPersonalesRequest $request, $id)
     {
         $request->validate([
             'empleado_id' => 'required',
@@ -204,14 +331,13 @@ class LicenciasPersonalesController extends Controller
 
 
 
-
+            //dd($fechaCompleta);
             $fechaCarbon = Carbon::createFromFormat('Y-m-d', $fechaCompleta);
             $fechaAño = $fechaCarbon->format('Y');
 
             $licencia = LicenciasRipModel::find($licenciaId);
             $fechaCarbon2 = Carbon::createFromFormat('Y', $licencia->licencia);
             $año = $fechaCarbon2->format('Y');
-
             if ($fechaAño === $año) {
                 // Busca al empleado con el permiso específico
                 $empleadolicencia = EmpleadosModel::where('idemp', $empleadoId)
@@ -244,7 +370,7 @@ class LicenciasPersonalesController extends Controller
                                 $licenciaPersonal->usuario_modificacion  = Auth::user()->name . '-' . now(); // Obtener el nombre del usuario actualmente autenticado
                             }
                             // Guarda el registro en la base de datos
-                            $licenciaPersonal->save();
+                            $licenciaPersonal->update();
                             // Redirecciona a la vista de éxito o a donde desees
                             return redirect()->route('licenciaspersonales.index')->with('success', 'Permiso Modificado Exitosamente.');
                         } else {
@@ -351,9 +477,9 @@ class LicenciasPersonalesController extends Controller
                             // Guarda el registro en la base de datos
                             $licenciaPersonal->save();
                             // Redirecciona a la vista de éxito o a donde desees
-                            return redirect()->route('licenciaspersonales.index')->with('success', 'Permiso registrado exitosamente.');
+                            return redirect()->route('licenciaspersonales.index')->with('success', 'Se registro la Licencia exitosamente.');
                         } else {
-                            return redirect()->back()->with('error', 'No se pudo crear el permiso: ' . 'Limite  Excedido a ' . $s = $this->convertirATexto($suma));
+                            return redirect()->back()->with('error', 'No se pudo crear el registro la Licencia: ' . 'Limite  Excedido a ' . $s = $this->convertirATexto($suma));
                         }
                     } else {
 
@@ -373,20 +499,20 @@ class LicenciasPersonalesController extends Controller
                         // Guarda el registro en la base de datos
                         $licenciaPersonal->save();
                         // Redirecciona a la vista de éxito o a donde desees
-                        return redirect()->route('licenciaspersonales.index')->with('success', 'Permiso creado exitosamente.');
+                        return redirect()->route('licenciaspersonales.index')->with('success', 'Se registró la Licencia exitosamente.');
                     }
                 } else {
                     // Manejar el caso en el que no se encuentra el empleado
-                    return redirect()->back()->with('error', 'No se pudo crear el permiso: ');
+                    return redirect()->back()->with('error', 'No se pudo crear el registro la Licencia: ');
                 }
             } else {
-                return redirect()->back()->with('error', 'La Fecha de Solicitud No corresponde al Mes ' . $año . ' No se pudo registrar el permiso: ');
+                return redirect()->back()->with('error', 'La Fecha de Solicitud No corresponde al Mes ' . $año . ' No se pudo registrar el registro la Licencia ');
             }
         } catch (\Exception $e) {
 
 
             // Captura cualquier excepción que pueda ocurrir y muestra un mensaje de error
-            return redirect()->back()->with('error', 'No se pudo crear el permiso: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'No se pudo crear el registro la Licencia ' . $e->getMessage());
         }
     }
 

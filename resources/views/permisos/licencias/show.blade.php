@@ -36,10 +36,10 @@
                     <tr>
                         <th>Año / Gestión </th>
                         <th>Fecha Solicitud<br>Licencia</th>
-                        <th>Asunto</th>
-                        <th>Registrado por Usuario</th>
-                        <th>Modificado por Usuario</th>
-                        <th>Días Utilizados</th>
+                        <th>Registrado <br>por Usuario</th>
+                        <th>Modificado <br>por Usuario</th>
+                        <th>Días<br>Utilizados</th>
+                        <th>Detalle<br>Fraccionamiento</th>
                     </tr>
                 </thead>
             </table>
@@ -93,11 +93,7 @@
                     name: 'pivot.fecha_solicitud',
                     class: 'text-justify p-1 font-verdana-sm'
                 },
-                {
-                    data: 'pivot.asunto',
-                    name: 'pivot.asunto',
-                    class: 'text-justify p-1 font-verdana-sm'
-                }, 
+                
                 {
                     data: 'pivot.usuario_creacion',
                     name: 'pivot.usuario_creacion',
@@ -111,6 +107,11 @@
                 {
                     data: 'dias_utilizados',
                     name: 'dias_utilizados',
+                    class: 'text-justify p-1 font-verdana-sm'
+                },
+                {
+                    data: 'pivot.asunto',
+                    name: 'pivot.asunto',
                     class: 'text-justify p-1 font-verdana-sm'
                 }
 

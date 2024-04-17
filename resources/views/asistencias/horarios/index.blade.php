@@ -23,13 +23,8 @@
                     Fechas&nbsp;<i class="fa-sharp fa-solid fa-calendar"></i>&nbsp;
                 </button>
             </a>
-            <a href="{{ route('empleadoasistencias.index') }}" class="tts:left tts-slideIn tts-custom" aria-label="Ver Empleados">
-                <button class="btn btn-sm btn-info font-verdana" type="button" aria-label="Ver Empleados ">
-                    Empleados&nbsp;<i class="fa-sharp fa-solid fa-people-arrows"></i>&nbsp;
-                </button>
-            </a>
-            <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
-
+       
+           
             <a href="{{ route('horarios.create') }}" class="tts:left tts-slideIn tts-custom" aria-label="Crear Nuevo Horario">
                 <button class="btn btn-sm btn-success font-verdana" type="button" aria-label="Agregar Nuevo Horario">
                     Agregar Nuevo Horario&nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
@@ -102,8 +97,16 @@
 
             @else
             <div class="col-md-4">
+            <div class="row">
+            <div class="col">
+            <label class="titulo" for="fecha_inicio2" ><b>   Fecha Actual:</b></label>
+            </div>
+            </div>
                 <div class="row">
+                    
                     <div class="col">
+                 
+
                         <div class="alert alert-info">
                             <strong>Hoy:</strong> {{ $fechaHoy }}
                         </div>
@@ -196,13 +199,13 @@
                 </div>
                 <div class="row font-verdana-bg">
                     <div class="col-md-6">
-                        <div class="alert alert-warning">
-                        <label for="hora_inicio" style="color: black;">ENTRADA</label>
+                        <div class="alert alert-secondary">
+                        <label for="hora_inicio" style="color: black;"><b>ENTRADA</b></label>
                             <input type="time" id="hora_inicio" name="hora_inicio" value="{{ $horarioActivo->hora_inicio }}" class="form-control form-control-sm" readonly style="background-color: white;">
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="alert alert-warning">
+                        <div class="alert alert-secondary">
                         <label for="hora_inicio" style="color: black;"><b>SALIDA</b></label>
                             <input type="time" id="hora_final" name="hora_final" value="{{ $horarioActivo->hora_final }}" class="form-control form-control-sm" readonly style="background-color: white;">
                         </div>
@@ -238,7 +241,6 @@
                         <th>Mañana</th>
                         <th>Tarde</th>
                         <th>Asignados</th>
-                        <th>Excepcion</th>
                         <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
@@ -333,11 +335,7 @@
                     data: 'asignados',
                     name: 'asignados'
                 },
-                {
-                    className: 'text-center p-1 font-verdana',
-                    data: 'excepcion',
-                    name: 'excepcion'
-                },
+            
 
                 {
                     className: 'text-center p-1 font-verdana',

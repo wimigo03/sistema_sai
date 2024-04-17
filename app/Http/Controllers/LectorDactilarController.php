@@ -156,5 +156,17 @@ class LectorDactilarController extends Controller
             return redirect()->route('lector.index')->with('error', 'Dispositivo no encontrado.');
         }
     }
+
+    public function updateEstadoHuella(Request $request, $id)
+    {
+        $huella = HuellasDigitalesModel::findOrFail($id);
+        
+        // Cambiar el estado de la huella digital
+        $huella->estado = $huella->estado == 1 ? 0 : 1;
+        $huella->save();
+        
+        // Redirigir de vuelta a la página anterior
+        return redirect()->back()->with('success', 'Estado de la huella digital actualizado correctamente.');
+    }
     
 }

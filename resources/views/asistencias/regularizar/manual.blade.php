@@ -1,301 +1,504 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="container">
 
-    <div class="row font-verdana-bg">
-        <div class="col-md-8 titulo">
-            <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
-                <a href="{{route('agregar.regulacion', $registroAsistencia->empleado_id)}}" class="color-icon-1">
-                    <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
-                </a>
-            </span>
-
-            <b>Regularizar Asistencia Marcada</b>
-        </div>
-
-
-        <div class="col-md-4 text-right">
-
-            <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
-                <button class="btn btn-sm btn-danger font-verdana" type="button">
-                    &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
-                </button>
+<div class="row font-verdana-sm">
+    <div class="col-md-8 titulo">
+        <span class="tts:right tts-slideIn tts-custom" aria-label="Ir a gestionar-c">
+            <a href="{{route('agregar.regulacion', $registroAsistencia->empleado_id)}}" class="color-icon-1">
+                <i class="fa fa-lg fa-reply" aria-hidden="true"></i>
             </a>
-        </div>
-        <div class="col-md-12">
-            <hr class="hrr">
-            @if(session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-            @endif
-            @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-            @endif
-        </div>
+        </span>
+
+        <b>Regularizar Marcado de Asistencia </b>
     </div>
-    <!-- Campos del formulario -->
-    <div class="row font-verdana-sm">
-        <div class="col-md-6 table-responsive center">
-            @if($registroAsistencia->horario->tipo == 0)
-            <div class="body-border ">
-                <div class="row">
-                    <div class="form-group col-md-12 form-check">
-                        <b>TURNO CONTINUO :</b>
-                        <hr class="hrr">
-                        <div class="row">
-                            <div class="form-group col-md-6 form-check-sm">
-                                <br><b>MARCADO DE ENTRADA:</b></br>
-                                <label for="asignado" id="label1">Biometrico</label>
-                                <input type="checkbox" name="asignado" id="asignado1" class="form-control" onclick="toggleLabel('label1', 'asignado1', 'registroH_inicio', 'registro_inicio')">
-                                <input type="time" id="registroH_inicio" name="registro_entrada" class="form-control" value="{{ $registroAsistencia->horario->hora_inicio }}" required disabled>
+    <div class="col-md-4 text-right">
+
+        <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
+            <button class="btn btn-sm btn-danger font-verdana" type="button">
+                &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
+            </button>
+        </a>
+    </div>
+    <div class="col-md-12">
+        <hr class="hrr">
+        @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @endif
+        @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+        @endif
+    </div>
+</div>
+<div class="row font-verdana-sm">
+
+    <div class="col-md-9">
+
+        <!-- Campos del formulario -->
+        <form method="POST" action="{{ route('regularizar_asistencia.update', $registroAsistencia->id) }} " id="actualizarForm">
+
+            @csrf
+            @method('PUT')
+            <div class="row font-verdana-sm">
+
+                <div class="col-md-7 table-responsive center">
+
+                    <div class="card">
+                        <div class="card-body">
+                            <b>DATOS DE REGISTRO DE ASISTENCIA:</b>
+                            <hr class="hrr">
+
+
+                            <div class="form-group row ">
+                                <div class="form-group col-md-8">
+                                    <label for="descripcion"><b>Nombre Completo :</b></label>
+                                    <input type="text" name="descripcion" value="{{ $registroAsistencia->empleado->nombres }} {{$registroAsistencia->empleado->ap_pat}} {{$registroAsistencia->empleado->ap_mat}}" class="form-control form-control-sm" readonly>
+
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="fecha"><b>Fecha de Registro:</b></label>
+                                    <input type="date" name="fecha" class="form-control form-control-sm" value="{{ $registroAsistencia->asistencia->fecha }}" readonly>
+                                </div>
+                            </div>
+                            @if($registroAsistencia->horario->tipo == 1)
+                            <b>HORARIO :</b>
+                            <hr class="hrr">
+                            <div class="row">
+
+                                <div class="form-group col-md-6 form-check">
+                                    <b>TURNO MAÑANA :</b>
+                                    <div class="row">
+                                        <div class="form-group col-md-6 form-check">
+                                            <br><b>ENTRADA:</b></br>
+                                            <label for="asignado" id="label1">Biometrico</label>
+                                            <input type="checkbox" name="hora_checks[]" id="asignado1" class="form-control" onclick="toggleLabel('label1', 'asignado1', 'registroH_inicio', 'registro_inicio')">
+                                            <input type="hidden" id="registroH_inicio" name="registro_inicio" class="form-control form-control-sm" value="{{ $registroAsistencia->horario->hora_inicio }}" required disabled>
+                                            @if($registroAsistencia->registro_inicio)
+
+                                            <input type="time" id="registro_inicio" name="registro_inicio" class="form-control form-control-sm" value="{{ $registroAsistencia->registro_inicio }}" readonly>
+                                            @else
+
+                                            <input type="time" id="registro_inicio" name="registro_inicio" class="form-control form-control-sm" value="">
+                                            @endif
+                                        </div>
+                                        <div class="form-group col-md-6 form-check">
+                                            <br><b>SALIDA:</b></br>
+                                            <label for="asignado" id="label2">Biometrico</label>
+                                            <input type="checkbox" name="hora_checks[]" id="asignado2" class="form-control" onclick="toggleLabel3('label2', 'asignado2', 'registroH_salida', 'registro_salida')">
+                                            <input type="hidden" id="registroH_salida" name="registro_salida" class="form-control form-control-sm" value="{{ $registroAsistencia->horario->hora_salida }}" required disabled>
+                                            @if($registroAsistencia->registro_salida)
+                                            <input type="time" id="registro_salida" name="registro_salida" class="form-control form-control-sm" value="{{ $registroAsistencia->registro_salida }}" readonly required>
+                                            @else
+
+                                            <input type="time" id="registro_salida" name="registro_salida" class="form-control form-control-sm" value="">
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6 form-check">
+
+                                    <b>TURNO TARDE :</b>
+                                    <div class="row">
+                                        <div class="form-group col-md-6 form-check">
+                                            <br><b>ENTRADA:</b></br>
+                                            <label for="asignado" id="label3">Biometrico</label>
+                                            <input type="checkbox" name="hora_checks[]" id="asignado3" class="form-control" onclick="toggleLabel4('label3', 'asignado3','registroH_entrada','registro_entrada')">
+                                            <input type="hidden" id="registroH_entrada" name="registro_entrada" class="form-control form-control-sm" value="{{ $registroAsistencia->horario->hora_entrada }}" required disabled>
+                                            @if($registroAsistencia->registro_entrada)
+
+                                            <input type="time" id="registro_entrada" name="registro_entrada" class="form-control form-control-sm" value="{{ $registroAsistencia->registro_entrada }}" readonly required>
+                                            @else
+
+                                            <input type="time" id="registro_entrada" name="registro_entrada" class="form-control form-control-sm" value="">
+                                            @endif
+                                        </div>
+                                        <div class="form-group col-md-6 form-check">
+                                            <br><b>SALIDA:</b></br>
+                                            <label for="asignado" id="label4">Biometrico</label>
+                                            <input type="checkbox" name="hora_checks[]" id="asignado4" class="form-control" onclick="toggleLabel2('label4', 'asignado4','registroH_final','registro_final')">
+                                            <input type="hidden" id="registroH_final" name="registro_final" class="form-control form-control-sm" value="{{ $registroAsistencia->horario->hora_final}}" required disabled>
+                                            @if($registroAsistencia->registro_final)
+
+
+                                            <input type="time" id="registro_final" name="registro_final" class="form-control form-control-sm" value="{{ $registroAsistencia->registro_final }}" readonly>
+                                            @else
+
+                                            <input type="time" id="registro_final" name="registro_final" class="form-control form-control-sm" value="">
+
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                </div>
 
                             </div>
-                            <div class="form-group col-md-6 form-check">
-                                <br><b>MARCADO DE SALIDA:</b></br>
-                                <label for="asignado" id="label4">Biometrico</label>
-                                <input type="checkbox" name="asignado" id="asignado4" class="form-control" onclick="toggleLabel2('label4', 'asignado4','registroH_final','registro_final')">
-                                <input type="time" id="registroH_final" name="registro_final" class="form-control" value="{{ $registroAsistencia->horario->hora_final}}" required disabled>
+                            @error('hora_checks')
+                            <div class="row">
+                                <div class="form-group col-md-12 form-check">
+
+                                    <span class="text-danger">{{ $message }}</span>
+                                </div>
+
                             </div>
+                            @enderror
+                            @else
+                            <b>TURNO CONTINUO :</b>
+                            <hr class="hrr">
+                            <div class="row">
+                                <div class="form-group col-md-6 form-check-sm">
+                                    <br><b>MARCADO DE ENTRADA:</b></br>
+                                    <label for="asignado" id="label1">Biometrico</label>
+                                    <input type="checkbox" name="hora_checks[]" id="asignado1" class="form-control" onclick="toggleLabel('label1', 'asignado1', 'registroH_inicio', 'registro_inicio')">
+                                    <input type="hidden" id="registroH_inicio" name="registro_entrada" class="form-control" value="{{ $registroAsistencia->horario->hora_inicio }}" required disabled>
+                                    @if($registroAsistencia->registro_inicio)
+
+                                    <input type="time" id="registro_inicio" name="registro_inicio" class="form-control form-control-sm" value="{{ $registroAsistencia->registro_inicio }}" readonly>
+                                    @else
+
+                                    <input type="time" id="registro_inicio" name="registro_inicio" class="form-control form-control-sm" value="">
+                                    @endif
+
+                                </div>
+                                <div class="form-group col-md-6 form-check">
+                                    <br><b>MARCADO DE SALIDA:</b></br>
+                                    <label for="asignado" id="label4">Biometrico</label>
+                                    <input type="checkbox" name="hora_checks[]" id="asignado4" class="form-control" onclick="toggleLabel2('label4', 'asignado4','registroH_final','registro_final')">
+                                    <input type="hidden" id="registroH_final" name="registro_final" class="form-control" value="{{ $registroAsistencia->horario->hora_final}}" required disabled>
+                                    @if($registroAsistencia->registro_final)
+
+
+                                    <input type="time" id="registro_final" name="registro_final" class="form-control form-control-sm" value="{{ $registroAsistencia->registro_final }}" readonly>
+                                    @else
+
+                                    <input type="time" id="registro_final" name="registro_final" class="form-control form-control-sm" value="">
+
+                                    @endif
+                                </div>
+                            </div>
+                            @error('hora_checks')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+
+                            @endif
                         </div>
-
                     </div>
+                    <div class="card">
 
+                        <div class="form-group row ">
+                            <div class="col-md-12">
 
-                    <div class="form-group col-md-12">
-                        <div class="row">
-                            <div class="form-group col-md-12 form-check">
-                                <b>REGULARIZADO :</b>
+                                <div class="form-group row">
+                                    <div class="card-body">
+                                        @if($permisos->count() > 0 && $registroAsistencia->empleado->tipo == 1)
 
-                                <hr class="hrr">
-                            </div>
-                        </div>
-
-                        <div class="row">
-
-                            <!-- Agrega más campos según sea necesario -->
-                            <div class="form-check">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    BOLETA OFICIAL
-                                </label>
-                                <input class="form-control checkbox" type="checkbox" value="BOLETA OFICIAL" id="flexCheckDefault">
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label" for="flexCheckDefault1">
-                                    COMUNICACIóN INTERNA
-                                </label>
-
-                                <input class="form-control checkbox" type="checkbox" value="COMUNICACION INTERNA" id="flexCheckDefault1">
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label" for="flexCheckChecked2">
-                                    LICENCIAS
-                                </label>
-                                <input class="form-control checkbox" type="checkbox" value="LICENCIAS" id="flexCheckChecked2">
-
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label" for="flexCheckChecked3">
-                                    VACACIONES
-                                </label>
-                                <input class="form-control checkbox" type="checkbox" value="VACACIONES" id="flexCheckChecked3">
-
-                            </div>
-                        </div>
-                        <div class="form-group col-md-12 form-check">
-                            <hr class="hr">
-                        </div>
-
-
-                        <div class="row">
-                            <div class="form-check">
-                                <label class="form-check-label" for="flexCheckDefault4">
-                                    BAJA MÉDICA
-                                </label>
-                                <input class="form-control checkbox" type="checkbox" value="BAJA MÉDICA" id="flexCheckDefault4">
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label" for="flexCheckChecked5">
-                                    LIC. G/ DE HABERES
-                                </label>
-                                <input class="form-control checkbox" type="checkbox" value="LICENCIA SIN GOCE DE HABERES" id="flexCheckChecked5">
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label" for="flexCheckChecked6">
-                                    ÓRDEN DE SERVICIO
-                                </label>
-                                <input class="form-control checkbox" type="checkbox" value="ORDEN DE SERVICIO" id="flexCheckChecked6">
-                            </div>
-                        </div>
-                        <div class="form-group col-md-12 form-check">
-                            <hr class="hr">
-                        </div>
-                        <div class="form-group row font-verdana-sm">
-
-                            @if($permiso->count() > 0 && $registroAsistencia->empleado->tipo==1)
-                            <div class="form-group col-md-12 ">
-                                <div class="form-group row font-verdana-sm">
-                                    <div class="form-group col-md-4">
                                         <!-- Agrega más campos según sea necesario -->
                                         <div class="form-check">
                                             <label class="form-check-label text-success" for="flexCheckDefault0">
                                                 <b>BOLETA PERSONAL</b>
                                             </label>
-                                            <input class="form-control checkbox" type="checkbox" value="BOLETA PERSONAL" id="flexCheckDefault0">
-                                            <p class="mb-0">{{$sumaPermisos}}</p>
+                                            <input class="form-control checkbox" name="reg_checks[]" type="checkbox" value="BOLETA PERSONAL" id="flexCheckDefault0" @if($permisos) checked @endif>
+
+                                        </div>
+                                        @else
+                                        @if($sumaPermisos < 120 && $registroAsistencia->empleado->tipo == 1)
+                                            <div class="form-check">
+                                                <label class="form-check-label text-success" for="flexCheckDefault0">
+                                                    <b>BOLETA PERSONAL</b>
+                                                </label>
+                                                <p class="mb-0" style="color: black;">No se tiene Boleta Personal registrada en Hora de Salida</p>
+                                            </div>
+
+                                            @elseif($sumaPermisos == 120 && $registroAsistencia->empleado->tipo == 1)
+
+                                            <!-- Agrega más campos según sea necesario -->
+                                            <div class="form-check">
+                                                <label class="form-check-label text-success" for="flexCheckDefault0">
+                                                    <b>BOLETA PERSONAL</b>
+                                                </label>
+                                                <p class="mb-0" style="color: red;">Ya ocupó sus Boletas Personales</p>
+
+                                            </div>
+                                            @endif
+                                            @endif
+                                    </div>
+                                    <div class="card-body">
+                                        @if($licencia->count() > 0 && $registroAsistencia->empleado->tipo == 1)
+
+
+                                        <!-- Agrega más campos según sea necesario -->
+                                        <div class="form-check">
+                                            <label class="form-check-label text-primary" for="flexCheckDefault0">
+                                                <b>LICENCIA PERSONAL</b>
+                                            </label>
+                                            <input class="form-control checkbox" name="reg_checks[]" type="checkbox" value="BOLETA PERSONAL" id="flexCheckDefault0" @if($permisos) checked @endif>
 
                                         </div>
 
-                                    </div>
+                                        @else
 
+                                        @if($sumaLicencias < 48 && $registroAsistencia->empleado->tipo == 1)
 
-                                    <div class="col-md-4 text-md-right">
-                                        <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalMostraroPermiso">Detalle</button>
-                                        <hr class="hrr">
-                                        <b>TIENE REGISTRO <br>BOLETA PERSONAL </b>
+                                            <div class="form-check">
+                                                <label class="form-check-label text-primary" for="flexCheckDefault0">
+                                                    <b>LICENCIA CARGO RIP</b>
+                                                </label>
+                                                <p class="mb-0" style="color: black;">Hoy no tiene Licencia Personal <br>registrada </p>
+                                            </div>
 
-                                    </div>
+                                            @elseif($sumaLicencias == 48 && $registroAsistencia->empleado->tipo == 1)
 
-                                    <div class="col-md-4 text-md-right">
-                                        @if($sumaPermisos < 120) <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalRegistroPermiso">
-                                            Agregar
-                                            </button>
-                                            <hr class="hrr">
-                                            <b>DISPONIBLE: </b><br>
-                                            <?php
-                                            $horas = floor((120 - $sumaPermisos) / 60);
-                                            $minutos = $sumaPermisos % 60;
-                                            ?>
-                                            {{$horas}} horas {{$minutos}} minutos
+                                            <!-- Agrega más campos según sea necesario -->
+                                            <div class="form-check">
+                                                <label class="form-check-label text-primary" for="flexCheckDefault0">
+                                                    <b>LICENCIA CARGO RIP</b>
+                                                </label>
+                                                <p class="mb-0" style="color: red;">Ya ocupó sus Boletas Personales</p>
+
+                                            </div>
+
                                             @endif
-
-
+                                            @endif
                                     </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5 table-responsive center">
+
+                    <div class="card">
+                        <div class="card-body">
+                            <b>REGULARIZADO :</b>
+
+                            <hr class="hrr">
+                            <!-- Agrega más campos según sea necesario -->
+
+                            <div class="row justify-content-center">
+                                <div class="form-check">
+                                    <label class="form-check-label" for="flexCheckDefault" style="font-size: 9px;">
+                                        BOLETA<br> OFICIAL
+                                    </label>
+                                    <input class="form-control checkbox" name="reg_checks[]" type="checkbox" value="BOLETA OFICIAL" id="flexCheckDefault">
+                                </div>
+                                <div class="form-check">
+                                    <label class="form-check-label" for="flexCheckDefault1" style="font-size: 9px;">
+                                        COMUNICACIóN<br> INTERNA
+                                    </label>
+                                    <input class="form-control checkbox" name="reg_checks[]" type="checkbox" value="COMUNICACION INTERNA" id="flexCheckDefault1">
+                                </div>
+                                <div class="form-check">
+                                    <label class="form-check-label" for="flexCheckChecked6" style="font-size: 9px;">
+                                        ÓRDEN DE<br> SERVICIO
+                                    </label>
+                                    <input class="form-control checkbox" name="reg_checks[]" type="checkbox" value="ORDEN DE SERVICIO" id="flexCheckChecked6">
                                 </div>
                             </div>
 
-                            @else
-                            <div class="form-group row font-verdana-sm">
 
-
-                                <div class="col-md-3">
-                                    <div class="form-check">
-                                        <label class="form-check-label text-success" for="flexCheckDefault0">
-                                            <b>BOLETA PERSONAL</b>
-                                        </label>
-
-                                    </div>
-                                    <div class="form-check">
-                                        <p class="mb-0">Hoy no hay ningúna Boleta Personal Registrada</p>
-                                    </div>
+                            <div class="row justify-content-center">
+                                <div class="form-group col-md-12 form-check">
+                                    <hr class="hr">
                                 </div>
-                                <div class="col-md-4 text-md-right">
-                                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalMostraroPermiso">Detalle</button>
-                                    <hr class="hrr">
-                                    <b>HOY NO TIENE REGISTRO</b>
+                            </div>
+
+                            @if($registroAsistencia->empleado->tipo==1)
+
+                            <div class="row justify-content-center">
+                                <div class="form-check">
+                                    <label class="form-check-label" for="flexCheckChecked5" style="font-size: 9px;">
+                                        LIC. SIN GOCE<br> DE HABERES
+                                    </label>
+                                    <input class="form-control checkbox" name="reg_checks[]" type="checkbox" value="LICENCIA SIN GOCE DE HABERES" id="flexCheckChecked5">
+                                </div>
+                                <div class="form-check">
+                                    <label class="form-check-label" for="flexCheckDefault4" style="font-size: 9px;">
+                                        BAJA <br>MÉDICA
+                                    </label>
+                                    <input class="form-control checkbox" name="reg_checks[]" type="checkbox" value="BAJA MÉDICA" id="flexCheckDefault4">
+                                </div>
+                                <div class="form-check">
+                                    <label class="form-check-label" for="flexCheckChecked3" style="font-size: 9px;">
+                                        <br>
+                                        VACACIONES
+                                    </label>
+                                    <input class="form-control checkbox" name="reg_checks[]" type="checkbox" value="VACACIONES" id="flexCheckChecked3" {{ in_array('VACACIONES', $opciones) ? 'checked' : '' }}>
 
                                 </div>
-                                <div class="col-md-4 text-md-right">
-                                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalRegistroPermiso">Agregar</button>
+                            </div>
+                            @endif
+
+
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="col-md-12 form-check">
+                                <label for="asignado"><b>OBSERVACIONES:</b></label><br>
+                                <input type="hidden" id="observ2" name="observ2" class="form-control form-control-sm" value="{{$registroAsistencia->observ}}">
+                                <textarea class="form-control form-control-sm" name="observ" id="exampleTextarea" rows="6" style="font-size: 8px;" readonly>{{$registroAsistencia->observ}}</textarea>
+                                @error('observ')
+                                <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="form-group row ">
+
+                                <div class="col-md-12 text-right">
                                     <hr class="hrr">
-                                    <b>Disponible: </b><br>
-                                    @php
-                                    $horas = floor( (120 - $sumaPermisos) / 60);
+                                    <button type="submit" class="btn btn-success">Regularizar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+        </form>
+    </div>
+</div>
+<div class="col-md-3">
+    <div class="card">
+        <div class="card-body">
+            <div class="form-group row font-verdana-sm">
+                @if($permisos->count() > 0 && $registroAsistencia->empleado->tipo == 1)
+                <div class="form-group col-md-12 ">
+                    <hr class="hrr">
+
+                    <div class="form-group row font-verdana-sm">
+
+                        <div class="col-md-6 text-md-right">
+                            <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalMostrarPermiso">Detalles</button>
+                            <hr class="hrr">
+                            <b>TIENE REGISTRO DE <br>BOLETA PERSONAL </b>
+                        </div>
+
+                        <div class="col-md-6 text-md-right">
+                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalRegistroPermiso">Agregar</button>
+                            <hr class="hrr">
+                            <b>DISPONIBLE: </b><br>
+                            <?php
+                            $horas = floor((120 - $sumaPermisos) / 60);
+                            $minutos = $sumaPermisos % 60;
+                            ?>
+                            {{$horas}} horas {{$minutos}} minutos
+
+                        </div>
+                    </div>
+                </div>
+
+                @else
+
+                <div class="form-group col-md-12 ">
+                    <div class="form-group row font-verdana-sm">
+
+
+                        @if($sumaPermisos < 120 && $registroAsistencia->empleado->tipo == 1)
+
+                            <div class="col-md-6 text-md-right">
+                                <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalMostrarPermiso">Detalles</button>
+                                <hr class="hrr">
+                                <div class="form-check">
+                                    <b>DISPONIBLE: </b><br>
+                                    <?php
+                                    $horas = floor((120 - $sumaPermisos) / 60);
                                     $minutos = $sumaPermisos % 60;
-                                    @endphp
+                                    ?>
+                                    <p class="mb-0" style="color: green;"> {{$horas}} horas {{$minutos}} minutos</p>
 
-                                    @if($horas > 0)
-                                    {{ $horas }} horas {{ $minutos }} minutos
-                                    @else
-                                    {{ $minutos }} minutos
-                                    @endif
                                 </div>
+                            </div>
+                            <div class="col-md-6 text-md-right">
+                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalRegistroPermiso">Agregar</button>
+                                <hr class="hrr">
+
+                            </div>
+                            @elseif($sumaPermisos == 120 && $registroAsistencia->empleado->tipo == 1)
+
+
+                            <div class="form-group col-md-6 text-md-right">
+                                <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalMostrarPermiso">Detalles</button>
+                                <hr class="hrr">
+                                <p style="color: red;">Ya ocupó sus Boletas Personales</p>
+                            </div>
+                            <div class="form-group col-md-6 text-md-right">
+                                <button class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modalAgregarPermiso" disabled>Agregar</button>
+                                <hr class="hrr">
+                                <b>DISPONIBLE: </b>
+                                <?php
+                                $horas = floor((120 - $sumaPermisos) / 60);
+                                $minutos = $sumaPermisos % 60;
+                                ?>
+                                <p style="color: red;"> {{$horas}} horas {{$minutos}} minutos</p>
+
 
                             </div>
 
                             @endif
+                    </div>
+                </div>
+
+                @endif
+            </div>
+            <div class="form-group row font-verdana-sm">
+                @if($licencia->count() > 0 && $registroAsistencia->empleado->tipo == 1)
+                <div class="form-group col-md-12 ">
+                    <div class="form-group row font-verdana-sm">
+
+
+                        <div class="col-md-6 text-md-right">
+                            <hr class="hrr">
+                            <b>TIENE REGISTRO DE <br>LICENCIA CARGO RIP </b>
                         </div>
-                        <div class="form-group row font-verdana-sm">
-                            @if($licencia->count() > 0 && $registroAsistencia->empleado->tipo==1)
-                            <div class="form-group col-md-12 ">
-                                <div class="form-group row font-verdana-sm">
-                                    <div class="form-group col-md-4">
-                                        <!-- Agrega más campos según sea necesario -->
-                                        <div class="form-check">
-                                            <label class="form-check-label text-primary" for="flexCheckDefault0">
-                                                <b>LICENCIA CARGO RIP</b>
-                                            </label>
-                                            <input class="form-control checkbox" type="checkbox" value="BOLETA PERSONAL" id="flexCheckDefault0">
-                                            <p class="mb-0">{{$sumaLicencias}}</p>
 
-                                        </div>
+                        <div class="col-md-6 text-md-right">
+                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalMostrarPermiso">Detalles</button>
+                            <hr class="hrr">
+                            <b>DISPONIBLE: </b><br>
 
-                                    </div>
+                            <span class="text-white bg-success px-2 py-1 rounded" style="font-size: medium;">
+                                <?php
+                                $dias = floor((48 - $sumaLicencias) / 24);
+                                $minutos = (48 - $sumaLicencias) % 24;
 
+                                // Genera una representación textual
+                                $texto = '';
 
-                                    <div class="col-md-4 text-md-right">
-                                        <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalMostraroPermiso">Detalle</button>
-                                        <hr class="hrr">
-                                        <b>TIENE REGISTRO <br>LICENCIA CARGO RIP </b>
+                                if ($dias > 0) {
+                                    $texto .= $dias . ' día' . ($dias > 1 ? 's' : '') . ' ';
+                                }
 
-                                    </div>
+                                if ($minutos > 0) {
+                                    $minutos = floor($minutos / 12);
+                                    $texto .= $minutos . ' mediodia' . ($minutos > 1 ? 's' : '');
+                                }
 
-                                    <div class="col-md-4 text-md-right">
-                                        @if($sumaLicencias < 48 && $registroAsistencia->empleado->tipo==1) <hr class="hrr">
-                                            <b>DISPONIBLE: </b><br>
-                                            <span class="text-white bg-success px-2 py-1 rounded" style="font-size: medium;">
-                                                <?php
-                                                $dias = floor((48 - $sumaLicencias) / 24);
-                                                $minutos = (48 - $sumaLicencias) % 24;
-
-                                                // Genera una representación textual
-                                                $texto = '';
-
-                                                if ($dias > 0) {
-                                                    $texto .= $dias . ' día' . ($dias > 1 ? 's' : '') . ' ';
-                                                }
-
-                                                if ($minutos > 0) {
-                                                    $minutos = floor($minutos / 12);
-                                                    $texto .= $minutos . ' mediodia' . ($minutos > 1 ? 's' : '');
-                                                }
-
-                                                echo $texto;
-                                                ?>
-                                            </span>
-                                            @endif
+                                echo $texto;
+                                ?>
+                            </span>
 
 
-                                    </div>
-                                </div>
-                            </div>
 
-                            @else
-                            <div class="form-group row font-verdana-sm">
+                        </div>
+                    </div>
+                </div>
+
+                @else
+
+                <div class="form-group col-md-12 ">
+                    <div class="form-group row font-verdana-sm">
 
 
-                                <div class="col-md-3">
-                                    <div class="form-check">
-                                        <label class="form-check-label text-primary" for="flexCheckDefault0">
-                                            <b>LICENCIA CARGO RIP</b>
-                                        </label>
+                        @if($sumaLicencias < 48 && $registroAsistencia->empleado->tipo == 1)
 
-                                    </div>
-                                    <div class="form-check">
-                                        <p class="mb-0">Hoy no hay ningúna Boleta Personal Registrada</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 text-md-right">
-                                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalMostraroLicencia">Detalle</button>
-                                    <hr class="hrr">
-                                    <b>HOY NO TIENE REGISTRO</b>
-
-                                </div>
-                                <div class="col-md-4 text-md-right">
-                                    <hr class="hrr">
+                            <div class="col-md-12 text-md-right">
+                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalMostrarPermiso">Detalles</button>
+                                <hr class="hrr">
+                                <div class="form-check">
                                     <b>DISPONIBLE: </b><br>
                                     <span class="text-white bg-success px-2 py-1 rounded" style="font-size: medium;">
                                         <?php
@@ -317,534 +520,53 @@
                                         echo $texto;
                                         ?>
                                     </span>
-
-
-                                </div>
-
-
-                            </div>
-
-                            @endif
-
-                        </div>
-
-                        <hr class="hrr">
-                    </div>
-                </div>
-            </div>
-            @elseif($registroAsistencia->horario->tipo == 1)
-            <div class="body-border ">
-                <div class="row font-verdana-sm">
-                    <div class="form-group col-md-12 form-check">
-                        <b>HORARIO :</b>
-                        <hr class="hrr">
-                        <div class="row">
-
-                            <div class="form-group col-md-6 form-check">
-                                <b>TURNO MAÑANA :</b>
-                                <div class="row">
-                                    <div class="form-group col-md-6 form-check">
-                                        <br><b>ENTRADA:</b></br>
-                                        <label for="asignado" id="label1">Biometrico</label>
-                                        <input type="checkbox" name="asignado" id="asignado1" class="form-control" onclick="toggleLabel('label1', 'asignado1', 'registroH_inicio', 'registro_inicio')">
-                                        <input type="time" id="registroH_inicio" name="registro_inicio" class="form-control form-control-sm" value="{{ $registroAsistencia->horario->hora_inicio }}" required disabled>
-                                    </div>
-                                    <div class="form-group col-md-6 form-check">
-                                        <br><b>SALIDA:</b></br>
-                                        <label for="asignado" id="label2">Biometrico</label>
-                                        <input type="checkbox" name="asignado" id="asignado2" class="form-control" onclick="toggleLabel3('label2', 'asignado2', 'registroH_salida', 'registro_salida')">
-                                        <input type="time" id="registroH_salida" name="registro_salida" class="form-control form-control-sm" value="{{ $registroAsistencia->horario->hora_salida }}" required disabled>
-                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group col-md-6 form-check">
 
-                                <b>TURNO TARDE :</b>
-
+                            @elseif($sumaLicencias == 48 && $registroAsistencia->empleado->tipo == 1)
 
 
-                                <div class="row">
-                                    <div class="form-group col-md-6 form-check">
-                                        <br><b>ENTRADA:</b></br>
-                                        <label for="asignado" id="label3">Biometrico</label>
-                                        <input type="checkbox" name="asignado" id="asignado3" class="form-control" onclick="toggleLabel4('label3', 'asignado3','registroH_entrada','registro_entrada')">
-                                        <input type="time" id="registroH_entrada" name="registro_entrada" class="form-control form-control-sm" value="{{ $registroAsistencia->horario->hora_entrada }}" required disabled>
-
-                                    </div>
-                                    <div class="form-group col-md-6 form-check">
-                                        <br><b>SALIDA:</b></br>
-                                        <label for="asignado" id="label4">Biometrico</label>
-                                        <input type="checkbox" name="asignado" id="asignado4" class="form-control" onclick="toggleLabel2('label4', 'asignado4','registroH_final','registro_final')">
-                                        <input type="time" id="registroH_final" name="registro_final" class="form-control form-control-sm" value="{{ $registroAsistencia->horario->hora_final}}" required disabled>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-12">
-                        <div class="row">
-                            <div class="form-group col-md-12 form-check">
-                                <b>REGULARIZADO :</b>
-
+                            <div class="form-group col-md-6 text-sm-right">
+                                <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalMostrarPermiso">Detalles</button>
                                 <hr class="hrr">
+                                <p style="color: red;">Ya ocupó sus Licencias Personales Cargo RIP</p>
                             </div>
-                        </div>
+                            <div class="form-group col-md-6 text-sm-right">
+                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalMostrarLicencia">Detalles</button>
+                                <hr class="hrr">
+                                <b>DISPONIBLE: </b>
+                                <span class="text-white bg-danger px-2 py-1 rounded" style="font-size: medium;">
+                                    <?php
+                                    $dias = floor((48 - $sumaLicencias) / 24);
+                                    $minutos = (48 - $sumaLicencias) % 24;
 
-                        <div class="row">
+                                    // Genera una representación textual
+                                    $texto = '';
 
-                            <!-- Agrega más campos según sea necesario -->
-                            <div class="form-check">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    BOLETA OFICIAL
-                                </label>
-                                <input class="form-control checkbox" type="checkbox" value="BOLETA OFICIAL" id="flexCheckDefault">
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label" for="flexCheckDefault1">
-                                    COMUNICACIóN INTERNA
-                                </label>
+                                    if ($dias > 0) {
+                                        $texto .= $dias . ' día' . ($dias > 1 ? 's' : '') . ' ';
+                                    }
 
-                                <input class="form-control checkbox" type="checkbox" value="COMUNICACION INTERNA" id="flexCheckDefault1">
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label" for="flexCheckChecked2">
-                                    LICENCIAS
-                                </label>
-                                <input class="form-control checkbox" type="checkbox" value="LICENCIAS" id="flexCheckChecked2">
+                                    if ($minutos > 0) {
+                                        $minutos = floor($minutos / 12);
+                                        $texto .= $minutos . ' mediodia' . ($minutos > 1 ? 's' : '');
+                                    }
 
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label" for="flexCheckChecked3">
-                                    VACACIONES
-                                </label>
-                                <input class="form-control checkbox" type="checkbox" value="VACACIONES" id="flexCheckChecked3">
-
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-12 form-check">
-                                <hr class="hr">
-                            </div>
-                        </div>
+                                    echo $texto;
+                                    ?>
+                                </span>
 
 
-                        <div class="row">
-                            <div class="form-check">
-                                <label class="form-check-label" for="flexCheckDefault4">
-                                    BAJA MÉDICA
-                                </label>
-                                <input class="form-control checkbox" type="checkbox" value="BAJA MÉDICA" id="flexCheckDefault4">
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label" for="flexCheckChecked5">
-                                    LIC. G/ DE HABERES
-                                </label>
-                                <input class="form-control checkbox" type="checkbox" value="LICENCIA SIN GOCE DE HABERES" id="flexCheckChecked5">
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label" for="flexCheckChecked6">
-                                    ÓRDEN DE SERVICIO
-                                </label>
-                                <input class="form-control checkbox" type="checkbox" value="ORDEN DE SERVICIO" id="flexCheckChecked6">
-                            </div>
-                        </div>
-                        <div class="form-group col-md-12 form-check">
-                            <hr class="hr">
-                        </div>
-                        <div class="form-group row font-verdana-sm">
-                            @if($permisos->count() > 0 && $registroAsistencia->empleado->tipo == 1)
-                            <div class="form-group col-md-12 ">
-                                <div class="form-group row font-verdana-sm">
-                                    <div class="form-group col-md-4">
-                                        <!-- Agrega más campos según sea necesario -->
-                                        <div class="form-check">
-                                            <label class="form-check-label text-success" for="flexCheckDefault0">
-                                                <b>BOLETA PERSONAL</b>
-                                            </label>
-                                            <input class="form-control checkbox" type="checkbox" value="BOLETA PERSONAL" id="flexCheckDefault0" @if($permisos) checked @endif>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4 text-md-right">
-                                        <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalMostrarPermiso">Detalles</button>
-                                        <hr class="hrr">
-                                        <b>TIENE REGISTRO DE <br>BOLETA PERSONAL </b>
-                                    </div>
-
-                                    <div class="col-md-4 text-md-right">
-                                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalRegistroPermiso">Agregar</button>
-                                        <hr class="hrr">
-                                        <b>DISPONIBLE: </b><br>
-                                        <?php
-                                        $horas = floor((120 - $sumaPermisos) / 60);
-                                        $minutos = $sumaPermisos % 60;
-                                        ?>
-                                        {{$horas}} horas {{$minutos}} minutos
-
-                                    </div>
-                                </div>
-                            </div>
-
-                            @else
-
-                            <div class="form-group col-md-12 ">
-                                <div class="form-group row font-verdana-bg">
-
-
-                                    @if($sumaPermisos < 120 && $registroAsistencia->empleado->tipo == 1)
-                                        <div class="col-md-4">
-                                            <div class="form-check">
-                                                <label class="form-check-label text-success" for="flexCheckDefault0">
-                                                    <b>BOLETA PERSONAL</b>
-                                                </label>
-                                                <p class="mb-0" style="color: black;">No se tiene Boleta Personal registrada en Hora de Salida</p>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 text-md-right">
-                                            <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalMostrarPermiso">Detalles</button>
-                                            <hr class="hrr">
-                                            <div class="form-check">
-                                                <b>DISPONIBLE: </b><br>
-                                                <?php
-                                                $horas = floor((120 - $sumaPermisos) / 60);
-                                                $minutos = $sumaPermisos % 60;
-                                                ?>
-                                                <p class="mb-0" style="color: green;"> {{$horas}} horas {{$minutos}} minutos</p>
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 text-md-right">
-                                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalRegistroPermiso">Agregar</button>
-                                            <hr class="hrr">
-
-                                        </div>
-                                        @elseif($sumaPermisos == 120 && $registroAsistencia->empleado->tipo == 1)
-
-                                        <div class="form-group col-md-3">
-                                            <!-- Agrega más campos según sea necesario -->
-                                            <div class="form-check">
-                                                <label class="form-check-label text-success" for="flexCheckDefault0">
-                                                    <b>BOLETA PERSONAL</b>
-                                                </label>
-                                                <p class="mb-0" style="color: red;">Ya ocupó sus Boletas Personales</p>
-
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-md-4 text-md-right">
-                                            <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalMostrarPermiso">Detalles</button>
-                                            <hr class="hrr">
-                                            <p style="color: red;">Ya ocupó sus Boletas Personales</p>
-                                        </div>
-                                        <div class="form-group col-md-4 text-md-right">
-                                            <button class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modalAgregarPermiso" disabled>Agregar</button>
-                                            <hr class="hrr">
-                                            <b>DISPONIBLE: </b>
-                                            <?php
-                                            $horas = floor((120 - $sumaPermisos) / 60);
-                                            $minutos = $sumaPermisos % 60;
-                                            ?>
-                                            <p style="color: red;"> {{$horas}} horas {{$minutos}} minutos</p>
-
-
-                                        </div>
-
-                                        @endif
-                                </div>
                             </div>
 
                             @endif
-                        </div>
-                        <div class="form-group row font-verdana-sm">
-                            @if($licencia->count() > 0 && $registroAsistencia->empleado->tipo == 1)
-                            <div class="form-group col-md-12 ">
-                                <div class="form-group row font-verdana-sm">
-                                    <div class="form-group col-md-4">
-                                        <!-- Agrega más campos según sea necesario -->
-                                        <div class="form-check">
-                                            <label class="form-check-label text-primary" for="flexCheckDefault0">
-                                                <b>LICENCIA PERSONAL</b>
-                                            </label>
-                                            <input class="form-control checkbox" type="checkbox" value="BOLETA PERSONAL" id="flexCheckDefault0" @if($permisos) checked @endif>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4 text-md-right">
-                                         <hr class="hrr">
-                                        <b>TIENE REGISTRO DE <br>LICENCIA CARGO RIP </b>
-                                    </div>
-
-                                    <div class="col-md-4 text-md-right">
-                                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalMostrarPermiso">Detalles</button>
-                                        <hr class="hrr">
-                                        <b>DISPONIBLE: </b><br>
-
-                                        <span class="text-white bg-success px-2 py-1 rounded" style="font-size: medium;">
-                                            <?php
-                                            $dias = floor((48 - $sumaLicencias) / 24);
-                                            $minutos = (48 - $sumaLicencias) % 24;
-
-                                            // Genera una representación textual
-                                            $texto = '';
-
-                                            if ($dias > 0) {
-                                                $texto .= $dias . ' día' . ($dias > 1 ? 's' : '') . ' ';
-                                            }
-
-                                            if ($minutos > 0) {
-                                                $minutos = floor($minutos / 12);
-                                                $texto .= $minutos . ' mediodia' . ($minutos > 1 ? 's' : '');
-                                            }
-
-                                            echo $texto;
-                                            ?>
-                                        </span>
-
-
-
-                                    </div>
-                                </div>
-                            </div>
-
-                            @else
-
-                            <div class="form-group col-md-12 ">
-                                <div class="form-group row font-verdana-bg">
-
-
-                                    @if($sumaLicencias < 48 && $registroAsistencia->empleado->tipo == 1)
-                                        <div class="col-md-4">
-                                            <div class="form-check">
-                                                <label class="form-check-label text-primary" for="flexCheckDefault0">
-                                                    <b>LICENCIA CARGO RIP</b>
-                                                </label>
-                                                <p class="mb-0" style="color: black;">Hoy no tiene Licencia Personal registrada </p>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 text-md-right">
-                                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalMostrarPermiso">Detalles</button>
-                                            <hr class="hrr">
-                                            <div class="form-check">
-                                                <b>DISPONIBLE: </b><br>
-                                                <span class="text-white bg-success px-2 py-1 rounded" style="font-size: medium;">
-                                                    <?php
-                                                    $dias = floor((48 - $sumaLicencias) / 24);
-                                                    $minutos = (48 - $sumaLicencias) % 24;
-
-                                                    // Genera una representación textual
-                                                    $texto = '';
-
-                                                    if ($dias > 0) {
-                                                        $texto .= $dias . ' día' . ($dias > 1 ? 's' : '') . ' ';
-                                                    }
-
-                                                    if ($minutos > 0) {
-                                                        $minutos = floor($minutos / 12);
-                                                        $texto .= $minutos . ' mediodia' . ($minutos > 1 ? 's' : '');
-                                                    }
-
-                                                    echo $texto;
-                                                    ?>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        
-                                        @elseif($sumaLicencias == 48 && $registroAsistencia->empleado->tipo == 1)
-
-                                        <div class="form-group col-md-3">
-                                            <!-- Agrega más campos según sea necesario -->
-                                            <div class="form-check">
-                                                <label class="form-check-label text-primary" for="flexCheckDefault0">
-                                                    <b>LICENCIA CARGO RIP</b>
-                                                </label>
-                                                <p class="mb-0" style="color: red;">Ya ocupó sus Boletas Personales</p>
-
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-md-4 text-md-right">
-                                            <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalMostrarPermiso">Detalles</button>
-                                            <hr class="hrr">
-                                            <p style="color: red;">Ya ocupó sus Licencias Personales Cargo RIP</p>
-                                        </div>
-                                        <div class="form-group col-md-4 text-md-right">
-                                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalMostrarPermiso">Detalles</button>
-                                            <hr class="hrr">
-                                            <b>DISPONIBLE: </b>
-                                            <span class="text-white bg-danger px-2 py-1 rounded" style="font-size: medium;">
-                                        <?php
-                                        $dias = floor((48 - $sumaLicencias) / 24);
-                                        $minutos = (48 - $sumaLicencias) % 24;
-
-                                        // Genera una representación textual
-                                        $texto = '';
-
-                                        if ($dias > 0) {
-                                            $texto .= $dias . ' día' . ($dias > 1 ? 's' : '') . ' ';
-                                        }
-
-                                        if ($minutos > 0) {
-                                            $minutos = floor($minutos / 12);
-                                            $texto .= $minutos . ' mediodia' . ($minutos > 1 ? 's' : '');
-                                        }
-
-                                        echo $texto;
-                                        ?>
-                                    </span>
-
-
-                                        </div>
-
-                                        @endif
-                                </div>
-                            </div>
-
-                            @endif
-                        </div>
-
-                        <hr class="hrr">
                     </div>
                 </div>
-            </div>
-            @endif
-        </div>
 
-        <div class="col-md-6 table-responsive center">
-
-            <div class="body-border ">
-                <b>DATOS DE REGISTRO DE ASISTENCIA:</b>
-                <hr class="hrr">
-
-                <form method="POST" action="{{ route('regularizar_asistencia.update', $registroAsistencia->id) }} " id="actualizarForm">
-                    @csrf
-                    @method('PUT')
-
-                    <div class="form-group row ">
-                        <div class="form-group col-md-8">
-                            <label for="descripcion"><b>Nombre Completo :</b></label>
-                            <input type="text" name="descripcion" value="{{ $registroAsistencia->empleado->nombres }} {{$registroAsistencia->empleado->ap_pat}} {{$registroAsistencia->empleado->ap_mat}}" class="form-control form-control-sm" readonly>
-                            <input type="hidden" name="observ" value="Regularizado" class="form-control form-control-sm" readonly>
-
-                        </div>
-
-                        <div class="form-group col-md-4">
-                            <label for="fecha"><b>Fecha de Registro:</b></label>
-                            <input type="date" name="fecha" class="form-control form-control-sm" value="{{ $registroAsistencia->asistencia->fecha }}" readonly>
-                        </div>
-                    </div>
-
-                    <div class="form-group row font-verdana-sm">
-
-                        @if($registroAsistencia->horario->tipo == 0)
-                        @if($registroAsistencia->registro_inicio)
-                        <div class="form-group col-md-6">
-                            <label for="registro_final"><b>MAÑANA</b> </label><br>
-                            <label for="registro_inicio"><b>Reg. de Entrada</b></label>
-                            <input type="time" id="registro_inicio" name="registro_inicio" class="form-control form-control-sm" value="{{ $registroAsistencia->registro_inicio }}" readonly>
-                        </div>
-                        @else
-                        <div class="form-group col-md-6">
-                            <label for="registro_final"><b>MAÑANA</b> </label><br>
-                            <label for="registro_inicio"><b>Reg. de Entrada</b></label>
-                            <input type="time" id="registro_inicio" name="registro_inicio" class="form-control form-control-sm" value="">
-                        </div>
-                        @endif
-                        @if($registroAsistencia->registro_final)
-
-                        <div class="form-group col-md-6">
-                            <label for="registro_final"><b>TARDE</b> </label><br>
-                            <label for="registro_final"><b>Reg. de Salida</b> </label>
-                            <input type="time" id="registro_final" name="registro_final" class="form-control form-control-sm" value="{{ $registroAsistencia->registro_final }}" readonly>
-                        </div>
-                        @else
-
-                        <div class="form-group col-md-6">
-                            <label for="registro_final"><b>TARDE</b> </label><br>
-                            <label for="registro_final"><b>Reg. de Salida</b> </label>
-                            <input type="time" id="registro_final" name="registro_final" class="form-control form-control-sm" value="">
-                        </div>
-                        @endif
-                        @else
-                        @if($registroAsistencia->registro_inicio)
-                        <div class="form-group col-md-3">
-                            <label for="registro_final"><b>MAÑANA</b> </label><br>
-                            <label for="registro_inicio"><b>Reg. de Entrada</b></label>
-                            <input type="time" id="registro_inicio" name="registro_inicio" class="form-control form-control-sm" value="{{ $registroAsistencia->registro_inicio }}" readonly>
-                        </div>
-                        @else
-                        <div class="form-group col-md-3">
-                            <label for="registro_final"><b>MAÑANA</b> </label><br>
-                            <label for="registro_inicio"><b>Reg. de Entrada</b></label>
-                            <input type="time" id="registro_inicio" name="registro_inicio" class="form-control form-control-sm" value="">
-                        </div>
-                        @endif
-                        @if($registroAsistencia->registro_salida)
-                        <div class="form-group col-md-3">
-                            <label for="registro_final"><b></b> </label><br>
-                            <label for="registro_salida">Hora de salida</label>
-                            <input type="time" id="registro_salida" name="registro_salida" class="form-control form-control-sm" value="{{ $registroAsistencia->registro_salida }}" readonly required>
-                        </div>
-                        @else
-                        <div class="form-group col-md-3">
-                            <label for="registro_final"><b></b> </label><br>
-                            <label for="registro_salida">Hora de salida</label>
-                            <input type="time" id="registro_salida" name="registro_salida" class="form-control form-control-sm" value="">
-                        </div>
-                        @endif
-                        @if($registroAsistencia->registro_entrada)
-                        <div class="form-group col-md-3">
-                            <label for="registro_final"><b></b> </label><br>
-                            <label for="registro_entrada">Hora de retorno</label>
-                            <input type="time" id="registro_entrada" name="registro_entrada" class="form-control form-control-sm" value="{{ $registroAsistencia->registro_entrada }}" readonly required>
-                        </div>
-                        @else
-                        <div class="form-group col-md-3">
-                            <label for="registro_final"><b></b> </label><br>
-                            <label for="registro_entrada">Hora de retorno</label>
-                            <input type="time" id="registro_entrada" name="registro_entrada" class="form-control form-control-sm" value="">
-                        </div>
-                        @endif
-                        @if($registroAsistencia->registro_final)
-
-                        <div class="form-group col-md-3">
-                            <label for="registro_final"><b>TARDE</b> </label><br>
-                            <label for="registro_final"><b>Reg. de Salida</b> </label>
-                            <input type="time" id="registro_final" name="registro_final" class="form-control form-control-sm" value="{{ $registroAsistencia->registro_final }}" readonly>
-                        </div>
-                        @else
-
-                        <div class="form-group col-md-3">
-                            <label for="registro_final"><b>TARDE</b> </label><br>
-                            <label for="registro_final"><b>Reg. de Salida</b> </label>
-                            <input type="time" id="registro_final" name="registro_final" class="form-control form-control-sm" value="">
-                        </div>
-                        @endif
-                        @endif
-
-                    </div>
-
-                    <div class="col-md-12 form-check">
-
-                        <label for="asignado"><b>OBSERVACIONES:</b></label><br>
-
-                        <input type="hidden" id="observ2" name="observ2" class="form-control form-control-sm" value="{{$registroAsistencia->observ}}">
-
-                        <textarea class="form-control form-control-sm" name="observ" id="exampleTextarea" rows="6" required>{{$registroAsistencia->observ}}</textarea>
-
-                    </div>
-
-                    <div class="col-md-12 text-right">
-                        <hr class="hrr">
-                        <button type="submit" class="btn btn-success">Regularizar</button>
-                    </div>
-
-                </form>
-
+                @endif
             </div>
         </div>
     </div>
-</div>
 </div>
 
 
@@ -1236,7 +958,6 @@
         confirmarBtn.addEventListener('click', function() {
             // Simplemente envía el formulario cuando el usuario confirma
             document.forms['actualizarForm'].submit();
-            registroModal.hide();
             confirmarModal.hide();
         });
 
@@ -1345,6 +1066,21 @@
     // Escuchar cambios en la hora de salida y la duración
     document.getElementById('hora_salida').addEventListener('change', calcularHoraRetorno);
     document.getElementById('duracion').addEventListener('change', calcularHoraRetorno);
+</script>
+<script>
+    document.getElementById('miFormulario').addEventListener('submit', function(event) {
+        var checkboxes = document.querySelectorAll('input[name="grupo_checks[]"]');
+        var isChecked = false;
+        checkboxes.forEach(function(checkbox) {
+            if (checkbox.checked) {
+                isChecked = true;
+            }
+        });
+        if (!isChecked) {
+            alert('Por favor, seleccione al menos una opción.');
+            event.preventDefault(); // Evita que el formulario se envíe si no se ha seleccionado ningún checkbox.
+        }
+    });
 </script>
 
 @endsection

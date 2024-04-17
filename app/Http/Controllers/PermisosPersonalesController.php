@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePermisosPersonalesRequest;
+use App\Models\ConfigHorario;
 use App\Models\EmpleadoPermisoModel;
 use App\Models\EmpleadosModel;
 use App\Models\PermisoModel;
@@ -20,6 +22,106 @@ class PermisosPersonalesController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+    public function config(Request $request)
+    {
+        $request->validate([
+
+            'permisosmensuales' => 'required|numeric',
+        ]);
+
+        $horas = $request->input('permisosmensuales');
+        $horarioConfig = ConfigHorario::first();
+
+        if ($horarioConfig) {
+            // Actualizar los campos utilizando el método update()
+            $horarioConfig->update([
+                'permisosmensuales' => $horas,
+
+                // Puedes agregar más campos aquí si es necesario
+            ]);
+
+          //  dd($horas);
+            $añoMesActual = Carbon::now()->format('Y-m');
+
+            // Redirigir o realizar otras acciones según sea necesario
+            $permiso =  $this->obtenerOCrearPermiso($añoMesActual);
+            if ($permiso) {
+                // Actualizar los campos directamente utilizando el método update()
+                PermisoModel::where('mes', $añoMesActual)
+                    ->update([
+                        'horas_permitidas' => $horas,
+                        // ... y así sucesivamente
+                    ]);
+
+                // Redirigir o realizar otras acciones según sea necesario
+                return redirect()->back()->with('success', 'Permisos actualizados exitosamente.');
+            } else {
+                $permiso = $this->obtenerOCrearLicencia($añoMesActual);
+                // Actualizar los campos directamente utilizando el método update()
+                PermisoModel::where('mes', $añoMesActual)
+                    ->update([
+                        'horas_permitidas' => $horas,
+                        // ... y así sucesivamente
+                    ]);
+
+                // Redirigir o realizar otras acciones según sea necesario
+                return redirect()->back()->with('success', 'Permisos actualizados exitosamente.');
+            }
+        } else {
+            // Manejar el caso en el que no se encuentre ninguna configuración de horario
+            return redirect()->back()->with('error', 'No se encontró ninguna configuración de horario.');
+        }
+    }
+    public function configUpdate(Request $request)
+    {
+        $request->validate([
+
+            'permisosmensuales' => 'required|numeric',
+        ]);
+
+        $horas = $request->input('permisosmensuales');
+        $horarioConfig = ConfigHorario::first();
+
+        if ($horarioConfig) {
+            // Actualizar los campos utilizando el método update()
+            $horarioConfig->update([
+                'permisosmensuales' => $horas,
+
+                // Puedes agregar más campos aquí si es necesario
+            ]);
+
+          //  dd($horas);
+            $añoMesActual = Carbon::now()->format('Y-m');
+
+            // Redirigir o realizar otras acciones según sea necesario
+            $permiso =  $this->obtenerOCrearPermiso($añoMesActual);
+            if ($permiso) {
+                // Actualizar los campos directamente utilizando el método update()
+                PermisoModel::where('mes', $añoMesActual)
+                    ->update([
+                        'horas_permitidas' => $horas,
+                        // ... y así sucesivamente
+                    ]);
+
+                // Redirigir o realizar otras acciones según sea necesario
+                return redirect()->back()->with('success', 'Permisos actualizados exitosamente.');
+            } else {
+                $permiso = $this->obtenerOCrearLicencia($añoMesActual);
+                // Actualizar los campos directamente utilizando el método update()
+                PermisoModel::where('mes', $añoMesActual)
+                    ->update([
+                        'horas_permitidas' => $horas,
+                        // ... y así sucesivamente
+                    ]);
+
+                // Redirigir o realizar otras acciones según sea necesario
+                return redirect()->back()->with('success', 'Permisos actualizados exitosamente.');
+            }
+        } else {
+            // Manejar el caso en el que no se encuentre ninguna configuración de horario
+            return redirect()->back()->with('error', 'No se encontró ninguna configuración de horario.');
+        }
+    }
 
 
 
@@ -27,7 +129,11 @@ class PermisosPersonalesController extends Controller
 
     public function index(Request $request)
     {
+
+
         $añoMesActual = Carbon::now()->format('Y-m');
+
+
         $permiso =  $this->obtenerOCrearPermiso($añoMesActual);
         return view('permisos.personales.index', compact('permiso', 'añoMesActual'));
     }
@@ -40,7 +146,9 @@ class PermisosPersonalesController extends Controller
             $permisoActual = PermisoModel::where('mes', Carbon::now()->format('Y-m'))->first();
 
             if (!$permisoActual) {
-                $permisoActual = PermisoModel::create(['mes' => Carbon::now()->format('Y-m'), 'horas_permitidas' => 120]);
+                $config = ConfigHorario::first();
+
+                $permisoActual = PermisoModel::create(['mes' => Carbon::now()->format('Y-m'), 'horas_permitidas' =>  $config->permisosmensuales]);
             }
 
             return $permisoActual;
@@ -104,7 +212,7 @@ class PermisosPersonalesController extends Controller
                 if ($suma_horas_utilizadas) {
 
                     $tiempo_disponible = $horas_permitidas - $suma_horas_utilizadas;
-                    if ($tiempo_disponible == 0) {
+                    if ($tiempo_disponible == 0 || $suma_horas_utilizadas > $horas_permitidas) {
                         return '<span style="color: red;">Sin HORAS disponibles</span>';
                     }
 
@@ -123,7 +231,7 @@ class PermisosPersonalesController extends Controller
             ->addColumn('btn2', function ($empleado) use ($permisoId, $permiso) {
                 $suma_horas_utilizadas = $empleado->suma_horas_utilizadas;
                 $horas_permitidas = $permiso->horas_permitidas;
-                if ($suma_horas_utilizadas == $horas_permitidas) {
+                if ($suma_horas_utilizadas == $horas_permitidas || $suma_horas_utilizadas > $horas_permitidas ) {
 
                     return  '<a class="tts:left tts-slideIn tts-custom" aria-label="Ver Todos los Registros" href="' . route('listar.permiso', ['id' => $empleado->idemp]) . '">
                 &nbsp;<i class="fa-sharp fa-solid fa-list"></i></i>
@@ -164,30 +272,39 @@ class PermisosPersonalesController extends Controller
                 return '<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Registro" href="' . route('editar.permiso', $permiso->id) . '">
                 <i class="fa-solid fa-2xl fa-square-pen text-warning"></i>
             </a>&nbsp;&nbsp;'
-                    . '<a class="tts:left tts-slideIn tts-custom" aria-label="Eliminar Huella Dactilar" href="#" data-toggle="modal" data-target="#confirmarEliminarModal" data-nombre="' . $permiso->empleado->nombres . ' ' . $permiso->empleado->ap_pat . ' ' . $permiso->empleado->ap_mat . '" data-id="' . $permiso->id . '"><span class="badge badge-danger"> ELIMINAR</span>  </a>';
+                    . '<a class="tts:left tts-slideIn tts-custom" aria-label="Eliminar Registro" href="#" data-toggle="modal" data-target="#confirmarEliminarModal" data-nombre="' . $permiso->empleado->nombres . ' ' . $permiso->empleado->ap_pat . ' ' . $permiso->empleado->ap_mat . '" data-id="' . $permiso->id . '"><span class="badge badge-danger"> ELIMINAR</span>  </a>';
             })
             ->rawColumns(['horas_utilizadas', 'opciones'])
             ->make(true);
     }
 
     public function nuevo($id, $permiso_id)
+
     {
         $empleado = EmpleadosModel::find($id);
         $permiso = PermisoModel::find($permiso_id);
-        return view('permisos.personales.create', compact('empleado', 'permiso'));
-    }
 
-    public function editarPermiso(EmpleadoPermisoModel $permiso)
-    {
-        // Obtener el permiso y la información del empleado asociado al permiso
-
-        // Verificar si el permiso existe
+        if (!$empleado) {
+            // Puedes manejar la situación en la que el permiso no existe, por ejemplo, redirigir o mostrar un error.
+            // Aquí simplemente redirijo a alguna ruta, puedes ajustarlo según tus necesidades.
+            abort(404); // o maneja de alguna manera el caso en que no se encuentre el registro
+        }
         if (!$permiso) {
             // Puedes manejar la situación en la que el permiso no existe, por ejemplo, redirigir o mostrar un error.
             // Aquí simplemente redirijo a alguna ruta, puedes ajustarlo según tus necesidades.
             abort(404); // o maneja de alguna manera el caso en que no se encuentre el registro
         }
 
+
+        $sumaPermisos = EmpleadoPermisoModel::where('permiso_id', $permiso_id)
+            ->where('empleado_id', $id)
+            ->sum('horas_utilizadas');
+        $disponible = $permiso->horas_permitidas - $sumaPermisos;
+        return view('permisos.personales.create', compact('disponible', 'empleado', 'permiso'));
+    }
+
+    public function editarPermiso(EmpleadoPermisoModel $permiso)
+    {
         return view('permisos.personales.edit', compact('permiso'));
     }
     public function listarPermiso($id)
@@ -239,23 +356,10 @@ class PermisosPersonalesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePermisosPersonalesRequest $request)
     {
         // Valida los datos del formulario
-
-
-        $request->validate([
-            'empleado_id' => 'required',
-            'permiso_id' => 'required',
-            'asunto' => 'required',
-            'hora_salida_input' => 'required',
-            'hora_retorno' => 'required',
-            'fecha_solicitud' => 'required|date',
-            'duracion' => 'required|numeric',
-        ]);
-
-
-
+        $request->validated();
         try {
             // Obtén los valores del formulario
             $empleadoId = $request->input('empleado_id');
@@ -263,7 +367,7 @@ class PermisosPersonalesController extends Controller
             $horasSolicitadas = $request->input('duracion');
             $registro_id = $request->input('registroAsistencia_id');
             if ($horasSolicitadas == 0) {
-                return redirect()->back()->with('error', 'No se pudo registrar el permiso');
+                return redirect()->back()->with('horas', 'No se pudo registrar el permiso. Seleccione las horas solicitada');
             }
 
 
@@ -275,9 +379,9 @@ class PermisosPersonalesController extends Controller
 
             if ($registro_id) {
                 if ($permisoRegularizado->count() > 0) {
-                    return redirect()->route('regularizar.ausencia', ['id' =>  $registro_id])->with('error', 'Regularizado correctamente la asistencia del día: '.$permisoRegularizado . $fechaCompleta);
+                    return redirect()->route('regularizar.ausencia', ['id' =>  $registro_id])->with('success', 'Regularizado correctamente la asistencia del día: ' . $fechaCompleta);
 
-                  //  return redirect()->back()->with('error', 'Ya Registro la Boleta Personal' . $permisoRegularizado);
+                    //  return redirect()->back()->with('error', 'Ya Registro la Boleta Personal' . $permisoRegularizado);
                 }
             }
 
@@ -288,9 +392,14 @@ class PermisosPersonalesController extends Controller
             $fechaCarbon = Carbon::createFromFormat('Y-m-d', $fechaCompleta);
             $fechaMes = $fechaCarbon->format('Y-m');
 
+
             $permisoMes = PermisoModel::find($permisoId);
             $fechaCarbon2 = Carbon::createFromFormat('Y-m', $permisoMes->mes);
             $mes = $fechaCarbon2->format('Y-m');
+
+            $fechaMesLiteral = $fechaCarbon->format('F'); // Obtener el nombre completo del mes
+            $fechaMesLiteralMayuscula = mb_strtoupper($fechaMesLiteral); // Convertir a mayúsculas
+
             if ($fechaMes === $mes) {
                 // Busca al empleado con el permiso específico
                 $empleadopermiso = EmpleadosModel::where('idemp', $empleadoId)
@@ -329,11 +438,16 @@ class PermisosPersonalesController extends Controller
                             if ($registro_id) {
                                 // return redirect()->route('regularizar.ausencia', ['id' =>  $registro_id ])->with('success', 'Regularizado correctamente la asistencia del día: '.$fechaCompleta );
 
-                                return redirect()->back()->with('success', 'Permiso registrado exitosamente.' . $permisoRegularizado);
+                                return redirect()->back()->with('success', 'Permiso registrado exitosamente.');
                             }
-                            return redirect()->route('permisospersonales.index')->with('success', 'Permiso registrado exitosamente.' . $permisoRegularizado . $registro_id);
+                            $empleado = EmpleadosModel::find($empleadoId, ['nombres', 'ap_pat', 'ap_mat']);
+
+                            return redirect()->route('permisospersonales.index')
+                                ->with('success', 'Permiso registrado exitosamente. Para: ' . $empleado->nombres . ' ' . $empleado->ap_pat . ' ' . $empleado->ap_mat)
+                                ->with('mes', $fechaMes)
+                                ->with('permiso', $permisoId);
                         } else {
-                            return redirect()->back()->with('error', 'No se pudo crear el permiso: ' . 'Te quedan ' . $resta . '(minutos)');
+                            return redirect()->back()->with('horas', 'No se pudo crear el permiso: ' . 'Te quedan ' . $resta . '(minutos)');
                         }
                     } else {
 
@@ -358,14 +472,18 @@ class PermisosPersonalesController extends Controller
 
                             return redirect()->back()->with('success', 'Permiso registrado exitosamente.');
                         }
-                        return redirect()->route('permisospersonales.index')->with('success', 'Permiso creado exitosamente.' . $permisoRegularizado);
+                        $empleado = EmpleadosModel::find($empleadoId, ['nombres', 'ap_pat', 'ap_mat']);
+
+                        return redirect()->route('permisospersonales.index')->with('success', 'Permiso creado exitosamente. ' . $empleado->nombres . ' ' . $empleado->ap_pat . ' ' . $empleado->ap_mat)
+                            ->with('mes', $fechaMes)
+                            ->with('permiso', $permisoId);
                     }
                 } else {
                     // Manejar el caso en el que no se encuentra el empleado
                     return redirect()->back()->with('error', 'No se pudo crear el permiso: ');
                 }
             } else {
-                return redirect()->back()->with('error', 'La Fecha de Solicitud No corresponde al Mes ' . $mes . ' No se pudo registrar el permiso: ');
+                return redirect()->back()->with('fecha', 'La Fecha de Solicitud No corresponde al Mes de Registro: ' .  $fechaMesLiteralMayuscula . ' No se pudo registrar el permiso: ');
             }
         } catch (\Exception $e) {
 
@@ -396,7 +514,7 @@ class PermisosPersonalesController extends Controller
 
             $horasSolicitadas = $request->input('duracion');
             if ($horasSolicitadas == 0) {
-                return redirect()->back()->with('error', 'No se pudo registrar el permiso');
+                return redirect()->back()->with('error', 'No se pudo registrar el permiso' . $horasSolicitadas);
             }
 
 
@@ -408,6 +526,8 @@ class PermisosPersonalesController extends Controller
             $permisoMes = PermisoModel::find($permisoId);
             $fechaCarbon2 = Carbon::createFromFormat('Y-m', $permisoMes->mes);
             $mes = $fechaCarbon2->format('Y-m');
+            //dd($mes);
+            //dd($fechaMes);
             if ($fechaMes === $mes) {
                 // Busca al empleado con el permiso específico
                 $empleadopermiso = EmpleadosModel::where('idemp', $empleadoId)
@@ -450,7 +570,7 @@ class PermisosPersonalesController extends Controller
                     }
                 } else {
                     // Manejar el caso en el que no se encuentra el empleado
-                    return redirect()->back()->with('error', 'No se pudo crear el permiso: ');
+                    return redirect()->back()->with('error', 'No se pudo crear el permiso:' . $empleadopermiso);
                 }
             } else {
                 return redirect()->back()->with('error', 'La Fecha de Solicitud No corresponde al Mes ' . $mes . ' No se pudo registrar el permiso: ');

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreConfigDescuentoRequest;
+use App\Http\Requests\UpdateConfigDescuentoRequest;
+use App\Models\ConfigHorario;
 use App\Models\DescuentoModel;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -17,17 +20,19 @@ class DescuentosController extends Controller
     public function index(Request $request)
     {
         //
-            $descuentos = DescuentoModel::select(['id', 'descripcion','retraso_max', 'cantidad_dia']);
+        $descuentos = DescuentoModel::select(['id', 'descripcion', 'retraso_max', 'cantidad_dia']);
+        $HorarioConfig = ConfigHorario::first();
 
-            if ($request->ajax()) {
-$descuentos  =$descuentos->get();
+//dd( $HorarioConfig);
+         if ($request->ajax()) {
+            $descuentos  = $descuentos->get();
             return DataTables::of($descuentos)
-              
+
                 ->addColumn('descripcion', function ($descuento) {
-                    return $descuento->descripcion ? : '-';
+                    return $descuento->descripcion ?: '-';
                 })
                 ->addColumn('tiempo', function ($descuento) {
-                    return $descuento->retraso_max ? : '-';
+                    return $descuento->retraso_max ?: '-';
                 })
                 ->addColumn('cantidad', function ($descuento) {
                     return $descuento->cantidad_dia;
@@ -41,15 +46,47 @@ $descuentos  =$descuentos->get();
                 ->make(true);
         }
 
-        return view('asistencias.descuentos.index');
+        return view('asistencias.descuentos.index', compact('HorarioConfig'));
     }
 
-    public function detalleEmpleado()
+    public function detalleEmpleado(Request $request)
     {
         //
 
     }
 
+    public function config(StoreConfigDescuentoRequest $request)
+    {
+        $request->validated();
+
+        $nuevoRegistro = new ConfigHorario(); // Reemplaza 'TuModelo' con el nombre de tu modelo
+        $nuevoRegistro->jornadamax = $request->maxima;
+
+        $nuevoRegistro->jornadamin = $request->minima;
+        $nuevoRegistro->iniciomax = $request->inicio;
+        $nuevoRegistro->marcadomax = $request->marcado;
+
+        // Guardar el registro en la base de datos
+        $nuevoRegistro->save();
+        return redirect()->back()->with('success', 'Configuracion Creada exitosamente.');
+
+    }
+    public function configUpdate(UpdateConfigDescuentoRequest $request,ConfigHorario $id)
+    {
+        $request->validated(); // Validar los datos del request
+        // Encontrar el registro existente en la base de datos
+    
+        $id->update([
+            'jornadamax' => $request->maxima,
+            'jornadamin' => $request->minima,
+            'iniciomax' => $request->inicio,
+            'marcadomax' => $request->marcado,
+        ]);
+    
+        // Redirigir de vuelta a la página anterior con un mensaje de éxito
+        return redirect()->back()->with('success', 'Configuración actualizada exitosamente.');
+    }
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -126,7 +163,7 @@ $descuentos  =$descuentos->get();
             'dia' => 'required',
         ]);
 
- 
+
         $descuento->retraso_max = $request->input('tiempo_min');
         $descuento->descripcion = $request->input('descripcion');
         $descuento->cantidad_dia = $request->input('dia');

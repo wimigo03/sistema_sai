@@ -25,7 +25,7 @@
             </div>
 
         </div>
-        <div class="body-borded font-verdana-bg">
+        <div class=" font-verdana-bg">
             <form method="POST" action="{{ route('contrato.actualizar') }}">
                 @csrf
                 @method('POST')
@@ -33,7 +33,7 @@
                 <input name="idareaoriginal" hidden value="{{$empleados->idarea}}"></input>
                 <input name="idfileoriginal" hidden value="{{$empleados->idfile}}"></input>
                 <div class="form-group row">
-                    <span class="input-group col-md-1" style="color:black;font-weight: bold;">Nombres:</span>
+                    <span class="input-group col-md-1" style="color:black;font-weight: bold;">Nombre(s):</span>
 
                     <div class="col-md-2 ">
                         <input required type="text" name="nombres" class="form-control" onchange="javascript:this.value=this.value.toUpperCase();" value="{{$empleados->nombres}}"></input>

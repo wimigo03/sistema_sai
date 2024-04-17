@@ -14,8 +14,8 @@
                     $fechaEnEspañol = mb_strtoupper($fechaCarbon->locale('es')->isoFormat('MMMM YYYY'), 'UTF-8');
 
                     @endphp
-                    <span  class="text-right">{{$fechaEnEspañol}}</span> &nbsp;
-                    
+                    <span class="text-right">{{$fechaEnEspañol}}</span> &nbsp;
+
                     <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{ route('permisospersonales.index') }}">
                         <button class="btn btn-sm btn-danger font-verdana" type="button" aria-label="Cerrar">
                             &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
@@ -41,6 +41,7 @@
                     @endif
 
                     @if(session('message'))
+
                     <div class="alert alert-info">
                         {{ session('message') }}
                     </div>
@@ -67,11 +68,24 @@
                                     <label for="fecha_solicitud"><b>Fecha de Solicitud:</b></label>
 
                                     @php
-                                    $permiso = $permiso->mes . '-01'; // Agregar el día 01 al mes seleccionado
-                                    $fechaCarbon = \Carbon\Carbon::createFromFormat('Y-m-d', $permiso);
-                                    @endphp
+                                    $fechaInicioMes = $permiso->mes . '-01'; // Agregar el día 01 al mes seleccionado
+                                    $fechaCarbon = \Carbon\Carbon::createFromFormat('Y-m-d', $fechaInicioMes);
 
-                                    <input type="date" name="fecha_solicitud" id="fecha_solicitud" value="{{ $fechaCarbon->format('Y-m-d') }}" required class="form-control">
+                                    $fechaFinalMes = $fechaCarbon->endOfMonth();
+
+                                    @endphp
+                                   
+                                    <input type="date" name="fecha_solicitud" id="fecha_solicitud" min="{{$fechaInicioMes}}" max="{{ $fechaFinalMes->format('Y-m-d') }}" value="{{ old('fecha_solicitud') }}" required class="form-control">
+
+                                    @if(session('fecha'))
+                                    <span class="text-danger"> {{ session('fecha') }}</span>
+
+
+                                    @endif
+                                    @error('fecha_solicitud')
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+
                                 </div>
 
                             </div>
@@ -87,9 +101,12 @@
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="duracion"><b>Horas Utilizadas:</b></label>
+                                    <label for="duracion"><b>Tiempo Solicitado:</b></label>
+
                                     <select name="duracion" id="duracion" class="form-control" required>
-                                        @for ($i = 0; $i <= 120; $i +=30) @php $hours=floor($i / 60); $minutes=$i % 60; $hourLabel=($hours===1) ? 'hora' : 'horas' ; $minuteLabel=($minutes===1) ? 'minuto' : 'minutos' ; $durationText='' ; if ($hours> 0) {
+                                        <option value="">Seleccione el Tiempo</option>
+
+                                        @for ($i = 30; $i <= $disponible; $i +=30) @php $hours=floor($i / 60); $minutes=$i % 60; $hourLabel=($hours===1) ? 'hora' : 'horas' ; $minuteLabel=($minutes===1) ? 'minuto' : 'minutos' ; $durationText='' ; if ($hours> 0) {
                                             $durationText .= "$hours $hourLabel";
                                             }
 
@@ -101,10 +118,22 @@
                                             $durationText .= "$minutes $minuteLabel";
                                             }
                                             @endphp
-                                            <option value="{{ $i }}">{{ $durationText }}</option>
+
+                                            <option value="{{ $i }}" @if(old('duracion')==$i) selected @endif>{{ $durationText }}</option>
                                             @endfor
+
                                     </select>
+
+
+
+                                    @if(session('horas'))
+                                    <span class="text-danger"> {{ session('horas') }}</span>
+
+
+                                    @endif
                                 </div>
+
+
                             </div>
 
                         </div>
@@ -113,18 +142,18 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="hora_salida"><b>Hora de Salida:</b></label>
-                                    <input type="time" name="hora_salida_input" id="hora_salida_input" required class="form-control">
+                                    <input type="time" name="hora_salida_input" value="{{old('hora_salida_input')}}" id="hora_salida_input" required class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="hora_retorno"><b>Hora de Retorno:</b></label>
-                                    <input type="time" name="hora_retorno" id="hora_retorno" required class="form-control">
+                                    <input type="time" name="hora_retorno" id="hora_retorno" value="{{old('hora_retorno')}}" required class="form-control">
                                 </div>
                             </div>
                         </div>
 
-                        <input type="hidden" name="hora_actual" id="hora_salida" value="{{ date('H:i') }}" required class="form-control">
+                        <input type="hidden" name="hora_actual" id="hora_salida" value="{{ date('H:i') }}" required class="form-control" readonly>
                         <div class="form-group text-right">
                             <button type="submit" class="btn btn-success">REGISTRAR PERMISO</b></button>
                         </div>
@@ -193,5 +222,7 @@
     document.getElementById('hora_salida').addEventListener('change', calcularHoraRetorno);
     document.getElementById('duracion').addEventListener('change', calcularHoraRetorno);
 </script>
+
+
 
 @endsection

@@ -5,7 +5,7 @@
     <br>
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
-            <b>Gestón de Licencias Cargo RIP - (2 DÍAS/AÑO) - Personal de Planta </b>
+            <b>Gestión de Licencias Cargo RIP - (2 DÍAS/AÑO) - Personal de Planta </b>
 
         </div>
         <div class="col-md-4 text-right">
@@ -152,8 +152,12 @@
                 class: 'text-justify p-1 font-verdana-sm'
             },
             {
-                data: 'ap_pat',
-                name: 'ap_pat',
+                data: null,
+                render: function(data, type, row) {
+                    var ap_pat = row.ap_pat || ''; // Si ap_pat es null, se asigna un string vacío
+                    var ap_mat = row.ap_mat || ''; // Si ap_mat es null, se asigna un string vacío
+                    return ap_pat + ' ' + ap_mat;
+                },
                 class: 'text-justify p-1 font-verdana-sm'
             },
             {

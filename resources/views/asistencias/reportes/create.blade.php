@@ -73,7 +73,7 @@
         <div class="tab-pane fade show active" id="tab1">
             <hr class="hr">
             <div class="col-md-8 titulo">
-                <b>Reporte de Asistencia Personal</b>
+                <b>Reporte de Asistencia de Personal</b>
             </div>
             <div class="body-border ">
                 <form method="POST" action="{{ route('registro.visualizar') }}" id="crearForm">

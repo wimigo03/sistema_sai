@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateAusenciasRequest;
 use App\Models\AsistenciaModel;
 use App\Models\EmpleadoLicenciasModel;
 use App\Models\EmpleadoPermisoModel;
@@ -92,7 +93,9 @@ class AusenciasController extends Controller
         ])->find($id);
         //dd($registroAsistencia);
         if ($registroAsistencia->horario->tipo == 0) {
-            $permiso = EmpleadoPermisoModel::where('fecha_solicitud', $registroAsistencia->fecha)
+            $opciones = explode(',', $registroAsistencia->observ);
+
+            $permisos = EmpleadoPermisoModel::where('fecha_solicitud', $registroAsistencia->fecha)
                 ->where('empleado_id', $registroAsistencia->empleado_id)
                 ->where('hora_retorno', '>', $registroAsistencia->horario->hora_final)
                 ->get();
@@ -117,9 +120,11 @@ class AusenciasController extends Controller
                 ->sum('dias_utilizados');
             // $tiempoTexto = $this->convertirHorasMinutosATexto($sumaPermisos);
             // dd($permiso);
-            return view('asistencias.regularizar.manual', compact('licenciaTotal', 'sumaLicencias', 'licencia', 'permisTotal', 'sumaPermisos', 'permisoID', 'permiso', 'registroAsistencia'));
+            return view('asistencias.regularizar.manual', compact('opciones','licenciaTotal', 'sumaLicencias', 'licencia', 'permisTotal', 'sumaPermisos', 'permisoID', 'permisos', 'registroAsistencia'));
         } else if ($registroAsistencia->horario->tipo == 1) {
 
+
+            $opciones = explode(',', $registroAsistencia->observ);
 
 
             $permisos = EmpleadoPermisoModel::where('fecha_solicitud', $registroAsistencia->fecha)->where('empleado_id', $registroAsistencia->empleado_id)
@@ -148,7 +153,7 @@ class AusenciasController extends Controller
             // $tiempoTexto = $this->convertirHorasMinutosATexto($sumaPermisos);
             //dd($sumaLicencias);
 
-            return view('asistencias.regularizar.manual', compact('licenciaTotal', 'sumaLicencias', 'licencia', 'permisTotal', 'sumaPermisos', 'permisoID', 'permisos', 'registroAsistencia'));
+            return view('asistencias.regularizar.manual', compact('opciones','licenciaTotal', 'sumaLicencias', 'licencia', 'permisTotal', 'sumaPermisos', 'permisoID', 'permisos', 'registroAsistencia'));
         }
 
         // Asegúrate de que $data no sea nulo antes de pasar los datos a la vista
@@ -351,13 +356,11 @@ class AusenciasController extends Controller
             ->get();
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateAusenciasRequest $request, $id)
     {
         try {
-            $request->validate([
+            $request->validated();
 
-                // Añade reglas adicionales según tus necesidades
-            ]);
             //Encuentro el registro
 
             $registro = RegistroAsistencia::where('id', $id)->first();
@@ -704,7 +707,7 @@ class AusenciasController extends Controller
             // Si es posterior, obtener o crear el permiso del mes actual
             $asistenciaActual = AsistenciaModel::where('fecha', $fecha)->select('id')->first();
             if (!$asistenciaActual) {
-                $asistenciaActual = AsistenciaModel::create(['fecha' => $fecha, 'descrip' => "Programado", 'estado' => '1']);
+                $asistenciaActual = AsistenciaModel::create(['fecha' => $fecha, 'descrip' => "Activo", 'estado' => '0']);
             }
 
             return $asistenciaActual;

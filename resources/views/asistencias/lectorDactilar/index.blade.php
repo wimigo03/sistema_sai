@@ -4,9 +4,14 @@
 <div class="container">
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">
-            <b>Lista General de Dispositivos Dactilares Registradas</b>
+            <b>Lista General de Dispositivos Dactilares Registrados</b>
         </div>
         <div class="col-md-4 text-right">
+        <a class="tts:left tts-slideIn tts-custom" aria-label="Ver Registros" href="{{route('lectordactilar.index')}}">
+                <button class="btn btn-sm btn-info font-verdana" type="button">
+                    &nbsp; <i class="fa-solid fa-2xl fa-fingerprint"></i>&nbsp;HISTORIAL DE REGISTROS DACTILARES
+                </button>
+            </a>
             <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
                 <button class="btn btn-sm btn-danger font-verdana" type="button">
                     &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;

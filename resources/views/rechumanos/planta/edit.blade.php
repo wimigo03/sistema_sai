@@ -63,7 +63,7 @@
 
 
                         <div class="col-md-2">
-                            <label for="date"><b>Fecha Cumpleaños</b></label>
+                            <label for="date"><b>Fecha Nacimiento</b></label>
                             <input type="date" class="form-control" name="natalicio" value="{{$empleados->natalicio}}">
                         </div>
                        

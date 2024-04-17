@@ -57,7 +57,7 @@ class EmpleadoAsistenciasController extends Controller
                 }
             })
             ->addColumn('actions1', function ($row) {
-                return '<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Horarios Asignados" href="' . route('horarios.cambio', $row->idemp) . '">
+                return '<a class="tts:left tts-slideIn tts-custom" aria-label="Datos de Control" href="' . route('horarios.cambio', $row->idemp) . '">
                   <i class="fa-solid fa-2xl fa-bars"></i>
                 
             </a>';
@@ -67,7 +67,7 @@ class EmpleadoAsistenciasController extends Controller
               <i class="fa-solid fa-2xl  fa-calendar-days text-warning"></i>       
       </a>';
             })->addColumn('actions3', function ($row) {
-                return ' <a class="tts:left tts-slideIn tts-custom" aria-label="Ver lista de Registros de Asistencia" href="' . route('empleadoasistencias.show', ['id' => $row->idemp]) . '">
+                return ' <a class="tts:left tts-slideIn tts-custom" aria-label="Registros de Asistencia" href="' . route('empleadoasistencias.show', ['id' => $row->idemp]) . '">
                 <i class="fa-solid fa-2xl fa-list text-success" aria-hidden="true"></i>
                  
               </a>';
@@ -106,7 +106,7 @@ class EmpleadoAsistenciasController extends Controller
                 }
             })
             ->addColumn('actions1', function ($row) {
-                return '<a class="tts:left tts-slideIn tts-custom" aria-label="Modificar Horarios Asignados" href="' . route('horarios.cambio', $row->idemp) . '">
+                return '<a class="tts:left tts-slideIn tts-custom" aria-label="Datos de Control" href="' . route('horarios.cambio', $row->idemp) . '">
                 <i class="fa-solid fa-2xl fa-bars"></i>
                 
             </a>';

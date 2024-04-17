@@ -53,7 +53,7 @@
 
 </div>
 
-<div class="body-bordered">
+<div class="body-borderd">
 
     <form method="POST" action="{{ route('contrato.guardar') }}">
         @csrf

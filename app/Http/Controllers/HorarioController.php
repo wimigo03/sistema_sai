@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\HoraEmpleadoRequest;
+use App\Http\Requests\UpdateHoraEmpleadoRequest;
 use App\Models\AsistenciaModel;
 use App\Models\EmpleadosModel;
 use App\Models\HorarioModel;
@@ -90,7 +91,7 @@ class HorarioController extends Controller
                     } else if ($horario->estado == 0) {
                         $html .= '<a class="tts:left tts-slideIn tts-custom" aria-label="Activar Horario"  href="#" onclick="confirmUpdateState(this)"><span class="badge badge-danger">Desactivado</span></a>';
                     } else {
-                        $html .= '<a class="tts:left tts-slideIn tts-custom" aria-label="Horario sin Asignar" href="#" onclick="confirmUpdateState(this)"><span class="badge badge-secondary">Sin Asignar</span></a>';
+                        $html .= '<a   href="#" ><span class="badge badge-secondary">Sin Asignar</span></a>';
                     }
 
                     $html .= '</form>';
@@ -122,7 +123,7 @@ class HorarioController extends Controller
         $request->validated();
         $horario = new HorarioModel();
 
-        $horario->Nombre = $request->nombre;
+        $horario->Nombre = $request->Nombre;
         $horario->hora_entrada = $request->hora_entrada;
         $horario->hora_inicio = $request->hora_inicio;
         $horario->hora_final = $request->hora_final;
@@ -133,13 +134,16 @@ class HorarioController extends Controller
         if ($request->hora_entrada && $request->hora_salida) {
             $horario->tipo = 1;
         }
+        $horario->tipo = 0;
         $horario->save();
 
 
         if ($request->has('asignado')) {
             $horario->estado = 1;
             $horario->save();
-            HorarioModel::where('id', '<>', $horario->id)->where('estado', '=', 1)->update(['estado' => 0]);
+            HorarioModel::where('id', '<>', $horario->id)
+                ->where('estado', '=', 1)
+                ->update(['estado' => 0]);
 
             $empleados = EmpleadosModel::all();
 
@@ -285,7 +289,7 @@ class HorarioController extends Controller
             return redirect()->route('empleadoasistencias.index');
         } catch (\Exception $e) {
             // Captura cualquier excepción que pueda ocurrir y muestra un mensaje de error
-            return redirect()->back()->with('error', 'No se pudo crear el permiso: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'No se pudo crear el codigo PIN: ' . $e->getMessage());
         }
     }
 
@@ -299,7 +303,8 @@ class HorarioController extends Controller
 
 
         $cantidadHuellas = HuellasDigitalesModel::where('empleado_id', $empleado->idemp)
-            ->count();
+            ->get();
+
         if ($empleado) {
             return view('asistencias.horarios.cambio', compact('cantidadHuellas', 'empleado', 'horarios', 'horariosCompletos'));
         } else {
@@ -315,23 +320,23 @@ class HorarioController extends Controller
     {
     }
 
-    public function update(HoraEmpleadoRequest $request, HorarioModel $horario)
+    public function update(UpdateHoraEmpleadoRequest $request, HorarioModel $horario)
     {
 
         $fecha = Carbon::now()->format('Y-m-d');
-        $asistencia = AsistenciaModel::where('fecha', $fecha)->select('id')->first();
+        //  $asistencia = AsistenciaModel::where('fecha', $fecha)->select('id')->first();
         $request->validated();
 
-        $horario->Nombre = $request->input('nombre');
-        $horario->hora_entrada = $request->input('hora_entrada');
+        $horario->Nombre = $request->input('Nombre');
         $horario->hora_inicio = $request->input('hora_inicio');
+        $horario->hora_entrada = $request->input('hora_entrada');
+
+        $horario->hora_salida = $request->input('hora_salida');
         $horario->hora_final = $request->input('hora_final');
 
-        $horario->hora_entrada = $request->input('hora_entrada');
-        $horario->hora_salida = $request->input('hora_salida');
         $horario->excepcion = $request->input('excepcion');
         $horario->inicio_jornada = $request->input('inicio_jornada');
-        if ($request->input('hora_inicio') && $request->input('hora_entrada')) {
+        if ($request->input('hora_salida') && $request->input('hora_entrada')) {
             $horario->tipo = 1;
         } else {
             # code...
@@ -368,8 +373,8 @@ class HorarioController extends Controller
 
 
         } else {
-            $horario->empleados()->detach();
-            $horario->estado = 2;
+            // $horario->empleados()->detach();
+            // $horario->estado = 2;
             $horario->save();
         }
 
@@ -389,6 +394,7 @@ class HorarioController extends Controller
         // Definir $selectedMonth fuera del bloque if para que esté disponible en ambos casos
         // Asignar un valor predeterminado a $selectedMonth
         $vistaselectedMonth = Carbon::now()->format('Y-m');
+        // $vistaselectedMonth = ('2024-02');
 
 
         if ($request->ajax()) {
@@ -401,6 +407,7 @@ class HorarioController extends Controller
             // Verificar si no se proporcionó una fecha seleccionada y usar el mes actual
             if (!$selectedMonth) {
                 $selectedMonth = Carbon::now()->format('Y-m');
+                //  $selectedMonth =  ('2024-02');
                 $formattedDate = $selectedMonth . '-01'; // Añade el primer día del mes
             }
             $firstDay = Carbon::createFromFormat('Y-m-d', $formattedDate)->startOfMonth();
@@ -409,38 +416,34 @@ class HorarioController extends Controller
 
 
             // Obtener todos los días del mes actual organizados por semanas
-            $weeksInMonth = $this->getWeeksInMonth($firstDay, $lastDay, $selectedMonth);
-
+            $weeksInMonth = $this->getWeeksInMonth($firstDay, $lastDay);
+            // dd($weeksInMonth);
             // Transformar los datos en un formato compatible con DataTables
             $data = $this->transformDataForDataTables($weeksInMonth, $selectedMonth);
-
+            //dd($data);
             return DataTables::of($data)
-
                 ->make(true);
         }
 
         return view('asistencias.horarios.fechas', compact('vistaselectedMonth'));
     }
 
-
-
-    private function getWeeksInMonth($start, $end, $selectedMonth)
+    private function getWeeksInMonth($start, $end)
     {
         $weeks = [];
         $currentWeek = [];
 
-        // Calcular el número de días a agregar del mes anterior
-        $daysToAdd = $start->dayOfWeek === Carbon::SUNDAY ? 6 : $start->dayOfWeek - 1;
-
         // Agregar días del mes anterior si la primera semana no comienza en lunes
-        for ($i = $daysToAdd; $i > 0; $i--) {
-            $currentWeek[] = $start->copy()->subDay($i);
-        }
+        $daysToAdd = $start->dayOfWeek;
+        $start->subDays($daysToAdd);
+
+        // Llevar $start al primer día del mes
+        $start->addDay();
 
         while ($start <= $end) {
-            $currentWeek[] = $start->copy();
+            $currentWeek[] = $start->copy(); // Guardar copia de la fecha como objeto Carbon
 
-            if ($start->dayOfWeek == Carbon::createFromFormat('Y-m', $selectedMonth)->startOfMonth()->format('D')) {
+            if ($start->dayOfWeek === Carbon::SUNDAY) {
                 $weeks[] = $currentWeek;
                 $currentWeek = [];
             }
@@ -448,13 +451,7 @@ class HorarioController extends Controller
             $start->addDay();
         }
 
-        // Agregar días del mes posterior si la última semana no está completa
-        $remainingDays = 7 - count($currentWeek);
-        for ($i = 0; $i <= $remainingDays; $i++) {
-            $currentWeek[] = $start->copy()->addDay($i);
-        }
-
-        // Agregar la última semana si es necesario
+        // Si la última semana no es completa, agrégala también
         if (!empty($currentWeek)) {
             $weeks[] = $currentWeek;
         }
@@ -463,10 +460,16 @@ class HorarioController extends Controller
     }
 
 
+
+
+
+
+
     private function transformDataForDataTables($weeksInMonth, $selectedMonth)
     {
         $data = [];
 
+        // Obtener todos los datos del mes de una vez
         // Obtener todos los datos del mes de una vez
         $allData = $this->getDataForMonth($weeksInMonth[0][0], end($weeksInMonth[count($weeksInMonth) - 1]));
 
@@ -490,12 +493,8 @@ class HorarioController extends Controller
                 ];
                 $rowData[] = $cellData;
             }
-
-
             // Llenar con nulos para completar la última semana
-            while (count($rowData) < 7) {
-                $rowData[] = null;
-            }
+
 
             $data[] = $rowData;
         }

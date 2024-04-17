@@ -10,7 +10,7 @@
         </span>
     </div>
     <div class="col-md-8 titulo">
-        <b>GESTIONAR PERSONAL-P/{{$nombrearea}}</b>
+        <b>GESTIONAR PERSONAL-C/{{$nombrearea}}</b>
     </div>
     <div class="col-md-2 text-right">
         @can('empleado_contrato_create_access')

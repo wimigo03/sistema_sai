@@ -130,7 +130,7 @@ class HistorialAsistenciasController extends Controller
 
         // Ahora, $datosAnterioresArray contiene los valores originales como un array asociativo
         // Puedes utilizar estos valores según tus necesidades
-        $registro = RegistroAsistencia::find($datosAnterioresArray['id'])->select('fecha')->first();
+        $registro = RegistroAsistencia::where('id',$historial->registro_asistencia_id)->select('fecha')->first();
 
         // Por ejemplo, podrías restaurar los datos en el modelo original
         // Supongamos que el modelo original es Usuario y el ID del usuario está en $datosAnterioresArray['usuario_id']
@@ -166,7 +166,7 @@ class HistorialAsistenciasController extends Controller
                 $registro->registro_entrada &&
                 $registro->registro_final
             ) {
-                $registro->estado = 1;
+                $registro->estado = 3;
                 $registro->tipo = 1;
                 $registro->save();
             } else if (
@@ -311,7 +311,7 @@ class HistorialAsistenciasController extends Controller
                 $registro->registro_final && $registro->registro_inicio
             ) {
                 $registro->tipo = 0;
-                $registro->estado = 1;
+                $registro->estado = 3;
                 $registro->save();
             } else if (!$registro->registro_final && $registro->registro_inicio) {
                 $registro->estado = 2;

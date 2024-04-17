@@ -13,10 +13,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateUserPhotoRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use DB;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests;
-
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {

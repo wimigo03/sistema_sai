@@ -434,16 +434,7 @@
 
                         </li>
                         @endcan
-                        @can('horario_access')
-                        <li>
-                            <a href="{{ route('lectordactilar.index') }}">
-                            &nbsp; &nbsp;
-                                <span class="nav-label mr-4">Huellas Dactilares</span>
-
-                            </a>
-
-                        </li>
-                        @endcan
+                     
                         @can('horario_access')
                         <li>
                             <a href="{{ route('registroasistencia.index') }}">
@@ -487,7 +478,7 @@
                         <li>
                             <a href="{{ route('licenciaspersonales.index') }}">
                             &nbsp; &nbsp; 
-                                <span class="nav-label mr-4">Licencias Cargo RIP</span>
+                                <span class="nav-label mr-4">Gestionar Licencias Cargo RIP</span>
                             </a>
                         </li>
                         @endcan
@@ -495,6 +486,33 @@
                     </ul>
                 </li>
                 @endcanany
+                {{--ASISTENCIAS--}}
+                @canany(['asistencias_access'])
+                <li class="font-verdana-bg">
+
+                    <a href="" data-toggle="collapse" data-target="#dashboard_backup" class="active collapsed" aria-expanded="false">
+
+                        <i class='fas fa-user-clock' style="color:green"></i>
+                        <span class="nav-label mr-3">Gestion Copias de Seguridad</span>
+                        <span class="fa fa-arrow-circle-left float-right"></span>
+                    </a>
+
+                    <ul class="sub-menu collapse" id="dashboard_backup">
+                        @can('horario_access')
+                        <li>
+                            <a href="{{ route('backups.index') }}">
+                            &nbsp; &nbsp;
+                                <span class="nav-label mr-4">Lista Copias de Seguridad</span>
+
+                            </a>
+
+                        </li>
+                        @endcan
+                   
+                    </ul>
+                </li>
+                @endcanany
+
 
                 {{-- Personerias --}}
                 @canany(['recHumanos'])

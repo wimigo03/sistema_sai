@@ -350,7 +350,12 @@ class ReporteController extends Controller
             $registrosPorEmpleado = [];
 
             foreach ($arregloEmpleados as $id) {
-                $registrosPorEmpleado[$id] = $this->mostrarRegistrosPorEmpleado($id,  $fechaInicio,  $fechaFin);
+                $empleado = EmpleadosModel::find($id, ['idemp','nombres', 'ap_pat','ap_mat']);
+                $registrosPorEmpleado[$id] = [
+                    'empleado' => $empleado,
+                    'registros' => $this->mostrarRegistrosPorEmpleado($id, $fechaInicio, $fechaFin),
+                ];
+                //$registrosPorEmpleado[$id] = $this->mostrarRegistrosPorEmpleado($id,  $fechaInicio,  $fechaFin);
             }
 
 
@@ -1006,7 +1011,7 @@ class ReporteController extends Controller
         $empleadoDatos =  EmpleadosModel::where('idemp', $empleado_id)->with('empleadosareas')->select('nombres', 'ap_pat', 'ap_mat', 'idarea', 'ci')->first();
 
 
-        $view =  view('asistencias.reportes.reporte-personal-excel', compact(['empleadoDatos', 'data', 'fechaInicio', 'fechaFinal']));
+        $view =  view('asistencias.reportes.reporte-personal-excel', compact(['nombreCompleto','empleadoDatos', 'data', 'fechaInicio', 'fechaFinal']));
 
         // Asegúrate de tener un modelo que represente tus datos
         $fileName = 'reporte_por_fechas.xlsx';

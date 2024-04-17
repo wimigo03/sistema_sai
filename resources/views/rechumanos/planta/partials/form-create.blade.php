@@ -2,25 +2,34 @@
 <div class="form-group row font-verdana-bg">
     <div class="col-md-2">
         <label for="nombres"><b>Nombre(s)</b></label>
-        <input type="text" name="nombres" class="form-control form-control-sm font-verdana-bg" required onchange="javascript:this.value=this.value.toUpperCase();">
+        <input type="text" name="nombres" value="{{ old('nombres') }}" required class="form-control form-control-sm font-verdana-bg"  onchange="javascript:this.value=this.value.toUpperCase();">
+        @error('nombres')
+        <span class="text-danger">{{ $message }}</span>
+        @enderror
     </div>
     <div class="col-md-2">
         <label for="ap_paterno"><b>Ap. Paterno</b></label>
-        <input type="text" name="ap_pat" class="form-control form-control-sm font-verdana-bg" required onchange="javascript:this.value=this.value.toUpperCase();">
+        <input type="text" name="ap_pat" value="{{ old('ap_pat') }}"   class="form-control form-control-sm font-verdana-bg" onchange="javascript:this.value=this.value.toUpperCase();">
     </div>
     <div class="col-md-2">
         <label for="ap_materno"><b>Ap. Materno</b></label>
-        <input type="text" name="ap_mat" class="form-control form-control-sm font-verdana-bg" onchange="javascript:this.value=this.value.toUpperCase();">
+        <input type="text" name="ap_mat" value="{{ old('ap_mat') }}" required  class="form-control form-control-sm font-verdana-bg"  onchange="javascript:this.value=this.value.toUpperCase();">
+        @error('ap_mat')
+        <span class="text-danger">{{ $message }}</span>
+        @enderror
     </div>
     <div class="col-md-2">
         <label for="nro_carnet"><b>N° Carnet</b></label>
-        <input type="text" name="ci" class="form-control" value="">
+        <input type="text" name="ci" class="form-control"  required pattern="[0-9]*" minlength="7" value="{{ old('ci') }}">
+        @error('ci')
+        <span class="text-danger">{{ $message }}</span>
+        @enderror
     </div>
 
     <div class="col-md-2">
         <label for="procedencia"><b>Procedencia</b></label><br>
-        <select name="procedencia" id="procedencia" class="form-control form-control-sm" >
-            <option value="">-</option>
+        <select name="procedencia" id="procedencia" required class="form-control form-control-sm">
+            <option value=""></option>
             <option value="TJ" @if(request('procedencia')=='TJ' ) selected @endif>TARIJA</option>
             <option value="CH" @if(request('procedencia')=='CH' ) selected @endif>CHUQUISACA</option>
             <option value="LP" @if(request('procedencia')=='LP' ) selected @endif>LA PAZ</option>
@@ -33,24 +42,30 @@
         </select>
     </div>
     <div class="col-md-2">
-        <label for="date"><b>Fecha Cumpleaños</b></label>
-        <input type="date" name="natalicio" class="form-control form-control-sm font-verdana-bg" required>
+        <label for="date"><b>Fecha Nacimiento:</b></label>
+        <input type="date" name="natalicio" required value="{{ old('natalicio') }}" class="form-control form-control-sm font-verdana-bg" >
+        @error('natalicio')
+        <span class="text-danger">{{ $message }}</span>
+        @enderror
     </div>
 </div>
 <div class="form-group row font-verdana-bg">
 
     <div class="col-md-2">
-        <label for="date"><b>Fecha Ingreso</b></label>
-        <input type="date" name="fechingreso" class="form-control form-control-sm font-verdana-bg" required>
+        <label for="fecha_ingreso"><b>Fecha Ingreso</b></label>
+        <input type="date" name="fecha_ingreso"  required value="{{ old('fecha_ingreso') }}" class="form-control form-control-sm font-verdana-bg" onchange="javascript:this.value=this.value.toUpperCase();">
+        @error('fecha_ingreso')
+        <span class="text-danger">{{ $message }}</span>
+        @enderror
     </div>
 
 
 
     <div class="col-md-2">
-    <label for="poai"> <span class="tts:right tts-slideIn tts-custom" aria-label="Programación Operativa Anual Individual">
+        <label for="poai"> <span class="tts:right tts-slideIn tts-custom" aria-label="Programación Operativa Anual Individual">
                 <b> POAI</b></span></label>
         <label for="poai"><b></b></label>
-        <input type="text" name="poai" class="form-control form-control-sm font-verdana-bg">
+        <input type="text" name="poai"  value="{{ old('poai') }}" class="form-control form-control-sm font-verdana-bg">
     </div>
     <div class="col-md-2">
         <div class="row">
@@ -65,7 +80,7 @@
                 </span>
             </div>
         </div>
-        <input type="date" name="exppoai" id="exppoai" class="form-control form-control-sm font-verdana-bg">
+        <input type="date" name="exppoai" value="{{ old('exppoai') }}"  id="exppoai" class="form-control form-control-sm font-verdana-bg">
     </div>
     <div class="col-md-2">
         <label for="decjurada"><b>Dec. Jurada</b></label>
@@ -78,8 +93,8 @@
 </div>
 <div class="form-group row font-verdana-bg">
     <div class="col-md-2">
-    
-    
+
+
         <label for="sippase"> <span class="tts:right tts-slideIn tts-custom" aria-label="Sistema Integral Plurinacional de Prevención, Atención, Sanción, Erradicación de la Violencia contra las Mujeres">
                 <b>Cert. SIPPASE</b></span></label>
         <input type="text" name="sippase" class="form-control form-control-sm font-verdana-bg">
@@ -93,8 +108,11 @@
         <input type="text" name="servmilitar" class="form-control form-control-sm font-verdana-bg">
     </div>
     <div class="col-md-2">
-        <label for="idioma"><b>Idioma</b></label>
-        <input type="text" name="idioma" class="form-control form-control-sm font-verdana-bg" required>
+        <label for="idioma"><b>Idioma Originario</b></label>
+        <input type="text" name="idioma" required value="{{ old('idioma') }}" class="form-control form-control-sm font-verdana-bg" >
+        @error('idioma')
+        <span class="text-danger">{{ $message }}</span>
+        @enderror
     </div>
     <div class="col-md-2">
         <label for="induccion"><b>Inducción</b></label>
@@ -150,7 +168,7 @@
     </div>
     <div class="col-md-2">
         <label for="biometrico"><b>Biometrico</b></label>
-        <input type="text" name="biometrico" class="form-control form-control-sm font-verdana-bg">
+        <input type="text" name="biometrico" class="form-control form-control-sm font-verdana-bg" disabled>
     </div>
     <div class="col-md-2">
         <label for="gradacademico"><b>Profesión (Gd. Acad.)</b></label>
@@ -159,7 +177,7 @@
 </div>
 <div class="form-group row font-verdana-bg">
     <div class="col-md-2">
-       
+
         <label for="rae"> <span class="tts:right tts-slideIn tts-custom" aria-label="Registro Abogados del Estado">
                 <b> RAE.</b></span></label>
         <input type="text" name="rae" class="form-control form-control-sm font-verdana-bg">
@@ -179,13 +197,15 @@
     </div>
     <div class="col-md-4">
         <label for="idfile"><b>File</b></label><br>
-        <select name="idfile" id="idfile" class="form-control form-control-sm" required>
-            <option value="">-</option>
+        <select name="idfile" id="idfile" required class="form-control form-control-sm" >
+            <option value=""></option>
             @foreach ($files as $index => $value)
             <option value="{{ $index }}" @if(request('idfile')==$index) selected @endif>{{ $value }}</option>
             @endforeach
         </select>
+        <span class="text-danger" id="idfile-error"></span> <!-- Aquí se mostrará el mensaje de error -->
     </div>
+
 </div>
 <div class="form-group row">
     <div class="col-md-12 text-right">

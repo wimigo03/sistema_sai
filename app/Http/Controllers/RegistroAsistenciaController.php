@@ -147,6 +147,13 @@ class RegistroAsistenciaController extends Controller
     public function marcadoDactilar(Request $request)
     {
         // Validar los datos del formulario
+        if ($request->isMethod('post')) {
+            // La solicitud es de tipo POST, procede con la lógica aquí
+            return response()->json(['message' => 'La solicitud POST fue procesada correctamente.'], 200);
+        } else {
+            // La solicitud no es de tipo POST, devuelve un error
+            return response()->json(['error' => 'La solicitud debe ser de tipo POST.'], 405);
+        }
 
         $data = $request->json()->all();
         $lid = isset($data['lector']) ? strval($data['lector']) : null;
@@ -358,10 +365,10 @@ class RegistroAsistenciaController extends Controller
             $horaFinalCarbon = Carbon::parse($horario->hora_final);
 
 
-            $horaMinimaInicio = $horaInicioCarbon->subMinutes(45)->format('H:i:s');
+            //$horaMinimaInicio = $horaInicioCarbon->subMinutes(45)->format('H:i:s');
             $horaMaximaSalida = $horaSalidaCarbon->addMinutes(45)->format('H:i:s');
             $horaMinimaEntrada = $horaEntradaCarbon->subMinutes(45)->format('H:i:s');
-            $horaMaximaFinal = $horaFinalCarbon->addMinutes(45)->format('H:i:s');
+           // $horaMaximaFinal = $horaFinalCarbon->addMinutes(45)->format('H:i:s');
 
             if (!$registro) {
                 $asistencia = $this->obtenerOCrearAsistencia($fecha);

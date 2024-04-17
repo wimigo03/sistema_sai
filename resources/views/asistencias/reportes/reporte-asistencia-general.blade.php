@@ -12,20 +12,7 @@
             </span>
             <b> REPORTE GENERAL DE ASISTENCIAS</b>
         </div>
-        <div class="col-md-4 text-right titulo">
-            <div class="btn-group">
-                <b> Fecha: </b>
-
-
-
-            </div>
-
-            <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('admin.home')}}">
-                <button class="btn btn-sm btn-danger font-verdana" type="button">
-                    &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
-                </button>
-            </a>
-        </div>
+     
         <div class="col-md-12">
             <hr class="hrr">
         </div>
@@ -33,27 +20,43 @@
 
     <div class="row font-verdana">
         <div class="col-md-12">
-            @foreach ($registrosPorEmpleado as $empleado_id => $registrosEmpleado)
-            <h2>Registros para el empleado {{ $empleado_id }}</h2>
+            @foreach ($registrosPorEmpleado as $idEmpleado => $dataEmpleado)
+            <h2> </h2>
+            <table id="tablaAsistencias" class="table-bordered yajra-datatable hoverTable font-verdana-bg" style="width:100%; background-color: #f2f2f2;">
+                <tr>
+                    <th colspan="1">
+                        ID:
+                    </th>
+                    <th colspan="1">
+                        {{ $dataEmpleado['empleado']->idemp }}
+                    </th>
+                  
+                    <th colspan="2">
+                        - {{ $dataEmpleado['empleado']->nombres }} {{ $dataEmpleado['empleado']->ap_pat }} {{ $dataEmpleado['empleado']->ap_mat }}
+                    </th>
+                </tr>
+
+            </table>
 
             <table id="tablaAsistencias" class="table-bordered yajra-datatable hoverTable font-verdana-sm" style="width:100%">
 
-                <tr>
-                    <th>Fecha</th>
-                    <th>Nombres Apellidos</th>
-                    <th>Horario</th>
-                    <th>Entrada<br>Mañana</th>
-                    <th>Salida<br>Mañana</th>
-                    <th>Entrada<br>Tarde</th>
-                    <th>Salida<br>Tarde</th>
-                    <th>Minutos<br>Retraso</th>
-                    <th>Estado</th>
-                    <th>Observaciones</th>
-                    <!-- Agrega más columnas según tus necesidades -->
-                </tr>
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Nombres Apellidos</th>
+                        <th>Horario</th>
+                        <th>Entrada<br>Mañana</th>
+                        <th>Salida<br>Mañana</th>
+                        <th>Entrada<br>Tarde</th>
+                        <th>Salida<br>Tarde</th>
+                        <th>Minutos<br>Retraso</th>
+                        <th>Estado</th>
+                        <th>Observaciones</th>
+                        <!-- Agrega más columnas según tus necesidades -->
+                    </tr>
                 </thead>
                 <tbody>
-                    @foreach($registrosEmpleado as $asistencia)
+                    @foreach($dataEmpleado['registros'] as $asistencia)
                     <?php
                     $fechaAsistencia = $asistencia->fecha;
                     $estiloFondo = '';
@@ -66,7 +69,12 @@
                     <tr style="<?php echo $estiloFondo; ?>">
 
                         <td>{{ $asistencia->fecha }}</td>
-                        <td>{{ $asistencia->nombre_empleado }}</td>
+                        <td>
+                            @if (\Carbon\Carbon::parse($asistencia->fecha)->isWeekday())
+                            {{ $asistencia->nombre_empleado }}
+                            @endif
+                        </td>
+
                         @if($asistencia->ht ==1)
 
                         <td>{{ $asistencia->hn }}<br>

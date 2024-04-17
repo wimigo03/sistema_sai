@@ -32,7 +32,7 @@ Auth::routes();
 Route::group(['prefix' => "admin", 'as' => 'admin.', 'namespace' => 'App\Http\Controllers\Admin', 'middleware' => ['auth', 'AdminPanelAccess']], function () {
 
     Route::get('/', 'HomeController@index')->name('home');
-    Route::resource('/users', 'UserController');
+  //  Route::resource('/users', 'UserController');
     Route::resource('/roles', 'RoleController');
     Route::resource('/permissions', 'PermissionController')->except(['show']);
 });
@@ -414,7 +414,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
     Route::get('horarios/cambio/{empleado}', 'HorarioController@cambio')->name('horarios.cambio')->middleware('can:horario_access');
 
-    Route::put('/horarios/{horario}/updatehora', 'HorarioController@updatehora')->name('horarios.updatehora')->middleware('can:update_horario_access');
+    Route::put('horarios/{horario}/updatehora', 'HorarioController@updatehora')->name('horarios.updatehora')->middleware('can:update_horario_access');
 
 
     Route::get('horarios/index', 'HorarioController@index')->name('horarios.index')->middleware('can:horario_access');
@@ -430,7 +430,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::put('horarios/pin/{empleado}', 'HorarioController@pinguardar')->name('pin.guardar')->middleware('can:update_pin_access');
 
     //activar-Desactivar Horario
-    Route::put('/horarios/{id}/updateEstado', 'HorarioController@updateEstado')->name('horarios.updateEstado')->middleware('can:update_horario_access');
+    Route::put('horarios/{id}/updateEstado', 'HorarioController@updateEstado')->name('horarios.updateEstado')->middleware('can:update_horario_access');
 
     //Programar-Horario-Fechas
     Route::get('horarios/fechas', 'HorarioController@fechas')->name('horarios.fechas')->middleware('can:asistencias_access');
@@ -454,6 +454,9 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('descuentos/show/{id}', 'DescuentosController@show')->name('descuentos.show')->middleware('can:horario_access');
     Route::put('descuentos/update/{descuento}', 'DescuentosController@update')->name('descuentos.update')->middleware('can:horario_access');
     Route::get('descuentos/{descuento}/edit', 'DescuentosController@edit')->name('descuentos.edit')->middleware('can:horario_access');
+    Route::post('configurar-jornada', 'DescuentosController@config')->name('descuentos.config')->middleware('can:horario_access');
+    Route::put('actualizar-config/{id}/config', 'DescuentosController@configUpdate')->name('descuentos.configUpdate')->middleware('can:horario_access');
+
 
 
     Route::get('registroasistencia', 'RegistroAsistenciaController@index')->name('registroasistencia.index')->middleware('can:asistencias_access');
@@ -472,7 +475,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
     Route::get('regularizar-ausencia/{id}', 'AusenciasController@regularizar')->name('regularizar.ausencia')->middleware('can:asistencias_access');
 
-    Route::put('regularizar-asistencia/{id}', 'AusenciasController@update')->name('regularizar_asistencia.update')->middleware('can:asistencias_access');
+    Route::put('regularizar-asistencia/{id}', 'AusenciasController@update')->name('regularizar_asistencia.update')->middleware('can:regularizar_access_crear');
     Route::get('historial-cambios-asistencia', 'HistorialAsistenciasController@index')->name('historial_asistencia.index')->middleware('can:asistencias_access');
     Route::get('restaurar-datos/{id}', 'HistorialAsistenciasController@restore')->name('restaurar-datos.restore')->middleware('can:asistencias_access');
     Route::get('historial-cambios-personal', 'HistorialAsistenciasController@personalHistorial')->name('personalHistorial')->middleware('can:asistencias_access');
@@ -509,11 +512,13 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     //Permisos Mensuales
     Route::get('permisos/id', 'PermisosPersonalesController@getID')->name('permisospersonales.getID')->middleware('can:permisos_access');
     Route::get('permisos', 'PermisosPersonalesController@index')->name('permisospersonales.index')->middleware('can:permisos_access');
+    Route::post('permisos/config', 'PermisosPersonalesController@config')->name('permisospersonales.config')->middleware('can:permisos_access');
+    Route::put('permisos/{id}/configUpdate', 'PermisosPersonalesController@configUpdate')->name('permisospersonales.configUpdate')->middleware('can:permisos_access');
 
-    Route::get('permisos/nuevo/{id}/{permiso_id}', 'PermisosPersonalesController@nuevo')->name('permisospersonales.nuevo')->middleware('can:permisos_access');
+    Route::get('permisos/nuevo/{id}/{permiso_id}', 'PermisosPersonalesController@nuevo')->name('permisospersonales.nuevo')->middleware('can:permisos_access_store');
     Route::get('permisos/get', 'PermisosPersonalesController@getEmpleados')->name('permisosempleados.get')->middleware('can:permisos_access');
     Route::get('permisos/create/', 'PermisosPersonalesController@create')->name('permisospersonales.create')->middleware('can:permisos_access');
-    Route::post('permisos/store/', 'PermisosPersonalesController@store')->name('permisospersonales.store')->middleware('can:permisos_access');
+    Route::post('permisos/store/', 'PermisosPersonalesController@store')->name('permisospersonales.store')->middleware('can:permisos_access_store');
     Route::get('permisos/detalle/{id}/{permiso_id}', 'PermisosPersonalesController@detalle')->name('permisospersonales.detalle')->middleware('can:permisos_access');
     Route::get('permisos/show', 'PermisosPersonalesController@show')->name('permisospersonales.show')->middleware('can:permisos_access');
     Route::get('editar-permiso/{permiso}', 'PermisosPersonalesController@editarPermiso')->name('editar.permiso')->middleware('can:permisos_access');
@@ -523,6 +528,8 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
     //Registro de Licencias
     Route::get('licencias', 'LicenciasPersonalesController@index')->name('licenciaspersonales.index')->middleware('can:licencias_access');
+    Route::post('licencias/config', 'LicenciasPersonalesController@config')->name('licenciaspersonales.config')->middleware('can:licencias_access');
+    Route::put('licencias/{id}/configUpdate', 'LicenciasPersonalesController@configUpdate')->name('licenciaspersonales.configUpdate')->middleware('can:licencias_access');
 
     Route::get('licencias/id', 'LicenciasPersonalesController@getID')->name('licenciaspersonales.getID')->middleware('can:licencias_access');
     Route::get('licencias/nuevo/{id}/{licencia_id}', 'LicenciasPersonalesController@nuevo')->name('licenciaspersonales.nuevo')->middleware('can:licencias_access');
@@ -543,6 +550,16 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('lectordactilar/destroy/{id}', 'LectorDactilarController@destroy')->name('lectordactilar.destroy')->middleware('can:dactilar_access');
     Route::get('lectordactilar/lector', 'LectorDactilarController@lector')->name('lector.index')->middleware('can:dactilar_access');
     // web.php
+    Route::put('/huellas-digitales/{id}/update-estado', 'LectorDactilarController@updateEstadoHuella')->name('huellas.update-estado')->middleware('can:dactilar_access');
 
     Route::get('lectordactilar/updateEstado/{id}', 'LectorDactilarController@updateEstado')->name('dispositivo.updateEstado');
+    Route::get('backup/index', 'BackupController@index')->name('backups.index');
+
+    Route::get('backups/get', 'BackupController@backups')->name('database.backups');
+    Route::post('backup/create', 'BackupController@create')->name('backup.create');
+    Route::post('backup/restore', 'BackupController@restoreBackupZip')->name('backup.restoreStorage');
+    Route::post('descargar-backup/', 'BackupController@descargarBackup')->name('descargar_backup');
+    Route::post('cargar-zip/', 'BackupController@restoreStorageFromZip')->name('backup.cargar');
+    Route::post('cargar-backup/', 'BackupController@restoreStorageFromBackup')->name('backup.cargarBackup');
+
 });

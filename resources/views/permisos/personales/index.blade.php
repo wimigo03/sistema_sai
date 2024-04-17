@@ -10,9 +10,10 @@
         <div class="col-4 text-right titulo">
             <b> MES: </b>
             <div class="btn-group">
+ 
+            <input type="month" name="fecha" id="fecha" class="form-control" value="{{ session('mes', $añoMesActual) }}">
 
-                <input type="month" name="fecha" id="fecha" class="form-control" value="{{ $añoMesActual }}">
-                <input type="hidden" id="permiso" value="{{ $permiso->id }}">
+            <input type="hidden" id="permiso"  value="{{ session('permiso', $permiso->id) }}">
 
             </div>
 

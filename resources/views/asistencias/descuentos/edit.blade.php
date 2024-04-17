@@ -3,51 +3,109 @@
 @section('content')
 <div class="container">
 
-    <div class="row font-verdana-bg">
-        <div class="col-md-8 titulo">
-            <b>Editar Descuentos</b>
-        </div>
-        <div class="col-md-4 text-right">
-            <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('descuentos.index')}}">
-                <button class="btn btn-sm btn-danger font-verdana" type="button">
-                    &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
-                </button>
-            </a>
-         </div>
-        <div class="col-md-12">
-            <hr class="hrr">
-        </div>
-    </div>
 
     <!-- Campos del formulario -->
+
+
+
     <div class="row font-verdana">
-        <div class="col-md-12 table-responsive center">
-            <div class="body-border">
-                <form method="POST" action="{{ route('descuentos.update', $descuento->id) }}">
-                    @csrf
-                    @method('PUT')
 
-                    <!-- Campos del formulario -->
-                    <div class="form-group">
-                        <label for="descripcion">Descripcion</label>
-                        <input type="text" name="descripcion" value="{{ $descuento->descripcion }}" class="form-control" required>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="tiempo_min">Tiempo de Retraso</label>
-                        <input type="number" name="tiempo_min" value="{{$descuento->retraso_max }}" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="dia">Cantidad de Días</label>
-                        <input type="number" name="dia" class="form-control" value="{{ $descuento->cantidad_dia  }}" step="0.01" required>
-                    </div>
+        <div class="col-md-6 offset-md-3">
 
-                    <!-- Botón para actualizar -->
-                    <button type="submit" class="btn btn-primary">Actualizar</button>
-                </form>
+            @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
             </div>
+            @endif
+
+            <!-- Mostrar mensajes de error -->
+            @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+            @endif
+            <form method="POST" action="{{ route('descuentos.update', $descuento->id)}}">
+                @csrf
+                @method('PUT')
+
+                <div class="card">
+                    <div class="card-header titulo">
+                        <div class="row">
+                            <div class="col-md-6 text-left">
+                                <b>Editar Descuentos</b>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <a class="tts:left tts-slideIn tts-custom" aria-label="Cerrar" href="{{route('descuentos.index')}}">
+                                    <button class="btn btn-sm btn-danger font-verdana" type="button">
+                                        &nbsp;<i class="fa fa-times" aria-hidden="true"></i>&nbsp;
+                                    </button>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Campos del formulario -->
+                        <div class="form-group row font-verdana-sm ">
+                            <div class="col-md-12 table-responsive center">
+                                <label for="descripcion"><b>Descripcion:</b></label>
+                                <input type="text" name="descripcion" value="{{ $descuento->descripcion }}" class="form-control" required>
+                                @error('descripcion')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <small class="form-text text-muted">Agregar descripcion o nombre del descuento.</small>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group row font-verdana-sm ">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="tiempo_min"><b>Tiempo de Retraso:</b></label>
+                                    <input type="number" name="tiempo_min" value="{{$descuento->retraso_max }}" class="form-control" required>
+                                    @error('tiempo_min')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <small class="form-text text-muted">Tiempo de retraso acumulado mensual de asistencias registradas.</small>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="dia"><b>Cantidad de Días:</b></label>
+                                    <select id="dia" name="dia" class="form-control" required>
+                                        <option value="0" {{ $descuento->cantidad_dia == 0 ? 'selected' : '' }}>Ningun descuento</option>
+                                        <option value="0.5" {{ $descuento->cantidad_dia == 0.5 ? 'selected' : '' }}>Medio día</option>
+                                        <option value="1" {{ $descuento->cantidad_dia == 1 ? 'selected' : '' }}>Un dia</option>
+                                        <option value="2" {{ $descuento->cantidad_dia == 2 ? 'selected' : '' }}>Dos días</option>
+                                        <option value="3" {{ $descuento->cantidad_dia == 3 ? 'selected' : '' }}>Tres días</option>
+                                    </select>
+                                    @error('dia')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <small class="form-text text-muted">Cantidad de equivalente de descuento según RIP.</small>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Botón para actualizar -->
+                        <div class="form-group row font-verdana-sm ">
+                            <div class="col-md-12 text-right">
+                                <button type="submit" class="btn btn-primary">Actualizar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
         </div>
     </div>
-
 </div>
+
 @endsection
