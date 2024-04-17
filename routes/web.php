@@ -91,10 +91,13 @@ Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('/login', 'Auth\LoginController@login');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/admin', 'Admin\HomeController@index')->name('home.index');
-});
 
-Route::middleware(['auth'])->group(function () {
+    Route::get('admin/', 'Admin\HomeController@index')->name('home.index');
+    Route::group(['name' => 'admin.'], function () {
+
+        //Route::get('admin/roles/index', 'Admin\RoleController@index')->name('roles.index');
+        //Route::get('admin/roles/create', 'Admin\RoleController@create')->name('roles.create');
+    });
     //Route::get('/', [HomeController::class, 'index'])->name('home');
     /*Route::get('admin/users/index', [UserController::class, 'index'])->name('admin.users.index');
     Route::get('admin/users/search', [UserController::class, 'search'])->name('admin.users.search');
