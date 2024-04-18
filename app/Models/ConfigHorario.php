@@ -15,8 +15,7 @@ class ConfigHorario extends Model
         'iniciomax',
         'marcadomax',
         'permisosmensuales', // Agrega el atributo aquí
-        'licenciasrip', // Agrega el atributo aquí
-
+        'licenciasrip', // Agrega el atributo aqu
     ];
 
 }

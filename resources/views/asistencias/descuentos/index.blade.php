@@ -166,11 +166,12 @@
                                     <div class="form-group">
                                         <label for="maxima"><b>Marcado para Salida y Entrada: </b></label>
                                         <select id="marcado" name="marcado" class="form-control form-control-sm" disabled required>
+                                            @if($HorarioConfig)
 
                                             <option value="15" {{ $HorarioConfig->marcadomax == 15 ? 'selected' : '' }}>15 MINUTOS</option>
                                             <option value="30" {{ $HorarioConfig->marcadomax == 30 ? 'selected' : '' }}>30 MINUTOS</option>
                                             <option value="45" {{ $HorarioConfig->marcadomax == 45 ? 'selected' : '' }}>45 MINUTOS</option>
-
+                                            @endif
                                         </select>
                                         @error('marcado')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -191,6 +192,8 @@
             </div>
 
         </div>
+        @if($HorarioConfig)
+
         <div class="col-md-3 ">
             <div class="row font-verdana-md">
                 <div class="col-md-12 center">
@@ -327,6 +330,7 @@
                 </div>
             </div>
         </div>
+        @endif
     </div>
 </div>
 <!-- Botón para abrir el modal -->
@@ -510,6 +514,8 @@
     </div>
 </div>
 @endif
+                                      @if($HorarioConfig)
+
 @if(!$HorarioConfig->permisosmensuales)
 
 <div class="modal fade" id="miModalCreatePermisos" tabindex="-1" role="dialog" aria-labelledby="miModalLabel" aria-hidden="true">
@@ -675,7 +681,7 @@
 <div class="modal fade" id="miModalUpdateLicencias" tabindex="-1" role="dialog" aria-labelledby="miModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-        <form method="POST" action="{{ route('licenciaspersonales.configUpdate', $HorarioConfig->id)}}">
+            <form method="POST" action="{{ route('licenciaspersonales.configUpdate', $HorarioConfig->id)}}">
                 @csrf
                 @method('PUT')
 
@@ -725,6 +731,7 @@
         </div>
     </div>
 </div>
+@endif
 @endif
 @section('scripts')
 <script>
