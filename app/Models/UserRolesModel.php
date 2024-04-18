@@ -8,17 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class UserRolesModel extends Model
 {
     protected $table = 'user_roles';
-
+    protected $fillable = [
+        'id_user',
+        'id_role'
+    ];
 
     public $timestamps = false;
-
-    protected $fillable = [
-
-
-    ];
-
-    protected $guarded = [
-
-
-    ];
 }

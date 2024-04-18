@@ -752,17 +752,17 @@ Route::get('Evento2/urlfile/{id}', [ControllerEvent2::class,'urlfile'])->name('e
 /////////////////////////--CANASTA--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Route::get('almacen/detalle/{id}','AlmacenController@detalle')->name('almacen.detalle');
 
-Route::get('canasta/beneficiarios/index', 'Canasta\BeneficiariosController@index')->name('canasta.beneficiarios.index');
-Route::get('canasta/beneficiarios/search', 'Canasta\BeneficiariosController@search')->name('canasta.beneficiarios.search');
-Route::get('canasta/beneficiarios/excel', 'Canasta\BeneficiariosController@excel')->name('canasta.beneficiarios.excel');
-Route::get('canasta/beneficiarios/show/{usuario_id}', 'Canasta\BeneficiariosController@show')->name('canasta.beneficiarios.show');
-Route::get('canasta/beneficiarios/show/pdf/{usuario_id}', 'Canasta\BeneficiariosController@show_pdf')->name('canasta.beneficiarios.show.pdf');
-Route::get('canasta/barrios/index', 'Canasta\BarriosController@index')->name('canasta.barrios.index');
-Route::get('canasta/barrios/search', 'Canasta\BarriosController@search')->name('canasta.barrios.search');
-Route::get('canasta/barrios/excel', 'Canasta\BarriosController@excel')->name('canasta.barrios.excel');
-Route::get('canasta/periodos/index', 'Canasta\PeriodosController@index')->name('canasta.periodos.index');
-Route::get('canasta/periodos/search', 'Canasta\PeriodosController@search')->name('canasta.periodos.search');
-Route::get('canasta/entregas/index', 'Canasta\EntregasController@index')->name('canasta.entregas.index');
+//Route::get('canasta/beneficiarios/index', 'Canasta\BeneficiariosController@index')->name('canasta.beneficiarios.index');
+//Route::get('canasta/beneficiarios/search', 'Canasta\BeneficiariosController@search')->name('canasta.beneficiarios.search');
+//Route::get('canasta/beneficiarios/excel', 'Canasta\BeneficiariosController@excel')->name('canasta.beneficiarios.excel');
+//Route::get('canasta/beneficiarios/show/{usuario_id}', 'Canasta\BeneficiariosController@show')->name('canasta.beneficiarios.show');
+//Route::get('canasta/beneficiarios/show/pdf/{usuario_id}', 'Canasta\BeneficiariosController@show_pdf')->name('canasta.beneficiarios.show.pdf');
+//Route::get('canasta/barrios/index', 'Canasta\BarriosController@index')->name('canasta.barrios.index');
+//Route::get('canasta/barrios/search', 'Canasta\BarriosController@search')->name('canasta.barrios.search');
+//Route::get('canasta/barrios/excel', 'Canasta\BarriosController@excel')->name('canasta.barrios.excel');
+//Route::get('canasta/periodos/index', 'Canasta\PeriodosController@index')->name('canasta.periodos.index');
+//Route::get('canasta/periodos/search', 'Canasta\PeriodosController@search')->name('canasta.periodos.search');
+//Route::get('canasta/entregas/index', 'Canasta\EntregasController@index')->name('canasta.entregas.index');
 
 /**CANASTA V2*/
 Route::get('distritos/', 'Canasta_v2\DistritosV2Controller@index')->name('distritos.index');

@@ -1,6 +1,6 @@
 <div class="form-group row">
-    <div class="col-md-12 table-responsive">
-        <table class="table display table-bordered responsive" style="width:100%;">
+    <div class="col-md-12 pr-1 pl-1 table-responsive">
+        <table class="table display table-striped table-bordered responsive hover-orange" style="width:100%;">
             <thead>
                 <tr class="font-verdana-11">
                     <td class="text-left p-1"><b>ID</b></td>

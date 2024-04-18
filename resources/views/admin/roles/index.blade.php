@@ -1,15 +1,16 @@
 @extends('layouts.admin')
 @section('content')
-<link rel="stylesheet" href="/css/font-verdana.css" rel="stylesheet">
-<div class="card card-custom">
-    <div class="card-header font-verdana-15">
-        <b>ROLES</b>
+    <div class="card-header header">
+        <div class="row">
+            <div class="col-md-12 pr-1 pl-1 text-center">
+                <b>ROLES</b>
+            </div>
+        </div>
     </div>
-    <div class="card-body">
+    <div class="card-body body">
         @include('admin.roles.partials.search')
         @include('admin.roles.partials.table')
     </div>
-</div>
 @endsection
 @section('scripts')
     <script>

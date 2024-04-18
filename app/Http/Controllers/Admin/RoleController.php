@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-//use App\Http\Requests\StoreRoleRequest;
-//use App\Http\Requests\UpdateRoleRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Response;
 use App\Models\Permission;
