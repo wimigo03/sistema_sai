@@ -201,7 +201,7 @@
         // Función para personalizar la visualización de la celda
         function renderCell(data, type, row) {
             // Verificar si hay datos y personalizar la visualización
-            if (data.actual) {
+            if (data && data.actual) {
                 console.log(data);
                 let additionalInfo = '';
 
@@ -292,7 +292,7 @@
 
         function renderCell2(data, type, row) {
             // Verificar si hay datos y personalizar la visualización
-            if (data.actual) {
+            if (data && data.actual ) {
                 let additionalInfo = '';
                 // Si necesitas agregar información adicional, puedes hacerlo aquí
 

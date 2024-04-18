@@ -262,44 +262,7 @@ class AusenciasController extends Controller
         return redirect()->route('agregar.regulacion', ['id' => 'id'])->with('success', 'Regularizado correctamente la asistencia del día: ');
     }
 
-    private function getWeeksInMonth($start, $end, $selectedMonth)
-    {
-        $weeks = [];
-        $currentWeek = [];
-
-        // Calcular el número de días a agregar del mes anterior
-        $daysToAdd = $start->dayOfWeek === Carbon::SUNDAY ? 6 : $start->dayOfWeek - 1;
-
-        // Agregar días del mes anterior si la primera semana no comienza en lunes
-        for ($i = $daysToAdd; $i > 0; $i--) {
-            $currentWeek[] = $start->copy()->subDay($i);
-        }
-
-        while ($start <= $end) {
-            $currentWeek[] = $start->copy();
-
-            if ($start->dayOfWeek == Carbon::createFromFormat('Y-m', $selectedMonth)->startOfMonth()->format('D')) {
-                $weeks[] = $currentWeek;
-                $currentWeek = [];
-            }
-
-            $start->addDay();
-        }
-
-        // Agregar días del mes posterior si la última semana no está completa
-        $remainingDays = 7 - count($currentWeek);
-        for ($i = 0; $i <= $remainingDays; $i++) {
-            $currentWeek[] = $start->copy()->addDay($i);
-        }
-
-        // Agregar la última semana si es necesario
-        if (!empty($currentWeek)) {
-            $weeks[] = $currentWeek;
-        }
-
-        return $weeks;
-    }
-
+  
 
     private function transformDataForDataTables($weeksInMonth, $selectedMonth, $id)
     {
@@ -347,14 +310,37 @@ class AusenciasController extends Controller
     }
 
 
-    private function getDataForMonth($start, $end, $employeeId)
+    private function getWeeksInMonth($start, $end)
     {
-        // Realizar una sola consulta para obtener todos los datos del mes para un empleado específico
-        return RegistroAsistencia::where('empleado_id', $employeeId)
-            ->whereBetween('fecha', [$start->toDateString(), $end->toDateString()])
-            ->select('id', 'fecha', 'estado', 'observ')
-            ->get();
+        $weeks = [];
+        $currentWeek = [];
+
+        // Agregar días del mes anterior si la primera semana no comienza en lunes
+        $daysToAdd = $start->dayOfWeek;
+        $start->subDays($daysToAdd);
+
+        // Llevar $start al primer día del mes
+        $start->addDay();
+
+        while ($start <= $end) {
+            $currentWeek[] = $start->copy(); // Guardar copia de la fecha como objeto Carbon
+
+            if ($start->dayOfWeek === Carbon::SUNDAY) {
+                $weeks[] = $currentWeek;
+                $currentWeek = [];
+            }
+
+            $start->addDay();
+        }
+
+        // Si la última semana no es completa, agrégala también
+        if (!empty($currentWeek)) {
+            $weeks[] = $currentWeek;
+        }
+
+        return $weeks;
     }
+
 
     public function update(UpdateAusenciasRequest $request, $id)
     {
