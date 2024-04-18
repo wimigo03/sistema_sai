@@ -128,7 +128,7 @@
                                         @error('maxima')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
-                                        <small class="form-text text-muted">El tiempo de marcado debe estar entre 8 y 12.</small>
+                                        <small class="form-text text-muted">El tiempo de marcado debe estar en 8.</small>
                                     </div>
                                 </div>
 
@@ -375,7 +375,7 @@
                                     @error('maxima')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
-                                    <small class="form-text text-muted">El tiempo de marcado debe estar entre 8 y 12.</small>
+                                    <small class="form-text text-muted">El tiempo de marcado debe estar entre 8 .</small>
                                 </div>
                             </div>
 
@@ -466,7 +466,7 @@
                                 @error('maxima')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                                <small class="form-text text-muted">El tiempo de marcado debe estar entre 8 y 12.</small>
+                                <small class="form-text text-muted">El tiempo de marcado debe estar entre 8.</small>
                             </div>
                         </div>
 
