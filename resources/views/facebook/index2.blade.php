@@ -98,7 +98,7 @@
 
                                     <td>
 
-                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Eliminar Registro">
+                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Registrar">
                                             <button type="submit" class="btn">
                                             <a   class="btn  btn-sm delete btn-flat"><i class='fa fa-check'></i></a>
                                             </button>
