@@ -200,7 +200,7 @@ class ArchivosController2 extends Controller
 
 
 
-        return redirect()->action('App\Http\Controllers\ArchivosController2@index');
+        return redirect()->route('archivos2.index', ['idd' => $personalArea]);
 
         } catch (\Throwable $th){
          return '[ERROR_500]';
@@ -304,7 +304,8 @@ class ArchivosController2 extends Controller
             $archivos->save();
         }
 
-        return redirect()->action('App\Http\Controllers\ArchivosController2@index');
+        //return view('archivos2.index', ['idd' => $personalArea]);
+        return redirect()->route('archivos2.index', ['idd' => $personalArea]);
     }
 
 

@@ -70,11 +70,17 @@ class EntregasV2Controller extends Controller
 
     public function store_paquete(Request $request)
         {
+
+            $personal = User::find(Auth::user()->id);
+            $id_usuario = $personal->id;
+            $dea_id = $personal->dea_id;
+
+
                                 $paquetes = new Paquetes();
                                 $paquetes->gestion = $request->gestion;
                                 $paquetes->items = $request->items;
-                                $paquetes->user_id = 16;
-                                $paquetes->dea_id = 1;
+                                $paquetes->user_id = $id_usuario;
+                                $paquetes->dea_id = $dea_id;
                                 $paquetes->estado = 1;
                                 $paquetes->save();
         return redirect()->route('entregas.index')->with($request->session()->flash('message', 'Registro Procesado'));

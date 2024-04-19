@@ -14,10 +14,8 @@
             <tbody>
                 @foreach ($users as $user)
                     <tr class="font-roboto-11">
-                        <td class="text-center p-1">{{ $user->dea->nombre }}</td>
                         <td class="text-left p-1">{{ $user->nombre_completo }}</td>
                         <td class="text-left p-1">{{ $user->name }}</td>
-                        <td class="text-left p-1">{{ $user->area->nombrearea }}</td>
                         <td class="text-center p-1">
                             <span class="{{ $user->icono_estado }}">
                                 {{ $user->status }}

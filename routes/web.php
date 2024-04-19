@@ -133,9 +133,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('compras/medidas/store', [MedidaController::class,'store'])->name('medidas.store');
 
 
-    Route::get('admin/users/baja/{id}', [Admin\UserController::class,'baja'])->name('users.baja');
-    Route::get('admin/users/alta/{id}', [Admin\UserController::class,'alta'])->name('users.alta');
-    Route::get('admin/users//index', [Admin\UserController::class,'index'])->name('users.index');
+    //Route::get('admin/users/baja/{id}', [Admin\UserController::class,'baja'])->name('users.baja');
+    //Route::get('admin/users/alta/{id}', [Admin\UserController::class,'alta'])->name('users.alta');
+    //Route::get('admin/users//index', [Admin\UserController::class,'index'])->name('users.index');
 
 /////////////////////////--COMPRAS PEDIDO--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
