@@ -7,98 +7,85 @@
     <div class="side-inner">
         <div class="profile">
             <img src="{{ asset('logos/logo2.png') }}" alt="Image" class="img-fluid" />
-            <span class="name font-verdana" style="color:green">S.A.I. - G.A.R.G.CH.</span>
-            {{-- <span class="country" style="color:green">Yacuiba - Carapari - Villamontes</span> --}}
-
+            <span class="font-roboto-15 text-success"><b>G.A.R.G.CH.</b></span>
         </div>
         <div class="nav-menu">
             <div class="sidebar left">
                 <ul class="list-sidebar bg-defoult">
-
-                    {{-- CANASTA --}}
-                    @canany(['canasta_access'])
-                        <li class="font-verdana-bg">
-                            <a href="" data-toggle="collapse" data-target="#dashboard_canasta"
-                                class="active collapsed" aria-expanded="false">
-                                <i class="fa-duotone fa-family-dress" style="color:green"></i>
-                                <span class="nav-label mr-3">CANASTA-AD.M.</span>
-                                <span class="fa fa-arrow-circle-left float-right"></span>
+                    <li class="font-verdana-12">
+                        <a href="javascript:void(0)" onclick="$('#logout-form').submit();" class="text-danger">
+                            <i class="fa fa-sign-out fa-fw"></i>&nbsp;Cerrar Sesion
+                        </a>
+                    </li>
+                    @canany(['canasta.entregas.index','beneficiarios.index','distritos.index','barrios.index'])
+                        <li class="font-verdana-12">
+                            <a href="" data-toggle="collapse" data-target="#dashboard_canasta_v2" class="active collapsed" aria-expanded="false">
+                                <i class="fa-solid fa-gift fa-fw"></i>&nbsp;Canasta
+                                <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
                             </a>
-                            <ul class="sub-menu collapse" id="dashboard_canasta">
-                                @can('canasta_access')
-                                <li>
-                                    <a href="{{ route('entregas.index') }}">
-                                        <span class="nav-label mr-4">
-                                            <i class="fa-solid fa-shopping-bag"></i>&nbsp;Paquetes
-                                        </span>
-                                    </a>
-                                </li>
+                            <ul class="sub-menu collapse" id="dashboard_canasta_v2">
+                                @can('canasta.entregas.index')
+                                    <li>
+                                        <a href="{{ route('entregas.index') }}">
+                                            &nbsp;&nbsp;<i class="fa-solid fa-shopping-bag fa-fw"></i>&nbsp;Paquetes
+                                        </a>
+                                    </li>
                                 @endcan
-
-
-                                <li>
-                                    <a href="{{ route('beneficiarios.index') }}">
-                                        <span class="nav-label mr-4">
-                                            <i class="fa-solid fa-male"></i>&nbsp;Beneficiarios
-                                        </span>
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="{{ route('distritos.index') }}">
-                                        <span class="nav-label mr-4">
-                                            <i class="fa-solid fa-house"></i>&nbsp;Distritos
-                                        </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('barrios.index') }}">
-                                        <span class="nav-label mr-4">
-                                            <i class="fa-solid fa-house"></i>&nbsp;Barrios
-                                        </span>
-                                    </a>
-                                </li>
-
-
-
-
+                                @can('beneficiarios.index')
+                                    <li>
+                                        <a href="{{ route('beneficiarios.index') }}">
+                                            &nbsp;&nbsp;<i class="fas fa-user-friends"></i>&nbsp;Beneficiarios
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('distritos.index')
+                                    <li>
+                                        <a href="{{ route('distritos.index') }}">
+                                            &nbsp;&nbsp;<i class="fa-solid fa-house"></i>&nbsp;Distritos
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('barrios.index')
+                                    <li>
+                                        <a href="{{ route('barrios.index') }}">
+                                            &nbsp;&nbsp;<i class="fa-solid fa-house"></i>&nbsp;Barrios
+                                        </a>
+                                    </li>
+                                @endcan
                             </ul>
                         </li>
                     @endcanany
-                    <hr style="margin-top:0; margin-bottom:0;">
                     {{-- USUARIOS --}}
                     @canany(['users.index','roles.index','permissions.index'])
-                        <li class="font-roboto-14">
+                        <li class="font-verdana-12">
                             <a href="" data-toggle="collapse" data-target="#dashboard_adm" class="active collapsed" aria-expanded="false">
-                                <i class="fa-solid fa-gears fa-fw"></i>
-                                <span class="nav-label">Administracion</span>
-                                <span class="fa fa-arrow-circle-left float-right fa-fw"></span>
+                                <i class="fa-solid fa-gears fa-fw"></i>&nbsp;Administrar
+                                <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_adm">
                                 @can('users.index')
                                     <li>
                                         <a href="{{ route('users.index') }}">
-                                            &nbsp;&nbsp;&nbsp;<i class="fa fa-users fa-fw"></i>&nbsp;Usuarios
+                                            &nbsp;&nbsp;<i class="fa fa-users fa-fw"></i>&nbsp;Usuarios
                                         </a>
                                     </li>
                                 @endcan
                                 @can('roles.index')
                                     <li>
                                         <a href="{{ route('roles.index') }}">
-                                            &nbsp;&nbsp;&nbsp;<i class="fa-solid fa-list fa-fw"></i>&nbsp;Roles
+                                            &nbsp;&nbsp;<i class="fa-solid fa-list fa-fw"></i>&nbsp;Roles
                                         </a>
                                     </li>
                                 @endcan
                                 @can('permissions.index')
                                     <li>
                                         <a href="{{ route('permissions.index') }}">
-                                            &nbsp;&nbsp;&nbsp;<i class="fa-solid fa-layer-group fa-fw"></i>&nbsp;Permisos
+                                            &nbsp;&nbsp;<i class="fa-solid fa-layer-group fa-fw"></i>&nbsp;Permisos
                                         </a>
                                     </li>
                                 @endcan
                             </ul>
                         </li>
-                        <hr style="margin-top:0; margin-bottom:0;">
                     @endcanany
                     {{-- COMPRAS --}}
                     @canany(['solicitud.compra.index','orden.compra.index','proveedor.index','programa.index','categoria.programatica.index','item.index','unidad.medida.index','partida.index'])

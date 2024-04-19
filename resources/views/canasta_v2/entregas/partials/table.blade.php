@@ -21,7 +21,11 @@
                         <td class="text-left p-1">{{ $datos->periodo }}</td>
                         <td class="text-left p-1">{{ $datos->dea->descripcion }}</td>
 
+                        @can('canasta.paquete.editar')
                         <td align="center" style="width:3%" >
+
+
+
                             <span class="tts:left tts-slideIn tts-custom" aria-label="Editar Paquete">
                                 <a href="{{ route('entregas.edit_paquete', $datos->id) }}"
                                     class="btn btn-sm edit btn-flat"><i class="fa-sharp fa-regular fa-pen-to-square"></i>
@@ -29,18 +33,25 @@
 
 
                         </td>
+                        @endcan
+                        @can('canasta.paquete.periodo')
+
+
                         <td align="center" style="width:3%">
                             <span class="tts:left tts-slideIn tts-custom" aria-label="Agregar Periodos">
                                 <a  href="{{ route('entregas.paquete_periodo',$datos->id ) }}"
                                     class="btn btn-sm edit btn-flat"><i class="fa-solid fa-calendar-days"></i>
                             </span>
                         </td>
+                        @endcan
+                        @can('canasta.entregas.paquete.index')
                         <td align="center" style="width:3%">
                             <span class="tts:left tts-slideIn tts-custom" aria-label="Entregar Paquete">
                                 <a  href="{{ route('entregas.entrega_index',$datos->id) }}"
                                     class="btn btn-sm edit btn-flat"><i class="fa-solid fa-arrow-up-right-from-square"></i>
                             </span>
                         </td>
+                        @endcan
 
                     </tr>
                 @endforeach
