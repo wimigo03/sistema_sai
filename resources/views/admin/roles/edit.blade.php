@@ -1,5 +1,12 @@
 @extends('layouts.admin')
 @section('content')
+    <div class="card-header header">
+        <div class="row">
+            <div class="col-md-12 pr-1 pl-1 text-center">
+                <b>MODIFICAR ROL</b>
+            </div>
+        </div>
+    </div>
 <link rel="stylesheet" href="/css/font-verdana.css" rel="stylesheet">
 <div class="card card-custom">
     <div class="card-header font-verdana-15">

@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-//use App\Http\Requests\StoreRoleRequest;
-//use App\Http\Requests\UpdateRoleRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Response;
 use App\Models\Permission;
@@ -100,12 +98,9 @@ class RoleController extends Controller
 
     public function edit($id)
     {
-        //dd('hola');
         $role = Role::find($id);
         $deas = Dea::select('descripcion','id')->get();
         $permissions = Permission::all()->pluck('name', 'id');
-
-        //dd($role);
         return view('admin.roles.edit', compact('role','deas','permissions'));
     }
 

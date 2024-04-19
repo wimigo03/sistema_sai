@@ -31,7 +31,7 @@
     <div class="form-group row">
         <div class="col-md-6 pr-1 pl-1">
             @can('users.create')
-                <span class="tts:right tts-slideIn tts-custom" aria-label="Crear Nuevo Usuario">
+                <span class="tts:right tts-slideIn tts-custom" aria-label="Crear">
                     <span class="btn btn-outline-success font-roboto-12" onclick="create();">
                         <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
                     </span>

@@ -12,28 +12,16 @@ use Illuminate\Http\Response;
 
 class PermissionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
-    {dd("ok");
-        abort_if(Gate::denies('permissions_access'), Response::HTTP_FORBIDDEN, 'Forbidden');
+    {
+        //abort_if(Gate::denies('permissions_access'), Response::HTTP_FORBIDDEN, 'Forbidden');
 
         $permissions = Permission::paginate(5)->appends($request->query());;
-        return view('permissions.index',compact('permissions'));
+        return view('admin.permissions.index',compact('permissions'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        abort_if(Gate::denies('permission_create'), Response::HTTP_FORBIDDEN, 'Forbidden');
-
         return view('admin.permissions.create');
     }
 

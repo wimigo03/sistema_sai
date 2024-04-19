@@ -6,7 +6,7 @@ use App\Models\Role;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-
+use DB;
 class AuthGates
 {
     /**
@@ -19,16 +19,22 @@ class AuthGates
     public function handle(Request $request, Closure $next)
     {
         if(Auth()->check()){
-
-            $role_id  = Auth()->user()->role_id;
-
-            $role = Role::with('permissions')->where('id', $role_id)->first();
+            $user_id  = Auth()->user()->id;
+            $role = Role::with('permissions')->where('id', 1)->first();
+            $permissions_two = DB::table('user_roles  as uu')
+                                    ->join('users as u', 'u.id', 'uu.id_user')
+                                    ->join('roles as r', 'r.id', 'uu.id_role')
+                                    ->join('role_permissions as rp', 'rp.role_id', 'r.id')
+                                    ->join('permissions as p', 'p.id', 'rp.permission_id')
+                                    ->select('p.name')
+                                    ->where('u.id', $user_id)
+                                    ->get();
 
             if(!$role){
                 abort(403);
             }
 
-            $permissions = $role->permissions->pluck('name');
+            $permissions = $permissions_two->pluck('name');
 
             foreach($permissions as $permission){
                 Gate::define($permission, function(){

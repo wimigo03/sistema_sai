@@ -2,8 +2,8 @@
 
 Route::prefix('roles')->name('roles.')->middleware(['auth'])->group(function () {
     Route::get('/index', 'Admin\RoleController@index')->name('index')->middleware('can:roles.index');
-    Route::get('/show/{id}', 'Admin\RoleController@show')->name('show')->middleware('can:roles.show');
     Route::get('/search', 'Admin\RoleController@search')->name('search')->middleware('can:roles.index');
+    Route::get('/show/{id}', 'Admin\RoleController@show')->name('show')->middleware('can:roles.show');
     Route::get('/create', 'Admin\RoleController@create')->name('create')->middleware('can:roles.create');
     Route::post('/store', 'Admin\RoleController@store')->name('store')->middleware('can:roles.create');
     Route::get('/edit/{id}', 'Admin\RoleController@edit')->name('edit')->middleware('can:roles.edit');

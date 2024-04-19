@@ -1,5 +1,5 @@
 <form action="#" method="get" id="form">
-    <div class="form-group row">
+    {{--<div class="form-group row">
         <div class="col-md-2 pr-1 pl-1">
             <input type="text" name="codigo_id" placeholder="--Codigo Id--" value="{{ request('codigo_id') }}" class="form-control font-roboto-12 intro" onkeypress="return valideNumberInteger(event);">
         </div>
@@ -25,7 +25,7 @@
                 @endforeach
             </select>
         </div>
-    </div>
+    </div>--}}
     <div class="form-group row">
         <div class="col-md-6 pr-1 pl-1">
             <span class="tts:right tts-slideIn tts-custom" aria-label="Crear">
@@ -35,7 +35,7 @@
                 <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
             </span>
         </div>
-        <div class="col-md-6 pr-1 pl-1 text-right">
+        {{--<div class="col-md-6 pr-1 pl-1 text-right">
             <button class="btn btn-outline-primary font-roboto-12" type="button" onclick="procesar();">
                 <i class="fa fa-search" aria-hidden="true"></i> Buscar
             </button>
@@ -43,6 +43,6 @@
                 <i class="fa fa-eraser"></i> Limpiar
             </button>
             <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-        </div>
+        </div>--}}
     </div>
 </form>

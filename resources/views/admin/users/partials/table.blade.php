@@ -1,6 +1,6 @@
 <div class="form-group row">
     <div class="col-md-12 pr-1 pl-1">
-        <table class="table table-borderless hoverTable table-striped" id="#">
+        <table class="table table-borderless hoverTable table-striped hover-orange" id="#">
             <thead>
                 <tr class="font-roboto-11">
                     <th class="text-center p-1">DEA</th>

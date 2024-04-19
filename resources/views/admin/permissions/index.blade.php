@@ -1,58 +1,37 @@
 @extends('layouts.admin')
-
 @section('content')
-
-    <div class="card">
-        <div class="card-header">MODULO PERMISOS</div>
-
-        <div class="card-body table-responsive">
-    )
-            <a href="{{ route('admin.permissions.create') }}" class="btn btn-outline-primary">Agregar nuevo permiso</a>
-
-
-            <br /><br />
-
-
-
-                <table class="table table-borderless hoverTable">
-                            <tr class="bg-info text-light">
-                                <th class="text-center">ID</th>
-                                <th>Nombre</th>
-                                <th>
-                                    &nbsp;
-                                </th>
-                            </tr>
-                    @forelse ($permissions as $permission)
-                        <tr>
-                            <td class="text-center">{{$permission->id}}</td>
-                            <td>{{$permission->name}}</td>
-                            <td>
-  
-                                        <a href="{{ route('admin.permissions.edit', $permission->id) }}" class="btn btn-sm btn-outline-warning">Editar</a>
- 
-                                <form action="{{ route('admin.permissions.destroy', $permission->id) }}" class="d-inline-block" method="post">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" onclick="return confirm('Esta Ud. seguro?')" class="btn btn-sm btn-outline-danger">Borrar</button>
-                                </form>
-                            </td>
-                        </tr>
-                        @empty
-                            <tr>
-                                <td colspan="100%" class="text-center text-muted py-3">No Permissions Found</td>
-                            </tr>
-                    @endforelse
-                </table>
-
-
-
-
-            @if($permissions->total() > $permissions->perPage())
-            <br><br>
-            {{$permissions->links()}}
-            @endif
-
+    <div class="card-header header">
+        <div class="row">
+            <div class="col-md-12 pr-1 pl-1 text-center">
+                <b>PERMISOS</b>
+            </div>
         </div>
     </div>
+    <div class="card-body body">
+        @include('admin.permissions.partials.search')
+        @include('admin.permissions.partials.table')
+    </div>
+@endsection
+@section('scripts')
+    <script>
+        $(document).ready( function () {
+            $('.select2').select2({
+                theme: "bootstrap4",
+                placeholder: "--Seleccionar--",
+                width: '100%'
+            });
+        });
 
+        $('.intro').on('keypress', function(event) {
+            if (event.which === 13) {
+                search();
+                event.preventDefault();
+            }
+        });
+
+        function create(){
+            var url = "{{ route('permissions.create') }}";
+            window.location.href = url;
+        }
+    </script>
 @endsection

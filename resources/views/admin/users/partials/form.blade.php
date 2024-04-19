@@ -73,7 +73,7 @@
                 <i class="fa-solid fa-paper-plane"></i>&nbsp;Registrar
             </button>
             <button class="btn btn-outline-danger font-roboto-12" type="button" onclick="cancelar();">
-                &nbsp;<i class="fa-solid fa-xmark"></i>&nbsp;Cancelar
+                <i class="fa-solid fa-xmark"></i>&nbsp;Cancelar
             </button>
             <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn" style="display: none;"></i>
         </div>
