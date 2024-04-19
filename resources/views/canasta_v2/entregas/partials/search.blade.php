@@ -19,11 +19,11 @@
 
     <div class="form-group row">
         <div class="col-md-6">
-
-            <button class="btn btn-outline-primary font-verdana" type="button" onclick="create();">
-                &nbsp;<i class="fa fa-plus"></i>&nbsp;Crear
-            </button>
-
+            @can('canasta.entregas.create')
+                <button class="btn btn-outline-primary font-verdana" type="button" onclick="create();">
+                    &nbsp;<i class="fa fa-plus"></i>&nbsp;Crear
+                </button>
+            @endcan
 
 
         </div>
