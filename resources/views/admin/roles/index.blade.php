@@ -24,20 +24,14 @@
         });
 
         function create(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
             window.location.href = "{{ route('roles.create') }}";
         }
         function procesar(){
             var url = "{{ route('roles.search') }}";
             $("#form").attr('action', url);
-            $(".btn").hide();
-            $(".spinner-btn").show();
             $("#form").submit();
         }
         function limpiar(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
             window.location.href = "{{ route('roles.index') }}";
         }
     </script>

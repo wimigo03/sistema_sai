@@ -12,14 +12,14 @@
         <div class="nav-menu">
             <div class="sidebar left">
                 <ul class="list-sidebar bg-defoult">
-                    @canany(['entregas.index','beneficiarios.index','distritos.index','barrios.index'])
+                    @canany(['canasta.entregas.index','beneficiarios.index','distritos.index','barrios.index'])
                         <li class="font-verdana-12">
                             <a href="" data-toggle="collapse" data-target="#dashboard_canasta_v2" class="active collapsed" aria-expanded="false">
                                 <i class="fa-solid fa-gift fa-fw"></i>&nbsp;Canasta
                                 <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_canasta_v2">
-                                @can('entregas.index')
+                                @can('canasta.entregas.index')
                                     <li>
                                         <a href="{{ route('entregas.index') }}">
                                             &nbsp;&nbsp;&nbsp;<i class="fa-solid fa-shopping-bag fa-fw"></i>&nbsp;Paquetes
