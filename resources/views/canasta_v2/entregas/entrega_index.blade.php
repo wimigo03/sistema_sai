@@ -1,131 +1,39 @@
 @extends('layouts.admin')
 @section('content')
-    @include('layouts.message_alert')
+    {{--@include('layouts.message_alert')
     @if (Session::has('message'))
         <div class="alert alert-success">
             <em> {!! session('message') !!}</em>
         </div>
-    @endif
-    <br>
-    <div class="row font-verdana-12">
-        <div class="col-md-2 titulo">
-            <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-                <a href="{{ url('/entregas') }}">
-                    <span class="color-icon-1">
-                        &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
-                    </span>
-                </a>
-            </span>
+    @endif--}}
+    <div class="card-header header">
+        <div class="row">
+            <div class="col-md-12 pr-1 pl-1 text-center">
+                <b>ENTREGA DE CANASTA</b>
+            </div>
         </div>
-        <div class="col-md-10 text-right titulo">
-            <b>MODULO ENTREGA DE CANASTAS</b>
-        </div>
-        <div class="col-md-12">
-            <hr class="hrr">
-        </div>
-
     </div>
-    <div>
-
-        @can('entregas.agregar.porbarrio')
-            <button class="btn btn-outline-info" type="button" data-toggle="collapse" data-target="#collapseExample2"
-                aria-expanded="false" aria-controls="collapseExample">
-                <i class="fa fa-address-book" aria-hidden="true"></i>
-                Agregar Beneficiarios por Barrio
-            </button>
-        @endcan
-        @can('entregas.generar.boleta')
-
-
-        @if($botonImprimir == 1)
-
-
-            <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#collapseExample3"
-            aria-expanded="false" aria-controls="collapseExample">
-            <i class="fa fa-print" aria-hidden="true"></i>
-            Imprimir Boleta por Barrio
-        </button>
-
-
-        @endif
-        @endcan
-
-
-    </div>
-
-
-    {{-- collapse agregar por barrio --}}
-
-    <div class="collapse" id="collapseExample2">
-        <div class="body-border" style="background-color: #FFFFFF;">
-            <form action="{{ route('entregas.agregarporbarrio', $idpaquete) }}" method="post" id="form2">
-                @csrf
-                <br>
-                <input type="hidden" value="{{ $idpaquete }}" id="idcompra" name="idpaquete">
-                <div class="form-group row">
-                    <div class="col-md-4">
-                        <label for="barrio" class="d-inline font-verdana-12">
-                            <b>Barrio</b>&nbsp;<span style="font-size:10px;"></span>
-                        </label>
-                        <select name="barrio" id="barrio" class="form-control form-control-sm ">
-                            <option value="">-</option>
-                            @foreach ($barrios as $barrio)
-                                <option value="{{ $barrio->id }}">{{ $barrio->nombre }}</option>
-                            @endforeach
-                        </select>
-
-                    </div>
-
-                    <div class="col-md-2 ">
-
-                        <button class="btn btn-primary font-verdana-12" type="button" onclick="save2();">
-                            <i class="fa-solid fa-plus"></i>
-                            Agregar
+    <div class="card-body body">
+        <div class="form-group row">
+            <div class="col-md-6 pr-1 pl-1">
+                @can('entregas.agregar.porbarrio')
+                    <button class="btn btn-outline-info font-roboto-12" type="button" data-toggle="collapse" data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample">
+                        <i class="fa fa-address-book fa-fw" aria-hidden="true"></i> Agregar Beneficiarios por Barrio
+                    </button>
+                @endcan
+                @can('entregas.generar.boleta')
+                    @if($botonImprimir == 1)
+                        <button class="btn btn-outline-secondary font-roboto-12" type="button" data-toggle="collapse" data-target="#collapseExample3" aria-expanded="false" aria-controls="collapseExample">
+                            <i class="fa fa-print fa-fw" aria-hidden="true"></i> Imprimir Boleta por Barrio
                         </button>
-                    </div>
-                </div>
-            </form>
+                    @endif
+                @endcan
+            </div>
+            <div class="col-md-6 pr-1 pl-1">
+                @include('canasta_v2.entregas.partials.agregar-por-barrio')
+                @include('canasta_v2.entregas.partials.generar-boleta')
+            </div>
         </div>
-    </div>
-    {{-- collapse imprimir por barrio --}}
-
-    <div class="collapse" id="collapseExample3">
-        <div class="body-border" style="background-color: #FFFFFF;">
-            <form action="{{ route('entregas.generarboleta') }}" method="get" id="form3" target="_blank">
-                @csrf
-                <br>
-                <input type="hidden" value="{{ $idpaquete }}" id="idcompra" name="idpaquete">
-                <div class="form-group row">
-                    <div class="col-md-4">
-                        <label for="barrio3" class="d-inline font-verdana-12">
-                            <b>Barrio</b>&nbsp;<span style="font-size:10px;"></span>
-                        </label>
-                        <select name="barrio3" id="barrio3" class="form-control form-control-sm">
-                            <option value="">-</option>
-                            @foreach ($barrios3 as $barrio3)
-                                <option value="{{ $barrio3->id }}">{{ $barrio3->nombre }}</option>
-                            @endforeach
-                        </select>
-
-                    </div>
-
-                    <div class="col-md-2 ">
-
-                        <button class="btn btn-primary font-verdana-12" type="button" onclick="save3();" >
-                            <i class="fa fa-print" aria-hidden="true"></i>
-                            Imprimir
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
-
-    <div>
-        <hr class="hrr">
-    </div>
-    <div class="card-body">
         @include('canasta_v2.entregas.partials.search_entrega')
         @include('canasta_v2.entregas.partials.table_entrega')
     </div>
@@ -133,22 +41,35 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-
-
             $('#barrio').select2({
-                placeholder: "---------- Seleccionar un Barrio ----------"
+                theme: "bootstrap4",
+                placeholder: "--Seleccionar un Barrio--",
+                width: '100%'
             });
 
             $('#barrio2').select2({
-                placeholder: "-------------- Barrio --------------"
+                theme: "bootstrap4",
+                placeholder: "--Barrio--",
+                width: '100%'
             });
             $('#barrio3').select2({
-                placeholder: "---------- Seleccionar un Barrio ----------"
+                theme: "bootstrap4",
+                placeholder: "--Seleccionar un Barrio--",
+                width: '100%'
             });
 
             $('#estado').select2({
-                placeholder: "---- Estado ----"
+                theme: "bootstrap4",
+                placeholder: "--Estado--",
+                width: '100%'
             });
+        });
+
+        $('.intro').on('keypress', function(event) {
+            if (event.which === 13) {
+                procesar();
+                event.preventDefault();
+            }
         });
 
         function message_alert(mensaje) {
@@ -161,20 +82,14 @@
         function procesar() {
             var url = "{{ route('entregas.search_entrega', $idpaquete) }}";
             $("#form").attr('action', url);
-            $(".btn").hide();
-            $(".spinner-btn-send").show();
             $("#form").submit();
         }
 
         function limpiar() {
-            $(".btn").hide();
-            $(".spinner-btn-send").show();
             window.location.href = "{{ route('entregas.entrega_index', $idpaquete) }}";
         }
 
         function show() {
-            $(".btn").hide();
-            $(".spinner-btn-send").show();
             var idcompra = $("#idcompra").val();
             var url = "{{ route('compras.detalleparcial.principalorden', ':id') }}";
             url = url.replace(':id', idcompra);
@@ -182,15 +97,10 @@
         }
 
         function print() {
-            $(".btn").hide();
-            $(".spinner-btn-send").show();
-
             window.location.href = "{{ route('compras.detalleparcial.show') }}";
         }
 
         function create() {
-            $(".btn").hide();
-            $(".spinner-btn-send").show();
             var idcompra = $("#idcompra").val();
             var url = "{{ route('compras.detalleparcial.principal', ':id') }}";
             url = url.replace(':id', idcompra);
@@ -206,19 +116,17 @@
         }
 
         function save2() {
-
-            $(".btn").hide();
-            $(".spinner-btn-send").show();
             $("#form2").submit();
 
         }
 
         function save3() {
-
-            $(".btn").hide();
-            $(".spinner-btn-send").show();
             $("#form3").submit();
+        }
 
+        function cancelar(){
+            var url = "{{ route('entregas.index') }}";
+            window.location.href = url;
         }
 
         function validar_formulario() {
