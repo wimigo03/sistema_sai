@@ -28,12 +28,16 @@
     </div>
     <div class="form-group row">
         <div class="col-md-6">
-            <button class="btn btn-outline-success font-verdana" type="button" onclick="excel();">
-                <i class="fa-solid fa-file-excel"></i>&nbsp;Excel
-            </button>
+            @can('canasta.distritos.excel')
+                <button class="btn btn-outline-success font-verdana" type="button" onclick="excel();">
+                    <i class="fa-solid fa-file-excel"></i>&nbsp;Excel
+                </button>
+            @endcan
+            @can('canasta.distritos.create')
             <button class="btn btn-outline-primary font-verdana" type="button" onclick="create();">
                 &nbsp;<i class="fa fa-plus"></i>&nbsp;Crear
             </button>
+            @endcan
             <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn-send" style="display: none;"></i>
         </div>
         <div class="col-md-6 text-right">

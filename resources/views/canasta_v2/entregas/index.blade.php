@@ -39,12 +39,6 @@
             $("#form").submit();
         }
 
-        function excel(){
-            var url = "{{ route('barrios.excel') }}";
-            $("#form").attr('action', url);
-            $("#form").submit();
-        }
-
         function limpiar(){
             $(".btn").hide();
             $(".spinner-btn-send").show();

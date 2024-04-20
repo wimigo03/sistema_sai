@@ -17,7 +17,7 @@
                             <i class="fa fa-sign-out fa-fw"></i>&nbsp;Cerrar Sesion
                         </a>
                     </li>
-                    @canany(['canasta.entregas.index','beneficiarios.index','distritos.index','barrios.index'])
+                    @canany(['canasta.entregas.index','canasta.beneficiarios.index','canasta.distritos.index','canasta.barrios.index'])
                         <li class="font-verdana-12">
                             <a href="" data-toggle="collapse" data-target="#dashboard_canasta_v2" class="active collapsed" aria-expanded="false">
                                 <i class="fa-solid fa-gift fa-fw"></i>&nbsp;Canasta
@@ -31,21 +31,21 @@
                                         </a>
                                     </li>
                                 @endcan
-                                @can('beneficiarios.index')
+                                @can('canasta.beneficiarios.index')
                                     <li>
                                         <a href="{{ route('beneficiarios.index') }}">
                                             &nbsp;&nbsp;<i class="fas fa-user-friends"></i>&nbsp;Beneficiarios
                                         </a>
                                     </li>
                                 @endcan
-                                @can('distritos.index')
+                                @can('canasta.distritos.index')
                                     <li>
                                         <a href="{{ route('distritos.index') }}">
                                             &nbsp;&nbsp;<i class="fa-solid fa-house"></i>&nbsp;Distritos
                                         </a>
                                     </li>
                                 @endcan
-                                @can('barrios.index')
+                                @can('canasta.barrios.index')
                                     <li>
                                         <a href="{{ route('barrios.index') }}">
                                             &nbsp;&nbsp;<i class="fa-solid fa-house"></i>&nbsp;Barrios

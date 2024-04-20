@@ -27,12 +27,15 @@
     </div>
     <div>
 
+        @can('entregas.agregar.porbarrio')
+            <button class="btn btn-outline-info" type="button" data-toggle="collapse" data-target="#collapseExample2"
+                aria-expanded="false" aria-controls="collapseExample">
+                <i class="fa fa-address-book" aria-hidden="true"></i>
+                Agregar Beneficiarios por Barrio
+            </button>
+        @endcan
+        @can('entregas.generar.boleta')
 
-        <button class="btn btn-outline-info" type="button" data-toggle="collapse" data-target="#collapseExample2"
-            aria-expanded="false" aria-controls="collapseExample">
-            <i class="fa fa-address-book" aria-hidden="true"></i>
-            Agregar Beneficiarios por Barrio
-        </button>
 
         @if($botonImprimir == 1)
 
@@ -43,9 +46,9 @@
             Imprimir Boleta por Barrio
         </button>
 
-        @else
 
         @endif
+        @endcan
 
 
     </div>
