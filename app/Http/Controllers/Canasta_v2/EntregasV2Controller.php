@@ -74,6 +74,7 @@ class EntregasV2Controller extends Controller
         $paquetes = new Paquetes();
         $paquetes->gestion = $request->gestion;
         $paquetes->items = $request->items;
+        $paquetes->numero = $request->numero;
         $paquetes->user_id = $id_usuario;
         $paquetes->dea_id = $dea_id;
         $paquetes->estado = 1;
@@ -90,11 +91,16 @@ class EntregasV2Controller extends Controller
 
     public function update_paquete(Request $request)
     {
+
+        $personal = User::find(Auth::user()->id);
+        $id_usuario = $personal->id;
+        $dea_id = $personal->dea_id;
         $paquetes = Paquetes::find($request->id_paquete);
         $paquetes->gestion = $request->gestion;
         $paquetes->items = $request->items;
-        $paquetes->user_id = 16;
-        $paquetes->dea_id = 1;
+        $paquetes->numero = $request->numero;
+        $paquetes->user_id = $id_usuario;
+        $paquetes->dea_id = $dea_id;
         $paquetes->estado = 1;
         $paquetes->save();
         return redirect()->route('entregas.index')->with($request->session()->flash('message', 'Registro Procesado'));
@@ -214,6 +220,10 @@ class EntregasV2Controller extends Controller
 
     public function createEntrega(Request $request)
         {
+
+                                     $personal = User::find(Auth::user()->id);
+                                      $id_usuario = $personal->id;
+                                     $dea_id = $personal->dea_id;
                                         $date = Carbon::now();
 
                                         $deas = Dea::where('id',Auth::user()->dea->id)->pluck('nombre','id');
@@ -227,8 +237,9 @@ class EntregasV2Controller extends Controller
                                         $entrega->fecha = $date;
                                         $entrega->id_paquete = $request->idpaquete;
                                         $entrega->id_beneficiario = $request->idbeneficiario;
-                                        $entrega->user_id = 16;
-                                        $entrega->dea_id = 1;
+
+                                        $entrega->user_id = $id_usuario;
+                                        $entrega->dea_id = $dea_id;
                                         $entrega->estado = 1;
 
                                         $entregas2 = Entrega::where('dea_id',Auth::user()->dea->id)
