@@ -9,7 +9,6 @@ use App\Models\ProveedoresModel;
 use App\Models\DocProveedorModel;
 use App\Models\RemitenteModel;
 use App\Models\LugarModel;
-
 use App\Models\ArchivosModel;
 use App\Models\AnioModel;
 use Illuminate\Support\Facades\Redirect;
@@ -19,10 +18,8 @@ use DB;
 use Carbon\Carbon;
 use DataTables;
 
-class RecepcionController extends Controller
+class CorrespondenciaController extends Controller
 {
-
-
     public function index(Request $request)
     {
 
@@ -191,7 +188,7 @@ class RecepcionController extends Controller
         $recepcion->estado_derivacion = 1;
         $recepcion->save();
 
-        return redirect()->route('recepcion.index');
+        return redirect()->route('correspondencia.index');
     }
 
 
@@ -212,6 +209,6 @@ class RecepcionController extends Controller
         } else {
             $request->session()->flash('message', 'Error al Procesar Registro');
         }
-        return redirect()->route('recepcion.index');
+        return redirect()->route('correspondencia.index');
     }
 }

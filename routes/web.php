@@ -25,7 +25,7 @@ use App\Http\Controllers\ActivosVsiafController;
 use App\Http\Controllers\ArchivosController;
 use App\Http\Controllers\ArchivosController2;
 use App\Http\Controllers\AlmacenController;
-use App\Http\Controllers\RecepcionController;
+use App\Http\Controllers\CorrespondenciaController;
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\ControllerCalendar;
 use App\Http\Controllers\Recepcion2Controller;
@@ -639,20 +639,20 @@ Route::get('almacen/index', [AlmacenController::class,'index'])->name('almacen.i
 //Route::get('compras/pedido/editar/{id}', 'CompraController@editar')->name('compras.pedido.editar');
 //Route::post('compras/pedido/update', 'CompraController@update')->name('compras.pedido.update');
 
-/////////////////////////--CORRESPONDENCIA--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////--CORRESPO0NDENCIA--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('correspondencia/index', [RecepcionController::class,'index'])->name('recepcion.index');
-Route::get('correspondencia/createRecepcion', [RecepcionController::class,'create'])->name('recepcion.create');
-Route::get('correspondencia/indexUnidad', [RecepcionController::class,'indexUnidad'])->name('recepcion.unidadIndex');
-Route::get('correspondencia/indexRemitente', [RecepcionController::class,'indexRemitente'])->name('recepcion.remitenteIndex');
-Route::get('correspondencia/createUnidad', [RecepcionController::class,'createLugar'])->name('crear.lugar');
-Route::post('correspondencia/storeLugar', [RecepcionController::class,'storeLugar'])->name('guardar.lugar');
-Route::get('correspondencia/createRemitente', [RecepcionController::class,'createRemitente'])->name('crear.remitente');
-Route::post('correspondencia/storeRemitente', [RecepcionController::class,'storeRemitente'])->name('guardar.remitente');
-Route::get('correspondencia/createRecepcion', [RecepcionController::class,'createRecepcion'])->name('crear.recepcion');
-Route::post('correspondencia/storeRecepcion', [RecepcionController::class,'storeRecepcion'])->name('guardar.recepcion');
-Route::get('correspondencia/{id}/edit', [RecepcionController::class,'editarCodigo'])->name('correspondencia.edit');
-Route::POST('correspondencia/{id}/updateCodigo', [RecepcionController::class,'updateCodigo'])->name('correspondencia.update');
+Route::get('correspondencia/index', [CorrespondenciaController::class,'index'])->name('correspondencia.index');
+Route::get('correspondencia/createRecepcion', [CorrespondenciaController::class,'create'])->name('correspondencia.create');
+Route::get('correspondencia/indexUnidad', [CorrespondenciaController::class,'indexUnidad'])->name('recepcion.unidadIndex');
+Route::get('correspondencia/indexRemitente', [CorrespondenciaController::class,'indexRemitente'])->name('recepcion.remitenteIndex');
+Route::get('correspondencia/createUnidad', [CorrespondenciaController::class,'createLugar'])->name('crear.lugar');
+Route::post('correspondencia/storeLugar', [CorrespondenciaController::class,'storeLugar'])->name('guardar.lugar');
+Route::get('correspondencia/createRemitente', [CorrespondenciaController::class,'createRemitente'])->name('crear.remitente');
+Route::post('correspondencia/storeRemitente', [CorrespondenciaController::class,'storeRemitente'])->name('guardar.remitente');
+Route::get('correspondencia/createRecepcion', [CorrespondenciaController::class,'createRecepcion'])->name('crear.recepcion');
+Route::post('correspondencia/storeRecepcion', [CorrespondenciaController::class,'storeRecepcion'])->name('guardar.recepcion');
+Route::get('correspondencia/{id}/edit', [CorrespondenciaController::class,'editarCodigo'])->name('correspondencia.edit');
+Route::POST('correspondencia/{id}/updateCodigo', [CorrespondenciaController::class,'updateCodigo'])->name('correspondencia.update');
 
 
 ////////////////////////////--AGENDA--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

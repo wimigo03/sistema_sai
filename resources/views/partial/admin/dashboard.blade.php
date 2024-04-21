@@ -492,7 +492,7 @@
                         <hr style="margin-top:0; margin-bottom:0;">
                     @endcan
                     {{-- CORRESPONDENCIA --}}
-                    @can('recepcion.index')
+                    {{--@can('correspondencia.index')--}}
                         <li class="font-verdana-12">
                             <a href="" data-toggle="collapse" data-target="#dashboard_ventanilla" class="active collapsed" aria-expanded="false">
                                 <i class="fa fa-folder-open" style="color:green"></i>
@@ -501,7 +501,7 @@
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_ventanilla">
                                 <li>
-                                    <a href="{{ route('recepcion.index') }}">
+                                    <a href="{{ route('correspondencia.index') }}">
                                         &nbsp; &nbsp; &nbsp;
                                         <span class="nav-label mr-4">Acceder</span>
                                     </a>
@@ -509,7 +509,7 @@
                             </ul>
                         </li>
                         <hr style="margin-top:0; margin-bottom:0;">
-                    @endcan
+                    {{--@endcan--}}
                     {{-- CORRESPONDENCIA LOCAL --}}
                     @can('recepcion2.index')
                         <li class="font-verdana-12">
