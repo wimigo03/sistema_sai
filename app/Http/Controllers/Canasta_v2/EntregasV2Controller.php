@@ -285,6 +285,10 @@ class EntregasV2Controller extends Controller
 
     public function generarboleta(Request $request)
     {
+                                         $meses = array(1 => 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                                         'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
+
+                                        $fecha_actual=$meses[date('n')] . '-' . date('Y');
                                         $personal = User::find(Auth::user()->id);
                                         $id = $personal->id;
                                         $userdate = User::find($id)->usuariosempleados;
@@ -315,7 +319,7 @@ class EntregasV2Controller extends Controller
                                             //$pdf->setPaper('LETTER', 'portrait'); //landscape
                                            //return $pdf->stream();
 
-                                        return view('canasta_v2/entregas/generarboleta', ["entregas" => $entregas,"userdate" => $userdate,"personalArea" => $personalArea]);
+                                        return view('canasta_v2/entregas/generarboleta', ["fecha_actual" => $fecha_actual,"entregas" => $entregas,"userdate" => $userdate,"personalArea" => $personalArea]);
 
 
                 }
@@ -324,6 +328,12 @@ class EntregasV2Controller extends Controller
 
    public function generarboleta2($id_entrega)
                                         {
+
+                                            $meses = array(1 => 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                                            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
+
+                        $fecha_actual=$meses[date('n')] . '-' . date('Y');
+
                         $personal = User::find(Auth::user()->id);
                         $id = $personal->id;
                         $userdate = User::find($id)->usuariosempleados;
@@ -345,7 +355,7 @@ class EntregasV2Controller extends Controller
                         //dd($entregas);
                                         //return view('canasta_v2/entregas/generarboleta2', ["entrega" => $entregas,"userdate" => $userdate,"personalArea" => $personalArea]);
 
-                                        return view('canasta_v2.entregas/generarboleta2', compact('entrega','userdate','personalArea'));
+                                        return view('canasta_v2.entregas/generarboleta2', compact('fecha_actual','entrega','userdate','personalArea'));
                       }
 
 
