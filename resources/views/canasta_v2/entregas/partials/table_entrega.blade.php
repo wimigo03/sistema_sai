@@ -14,6 +14,7 @@
                             <td class="text-justify p-1"><b>Ci</b></td>
                             <td class="text-justify p-1"><b>Barrio</b></td>
                             <td class="text-justify p-1"><b>Estado</b></td>
+                            <td class="text-justify p-1"><b>Foto</b></td>
                             <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
                             <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
                             <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
@@ -34,6 +35,10 @@
                                 <td class="text-justify p-1">{{ $entregas->beneficiario->ci }}</td>
                                 <td class="text-justify p-1">{{ $entregas->beneficiario->barrio->nombre }}</td>
                                 <td class="text-center p-1">{{ $entregas->status }}</td>
+                                <td class="text-center p-1">
+                                    <img src="{{ asset(substr($entregas->beneficiario->dirFoto , 3)) }}" src="" width='50' height='50' />
+
+                                   </td>
 
                                 <td align="center" style="width:3%">
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Imiprimir Boleta">

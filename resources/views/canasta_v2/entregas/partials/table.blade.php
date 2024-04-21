@@ -6,7 +6,7 @@
                     <td class="text-left p-1"><b>IDPAQUETE</b></td>
                     <td class="text-left p-1"><b>GESTION</b></td>
                     <td class="text-left p-1"><b>PERIODO</b></td>
-                    <td class="text-left p-1"><b>DEA</b></td>
+                    <td class="text-left p-1"><b>NUM.ENTREGA</b></td>
                     <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
                     <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
                     <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
@@ -19,7 +19,7 @@
                         <td class="text-left p-1">{{ $datos->id }}</td>
                         <td class="text-left p-1">{{ $datos->gestion }}</td>
                         <td class="text-left p-1">{{ $datos->periodo }}</td>
-                        <td class="text-left p-1">{{ $datos->dea->descripcion }}</td>
+                        <td class="text-left p-1">{{ $datos->numero}}</td>
 
                         @can('canasta.paquete.editar')
                         <td align="center" style="width:3%" >
@@ -44,14 +44,14 @@
                             </span>
                         </td>
                         @endcan
-                        @can('canasta.entregas.paquete.index')
+
                         <td align="center" style="width:3%">
                             <span class="tts:left tts-slideIn tts-custom" aria-label="Entregar Paquete">
                                 <a  href="{{ route('entregas.entrega_index',$datos->id) }}"
                                     class="btn btn-sm edit btn-flat"><i class="fa-solid fa-arrow-up-right-from-square"></i>
                             </span>
                         </td>
-                        @endcan
+
 
                     </tr>
                 @endforeach

@@ -1,17 +1,17 @@
 <?php
 
 Route::prefix('entregas')->name('entregas.')->middleware(['auth'])->group(function () {
-    Route::get('/', 'Canasta_v2\EntregasV2Controller@index')->name('index')->middleware('can:canasta.entregas.index');
-    Route::get('search', 'Canasta_v2\EntregasV2Controller@search')->name('search')->middleware('can:canasta.entregas.index');
-    Route::get('entrega_index/{id}', 'Canasta_v2\EntregasV2Controller@entrega_index')->name('entrega_index')->middleware('can:canasta.entregas.paquete.index');
+    Route::get('/', 'Canasta_v2\EntregasV2Controller@index')->name('index');
+    Route::get('search', 'Canasta_v2\EntregasV2Controller@search')->name('search');
+    Route::get('entrega_index/{id}', 'Canasta_v2\EntregasV2Controller@entrega_index')->name('entrega_index');
     Route::post('create', 'Canasta_v2\EntregasV2Controller@create')->name('create')->middleware('can:canasta.entregas.create');
     Route::post('store', 'Canasta_v2\EntregasV2Controller@store')->name('store')->middleware('can:canasta.entregas.create');
-    Route::get('edit_paquete/{id}', 'Canasta_v2\EntregasV2Controller@edit_paquete')->name('edit_paquete')->middleware('can:canasta.paquete.editar');
-    Route::post('update_paquete', 'Canasta_v2\EntregasV2Controller@update_paquete')->name('update_paquete')->middleware('can:canasta.paquete.editar');
-    Route::get('paquete_periodo/{id}', 'Canasta_v2\EntregasV2Controller@paquete_periodo')->name('paquete_periodo')->middleware('can:canasta.paquete.periodo');
-    Route::post('paquete_periodo_agregar/{id}', 'Canasta_v2\EntregasV2Controller@paquete_periodo_agregar')->name('paquete_periodo_agregar')->middleware('can:canasta.paquete.periodo');
-    Route::get('finalizar/{id}', 'Canasta_v2\EntregasV2Controller@finalizar')->name('finalizar')->middleware('can:canasta.entregas.finalizar');
-    Route::get('eliminar_periodo/{id}', 'Canasta_v2\EntregasV2Controller@eliminar_periodo')->name('eliminar_periodo')->middleware('can:canasta.periodo.eliminar');
+    Route::get('edit_paquete/{id}', 'Canasta_v2\EntregasV2Controller@edit_paquete')->name('edit_paquete');
+    Route::post('update_paquete', 'Canasta_v2\EntregasV2Controller@update_paquete')->name('update_paquete');
+    Route::get('paquete_periodo/{id}', 'Canasta_v2\EntregasV2Controller@paquete_periodo')->name('paquete_periodo');
+    Route::post('paquete_periodo_agregar/{id}', 'Canasta_v2\EntregasV2Controller@paquete_periodo_agregar')->name('paquete_periodo_agregar');
+    Route::get('finalizar/{id}', 'Canasta_v2\EntregasV2Controller@finalizar')->name('finalizar');
+    Route::get('eliminar_periodo/{id}', 'Canasta_v2\EntregasV2Controller@eliminar_periodo')->name('eliminar_periodo');
     //Route::get('editar/{id}', 'Canasta_v2\EntregasV2Controller@editar')->name('editar')->middleware('can:canasta.entregas.editar');
     //Route::post('update', 'Canasta_v2\EntregasV2Controller@update')->name('update')->middleware('can:canasta.entregas.editar');
     //Route::get('habilitar/{id}', 'Canasta_v2\EntregasV2Controller@habilitar')->name('habilitar');
