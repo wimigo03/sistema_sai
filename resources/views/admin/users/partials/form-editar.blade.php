@@ -35,7 +35,7 @@
     </div>
     <div class="form-group row font-roboto-12">
         <div class="col-md-12 pr-1 pl-1" id="permissions-select">
-            <label for="roles" class="d-inline">Roles</label>
+            <label for="roles" class="d-inline"><b>Asignacion de Roles</b></label>
             <select name="roles[]" id="roles" class="@error('roles') is-invalid @enderror"  multiple>
                 @foreach ($roles as $id => $rol)
                     <option value="{{ $id }}" {{ (in_array($id, old('roles', [])) || $user->roles->contains($id)) ? 'selected' : '' }}>{{ $rol }}</option>

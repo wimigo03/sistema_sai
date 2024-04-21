@@ -32,14 +32,14 @@
         <div class="col-md-6 pr-1 pl-1">
             @can('users.create')
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Crear">
-                    <span class="btn btn-outline-success font-roboto-12" onclick="create();">
+                    <span class="btn btn-outline-success font-roboto-12 float-left" onclick="create();">
                         <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
                     </span>
                 </span>
             @endcan
             @can('users.excel')
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Exportar a Excel">
-                    <span class="btn btn-outline-success font-roboto-12" onclick="excel();">
+                    <span class="btn btn-outline-success font-roboto-12 float-left" onclick="excel();">
                         <i class="fa fa-file-excel fa-fw" aria-hidden="true"></i>
                     </span>
                 </span>

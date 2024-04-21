@@ -1,6 +1,6 @@
 <div class="form-group row">
-    <div class="col-md-12 pr-1 pl-1">
-        <table class="table table-borderless hoverTable table-striped hover-orange" id="#">
+    <div class="col-md-12 pr-1 pl-1 table-responsive">
+        <table class="table display table-striped table-bordered responsive hover-orange" style="width:100%;">
             <thead>
                 <tr class="font-roboto-11">
                     <th class="text-center p-1">DEA</th>
@@ -14,20 +14,24 @@
             <tbody>
                 @foreach ($users as $user)
                     <tr class="font-roboto-11">
+                        <td class="text-center p-1">{{ $user->dea->descripcion }}</td>
                         <td class="text-left p-1">{{ $user->nombre_completo }}</td>
                         <td class="text-left p-1">{{ $user->name }}</td>
+                        <td class="text-left p-1">{{ $user->area->nombrearea }}</td>
                         <td class="text-center p-1">
                             <span class="{{ $user->icono_estado }}">
                                 {{ $user->status }}
                             </span>
                         </td>
                         <td class="text-center p-1">
+                            <div class="d-flex justify-content-center">
                             @can('users.editar')
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar">
                                     <a href="{{ route('users.edit',$user->id) }}" class="btn btn-xs btn-warning">
                                         <i class="fa fa-lg fa-edit" aria-hidden="true"></i>
                                     </a>
                                 </span>
+                                &nbsp;
                             @endcan
                                 @if ($user->estadouser == 1)
                                     @can('users.deshabilitar')
@@ -52,6 +56,7 @@
                                         </form>
                                     @endcan
                                 @endif
+                            </div>
                         </td>
                     </tr>
                 @endforeach

@@ -14,6 +14,6 @@ Route::prefix('entregas')->name('entregas.')->middleware(['auth'])->group(functi
     Route::get('finalizar/{id}', 'Canasta_v2\EntregasV2Controller@finalizar')->name('finalizar')->middleware('can:canasta.entregas.finalizar');
     Route::get('eliminar_periodo/{id}', 'Canasta_v2\EntregasV2Controller@eliminar_periodo')->name('eliminar_periodo')->middleware('can:canasta.periodo.eliminar');
     Route::post('agregarporbarrio/{id}', 'Canasta_v2\EntregasV2Controller@agregarporbarrio')->name('agregarporbarrio')->middleware('can:entregas.agregar.porbarrio');
-    Route::get('generarboleta', 'Canasta_v2\EntregasV2Controller@generarboleta')->name('generarboleta')->middleware('can:entregas.generar.boleta');
-    Route::get('generarboleta2/{id}', 'Canasta_v2\EntregasV2Controller@generarboleta2')->name('generarboleta2')->middleware('can:entregas.generar.boleta');
+    Route::get('generarboleta', 'Canasta_v2\EntregasV2Controller@generarboleta')->name('generarboleta')->middleware('can:canasta.entregas.generar.boleta');
+    Route::get('generarboleta2/{id}', 'Canasta_v2\EntregasV2Controller@generarboleta2')->name('generarboleta2')->middleware('can:canasta.entregas.generar.boleta');
 });

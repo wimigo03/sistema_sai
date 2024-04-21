@@ -16,12 +16,12 @@
     <div class="card-body body">
         <div class="form-group row">
             <div class="col-md-6 pr-1 pl-1">
-                @can('entregas.agregar.porbarrio')
+                @can('canasta.entregas.agregar.porbarrio')
                     <button class="btn btn-outline-info font-roboto-12" type="button" data-toggle="collapse" data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample">
                         <i class="fa fa-address-book fa-fw" aria-hidden="true"></i> Agregar Beneficiarios por Barrio
                     </button>
                 @endcan
-                @can('entregas.generar.boleta')
+                @can('canasta.entregas.generar.boleta')
                     @if($botonImprimir == 1)
                         <button class="btn btn-outline-secondary font-roboto-12" type="button" data-toggle="collapse" data-target="#collapseExample3" aria-expanded="false" aria-controls="collapseExample">
                             <i class="fa fa-print fa-fw" aria-hidden="true"></i> Imprimir Boleta por Barrio
