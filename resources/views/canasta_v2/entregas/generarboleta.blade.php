@@ -128,7 +128,7 @@
                             </tr>
                             <tr>
 
-                                <td class="td2"><b>Fecha de Impresion:</b>&nbsp;&nbsp; {{ \Carbon\Carbon::now()->formatLocalized('%B - %Y') }}</td>
+                                <td class="td2"><b>Fecha de Impresion:</b>&nbsp;&nbsp; {{ $fecha_actual }}</td>
                             </tr>
                         </table>
 

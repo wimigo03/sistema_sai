@@ -16,28 +16,28 @@
                     @canany(['users.index','roles.index','permissions.index'])
                         <li class="font-verdana-12">
                             <a href="" data-toggle="collapse" data-target="#dashboard_adm" class="active collapsed" aria-expanded="false">
-                                <i class="fa-solid fa-gears fa-fw"></i>&nbsp;Administrar
+                                <i class="fa-solid fa-gears fa-fw"></i>&nbsp;Administracion
                                 <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_adm">
                                 @can('users.index')
                                     <li>
                                         <a href="{{ route('users.index') }}">
-                                            &nbsp;&nbsp;<i class="fa fa-users fa-fw"></i>&nbsp;Usuarios
+                                            &nbsp;&nbsp;&nbsp;<i class="fa fa-users fa-fw"></i>&nbsp;Usuarios
                                         </a>
                                     </li>
                                 @endcan
                                 @can('roles.index')
                                     <li>
                                         <a href="{{ route('roles.index') }}">
-                                            &nbsp;&nbsp;<i class="fa-solid fa-list fa-fw"></i>&nbsp;Roles
+                                            &nbsp;&nbsp;&nbsp;<i class="fa-solid fa-list fa-fw"></i>&nbsp;Roles
                                         </a>
                                     </li>
                                 @endcan
                                 @can('permissions.index')
                                     <li>
                                         <a href="{{ route('permissions.index') }}">
-                                            &nbsp;&nbsp;<i class="fa-solid fa-layer-group fa-fw"></i>&nbsp;Permisos
+                                            &nbsp;&nbsp;&nbsp;<i class="fa-solid fa-layer-group fa-fw"></i>&nbsp;Permisos
                                         </a>
                                     </li>
                                 @endcan
@@ -91,18 +91,22 @@
                                 <span class="nav-label">Compras</span>
                                 <span class="fa fa-arrow-circle-left float-right"></span>
                             </a>
-                            <ul class="sub-menu collapse" id="dashboard_compras">
-                                @can('solicitud.compra.index')
+
+                            <ul class="sub-menu collapse" id="dashboard_agenda">
+                                @can('agenda_ejecutivo')
                                     <li>
-                                        <a href="{{ route('solicitud.compra.index') }}">
-                                            &nbsp;&nbsp;&nbsp;<i class="fa-solid fa-list fa-fw"></i>&nbsp;Solicitudes de Compra
+                                        <a href="{{ asset('/Evento/index/') }}">
+                                            &nbsp; &nbsp; &nbsp;
+                                            <span class="nav-label mr-4">Ejecutivo</span>
                                         </a>
                                     </li>
                                 @endcan
-                                @can('orden.compra.index')
+
+                                @can('agenda_institucional')
                                     <li>
-                                        <a href="{{ route('orden.compra.index') }}">
-                                            &nbsp;&nbsp;&nbsp;<i class="fa-solid fa-file-lines fa-fw"></i>&nbsp;Ordenes de Compra
+                                        <a href="{{ asset('/Evento2/index/') }}">
+                                            &nbsp; &nbsp; &nbsp;
+                                            <span class="nav-label mr-4">Institucional</span>
                                         </a>
                                     </li>
                                 @endcan
