@@ -39,15 +39,14 @@
             <textarea type="text" rows="10" class="form-control form-control-sm font-verdana-bg" id="items" name="items" required></textarea>
         </div>
     </div>
-
     <div class="form-group row">
-        <div class="col-md-12 text-right">
-            <button class="btn btn-outline-primary font-verdana" type="button" onclick="save();">
-                <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>&nbsp;Procesar
-            </button>
-            <button class="btn btn-outline-danger font-verdana" type="button" onclick="cancelar();">
-                &nbsp;<i class="fa-solid fa-xmark"></i>&nbsp;Cancelar
-            </button>
+        <div class="col-md-12 pr-1 pl-1 text-right">
+            <span class="btn btn-outline-primary font-roboto-12" onclick="save();">
+                <i class="fa-solid fa-paper-plane fa-fw" aria-hidden="true"></i>&nbsp;Procesar
+            </span>
+            <span class="btn btn-outline-danger font-roboto-12" onclick="cancelar();">
+                <i class="fa-solid fa-xmark fa-fw"></i>&nbsp;Cancelar
+            </span>
             <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
         </div>
     </div>

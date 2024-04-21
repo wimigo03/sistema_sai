@@ -10,7 +10,9 @@
                     <td class="text-center p-1"><b>BAJAS</b></td>
                     <td class="text-center p-1"><b>FALLECIDOS</b></td>
                     <td class="text-center p-1"><b>PENDIENTES</b></td>
-                    <td class="text-center p-1"><b><i class="fa-solid fa-bars"></i></b></td>
+                    @canany(['canasta.barrios.editar', 'canasta.barrios.habilitar'])
+                        <td class="text-center p-1"><b><i class="fa-solid fa-bars"></i></b></td>
+                    @endcanany
                 </tr>
             </thead>
             <tbody>
@@ -23,29 +25,35 @@
                         <td class="text-center p-1" style="color: red;font-weight: bold;">{{ $datos->beneficiariosB()->count() }}</td>
                         <td class="text-center p-1" style="color: orange;font-weight: bold;">{{ $datos->beneficiariosF()->count() }}</td>
                         <td class="text-center p-1" style="color: blue;font-weight: bold;">{{ $datos->beneficiariosX()->count() }}</td>
-                        <td class="text-center p-1">
-                            <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar"
-                                style="cursor: pointer;">
-                                <a href="{{ route('barrios.editar', $datos->id) }}" class="badge-with-padding badge badge-warning text-white">
-                                    <i class="fa-solid fa-pen-to-square fa-fw"></i>
-                                </a>
-                            </span>
-                            @if (App\Models\Canasta\Barrio::ESTADOS[$datos->estado] == 'HABILITADO')
-                                <span class="tts:left tts-slideIn tts-custom" aria-label="Dehabilitar"
-                                    style="cursor: pointer;">
-                                    <a href="{{ route('barrios.deshabilitar', $datos->id) }}" class="badge-with-padding badge badge-success">
-                                        <i class="fa-regular fa-circle-down fa-lg"></i>
-                                    </a>
-                                </span>
-                            @else
-                                <span class="tts:left tts-slideIn tts-custom" aria-label="Habilitar"
-                                    style="cursor: pointer;">
-                                    <a href="{{ route('barrios.habilitar', $datos->id) }}" class="badge-with-padding badge badge-danger">
-                                        <i class="fa-regular fa-circle-up fa-lg"></i>
-                                    </a>
-                                </span>
-                            @endif
-                        </td>
+                        @canany(['canasta.barrios.editar', 'canasta.barrios.habilitar'])
+                            <td class="text-center p-1">
+                                @can('canasta.barrios.editar')
+                                    <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar"
+                                        style="cursor: pointer;">
+                                        <a href="{{ route('barrios.editar', $datos->id) }}" class="badge-with-padding badge badge-warning text-white">
+                                            <i class="fa-solid fa-pen-to-square fa-fw"></i>
+                                        </a>
+                                    </span>
+                                @endcan
+                                @can('canasta.barrios.habilitar')
+                                    @if (App\Models\Canasta\Barrio::ESTADOS[$datos->estado] == 'HABILITADO')
+                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Dehabilitar"
+                                            style="cursor: pointer;">
+                                            <a href="{{ route('barrios.deshabilitar', $datos->id) }}" class="badge-with-padding badge badge-success">
+                                                <i class="fa-regular fa-circle-down fa-lg"></i>
+                                            </a>
+                                        </span>
+                                    @else
+                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Habilitar"
+                                            style="cursor: pointer;">
+                                            <a href="{{ route('barrios.habilitar', $datos->id) }}" class="badge-with-padding badge badge-danger">
+                                                <i class="fa-regular fa-circle-up fa-lg"></i>
+                                            </a>
+                                        </span>
+                                    @endif
+                                @endcan
+                            </td>
+                        @endcanany
                     </tr>
                 @endforeach
             </tbody>

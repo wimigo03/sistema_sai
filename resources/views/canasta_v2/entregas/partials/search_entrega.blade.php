@@ -1,55 +1,48 @@
 <form action="#" method="get" id="form">
     <div class="form-group row">
-
         <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="nombres" placeholder="-- Nombres --" value="{{request('nombres')}}" class="form-control form-control-sm font-verdana-12 intro">
+            <input type="text" name="nombres" placeholder="-- Nombres --" value="{{ request('nombres') }}" class="form-control font-roboto-12 intro">
         </div>
-
         <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="ap" placeholder="-- Ap.Paterno --" value="{{request('ap')}}" class="form-control form-control-sm font-verdana-12 intro">
+            <input type="text" name="ap" placeholder="-- Ap. Paterno --" value="{{ request('ap') }}" class="form-control font-roboto-12 intro">
         </div>
-
         <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="am" placeholder="-- Ap.Materno --" value="{{request('am')}}" class="form-control form-control-sm font-verdana-12 intro">
+            <input type="text" name="am" placeholder="-- Ap. Materno --" value="{{ request('am') }}" class="form-control font-roboto-12 intro">
         </div>
-
         <div class="col-md-1 pr-1 pl-1">
-            <input type="text" name="ci" placeholder="-- C.i. --" value="{{request('ci')}}" class="form-control form-control-sm font-verdana-12 intro">
+            <input type="text" name="ci" placeholder="-- C. I. --" value="{{ request('ci') }}" class="form-control font-roboto-12 intro">
         </div>
-
-
-
-        <div class="col-md-3 pl-1">
-            <select name="barrio"  id="barrio2" class="form-control form-control-sm">
+        <div class="col-md-3 pr-1 pl-1">
+            <select name="barrio"  id="barrio2" class="form-control">
                 <option value="">-</option>
                 @foreach ($barrios2 as $barrio)
-                <option value="{{ $barrio->nombre }}" @if(request('barrio') == $barrio->nombre) selected @endif>{{ $barrio->nombre }}</option>
-            @endforeach
+                    <option value="{{ $barrio->nombre }}" @if(request('barrio') == $barrio->nombre) selected @endif>{{ $barrio->nombre }}</option>
+                @endforeach
             </select>
-
         </div>
-        <div class="col-md-2 pl-1">
-            <select name="estado" id="estado" class="form-control form-control-sm">
+        <div class="col-md-2 pr-1 pl-1">
+            <select name="estado" id="estado" class="form-control">
                 <option value="">-</option>
                 @foreach ($estados as $index => $value)
                     <option value="{{ $index }}" @if(request('estado') == $index) selected @endif >{{ $value }}</option>
                 @endforeach
             </select>
         </div>
-
     </div>
-
     <div class="form-group row">
-        <div class="col-md-6">
-
+        <div class="col-md-6 pr-1 pl-1">
+            <span class="btn btn-primary font-roboto-12" onclick="cancelar();">
+                <i class="fas fa-arrow-left fa-sm"></i> Ir atras
+            </span>
+            <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn-send" style="display: none;"></i>
         </div>
-        <div class="col-md-6 text-right">
-            <button class="btn btn-outline-primary font-verdana" type="button" onclick="procesar();">
-                <i class="fa fa-search" aria-hidden="true"></i>&nbsp;Buscar
-            </button>
-            <button class="btn btn-outline-danger font-verdana" type="button" onclick="limpiar();">
-                &nbsp;<i class="fa fa-eraser"></i>&nbsp;Limpiar
-            </button>
+        <div class="col-md-6 pr-1 pl-1 text-right">
+            <span class="btn btn-outline-primary font-roboto-12" onclick="procesar();">
+                <i class="fa fa-search fa-fw" aria-hidden="true"></i>&nbsp;Buscar
+            </span>
+            <span class="btn btn-outline-danger font-roboto-12" onclick="limpiar();">
+                <i class="fa fa-eraser fa-fw"></i>&nbsp;Limpiar
+            </span>
             <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn-send" style="display: none;"></i>
         </div>
     </div>

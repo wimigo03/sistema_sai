@@ -13,10 +13,11 @@
                     <td class="text-center p-1"><b>ESTADO</b></td>
 
 
-
-                    <td class="text-center p-1 font-weight-bold">
-                        <i class="fa fa-bars" aria-hidden="true"></i>
-                    </td>
+                    @can('canasta.beneficiarios.editar')
+                        <td class="text-center p-1 font-weight-bold">
+                            <i class="fa fa-bars" aria-hidden="true"></i>
+                        </td>
+                    @endcan
 
                 </tr>
             </thead>
@@ -41,19 +42,19 @@
                         <td class="text-left p-1" style="color: blue;font-weight: bold;">{{ strtoupper($datos->status) }}</td>
                         @endif
 
+                        @can('canasta.beneficiarios.editar')
+                            <td style="padding: 0;" class="text-center p-1">
 
-                        <td style="padding: 0;" class="text-center p-1">
+                                <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Beneficiario">
+                                    <a href="{{ route('beneficiarios.editar', $datos->id) }}">
+                                        <span class="text-warning">
+                                            <i class="fas fa-lg fa-edit" style="color:rgb(26, 162, 16)"></i>
+                                        </span>
+                                    </a>
+                                </span>
 
-                            <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar Beneficiario">
-                                <a href="{{ route('beneficiarios.editar', $datos->id) }}">
-                                    <span class="text-warning">
-                                        <i class="fas fa-lg fa-edit" style="color:rgb(26, 162, 16)"></i>
-                                    </span>
-                                </a>
-                            </span>
-
-                        </td>
-
+                            </td>
+                        @endcan
                     </tr>
                 @endforeach
             </tbody>
