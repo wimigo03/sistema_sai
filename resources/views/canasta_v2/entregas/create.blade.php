@@ -61,10 +61,6 @@
                 message_alert("El campo <b>[Gestion]</b> es un dato obligatorio...");
                 return false;
             }
-            if ($("#numero>option:selected").val() == "") {
-                message_alert("El campo <b>[Num.Entrega]</b> es un dato obligatorio...");
-                return false;
-            }
 
 
             if ($("#items").val() == "") {
