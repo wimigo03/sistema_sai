@@ -491,6 +491,7 @@
                         </li>
                         <hr style="margin-top:0; margin-bottom:0;">
                     @endcan
+                    @can('correspondencia.index')
                     {{-- CORRESPONDENCIA --}}
                     {{--@can('correspondencia.index')--}}
                         <li class="font-verdana-12">
@@ -547,6 +548,7 @@
                                 </li>
                             </ul>
                         </li>
+                        @endcan
                         <hr style="margin-top:0; margin-bottom:0;">
 
                     {{-- ARCHIVOS --}}

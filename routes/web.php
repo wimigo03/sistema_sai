@@ -641,18 +641,18 @@ Route::get('almacen/index', [AlmacenController::class,'index'])->name('almacen.i
 
 /////////////////////////--CORRESPO0NDENCIA--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('correspondencia/index', [CorrespondenciaController::class,'index'])->name('correspondencia.index');
-Route::get('correspondencia/createRecepcion', [CorrespondenciaController::class,'create'])->name('correspondencia.create');
-Route::get('correspondencia/indexUnidad', [CorrespondenciaController::class,'indexUnidad'])->name('recepcion.unidadIndex');
-Route::get('correspondencia/indexRemitente', [CorrespondenciaController::class,'indexRemitente'])->name('recepcion.remitenteIndex');
-Route::get('correspondencia/createUnidad', [CorrespondenciaController::class,'createLugar'])->name('crear.lugar');
-Route::post('correspondencia/storeLugar', [CorrespondenciaController::class,'storeLugar'])->name('guardar.lugar');
-Route::get('correspondencia/createRemitente', [CorrespondenciaController::class,'createRemitente'])->name('crear.remitente');
-Route::post('correspondencia/storeRemitente', [CorrespondenciaController::class,'storeRemitente'])->name('guardar.remitente');
-Route::get('correspondencia/createRecepcion', [CorrespondenciaController::class,'createRecepcion'])->name('crear.recepcion');
-Route::post('correspondencia/storeRecepcion', [CorrespondenciaController::class,'storeRecepcion'])->name('guardar.recepcion');
-Route::get('correspondencia/{id}/edit', [CorrespondenciaController::class,'editarCodigo'])->name('correspondencia.edit');
-Route::POST('correspondencia/{id}/updateCodigo', [CorrespondenciaController::class,'updateCodigo'])->name('correspondencia.update');
+Route::get('correspondencia/index', [RecepcionController::class,'index'])->name('recepcion.index')->middleware('can:correspondencia.index');
+Route::get('correspondencia/createRecepcion', [RecepcionController::class,'create'])->name('recepcion.create')->middleware('can:correspondencia.index');
+Route::get('correspondencia/indexUnidad', [RecepcionController::class,'indexUnidad'])->name('recepcion.unidadIndex')->middleware('can:correspondencia.index');
+Route::get('correspondencia/indexRemitente', [RecepcionController::class,'indexRemitente'])->name('recepcion.remitenteIndex')->middleware('can:correspondencia.index');
+Route::get('correspondencia/createUnidad', [RecepcionController::class,'createLugar'])->name('crear.lugar')->middleware('can:correspondencia.index');
+Route::post('correspondencia/storeLugar', [RecepcionController::class,'storeLugar'])->name('guardar.lugar')->middleware('can:correspondencia.index');
+Route::get('correspondencia/createRemitente', [RecepcionController::class,'createRemitente'])->name('crear.remitente')->middleware('can:correspondencia.index');
+Route::post('correspondencia/storeRemitente', [RecepcionController::class,'storeRemitente'])->name('guardar.remitente')->middleware('can:correspondencia.index');
+Route::get('correspondencia/createRecepcion', [RecepcionController::class,'createRecepcion'])->name('crear.recepcion')->middleware('can:correspondencia.index');
+Route::post('correspondencia/storeRecepcion', [RecepcionController::class,'storeRecepcion'])->name('guardar.recepcion')->middleware('can:correspondencia.index');
+Route::get('correspondencia/{id}/edit', [RecepcionController::class,'editarCodigo'])->name('correspondencia.edit')->middleware('can:correspondencia.index');
+Route::POST('correspondencia/{id}/updateCodigo', [RecepcionController::class,'updateCodigo'])->name('correspondencia.update')->middleware('can:correspondencia.index');
 
 
 ////////////////////////////--AGENDA--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -697,32 +697,32 @@ Route::post('Evento/actualizar2/{id}',[ControllerEvent::class,'actualizar']);
 
 /////////////////////////--CORRESPONDENCIA 2--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('correspondencia2/index', [Recepcion2Controller::class,'index'])->name('recepcion2.index');
-Route::get('correspondencia2/{id}/edit', [Recepcion2Controller::class,'editarCodigo'])->name('correspondencia2.edit');
-Route::POST('correspondencia2/{id}/updateCodigo', [Recepcion2Controller::class,'updateCodigo'])->name('correspondencia2.update');
-Route::get('correspondencia2/createRecepcion', [Recepcion2Controller::class,'createRecepcion'])->name('crear2.recepcion');
-Route::post('correspondencia2/storeRecepcion', [Recepcion2Controller::class,'storeRecepcion'])->name('guardar2.recepcion');
-Route::get('correspondencia2/indexUnidad', [Recepcion2Controller::class,'indexUnidad'])->name('recepcion2.unidadIndex');
-Route::get('correspondencia2/createUnidad', [Recepcion2Controller::class,'createLugar'])->name('crear2.lugar');
-Route::post('correspondencia2/storeLugar', [Recepcion2Controller::class,'storeLugar'])->name('guardar2.lugar');
-Route::get('correspondencia2/indexRemitente', [Recepcion2Controller::class,'indexRemitente'])->name('recepcion2.remitenteIndex');
-Route::get('correspondencia2/createRemitente', [Recepcion2Controller::class,'createRemitente'])->name('crear2.remitente');
-Route::post('correspondencia2/storeRemitente', [Recepcion2Controller::class,'storeRemitente'])->name('guardar2.remitente');
-Route::get('correspondencia2/createTipo', [Recepcion2Controller::class,'createTipo'])->name('crear2.tipo');
-Route::post('correspondencia2/storeTipo', [Recepcion2Controller::class,'storeTipo'])->name('guardar2.tipo');
+Route::get('correspondencia2/index', [Recepcion2Controller::class,'index'])->name('recepcion2.index')->middleware('can:correspondencia.index');
+Route::get('correspondencia2/{id}/edit', [Recepcion2Controller::class,'editarCodigo'])->name('correspondencia2.edit')->middleware('can:correspondencia.index');
+Route::POST('correspondencia2/{id}/updateCodigo', [Recepcion2Controller::class,'updateCodigo'])->name('correspondencia2.update')->middleware('can:correspondencia.index');
+Route::get('correspondencia2/createRecepcion', [Recepcion2Controller::class,'createRecepcion'])->name('crear2.recepcion')->middleware('can:correspondencia.index');
+Route::post('correspondencia2/storeRecepcion', [Recepcion2Controller::class,'storeRecepcion'])->name('guardar2.recepcion')->middleware('can:correspondencia.index');
+Route::get('correspondencia2/indexUnidad', [Recepcion2Controller::class,'indexUnidad'])->name('recepcion2.unidadIndex')->middleware('can:correspondencia.index');
+Route::get('correspondencia2/createUnidad', [Recepcion2Controller::class,'createLugar'])->name('crear2.lugar')->middleware('can:correspondencia.index');
+Route::post('correspondencia2/storeLugar', [Recepcion2Controller::class,'storeLugar'])->name('guardar2.lugar')->middleware('can:correspondencia.index');
+Route::get('correspondencia2/indexRemitente', [Recepcion2Controller::class,'indexRemitente'])->name('recepcion2.remitenteIndex')->middleware('can:correspondencia.index');
+Route::get('correspondencia2/createRemitente', [Recepcion2Controller::class,'createRemitente'])->name('crear2.remitente')->middleware('can:correspondencia.index');
+Route::post('correspondencia2/storeRemitente', [Recepcion2Controller::class,'storeRemitente'])->name('guardar2.remitente')->middleware('can:correspondencia.index');
+Route::get('correspondencia2/createTipo', [Recepcion2Controller::class,'createTipo'])->name('crear2.tipo')->middleware('can:correspondencia.index');
+Route::post('correspondencia2/storeTipo', [Recepcion2Controller::class,'storeTipo'])->name('guardar2.tipo')->middleware('can:correspondencia.index');
 
-Route::get('correspondencia2/buscarRemitentes', [Recepcion2Controller::class,'buscarRemitentes'])->name('crear2.buscarRemitentes');
+Route::get('correspondencia2/buscarRemitentes', [Recepcion2Controller::class,'buscarRemitentes'])->name('crear2.buscarRemitentes')->middleware('can:correspondencia.index');
 
 //////////////////
-Route::get('correspondencia2/{id}/gestionarCorrespondencia', [Recepcion2Controller::class,'gestionarCorrespondencia'])->name('correspondencia2.gestionar');
-Route::get('correspondencia2/{id}/cargarpdf', [Recepcion2Controller::class,'cargarpdf'])->name('correspondencia2.cargarpdf');
-Route::post('correspondencia2/storepdf', [Recepcion2Controller::class,'storepdf'])->name('correspondencia2.storepdf');
-Route::get('correspondencia2/{id}/derivar', [Recepcion2Controller::class,'derivar'])->name('correspondencia2.derivar');
-Route::get('correspondencia2/derivar2', [Recepcion2Controller::class,'guardarderivacion'])->name('correspondencia2.guardarderivacion');
-Route::get('correspondencia2/delete{id}', [Recepcion2Controller::class,'delete'])->name('correspondencia2.delete');
-Route::get('correspondencia2/urlfile/{id}', [Recepcion2Controller::class,'urlfile'])->name('correspondencia2.urlfile');
-Route::get('correspondencia2/{id}/actualizarpdf', [Recepcion2Controller::class,'actualizarpdf'])->name('correspondencia2.actualizarpdf');
-Route::post('correspondencia2/updatepdf', [Recepcion2Controller::class,'updatepdf'])->name('correspondencia2.updatepdf');
+Route::get('correspondencia2/{id}/gestionarCorrespondencia', [Recepcion2Controller::class,'gestionarCorrespondencia'])->name('correspondencia2.gestionar')->middleware('can:correspondencia.index');
+Route::get('correspondencia2/{id}/cargarpdf', [Recepcion2Controller::class,'cargarpdf'])->name('correspondencia2.cargarpdf')->middleware('can:correspondencia.index');
+Route::post('correspondencia2/storepdf', [Recepcion2Controller::class,'storepdf'])->name('correspondencia2.storepdf')->middleware('can:correspondencia.index');
+Route::get('correspondencia2/{id}/derivar', [Recepcion2Controller::class,'derivar'])->name('correspondencia2.derivar')->middleware('can:correspondencia.index');
+Route::get('correspondencia2/derivar2', [Recepcion2Controller::class,'guardarderivacion'])->name('correspondencia2.guardarderivacion')->middleware('can:correspondencia.index');
+Route::get('correspondencia2/delete{id}', [Recepcion2Controller::class,'delete'])->name('correspondencia2.delete')->middleware('can:correspondencia.index');
+Route::get('correspondencia2/urlfile/{id}', [Recepcion2Controller::class,'urlfile'])->name('correspondencia2.urlfile')->middleware('can:correspondencia.index');
+Route::get('correspondencia2/{id}/actualizarpdf', [Recepcion2Controller::class,'actualizarpdf'])->name('correspondencia2.actualizarpdf')->middleware('can:correspondencia.index');
+Route::post('correspondencia2/updatepdf', [Recepcion2Controller::class,'updatepdf'])->name('correspondencia2.updatepdf')->middleware('can:correspondencia.index');
 
 Route::post('/ruta', [Recepcion2Controller::class,'respuesta'])->name('pregunta');
 
