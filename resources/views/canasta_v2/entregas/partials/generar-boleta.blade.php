@@ -3,7 +3,7 @@
         @csrf
         <input type="hidden" value="{{ $idpaquete }}" id="idcompra" name="idpaquete">
         <div class="form-group row font-roboto-12">
-            <div class="col-md-10">
+            <div class="col-md-6">
                 <select name="barrio3" id="barrio3" class="form-control form-control-sm">
                     <option value="">-</option>
                     @foreach ($barrios3 as $barrio3)

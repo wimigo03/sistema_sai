@@ -68,6 +68,7 @@
                     <td style=" border-bottom: 1px solid #ccc;">APELLIDO PATERNO</td>
                     <td style=" border-bottom: 1px solid #ccc;">APELLIDO MATERNO</td>
                     <td style=" border-bottom: 1px solid #ccc;">F.NACIMIENTO</td>
+                    <td style=" border-bottom: 1px solid #ccc;">F.REGISTRO</td>
 
 
                 </tr>
@@ -85,6 +86,7 @@
                     <td style=" border-bottom: 1px solid #ccc;">{{ $entrega->ap }}</td>
                     <td style=" border-bottom: 1px solid #ccc;">{{ $entrega->am }}</td>
                     <td style=" border-bottom: 1px solid #ccc;">{{ $entrega->fechaNac }}</td>
+                    <td style=" border-bottom: 1px solid #ccc;"> {{ \Carbon\Carbon::parse($entrega->created_att)->format('d/m/Y') }}</td>
                 </tr>
             @endforeach
 
