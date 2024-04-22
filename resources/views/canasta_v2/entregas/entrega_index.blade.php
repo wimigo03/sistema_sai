@@ -18,12 +18,12 @@
             <div class="col-md-6 pr-1 pl-1">
                 @can('canasta.entregas.agregar.porbarrio')
                     <button class="btn btn-outline-info font-roboto-12" type="button" data-toggle="collapse" data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample">
-                        <i class="fa fa-address-book fa-fw" aria-hidden="true"></i> Agr.X.Barrio
+                        <i class="fa fa-address-book fa-fw" aria-hidden="true"></i> Agr.Benf.X.Barrio
                     </button>
                 @endcan
                 @can('canasta.entregas.generar.boleta')
                     @if($botonImprimir == 1)
-                        <button class="btn btn-outline-secondary font-roboto-12" type="button" data-toggle="collapse" data-target="#collapseExample3" aria-expanded="false" aria-controls="collapseExample">
+                          <button class="btn btn-outline-secondary font-roboto-12" type="button" data-toggle="collapse" data-target="#collapseExample3" aria-expanded="false" aria-controls="collapseExample">
                             <i class="fa fa-print fa-fw" aria-hidden="true"></i> Imp.Bol.X.Barrio
                         </button>
                     @endif
@@ -35,11 +35,20 @@
                         </button>
                     @endif
                 @endcan
+                @can('canasta.entregas.generar.boleta')
+                @if($botonImprimir == 1)
+                    <button class="btn btn-outline-secondary font-roboto-12" type="button" data-toggle="collapse" data-target="#collapseExample5" aria-expanded="false" aria-controls="collapseExample">
+                        <i class="fa fa-print fa-fw" aria-hidden="true"></i> Imp.Det.X.Barrio2
+                    </button>
+                @endif
+            @endcan
             </div>
             <div class="col-md-6 pr-1 pl-1">
                 @include('canasta_v2.entregas.partials.agregar-por-barrio')
                 @include('canasta_v2.entregas.partials.generar-boleta')
                 @include('canasta_v2.entregas.partials.detalle-barrio')
+                @include('canasta_v2.entregas.partials.detalle-barrio2')
+
             </div>
         </div>
         @include('canasta_v2.entregas.partials.search_entrega')
@@ -66,6 +75,12 @@
                 width: '100%'
             });
             $('#barrio4').select2({
+                theme: "bootstrap4",
+                placeholder: "--Seleccionar un Barrio--",
+                width: '100%'
+            });
+
+            $('#barrio5').select2({
                 theme: "bootstrap4",
                 placeholder: "--Seleccionar un Barrio--",
                 width: '100%'
@@ -138,6 +153,10 @@
         }
         function save4() {
             $("#form4").submit();
+        }
+
+        function save5() {
+            $("#form5").submit();
         }
 
         function cancelar(){

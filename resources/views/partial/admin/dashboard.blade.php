@@ -492,7 +492,7 @@
                         <hr style="margin-top:0; margin-bottom:0;">
                     @endcan
                     {{-- CORRESPONDENCIA --}}
-                    @can('recepcion.index')
+
                         <li class="font-verdana-12">
                             <a href="" data-toggle="collapse" data-target="#dashboard_ventanilla" class="active collapsed" aria-expanded="false">
                                 <i class="fa fa-folder-open" style="color:green"></i>
@@ -509,9 +509,9 @@
                             </ul>
                         </li>
                         <hr style="margin-top:0; margin-bottom:0;">
-                    @endcan
+
                     {{-- CORRESPONDENCIA LOCAL --}}
-                    @can('recepcion2.index')
+
                         <li class="font-verdana-12">
                             <a href="" data-toggle="collapse" data-target="#dashboard_ventanilla2" class="active collapsed" aria-expanded="false">
                                 <i class="fa fa-envelope" style="color:green"></i>
@@ -528,9 +528,9 @@
                             </ul>
                         </li>
                         <hr style="margin-top:0; margin-bottom:0;">
-                    @endcan
+
                     {{-- CORRESPONDENCIA LOCAL 2 --}}
-                    @can('derivacion.index')
+
                         <li class="font-verdana-12">
                             <a href="" data-toggle="collapse" data-target="#dashboard_ventanilla22"
                                 class="active collapsed" aria-expanded="false">
@@ -548,7 +548,7 @@
                             </ul>
                         </li>
                         <hr style="margin-top:0; margin-bottom:0;">
-                    @endcan
+
                     {{-- ARCHIVOS --}}
                     @can('archivos2.index')
                         <li class="font-verdana-12">
