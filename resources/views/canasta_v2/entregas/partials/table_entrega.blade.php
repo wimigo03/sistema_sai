@@ -10,6 +10,7 @@
                     <th class="text-center p-1">AP. MATERNO</th>
                     <th class="text-center p-1">N° C. I.</th>
                     <th class="text-center p-1">BARRIO</th>
+                    <th class="text-center p-1">FOTO</th>
                     <th class="text-center p-1">ESTADO</th>
                     <th class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></th>
                 </tr>
@@ -24,6 +25,7 @@
                         <td class="text-justify p-1">{{ $entregas->beneficiario->am }}</td>
                         <td class="text-center p-1">{{ $entregas->beneficiario->ci }}</td>
                         <td class="text-center p-1">{{ $entregas->beneficiario->barrio->nombre }}</td>
+                        <td class="text-center p-1"><img src="{{ asset(substr($entregas->beneficiario->dirFoto , 3)) }}" align="center" height="30" with="30" /></td>
                         <td class="text-center p-1">{{ $entregas->status }}</td>
                         <td class="text-center p-1">
                             <span class="tts:left tts-slideIn tts-custom" aria-label="Imprimir Boleta">

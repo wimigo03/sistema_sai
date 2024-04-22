@@ -10,6 +10,7 @@
                     <td class="text-left p-1"><b>CI</b></td>
                     <td class="text-left p-1"><b>BARRIO</b></td>
                     <td class="text-left p-1"><b>DIRECCION</b></td>
+                    <td class="text-left p-1"><b>FOTO</b></td>
                     <td class="text-center p-1"><b>ESTADO</b></td>
 
 
@@ -31,6 +32,8 @@
                         <td class="text-left p-1">{{ $datos->ci }}</td>
                         <td class="text-left p-1">{{ $datos->barrio->nombre }}</td>
                         <td class="text-left p-1">{{ $datos->direccion }}</td>
+                        <td class="text-center p-1"><img src="{{ asset(substr($datos->dirFoto , 3)) }}" align="center" height="30" with="30" /></td>
+
 
                         @if (strtoupper($datos->status) == 'ACTIVO')
                         <td class="text-left p-1" style="color: green;font-weight: bold;">{{ strtoupper($datos->status) }}</td>
