@@ -18,13 +18,20 @@
             <div class="col-md-6 pr-1 pl-1">
                 @can('canasta.entregas.agregar.porbarrio')
                     <button class="btn btn-outline-info font-roboto-12" type="button" data-toggle="collapse" data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample">
-                        <i class="fa fa-address-book fa-fw" aria-hidden="true"></i> Agregar Beneficiarios por Barrio
+                        <i class="fa fa-address-book fa-fw" aria-hidden="true"></i> Agr.X.Barrio
                     </button>
                 @endcan
                 @can('canasta.entregas.generar.boleta')
                     @if($botonImprimir == 1)
                         <button class="btn btn-outline-secondary font-roboto-12" type="button" data-toggle="collapse" data-target="#collapseExample3" aria-expanded="false" aria-controls="collapseExample">
-                            <i class="fa fa-print fa-fw" aria-hidden="true"></i> Imprimir Boleta por Barrio
+                            <i class="fa fa-print fa-fw" aria-hidden="true"></i> Imp.Bol.X.Barrio
+                        </button>
+                    @endif
+                @endcan
+                @can('canasta.entregas.generar.boleta')
+                    @if($botonImprimir == 1)
+                        <button class="btn btn-outline-secondary font-roboto-12" type="button" data-toggle="collapse" data-target="#collapseExample4" aria-expanded="false" aria-controls="collapseExample">
+                            <i class="fa fa-print fa-fw" aria-hidden="true"></i> Imp.Det.X.Barrio
                         </button>
                     @endif
                 @endcan
@@ -32,6 +39,7 @@
             <div class="col-md-6 pr-1 pl-1">
                 @include('canasta_v2.entregas.partials.agregar-por-barrio')
                 @include('canasta_v2.entregas.partials.generar-boleta')
+                @include('canasta_v2.entregas.partials.detalle-barrio')
             </div>
         </div>
         @include('canasta_v2.entregas.partials.search_entrega')
@@ -53,6 +61,11 @@
                 width: '100%'
             });
             $('#barrio3').select2({
+                theme: "bootstrap4",
+                placeholder: "--Seleccionar un Barrio--",
+                width: '100%'
+            });
+            $('#barrio4').select2({
                 theme: "bootstrap4",
                 placeholder: "--Seleccionar un Barrio--",
                 width: '100%'
@@ -122,6 +135,9 @@
 
         function save3() {
             $("#form3").submit();
+        }
+        function save4() {
+            $("#form4").submit();
         }
 
         function cancelar(){

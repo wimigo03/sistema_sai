@@ -128,6 +128,10 @@ class BeneficiariosV2Controller extends Controller
 
     public function store(Request $request)
     {
+
+        $personal = User::find(Auth::user()->id);
+        $id_usuario = $personal->id;
+        $dea_id = $personal->dea_id;
         $newestUser = Beneficiario::orderBy('id', 'desc')->first();
         $maxId = $newestUser->id;
 
@@ -147,8 +151,8 @@ class BeneficiariosV2Controller extends Controller
                                     $beneficiario->obs = $request->observacion;
                                     $beneficiario->idOcupacion = $request->ocupacion;
                                     $beneficiario->idBarrio = $request->barrio;
-                                    $beneficiario->user_id = 16;
-                                    $beneficiario->dea_id = 1;
+                                    $beneficiario->user_id = $id_usuario;
+                                    $beneficiario->dea_id = $dea_id;
 
 
                                     $beneficiario->save();
@@ -178,6 +182,9 @@ public function editar($idbeneficiario)
 public function update2(Request $request)
 {
 
+    $personal = User::find(Auth::user()->id);
+    $id_usuario = $personal->id;
+    $dea_id = $personal->dea_id;
     $newestUser = HistorialMod::orderBy('id', 'desc')->first();
     $maxId = $newestUser->id;
 
@@ -199,8 +206,8 @@ public function update2(Request $request)
                                 //$beneficiario->obs = $request->observacion;
                                 $beneficiario->idOcupacion = $request->ocupacion;
                                 $beneficiario->idBarrio = $request->barrio;
-                                $beneficiario->user_id = 16;
-                                $beneficiario->dea_id = 1;
+                                $beneficiario->user_id = $id_usuario;
+                                $beneficiario->dea_id = $dea_id;
                                 $beneficiario->save();
 
 
@@ -229,6 +236,9 @@ public function update(Request $request)
 {
 
 //dd($request->documento);
+              $personal = User::find(Auth::user()->id);
+              $id_usuario = $personal->id;
+              $dea_id = $personal->dea_id;
 
         $newestUser = HistorialMod::orderBy('id', 'desc')->first();
         $maxId = $newestUser->id;
@@ -271,8 +281,8 @@ public function update(Request $request)
         $beneficiario->dirFoto = '../imagenes/fotos/' . $nombre;;
         $beneficiario->idOcupacion = $request->ocupacion;
         $beneficiario->idBarrio = $request->barrio;
-        $beneficiario->user_id = 16;
-        $beneficiario->dea_id = 1;
+        $beneficiario->user_id = $id_usuario;
+        $beneficiario->dea_id = $dea_id;
         $beneficiario->save();
 
 
@@ -297,8 +307,8 @@ public function update(Request $request)
 
         $beneficiario->idOcupacion = $request->ocupacion;
         $beneficiario->idBarrio = $request->barrio;
-        $beneficiario->user_id = 16;
-        $beneficiario->dea_id = 1;
+        $beneficiario->user_id = $id_usuario;
+        $beneficiario->dea_id = $dea_id;
         $beneficiario->save();
     }
 
@@ -307,8 +317,8 @@ public function update(Request $request)
     $Historialmod->id = $maxId + 1;
         $Historialmod->observacion = $request->observacion;
         $Historialmod->id_beneficiario = $request->idBeneficiario;
-        $Historialmod->user_id = 16;
-        $Historialmod->dea_id = 1;
+        $Historialmod->user_id = $id_usuario;
+        $Historialmod->dea_id = $dea_id;
         $Historialmod->save();
 
     $tipos = Barrio::TIPOS;

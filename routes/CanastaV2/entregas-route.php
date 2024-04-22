@@ -16,4 +16,5 @@ Route::prefix('entregas')->name('entregas.')->middleware(['auth'])->group(functi
     Route::post('agregarporbarrio/{id}', 'Canasta_v2\EntregasV2Controller@agregarporbarrio')->name('agregarporbarrio')->middleware('can:entregas.agregar.porbarrio');
     Route::get('generarboleta', 'Canasta_v2\EntregasV2Controller@generarboleta')->name('generarboleta')->middleware('can:canasta.entregas.generar.boleta');
     Route::get('generarboleta2/{id}', 'Canasta_v2\EntregasV2Controller@generarboleta2')->name('generarboleta2')->middleware('can:canasta.entregas.generar.boleta');
+    Route::get('impDetallebarrio', 'Canasta_v2\EntregasV2Controller@detalleBarrio')->name('detalleBarrio')->middleware('can:canasta.entregas.generar.boleta');
 });

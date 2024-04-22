@@ -20,6 +20,7 @@ use App\Http\Requests;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exportar\Canasta\BarriosExcel;
 use App\Models\Canasta\Ocupaciones;
+use App\Models\User;
 use DB;
 use PDF;
 
