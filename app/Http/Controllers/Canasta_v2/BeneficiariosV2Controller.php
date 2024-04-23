@@ -34,7 +34,8 @@ class BeneficiariosV2Controller extends Controller
          $beneficiarios = DB::connection('mysql_canasta')->table("usuarios")
          //->join('ocupaciones as o', 'o.idOcupacion', '=', 'u.idOcupacion')
         // ->select('o.ocupacion','u.nombres')
-        ->where('idUsuario','>',13408)
+        ->where('idUsuario','>',14822)
+        //->where('idUsuario','<',12000)
          ->get();
 
        //dd($beneficiarios);
@@ -58,7 +59,7 @@ class BeneficiariosV2Controller extends Controller
                 'idOcupacion'=>$data->idOcupacion,
                 'idBarrio'=>$data->idBarrio,
                 'dea_id'=>1,
-                'user_id'=>16,
+                'user_id'=>29,
                 'created_att'=>$data->_registrado,
                 'updated_att'=>$data->_modificado,
                 'idBarrio'=>$data->idBarrio,
@@ -177,6 +178,15 @@ public function editar($idbeneficiario)
     $beneficiario = Beneficiario::find($idbeneficiario);
 
     return view('canasta_v2.beneficiario.editar',compact('barrios','ocupaciones','beneficiario'));
+}
+
+public function beneficiario_datos($idbeneficiario)
+{
+    $barrios = Barrio::where('dea_id',Auth::user()->dea->id)->get();
+    $ocupaciones = Ocupaciones::where('estado','=',1)->get();
+    $beneficiario = Beneficiario::find($idbeneficiario);
+
+    return view('canasta_v2.beneficiario.beneficiario_datos',compact('barrios','ocupaciones','beneficiario'));
 }
 
 public function update2(Request $request)

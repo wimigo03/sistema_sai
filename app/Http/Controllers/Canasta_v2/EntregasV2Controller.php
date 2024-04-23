@@ -311,21 +311,40 @@ class EntregasV2Controller extends Controller
                                         $beneficiarios = Beneficiario::where('dea_id',Auth::user()->dea->id)
                                             ->get();
 
-                                        $entregas = Entrega::where('dea_id',Auth::user()->dea->id)
+                                        $entregas = Entrega::join('beneficiarios as b', 'b.id', '=', 'entrega.id_beneficiario')
+                                        ->where('entrega.dea_id',Auth::user()->dea->id)
+
+                                           ->where('entrega.id_paquete',$request->idpaquete)
+                                            ->where('entrega.idBarrio',$request->barrio3)
+                                            ->orderBy('b.nombres', 'asc')
+                                            ->get();
+
+                                          //  $entregas = DB::table('entrega as e')
+                                            //->join('paquete as p', 'p.id', '=', 'e.id_paquete')
+                                            //->join('barrios as b', 'b.id', '=', 'e.idBarrio')
+                                            //->join('beneficiarios as be', 'be.id', '=', 'e.id_beneficiario')
+                                            //->select('e.id','p.periodo','p.items','p.gestion','b.nombre','be.dirFoto', 'be.ci', 'be.nombres', 'be.ap', 'be.am','be.firma', 'be.fechaNac', 'be.created_att')
+                                            //->where('e.id_paquete',$request->idpaquete)
+                                            //->where('e.idBarrio',$request->barrio3)
+                                            //->orderBy('be.nombres', 'asc')
+                                            //->get();
+
+                                            $entregas2 = Entrega::where('dea_id',Auth::user()->dea->id)
                                             ->where('id_paquete',$request->idpaquete)
                                             ->where('idBarrio',$request->barrio3)
                                             //->take(2)
                                             ->get();
 
-                                            foreach ($entregas as $data){
-                                                $entrega = Entrega::find($data->id);
+                                            foreach ($entregas2 as $data){
+                                                $entrega3 = Entrega::find($data->id);
 
 
-                                                $entrega->estado = 2;
+                                                $entrega3->estado = 2;
 
 
-                                                $entrega->save();
+                                                $entrega3->save();
                                                 }
+
 
                                         //dd($entregas);
 
