@@ -62,6 +62,7 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
+            localStorage.clear();
             $('#barrio').select2({
                 theme: "bootstrap4",
                 placeholder: "--Seleccionar un Barrio--",

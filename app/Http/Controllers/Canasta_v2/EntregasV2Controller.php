@@ -214,6 +214,7 @@ class EntregasV2Controller extends Controller
                                         ->orderBy('id', 'desc')
                                         ->paginate(10);
 
+
      return view('canasta_v2.entregas.entrega_index', ["estados" => $estados,"barrios3" => $barrios3,"botonImprimir" => $botonImprimir,"barrios2" => $barrios2,"barrios" => $barrios,"beneficiarioControl" => $beneficiarioControl,"entrega" => $entregas,"idpaquete" => $idpaquete]);
 }
 
@@ -313,11 +314,10 @@ class EntregasV2Controller extends Controller
 
                                         $entregas = Entrega::join('beneficiarios as b', 'b.id', '=', 'entrega.id_beneficiario')
                                         ->where('entrega.dea_id',Auth::user()->dea->id)
-
-                                           ->where('entrega.id_paquete',$request->idpaquete)
-                                            ->where('entrega.idBarrio',$request->barrio3)
-                                            ->orderBy('b.nombres', 'asc')
-                                            ->get();
+                                        ->where('entrega.id_paquete',$request->idpaquete)
+                                        ->where('entrega.idBarrio',$request->barrio3)
+                                        ->orderBy('b.nombres', 'asc')
+                                        ->get();
 
                                           //  $entregas = DB::table('entrega as e')
                                             //->join('paquete as p', 'p.id', '=', 'e.id_paquete')
@@ -583,6 +583,26 @@ class EntregasV2Controller extends Controller
                                                     return view('canasta_v2/entregas/impDetallebarrio2', ["entrega_barrio" => $entrega_barrio, "fecha_actual" => $fecha_actual,"entregas" => $entregas,"userdate" => $userdate,"personalArea" => $personalArea]);
 
 
+                            }
+
+
+        public function deshabilitar($id,$idpaquete){
+
+           // dd($id);
+                                $entrega = Entrega::find($id);
+                                $entrega->update([
+                                    'estado' => 1
+                                ]);
+                                return redirect()->route('entregas.entrega_index',$idpaquete)->with('info_message', 'Se quitado el paquete seleccionado.');
+                            }
+
+        public function habilitar($id,$idpaquete){
+           // dd($id);
+                                $entrega = Entrega::find($id);
+                                $entrega->update([
+                                    'estado' => 2
+                                ]);
+                                return redirect()->route('entregas.entrega_index',$idpaquete)->with('info_message', 'Se ha entregado el paquete seleccionado.');
                             }
 
 
