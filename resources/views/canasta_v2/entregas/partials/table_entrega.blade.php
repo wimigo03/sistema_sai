@@ -13,6 +13,8 @@
                     <th class="text-center p-1">FOTO</th>
                     <th class="text-center p-1">ESTADO</th>
                     <th class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></th>
+                    <th class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></th>
+
                 </tr>
             </thead>
             <tbody>
@@ -29,10 +31,27 @@
                         <td class="text-center p-1">{{ $entregas->status }}</td>
                         <td class="text-center p-1">
                             <span class="tts:left tts-slideIn tts-custom" aria-label="Imprimir Boleta">
-                                <a  href="{{ route('entregas.generarboleta2',$entregas->id) }}" class="badge-with-padding badge badge-warning" target="_blank" >
+                                <a  href="{{ route('entregas.generarboleta2',$entregas->id) }}" class="badge-with-padding badge badge-primary" target="_blank" >
                                     <i class='fa fa-print fa-fw'></i>
                                 </a>
                             </span>
+                        </td>
+                        <td class="text-center p-1">
+                            @if (App\Models\Canasta\Entrega::ESTADOS[$entregas->estado] == 'ENTREGADO')
+                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Quitar Entrega"
+                                            style="cursor: pointer;">
+                                            <a href="{{ route('entregas.deshabilitar',[$entregas->id,$entregas->paquete->id]) }}" class="badge-with-padding badge badge-success">
+                                                <i class="fa-regular fa-circle-down fa-lg"></i>
+                                            </a>
+                                        </span>
+                                    @else
+                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Entregar"
+                                            style="cursor: pointer;">
+                                            <a href="{{ route('entregas.habilitar',[$entregas->id,$entregas->paquete->id]) }}" class="badge-with-padding badge badge-danger">
+                                                <i class="fa-regular fa-circle-up fa-lg"></i>
+                                            </a>
+                                        </span>
+                                    @endif
                         </td>
                     </tr>
                 @endforeach
