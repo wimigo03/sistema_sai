@@ -15,6 +15,7 @@ use App\Models\Canasta\Dea;
 use App\Http\Requests;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exportar\Canasta\DistritosExcel;
+use App\Models\User;
 use DB;
 use PDF;
 

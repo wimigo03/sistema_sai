@@ -20,6 +20,7 @@ use App\Http\Requests;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exportar\Canasta\BarriosExcel;
 use App\Models\Canasta\Ocupaciones;
+use App\Models\User;
 use DB;
 use PDF;
 
@@ -93,7 +94,8 @@ class BarriosV2Controller extends Controller
          //->where('distrito','!=',null)
          //->where('estado','=','A')
          //->where('tipo','=','Comunidad')
-         ->where('idHistorialMod','>',8641)
+         ->where('idHistorialMod','>',9486)
+         //->where('idHistorialMod','<',3000)
          ->get();
 
          //dd($ocupaciones);
@@ -105,7 +107,7 @@ class BarriosV2Controller extends Controller
                 'observacion'=>$data->observacion,
                 'id_beneficiario'=>$data->idUsuario,
                 'dea_id'=>1,
-                'user_id'=>16,
+                'user_id'=>29,
                 'created_at'=>$data->fecha     ]
 
 
@@ -123,7 +125,7 @@ class BarriosV2Controller extends Controller
          //->where('distrito','!=',null)
          //->where('estado','=','A')
          //->where('tipo','=','Comunidad')
-         ->where('idHistorialBaja','>',3269)
+         ->where('idHistorialBaja','<',3400)
          ->get();
 
          //dd($ocupaciones);
@@ -135,7 +137,7 @@ class BarriosV2Controller extends Controller
                 'observacion'=>$data->obs,
                 'id_beneficiario'=>$data->idUsuario,
                 'dea_id'=>1,
-                'user_id'=>16,
+                'user_id'=>29,
                 'created_at'=>$data->fecha     ]
 
 

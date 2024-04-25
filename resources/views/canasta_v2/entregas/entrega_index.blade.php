@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 @section('content')
-    {{--@include('layouts.message_alert')
+    {{-- @include('layouts.message_alert')
     @if (Session::has('message'))
         <div class="alert alert-success">
             <em> {!! session('message') !!}</em>
         </div>
-    @endif--}}
+    @endif --}}
     <div class="card-header header">
         <div class="row">
             <div class="col-md-12 pr-1 pl-1 text-center">
@@ -17,14 +17,32 @@
         <div class="form-group row">
             <div class="col-md-6 pr-1 pl-1">
                 @can('canasta.entregas.agregar.porbarrio')
-                    <button class="btn btn-outline-info font-roboto-12" type="button" data-toggle="collapse" data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample">
-                        <i class="fa fa-address-book fa-fw" aria-hidden="true"></i> Agregar Beneficiarios por Barrio
+                    <button class="btn btn-outline-info font-roboto-12" type="button" data-toggle="collapse"
+                        data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample">
+                        <i class="fa fa-address-book fa-fw" aria-hidden="true"></i> Agr.Benf.X.Barrio
                     </button>
                 @endcan
                 @can('canasta.entregas.generar.boleta')
-                    @if($botonImprimir == 1)
-                        <button class="btn btn-outline-secondary font-roboto-12" type="button" data-toggle="collapse" data-target="#collapseExample3" aria-expanded="false" aria-controls="collapseExample">
-                            <i class="fa fa-print fa-fw" aria-hidden="true"></i> Imprimir Boleta por Barrio
+                    @if ($botonImprimir == 1)
+                        <button class="btn btn-outline-secondary font-roboto-12" type="button" data-toggle="collapse"
+                            data-target="#collapseExample3" aria-expanded="false" aria-controls="collapseExample">
+                            <i class="fa fa-print fa-fw" aria-hidden="true"></i> Imp.Bol.X.Barrio
+                        </button>
+                    @endif
+                @endcan
+                @can('canasta.entregas.generar.boleta')
+                    @if ($botonImprimir == 1)
+                        <button class="btn btn-outline-secondary font-roboto-12" type="button" data-toggle="collapse"
+                            data-target="#collapseExample4" aria-expanded="false" aria-controls="collapseExample">
+                            <i class="fa fa-print fa-fw" aria-hidden="true"></i> Imp.Det.X.Barrio
+                        </button>
+                    @endif
+                @endcan
+                @can('canasta.entregas.generar.boleta')
+                    @if ($botonImprimir == 1)
+                        <button class="btn btn-outline-secondary font-roboto-12" type="button" data-toggle="collapse"
+                            data-target="#collapseExample5" aria-expanded="false" aria-controls="collapseExample">
+                            <i class="fa fa-print fa-fw" aria-hidden="true"></i> Imp.Det.X.Barrio2
                         </button>
                     @endif
                 @endcan
@@ -32,6 +50,9 @@
             <div class="col-md-6 pr-1 pl-1">
                 @include('canasta_v2.entregas.partials.agregar-por-barrio')
                 @include('canasta_v2.entregas.partials.generar-boleta')
+                @include('canasta_v2.entregas.partials.detalle-barrio')
+                @include('canasta_v2.entregas.partials.detalle-barrio2')
+
             </div>
         </div>
         @include('canasta_v2.entregas.partials.search_entrega')
@@ -53,6 +74,17 @@
                 width: '100%'
             });
             $('#barrio3').select2({
+                theme: "bootstrap4",
+                placeholder: "--Seleccionar un Barrio--",
+                width: '100%'
+            });
+            $('#barrio4').select2({
+                theme: "bootstrap4",
+                placeholder: "--Seleccionar un Barrio--",
+                width: '100%'
+            });
+
+            $('#barrio5').select2({
                 theme: "bootstrap4",
                 placeholder: "--Seleccionar un Barrio--",
                 width: '100%'
@@ -116,15 +148,41 @@
         }
 
         function save2() {
-            $("#form2").submit();
+            if (validar_formulario2() == true) {
+                $(".btn").hide();
+                $(".spinner-btn-send").show();
+                $("#form2").submit();
+            }
+
 
         }
 
         function save3() {
-            $("#form3").submit();
+            if (validar_formulario3() == true) {
+                $(".btn").hide();
+                $(".spinner-btn-send").show();
+                $("#form3").submit();
+            }
+
         }
 
-        function cancelar(){
+        function save4() {
+            if (validar_formulario4() == true) {
+                $(".btn").hide();
+                $(".spinner-btn-send").show();
+                $("#form4").submit();
+            }
+        }
+
+        function save5() {
+            if (validar_formulario5() == true) {
+                $(".btn").hide();
+                $(".spinner-btn-send").show();
+                $("#form5").submit();
+            }
+        }
+
+        function cancelar() {
             var url = "{{ route('entregas.index') }}";
             window.location.href = url;
         }
@@ -133,6 +191,42 @@
 
             if ($("#beneficiariodatos1").val() == "") {
                 message_alert("El campo <b>[Beneficiario]</b> es un dato obligatorio...");
+                return false;
+            }
+            return true;
+        }
+
+        function validar_formulario2() {
+
+            if ($("#barrio").val() == "") {
+                message_alert("El campo <b>[Barrio]</b> es un dato obligatorio...");
+                return false;
+            }
+            return true;
+        }
+
+        function validar_formulario3() {
+
+            if ($("#barrio3").val() == "") {
+                message_alert("El campo <b>[Barrio]</b> es un dato obligatorio...");
+                return false;
+            }
+            return true;
+        }
+
+        function validar_formulario4() {
+
+            if ($("#barrio4").val() == "") {
+                message_alert("El campo <b>[Barrio]</b> es un dato obligatorio...");
+                return false;
+            }
+            return true;
+        }
+
+        function validar_formulario5() {
+
+            if ($("#barrio5").val() == "") {
+                message_alert("El campo <b>[Barrio]</b> es un dato obligatorio...");
                 return false;
             }
             return true;

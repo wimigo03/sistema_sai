@@ -17,6 +17,27 @@
         </div>
     </div>
     <div class="form-group row font-roboto-12">
+        <div class="col-md-3 pr-1 pl-1">
+            <label for="numero" class="d-inline">Num.Entrega</label>
+            <select name="numero" id="numero" placeholder="--Seleccionar--"   class="form-control form-control-sm select" required>
+                                    <option value="">-- Seleccione --</option>
+                                    <option value="1RA.">1RA.</option>
+                                    <option value="2DA.">2DA.</option>
+                                    <option value="3RA.">3RA.</option>
+                                    <option value="4TA.">4TA.</option>
+                                    <option value="5TA.">5TA.</option>
+                                    <option value="6TA.">6TA.</option>
+                                    <option value="7MA.">7MA.</option>
+                                    <option value="8VA.">8VA.</option>
+                                    <option value="9NA.">9NA.</option>
+                                    <option value="10MA.">10MA.</option>
+                                    <option value="10MA.1RA.">10MA.1RA.</option>
+                                    <option value="10MA.2DA.">10MA.2DA.</option>
+                                </select>
+        </div>
+    </div>
+
+    <div class="form-group row font-roboto-12">
         <div class="col-md-9 pr-1 pl-1">
             <label for="nombre" class="d-inline"><b>Items</b></label>
             <textarea type="text" rows="10" class="form-control font-roboto-12" id="items" name="items" required></textarea>

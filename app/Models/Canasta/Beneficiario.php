@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Canasta\Dea;
 use App\Models\Canasta\Distrito;
 use App\Models\Canasta\Barrio;
+use App\Models\Canasta\Ocupaciones;
 use Carbon\Carbon;
 class Beneficiario extends Model
 {
@@ -62,6 +63,11 @@ class Beneficiario extends Model
     public function user(){
         return $this->belongsTo(User::class,'user_id','id');
     }
+
+    public function ocupacion(){
+        return $this->belongsTo(Ocupaciones::class,'idOcupacion','id');
+    }
+
 
     public function dea(){
         return $this->belongsTo(Dea::class,'dea_id','id');

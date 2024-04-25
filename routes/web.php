@@ -699,7 +699,6 @@ Route::post('Evento/actualizar2/{id}',[ControllerEvent::class,'actualizar']);
 
 
 
-
 ////evento2////
 
 // formulario

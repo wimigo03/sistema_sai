@@ -491,6 +491,7 @@
                         </li>
                         <hr style="margin-top:0; margin-bottom:0;">
                     @endcan
+                    @can('correspondencia.index')
                     {{-- CORRESPONDENCIA --}}
                     @can('correspondencia.index')
                         <li class="font-verdana-12">
@@ -508,7 +509,7 @@
                         </li>
                     @endcan
                     {{-- CORRESPONDENCIA LOCAL 2 --}}
-                    @can('derivacion.index')
+
                         <li class="font-verdana-12">
                             <a href="" data-toggle="collapse" data-target="#dashboard_ventanilla22"
                                 class="active collapsed" aria-expanded="false">
@@ -525,8 +526,9 @@
                                 </li>
                             </ul>
                         </li>
+                        @endcan
                         <hr style="margin-top:0; margin-bottom:0;">
-                    @endcan
+
                     {{-- ARCHIVOS --}}
                     @can('archivos2.index')
                         <li class="font-verdana-12">

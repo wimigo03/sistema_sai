@@ -7,4 +7,5 @@ Route::prefix('beneficiarios')->name('beneficiarios.')->middleware(['auth'])->gr
     Route::post('store', 'Canasta_v2\BeneficiariosV2Controller@store')->name('store')->middleware('can:canasta.beneficiarios.create');
     Route::get('editar/{id}', 'Canasta_v2\BeneficiariosV2Controller@editar')->name('editar')->middleware('can:canasta.beneficiarios.editar');
     Route::post('update', 'Canasta_v2\BeneficiariosV2Controller@update')->name('update')->middleware('can:canasta.beneficiarios.editar');
+    Route::get('beneficiario_datos/{id}', 'Canasta_v2\BeneficiariosV2Controller@beneficiario_datos')->name('beneficiario_datos')->middleware('can:canasta.beneficiarios.datos');
 });

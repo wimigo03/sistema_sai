@@ -34,7 +34,8 @@ class BeneficiariosV2Controller extends Controller
          $beneficiarios = DB::connection('mysql_canasta')->table("usuarios")
          //->join('ocupaciones as o', 'o.idOcupacion', '=', 'u.idOcupacion')
         // ->select('o.ocupacion','u.nombres')
-        ->where('idUsuario','>',13408)
+        ->where('idUsuario','>',14822)
+        //->where('idUsuario','<',12000)
          ->get();
 
        //dd($beneficiarios);
@@ -58,7 +59,7 @@ class BeneficiariosV2Controller extends Controller
                 'idOcupacion'=>$data->idOcupacion,
                 'idBarrio'=>$data->idBarrio,
                 'dea_id'=>1,
-                'user_id'=>16,
+                'user_id'=>29,
                 'created_att'=>$data->_registrado,
                 'updated_att'=>$data->_modificado,
                 'idBarrio'=>$data->idBarrio,
@@ -128,6 +129,10 @@ class BeneficiariosV2Controller extends Controller
 
     public function store(Request $request)
     {
+
+        $personal = User::find(Auth::user()->id);
+        $id_usuario = $personal->id;
+        $dea_id = $personal->dea_id;
         $newestUser = Beneficiario::orderBy('id', 'desc')->first();
         $maxId = $newestUser->id;
 
@@ -147,8 +152,8 @@ class BeneficiariosV2Controller extends Controller
                                     $beneficiario->obs = $request->observacion;
                                     $beneficiario->idOcupacion = $request->ocupacion;
                                     $beneficiario->idBarrio = $request->barrio;
-                                    $beneficiario->user_id = 16;
-                                    $beneficiario->dea_id = 1;
+                                    $beneficiario->user_id = $id_usuario;
+                                    $beneficiario->dea_id = $dea_id;
 
 
                                     $beneficiario->save();
@@ -175,9 +180,21 @@ public function editar($idbeneficiario)
     return view('canasta_v2.beneficiario.editar',compact('barrios','ocupaciones','beneficiario'));
 }
 
+public function beneficiario_datos($idbeneficiario)
+{
+    $barrios = Barrio::where('dea_id',Auth::user()->dea->id)->get();
+    $ocupaciones = Ocupaciones::where('estado','=',1)->get();
+    $beneficiario = Beneficiario::find($idbeneficiario);
+
+    return view('canasta_v2.beneficiario.beneficiario_datos',compact('barrios','ocupaciones','beneficiario'));
+}
+
 public function update2(Request $request)
 {
 
+    $personal = User::find(Auth::user()->id);
+    $id_usuario = $personal->id;
+    $dea_id = $personal->dea_id;
     $newestUser = HistorialMod::orderBy('id', 'desc')->first();
     $maxId = $newestUser->id;
 
@@ -199,8 +216,8 @@ public function update2(Request $request)
                                 //$beneficiario->obs = $request->observacion;
                                 $beneficiario->idOcupacion = $request->ocupacion;
                                 $beneficiario->idBarrio = $request->barrio;
-                                $beneficiario->user_id = 16;
-                                $beneficiario->dea_id = 1;
+                                $beneficiario->user_id = $id_usuario;
+                                $beneficiario->dea_id = $dea_id;
                                 $beneficiario->save();
 
 
@@ -229,6 +246,9 @@ public function update(Request $request)
 {
 
 //dd($request->documento);
+              $personal = User::find(Auth::user()->id);
+              $id_usuario = $personal->id;
+              $dea_id = $personal->dea_id;
 
         $newestUser = HistorialMod::orderBy('id', 'desc')->first();
         $maxId = $newestUser->id;
@@ -271,8 +291,8 @@ public function update(Request $request)
         $beneficiario->dirFoto = '../imagenes/fotos/' . $nombre;;
         $beneficiario->idOcupacion = $request->ocupacion;
         $beneficiario->idBarrio = $request->barrio;
-        $beneficiario->user_id = 16;
-        $beneficiario->dea_id = 1;
+        $beneficiario->user_id = $id_usuario;
+        $beneficiario->dea_id = $dea_id;
         $beneficiario->save();
 
 
@@ -297,8 +317,8 @@ public function update(Request $request)
 
         $beneficiario->idOcupacion = $request->ocupacion;
         $beneficiario->idBarrio = $request->barrio;
-        $beneficiario->user_id = 16;
-        $beneficiario->dea_id = 1;
+        $beneficiario->user_id = $id_usuario;
+        $beneficiario->dea_id = $dea_id;
         $beneficiario->save();
     }
 
@@ -307,8 +327,8 @@ public function update(Request $request)
     $Historialmod->id = $maxId + 1;
         $Historialmod->observacion = $request->observacion;
         $Historialmod->id_beneficiario = $request->idBeneficiario;
-        $Historialmod->user_id = 16;
-        $Historialmod->dea_id = 1;
+        $Historialmod->user_id = $id_usuario;
+        $Historialmod->dea_id = $dea_id;
         $Historialmod->save();
 
     $tipos = Barrio::TIPOS;
