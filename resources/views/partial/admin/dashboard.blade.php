@@ -519,7 +519,7 @@
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_ventanilla22">
                                 <li>
-                                    <a href="{{ route('derivacion.index') }}">
+                                    <a href="{{-- route('derivacion.index') --}}">
                                         &nbsp; &nbsp; &nbsp;
                                         <span class="nav-label mr-4">Acceder</span>
                                     </a>
