@@ -28,7 +28,7 @@
 
             <div class="body-border">
                 <font size="2" face="Courier New">
-                    <form method="POST" action="{{ route('guardar2.recepcion') }}" id="form" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('correspondencia.local.guardar') }}" id="form" enctype="multipart/form-data">
                         @csrf
 
                         <div class="form-group row">
@@ -121,13 +121,13 @@
                         <br>
 
                         <div align='center'>
-                            <a href="{{ route('crear2.tipo') }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar tipo">
+                            <a href="{{ route('correspondencia.local.tipo.crear') }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar tipo">
                                 <button class="btn btn-sm btn-warning font-verdana" type="button">
                                     &nbsp;<i class="fa fa-lg fa-align-justify" aria-hidden="true"></i>&nbsp;
                                 </button>
                             </a>
                             &nbsp;&nbsp;&nbsp;&nbsp;
-                            <a href="{{ route('crear2.remitente') }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar Remitente">
+                            <a href="{{ route('correspondencia.local.remitente.crear') }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar Remitente">
                                 <button class="btn btn-sm btn-primary font-verdana" type="button">
                                     &nbsp;<i class="fa fa-lg fa-user" aria-hidden="true"></i>&nbsp;
                                 </button>

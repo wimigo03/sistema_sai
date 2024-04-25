@@ -10,7 +10,7 @@
     <div class="row font-verdana-12">
         <div class="col-md-2 titulo">
             <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-                <a href="{{ route('correspondencia2.gestionar', $idrecepcion) }}">
+                <a href="{{ route('correspondencia.local.gestionar', $idrecepcion) }}">
                     <span class="color-icon-1">
                         &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                     </span>
@@ -28,7 +28,7 @@
 
     </div>
     <div class="body-border" style="background-color: #FFFFFF;">
-        <form action="{{ route('correspondencia2.guardarderivacion') }}" method="get" id="form">
+        <form action="{{ route('correspondencia.local.guardarderivacion') }}" method="get" id="form">
             @csrf
             <br>
             <input type="hidden" value="{{ $idrecepcion }}" name="idrecepcion">
@@ -100,7 +100,7 @@
 
                                 <td class="text-center p-1">
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Eliminar">
-                                        <a href="{{ route('correspondencia2.delete', $derivacionCorresps->idderivacion) }}"
+                                        <a href="{{ route('correspondencia.local.delete', $derivacionCorresps->idderivacion) }}"
                                             onclick="return confirm('Se va a eliminar el Item...')">
                                             <span class="text-danger">
                                                 <i class="fa-solid fa-xl fa-trash" aria-hidden="true"></i>
@@ -151,7 +151,7 @@
 
         });
 
-        
+
 
 
         function message_alert(mensaje) {

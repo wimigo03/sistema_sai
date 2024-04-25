@@ -31,8 +31,10 @@
     </div>
     <div class="form-group row">
         <div class="col-md-6 pr-1 pl-1">
-            <span class="btn btn-primary font-roboto-12" onclick="cancelar();">
-                <i class="fas fa-arrow-left fa-sm"></i> Ir atras
+            <span class="tts:right tts-slideIn tts-custom" aria-label="Ir atras" style="cursor: pointer;">
+                <span class="btn btn-primary font-roboto-12" onclick="cancelar();">
+                    <i class="fas fa-angle-double-left fa-fw"></i>
+                </span>
             </span>
             <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn-send" style="display: none;"></i>
         </div>

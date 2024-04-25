@@ -25,7 +25,7 @@
         <div class="col-md-4 text-right titulo">
 
 
-                <a href="{{ route('crear.remitente') }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar Remitente">
+                <a href="{{ route('correspondencia.crear.remitente') }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar Remitente">
                     <button class="btn btn-sm btn-success font-verdana" type="button">
                         &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
                     </button>
@@ -69,7 +69,7 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ajax: "{{ route('recepcion.remitenteIndex') }}",
+                ajax: "{{ route('correspondencia.remitenteIndex') }}",
                 columns: [{
                         data: 'DT_RowIndex',
                         orderable: false,

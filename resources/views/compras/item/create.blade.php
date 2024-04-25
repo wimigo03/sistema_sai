@@ -8,6 +8,7 @@
         </div>
     </div>
     @include('compras.item.partials.form-create')
+@endsection
 @section('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
@@ -52,5 +53,4 @@
             window.location.href = url;
         }
     </script>
-@endsection
 @endsection

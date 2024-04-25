@@ -448,7 +448,7 @@ class ControllerEvent2 extends Controller
         $evento2 = Event2::find($request->input('idevento2'));
         $evento2->estadoarchivo = 1;
         $evento2->save();
-        //return redirect()->route('correspondencia2.gestionar',$request->input('idrecepcion'));
+        //return redirect()->route('correspondencia.local.gestionar',$request->input('idrecepcion'));
         return redirect()->action('App\Http\Controllers\ControllerEvent2@index');
 
 

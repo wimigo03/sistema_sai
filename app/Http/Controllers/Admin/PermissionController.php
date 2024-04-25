@@ -4,80 +4,108 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Permission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePermissionRequest;
 use App\Http\Requests\UpdatePermissionRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Response;
+use App\Models\Canasta\Dea;
+use DB;
 
 class PermissionController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        //abort_if(Gate::denies('permissions_access'), Response::HTTP_FORBIDDEN, 'Forbidden');
-
-        $permissions = Permission::paginate(5)->appends($request->query());;
-        return view('admin.permissions.index',compact('permissions'));
+        $dea_id = Auth::user()->dea->id;
+        $titulos = Permission::select('title')
+                                    ->where('dea_id',$dea_id)
+                                    ->groupBy('title')
+                                    ->get();
+        $permissions = Permission::query()
+                                    ->ByDea($dea_id)
+                                    ->orderBy('id','desc')
+                                    ->paginate(10);
+        return view('admin.permissions.index',compact('titulos','dea_id','permissions'));
     }
 
-    public function create()
+    public function search(Request $request)
     {
-        return view('admin.permissions.create');
+        $dea_id = $request->dea_id;
+        $titulos = Permission::select('title')
+                                    ->where('dea_id',$dea_id)
+                                    ->groupBy('title')
+                                    ->get();
+        $permissions = Permission::query()
+                                    ->ByDea($dea_id)
+                                    ->byTitulo($request->titulo)
+                                    ->ByNombre($request->nombre)
+                                    ->orderBy('id','desc')
+                                    ->paginate(10);
+
+        return view('admin.permissions.index',compact('titulos','dea_id','permissions'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StorePermissionRequest $request)
+    public function create($dea_id)
     {
-        Permission::create($request->validated());
-
-        return redirect()->route('admin.permissions.index')->with('status-success','New Permission Created');
+        return view('admin.permissions.create',compact('dea_id'));
     }
 
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Permission  $permission
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Permission $permission)
+    public function store(Request $request)
     {
-        abort_if(Gate::denies('permission_edit'), Response::HTTP_FORBIDDEN, 'Forbidden');
+        $request->validate([
+            'dea_id' => 'required',
+            'name' => 'required|unique:permissions,name,null,id,dea_id,' . $request->dea_id
+        ]);
 
-        return view('admin.permissions.edit', compact('permission'));
+        if (strpos($request->name, ".") !== false) {
+            $title = explode(".", $request->name);
+        } else {
+            return redirect()->back()->with('info_message', '[El formato que ha introducido no es el correcto...]')->withInput();
+        }
+
+        $permission = Permission::create([
+            'title' => $title[0],
+            'name' => $request->name,
+            'dea_id' => $request->dea_id
+        ]);
+
+        return redirect()->route('permissions.index')->with('success_message','Se creo un registro en la tabla de permisos');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Permission  $permission
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdatePermissionRequest $request, Permission $permission)
+    public function edit($permission_id)
     {
-        $permission->update($request->validated());
-
-        return redirect()->route('admin.permissions.index')->with('status-success','Permission Updated');
+        $permission = Permission::find($permission_id);
+        return view('admin.permissions.edit',compact('permission'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Permission  $permission
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Permission $permission)
+    public function update(Request $request)
     {
-        abort_if(Gate::denies('permission_delete'), Response::HTTP_FORBIDDEN, 'Forbidden');
+        $request->validate([
+            'dea_id' => 'required',
+            'name' => 'required|unique:permissions,name,' . $request->permission_id . ',id,dea_id,' . $request->dea_id
+        ]);
 
-        $permission->delete();
+        if (strpos($request->name, ".") !== false) {
+            $title = explode(".", $request->name);
+        } else {
+            return redirect()->back()->with('info_message', '[El formato que ha introducido no es el correcto...]')->withInput();
+        }
 
-        return redirect()->back()->with('status-success','Permission Deleted');
+        $permission = Permission::find($request->permission_id);
+        $permission->update([
+            'title' => $title[0],
+            'name' => $request->name
+        ]);
+
+        return redirect()->route('permissions.index')->with('info_message','Se actualizo un registro en la tabla de permisos');
+    }
+
+    public function show($permission_id)
+    {
+        $permission = Permission::find($permission_id);
+        $roles_permissions = DB::table('role_permissions')->where('permission_id',$permission_id)->get();
+        return view('admin.permissions.show',compact('permission','roles_permissions'));
     }
 }

@@ -43,7 +43,7 @@
                     @if ($data->estado_corresp == 0)
                         <b style="color: red">--SIN DIGITAL--</b>
                     @elseif ($data->estado_corresp == 1)
-                        <a href="{{ route('correspondencia2.derivar', $data->id_recepcion) }}">
+                        <a href="{{ route('correspondencia.local.derivar', $data->id_recepcion) }}">
                             <button class="btn btn-sm btn-light   font-verdana" type="button">
                                 &nbsp;<i class="fa fa-lg fa-random" style="color: green "
                                     aria-hidden="true"></i>&nbsp;Responder

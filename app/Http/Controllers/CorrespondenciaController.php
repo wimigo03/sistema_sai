@@ -22,41 +22,35 @@ class CorrespondenciaController extends Controller
 {
     public function index(Request $request)
     {
-
         if ($request->ajax()) {
+            $data = DB::connection('pgsql_correspondencia')
+                        ->table("recepcion as r")
+                        ->join('empleados as e', 'e.id_emp', 'r.id_emp')
+                        ->join('unidad as u', 'u.id_unidad', 'e.id_unidad')
+                        ->select('r.id_recepcion',
+                                    'r.asunto',
+                                    'r.fecha_recepcion',
+                                    'r.n_oficio',
+                                    'r.observaciones',
+                                    'e.nombres',
+                                    'e.ap_pat',
+                                    'e.ap_mat',
+                                    'u.nombre_unidad')
+                        ->orderBy('r.id_recepcion', 'desc');
 
-            $data = DB::connection('pgsql_correspondencia')->table("recepcion as r")
-
-                ->join('empleados as e', 'e.id_emp', '=', 'r.id_emp')
-                ->join('unidad as u', 'u.id_unidad', '=', 'e.id_unidad')
-                ->select('r.id_recepcion', 'r.asunto', 'r.fecha_recepcion', 'r.n_oficio', 'r.observaciones', 'e.nombres', 'e.ap_pat', 'e.ap_mat', 'u.nombre_unidad')
-                ->orderBy('r.id_recepcion', 'desc');
-
-            return Datatables::of($data)
-                ->addIndexColumn()
-                ->addColumn('btn', 'correspondencia.btn')
-
-                ->rawColumns(['btn'])
-                ->make(true);
-
-            //dd($data);
+            return Datatables::of($data)->addIndexColumn()
+                                        ->addColumn('btn', 'correspondencia.btn')
+                                        ->rawColumns(['btn'])
+                                        ->make(true);
         }
 
         return view('correspondencia.index');
     }
 
-
     public function create()
-
     {
-
-
-
         $date = Carbon::now();
-
         $date = $date->format('Y');
-
-
         $tipos = DB::table('tipoarchivo')->get();
         $anio = DB::table('anio')->get();
         return view('correspondencia.createRecepcion', ["tipos" => $tipos, "date" => $date, "anio" => $anio]);
@@ -65,16 +59,12 @@ class CorrespondenciaController extends Controller
 
     public function indexUnidad(Request $request)
     {
-
         if ($request->ajax()) {
+            $unidad = DB::connection('pgsql_correspondencia')
+                            ->table("unidad as u")
+                            ->select('u.nombre_unidad');
 
-            $unidad = DB::connection('pgsql_correspondencia')->table("unidad as u")
-
-                ->select('u.nombre_unidad');
-
-            return Datatables::of($unidad)
-                ->addIndexColumn()
-                ->make(true);
+            return Datatables::of($unidad)->addIndexColumn()->make(true);
         }
 
         return view('correspondencia.indexUnidad');
@@ -82,17 +72,13 @@ class CorrespondenciaController extends Controller
 
     public function indexRemitente(Request $request)
     {
-
         if ($request->ajax()) {
+            $data = DB::connection('pgsql_correspondencia')
+                        ->table("empleados as e")
+                        ->join('unidad as u', 'u.id_unidad', 'e.id_unidad')
+                        ->select('e.nombres', 'e.ap_pat', 'e.ap_mat', 'e.ci', 'u.nombre_unidad');
 
-            $data = DB::connection('pgsql_correspondencia')->table("empleados as e")
-
-                ->join('unidad as u', 'u.id_unidad', '=', 'e.id_unidad')
-                ->select('e.nombres', 'e.ap_pat', 'e.ap_mat', 'e.ci', 'u.nombre_unidad');
-
-            return Datatables::of($data)
-                ->addIndexColumn()
-                ->make(true);
+            return Datatables::of($data)->addIndexColumn()->make(true);
         }
 
         return view('correspondencia.indexRemitente');
@@ -105,33 +91,27 @@ class CorrespondenciaController extends Controller
 
     public function storeLugar(request $request)
     {
-
         $newestUser = LugarModel::orderBy('id_unidad', 'desc')->first();
         $maxId = $newestUser->id_unidad;
-
         $lugar = new LugarModel();
         $lugar->id_unidad = $maxId + 1;
         $lugar->nombre_unidad = $request->input('nombre');
         $lugar->estado_unidad = 1;
         $lugar->save();
 
-        return redirect()->route('recepcion.unidadIndex');
+        return redirect()->route('correspondencia.unidadIndex');
     }
-
 
     public function createRemitente()
     {
-
         $unidades = DB::connection('pgsql_correspondencia')->table("unidad")->get();
         return view('correspondencia.createRemitente', ["unidades" => $unidades]);
     }
 
     public function storeRemitente(request $request)
     {
-
         $newestUser = RemitenteModel::orderBy('id_emp', 'desc')->first();
         $maxId = $newestUser->id_emp;
-
         $remitente = new RemitenteModel();
         $remitente->id_emp = $maxId + 1;
         $remitente->nombres = $request->input('nombres');
@@ -144,32 +124,25 @@ class CorrespondenciaController extends Controller
         $remitente->estado_u = 0;
         $remitente->save();
 
-        return redirect()->route('recepcion.remitenteIndex');
+        return redirect()->route('correspondencia.remitenteIndex');
     }
 
 
     public function createRecepcion()
     {
-
-
-        $empleados = DB::connection('pgsql_correspondencia')->table("empleados as e")
-
-            // ->join('empleados as e', 'e.id_emp', '=', 'r.id_emp')
-            ->join('unidad as u', 'u.id_unidad', '=', 'e.id_unidad')
-            ->select('e.nombres', 'e.id_emp', 'e.ap_pat', 'e.ap_mat', 'u.nombre_unidad')
-            //->limit(5)
-            ->get();
+        $empleados = DB::connection('pgsql_correspondencia')
+                        ->table("empleados as e")
+                        ->join('unidad as u', 'u.id_unidad', '=', 'e.id_unidad')
+                        ->select('e.nombres', 'e.id_emp', 'e.ap_pat', 'e.ap_mat', 'u.nombre_unidad')
+                        ->get();
 
         $tipos = DB::connection('pgsql_correspondencia')->table("tipo_correspondencia")->get();
 
-
-        //$empleados = DB::connection('pgsql_correspondencia')->table("empleados")->get();
         return view('correspondencia.createRecepcion', ["empleados" => $empleados, "tipos" => $tipos]);
     }
 
     public function storeRecepcion(request $request)
     {
-
         $newestUser = RecepcionModel::orderBy('id_recepcion', 'desc')->first();
         $maxId = $newestUser->id_recepcion;
         $fecha_recepcion = substr($request->fecha, 6, 4) . '-' . substr($request->fecha, 3, 2) . '-' . substr($request->fecha, 0, 2);
@@ -191,12 +164,9 @@ class CorrespondenciaController extends Controller
         return redirect()->route('correspondencia.index');
     }
 
-
-
     public function editarCodigo($idrecepcion)
     {
         $recepcion = RecepcionModel::find($idrecepcion);
-        //dd($recepcion);
         return view('correspondencia/edit')->with('recepcion', $recepcion);
     }
 
@@ -209,6 +179,7 @@ class CorrespondenciaController extends Controller
         } else {
             $request->session()->flash('message', 'Error al Procesar Registro');
         }
+
         return redirect()->route('correspondencia.index');
     }
 }

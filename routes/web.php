@@ -28,7 +28,7 @@ use App\Http\Controllers\AlmacenController;
 use App\Http\Controllers\CorrespondenciaController;
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\ControllerCalendar;
-use App\Http\Controllers\Recepcion2Controller;
+use App\Http\Controllers\CorrespondenciaLocalController;
 use App\Http\Controllers\ControllerEvent2;
 use App\Http\Controllers\ControllerEvent;
 use App\Http\Controllers\CanastaBeneficiariosController;
@@ -641,18 +641,18 @@ Route::get('almacen/index', [AlmacenController::class,'index'])->name('almacen.i
 
 /////////////////////////--CORRESPO0NDENCIA--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('correspondencia/index', [CorrespondenciaController::class,'index'])->name('correspondencia.index');
+/*Route::get('correspondencia/index', [CorrespondenciaController::class,'index'])->name('correspondencia.index');
 Route::get('correspondencia/createRecepcion', [CorrespondenciaController::class,'create'])->name('correspondencia.create');
-Route::get('correspondencia/indexUnidad', [CorrespondenciaController::class,'indexUnidad'])->name('recepcion.unidadIndex');
-Route::get('correspondencia/indexRemitente', [CorrespondenciaController::class,'indexRemitente'])->name('recepcion.remitenteIndex');
-Route::get('correspondencia/createUnidad', [CorrespondenciaController::class,'createLugar'])->name('crear.lugar');
-Route::post('correspondencia/storeLugar', [CorrespondenciaController::class,'storeLugar'])->name('guardar.lugar');
-Route::get('correspondencia/createRemitente', [CorrespondenciaController::class,'createRemitente'])->name('crear.remitente');
-Route::post('correspondencia/storeRemitente', [CorrespondenciaController::class,'storeRemitente'])->name('guardar.remitente');
-Route::get('correspondencia/createRecepcion', [CorrespondenciaController::class,'createRecepcion'])->name('crear.recepcion');
-Route::post('correspondencia/storeRecepcion', [CorrespondenciaController::class,'storeRecepcion'])->name('guardar.recepcion');
+Route::get('correspondencia/indexUnidad', [CorrespondenciaController::class,'indexUnidad'])->name('correspondencia.unidadIndex');
+Route::get('correspondencia/indexRemitente', [CorrespondenciaController::class,'indexRemitente'])->name('correspondencia.remitenteIndex');
+Route::get('correspondencia/createUnidad', [CorrespondenciaController::class,'createLugar'])->name('correspondencia.crear.lugar');
+Route::post('correspondencia/storeLugar', [CorrespondenciaController::class,'storeLugar'])->name('correspondencia.guardar.lugar');
+Route::get('correspondencia/createRemitente', [CorrespondenciaController::class,'createRemitente'])->name('correspondencia.crear.remitente');
+Route::post('correspondencia/storeRemitente', [CorrespondenciaController::class,'storeRemitente'])->name('correspondencia.guardar.remitente');
+Route::get('correspondencia/createRecepcion', [CorrespondenciaController::class,'createRecepcion'])->name('correspondencia.crear.recepcion');
+Route::post('correspondencia/storeRecepcion', [CorrespondenciaController::class,'storeRecepcion'])->name('correspondencia.guardar.recepcion');
 Route::get('correspondencia/{id}/edit', [CorrespondenciaController::class,'editarCodigo'])->name('correspondencia.edit');
-Route::POST('correspondencia/{id}/updateCodigo', [CorrespondenciaController::class,'updateCodigo'])->name('correspondencia.update');
+Route::POST('correspondencia/{id}/updateCodigo', [CorrespondenciaController::class,'updateCodigo'])->name('correspondencia.update');*/
 
 
 ////////////////////////////--AGENDA--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -697,34 +697,7 @@ Route::post('Evento/actualizar2/{id}',[ControllerEvent::class,'actualizar']);
 
 /////////////////////////--CORRESPONDENCIA 2--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('correspondencia2/index', [Recepcion2Controller::class,'index'])->name('recepcion2.index');
-Route::get('correspondencia2/{id}/edit', [Recepcion2Controller::class,'editarCodigo'])->name('correspondencia2.edit');
-Route::POST('correspondencia2/{id}/updateCodigo', [Recepcion2Controller::class,'updateCodigo'])->name('correspondencia2.update');
-Route::get('correspondencia2/createRecepcion', [Recepcion2Controller::class,'createRecepcion'])->name('crear2.recepcion');
-Route::post('correspondencia2/storeRecepcion', [Recepcion2Controller::class,'storeRecepcion'])->name('guardar2.recepcion');
-Route::get('correspondencia2/indexUnidad', [Recepcion2Controller::class,'indexUnidad'])->name('recepcion2.unidadIndex');
-Route::get('correspondencia2/createUnidad', [Recepcion2Controller::class,'createLugar'])->name('crear2.lugar');
-Route::post('correspondencia2/storeLugar', [Recepcion2Controller::class,'storeLugar'])->name('guardar2.lugar');
-Route::get('correspondencia2/indexRemitente', [Recepcion2Controller::class,'indexRemitente'])->name('recepcion2.remitenteIndex');
-Route::get('correspondencia2/createRemitente', [Recepcion2Controller::class,'createRemitente'])->name('crear2.remitente');
-Route::post('correspondencia2/storeRemitente', [Recepcion2Controller::class,'storeRemitente'])->name('guardar2.remitente');
-Route::get('correspondencia2/createTipo', [Recepcion2Controller::class,'createTipo'])->name('crear2.tipo');
-Route::post('correspondencia2/storeTipo', [Recepcion2Controller::class,'storeTipo'])->name('guardar2.tipo');
 
-Route::get('correspondencia2/buscarRemitentes', [Recepcion2Controller::class,'buscarRemitentes'])->name('crear2.buscarRemitentes');
-
-//////////////////
-Route::get('correspondencia2/{id}/gestionarCorrespondencia', [Recepcion2Controller::class,'gestionarCorrespondencia'])->name('correspondencia2.gestionar');
-Route::get('correspondencia2/{id}/cargarpdf', [Recepcion2Controller::class,'cargarpdf'])->name('correspondencia2.cargarpdf');
-Route::post('correspondencia2/storepdf', [Recepcion2Controller::class,'storepdf'])->name('correspondencia2.storepdf');
-Route::get('correspondencia2/{id}/derivar', [Recepcion2Controller::class,'derivar'])->name('correspondencia2.derivar');
-Route::get('correspondencia2/derivar2', [Recepcion2Controller::class,'guardarderivacion'])->name('correspondencia2.guardarderivacion');
-Route::get('correspondencia2/delete{id}', [Recepcion2Controller::class,'delete'])->name('correspondencia2.delete');
-Route::get('correspondencia2/urlfile/{id}', [Recepcion2Controller::class,'urlfile'])->name('correspondencia2.urlfile');
-Route::get('correspondencia2/{id}/actualizarpdf', [Recepcion2Controller::class,'actualizarpdf'])->name('correspondencia2.actualizarpdf');
-Route::post('correspondencia2/updatepdf', [Recepcion2Controller::class,'updatepdf'])->name('correspondencia2.updatepdf');
-
-Route::post('/ruta', [Recepcion2Controller::class,'respuesta'])->name('pregunta');
 
 
 ////evento2////
@@ -1262,11 +1235,6 @@ Route::group(['namespace' => 'Fexpo'], function() {
    ->name('employees.destroy');
 
 ///////////
-Route::get('derivacion/index', 'Recepcion2Controller@indexderivacion')->name('derivacion.index');
-Route::get('derivacion/{id}/gestionarCorrespondencia', 'Recepcion2Controller@gestionarCorrespondencia2')->name('derivacion.gestionar');
-Route::get('correspondencia2/urlfilederivacion/{id}', 'Recepcion2Controller@urlfile')->name('derivacion.urlfilederivacion');
-Route::get('correspondencia2/pregunta', 'Recepcion2Controller@pregunta2')->name('derivacion.pregunta');
-Route::get('/get-users', 'Recepcion2Controller@getUsers')->name('get-users');
-Route::post('/ruta', 'Recepcion2Controller@respuesta')->name('pregunta');
+
 
 });

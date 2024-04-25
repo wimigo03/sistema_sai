@@ -20,6 +20,12 @@
                 placeholder: "--Seleccionar--",
                 width: '100%'
             });
+
+            $('#titulo').select2({
+                theme: "bootstrap4",
+                placeholder: "--Titulo--",
+                width: '100%'
+            });
         });
 
         $('.intro').on('keypress', function(event) {
@@ -30,7 +36,20 @@
         });
 
         function create(){
-            var url = "{{ route('permissions.create') }}";
+            var dea_id = $("#dea_id").val()
+            var url = "{{ route('permissions.create',':dea_id') }}";
+            url = url.replace(':dea_id',dea_id);
+            window.location.href = url;
+        }
+
+        function procesar(){
+            var url = "{{ route('permissions.search') }}";
+            $("#form").attr('action', url);
+            $("#form").submit();
+        }
+
+        function limpiar(){
+            var url = "{{ route('permissions.index') }}";
             window.location.href = url;
         }
     </script>

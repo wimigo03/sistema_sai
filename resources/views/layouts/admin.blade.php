@@ -25,7 +25,7 @@
     <link href="{{ asset('dashboard/css/tooltips.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/notificaciones/Lobibox.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/notificaciones/notifications.css') }}" rel="stylesheet">
-    {{--<link href="{{ asset('css/font-verdana.css') }}" rel="stylesheet">--}}
+    <link href="{{ asset('js/jquery-ui-1.13.2/jquery-ui.min.css') }}" rel="stylesheet">
     <style>
         #customers-table tbody td.details-control {
             background-image: url('{{ asset('admin_assets/images/details_open.png') }}');
@@ -73,10 +73,11 @@
     <script src="{{ asset('dashboard/js/popper.min.js') }}"></script>
     <script src="{{ asset('dashboard/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('dashboard/js/main.js') }}"></script>
-    <script src="{{ asset('datepicker/datepicker.min.js') }}"></script>
-    <script src="{{ asset('datepicker/datepicker.es.js') }}"></script>
     <script src="{{ asset('js/notificaciones/Lobibox.js') }}"></script>
     <script src="{{ asset('js/notificaciones/notification-active.js') }}"></script>
+    <script src="{{ asset('js/jquery-ui-1.13.2/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('datepicker/datepicker.min.js') }}"></script>
+    <script src="{{ asset('datepicker/datepicker.es.js') }}"></script>
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/cleave.min.js"
         integrity="sha512-KaIyHb30iXTXfGyI9cyKFUIRSSuekJt6/vqXtyQKhQP6ozZEGY8nOtRS6fExqE4+RbYHus2yGyYg1BrqxzV6YA=="

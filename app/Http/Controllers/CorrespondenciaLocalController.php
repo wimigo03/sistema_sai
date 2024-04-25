@@ -14,7 +14,6 @@ use App\Models\UnidadModel;
 use App\Models\ArchivoCorrespModel;
 use App\Models\DerivCorrespModel;
 use App\Models\InstruccionvModel;
-
 use App\Models\AnioModel;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
@@ -23,217 +22,160 @@ use DB;
 use Carbon\Carbon;
 use DataTables;
 
-class Recepcion2Controller extends Controller
+class CorrespondenciaLocalController extends Controller
 {
     public function index(Request $request)
     {
-
         if ($request->ajax()) {
-
-            // $data = DB::connection('pgsql_correspondencia')->table("recepcion as r")
             $data = DB::table('recepcion as r')
-                ->join('remitente as re', 're.id_remitente', '=', 'r.id_remitente')
-                ->join('unidad as u', 'u.id_unidad', '=', 're.id_unidad')
-                ->select('r.estado_corresp', 'r.id_recepcion', 'r.asunto', 'r.fecha_recepcion', 'r.n_oficio', 'r.observaciones', 're.nombres_remitente', 're.apellidos_remitente', 'u.nombre_unidad')
-                ->orderBy('r.id_recepcion', 'desc');
+                        ->join('remitente as re', 're.id_remitente', 'r.id_remitente')
+                        ->join('unidad as u', 'u.id_unidad', 're.id_unidad')
+                        ->select('r.estado_corresp',
+                                    'r.id_recepcion',
+                                    'r.asunto',
+                                    'r.fecha_recepcion',
+                                    'r.n_oficio',
+                                    'r.observaciones',
+                                    're.nombres_remitente',
+                                    're.apellidos_remitente',
+                                    'u.nombre_unidad')
+                        ->orderBy('r.id_recepcion', 'desc');
 
-            return Datatables::of($data)
-                ->addIndexColumn()
-                ->addColumn('btn', 'correspondencia2.btn')
-                ->addColumn('btn3', function ($data) {
-
-                    if ($data->estado_corresp == 0) {
-                        return view('correspondencia2.btn4', compact('data'));
-                    }
-                    if ($data->estado_corresp == 1) {
-                        return view('correspondencia2.btn3', compact('data'));
-                    }
-                })
-
-                ->rawColumns(['btn'])
-                ->make(true);
-
-            //dd($data);
+            return Datatables::of($data)->addIndexColumn()
+                                        ->addColumn('btn', 'correspondencia-local.btn')
+                                        ->addColumn('btn3', function ($data) {
+                                            if ($data->estado_corresp == 0) {
+                                                return view('correspondencia-local.btn4', compact('data'));
+                                            }
+                                            if ($data->estado_corresp == 1) {
+                                                return view('correspondencia-local.btn3', compact('data'));
+                                            }
+                                        })
+                                        ->rawColumns(['btn'])
+                                        ->make(true);
         }
 
-        return view('correspondencia2.index');
+        return view('correspondencia-local.index');
     }
 
 
     public function create()
-
     {
-
-
-
         $date = Carbon::now();
-
         $date = $date->format('Y');
-
-
         $tipos = DB::table('tipoarchivo')->get();
         $anio = DB::table('anio')->get();
-        return view('correspondencia2.createRecepcion', ["tipos" => $tipos, "date" => $date, "anio" => $anio]);
+        return view('correspondencia-local.createRecepcion', ["tipos" => $tipos, "date" => $date, "anio" => $anio]);
     }
-
-
-    /////////// LISTA UNIDAD ///////////
 
     public function indexUnidad(Request $request)
     {
-
         if ($request->ajax()) {
-
-            $unidad = DB::table("unidad as u")
-
-                ->select('u.nombre_unidad');
-
+            $unidad = DB::table("unidad as u")->select('u.nombre_unidad');
             return Datatables::of($unidad)
-                ->addIndexColumn()
-                ->make(true);
+                                ->addIndexColumn()
+                                ->make(true);
         }
 
-        return view('correspondencia2.indexUnidad');
+        return view('correspondencia-local.indexUnidad');
     }
-
-
-    //////////// LISTA REMITENTE //////////
 
     public function indexRemitente(Request $request)
     {
-
         if ($request->ajax()) {
-
             $data = DB::table("remitente as re")
-
-                ->join('unidad as u', 'u.id_unidad', '=', 're.id_unidad')
-                ->select('re.id_remitente', 're.nombres_remitente', 're.apellidos_remitente', 're.ci_remitente', 'u.nombre_unidad');
-
+                        ->join('unidad as u', 'u.id_unidad', '=', 're.id_unidad')
+                        ->select('re.id_remitente', 're.nombres_remitente', 're.apellidos_remitente', 're.ci_remitente', 'u.nombre_unidad');
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->make(true);
         }
 
-        return view('correspondencia2.indexRemitente');
+        return view('correspondencia-local.indexRemitente');
     }
-
-
-    ////////////////CREAR AREA //////////////
 
     public function createLugar()
     {
-        return view('correspondencia2.createUnidad');
+        return view('correspondencia-local.createUnidad');
     }
 
     public function storeLugar(request $request)
     {
-
-        //$newestUser = UnidadModel::orderBy('id_unidad', 'desc')->first();
-        // $maxId = $newestUser->id_unidad;
-
         $lugar = new UnidadModel();
-        //$lugar->id_unidad = $maxId + 1;
         $lugar->nombre_unidad = $request->input('nombre');
         $lugar->estado_unidad = 1;
         $lugar->save();
 
-        return redirect()->route('crear2.remitente');
+        return redirect()->route('correspondencia.local.remitente.crear');
     }
-
-
-    ////////////////CREAR TIPO CORRESPONDENCIA //////////////
 
     public function createTipo()
     {
-        return view('correspondencia2.createTipo');
+        return view('correspondencia-local.createTipo');
     }
 
     public function storeTipo(request $request)
     {
-
-        //$newestUser = UnidadModel::orderBy('id_unidad', 'desc')->first();
-        // $maxId = $newestUser->id_unidad;
-
         $tipo = new TipoCorresp2Model();
-        //$lugar->id_unidad = $maxId + 1;
         $tipo->nombre_tipo = $request->input('nombre');
         $tipo->estado_tipo = 1;
         $tipo->save();
 
-        return redirect()->route('crear2.recepcion');
+        return redirect()->route('correspondencia.local.crear');
     }
-
-    ////////////////// CREAR REMITENTE ////////////
 
     public function createRemitente()
     {
-
         $unidades = DB::table("unidad")->get();
-        return view('correspondencia2.createRemitente', ["unidades" => $unidades]);
+        return view('correspondencia-local.createRemitente', ["unidades" => $unidades]);
     }
 
     public function storeRemitente(request $request)
     {
-
-        //$newestUser = Remitente2Model::orderBy('id_remitente', 'desc')->first();
-        //$maxId = $newestUser->id_remitente;
-
         $remitente = new Remitente2Model();
-        //
-        //  $remitente->id_remitente = $maxId + 1;
         $remitente->nombres_remitente = $request->input('nombres');
         $remitente->apellidos_remitente = $request->input('apellidos');
-        //$remitente->ap_mat = $request->input('apMat');
         $remitente->ci_remitente = $request->input('ci');
         $remitente->id_unidad = $request->input('lugar');
         $remitente->estado_remitente = 1;
-        //$remitente->estado_envio = 0;
-        //$remitente->estado_u = 0;
         $remitente->save();
 
-        return redirect()->route('crear2.recepcion');
+        return redirect()->route('correspondencia.local.crear');
     }
-
-
-
-    ///////////// CREAR RECEPCION ////////////////
 
     public function createRecepcion()
     {
         $fechaActual = date('d/m/Y');
-
         $newestUser = Recepcion2Model::orderBy('n_oficio', 'desc')->first();
         $maxId = $newestUser->n_oficio;
         $maxId2 = $maxId + 1;
         $hojaderuta = 0;
-        //dd($maxId2);
         $remitentes = DB::table("remitente as re")
-
-            // ->join('empleados as e', 'e.id_emp', '=', 'r.id_emp')
-            ->join('unidad as u', 'u.id_unidad', '=', 're.id_unidad')
-            ->select('re.nombres_remitente', 're.id_remitente', 're.apellidos_remitente', 'u.nombre_unidad')
-            //->limit(5)
-            ->get();
+                        ->join('unidad as u', 'u.id_unidad', 're.id_unidad')
+                        ->select('re.nombres_remitente', 're.id_remitente', 're.apellidos_remitente', 'u.nombre_unidad')
+                        ->get();
 
         $tipos = DB::table("tipocorresp")->get();
-
-
-        //$empleados = DB::connection('pgsql_correspondencia')->table("empleados")->get();
-        return view('correspondencia2.createRecepcion', ["remitentes" => $remitentes, "tipos" => $tipos, "maxId2" => $maxId2, "hojaderuta" => $hojaderuta, "fechaActual" => $fechaActual]);
+        return view('correspondencia-local.createRecepcion', ["remitentes" => $remitentes, "tipos" => $tipos, "maxId2" => $maxId2, "hojaderuta" => $hojaderuta, "fechaActual" => $fechaActual]);
     }
 
-
     public function buscarRemitentes(Request $request)
-{
-    $q = $request->q;
-
-    $resultados = Remitente::where('nombres_remitente', 'like', '%' . $q . '%')
-        ->orWhere('apellidos_remitente', 'like', '%' . $q . '%')
-        ->orWhere('nombre_unidad', 'like', '%' . $q . '%')
-        ->get();
-
-    return response()->json($resultados);
-}
+    {
+        $term = $request->get('term');
+        $querys = DB::table('remitente as a')
+                        ->join('unidad as b','b.id_unidad','a.id_unidad')
+                        ->where('a.nombres_remitente', 'like', '%' . $term . '%')
+                        ->orWhere('a.apellidos_remitente', 'like', '%' . $term . '%')
+                        ->orWhere('b.nombre_unidad', 'like', '%' . $term . '%')
+                        ->get();
+        $data = [];
+        foreach($querys as $query){
+            $data[] = [
+                'label' => '(' . $query->id_remitente . ') ' . $query->nombre_unidad . ' / ' . $query->nombres_remitente . ' ' . $query->apellidos_remitente
+            ];
+        }
+        return $data;
+    }
 
     public function storeRecepcion2(request $request)
     {
@@ -261,30 +203,27 @@ class Recepcion2Controller extends Controller
         $archivo->documento = $recepcion->id_recepcion;
         $archivo->save();
 
-        return redirect()->route('recepcion2.index');
+        return redirect()->route('correspondencia.local.index');
     }
 
     public function storeRecepcion(Request $request)
     {
+        $cadena = $request->emp;
+        if (preg_match('/\((\d+)\)/', $cadena, $matches)) {
+            $emp = $matches[1];
+        } else {
+            return redirect()->back()->with('error_message','[Ocurrio un Error en el registro.]')->withInput();
+        }
 
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
-        // $userdate = User::find($id)->usuariosempleados;
-        // $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
-
-        //$fecha_recepcion = substr($request->fecha, 6, 4) . '-' . substr($request->fecha, 3, 2) . '-' . substr($request->fecha, 0, 2);
-
         $fecha_gestion = substr($request->fecha, 6, 4);
-
-        //$archivos = ArchivosModel::find($idarchivo);
         if ($request->file("documento") != null) {
             if ($request->hasFile("documento")) {
                 $file = $request->file("documento");
                 $file_name = $file->getClientOriginalName();
                 $nombre = "pdf_" . time() . "." . $file->guessExtension();
-
                 $ruta = public_path("/Documentos_Correspondencia/" . '/' . $nombre);
-
                 if ($file->guessExtension() == "pdf") {
                     copy($file, $ruta);
                 } else {
@@ -292,17 +231,14 @@ class Recepcion2Controller extends Controller
                 }
             }
 
-
             $fecha_recepcion = substr($request->fecha, 6, 4) . '-' . substr($request->fecha, 3, 2) . '-' . substr($request->fecha, 0, 2);
             $recepcion = new Recepcion2Model();
-            // $recepcion->id_recepcion = $maxId + 1;
             $recepcion->asunto = $request->input('asunto');
             $recepcion->n_oficio = $request->input('codigo');
             $recepcion->observaciones = $request->input('oficio');
-            //$remitente->ci = $request->input('ci');
             $recepcion->fecha_recepcion = $fecha_recepcion;
             $recepcion->id_us = $id;
-            $recepcion->id_remitente = $request->input('emp');
+            $recepcion->id_remitente = $emp;
             $recepcion->idtipo_corresp = $request->input('tipo');
             $recepcion->confidencialidad = 0;
             $recepcion->estado_corresp = 1;
@@ -313,19 +249,16 @@ class Recepcion2Controller extends Controller
             $archivo->id_recepcion = $recepcion->id_recepcion;
             $archivo->documento = $nombre;
             $archivo->estado_envio = 1;
-
             $archivo->save();
         } else {
             $fecha_recepcion = substr($request->fecha, 6, 4) . '-' . substr($request->fecha, 3, 2) . '-' . substr($request->fecha, 0, 2);
             $recepcion = new Recepcion2Model();
-            // $recepcion->id_recepcion = $maxId + 1;
             $recepcion->asunto = $request->input('asunto');
             $recepcion->n_oficio = $request->input('codigo');
             $recepcion->observaciones = $request->input('oficio');
-            //$remitente->ci = $request->input('ci');
             $recepcion->fecha_recepcion = $fecha_recepcion;
             $recepcion->id_us = $id;
-            $recepcion->id_remitente = $request->input('emp');
+            $recepcion->id_remitente = $emp;
             $recepcion->idtipo_corresp = $request->input('tipo');
             $recepcion->confidencialidad = 0;
             $recepcion->estado_corresp = 0;
@@ -333,29 +266,19 @@ class Recepcion2Controller extends Controller
             $recepcion->save();
         }
 
-        return redirect()->route('recepcion2.index');
+        return redirect()->route('correspondencia.local.index')->with('success_message', '[Registro creado correctamente...]');
     }
-
-    ///////////////// EDITAR CODIGO ///////////////////////////////////
 
     public function editarCodigo($idrecepcion)
     {
         $recepcion = Recepcion2Model::find($idrecepcion);
         $remitentes = DB::table("remitente as re")
-
-            // ->join('empleados as e', 'e.id_emp', '=', 'r.id_emp')
-            ->join('unidad as u', 'u.id_unidad', '=', 're.id_unidad')
-            ->select('re.nombres_remitente', 're.id_remitente', 're.apellidos_remitente', 'u.nombre_unidad')
-            //->limit(5)
-            ->get();
-        // $fechaActual = date('d/m/Y');
-        // $date = str_replace('/', '-', $request->stockupdate);
+                        ->join('unidad as u', 'u.id_unidad', '=', 're.id_unidad')
+                        ->select('re.nombres_remitente', 're.id_remitente', 're.apellidos_remitente', 'u.nombre_unidad')
+                        ->get();
         $fecha_d_m_y = date("d/m/Y", strtotime($recepcion->fecha_recepcion));
-
-        $tipos = DB::table("tipocorresp")->get();
-        //dd($recepcion);
-        //return view('correspondencia2/edit')->with('recepcion', $recepcion);
-        return view('correspondencia2/edit', ["recepcion" => $recepcion, "tipos" => $tipos, "remitentes" => $remitentes, "fecha_d_m_y" => $fecha_d_m_y]);
+        $tipos = DB::table("tipocorresp")->get();;
+        return view('correspondencia-local.edit', ["recepcion" => $recepcion, "tipos" => $tipos, "remitentes" => $remitentes, "fecha_d_m_y" => $fecha_d_m_y]);
     }
 
 
@@ -377,43 +300,21 @@ class Recepcion2Controller extends Controller
         } else {
             $request->session()->flash('message', 'Error al Procesar Registro');
         }
-        //return redirect()->route('recepcion2.index');
-        return redirect()->route('correspondencia2.gestionar', $idRecepcion);
+        //return redirect()->route('correspondencia.local.index');
+        return redirect()->route('correspondencia.local.gestionar', $idRecepcion);
     }
-
-
-
-    ///////////////// GESTIONAR CORRESPONDENCIA ///////////////
 
     public function gestionarCorrespondencia($idrecepcion)
     {
         $recepcion = Recepcion2Model::find($idrecepcion);
-
         $data = DB::table('recepcion as r')
-            ->join('remitente as re', 're.id_remitente', '=', 'r.id_remitente')
-            ->join('unidad as u', 'u.id_unidad', '=', 're.id_unidad')
-            ->select('r.estado_corresp', 'r.id_recepcion', 'r.asunto', 'r.fecha_recepcion', 'r.n_oficio', 'r.observaciones', 're.nombres_remitente', 're.apellidos_remitente', 'u.nombre_unidad')
-            ->where('r.id_recepcion', $recepcion->id_recepcion)
-            ->first();
+                    ->join('remitente as re', 're.id_remitente', 'r.id_remitente')
+                    ->join('unidad as u', 'u.id_unidad', 're.id_unidad')
+                    ->select('r.estado_corresp', 'r.id_recepcion', 'r.asunto', 'r.fecha_recepcion', 'r.n_oficio', 'r.observaciones', 're.nombres_remitente', 're.apellidos_remitente', 'u.nombre_unidad')
+                    ->where('r.id_recepcion', $recepcion->id_recepcion)
+                    ->first();
 
-            //$personal = User::find(Auth::user()->id);
-            //$id = $personal->id;
-           // $userdate = User::find($id)->usuariosempleados;
-           // $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
-
-           // $dataderivacion = DB::table('derivCorresp as d')
-            //->join('remitente as re', 're.id_remitente', '=', 'r.id_remitente')
-            //->join('areas as a', 'a.idarea', '=', 'd.idarea')
-           // ->select('d.idarea','d.idderivacion','d.estadoderiv1')
-           //->where('d.idarea', $personalArea->idarea)
-          //->where('d.estadoderiv1', 1)
-
-           // ->get();
-
-      // dd($dataderivacion);
-
-        //return view('correspondencia2/gestionarCorrespondencia')->with('data', $data);
-        return view('correspondencia2.gestionarCorrespondencia', ["data" => $data]);
+        return view('correspondencia-local.gestionarCorrespondencia', ["data" => $data]);
     }
 
 
@@ -422,7 +323,7 @@ class Recepcion2Controller extends Controller
 
     {
 
-        return view('correspondencia2.cargarpdf', ["idrecepcion" => $idrecepcion]);
+        return view('correspondencia-local.cargarpdf', ["idrecepcion" => $idrecepcion]);
     }
 
 
@@ -453,19 +354,18 @@ class Recepcion2Controller extends Controller
         $recepcion = Recepcion2Model::find($request->input('idrecepcion'));
         $recepcion->estado_corresp = 1;
         $recepcion->save();
-        return redirect()->route('correspondencia2.gestionar', $request->input('idrecepcion'));
+        return redirect()->route('correspondencia.local.gestionar', $request->input('idrecepcion'));
     }
 
     public function actualizarpdf($idrecepcion)
-
     {
-        return view('correspondencia2.updatepdf', ["idrecepcion" => $idrecepcion]);
+        return view('correspondencia-local.updatepdf', ["idrecepcion" => $idrecepcion]);
     }
 
     public function notificacion()
 
     {
-        return view('correspondencia2.notificacion');
+        return view('correspondencia-local.notificacion');
     }
 
 
@@ -505,38 +405,30 @@ class Recepcion2Controller extends Controller
         $recepcion = Recepcion2Model::find($request->input('idrecepcion'));
         $recepcion->estado_corresp = 1;
         $recepcion->save();
-        return redirect()->route('correspondencia2.gestionar', $request->input('idrecepcion'));
+        return redirect()->route('correspondencia.local.gestionar', $request->input('idrecepcion'));
     }
 
 
 
     public function derivar($idrecepcion)
-
     {
         $area = DB::table('areas  as a')
-            // ->join('areas as ar', 'ar.idarea', '=', 'tt.idarea')
-            // ->join('tipoarchivo as t', 't.idtipo', '=', 'tt.idtipo')
-            ->select('a.idarea', 'a.nombrearea')
-            //  ->where('tt.idarea','=', $personalArea->idarea)
-            ->orderBy('a.idarea', 'desc')
-            ->get();
+                    ->select('a.idarea', 'a.nombrearea')
+                    ->orderBy('a.idarea', 'desc')
+                    ->get();
 
         $derivacionCorresp = DB::table('derivCorresp  as d')
-            ->join('areas as ar', 'ar.idarea', '=', 'd.idarea')
-            ->join('recepcion as r', 'r.id_recepcion', '=', 'd.id_recepcion')
-            ->select('r.id_recepcion', 'd.idderivacion', 'ar.nombrearea')
-            ->where('d.id_recepcion', '=', $idrecepcion)
-            // ->orderBy('d.idderivacion', 'desc')
-            ->get();
+                                ->join('areas as ar', 'ar.idarea', 'd.idarea')
+                                ->join('recepcion as r', 'r.id_recepcion', 'd.id_recepcion')
+                                ->select('r.id_recepcion', 'd.idderivacion', 'ar.nombrearea')
+                                ->where('d.id_recepcion', '=', $idrecepcion)
+                                ->get();
 
-            $instruccion = DB::table('instruccionv  as i')
-            ->select('i.idinstruccionv', 'i.nombreinstruccionv')
-            ->get();
+        $instruccion = DB::table('instruccion  as i')
+                            ->select('i.idinstruccion', 'i.nombreinstruccion')
+                            ->get();
 
-            //$instruccion = InstruccionvModel::all();
-
-       // dd($instruccion2);
-        return view('correspondencia2.derivar', ["instruccion" => $instruccion,"idrecepcion" => $idrecepcion, "area" => $area, "derivacionCorresp" => $derivacionCorresp]);
+        return view('correspondencia-local.derivar', ["instruccion" => $instruccion,"idrecepcion" => $idrecepcion, "area" => $area, "derivacionCorresp" => $derivacionCorresp]);
     }
 
     public function guardarderivacion(request $request)
@@ -578,7 +470,7 @@ class Recepcion2Controller extends Controller
 
 
 
-        return redirect()->route('correspondencia2.derivar', $request->input('idrecepcion'));
+        return redirect()->route('correspondencia.local.derivar', $request->input('idrecepcion'));
     }
 
 
@@ -588,31 +480,20 @@ class Recepcion2Controller extends Controller
         $idrecepcion = $derivacion->id_recepcion;
         $derivacion->delete();
 
-        return redirect()->route('correspondencia2.derivar', $idrecepcion);
+        return redirect()->route('correspondencia.local.derivar', $idrecepcion);
     }
 
 
     public function urlfile($recepcion_id)
     {
-        // $file = ThesisFile::where('thesis_id',$thesis_id)->where('state',1)->first();
-        // return response()->json(['response' => [
-        // 'url' => $file->url,
-        // 'name' => $file->name,
-        // ]
-        // ], 201);
-
         $data = DB::table('archivocorresp as a')
-            ->join('recepcion as r', 'r.id_recepcion', '=', 'a.id_recepcion')
-            //->join('unidad as u', 'u.id_unidad', '=', 're.id_unidad')
-            ->select('r.id_recepcion', 'a.documento')
-            ->where('r.id_recepcion', $recepcion_id)
-            ->first();
+                        ->join('recepcion as r', 'r.id_recepcion', 'a.id_recepcion')
+                        ->select('r.id_recepcion', 'a.documento')
+                        ->where('r.id_recepcion', $recepcion_id)
+                        ->first();
 
-        //dd($data->documento);
+        $redirect = '../Documentos_Correspondencia/';
 
-        $redirect = '../public/Documentos_Correspondencia/';
-        // return Redirect::to($redirect);
-        //return Redirect::to($redirect)->with('_blank');
         return redirect()->to($redirect . $data->documento);
     }
 

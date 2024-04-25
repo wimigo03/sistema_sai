@@ -8,7 +8,7 @@
                 <div class="col-md-4 titulo">
 
                     <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-                        <a href="{{ route('correspondencia2.gestionar', $idrecepcion) }}">
+                        <a href="{{ route('correspondencia.local.gestionar', $idrecepcion) }}">
                             <span class="color-icon-1">
                                 &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                             </span>
@@ -29,7 +29,7 @@
 
             <div class="body-border">
                 <font size="2" face="Courier New">
-                    <form method="POST" action="{{ route('correspondencia2.storepdf') }}" enctype="multipart/form-data"
+                    <form method="POST" action="{{ route('correspondencia.local.storepdf') }}" enctype="multipart/form-data"
                         id="form">
                         @csrf
                         <input type="hidden" value="{{ $idrecepcion }}" required name="idrecepcion" id="idrecepcion">
@@ -91,7 +91,7 @@
 
             $(".btn").hide();
             $(".spinner-btn-send").show();
-            window.location.href = "{{ route('correspondencia2.gestionar', $idrecepcion) }}";
+            window.location.href = "{{ route('correspondencia.local.gestionar', $idrecepcion) }}";
 
         });
 

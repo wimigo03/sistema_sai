@@ -28,7 +28,7 @@
 
             <div class="body-border">
                 <font size="2" face="Courier New">
-                    <form method="POST" action="{{ route('guardar.recepcion') }}" id="form">
+                    <form method="POST" action="{{ route('correspondencia.guardar.recepcion') }}" id="form">
                         @csrf
 
                         <div class="form-group row">
@@ -113,7 +113,7 @@
                         <br>
 
                         <div align='center'>
-                            <a href="{{ route('crear.remitente') }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar Remitente">
+                            <a href="{{ route('correspondencia.crear.remitente') }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar Remitente">
                                 <button class="btn btn-sm btn-success font-verdana" type="button">
                                     &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
                                 </button>

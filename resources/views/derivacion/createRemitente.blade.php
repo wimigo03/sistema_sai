@@ -28,7 +28,7 @@
 
             <div class="body-border">
                 <font size="2" face="Courier New">
-                    <form method="POST" action="{{ route('guardar2.remitente') }}" id="form">
+                    <form method="POST" action="{{ route('correspondencia.local.remitente.guardar') }}" id="form">
                         @csrf
 
                         <div class="form-group row">
@@ -80,7 +80,7 @@
                         <br>
 
                         <div align='center'>
-                            <a href="{{ route('crear2.lugar') }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar area-unidad">
+                            <a href="{{ route('correspondencia.local.lugar.crear') }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar area-unidad">
                                 <button class="btn btn-sm btn-warning font-verdana" type="button">
                                     &nbsp;<i class="fa fa-lg fa-address-book" aria-hidden="true"></i>&nbsp;
                                 </button>

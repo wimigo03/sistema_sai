@@ -492,42 +492,20 @@
                         <hr style="margin-top:0; margin-bottom:0;">
                     @endcan
                     {{-- CORRESPONDENCIA --}}
-                    {{--@can('correspondencia.index')--}}
+                    @can('correspondencia.index')
                         <li class="font-verdana-12">
-                            <a href="" data-toggle="collapse" data-target="#dashboard_ventanilla" class="active collapsed" aria-expanded="false">
-                                <i class="fa fa-folder-open" style="color:green"></i>
-                                <span class="nav-label mr-3">CORRESPONDENCIA</span>
-                                <span class="fa fa-arrow-circle-left float-right"></span>
+                            <a href="{{ route('correspondencia.index') }}">
+                                <i class="fa fa-folder-open fa-fw"></i>&nbsp;Correspondencia
                             </a>
-                            <ul class="sub-menu collapse" id="dashboard_ventanilla">
-                                <li>
-                                    <a href="{{ route('correspondencia.index') }}">
-                                        &nbsp; &nbsp; &nbsp;
-                                        <span class="nav-label mr-4">Acceder</span>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
-                        <hr style="margin-top:0; margin-bottom:0;">
-                    {{--@endcan--}}
+                    @endcan
                     {{-- CORRESPONDENCIA LOCAL --}}
-                    @can('recepcion2.index')
+                    @can('correspondencia_local.index')
                         <li class="font-verdana-12">
-                            <a href="" data-toggle="collapse" data-target="#dashboard_ventanilla2" class="active collapsed" aria-expanded="false">
-                                <i class="fa fa-envelope" style="color:green"></i>
-                                <span class="nav-label mr-3">CORRESP.LOCAL</span>
-                                <span class="fa fa-arrow-circle-left float-right"></span>
+                            <a href="{{ route('correspondencia.local.index') }}">
+                                <i class="fa fa-envelope fa-fw"></i>&nbsp;Correspondencia Local
                             </a>
-                            <ul class="sub-menu collapse" id="dashboard_ventanilla2">
-                                <li>
-                                    <a href="{{ route('recepcion2.index') }}">
-                                        &nbsp; &nbsp; &nbsp;
-                                        <span class="nav-label mr-4">Acceder</span>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
-                        <hr style="margin-top:0; margin-bottom:0;">
                     @endcan
                     {{-- CORRESPONDENCIA LOCAL 2 --}}
                     @can('derivacion.index')

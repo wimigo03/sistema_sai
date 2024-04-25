@@ -27,7 +27,7 @@
         <div class="body-border">
             <font size="2" face="Courier New" >
 
-                <form method="POST" action="{{ route('guardar.lugar') }}">
+                <form method="POST" action="{{ route('correspondencia.guardar.lugar') }}">
                     @csrf
 
                     <div class="form-group row">

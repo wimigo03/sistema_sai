@@ -1,36 +1,75 @@
 @extends('layouts.admin')
-
 @section('content')
-
-    <div class="card">
-        <div class="card-header">{{ __('Agregar nuevo permiso') }}</div>
-
-        <div class="card-body">
-            <form method="POST" action="{{ route('permissions.store') }}">
-                @csrf
-                <div class="form-group row">
-                    <label for="name" class="required col-md-4 col-form-label text-md-right">{{ __('Nombre') }}</label>
-
-                    <div class="col-md-6">
-                        <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" >
-
-                        @error('name')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="form-group row mb-0">
-                    <div class="col-md-6 offset-md-4">
-                        <button type="submit" class="btn btn-outline-primary">
-                            {{ __('Crear') }}
-                        </button>
-                    </div>
-                </div>
-            </form>
+    <div class="card-header header">
+        <div class="row">
+            <div class="col-md-12 pr-1 pl-1 text-center">
+                <b>REGISTRAR PERMISO</b>
+            </div>
         </div>
     </div>
+    <div class="card-body body">
+        <form method="post" action="{{ route('permissions.store') }}" id="form">
+            @csrf
+            <div class="form-group row font-roboto-12 abs-center">
+                <div class="col-md-4 pr-1 pl-1">
+                    <label for="nombre" class="d-inline"><b>Nombre del permiso</b></label>
+                    <input type="hidden" name="dea_id" value="{{ $dea_id }}">
+                    <input type="text" name="name" value="{{ old('name') }}" id="name" class="form-control font-roboto-12 intro">
+                </div>
+            </div>
+            <div class="form-group row font-roboto-12 abs-center">
+                <div class="col-md-8 pr-1 pl-1 text-right">
+                    <button class="btn btn-outline-primary font-roboto-12" type="button" onclick="procesar();">
+                        <i class="fas fa-paper-plane fa-fw"></i> Procesar
+                    </button>
+                    <button class="btn btn-outline-danger font-roboto-12" type="button" onclick="cancelar();">
+                        <i class="fas fa-times fa-fw"></i> Cancelar
+                    </button>
+                    <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
+                </div>
+            </div>
+        </form>
+    </div>
+@endsection
+@section('scripts')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.select2').select2({
+                theme: "bootstrap4",
+                placeholder: "--Seleccionar--",
+                width: '100%'
+            });
+        });
 
+        $('.intro').on('keypress', function(event) {
+            if (event.which === 13) {
+                procesar();
+                event.preventDefault();
+            }
+        });
+
+        var Modal = function(mensaje){
+            $("#modal-alert .modal-body").html(mensaje);
+            $('#modal-alert').modal({keyboard: false});
+        }
+
+        function procesar() {
+            $('#modal_confirmacion').modal({
+                keyboard: false
+            })
+        }
+
+        function confirmar(){
+            var url = "{{ route('permissions.store') }}";
+            $("#form").attr('action', url);
+            $(".btn").hide();
+            $(".spinner-btn").show();
+            $("#form").submit();
+        }
+
+        function cancelar(){
+            var url = "{{ route('permissions.index') }}";
+            window.location.href = url;
+        }
+    </script>
 @endsection

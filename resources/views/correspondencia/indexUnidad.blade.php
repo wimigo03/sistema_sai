@@ -21,8 +21,8 @@
         <div class="col-md-3 text-right titulo">
 
 
-     
-                <a href="{{ route('crear.lugar') }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar Area">
+
+                <a href="{{ route('correspondencia.crear.lugar') }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar Area">
                     <button class="btn btn-sm btn-success font-verdana" type="button">
                         &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
                     </button>
@@ -68,7 +68,7 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ajax: "{{ route('recepcion.unidadIndex') }}",
+                ajax: "{{ route('correspondencia.unidadIndex') }}",
                 columns: [{
                         data: 'DT_RowIndex',
                         orderable: false,

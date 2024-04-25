@@ -8,7 +8,7 @@
                 <div class="col-md-4 titulo">
 
                     <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-                        <a href="{{ route('correspondencia2.gestionar', $recepcion->id_recepcion) }}">
+                        <a href="{{ route('correspondencia.local.gestionar', $recepcion->id_recepcion) }}">
                             <span class="color-icon-1">
                                 &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
                             </span>
@@ -29,7 +29,7 @@
 
             <div class="body-border">
                 <font size="2" face="Courier New">
-                    <form method="POST" action="{{ route('correspondencia2.update', $recepcion->id_recepcion) }}"
+                    <form method="POST" action="{{ route('correspondencia.local.update', $recepcion->id_recepcion) }}"
                         enctype="multipart/form-data">
                         @csrf
 
