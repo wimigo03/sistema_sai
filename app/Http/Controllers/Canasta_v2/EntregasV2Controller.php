@@ -149,20 +149,28 @@ class EntregasV2Controller extends Controller
 
         $entregados = Entrega::where('dea_id',Auth::user()->dea->id)
                             ->where('id_paquete',$idpaquete)
+                            ->where('estado','=',3)
+                             ->count();
+
+        $sin_entrega_imp = Entrega::where('dea_id',Auth::user()->dea->id)
+                            ->where('id_paquete',$idpaquete)
                             ->where('estado','=',2)
                              ->count();
 
-        $sin_entrega = Entrega::where('dea_id',Auth::user()->dea->id)
-                            ->where('id_paquete',$idpaquete)
-                            ->where('estado','=',1)
-                             ->count();
+        $sin_entrega_sinImp = Entrega::where('dea_id',Auth::user()->dea->id)
+                             ->where('id_paquete',$idpaquete)
+                             ->where('estado','=',1)
+                              ->count();
+
+        $sin_entrega=$sin_entrega_imp + $sin_entrega_sinImp;
+
 
         $total = Entrega::where('dea_id',Auth::user()->dea->id)
                              ->where('id_paquete',$idpaquete)
                              //->where('estado','=',1)
                               ->count();
 
-        return view('canasta_v2.entregas.entrega_index', ["total" => $total,"entregados" => $entregados,"sin_entrega" => $sin_entrega,"estados" => $estados,"botonImprimir" => $botonImprimir,"barrios3" => $barrios3,"barrios2" => $barrios2,"barrios" => $barrios,"beneficiarioControl" => $beneficiarioControl,"entrega" => $entregas,"idpaquete" => $idpaquete]);
+        return view('canasta_v2.entregas.entrega_index', ["sin_entrega" => $sin_entrega,"total" => $total,"entregados" => $entregados,"estados" => $estados,"botonImprimir" => $botonImprimir,"barrios3" => $barrios3,"barrios2" => $barrios2,"barrios" => $barrios,"beneficiarioControl" => $beneficiarioControl,"entrega" => $entregas,"idpaquete" => $idpaquete]);
     }
 
     public function search_entrega(Request $request,$idpaquete)
@@ -234,15 +242,26 @@ class EntregasV2Controller extends Controller
                                             ->byBarrio($request->barrio)
                                             ->where('dea_id',Auth::user()->dea->id)
                                             ->where('id_paquete','=',$idpaquete)
-                                            ->where('estado','=',2)
+                                            ->where('estado','=',3)
                                             ->count();
 
-                                            $sin_entrega = Entrega::query()
+                                            $sin_entrega_imp = Entrega::query()
+                                            ->byBarrio($request->barrio)
+                                            ->where('dea_id',Auth::user()->dea->id)
+                                            ->where('id_paquete','=',$idpaquete)
+                                            ->where('estado','=',2)
+                                            //->where('estado','=',1)
+                                            ->count();
+
+                                            $sin_entrega_sinImp = Entrega::query()
                                             ->byBarrio($request->barrio)
                                             ->where('dea_id',Auth::user()->dea->id)
                                             ->where('id_paquete','=',$idpaquete)
                                             ->where('estado','=',1)
+                                            //->where('estado','=',1)
                                             ->count();
+
+                                            $sin_entrega=$sin_entrega_imp + $sin_entrega_sinImp;
 
                                             $total = Entrega::query()
                                             ->byBarrio($request->barrio)
@@ -266,7 +285,9 @@ class EntregasV2Controller extends Controller
 
                                         $entregados = 0;
 
-                                        $sin_entrega = 0;
+                                        $sin_entrega_imp = 0;
+                                        $sin_entrega_sinImp = 0;
+                                        $sin_entrega=$sin_entrega_imp + $sin_entrega_sinImp;
 
                                          $total =0;
                                     }
@@ -274,7 +295,7 @@ class EntregasV2Controller extends Controller
 
 
 
-     return view('canasta_v2.entregas.entrega_index', ["entregados" => $entregados,"sin_entrega" => $sin_entrega,"total" => $total,"estados" => $estados,"barrios3" => $barrios3,"botonImprimir" => $botonImprimir,"barrios2" => $barrios2,"barrios" => $barrios,"beneficiarioControl" => $beneficiarioControl,"entrega" => $entregas,"idpaquete" => $idpaquete]);
+     return view('canasta_v2.entregas.entrega_index', ["sin_entrega" => $sin_entrega,"entregados" => $entregados,"total" => $total,"estados" => $estados,"barrios3" => $barrios3,"botonImprimir" => $botonImprimir,"barrios2" => $barrios2,"barrios" => $barrios,"beneficiarioControl" => $beneficiarioControl,"entrega" => $entregas,"idpaquete" => $idpaquete]);
 }
 
 
@@ -456,7 +477,7 @@ class EntregasV2Controller extends Controller
                                         //return view('canasta_v2/entregas/generarboleta2', ["entrega" => $entregas,"userdate" => $userdate,"personalArea" => $personalArea]);
 
                                         return view('canasta_v2.entregas/generarboleta2', compact('fecha_actual','entrega','userdate','personalArea'));
-                     
+
                                     }
 
 
