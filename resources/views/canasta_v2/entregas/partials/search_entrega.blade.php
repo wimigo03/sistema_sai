@@ -30,15 +30,22 @@
         </div>
     </div>
     <div class="form-group row">
-        <div class="col-md-6 pr-1 pl-1">
+        <div class="col-md-2 pr-1 pl-1">
             <span class="tts:right tts-slideIn tts-custom" aria-label="Ir atras" style="cursor: pointer;">
                 <span class="btn btn-primary font-roboto-12" onclick="cancelar();">
                     <i class="fas fa-angle-double-left fa-fw"></i>
                 </span>
             </span>
-            <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn-send" style="display: none;"></i>
         </div>
-        <div class="col-md-6 pr-1 pl-1 text-right">
+        <div class="col-md-8 pr-1">
+            <label for="nombre">--- (Total:   {{ $total }}) -</label>
+            <label for="nombre">(Entregados:   {{ $entregados }}) -</label>
+            <label for="nombre" class="d-inline">(Sin Entrega:   {{ $sin_entrega }}) ---</label>
+        </div>
+
+
+
+        <div class="col-md-2 pr-2 pl-1 text-right">
             <span class="btn btn-outline-primary font-roboto-12" onclick="procesar();">
                 <i class="fa fa-search fa-fw" aria-hidden="true"></i>&nbsp;Buscar
             </span>

@@ -24,7 +24,7 @@
                 @endcan
                 @can('canasta.entregas.generar.boleta')
                     @if ($botonImprimir == 1)
-                        <button class="btn btn-outline-secondary font-roboto-12" type="button" data-toggle="collapse"
+                        <button class="btn btn-outline-success font-roboto-12" type="button" data-toggle="collapse"
                             data-target="#collapseExample3" aria-expanded="false" aria-controls="collapseExample">
                             <i class="fa fa-print fa-fw" aria-hidden="true"></i> Imp.Bol.X.Barrio
                         </button>
@@ -32,7 +32,7 @@
                 @endcan
                 @can('canasta.entregas.generar.boleta')
                     @if ($botonImprimir == 1)
-                        <button class="btn btn-outline-secondary font-roboto-12" type="button" data-toggle="collapse"
+                        <button class="btn btn-outline-danger font-roboto-12" type="button" data-toggle="collapse"
                             data-target="#collapseExample4" aria-expanded="false" aria-controls="collapseExample">
                             <i class="fa fa-print fa-fw" aria-hidden="true"></i> Imp.Det.X.Barrio
                         </button>
@@ -40,9 +40,18 @@
                 @endcan
                 @can('canasta.entregas.generar.boleta')
                     @if ($botonImprimir == 1)
-                        <button class="btn btn-outline-secondary font-roboto-12" type="button" data-toggle="collapse"
+                        <button class="btn btn-outline-warning font-roboto-12" type="button" data-toggle="collapse"
                             data-target="#collapseExample5" aria-expanded="false" aria-controls="collapseExample">
                             <i class="fa fa-print fa-fw" aria-hidden="true"></i> Imp.Det.X.Barrio2
+                        </button>
+                    @endif
+                @endcan
+
+                @can('canasta.entregas.generar.boleta')
+                    @if ($botonImprimir == 1)
+                        <button class="btn btn-outline-info font-roboto-12" type="button" data-toggle="collapse"
+                            data-target="#collapseExample6" aria-expanded="false" aria-controls="collapseExample">
+                            <i class="fa fa-check fa-fw" aria-hidden="true"></i> Confirmar.Ent.
                         </button>
                     @endif
                 @endcan
@@ -52,6 +61,7 @@
                 @include('canasta_v2.entregas.partials.generar-boleta')
                 @include('canasta_v2.entregas.partials.detalle-barrio')
                 @include('canasta_v2.entregas.partials.detalle-barrio2')
+                @include('canasta_v2.entregas.partials.confirmar_entrega')
 
             </div>
         </div>
@@ -86,6 +96,11 @@
             });
 
             $('#barrio5').select2({
+                theme: "bootstrap4",
+                placeholder: "--Seleccionar un Barrio--",
+                width: '100%'
+            });
+            $('#barrio6').select2({
                 theme: "bootstrap4",
                 placeholder: "--Seleccionar un Barrio--",
                 width: '100%'
@@ -183,6 +198,14 @@
             }
         }
 
+        function save6() {
+            if (validar_formulario6() == true) {
+                $(".btn").hide();
+                $(".spinner-btn-send").show();
+                $("#form6").submit();
+            }
+        }
+
         function cancelar() {
             var url = "{{ route('entregas.index') }}";
             window.location.href = url;
@@ -227,6 +250,15 @@
         function validar_formulario5() {
 
             if ($("#barrio5").val() == "") {
+                message_alert("El campo <b>[Barrio]</b> es un dato obligatorio...");
+                return false;
+            }
+            return true;
+        }
+
+        function validar_formulario6() {
+
+            if ($("#barrio6").val() == "") {
                 message_alert("El campo <b>[Barrio]</b> es un dato obligatorio...");
                 return false;
             }

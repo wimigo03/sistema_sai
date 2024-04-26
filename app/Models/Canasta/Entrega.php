@@ -23,16 +23,21 @@ class Entrega extends Model
         'estado'
     ];
     const ESTADOS = [
-        '1' => 'SIN ENTREGA',
-        '2' => 'ENTREGADO'
+        '1' => 'SIN ENT.(SIN IMPRESION)',
+        '2' => 'SIN ENT.(IMPRESO)',
+        '3' => 'ENTREGADO'
     ];
 
     public function getStatusAttribute(){
         switch ($this->estado) {
             case '1':
-                return "SIN ENTREGA";
+                return "SIN ENT.(SIN IMPRESION)";
+
             case '2':
-                return "ENTREGADO";
+                return "SIN ENT.(IMPRESO)";
+
+                case '3':
+                    return "ENTREGADO";
         }
     }
 

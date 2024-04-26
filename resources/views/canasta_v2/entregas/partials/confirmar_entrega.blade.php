@@ -1,10 +1,10 @@
-<div class="collapse" id="collapseExample3">
-    <form action="{{ route('entregas.generarboleta') }}" method="get" id="form3" target="_blank">
+<div class="collapse" id="collapseExample6">
+    <form action="{{ route('entregas.confirmar_entrega') }}" method="get" id="form6" >
         @csrf
         <input type="hidden" value="{{ $idpaquete }}" id="idcompra" name="idpaquete">
         <div class="form-group row font-roboto-12">
             <div class="col-md-6">
-                <select name="barrio3" id="barrio3" class="form-control form-control-sm">
+                <select name="barrio6" id="barrio6" class="form-control form-control-sm">
                     <option value="">-</option>
                     @foreach ($barrios3 as $barrio3)
                         <option value="{{ $barrio3->id }}">{{ $barrio3->nombre }}</option>
@@ -12,9 +12,9 @@
                 </select>
             </div>
             <div class="col-md-2 text-right">
-                <span class="tts:right tts-slideIn tts-custom" aria-label="Imprimir">
-                    <span class="btn btn-success font-roboto-12" onclick="save3();" >
-                        <i class="fa fa-print fa-fw" aria-hidden="true"></i>
+                <span class="tts:right tts-slideIn tts-custom" aria-label="Confirmar">
+                    <span class="btn btn-success font-roboto-12" onclick="save6();" >
+                        <i class="fa fa-check fa-fw" aria-hidden="true"></i>
                     </span>
                 </span>
             </div>

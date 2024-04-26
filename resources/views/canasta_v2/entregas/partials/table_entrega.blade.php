@@ -28,7 +28,15 @@
                         <td class="text-center p-1">{{ $entregas->beneficiario->ci }}</td>
                         <td class="text-center p-1">{{ $entregas->beneficiario->barrio->nombre }}</td>
                         <td class="text-center p-1"><img src="{{ asset(substr($entregas->beneficiario->dirFoto , 3)) }}" align="center" height="30" with="30" /></td>
-                        <td class="text-center p-1">{{ $entregas->status }}</td>
+                        @if (strtoupper($entregas->status) == 'SIN ENT.(SIN IMPRESION)')
+                        <td class="text-left p-1" style="color: RED;font-weight: bold;">{{ strtoupper($entregas->status) }}</td>
+                        @elseif(strtoupper($entregas->status) == 'SIN ENT.(IMPRESO)')
+                        <td class="text-left p-1" style="color: ORANGE;font-weight: bold;">{{ strtoupper($entregas->status) }}</td>
+                        @elseif(strtoupper($entregas->status) == 'ENTREGADO')
+                        <td class="text-left p-1" style="color: green;font-weight: bold;">{{ strtoupper($entregas->status) }}</td>
+                        @endif
+
+
                         <td class="text-center p-1">
                             <span class="tts:left tts-slideIn tts-custom" aria-label="Imprimir Boleta">
                                 <a  href="{{ route('entregas.generarboleta2',$entregas->id) }}" class="badge-with-padding badge badge-primary" target="_blank" >
@@ -44,7 +52,7 @@
                                                 <i class="fa-regular fa-circle-down fa-lg"></i>
                                             </a>
                                         </span>
-                                    @else
+                            @elseif (App\Models\Canasta\Entrega::ESTADOS[$entregas->estado] == 'SIN ENT.(IMPRESO)')
                                         <span class="tts:left tts-slideIn tts-custom" aria-label="Entregar"
                                             style="cursor: pointer;">
                                             <a href="{{ route('entregas.habilitar',[$entregas->id,$entregas->paquete->id]) }}" class="badge-with-padding badge badge-danger">
