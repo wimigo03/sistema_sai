@@ -6,8 +6,8 @@
             <div class="col-md-6">
                 <select name="barrio6" id="barrio6" class="form-control form-control-sm">
                     <option value="">-</option>
-                    @foreach ($barrios3 as $barrio3)
-                        <option value="{{ $barrio3->id }}">{{ $barrio3->nombre }}</option>
+                    @foreach ($barrios4 as $barrio4)
+                        <option value="{{ $barrio4->id }}">{{ $barrio4->nombre }}</option>
                     @endforeach
                 </select>
             </div>
