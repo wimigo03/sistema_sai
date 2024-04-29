@@ -46,6 +46,11 @@ class Paquetes extends Model
         return $this->belongsTo(Dea::class,'dea_id','id');
     }
 
+    public function barrios_entrega(){
+        return $this->belongsTo(Dea::class,'idPaquete','idPaquete');
+    }
+
+
     public function scopeByCodigo($query, $codigo){
         if($codigo){
             return $query->where('id', $codigo);

@@ -4,6 +4,7 @@ namespace App\Models\Canasta;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class Entrega extends Model
 {
@@ -48,6 +49,21 @@ class Entrega extends Model
     public function paquete_periodo(){
         return $this->belongsTo(User::class,'id','id_paquete');
     }
+
+   // public function getObtenerEstadoAttribute(){
+   //     $barrios_entrega = DB::table('barriosEntrega')
+   //                    ->where('idBarrio',$this->idBarrio)
+   //                    ->where('idPaquete',$this->id_paquete)
+   //                     ->select('estado')
+   //                      ->first();
+   //     if($barrios_entrega != null){
+   //         $estados =9;
+   //     }else{
+   //          $estados = 9;
+   //      }
+   //      return $estados=88;
+   //  }
+
 
     public function dea(){
         return $this->belongsTo(Dea::class,'dea_id','id');

@@ -3,6 +3,7 @@
         <table class="table display table-striped table-bordered responsive hover-orange" style="width:100%;">
             <thead>
                 <tr class="font-roboto-11">
+                    <th class="text-center p-1">BARRIO_ENTREGA</th>
                     <th class="text-center p-1">GESTION</th>
                     <th class="text-center p-1">PERIODO</th>
                     <th class="text-center p-1">NOMBRES</th>
@@ -20,6 +21,7 @@
             <tbody>
                 @foreach ($entrega as $entregas)
                     <tr class="font-roboto-11">
+                        <td class="text-center p-1">{{ $entregas->barrio->barrio_entrega->estado }}</td>
                         <td class="text-center p-1">{{ $entregas->paquete->gestion }}</td>
                         <td class="text-center p-1">{{ $entregas->paquete->periodo }}</td>
                         <td class="text-justify p-1">{{ $entregas->beneficiario->nombres }}</td>
@@ -45,14 +47,14 @@
                             </span>
                         </td>
                         <td class="text-center p-1">
-                            @if (App\Models\Canasta\Entrega::ESTADOS[$entregas->estado] == 'ENTREGADO')
+                            @if (App\Models\Canasta\Entrega::ESTADOS[$entregas->estado] == 'ENTREGADO' && $entregas->barrio->barrio_entrega->estado == 3)
                                         <span class="tts:left tts-slideIn tts-custom" aria-label="Quitar Entrega"
                                             style="cursor: pointer;">
                                             <a href="{{ route('entregas.deshabilitar',[$entregas->id,$entregas->paquete->id]) }}" class="badge-with-padding badge badge-success">
                                                 <i class="fa-regular fa-circle-down fa-lg"></i>
                                             </a>
                                         </span>
-                            @elseif (App\Models\Canasta\Entrega::ESTADOS[$entregas->estado] == 'SIN ENT.(IMPRESO)')
+                            @elseif (App\Models\Canasta\Entrega::ESTADOS[$entregas->estado] == 'SIN ENT.(IMPRESO)' && $entregas->barrio->barrio_entrega->estado == 3)
                                         <span class="tts:left tts-slideIn tts-custom" aria-label="Entregar"
                                             style="cursor: pointer;">
                                             <a href="{{ route('entregas.habilitar',[$entregas->id,$entregas->paquete->id]) }}" class="badge-with-padding badge badge-danger">

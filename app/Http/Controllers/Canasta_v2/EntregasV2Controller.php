@@ -114,7 +114,7 @@ class EntregasV2Controller extends Controller
 
         $barrioEntregaSel = BarrioEntrega::All()->where('idPaquete','=',$idpaquete);
         $barrioEntregaSel2 = BarrioEntrega::All()
-        ->where('estado','=',1)
+        ->where('estado','=',2)
         ->where('idPaquete','=',$idpaquete);
 
         $botonImprimir = 0;
@@ -434,21 +434,36 @@ class EntregasV2Controller extends Controller
                                             //->orderBy('be.nombres', 'asc')
                                             //->get();
 
-                                            $entregas2 = Entrega::where('dea_id',Auth::user()->dea->id)
-                                            ->where('id_paquete',$request->idpaquete)
+                                            $barrio_entrega = BarrioEntrega::where('idPaquete',$request->idpaquete)
                                             ->where('idBarrio',$request->barrio3)
                                             //->take(2)
-                                            ->get();
+                                             ->first();
 
-                                            foreach ($entregas2 as $data){
-                                                $entrega3 = Entrega::find($data->id);
+                                             if ($barrio_entrega->estado == 1) {
+
+                                                $entregas2 = Entrega::where('dea_id',Auth::user()->dea->id)
+                                                ->where('id_paquete',$request->idpaquete)
+                                                ->where('idBarrio',$request->barrio3)
+                                                //->take(2)
+                                                ->get();
+
+                                                foreach ($entregas2 as $data){
+                                                    $entrega3 = Entrega::find($data->id);
 
 
-                                                $entrega3->estado = 2;
+                                                    $entrega3->estado = 2;
 
 
-                                                $entrega3->save();
-                                                }
+                                                    $entrega3->save();
+                                                    }
+
+                                          //dd($barrio_entrega->id);
+                                          $barrio_entrega2 = BarrioEntrega::find($barrio_entrega->id);
+                                          $barrio_entrega2->update([
+                                              'estado' => 2
+                                          ]);
+                                            }
+
 
 
                                         //dd($entregas);
@@ -501,8 +516,8 @@ class EntregasV2Controller extends Controller
                         //dd($entregas);
                                         //return view('canasta_v2/entregas/generarboleta2', ["entrega" => $entregas,"userdate" => $userdate,"personalArea" => $personalArea]);
 
-                                        return view('canasta_v2.entregas/generarboleta2', compact('fecha_actual','entrega','userdate','personalArea'));
-
+                                        //return view('canasta_v2.entregas/generarboleta2', compact('fecha_actual','entrega','userdate','personalArea'));
+                                        return back();
                                     }
 
 
@@ -749,7 +764,7 @@ class EntregasV2Controller extends Controller
                                       //dd($barrio_entrega->id);
                                       $barrio_entrega2 = BarrioEntrega::find($barrio_entrega->id);
                                       $barrio_entrega2->update([
-                                          'estado' => 2
+                                          'estado' => 3
                                       ]);
 
                                     //dd($entregas);
