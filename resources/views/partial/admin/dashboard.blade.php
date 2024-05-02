@@ -91,30 +91,7 @@
                                 <span class="nav-label">Compras</span>
                                 <span class="fa fa-arrow-circle-left float-right"></span>
                             </a>
-
-                            <ul class="sub-menu collapse" id="dashboard_agenda">
-                                @can('agenda_ejecutivo')
-                                    <li>
-                                        <a href="{{ asset('/Evento/index/') }}">
-                                            &nbsp; &nbsp; &nbsp;
-                                            <span class="nav-label mr-4">Ejecutivo</span>
-                                        </a>
-                                    </li>
-                                @endcan
-
-                                @can('agenda_institucional')
-                                    <li>
-                                        <a href="{{ asset('/Evento2/index/') }}">
-                                            &nbsp; &nbsp; &nbsp;
-                                            <span class="nav-label mr-4">Institucional</span>
-                                        </a>
-                                    </li>
-                                @endcan
-                                {{--<li>
-                                    <a href="{{ route('compras.pedidoparcial.index') }}">
-                                        &nbsp;&nbsp;&nbsp;<i class="fa-solid fa-file-lines fa-fw"></i>&nbsp;Solicitudes
-                                    </a>
-                                </li>--}}
+                            <ul class="sub-menu collapse" id="dashboard_compras">
                                 @can('proveedor.index')
                                     <li>
                                         <a href="{{ route('proveedor.index') }}">
@@ -297,16 +274,22 @@
                         <hr style="margin-top:0; margin-bottom:0;">
                     @endcan
                     {{-- EVENTO --}}
-                    @can('evento.index')
+                    @can('agenda.ejecutiva.index')
+                        <li class="font-verdana-12">
+                            <a href="{{ route('agenda.ejecutiva.index') }}">
+                                <i class="fa-sharp fa-solid fa-calendar fa-fw"></i>&nbsp;Agenda ejecutiva
+                            </a>
+                        </li>
+                    @endcan
+                    @can('agenda.ej.index')
                         <li class="font-verdana-12">
                             <a href="" data-toggle="collapse" data-target="#dashboard_agenda" class="active collapsed" aria-expanded="false">
-                                <i class="fa-sharp fa-solid fa-calendar fa-beat" style="color:green"></i>
-                                <span class="nav-label mr-3">AGENDA</span>
-                                <span class="fa fa-arrow-circle-left float-right"></span>
+                                <i class="fa-sharp fa-solid fa-calendar fa-beat"></i>&nbsp;Agenda
+                                <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_agenda">
                                 <li>
-                                    <a href="{{ asset('/Evento/index/') }}">
+                                    <a href="{{ route('agenda.ej.index') }}">
                                         &nbsp; &nbsp; &nbsp;
                                         <span class="nav-label mr-4">Ejecutivo</span>
                                     </a>

@@ -29,7 +29,7 @@ use PDF;
 use NumerosEnLetras;
 use Hamcrest\TypeSafeDiagnosingMatcher;
 
-use App\Models\Event;
+use App\Models\Evento;
 use Carbon\Carbon;
 class ReporteAreasController extends Controller
 {
@@ -42,20 +42,20 @@ class ReporteAreasController extends Controller
 
         $id2 = $detalle->idingreso;
         $id3 = $detalle->idarea;
-      
+
 
        // $prodserv = DB::table('reportarea as rr')
 
 
         $prodserv = DB::table('detallevale as d')
 
-        ->join('ingreso as ing', 'ing.idingreso', '=', 'd.idingreso') 
+        ->join('ingreso as ing', 'ing.idingreso', '=', 'd.idingreso')
         ->join('vale as va', 'va.idvale', '=', 'd.idvale')
 
         ->join('areas as a', 'a.idarea', '=', 'va.idarea')
 
 
-       
+
         // ->select('rr.idreportarea',
         ->select(
          'ing.nombreprograma', 'ing.nombreproducto',
@@ -69,23 +69,23 @@ class ReporteAreasController extends Controller
 
         ->get();
 
-     
+
 
     $ingresos = DB::table('ingreso')
         ->where('estadocompracomb', 2)
         ->select(DB::raw("concat(idingreso,' // ',nombreproducto,' // ',nombreprograma,' // salida LTRS. ',cantidadsalida) as prodservicio"), 'idingreso')
         ->pluck('prodservicio', 'idingreso');
-        
-   
+
+
     $areas = DB::table('areas')
-     
+
     ->where('estadoarea', 1)
     ->select(DB::raw("concat(nombrearea,' // ',idarea) as prodservicios"), 'idarea')
     ->pluck('prodservicios', 'idarea');
 
-    return view('almacenes.reporte.index', 
-    ['prodserv' => $prodserv, 
-    'ingresos' => $ingresos, 
+    return view('almacenes.reporte.index',
+    ['prodserv' => $prodserv,
+    'ingresos' => $ingresos,
     'areas' => $areas,
     'id' => $id
 ]);
@@ -101,15 +101,15 @@ public function store(Request $request)
         $prod = $request->get('ingreso');
         $proddos = $request->get('area');
 
-      
-        
+
+
         $detallereport = new ReporteAreaModel();
         $detallereport->idingreso = $request->get('ingreso');
         $detallereport->idarea = $request->get('area');
-        
+
         $detallereport->save();
-       
-        
+
+
         if(is_null($detalle)){
             $detalle = new Temporal6Model;
             $detalle->idtemporal6=$id;
@@ -161,7 +161,7 @@ public function store(Request $request)
         return redirect()->route('archivos2.tipo');
     }
 
-    
+
     public function delete($idtipoarea)
     {
         $tipoarea =TipoAreaModel::find($idtipoarea);
@@ -188,7 +188,7 @@ public function store(Request $request)
                 ->select(
                     'ing.cantidad',
                     'ing.subtotal',
-             
+
                      'ing.cantidadsalida',
                     // 'ing.subtotalsalida',
 
@@ -204,24 +204,24 @@ public function store(Request $request)
             //modificacion aumentando dos columnas
             // $CantitadIngrs=$ingreso -> cantitad;
             // $SubtotalIngreso=$ingreso -> subtotal;
-       
+
 
                 // $Cantidadsalida = $ingresos->cantidadsalida;
                 // $Subtotalsalida = $ingresos->subtotalsalida;
             $prodserv = DB::table('detallevale as d')
 
-                ->join('ingreso as ing', 'ing.idingreso', '=', 'd.idingreso') 
+                ->join('ingreso as ing', 'ing.idingreso', '=', 'd.idingreso')
                 ->join('vale as v', 'v.idvale', '=', 'd.idvale')
 
                 ->join('areas as a', 'a.idarea', '=', 'v.idarea')
 
                 ->select('d.idvale','d.cantidadsol','d.preciosol','d.subtotalsol','d.cantidadresta',
-                
+
                 'v.usuarionombre','v.usuariocargo','v.fechaaprob',
 
                 'a.nombrearea',
-                
-                'ing.precio','ing.subtotalsalida') 
+
+                'ing.precio','ing.subtotalsalida')
 
                 ->where('d.idingreso', '=', $id2)
                 ->where('v.idarea', '=', $id3)
@@ -231,13 +231,13 @@ public function store(Request $request)
              //    $valor_total = $prodserv->sum('cantidadsol');
              //    $valor_total2 = $prodserv->sum('subtotalsol');
 
-               
-        
+
+
             $valor_total = $prodserv->sum('cantidadsol');
             $valor_total2 = $valor_total* $SPrecio;
 
             //modificacion para la parte decimal
-            $parte_entera = floor($Subtotalsalida); 
+            $parte_entera = floor($Subtotalsalida);
             $parte_decimal = ($Subtotalsalida - $parte_entera) * 100;
 
             $parte_entera_en_letras = NumerosEnLetras::convertir($parte_entera, 'Bolivianos', false);
@@ -245,7 +245,7 @@ public function store(Request $request)
 
             $valor_total5 = $parte_entera_en_letras . ' con ' . $parte_decimal_en_letras;
 
-            //fin de la modificacion 
+            //fin de la modificacion
 
 //obeteniendo por unidades centenas y decenas de mil
 
@@ -271,21 +271,21 @@ $valor_total6 = $parte_entera_formateada . ',' . $parte_decimaldos;
                                                 'valor_total2' => $valor_total2,
                                                 'valor_total3' => $valor_total3,
                                                 'valor_total5' => $valor_total5,
-                                                
-                                                 
+
+
                                                 //nueva modificacion
                                                 'valor_total6' => $valor_total6,
                                                 // 'Cantidadsalida' => $Cantidadsalida,
                                                 // 'Subtotalsalida' => $Subtotalsalida,
-                                                
+
                                                 //borrar
                                                 'parte_entera' => $parte_entera,
                                                 'parte_decimal' => $parte_decimal,
                                                 'Subtotalsalida' => $Subtotalsalida,
                                                 'parte_entera_formateada' => $parte_entera_formateada,
                                                 //'parte_decimaldos' => $parte_decimaldos,
-                                              
-                                       
+
+
                                                 'prodserv' => $prodserv,
                                                 'ingresos' => $ingresos
                                                 ]);
@@ -318,7 +318,7 @@ $valor_total6 = $parte_entera_formateada . ',' . $parte_decimaldos;
        ->select(
            'ing.cantidad',
            'ing.subtotal',
-    
+
            'ing.cantidadsalida',
          'ing.subtotalsalida',
 
@@ -326,58 +326,58 @@ $valor_total6 = $parte_entera_formateada . ',' . $parte_decimaldos;
            'ing.nombrecatprogmai'
        )
        ->where('ing.idingreso', '=', $id2)->first();
-       
+
        $ingreso = IngresoModel::find($id2);
     //    $Subtotalsalida=$ingreso -> subtotalsalida;
        $SPrecio=$ingreso -> precio;
 
        $detalle = DB::table('detallevale as d')
-   
-                   ->join('ingreso as ing', 'ing.idingreso', '=', 'd.idingreso') 
+
+                   ->join('ingreso as ing', 'ing.idingreso', '=', 'd.idingreso')
                    ->join('vale as v', 'v.idvale', '=', 'd.idvale')
-   
+
                    ->join('areas as a', 'a.idarea', '=', 'v.idarea')
-   
+
                    ->select('d.idvale','d.cantidadsol','d.preciosol','d.subtotalsol','d.cantidadresta',
-                   
+
                    'v.usuarionombre','v.usuariocargo','v.estadovale','v.fechaaprob',
-   
+
                    'a.nombrearea',
-                   'ing.precio') 
-                //    'ing.precio','ing.subtotalsalida') 
-   
+                   'ing.precio')
+                //    'ing.precio','ing.subtotalsalida')
+
                    ->where('d.idingreso', '=', $id2)
                    ->whereBetween('v.fechaaprob',[$id3, $id4])
                    ->orderBy('v.fechaaprob', 'asc')
                    ->get();
-               
+
                    $valor_total = $detalle->sum('cantidadsol');
                    $valor_total2 = $valor_total* $SPrecio;
-       
+
                    //modificacion para la parte decimal
-                //    $parte_entera = floor($Subtotalsalida); 
+                //    $parte_entera = floor($Subtotalsalida);
                 //    $parte_decimal = ($Subtotalsalida - $parte_entera) * 100;
-       
+
                 //    $parte_entera_en_letras = NumerosEnLetras::convertir($parte_entera, 'Bolivianos', false);
                 //    $parte_decimal_en_letras = NumerosEnLetras::convertir($parte_decimal, 'Centavos', false);
-       
+
                 //    $valor_total5 = $parte_entera_en_letras . ' con ' . $parte_decimal_en_letras;
-       
-               
+
+
     //    $parte_entera_formateada = number_format($Subtotalsalida, 0, '', '.');
-       
+
     //    $parte_decimaldos = floor($parte_decimal);
     //    $valor_total6 = $parte_entera_formateada . ',' . $parte_decimaldos;
-       
-       
-  
+
+
+
                     $valor_total3 = NumerosEnLetras::convertir($valor_total2, 'Bolivianos', true);
-             
+
     $ingresoso = DB::table('ingreso')
     ->where('estadocompracomb', 2)
     ->select(DB::raw("concat(idingreso,' // ',nombreproducto,' // ',nombreprograma,' // salida LTRS. ',cantidadsalida) as prodservicio"), 'idingreso')
-    ->pluck('prodservicio', 'idingreso');  
-           
+    ->pluck('prodservicio', 'idingreso');
+
            return view('almacenes/reporte/index2',
            [
             'valor_total' => $valor_total,
@@ -385,21 +385,21 @@ $valor_total6 = $parte_entera_formateada . ',' . $parte_decimaldos;
             'valor_total3' => $valor_total3,
             // 'valor_total5' => $valor_total5,
             // 'valor_total6' => $valor_total6,
-         
+
             // 'parte_entera' => $parte_entera,
             // 'parte_decimal' => $parte_decimal,
-          
+
             // 'parte_entera_formateada' => $parte_entera_formateada,
-          
+
             'ingresos' => $ingresos,
             'ingresoso' => $ingresoso,
             'detalle'=>$detalle,
-        
+
            'idingreso'=>$id2,
            'id'=>$id
         ]);
            }
-           
+
 public function store2(Request $request)
     {
 
@@ -411,15 +411,15 @@ public function store2(Request $request)
         $prodfi = Carbon::createFromFormat('d/m/Y', $request->input('fechainicio'))->format('Y-m-d');
         $prodffi =Carbon::createFromFormat('d/m/Y', $request->input('fechafin'))->format('Y-m-d');
 
-    
-        
+
+
         $detallereport = new ReporteAreaModel();
         $detallereport->idingreso = $request->get('ingreso');
         $detallereport->fechainicio = $request->get('fechainicio');
         $detallereport->fechafin = $request->get('fechafin');
         $detallereport->save();
-       
-        
+
+
         if(is_null($detalle)){
             $detalle = new Temporal7Model;
             $detalle->idtemporal7=$id;
@@ -459,7 +459,7 @@ public function store2(Request $request)
                 ->select(
                     'ing.cantidad',
                     'ing.subtotal',
-             
+
                      'ing.cantidadsalida',
                     // 'ing.subtotalsalida',
 
@@ -475,24 +475,24 @@ public function store2(Request $request)
             //modificacion aumentando dos columnas
             // $CantitadIngrs=$ingreso -> cantitad;
             // $SubtotalIngreso=$ingreso -> subtotal;
-       
+
 
                 // $Cantidadsalida = $ingresos->cantidadsalida;
                 // $Subtotalsalida = $ingresos->subtotalsalida;
             $prodserv = DB::table('detallevale as d')
 
-                ->join('ingreso as ing', 'ing.idingreso', '=', 'd.idingreso') 
+                ->join('ingreso as ing', 'ing.idingreso', '=', 'd.idingreso')
                 ->join('vale as v', 'v.idvale', '=', 'd.idvale')
 
                 ->join('areas as a', 'a.idarea', '=', 'v.idarea')
 
                 ->select('d.idvale','d.cantidadsol','d.preciosol','d.subtotalsol','d.cantidadresta',
-                
+
                 'v.usuarionombre','v.usuariocargo','v.fechaaprob',
 
                 'a.nombrearea',
-                
-                'ing.precio','ing.subtotalsalida') 
+
+                'ing.precio','ing.subtotalsalida')
 
                 ->where('d.idingreso', '=', $id2)
                 ->whereBetween('v.fechaaprob',[$id3, $id4])
@@ -503,13 +503,13 @@ public function store2(Request $request)
              //    $valor_total = $prodserv->sum('cantidadsol');
              //    $valor_total2 = $prodserv->sum('subtotalsol');
 
-               
-        
+
+
             $valor_total = $prodserv->sum('cantidadsol');
             $valor_total2 = $valor_total* $SPrecio;
 
             //modificacion para la parte decimal
-            $parte_entera = floor($Subtotalsalida); 
+            $parte_entera = floor($Subtotalsalida);
             $parte_decimal = ($Subtotalsalida - $parte_entera) * 100;
 
             $parte_entera_en_letras = NumerosEnLetras::convertir($parte_entera, 'Bolivianos', false);
@@ -517,7 +517,7 @@ public function store2(Request $request)
 
             $valor_total5 = $parte_entera_en_letras . ' con ' . $parte_decimal_en_letras;
 
-            //fin de la modificacion 
+            //fin de la modificacion
 
 //obeteniendo por unidades centenas y decenas de mil
 
@@ -543,21 +543,21 @@ $valor_total6 = $parte_entera_formateada . ',' . $parte_decimaldos;
                                                 'valor_total2' => $valor_total2,
                                                 'valor_total3' => $valor_total3,
                                                 'valor_total5' => $valor_total5,
-                                                
-                                                 
+
+
                                                 //nueva modificacion
                                                 'valor_total6' => $valor_total6,
                                                 // 'Cantidadsalida' => $Cantidadsalida,
                                                 // 'Subtotalsalida' => $Subtotalsalida,
-                                                
+
                                                 //borrar
                                                 'parte_entera' => $parte_entera,
                                                 'parte_decimal' => $parte_decimal,
                                                 'Subtotalsalida' => $Subtotalsalida,
                                                 'parte_entera_formateada' => $parte_entera_formateada,
                                                 //'parte_decimaldos' => $parte_decimaldos,
-                                              
-                                       
+
+
                                                 'prodserv' => $prodserv,
                                                 'ingresos' => $ingresos
                                                 ]);

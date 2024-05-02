@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\AgendaModel;
-use App\Models\Event;
+use App\Models\Evento;
 use App\Models\Event2;
 use Carbon\Carbon;
 use App\Models\User;

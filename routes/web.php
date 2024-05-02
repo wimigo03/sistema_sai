@@ -27,10 +27,9 @@ use App\Http\Controllers\ArchivosController2;
 use App\Http\Controllers\AlmacenController;
 use App\Http\Controllers\CorrespondenciaController;
 use App\Http\Controllers\AgendaController;
-use App\Http\Controllers\ControllerCalendar;
 use App\Http\Controllers\CorrespondenciaLocalController;
 use App\Http\Controllers\ControllerEvent2;
-use App\Http\Controllers\ControllerEvent;
+use App\Http\Controllers\ControllerAgendaEjecutivo;
 use App\Http\Controllers\CanastaBeneficiariosController;
 use App\Http\Controllers\ExpoController;
 use App\Http\Controllers\Fexpo\SolicitudController;
@@ -639,67 +638,15 @@ Route::get('almacen/index', [AlmacenController::class,'index'])->name('almacen.i
 //Route::get('compras/pedido/editar/{id}', 'CompraController@editar')->name('compras.pedido.editar');
 //Route::post('compras/pedido/update', 'CompraController@update')->name('compras.pedido.update');
 
-/////////////////////////--CORRESPO0NDENCIA--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*Route::get('correspondencia/index', [CorrespondenciaController::class,'index'])->name('correspondencia.index');
-Route::get('correspondencia/createRecepcion', [CorrespondenciaController::class,'create'])->name('correspondencia.create');
-Route::get('correspondencia/indexUnidad', [CorrespondenciaController::class,'indexUnidad'])->name('correspondencia.unidadIndex');
-Route::get('correspondencia/indexRemitente', [CorrespondenciaController::class,'indexRemitente'])->name('correspondencia.remitenteIndex');
-Route::get('correspondencia/createUnidad', [CorrespondenciaController::class,'createLugar'])->name('correspondencia.crear.lugar');
-Route::post('correspondencia/storeLugar', [CorrespondenciaController::class,'storeLugar'])->name('correspondencia.guardar.lugar');
-Route::get('correspondencia/createRemitente', [CorrespondenciaController::class,'createRemitente'])->name('correspondencia.crear.remitente');
-Route::post('correspondencia/storeRemitente', [CorrespondenciaController::class,'storeRemitente'])->name('correspondencia.guardar.remitente');
-Route::get('correspondencia/createRecepcion', [CorrespondenciaController::class,'createRecepcion'])->name('correspondencia.crear.recepcion');
-Route::post('correspondencia/storeRecepcion', [CorrespondenciaController::class,'storeRecepcion'])->name('correspondencia.guardar.recepcion');
-Route::get('correspondencia/{id}/edit', [CorrespondenciaController::class,'editarCodigo'])->name('correspondencia.edit');
-Route::POST('correspondencia/{id}/updateCodigo', [CorrespondenciaController::class,'updateCodigo'])->name('correspondencia.update');*/
-
-
-////////////////////////////--AGENDA--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-Route::get('agenda/index', [AgendaController::class,'index'])->name('agenda.index');
-//Route::get('archivos2/createArchivo', [ArchivosController::class,'createArchivo'])->name('agenda.create');
-Route::get('agenda/create', [AgendaController::class,'create'])->name('agenda.create');
-Route::POST('agenda/insertar', [AgendaController::class,'insertar'])->name('agenda.insertar');
-
-Route::get('agenda/{id}/edit', [AgendaController::class,'editar'])->name('agenda.edit');
-Route::POST('agenda/{id}/update', [AgendaController::class,'update'])->name('agenda.update');
-
-Route::get('agenda/{id}/edit2', [AgendaController::class,'editar2'])->name('agenda.edit2');
-Route::POST('agenda/{id}/update2', [AgendaController::class,'update2'])->name('agenda.update2');
-
-Route::get('agenda/indexayer', [AgendaController::class,'indexayer'])->name('agenda.indexayer');
-Route::get('agenda/indexhoy', [AgendaController::class,'indexhoy'])->name('agenda.indexhoy');
-Route::get('agenda/indexmaniana', [AgendaController::class,'indexmaniana'])->name('agenda.indexmaniana');
-Route::get('agenda/delete/{id}', [AgendaController::class,'delete'])->name('agenda.delete');
-
-
-
-////evento////
-Route::get('Calendar/event',[ControllerCalendar::class,'index']);
-Route::get('Calendar/event/{mes}',[ControllerCalendar::class,'index_month']);
-
-// formulario
-Route::get('Evento/form/{mes}',[ControllerEvent::class,'form']);
-Route::post('Evento/create', [ControllerEvent::class,'create']);
-// Detalles de evento
-Route::get('Evento/details/{id},{id2},{id3}',[ControllerEvent::class,'details']);
-Route::get('Evento/details2/{id}',[ControllerEvent::class,'details2']);
-// Calendario
-Route::get('Evento/index',[ControllerEvent::class,'index']);
-Route::get('Evento/index/{month}',[ControllerEvent::class,'index_month']);
-
-// editar
-Route::get('Evento/actualizar/{id}',[ControllerEvent::class,'editar']);
-Route::post('Evento/actualizar2/{id}',[ControllerEvent::class,'actualizar']);
-
-
-/////////////////////////--CORRESPONDENCIA 2--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-////evento2////
+//dilson agenda
+/*Route::get('agenda-ej/index',[ControllerAgendaEjecutivo::class,'index'])->name('agenda.ejecutiva.index');
+Route::get('agenda-ej/index/{month}',[ControllerAgendaEjecutivo::class,'index_month'])->name('agenda.ejecutiva.mes.index');
+Route::get('agenda-ej/details/{id}/{id2}/{id3}',[ControllerAgendaEjecutivo::class,'details'])->name('agenda.ejecutiva.detalle');
+Route::get('agenda-ej/form/{mes}',[ControllerAgendaEjecutivo::class,'form'])->name('agenda.ejecutiva.form');
+Route::post('agenda-ej/create', [ControllerAgendaEjecutivo::class,'create'])->name('agenda.ejecutiva.create');
+Route::get('agenda-ej/details2/{id}',[ControllerAgendaEjecutivo::class,'details2'])->name('agenda.ejecutiva.details2');
+Route::get('agenda-ej/actualizar/{id}',[ControllerAgendaEjecutivo::class,'editar'])->name('agenda.ejecutiva.editar');
+Route::post('agenda-ej/update',[ControllerAgendaEjecutivo::class,'actualizar'])->name('agenda.ejecutiva.update');*/
 
 // formulario
 Route::get('Evento2/form/{mes}',[ControllerEvent2::class,'form']);

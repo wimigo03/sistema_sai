@@ -51,7 +51,7 @@ class AgendaController extends Controller
 
         }
         //dd($data2);
-        return view('agenda.index');
+        return view('agenda.ej.index');
         //return view("archivos2.index2")->with("idd", $personalArea);
 
         // return view('archivos2.index');
@@ -431,7 +431,7 @@ class AgendaController extends Controller
 
         $agenda->delete();
 
-        return redirect()->route('agenda.index');
+        return redirect()->route('agenda.ej.index');
     }
 
 

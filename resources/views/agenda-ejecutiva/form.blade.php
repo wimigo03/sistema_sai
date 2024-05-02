@@ -8,7 +8,7 @@
         </div>
     </div>
     <div class="card-body body">
-        @include('evento.partials.form')
+        @include('agenda-ejecutiva.partials.form')
     </div>
 @endsection
 @section('scripts')
@@ -35,7 +35,7 @@
         }
 
         function confirmar(){
-            var url = "{{ route('agenda.create') }}";
+            var url = "{{ route('agenda.ejecutiva.create') }}";
             $("#form").attr('action', url);
             $(".btn").hide();
             $(".spinner-btn").show();
@@ -43,7 +43,7 @@
         }
 
         function cancelar(){
-            window.location.href = "{{ route('agenda.ej.index') }}";
+            window.location.href = "{{ route('agenda.ejecutiva.index') }}";
         }
 
         function validar() {

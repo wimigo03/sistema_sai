@@ -3,12 +3,12 @@
     <div class="card-header header">
         <div class="row">
             <div class="col-md-12 pr-1 pl-1 text-center">
-                <b>REGISTRAR EVENTO</b>
+                <b>ACTUALIZAR EVENTO</b>
             </div>
         </div>
     </div>
     <div class="card-body body">
-        @include('evento.partials.form')
+        @include('agenda-ejecutiva.partials.form-editar')
     </div>
 @endsection
 @section('scripts')
@@ -35,7 +35,7 @@
         }
 
         function confirmar(){
-            var url = "{{ route('agenda.create') }}";
+            var url = "{{ route('agenda.ejecutiva.update') }}";
             $("#form").attr('action', url);
             $(".btn").hide();
             $(".spinner-btn").show();
@@ -43,7 +43,7 @@
         }
 
         function cancelar(){
-            window.location.href = "{{ route('agenda.ej.index') }}";
+            window.location.href = "{{ route('agenda.ejecutiva.index') }}";
         }
 
         function validar() {

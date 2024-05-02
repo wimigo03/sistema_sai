@@ -14,13 +14,13 @@
             <b style='color:rgb(39, 6, 185)'>-- AGENDA DEL EJECUTIVO --</b><b></b>
         </div>
         <div class="col-md-4 text-right titulo">
-   
+
                 <a href="{{ route('agenda.create') }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar Evento">
                     <button class="btn btn-sm btn-primary font-verdana" type="button">Nuevo Evento.
                         &nbsp;<i class="fa fa-lg fa-plus" aria-hidden="true"></i>&nbsp;
                     </button>
                 </a>
-  
+
 
 
         </div>
@@ -68,7 +68,7 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ajax: "{{ route('agenda.index') }}",
+                ajax: "{{ route('agenda.ej.index') }}",
                 columns: [{
                         data: 'DT_RowIndex',
                         orderable: false,

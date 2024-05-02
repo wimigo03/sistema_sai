@@ -4,46 +4,64 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\AgendaModel;
-use App\Models\Event;
+use App\Models\Evento;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\EmpleadosModel;
 use Illuminate\Support\Facades\Auth;
 use PDF;
-class ControllerEvent extends Controller
+class AgendaEjecutivoController extends Controller
 {
-    //
-    // formulario de evento
+    public function index()
+    {
+        $month = date("Y-m");
+        $data = $this->calendar_month($month);
+        $mes = $data['month'];
+        $mespanish = $this->spanish_month($mes);
+        $mes = $data['month'];
+        return view('agenda-ejecutiva.calendario',compact('data','mes','mespanish'));
+    }
+
+    public function index_month($month)
+    {
+        $data = $this->calendar_month($month);
+        $mes = $data['month'];
+        $mespanish = $this->spanish_month($mes);
+        $mes = $data['month'];
+        return view('agenda-ejecutiva.calendario',compact('data','mes','mespanish'));
+    }
+
+    public function details($dia, $mes, $anio)
+    {
+        $mess = $this->getmesnumero($mes);
+        $myDate = $anio . '/' . $mess . '/' . $dia;
+        $date = Carbon::createFromFormat('Y/m/d', $myDate)->format('Y-m-d');
+        $eventos = Evento::where('fecha', $date)->orderby('horaini', 'asc')->get();
+        $fecha2 = Carbon::parse($date);
+        $fechaliteral = ucfirst($fecha2->dayName) . ' ' . $fecha2->day . ' ' . 'de' . ' ' . $fecha2->monthName . ' ' . 'del' . ' ' . $fecha2->year;
+        return view('agenda-ejecutiva.evento',compact('eventos','date','fechaliteral'));
+    }
+
+    public function show($id)
+    {
+        $evento = Evento::find($id);
+        $fecha = Carbon::parse($evento->fecha);
+        $fechaliteral = ucfirst($fecha->dayName) . ' ' . $fecha->day . ' ' . 'de' . ' ' . $fecha->monthName . ' ' . 'del' . ' ' . $fecha->year;
+        return view('agenda-ejecutiva.show',compact('evento','fechaliteral'));
+    }
+
     public function form($fecha)
     {
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
-        $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
-        //dd($userdate);
-        // return view("evento/form");
-        return view("evento/form", [
-            "fecha" => $fecha, "personal" => $userdate
-        ]);
+        $personal = User::find($id)->usuariosempleados;
+        $personalArea = EmpleadosModel::find($personal->idemp)->empleadosareas;
+        return view('agenda-ejecutiva.form',compact('fecha','personal'));
     }
 
-    // guardar evento
     public function create(Request $request)
     {
-
-        // validacion
-        //$this->validate($request, [
-           // 'titulo'     =>  'required',
-           // 'descripcion'  =>  'required',
-           // 'fecha' =>  'required',
-           // 'hora'  =>  'required',
-           // 'lugar'  =>  'required',
-           // 'coordinar'  =>  'required',
-           // 'representante'  =>  'required'
-        //]);
-
-        // guarda la base de datos
-        Event::insert([
+        Evento::insert([
             'titulo'       => $request->input("titulo"),
             'descripcion'  => $request->input("descripcion"),
             'fecha'        => $request->input("fecha"),
@@ -54,143 +72,57 @@ class ControllerEvent extends Controller
             'usuario'        => $request->input("usuario")
         ]);
 
-        // devuelve el mensaje de exito
-        return back()->with('success', 'Enviado exitosamente!');
+        $dia = date("d", strtotime($request->fecha));
+        $timestamp = strtotime($request->fecha);
+        $mes_literal = \IntlDateFormatter::create('es_ES',\IntlDateFormatter::FULL,\IntlDateFormatter::NONE,'UTC',\IntlDateFormatter::GREGORIAN,'MMMM')->format($timestamp);
+        $mes = ucfirst($mes_literal);
+        $anho = date("Y", strtotime($request->fecha));
+
+        return redirect()->route('agenda.ejecutiva.detalle',['id' => $dia,'id2' => $mes,'id3' => $anho])->with('success_message', '[Evento creado correctamente.]');
+    }
+
+    public function details2($fecha)
+    {
+        $eventos = Evento::where('fecha', $fecha)->orderby('horaini', 'desc')->get();
+        $fecha2 = Carbon::parse($fecha);
+        $fechaliteral = $fecha2->dayName.' '.$fecha2->day.' '.'de'.' '.$fecha2->monthName.' '.'del'.' '.$fecha2->year;
+        $pdf = PDF::loadView('agenda-ejecutiva.pdf-evento', compact(['eventos', 'fecha', 'fechaliteral']));
+        $pdf->setPaper('LETTER', 'landscape');
+        return $pdf->stream();
     }
 
     public function editar($id)
     {
+        $evento = Evento::find($id);
+        return view('agenda-ejecutiva.actualizar',compact('evento'));
+    }
 
-        // llamar evento por id
-        $event = Event::find($id);
-
-        return view("evento/actualizar", [
-            "evento" => $event
+    public function actualizar(Request $request)
+    {
+        $evento = Evento::find($request->evento_id);
+        $evento->update([
+            'titulo' => $request->titulo,
+            'descripcion' => $request->descripcion,
+            'fecha' => $request->fecha,
+            'horaini' => $request->hora,
+            'lugar' => $request->lugar,
+            'coordinar' => $request->coordinar,
+            'representante' => $request->representante,
+            'usuario' => $request->usuario,
         ]);
-    }
 
+        $dia = date("d", strtotime($request->fecha));
+        $timestamp = strtotime($request->fecha);
+        $mes_literal = \IntlDateFormatter::create('es_ES',\IntlDateFormatter::FULL,\IntlDateFormatter::NONE,'UTC',\IntlDateFormatter::GREGORIAN,'MMMM')->format($timestamp);
+        $mes = ucfirst($mes_literal);
+        $anho = date("Y", strtotime($request->fecha));
 
-
-     public function actualizar(Request $request, $idevent)
-     {
-
-        $event = Event::find($idevent);
-
-
-         $event->titulo = $request->input('nombre');
-
-         $event->titulo = $request->input("titulo");
-         $event->descripcion = $request->input("descripcion");
-         $event->fecha= $request->input("fecha");
-         $event->horaini= $request->input("hora");
-         $event->lugar=$request->input("lugar");
-         $event->coordinar= $request->input("coordinar");
-         $event->representante = $request->input("representante");
-         $event->usuario = $request->input("usuario");
-
-         if ($event->save()) {
-            $request->session()->flash('message', 'Registro Procesado');
-        } else {
-            $request->session()->flash('message', 'Error al Procesar Registro');
-        }
-        return back()->with('success', 'Actualizado exitosamente!');
-     }
-
-    public function details($dia, $mes, $anio)
-    {
-        // $mess=mesnumero($id2);
-        $mess = $this->getmesnumero($mes);
-        // llamar evento por id
-        //$event = Event::find($id);
-
-        $myDate = $anio . '/' . $mess . '/' . $dia;
-        $date = Carbon::createFromFormat('Y/m/d', $myDate)->format('Y-m-d');
-        $event = Event::where('fecha', $date)
-            ->orderby('horaini', 'desc')
-            ->get();
-
-
-        //dd($event);
-
-        $fecha2 = Carbon::parse($date);
-   // $date = $fecha2->locale();
-//dd($fecha->monthName);
-      $fechaliteral = $fecha2->dayName.' '.$fecha2->day.' '.'de'.' '.$fecha2->monthName.' '.'del'.' '.$fecha2->year;
-
-
-  return view("evento/evento", ["event" => $event, "date" => $date,"fechaliteral" => $fechaliteral]);
-    }
-
-
-    public function details2($fecha)
-    {
-        // $mess=mesnumero($id2);
-        //$mess = $this->getmesnumero($mes);
-        // llamar evento por id
-        //$event = Event::find($id);
-
-       // $myDate = $anio . '/' . $mess . '/' . $dia;
-        ///$date = Carbon::createFromFormat('Y/m/d', $myDate)->format('Y-m-d');
-        $event = Event::where('fecha', $fecha)
-            ->orderby('horaini', 'desc')
-            ->get();
-        //dd($event);
-       // return view("evento/pdf-evento", ["event" => $event, "fecha" => $fecha]);
-      // $fechaliteral = Carbon::parse($fecha)->format('l jS \\of F Y');
-      //$date = Carbon::create($fecha)->locale('es');
-
-      $fecha2 = Carbon::parse($fecha);
-   // $date = $fecha2->locale();
-//dd($fecha->monthName);
-      $fechaliteral = $fecha2->dayName.' '.$fecha2->day.' '.'de'.' '.$fecha2->monthName.' '.'del'.' '.$fecha2->year;
-      //$mes = $fecha2->monthName;
-
-
-        $pdf = PDF::loadView('evento/pdf-evento', compact(['event', 'fecha', 'fechaliteral']));
-            $pdf->setPaper('LETTER', 'landscape'); //landscape
-            return $pdf->stream();
-    }
-
-    // ======================== CANDELARIO =================
-    public function index()
-    {
-
-        $month = date("Y-m");
-        //
-        $data = $this->calendar_month($month);
-        $mes = $data['month'];
-        // obtener mes en espanol
-        $mespanish = $this->spanish_month($mes);
-        $mes = $data['month'];
-
-        return view("evento/calendario", [
-            'data' => $data,
-            'mes' => $mes,
-            'mespanish' => $mespanish
-        ]);
-    }
-
-    public function index_month($month)
-    {
-
-        $data = $this->calendar_month($month);
-        $mes = $data['month'];
-        // obtener mes en espanol
-        $mespanish = $this->spanish_month($mes);
-        $mes = $data['month'];
-
-        return view("evento/calendario", [
-            'data' => $data,
-            'mes' => $mes,
-            'mespanish' => $mespanish
-        ]);
+        return redirect()->route('agenda.ejecutiva.detalle',['id' => $dia,'id2' => $mes,'id3' => $anho])->with('success_message', '[Evento actualizado correctamente.]');
     }
 
     public static function calendar_month($month)
     {
-        //$mes = date("Y-m");
         $mes = $month;
-        //sacar el ultimo de dia del mes
         $daylast =  date("Y-m-d", strtotime("last day of " . $mes));
         //sacar el dia de dia del mes
         $fecha      =  date("Y-m-d", strtotime("first day of " . $mes));
@@ -202,7 +134,6 @@ class ControllerEvent extends Controller
         $diaDeLaSemana = date("w", $nuevaFecha);
         $nuevaFecha = $nuevaFecha - ($diaDeLaSemana * 24 * 3600); //Restar los segundos totales de los dias transcurridos de la semana
         $dateini = date("Y-m-d", $nuevaFecha);
-        //$dateini = date("Y-m-d",strtotime($dateini."+ 1 day"));
         // numero de primer semana del mes
         $semana1 = date("W", strtotime($fecha));
         // numero de ultima semana del mes
@@ -231,7 +162,7 @@ class ControllerEvent extends Controller
                 $datanew['fecha'] = $datafecha;
                 //AGREGAR CONSULTAS EVENTO
                 // consulta evento y filtra por fecha
-                $datanew['evento'] = Event::where("fecha", $datafecha)
+                $datanew['evento'] = Evento::where("fecha", $datafecha)
                     ->orderby('horaini', 'desc')
                     ->get();
                 array_push($weekdata, $datanew);
@@ -258,7 +189,6 @@ class ControllerEvent extends Controller
 
     public static function spanish_month($month)
     {
-
         $mes = $month;
         if ($month == "Jan") {
             $mes = "Enero";
@@ -292,7 +222,6 @@ class ControllerEvent extends Controller
 
     private function getmesnumero($month)
     {
-
         $mes = $month;
         if ($month == "Enero") {
             $mes = "1";

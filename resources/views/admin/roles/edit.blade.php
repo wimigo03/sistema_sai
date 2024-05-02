@@ -7,29 +7,20 @@
             </div>
         </div>
     </div>
-<link rel="stylesheet" href="/css/font-verdana.css" rel="stylesheet">
-<div class="card card-custom">
-    <div class="card-header font-verdana-15">
-        <div class="row">
-            <div class="col-md-6">
-                <b>MODIFICACION DE ROL</b>
-            </div>
-            <div class="col-md-6 text-right">
-                <span class="tts:left tts-slideIn tts-custom" aria-label="Ir atras">
-                    <a href="{{ route('roles.index') }}" class="text-dark">
-                        <i class="fa fa-reply"></i>
-                    </a>
-                </span>
-            </div>
-        </div>
+    <div class="card-body body">
+        @include('admin.roles.partials.form-editar')
     </div>
-    <div class="card-body">
-        @include('admin.roles.partials.form-edit')
-    </div>
-</div>
 @endsection
 @section('scripts')
     <script>
+        $(document).ready( function () {
+            $('.select2').select2({
+                theme: "bootstrap4",
+                placeholder: "--Seleccionar--",
+                width: '100%'
+            });
+        });
+        
         function procesar() {
             $('#modal_confirmacion').modal({
                 keyboard: false

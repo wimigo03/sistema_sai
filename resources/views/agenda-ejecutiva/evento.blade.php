@@ -8,27 +8,27 @@
         </div>
     </div>
     <div class="card-body body">
-        @include('evento.partials.search')
-        @include('evento.partials.content')
+        @include('agenda-ejecutiva.partials.search')
+        @include('agenda-ejecutiva.partials.content')
     </div>
 @endsection
 @section('scripts')
     <script>
         function limpiar(){
-            var url = "{{ route('agenda.ej.index') }}";
+            var url = "{{ route('agenda.ejecutiva.index') }}";
             window.location.href = url;
         }
 
         function create(){
             var date = $("#date").val()
-            var url = "{{ route('agenda.ej.detalle',':date') }}";
+            var url = "{{ route('agenda.ejecutiva.form',':date') }}";
             url = url.replace(':date',date);
             window.location.href = url;
         }
 
         function print(){
             var date = $("#date").val();
-            var url = "{{ route('agenda.details2', ':date') }}";
+            var url = "{{ route('agenda.ejecutiva.details2', ':date') }}";
             url = url.replace(':date', date);
             window.open(url, '_blank');
         }
