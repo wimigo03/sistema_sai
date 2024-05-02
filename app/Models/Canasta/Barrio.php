@@ -7,13 +7,15 @@ use App\Models\User;
 use App\Models\Canasta\Dea;
 use App\Models\Canasta\Distrito;
 use App\Models\Canasta\Beneficiario;
+use App\Models\Canasta\BarrioEntrega;
+
 
 class Barrio extends Model
 {
     protected $table = 'barrios';
     protected $primaryKey= 'id';
     protected $fillable = [
-
+        'id',
         'tipo',
         'nombre',
         'distrito_id',
@@ -76,6 +78,10 @@ class Barrio extends Model
 
     public function distrito(){
         return $this->belongsTo(Distrito::class,'distrito_id','id');
+    }
+
+    public function barrio_entrega(){
+        return $this->belongsTo(BarrioEntrega::class,'id','idBarrio');
     }
 
     public function scopeByCodigo($query, $codigo){

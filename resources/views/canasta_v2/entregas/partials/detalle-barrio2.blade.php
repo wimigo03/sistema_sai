@@ -13,7 +13,7 @@
             </div>
             <div class="col-md-2 text-right">
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Imprimir">
-                    <span class="btn btn-secondary font-roboto-12" onclick="save5();" >
+                    <span class="btn btn-warning font-roboto-12" onclick="save5();" >
                         <i class="fa fa-print fa-fw" aria-hidden="true"></i>
                     </span>
                 </span>

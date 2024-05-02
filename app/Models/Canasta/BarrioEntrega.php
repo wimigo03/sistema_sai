@@ -13,6 +13,7 @@ class BarrioEntrega extends Model
     protected $fillable = [
         'id',
         'idBarrio',
-        'idPaquete'
+        'idPaquete',
+        'estado'
     ];
 }

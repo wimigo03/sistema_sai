@@ -4,6 +4,7 @@ namespace App\Models\Canasta;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class Entrega extends Model
 {
@@ -23,16 +24,21 @@ class Entrega extends Model
         'estado'
     ];
     const ESTADOS = [
-        '1' => 'SIN ENTREGA',
-        '2' => 'ENTREGADO'
+        '1' => 'SIN ENT.(SIN IMPRESION)',
+        '2' => 'SIN ENT.(IMPRESO)',
+        '3' => 'ENTREGADO'
     ];
 
     public function getStatusAttribute(){
         switch ($this->estado) {
             case '1':
-                return "SIN ENTREGA";
+                return "SIN ENT.(SIN IMPRESION)";
+
             case '2':
-                return "ENTREGADO";
+                return "SIN ENT.(IMPRESO)";
+
+                case '3':
+                    return "ENTREGADO";
         }
     }
 
@@ -43,6 +49,21 @@ class Entrega extends Model
     public function paquete_periodo(){
         return $this->belongsTo(User::class,'id','id_paquete');
     }
+
+   // public function getObtenerEstadoAttribute(){
+   //     $barrios_entrega = DB::table('barriosEntrega')
+   //                    ->where('idBarrio',$this->idBarrio)
+   //                    ->where('idPaquete',$this->id_paquete)
+   //                     ->select('estado')
+   //                      ->first();
+   //     if($barrios_entrega != null){
+   //         $estados =9;
+   //     }else{
+   //          $estados = 9;
+   //      }
+   //      return $estados=88;
+   //  }
+
 
     public function dea(){
         return $this->belongsTo(Dea::class,'dea_id','id');
