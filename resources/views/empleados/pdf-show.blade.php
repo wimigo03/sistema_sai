@@ -29,7 +29,9 @@
             <tbody>
                 <tr>
                     <td colspan="2" class="align-center align-middle">
-                        <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path($empleado->url_foto))) }}" class="foto-pdf-show" alt="#"/>
+                        @if ($empleado->url_foto != null)
+                            <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path($empleado->url_foto))) }}" class="foto-pdf-show" alt="#"/>
+                        @endif
                     </td>
                 </tr>
                 <tr>

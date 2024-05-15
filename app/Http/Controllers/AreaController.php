@@ -3,18 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-//use App\Models\Empleado;
-//use App\Models\EmpleadoContrato;
 use App\Models\Area;
-//use App\Models\FileModel;
 use App\Models\Customer;
-//use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests;
-//use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
-//use App\Exportar\EmpleadosExcel;
 use App\Models\User;
 use DB;
 use PDF;

@@ -1,21 +1,11 @@
 <?php
 
 Route::prefix('area')->name('area.')->middleware(['auth'])->group(function () {
-    Route::get('/', 'AreaController@index')->name('index');//->middleware('can:area.index');
-    Route::get('/get_datos/{idarea}', 'AreaController@get_datos')->name('get.datos.area');//->middleware('can:area.index');
-    Route::get('create/{area_id}', 'AreaController@create')->name('create');//->middleware('can:empleados.create');
-    Route::post('store', 'AreaController@store')->name('store');//->middleware('can:empleados.create');
-    Route::get('editar/{area_id}', 'AreaController@editar')->name('editar');//->middleware('can:empleados.editar');
-    Route::post('update', 'AreaController@update')->name('update');//->middleware('can:empleados.editar');
-    Route::get('eliminar/{area_id}', 'AreaController@eliminar')->name('eliminar');//->middleware('can:empleados.editar');
-    /*Route::get('search', 'EmpleadoController@search')->name('search')->middleware('can:empleados.index');
-    Route::get('retirar/{idemp}', 'EmpleadoController@retirar')->name('retirar')->middleware('can:empleados.retirar');
-    Route::post('procesar-retiro', 'EmpleadoController@procesar_retiro')->name('procesar.retiro')->middleware('can:empleados.retirar');
-    Route::get('recontratar/{idemp}', 'EmpleadoController@recontratar')->name('recontratar')->middleware('can:empleados.recontratar');
-    Route::post('procesar-recontrato', 'EmpleadoController@procesar_recontrato')->name('procesar.recontrato')->middleware('can:empleados.recontratar');
-    Route::get('show/{idemp}', 'EmpleadoController@show')->name('show')->middleware('can:empleados.show');
-    Route::get('pdf-show/{idemp}', 'EmpleadoController@pdf_show')->name('pdf.show')->middleware('can:empleados.show');
-    Route::get('imprimir-credenciales/{dea_id}', 'EmpleadoController@imprimir_credenciales')->name('imprimir.credenciales')->middleware('can:empleados.show');
-    Route::get('procesar-credenciales', 'EmpleadoController@procesar_credenciales')->name('procesar.credenciales')->middleware('can:empleados.show');
-    Route::get('excel', 'EmpleadoController@excel')->name('excel')->middleware('can:empleados.index');*/
+    Route::get('/', 'AreaController@index')->name('index')->middleware('can:areas.index');
+    Route::get('/get_datos/{idarea}', 'AreaController@get_datos')->name('get.datos.area')->middleware('can:areas.index');
+    Route::get('create/{area_id}', 'AreaController@create')->name('create')->middleware('can:areas.create');
+    Route::post('store', 'AreaController@store')->name('store')->middleware('can:empleados.areas');
+    Route::get('editar/{area_id}', 'AreaController@editar')->name('editar')->middleware('can:areas.editar');
+    Route::post('update', 'AreaController@update')->name('update')->middleware('can:areas.editar');
+    Route::get('eliminar/{area_id}', 'AreaController@eliminar')->name('eliminar')->middleware('can:areas.eliminar');
 });

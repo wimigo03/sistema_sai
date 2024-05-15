@@ -28,27 +28,27 @@
                             <div id="treeview" class="font-roboto-12"></div>
                         </div>
                         <div class="col-md-1 text-right">
-                            {{--@can('area.create')--}}
+                            @can('areas.create')
                                 <span class="tts:left tts-slideIn tts-custom root" aria-label="Crear un dependiente" style="cursor: pointer;">
                                     <span class="btn btn-sm btn-outline-success font-verdana mb-1" onclick="create();" id="btn_create">
                                         <i class="fas fa-plus fa-fw"></i>
                                     </span>
                                 </span>
-                            {{--@endcan--}}
-                            {{--@can('area.create')--}}
+                            @endcan
+                            @can('areas.editar')
                                 <span class="tts:left tts-slideIn tts-custom root" aria-label="Modificar datos" style="cursor: pointer;">
                                     <span class="btn btn-sm btn-outline-warning font-verdana mb-1" onclick="editar();" id="btn_editar">
                                         <i class="fas fa-edit fa-fw"></i>
                                     </span>
                                 </span>
-                            {{--@endcan--}}
-                            {{--@can('area.create')--}}
+                            @endcan
+                            @can('areas.eliminar')
                                 <span class="tts:left tts-slideIn tts-custom root" aria-label="Eliminar area" style="cursor: pointer;">
                                     <span class="btn btn-sm btn-outline-danger font-verdana mb-1" onclick="procesar();" id="btn_eliminar">
                                         <i class="fas fa-eraser fa-fw"></i>
                                     </span>
                                 </span>
-                            {{--@endcan--}}
+                            @endcan
                         </div>
                     </div>
                 </div>

@@ -560,13 +560,13 @@
                                         </a>
                                     </li>
                                 @endcan
-                                {{--@can('empleados.index')--}}
+                                @can('areas.index')
                                     <li>
                                         <a href="{{ route('area.index') }}">
                                             &nbsp;&nbsp;&nbsp;<i class="fas fa-sitemap fa-fw"></i>&nbsp;Organigrama
                                         </a>
                                     </li>
-                                {{--@endcan--}}
+                                @endcan
                                 @can('areas.index')
                                     <li>
                                         <a href="{{ route('areas.index') }}">
