@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Empleado;
 use App\Models\Area;
 use App\Models\Customer;
-use App\Models\FileModel;
+use App\Models\File;
 use App\Models\MovimientosPtModel;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests;
@@ -156,7 +156,7 @@ class PlantaController extends Controller
         $empleados->tipo = 1;
         $empleados->save();
 
-        $file = FileModel::find($request->input('idfile'));
+        $file = File::find($request->input('idfile'));
         $file->estadofile = 2;
         $file->save();
 
@@ -233,9 +233,9 @@ class PlantaController extends Controller
         $empleados->save();
 
         if ($request->input('idfile') != $request->input('idfileoriginal')) {
-            $file = FileModel::find($request->input('idfile'));
+            $file = File::find($request->input('idfile'));
             $file->estadofile = 2;
-            $file2 = FileModel::find($request->input('idfileoriginal'));
+            $file2 = File::find($request->input('idfileoriginal'));
             $file2->estadofile = 1;
             $file->save();
             $file2->save();
@@ -319,9 +319,9 @@ class PlantaController extends Controller
         $empleados->save();
 
         if ($request->input('idfile') != $request->input('idfileoriginal')) {
-            $file = FileModel::find($request->input('idfile'));
+            $file = File::find($request->input('idfile'));
             $file->estadofile = 2;
-            $file2 = FileModel::find($request->input('idfileoriginal'));
+            $file2 = File::find($request->input('idfileoriginal'));
             $file2->estadofile = 1;
             $file->save();
             $file2->save();
@@ -331,7 +331,7 @@ class PlantaController extends Controller
                 ->select('f.numfile', 'f.cargo', 'f.habbasico', 'f.nombrecargo')
                 ->where('f.idfile', '=', $request->input('idfileoriginal'))->first();
 
-            // $fileactual = FileModel::find($request->input('idfile'))->first();
+            // $fileactual = File::find($request->input('idfile'))->first();
             $filenuevo = DB::table('file as f')
                 ->select('f.numfile', 'f.cargo', 'f.habbasico', 'f.nombrecargo')
                 ->where('f.idfile', '=', $request->input('idfile'))->first();

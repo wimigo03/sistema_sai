@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Area;
-use App\Models\FileModel;
+use App\Models\File;
 use App\Models\Empleado;
 use App\Models\Canasta\Dea;
 
@@ -89,7 +89,7 @@ class EmpleadoContrato extends Model
 
     public function file()
     {
-        return $this->belongsTo(FileModel::class, 'idfile','idfile');
+        return $this->belongsTo(File::class, 'idfile','idfile');
     }
 
     public function empleado()

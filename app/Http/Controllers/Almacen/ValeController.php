@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 use App\Models\User;
 
-use App\Models\FileModel;
+use App\Models\File;
 use App\Models\Empleado;
 
 use App\Models\Almacen\ValeModel;
@@ -44,10 +44,10 @@ class ValeController extends Controller
                         ->select('v.estadovale','v.idvale','v.detallesouconsumo',
 
                         'v.usuarionombre','v.usuariocargo',
-                        
+
                         'v.nombrelocalidad','v.marcaconsumo','v.placaconsumo','v.fechasolicitud',
                         'v.estado2',
-                      
+
                         'a.nombrearea',
                         'u.nombreuconsumo',
                         // 'u.kilometrajeinicialconsumo',
@@ -55,7 +55,7 @@ class ValeController extends Controller
                         'lo.nombrelocalidad')
 
                         ->orderBy('v.idvale', 'desc');
-                     
+
                         $vales = $vales->get();
                         return Datatables::of($vales)
                         ->addIndexColumn()
@@ -74,8 +74,8 @@ class ValeController extends Controller
                         ->addColumn('usuariocargo', function ($vales) {
                             return $vales->usuariocargo;
                         })
-                        ->addColumn('nombreuconsumo', function ($vales) {                                
-                        return $vales->nombreuconsumo;  
+                        ->addColumn('nombreuconsumo', function ($vales) {
+                        return $vales->nombreuconsumo;
 
                         })
                         ->addColumn('placaconsumo', function ($vales) {
@@ -95,9 +95,9 @@ class ValeController extends Controller
                                 case '3':
                                     return '<b style="color: purple">Almacen</b>';
                                 default:
-                                
+
                                     break;
-                }   }                  
+                }   }
                         )
 
                             ->addColumn('actions', function ($vales) {
@@ -121,7 +121,7 @@ class ValeController extends Controller
                                     </a>';
                                 } else {
                                     if ($vales->estadovale == 3) {
-            
+
                                         return '<a class="tts:left tts-slideIn tts-custom" aria-label=" boton uno" href="' . route('almacenes.pedido.editabletres', $vales->idvale) . '">
                                         <button class="tts:left tts-slideIn tts-custom" aria-label="Detalle" style="border: none;">
                                         <span class="text-primary" >
@@ -130,24 +130,24 @@ class ValeController extends Controller
                                             </button>
                                     </a>';
                                 }
-                             
-                                 
+
+
                                 }}}   )
 
-                        
+
 
                                 ->rawColumns(['actions', 'estadovale'])
                                 ->make(true);
-                        
 
-                     
+
+
 
                     }
                     $personal = User::find(Auth::user()->id);
                     $id = $personal->id;
                     $userdate = User::find($id)->usuariosempleados;
                     $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
-            
+
        return view('almacenes.pedido.index', ['idd' => $personalArea]);
     }
 
@@ -159,41 +159,41 @@ class ValeController extends Controller
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
         $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
-        
+
          if ($request->ajax()) {
             $vales = DB::table('vale as v')
 
             ->join('unidadconsumo as u', 'u.idunidadconsumo', '=', 'v.idunidad')
             ->join('localidad as lo', 'lo.idlocalidad', '=', 'v.idlocalidad')
-    
+
             ->join('areas as a', 'a.idarea', '=', 'v.idarea')
             ->where('v.estado1',2)
                             ->select('v.estadovale','v.idvale','v.detallesouconsumo',
-    
+
                             'v.usuarionombre','v.usuariocargo','v.codigoconsumo',
-                            
+
                             'v.nombrelocalidad','v.marcaconsumo','v.placaconsumo',
                             'v.estado1',
-                          
+
                             'a.nombrearea',
                             'u.codigoconsumo',
                             'lo.nombrelocalidad')
-                         
+
                             ->orderBy('v.idvale', 'asc');
-                            
-    
+
+
                             return DataTables::of($vales)
                             ->addIndexColumn()
                             ->addColumn('btn', 'almacenes.pedido.btn')
                             ->addColumn('btn3', 'almacenes.pedido.btn3')
-                      
+
                             ->rawColumns(['btn','btn3'])
                             ->make(true);
-    
+
                         }
            return view('almacenes.pedido.index2', ['idd' => $personalArea]);
         }
-    
+
         public function index3(Request $request)
         {
             $personal = User::find(Auth::user()->id);
@@ -202,38 +202,38 @@ class ValeController extends Controller
             $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
             if ($request->ajax()) {
                $vales = DB::table('vale as v')
-   
+
                ->join('unidadconsumo as u', 'u.idunidadconsumo', '=', 'v.idunidad')
                ->join('localidad as lo', 'lo.idlocalidad', '=', 'v.idlocalidad')
-       
+
                ->join('areas as a', 'a.idarea', '=', 'v.idarea')
                ->where('v.estado2',2)
                                ->select('v.estadovale','v.idvale','v.detallesouconsumo',
-       
+
                                'v.usuarionombre','v.usuariocargo','v.codigoconsumo',
-                               
+
                                'v.nombrelocalidad','v.marcaconsumo','v.placaconsumo',
                                'v.estado1',
-                             
+
                                'a.nombrearea',
                                'u.codigoconsumo',
                                'lo.nombrelocalidad')
-                            
+
                                ->orderBy('v.idvale', 'asc');
-                               
-       
+
+
                                return Datatables::of($vales)
                                ->addIndexColumn()
-                             
+
                                ->addColumn('btn4', 'almacenes.pedido.btn4')
-                         
+
                                ->rawColumns(['btn4'])
                                ->make(true);
-       
+
                            }
               return view('almacenes.pedido.index3', ['idd' => $personalArea]);
            }
-       
+
     public function create(){
         $consumos = DB::table('unidadconsumo')
         ->select(DB::raw("concat(codconsumo,' : ',placaconsumo,' : ',marcaconsumo)
@@ -273,7 +273,7 @@ class ValeController extends Controller
         $vales->estadovale = 1;
         $vales->estado1 = 1;
         $vales->estado2 = 1;
-        
+
 
         if($vales->save()){
             $request->session()->flash('message', 'Registro Procesado');
@@ -291,7 +291,7 @@ class ValeController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $detalle = Temporal2Model::find($id);
-        
+
         if(is_null($detalle)){
             $detalle = new Temporal2Model;
             $detalle->idtemporal2=$id;
@@ -311,7 +311,7 @@ class ValeController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $detalle = Temporal2Model::find($id);
-        
+
         if(is_null($detalle)){
             $detalle = new Temporal2Model;
             $detalle->idtemporal2=$id;
@@ -331,7 +331,7 @@ class ValeController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $detalle = Temporal2Model::find($id);
-        
+
         if(is_null($detalle)){
             $detalle = new Temporal2Model;
             $detalle->idtemporal2=$id;
@@ -346,7 +346,7 @@ class ValeController extends Controller
         }
           return redirect()->route('almacenes.detalle.index3');
      }
-     
+
     public function editar($idvale){
 
         $vales = ValeModel::find($idvale);
@@ -371,7 +371,7 @@ class ValeController extends Controller
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
         $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
-    
+
 
        // dirigido a
     $prod = $request->get('idusuario');
@@ -382,10 +382,10 @@ class ValeController extends Controller
     $Nombrecompdir= $Nombredir . " " .  $Apellidopadir. " " .$Apellidomadir ;
 
     $IdFile = $producto->idfile;
-    $productodos = FileModel::find($IdFile);
+    $productodos = File::find($IdFile);
     $Nombredircargo = $productodos->nombrecargo;
 
-        
+
 
         $vales = ValeModel::find($request->idvale);
 
@@ -394,7 +394,7 @@ class ValeController extends Controller
         $vales->motivosoli = $request->input('motivosoli');
         $vales->controlinterno = $request->input('controlinterno');
 
-        $vales->idusuario = $request->get('idusuario'); 
+        $vales->idusuario = $request->get('idusuario');
         $vales->usuarionombre = $Nombrecompdir;
         $vales->usuariocargo = $Nombredircargo;
 

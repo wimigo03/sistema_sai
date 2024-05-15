@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Area;
 use App\Models\NivelModel;
-use App\Models\FileModel;
+use App\Models\File;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests;
 use DB;
@@ -53,7 +53,7 @@ class AreasController extends Controller
 
     public function guardarfile(Request $request)
     {
-        $file = new FileModel();
+        $file = new File();
         $file->numfile = $request->input('numfile');
         $file->cargo = $request->input('cargo');
         $file->nombrecargo = $request->input('nombrecargo');
@@ -78,7 +78,7 @@ class AreasController extends Controller
 
     public function guardarfile2(Request $request)
     {
-        $file = new FileModel();
+        $file = new File();
         $file->numfile = $request->input('numfile');
         $file->cargo = $request->input('cargo');
         $file->nombrecargo = $request->input('nombrecargo');
@@ -133,7 +133,7 @@ class AreasController extends Controller
 
     public function byCategory($id)
     {
-        return FileModel::where('idarea', $id)->get();
+        return File::where('idarea', $id)->get();
     }
 
     public function store(Request $request)
@@ -178,7 +178,7 @@ class AreasController extends Controller
 
     public function editfile($idfile)
     {
-        $files = FileModel::find($idfile);
+        $files = File::find($idfile);
         $file = $files;
         $area = Area::find($files->idarea);
         $areas = DB::table('areas')->get();
@@ -187,7 +187,7 @@ class AreasController extends Controller
 
     public function editfile2($idfile)
     {
-        $files = FileModel::find($idfile);
+        $files = File::find($idfile);
         $file = $files;
         $area = Area::find($files->idarea);
         $areas = DB::table('areas')->get();
@@ -198,7 +198,7 @@ class AreasController extends Controller
 
     public function updatefile(Request $request)
     {
-        $file = FileModel::find($request->input('idfile'));
+        $file = File::find($request->input('idfile'));
         $file->numfile = $request->input('numfile');
         $file->cargo = $request->input('cargo');
         $file->nombrecargo = $request->input('nombrecargo');
@@ -220,7 +220,7 @@ class AreasController extends Controller
 
     public function updatefile2(Request $request)
     {
-        $file = FileModel::find($request->input('idfile'));
+        $file = File::find($request->input('idfile'));
         $file->numfile = $request->input('numfile');
         $file->cargo = $request->input('cargo');
         $file->nombrecargo = $request->input('nombrecargo');

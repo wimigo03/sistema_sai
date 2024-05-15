@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
-use App\Models\FileModel;
+use App\Models\File;
 
 class OficinaController extends Controller
 {

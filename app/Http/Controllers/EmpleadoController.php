@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Empleado;
 use App\Models\EmpleadoContrato;
 use App\Models\Area;
-use App\Models\FileModel;
+use App\Models\File;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests;
@@ -48,7 +48,7 @@ class EmpleadoController extends Controller
         //$this->completar_contratos();
         $dea_id = Auth::user()->dea->id;
         $areas = Area::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
-        $cargos = FileModel::where('dea_id',$dea_id)->pluck('nombrecargo','idfile');
+        $cargos = File::where('dea_id',$dea_id)->pluck('nombrecargo','idfile');
         $estados = Empleado::ESTADOS;
         $tipos = EmpleadoContrato::TIPOS;
         $empleados = Empleado::query()
@@ -62,7 +62,7 @@ class EmpleadoController extends Controller
     {
         $dea_id = $request->dea_id;
         $areas = Area::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
-        $cargos = FileModel::where('dea_id',$dea_id)->pluck('nombrecargo','idfile');
+        $cargos = File::where('dea_id',$dea_id)->pluck('nombrecargo','idfile');
         $estados = Empleado::ESTADOS;
         $tipos = EmpleadoContrato::TIPOS;
         $empleados = Empleado::query()
@@ -87,7 +87,7 @@ class EmpleadoController extends Controller
         $extensiones = Empleado::EXTENSIONES;
         $grados_academicos = Empleado::GRADOS_ACADEMICOS;
         $areas = Area::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
-        $cargos = FileModel::where('dea_id',$dea_id)->pluck('nombrecargo','idfile');
+        $cargos = File::where('dea_id',$dea_id)->pluck('nombrecargo','idfile');
         $tipos = EmpleadoContrato::TIPOS;
         return view('empleados.create', compact('dea_id','extensiones','grados_academicos','areas','cargos','tipos'));
     }
@@ -193,7 +193,7 @@ class EmpleadoController extends Controller
         $extensiones = Empleado::EXTENSIONES;
         $grados_academicos = Empleado::GRADOS_ACADEMICOS;
         $areas = Area::where('dea_id',$dea_id)->get();
-        $cargos = FileModel::where('dea_id',$dea_id)->get();
+        $cargos = File::where('dea_id',$dea_id)->get();
         $tipos = EmpleadoContrato::TIPOS;
         return view('empleados.editar', compact('empleado','dea_id','empleado_contrato','extensiones','grados_academicos','areas','cargos','tipos'));
     }
@@ -344,7 +344,7 @@ class EmpleadoController extends Controller
         $extensiones = Empleado::EXTENSIONES;
         $grados_academicos = Empleado::GRADOS_ACADEMICOS;
         $areas = Area::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
-        $cargos = FileModel::where('dea_id',$dea_id)->pluck('nombrecargo','idfile');
+        $cargos = File::where('dea_id',$dea_id)->pluck('nombrecargo','idfile');
         $tipos = EmpleadoContrato::TIPOS;
         return view('empleados.recontratar', compact('empleado','dea_id','extensiones','grados_academicos','areas','cargos','tipos'));
     }

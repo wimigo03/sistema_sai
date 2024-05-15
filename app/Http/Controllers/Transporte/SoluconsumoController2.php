@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Empleado;
 use App\Models\Area;
-use App\Models\FileModel;
+use App\Models\File;
 
 use App\Models\Almacen\LocalidadModel;
 
@@ -220,7 +220,7 @@ $Apellidomausuario = $productocinco->ap_mat;
 $Nombrecompusuario= $Nombreusuario . " " .  $Apellidopausuario. " " .$Apellidomausuario ;
 
 $IdFiletres = $productocinco->idfile;
-$productoseis = FileModel::find($IdFiletres);
+$productoseis = File::find($IdFiletres);
 $Nombreusuariocargo = $productoseis->nombrecargo;
 
 
@@ -242,7 +242,7 @@ $encargado = DB::table('encargados as e')
         $Nombrecompdir= $Nombredir . " " .  $Apellidopadir. " " .$Apellidomadir ;
 
         $IdFile = $producto->idfile;
-        $productodos = FileModel::find($IdFile);
+        $productodos = File::find($IdFile);
         $Nombredircargo = $productodos->nombrecargo;
 
 
@@ -256,7 +256,7 @@ $Apellidomavia = $productotres->ap_mat;
 $Nombrecompvia= $Nombrevia . " " .  $Apellidopavia. " " .$Apellidomavia ;
 
 $IdFiledos = $productotres->idfile;
-$productocuatro = FileModel::find($IdFiledos);
+$productocuatro = File::find($IdFiledos);
 $Nombreviacargo = $productocuatro->nombrecargo;
 
 
@@ -424,7 +424,7 @@ $Apellidomausuario = $productocinco->ap_mat;
 $Nombrecompusuario= $Nombreusuario . " " .  $Apellidopausuario. " " .$Apellidomausuario ;
 
 $IdFiletres = $productocinco->idfile;
-$productoseis = FileModel::find($IdFiletres);
+$productoseis = File::find($IdFiletres);
 $Nombreusuariocargo = $productoseis->nombrecargo;
 
 
@@ -445,7 +445,7 @@ $prod = 1435;
         $Nombrecompdir= $Nombredir . " " .  $Apellidopadir. " " .$Apellidomadir ;
 
         $IdFile = $producto->idfile;
-        $productodos = FileModel::find($IdFile);
+        $productodos = File::find($IdFile);
         $Nombredircargo = $productodos->nombrecargo;
 
 
@@ -459,7 +459,7 @@ $Apellidomavia = $productotres->ap_mat;
 $Nombrecompvia= $Nombrevia . " " .  $Apellidopavia. " " .$Apellidomavia ;
 
 $IdFiledos = $productotres->idfile;
-$productocuatro = FileModel::find($IdFiledos);
+$productocuatro = File::find($IdFiledos);
 $Nombreviacargo = $productocuatro->nombrecargo;
 
 

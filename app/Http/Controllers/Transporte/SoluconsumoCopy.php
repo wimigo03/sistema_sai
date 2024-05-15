@@ -11,7 +11,7 @@ use App\Models\User;
 use App\Models\Empleado;
 use App\Models\Area;
 use App\Models\EncargadosModel;
-use App\Models\FileModel;
+use App\Models\File;
 use App\Models\Transporte\SoluconsumoModel;
 use App\Models\Transporte\Temporal5Model;
 
@@ -287,7 +287,7 @@ $Apellidomausuario = $productocinco->ap_mat;
 $Nombrecompusuario= $Nombreusuario . " " .  $Apellidopausuario. " " .$Apellidomausuario ;
 
 $IdFiletres = $productocinco->idfile;
-$productoseis = FileModel::find($IdFiletres);
+$productoseis = File::find($IdFiletres);
 $Nombreusuariocargo = $productoseis->nombrecargo;
 
 
@@ -301,7 +301,7 @@ $Nombreusuariocargo = $productoseis->nombrecargo;
         $Nombrecompdir= $Nombredir . " " .  $Apellidopadir. " " .$Apellidomadir ;
 
         $IdFile = $producto->idfile;
-        $productodos = FileModel::find($IdFile);
+        $productodos = File::find($IdFile);
         $Nombredircargo = $productodos->nombrecargo;
 
 
@@ -315,7 +315,7 @@ $Apellidomavia = $productotres->ap_mat;
 $Nombrecompvia= $Nombrevia . " " .  $Apellidopavia. " " .$Apellidomavia ;
 
 $IdFiledos = $productotres->idfile;
-$productocuatro = FileModel::find($IdFiledos);
+$productocuatro = File::find($IdFiledos);
 $Nombreviacargo = $productocuatro->nombrecargo;
 
 

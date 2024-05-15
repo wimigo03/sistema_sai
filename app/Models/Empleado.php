@@ -6,11 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Area;
 use App\Models\EmpleadoContrato;
-use App\Models\FileModel;
-//use App\Models\Model_Activos\ActualModel;
-//use App\Models\Model_Activos\Adeudo;
-//use App\Models\Model_Activos\ArchivoAdjunto;
-//use App\Models\Model_Activos\Transferencia;
+use App\Models\File;
 
 class Empleado extends Model
 {
@@ -137,9 +133,19 @@ class Empleado extends Model
     public function getFileCargoAttribute(){
         $contrato = EmpleadoContrato::select('idfile')->where('idemp',$this->idemp)->orderBy('id','desc')->take(1)->first();
         if($contrato){
-            $cargo = FileModel::where('idfile',$contrato->idfile)->first();
+            $cargo = File::where('idfile',$contrato->idfile)->first();
             if($cargo){
                 return $cargo->nombrecargo;
+            }
+        }
+    }
+
+    public function getCargoFileAttribute(){
+        $contrato = EmpleadoContrato::select('idfile')->where('idemp',$this->idemp)->orderBy('id','desc')->take(1)->first();
+        if($contrato){
+            $cargo = File::where('idfile',$contrato->idfile)->first();
+            if($cargo){
+                return $cargo->cargo;
             }
         }
     }
@@ -156,7 +162,7 @@ class Empleado extends Model
 
     /*public function file()
     {
-        return $this->belongsTo(FileModel::class, 'idfile');
+        return $this->belongsTo(File::class, 'idfile');
     }*/
 
     /*public function archivoAdjuntos()

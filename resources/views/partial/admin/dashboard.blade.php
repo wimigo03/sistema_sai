@@ -567,10 +567,10 @@
                                         </a>
                                     </li>
                                 @endcan
-                                @can('areas.index')
+                                @can('files.index')
                                     <li>
-                                        <a href="{{ route('areas.index') }}">
-                                            &nbsp;&nbsp;&nbsp;<i class="fas fa-id-card"></i>&nbsp;Areas-Files
+                                        <a href="{{ route('file.index') }}">
+                                            &nbsp;&nbsp;&nbsp;<i class="fas fa-id-card fa-fw"></i>&nbsp;Items
                                         </a>
                                     </li>
                                 @endcan

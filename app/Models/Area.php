@@ -67,7 +67,7 @@ class Area extends Model
     }
 
     public function iPais_all(){
-        return $this->hasMany('App\Models\FileModel', 'idarea', 'idarea');
+        return $this->hasMany('App\Models\File', 'idarea', 'idarea');
     }
 
     public function actuals()

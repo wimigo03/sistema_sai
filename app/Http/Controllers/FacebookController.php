@@ -51,7 +51,7 @@ class FacebookController extends Controller
     public function cargar_datos($id)
     {
         $facebook = Facebook::find($id);
-        $facebook_detalles = FacebookDetalle::where('facebook_id',$id)->get();
+        $facebook_detalles = FacebookDetalle::where('facebook_id',$id)->orderBy('id','asc')->get();
         $cont = 1;
         return view('facebook.cargar-datos', compact('facebook','facebook_detalles','cont'));
     }
@@ -61,55 +61,88 @@ class FacebookController extends Controller
         try{
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');
-                $shares = FacebookDetalle::whereIn('id',$request->share)->get();
-                foreach($shares as $share){
-                    $share_detalle = FacebookDetalle::find($share->id);
-                    $share_detalle->update([
-                        'user_id' => Auth::user()->id,
-                        '_share' => '1'
-                    ]);
-                }
-                $no_shares = FacebookDetalle::whereNotIn('id',$request->share)->get();
-                foreach($no_shares as $share){
-                    $share_detalle = FacebookDetalle::find($share->id);
-                    $share_detalle->update([
-                        'user_id' => Auth::user()->id,
-                        '_share' => '2'
-                    ]);
-                }
-
-                $likes = FacebookDetalle::whereIn('id',$request->like)->get();
-                foreach($likes as $like){
-                    $like_detalle = FacebookDetalle::find($like->id);
-                    $like_detalle->update([
-                        'user_id' => Auth::user()->id,
-                        '_like' => '1'
-                    ]);
-                }
-                $no_likes = FacebookDetalle::whereNotIn('id',$request->like)->get();
-                foreach($no_likes as $like){
-                    $like_detalle = FacebookDetalle::find($like->id);
-                    $like_detalle->update([
-                        'user_id' => Auth::user()->id,
-                        '_like' => '2'
-                    ]);
+                if(isset($request->share)){
+                    $shares = FacebookDetalle::whereIn('id',$request->share)->get();
+                    foreach($shares as $share){
+                        $share_detalle = FacebookDetalle::find($share->id);
+                        $share_detalle->update([
+                            'user_id' => Auth::user()->id,
+                            '_share' => '1'
+                        ]);
+                    }
+                    $no_shares = FacebookDetalle::whereNotIn('id',$request->share)->get();
+                    foreach($no_shares as $share){
+                        $share_detalle = FacebookDetalle::find($share->id);
+                        $share_detalle->update([
+                            'user_id' => Auth::user()->id,
+                            '_share' => '2'
+                        ]);
+                    }
+                }else{
+                    $shares = FacebookDetalle::where('facebook_id',$request->facebook_id)->get();
+                    foreach($shares as $share){
+                        $share_detalle = FacebookDetalle::find($share->id);
+                        $share_detalle->update([
+                            'user_id' => Auth::user()->id,
+                            '_share' => '2'
+                        ]);
+                    }
                 }
 
-                $comments = FacebookDetalle::whereIn('id',$request->comment)->get();
-                foreach($comments as $comment){
-                    $comment_detalle = FacebookDetalle::find($comment->id);
-                    $comment_detalle->update([
-                        'user_id' => Auth::user()->id,
-                        '_comment' => '1'
-                    ]);
+                if(isset($request->like)){
+                    $likes = FacebookDetalle::whereIn('id',$request->like)->get();
+                    foreach($likes as $like){
+                        $like_detalle = FacebookDetalle::find($like->id);
+                        $like_detalle->update([
+                            'user_id' => Auth::user()->id,
+                            '_like' => '1'
+                        ]);
+                    }
+                    $no_likes = FacebookDetalle::whereNotIn('id',$request->like)->get();
+                    foreach($no_likes as $like){
+                        $like_detalle = FacebookDetalle::find($like->id);
+                        $like_detalle->update([
+                            'user_id' => Auth::user()->id,
+                            '_like' => '2'
+                        ]);
+                    }
+                }else{
+                    $likes = FacebookDetalle::where('facebook_id',$request->facebook_id)->get();
+                    foreach($likes as $like){
+                        $like_detalle = FacebookDetalle::find($like->id);
+                        $like_detalle->update([
+                            'user_id' => Auth::user()->id,
+                            '_like' => '2'
+                        ]);
+                    }
                 }
-                $no_comments = FacebookDetalle::whereNotIn('id',$request->comment)->get();
-                foreach($no_comments as $comment){
-                    $comment_detalle = FacebookDetalle::find($comment->id);
-                    $comment_detalle->update([
-                        'user_id' => Auth::user()->id,
-                        '_comment' => '2'
-                    ]);
+
+                if(isset($request->comment)){
+                    $comments = FacebookDetalle::whereIn('id',$request->comment)->get();
+                    foreach($comments as $comment){
+                        $comment_detalle = FacebookDetalle::find($comment->id);
+                        $comment_detalle->update([
+                            'user_id' => Auth::user()->id,
+                            '_comment' => '1'
+                        ]);
+                    }
+                    $no_comments = FacebookDetalle::whereNotIn('id',$request->comment)->get();
+                    foreach($no_comments as $comment){
+                        $comment_detalle = FacebookDetalle::find($comment->id);
+                        $comment_detalle->update([
+                            'user_id' => Auth::user()->id,
+                            '_comment' => '2'
+                        ]);
+                    }
+                }else{
+                    $comments = FacebookDetalle::where('facebook_id',$request->facebook_id)->get();
+                    foreach($comments as $comment){
+                        $comment_detalle = FacebookDetalle::find($comment->id);
+                        $comment_detalle->update([
+                            'user_id' => Auth::user()->id,
+                            '_comment' => '2'
+                        ]);
+                    }
                 }
 
                 return redirect()->route('facebook.cargar.datos',$request->facebook_id)->with('success_message', 'Se actualizaron los datos correctamente...');

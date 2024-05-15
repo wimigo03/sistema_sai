@@ -28,7 +28,7 @@ use NumerosEnLetras;
 use PDF;
 
 use App\Models\Empleado;
-use App\Models\FileModel;
+use App\Models\File;
 use App\Models\Area;
 
 
@@ -159,7 +159,7 @@ $Apellidomavia = $productotres->ap_mat;
 $Nombrecompvia= $Nombrevia . " " .  $Apellidopavia. " " .$Apellidomavia ;
 
 $IdFiledos = $productotres->idfile;
-$productocuatro = FileModel::find($IdFiledos);
+$productocuatro = File::find($IdFiledos);
 $Nombreviacargo = $productocuatro->nombrecargo;
 
 //todo klm actual

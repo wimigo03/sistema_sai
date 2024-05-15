@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Empleado;
 use App\Models\Area;
 use App\Models\Customer;
-use App\Models\FileModel;
+use App\Models\File;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests;
 use DB;
@@ -196,7 +196,7 @@ class ContratoController extends Controller
         $empleados->tipo = 2;
 
         $empleados->save();
-        $file = FileModel::find($request->input('idfile'));
+        $file = File::find($request->input('idfile'));
         $file->estadofile = 2;
         $file->save();
         return redirect()->action('App\Http\Controllers\ContratoController@lista', [$request->input('idarea')]);
@@ -285,9 +285,9 @@ class ContratoController extends Controller
         $empleados->save();
 
         if ($request->input('idfile') != $request->input('idfileoriginal')) {
-            $file = FileModel::find($request->input('idfile'));
+            $file = File::find($request->input('idfile'));
             $file->estadofile = 2;
-            $file2 = FileModel::find($request->input('idfileoriginal'));
+            $file2 = File::find($request->input('idfileoriginal'));
             $file2->estadofile = 1;
             $file->save();
             $file2->save();

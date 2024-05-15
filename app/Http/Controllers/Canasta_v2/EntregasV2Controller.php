@@ -516,8 +516,8 @@ class EntregasV2Controller extends Controller
                         //dd($entregas);
                                         //return view('canasta_v2/entregas/generarboleta2', ["entrega" => $entregas,"userdate" => $userdate,"personalArea" => $personalArea]);
 
-                                        //return view('canasta_v2.entregas/generarboleta2', compact('fecha_actual','entrega','userdate','personalArea'));
-                                        return back();
+                                        return view('canasta_v2.entregas/generarboleta2', compact('fecha_actual','entrega','userdate','personalArea'));
+                                        //return back();
                                     }
 
 

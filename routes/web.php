@@ -256,8 +256,8 @@ Route::POST('compras/productos/store', [ProdServController::class,'store'])->nam
     Route::POST('compras/proveedores/insertar', [ProveedoresController::class,'insertar'])->name('ProveedoresController.insertar')->middleware('can:proveedores_access');*/
 
         /*COMPRAS AREAS*/
-        Route::get('compras/areas/index', [AreasController::class,'index'])->name('areas.index');//->middleware('can:areas_access');
-        Route::get('compras/areas/list', [AreasController::class,'listado'])->name('areas.list')->middleware('can:areas_access');
+        /*Route::get('compras/areas/index', [AreasController::class,'index'])->name('areas.index');//->middleware('can:areas_access');
+        Route::get('compras/areas/list', [AreasController::class,'listado'])->name('areas.list');//->middleware('can:areas_access');
         Route::get('compras/areas/create', [AreasController::class,'create'])->name('areas.create');//->middleware('can:areas_access');
         Route::get('compras/areas/{id}/edit', [AreasController::class,'edit'])->name('areas.edit')->middleware('can:areas_access');
         Route::POST('compras/areas/{id}/update', [AreasController::class,'update'])->name('areas.update')->middleware('can:areas_access');
@@ -271,7 +271,7 @@ Route::POST('compras/productos/store', [ProdServController::class,'store'])->nam
         Route::get('compras/areas/{id}/crearFile2', [AreasController::class,'crearFile2'])->name('areas.crearFile2')->middleware('can:areas_access');
         Route::POST('compras/areas/guardarfile2', [AreasController::class,'guardarfile2'])->name('areas.guardarfile2')->middleware('can:areas_access');
         Route::get('compras/areas/{id}/actualizarfile2', [AreasController::class,'editfile2'])->name('file2.edit')->middleware('can:areas_access');
-        Route::POST('compras/areas/updatefile2', [AreasController::class,'updatefile2'])->name('file2.update')->middleware('can:areas_access');
+        Route::POST('compras/areas/updatefile2', [AreasController::class,'updatefile2'])->name('file2.update')->middleware('can:areas_access');*/
 
 
         //////////////////////////////--COMPRAS PROGRAMAS--////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
