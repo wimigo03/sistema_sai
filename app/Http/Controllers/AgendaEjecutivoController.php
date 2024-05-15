@@ -7,9 +7,10 @@ use App\Models\AgendaModel;
 use App\Models\Evento;
 use Carbon\Carbon;
 use App\Models\User;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 use Illuminate\Support\Facades\Auth;
 use PDF;
+
 class AgendaEjecutivoController extends Controller
 {
     public function index()
@@ -55,7 +56,7 @@ class AgendaEjecutivoController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $personal = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($personal->idemp)->empleadosareas;
+        $personalArea = Empleado::find($personal->idemp)->empleadosareas;
         return view('agenda-ejecutiva.form',compact('fecha','personal'));
     }
 

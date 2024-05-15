@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Activo;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveArchivoAdjuntoRequest;
 use App\Models\Model_Activos\ArchivoAdjunto;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
@@ -17,7 +17,7 @@ class ResponsableArchivoController extends Controller
     public function index($id)
     {
         $this->listado($id);
-        $empleado = EmpleadosModel::find($id);
+        $empleado = Empleado::find($id);
         return view('activo.responsableArchivo.index', compact('empleado', 'id'));
     }
 

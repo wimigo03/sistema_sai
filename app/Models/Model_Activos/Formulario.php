@@ -4,7 +4,7 @@ namespace App\Models\Model_Activos;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 use App\Models\User;
 
 class Formulario extends Model
@@ -19,7 +19,7 @@ class Formulario extends Model
 
     public function empleado()
     {
-        return $this->belongsTo(EmpleadosModel::class,'empleado_id','idemp');
+        return $this->belongsTo(Empleado::class,'empleado_id','idemp');
     }
     public function user()
     {

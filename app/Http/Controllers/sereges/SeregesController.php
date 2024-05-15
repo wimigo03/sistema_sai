@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\sereges\AlbergueModel;
 use App\Models\sereges\UserAlbergueModel;
 use App\Models\User;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 use App\Models\sereges\SeregesModel;
 use App\Models\sereges\FotoRegistroModel;
 use Illuminate\Support\Facades\Auth;

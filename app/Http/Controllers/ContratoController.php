@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\EmpleadosModel;
-use App\Models\AreasModel;
+use App\Models\Empleado;
+use App\Models\Area;
 use App\Models\Customer;
 use App\Models\FileModel;
 use Illuminate\Support\Facades\Redirect;
@@ -37,7 +37,7 @@ class ContratoController extends Controller
     public function list()
 
     {
-        $customers = AreasModel::select(['idarea', 'nombrearea', 'estadoarea', 'idnivel']);
+        $customers = Area::select(['idarea', 'nombrearea', 'estadoarea', 'idnivel']);
 
         return Datatables::of($customers)
             ->addColumn('details_url', function ($customer) {
@@ -84,7 +84,7 @@ class ContratoController extends Controller
 
             ->where('e.tipo', '=', 2)
             ->get();
-        //$areas = AreasModel::find($idarea);
+        //$areas = Area::find($idarea);
         //$nombrearea=$areas->nombrearea;
 
         return view('rechumanos.contrato.lista2', ["empleados" => $empleados]);
@@ -105,7 +105,7 @@ class ContratoController extends Controller
     public function contratonuevo($id)
     {
 
-        $area = AreasModel::where('estadoarea', '=', 1)->with('iPais_all')->get();
+        $area = Area::where('estadoarea', '=', 1)->with('iPais_all')->get();
         $niveles = DB::table('niveles')->get();
 
         return view('rechumanos.contrato.create', ["niveles" => $niveles, "area" => $area, "idarea" => $id]);
@@ -122,7 +122,7 @@ class ContratoController extends Controller
             ->select('a.nombrearea', 'f.numfile', 'e.idemp', 'e.nombres', 'e.ap_pat', 'e.ap_mat', 'f.cargo', 'f.nombrecargo', 'f.habbasico', 'f.categoria', 'f.niveladm', 'f.clase', 'f.nivelsal', 'e.fechingreso', 'e.natalicio', 'e.edad', 'e.ci', 'e.poai', 'e.exppoai', 'e.decjurada', 'e.expdecjurada', 'e.sippase', 'e.expsippase', 'e.servmilitar', 'e.idioma', 'e.induccion', 'e.expinduccion', 'e.progvacacion', 'e.expprogvacacion', 'e.vacganadas', 'e.vacpendientes', 'e.vacusasdas', 'e.segsalud', 'e.inamovilidad', 'e.aservicios', 'e.cvitae', 'e.telefono', 'e.biometrico', 'e.gradacademico', 'e.rae', 'e.regprofesional', 'e.evdesempenio', 'e.totalpresupuesto', 'e.fechafinal', 'e.ncontrato', 'e.npreventivo', 'e.progproy', 'e.rejap', 'e.aportesafp', 'e.cuentabanco', 'e.filecontrato', 'e.nit', 'e.sigep')
             ->where('e.tipo', '=', 2)
             ->where('e.idarea', '=', $idarea)->get();
-        $areas = AreasModel::find($idarea);
+        $areas = Area::find($idarea);
         $nombrearea = $areas->nombrearea;
 
         return view('rechumanos.contrato.lista', ["empleados" => $empleados, "idarea" => $idarea, "nombrearea" => $nombrearea]);
@@ -132,7 +132,7 @@ class ContratoController extends Controller
     public function guardarcontrato(Request $request)
     {
 
-        $empleados = new EmpleadosModel();
+        $empleados = new Empleado();
         $empleados->nombres = $request->input('nombres');
         $empleados->ap_pat = $request->input('ap_pat');
         $empleados->ap_mat = $request->input('ap_mat');
@@ -206,9 +206,9 @@ class ContratoController extends Controller
     public function editarcontrato($idempledoPlanta)
     {
 
-        $area = AreasModel::where('estadoarea', '=', 1)->with('iPais_all')->get();
+        $area = Area::where('estadoarea', '=', 1)->with('iPais_all')->get();
         $niveles = DB::table('niveles')->get();
-        $empleados = EmpleadosModel::find($idempledoPlanta);
+        $empleados = Empleado::find($idempledoPlanta);
         //dd($niveles);
         //return view('rechumanos.planta.edit')->with('empleados', $empleados,"niveles",$niveles,"area", $area);
 
@@ -217,7 +217,7 @@ class ContratoController extends Controller
 
     public function actualizarcontrato(Request $request)
     {
-        $empleados = EmpleadosModel::find($request->input('idemp'));
+        $empleados = Empleado::find($request->input('idemp'));
         $empleados->nombres = $request->input('nombres');
         $empleados->ap_pat = $request->input('ap_pat');
         $empleados->ap_mat = $request->input('ap_mat');

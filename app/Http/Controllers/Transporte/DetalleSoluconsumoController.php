@@ -27,9 +27,9 @@ use Carbon\Carbon;
 use NumerosEnLetras;
 use PDF;
 
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 use App\Models\FileModel;
-use App\Models\AreasModel;
+use App\Models\Area;
 
 
 class DetalleSoluconsumoController extends Controller
@@ -70,14 +70,14 @@ class DetalleSoluconsumoController extends Controller
                                     ) as emplead"),'emp.idemp')
 
                                     ->where('fi.cargo',"CHOFER")
-                                    ->pluck('emplead','emp.idemp');      
-                                    
+                                    ->pluck('emplead','emp.idemp');
+
                                     $consumos = DB::table('soluconsumo as s')
-                     
+
                                     ->where('s.idsoluconsumo', $id2)
                                     ->select('s.idsoluconsumo','s.estado3')
                                     ->first();
-                                                          
+
 
 
         return view('transportes.detalle.index',
@@ -115,13 +115,13 @@ class DetalleSoluconsumoController extends Controller
                         ' // klm anter. ',kilometrajefinalconsumo) as prodservicio"),'idunidadconsumo')
                         ->pluck('prodservicio','idunidadconsumo');
 
-                     
+
 
 
         return view('transportes.detalle.index2',
         ['prodserv'=>$prodserv,
         'productos'=>$productos,
-        
+
         'idsoluconsumo'=>$id2]);
     }
 
@@ -132,7 +132,7 @@ class DetalleSoluconsumoController extends Controller
         $id = $personal->id;
 
         $detalle = Temporal5Model::find($id);
-        
+
         $id2 = $detalle->idsoluconsumo;
 //accede a la tabla producto servicio
 
@@ -142,17 +142,17 @@ class DetalleSoluconsumoController extends Controller
         $Codigoconsumo = $producto->codigoconsumo;
         $Marcaconsumo = $producto->marcaconsumo;
         $Placaconsumo = $producto->placaconsumo;
-     //todo klm anterior 
+     //todo klm anterior
         $Klmactual = $producto->kilometrajefinalconsumo;
         $Gaxklm = $producto->gasporklm;
 
         $Tipouni = $producto->idtipomovilidad;
-           
+
 
 //requiere el kilometraje actual
 
 $proddos = $request->get('chofer');
-$productotres = EmpleadosModel::find($proddos);
+$productotres = Empleado::find($proddos);
 $Nombrevia = $productotres->nombres;
 $Apellidopavia = $productotres->ap_pat;
 $Apellidomavia = $productotres->ap_mat;
@@ -161,8 +161,8 @@ $Nombrecompvia= $Nombrevia . " " .  $Apellidopavia. " " .$Apellidomavia ;
 $IdFiledos = $productotres->idfile;
 $productocuatro = FileModel::find($IdFiledos);
 $Nombreviacargo = $productocuatro->nombrecargo;
-      
-//todo klm actual 
+
+//todo klm actual
 $KLMactual = $request->get('cantidad');
 
         $detalle = new DetalleSoluconsumoModel;
@@ -175,15 +175,15 @@ $KLMactual = $request->get('cantidad');
         $detalle->placaconsum = $Placaconsumo;
 
         $detalle->klmanterior = $Klmactual;
-    
+
         $detalle->gasporklm = $Gaxklm;
-    
+
         $detalle->idtipomovilidad = $Tipouni;
 
         // aumentando chofer
 
-        
-        $detalle->idchofer = $request->get('chofer');  //via 
+
+        $detalle->idchofer = $request->get('chofer');  //via
         $detalle->chofernombre = $Nombrecompvia;
         $detalle->chofercargo = $Nombreviacargo;
         $detalle->estadodetalle = 2;
@@ -197,18 +197,18 @@ $KLMactual = $request->get('cantidad');
                         -> orwhere('d.idunidadconsumo', $prod)
 
                         ->where('d.idsoluconsumo', $id2)->get();
-                        
+
 
         if($detallito->isEmpty()){
 
             if ($KLMactual > $Klmactual) {
-            $detalle->save();          
+            $detalle->save();
             $idDetalle=$detalle->idsoluconsumo;
-            
+
             $progrmi = SoluconsumoModel::find($idDetalle);
             $progrmi -> estado3=2;
-            $progrmi->save();  
-            
+            $progrmi->save();
+
             $request->session()->flash('message', 'Registro Agregado',);
         }else{
             $request->session()->flash('message', 'El kilometraje esta mal');
@@ -226,11 +226,11 @@ $KLMactual = $request->get('cantidad');
         $progrmi = SoluconsumoModel::find($IDdetal);
         $progrmi -> estado3=1;
         $progrmi->save();
-        
-        $detalle = DetalleSoluconsumoModel::find($id);
-       
 
-         
+        $detalle = DetalleSoluconsumoModel::find($id);
+
+
+
         $detalle->delete();
         return redirect()->route('transportes.detalle.index');
     }
@@ -242,7 +242,7 @@ $KLMactual = $request->get('cantidad');
         $Idunidad = $detalle->idunidadconsumo;
         $Idsoluconsumo = $detalle->idsoluconsumo;
 
- 
+
           // para vale
           $Codigoconsumo = $detalle->codigoconsumo;
           $Marcaconsumo = $detalle->marcaconsumo;
@@ -261,7 +261,7 @@ $KLMactual = $request->get('cantidad');
          //para sacar cuanto de combustible nececita
          $CalAproxrest = $Kilometrajeactualconsumo-$Kiloanterior;
          $CalAprox = $CalAproxrest/$Gasporklm;
-         
+
          //convertir a 2 decimales
          $CalAproxdos = number_format($CalAprox, 2);
 
@@ -297,15 +297,15 @@ $KLMactual = $request->get('cantidad');
         $producto->save();
 
 
-        
+
         $soluconsumo = SoluconsumoModel::find($Idsoluconsumo);
         $soluconsumo->estadosoluconsumo = 3;
-      
+
         $soluconsumo->save();
 
         $soluconsumodoss = SoluconsumoModel::find($Idsoluconsumo);
         $FecHAsol=$soluconsumodoss->fechasol;
-        
+
         $vales = new ValeModel();
 
         $vales->idarea = $Idarea;
@@ -334,7 +334,7 @@ $KLMactual = $request->get('cantidad');
 
 
         $vales->detallesouconsumo = $Detallesouconsumo;
-        
+
         $vales->fechasolicitud = $FecHAsol;
         $vales->estadovale = 1;
         $vales->estado1 = 1;

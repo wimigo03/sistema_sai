@@ -17,7 +17,7 @@ use NumerosEnLetras;
 use PDF;
 
 use App\Models\User;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 use App\Models\TipoAreaModel;
 use App\Models\AnioModel;
 use Illuminate\Support\Facades\Redirect;

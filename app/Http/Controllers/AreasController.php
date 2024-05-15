@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\AreasModel;
+use App\Models\Area;
 use App\Models\NivelModel;
 use App\Models\FileModel;
 use Illuminate\Support\Facades\Redirect;
@@ -32,7 +32,7 @@ class AreasController extends Controller
 
     public function create()
     {
-        $area = AreasModel::where('estadoarea', 1)->with('iPais_all')->get();
+        $area = Area::where('estadoarea', 1)->with('iPais_all')->get();
         $niveles = DB::table('niveles')->get();
         return view('compras.areas.create', ["niveles" => $niveles, "area" => $area]);
     }
@@ -40,14 +40,14 @@ class AreasController extends Controller
     public function crearFile($idArea)
     {
         $idarea = $idArea;
-        $area = AreasModel::find($idarea);
+        $area = Area::find($idarea);
         return view('compras.areas.crearFile', compact('idarea', 'area'));
     }
 
     public function crearFile2($idArea)
     {
         $idarea = $idArea;
-        $area = AreasModel::find($idarea);
+        $area = Area::find($idarea);
         return view('compras.areas.crearFile2', compact('idarea', 'area'));
     }
 
@@ -105,7 +105,7 @@ class AreasController extends Controller
 
     public function file($id)
     {
-        $area = AreasModel::find($id);
+        $area = Area::find($id);
         $file = DB::table('file as f')
             ->join('areas as a', 'a.idarea', 'f.idarea')
             ->select('f.idfile', 'f.numfile', 'f.cargo', 'f.nombrecargo', 'f.habbasico', 'f.categoria', 'f.niveladm', 'f.clase', 'f.nivelsal', 'a.nombrearea', 'f.estadofile')
@@ -120,7 +120,7 @@ class AreasController extends Controller
 
     public function file2($id)
     {
-        $area = AreasModel::find($id);
+        $area = Area::find($id);
         $file = DB::table('file as f')
             ->join('areas as a', 'a.idarea', '=', 'f.idarea')
             ->select('f.idfile', 'f.numfile', 'f.cargo', 'f.nombrecargo', 'f.habbasico', 'f.categoria', 'f.niveladm', 'f.clase', 'f.nivelsal', 'a.nombrearea', 'f.estadofile')
@@ -138,7 +138,7 @@ class AreasController extends Controller
 
     public function store(Request $request)
     {
-        $areas = new AreasModel();
+        $areas = new Area();
         $areas->nombrearea = $request->input('nombre');
         $areas->idnivel = $request->input('idnivel');
         $areas->estadoarea = 1;
@@ -156,13 +156,13 @@ class AreasController extends Controller
 
     public function edit($idarea)
     {
-        $areas = AreasModel::find($idarea);
+        $areas = Area::find($idarea);
         return view('compras.areas.edit', ["areas" => $areas]);
     }
 
     public function update(Request $request, $idarea)
     {
-        $areas = AreasModel::find($idarea);
+        $areas = Area::find($idarea);
         $areas->nombrearea = $request->input('nombre');
         if ($areas->save()) {
             $request->session()->flash('message', 'Registro Procesado');
@@ -180,7 +180,7 @@ class AreasController extends Controller
     {
         $files = FileModel::find($idfile);
         $file = $files;
-        $area = AreasModel::find($files->idarea);
+        $area = Area::find($files->idarea);
         $areas = DB::table('areas')->get();
         return view('compras.areas.actualizarfile', compact('areas', 'file', 'area'));
     }
@@ -189,7 +189,7 @@ class AreasController extends Controller
     {
         $files = FileModel::find($idfile);
         $file = $files;
-        $area = AreasModel::find($files->idarea);
+        $area = Area::find($files->idarea);
         $areas = DB::table('areas')->get();
 
         return view('compras.areas.actualizarfile2', compact('areas', 'file', 'area'));

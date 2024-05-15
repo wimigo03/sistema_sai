@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 
 
 use App\Models\User;
-use App\Models\EmpleadosModel;
-use App\Models\AreasModel;
+use App\Models\Empleado;
+use App\Models\Area;
 
 use App\Models\Almacen\Ingreso\IngresoModel;
 use App\Models\Almacen\Ingreso\ReporteAreaModel;
@@ -135,7 +135,7 @@ public function store(Request $request)
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         $tipoarea = new TipoAreaModel;
         $tipoarea->idarea = $personalArea->idarea;

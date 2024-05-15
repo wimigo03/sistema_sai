@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 
 use App\Models\Almacen\Ingreso\Temporal2Model;
 use App\Models\User;
-use App\Models\EmpleadosModel;
-use App\Models\AreasModel;
+use App\Models\Empleado;
+use App\Models\Area;
 use App\Models\EncargadosModel;
 use App\Models\FileModel;
 use App\Models\Transporte\SoluconsumoModel;
@@ -32,7 +32,7 @@ class SoluconsumoController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         if ($request->ajax()) {
 
@@ -41,25 +41,25 @@ class SoluconsumoController extends Controller
 
         ->join('localidad as lo', 'lo.idlocalidad', '=', 's.idlocalidad')
         ->join('areas as a', 'a.idarea', '=', 's.idarea')
-    
-    
+
+
 
         ->where('s.estado1',2)
 
         ->select('s.estadosoluconsumo','s.idsoluconsumo','s.cominterna','s.referencia', 's.oficina',
-                            
+
                             'a.nombrearea',
                             'lo.nombrelocalidad'
                             )
 
                         ->orderBy('s.cominterna', 'desc');
-                     
+
 
                         return Datatables::of($soluconsumos)
                         ->addIndexColumn()
                          ->addColumn('btn', 'transportes.pedido.btn')
                          ->addColumn('btn2', 'transportes.pedido.btn2')
-                  
+
                         // ->rawColumns(['btn','btn2'])
                          ->rawColumns(['btn','btn2'])
                         ->make(true);
@@ -68,8 +68,8 @@ class SoluconsumoController extends Controller
                     $personal = User::find(Auth::user()->id);
                     $id = $personal->id;
                     $userdate = User::find($id)->usuariosempleados;
-                    $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
-            
+                    $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
+
        return view('transportes.pedido.index', ['idd' => $personalArea]);
     }
 
@@ -78,7 +78,7 @@ class SoluconsumoController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         if ($request->ajax()) {
 
@@ -87,26 +87,26 @@ class SoluconsumoController extends Controller
 
             ->join('localidad as lo', 'lo.idlocalidad', '=', 's.idlocalidad')
             ->join('areas as a', 'a.idarea', '=', 's.idarea')
-        
-        
-    
+
+
+
             ->where('s.estado2',2)
-    
+
             ->select('s.estadosoluconsumo','s.idsoluconsumo','s.cominterna',
             's.referencia', 's.oficina',
-                                
+
                                 'a.nombrearea',
                                 'lo.nombrelocalidad'
                                 )
 
                         ->orderBy('s.cominterna', 'asc');
-                     
+
 
                         return Datatables::of($soluconsumos)
                         ->addIndexColumn()
                          ->addColumn('btn', 'transportes.pedido.btn')
                          ->addColumn('btn3', 'transportes.pedido.btn3')
-                  
+
                         // ->rawColumns(['btn','btn2'])
                          ->rawColumns(['btn','btn3'])
                         ->make(true);
@@ -115,8 +115,8 @@ class SoluconsumoController extends Controller
                     $personal = User::find(Auth::user()->id);
                     $id = $personal->id;
                     $userdate = User::find($id)->usuariosempleados;
-                    $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
-            
+                    $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
+
        return view('transportes.pedido.index2', ['idd' => $personalArea]);
     }
 
@@ -125,21 +125,21 @@ class SoluconsumoController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         if ($request->ajax()) {
         $soluconsumos = DB::table('soluconsumo as s')
         ->join('localidad as lo', 'lo.idlocalidad', '=', 's.idlocalidad')
         ->join('areas as a', 'a.idarea', '=', 's.idarea')
-        
+
         ->select(['s.estadosoluconsumo','s.idsoluconsumo','s.cominterna','s.fechasol',
         's.referencia', 's.oficina',
-                           
+
                             'a.nombrearea',
                             'lo.nombrelocalidad']
                             )
                         ->orderBy('s.idsoluconsumo', 'desc');
-                     
+
                         $soluconsumos = $soluconsumos->get();
                         return DataTables::of($soluconsumos)
                         ->addIndexColumn()
@@ -169,7 +169,7 @@ class SoluconsumoController extends Controller
                                 //'<b style="color: green">Sin repuesta</b>';
                                  return  '<b style="color: green">Pendiente</b>';
 
-                                
+
                             } else {
                                 if ($soluconsumos->estadosoluconsumo == '2') {
                                     return  '<b style="color: blue">Aprovada</b>';
@@ -183,7 +183,7 @@ class SoluconsumoController extends Controller
                                     return  '<b style="color: red">Rechazado</b>';
                                 }  else {
                     } }}}
-                }                   
+                }
                         )
                         ->addColumn('actions', function ($soluconsumos) {
 
@@ -194,7 +194,7 @@ class SoluconsumoController extends Controller
                         </a>';
             })
 
-                          
+
                         ->rawColumns(['actions', 'estadosoluconsumo'])
                         ->make(true);
 
@@ -202,8 +202,8 @@ class SoluconsumoController extends Controller
                     $personal = User::find(Auth::user()->id);
                     $id = $personal->id;
                     $userdate = User::find($id)->usuariosempleados;
-                    $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
-            
+                    $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
+
        return view('transportes.pedido.index3', ['idd' => $personalArea]);
     }
 
@@ -212,7 +212,7 @@ class SoluconsumoController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         if ($request->ajax()) {
 
@@ -221,25 +221,25 @@ class SoluconsumoController extends Controller
 
         ->join('localidad as lo', 'lo.idlocalidad', '=', 's.idlocalidad')
         ->join('areas as a', 'a.idarea', '=', 's.idarea')
-    
-    
+
+
 
         ->where('s.estado1',2)
 
         ->select('s.estadosoluconsumo','s.idsoluconsumo','s.cominterna','s.referencia', 's.oficina',
-                            
+
                             'a.nombrearea',
                             'lo.nombrelocalidad'
                             )
 
                         ->orderBy('s.idsoluconsumo', 'asc');
-                     
+
 
                         return Datatables::of($soluconsumos)
                         ->addIndexColumn()
                          ->addColumn('btn', 'transportes.pedido.btn')
-                       
-                  
+
+
                         // ->rawColumns(['btn','btn2'])
                          ->rawColumns(['btn'])
                         ->make(true);
@@ -247,11 +247,11 @@ class SoluconsumoController extends Controller
                     $personal = User::find(Auth::user()->id);
                     $id = $personal->id;
                     $userdate = User::find($id)->usuariosempleados;
-                    $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
-            
+                    $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
+
        return view('transportes.pedido.index4', ['idd' => $personalArea]);
     }
- 
+
 
      public function editar($idsoluconsumo){
         $soluconsumos = SoluconsumoModel::find($idsoluconsumo);
@@ -259,7 +259,7 @@ class SoluconsumoController extends Controller
         $areas = DB::table('areas')->get();
         $localidades = DB::table('localidad')->get();
         $empleados = DB::table('empleados')->get();
-   
+
 
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
@@ -276,11 +276,11 @@ class SoluconsumoController extends Controller
 
 
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
 
 // de parte de
-$productocinco = EmpleadosModel::find($userdate->idemp);
+$productocinco = Empleado::find($userdate->idemp);
 $Nombreusuario = $productocinco->nombres;
 $Apellidopausuario = $productocinco->ap_pat;
 $Apellidomausuario = $productocinco->ap_mat;
@@ -294,7 +294,7 @@ $Nombreusuariocargo = $productoseis->nombrecargo;
 
 // dirigido a
         $prod = $request->get('dirigidoa');
-        $producto = EmpleadosModel::find($prod);
+        $producto = Empleado::find($prod);
         $Nombredir = $producto->nombres;
         $Apellidopadir = $producto->ap_pat;
         $Apellidomadir = $producto->ap_mat;
@@ -308,7 +308,7 @@ $Nombreusuariocargo = $productoseis->nombrecargo;
 // via uno
 
 $proddos = $request->get('viauno');
-$productotres = EmpleadosModel::find($proddos);
+$productotres = Empleado::find($proddos);
 $Nombrevia = $productotres->nombres;
 $Apellidopavia = $productotres->ap_pat;
 $Apellidomavia = $productotres->ap_mat;
@@ -321,23 +321,23 @@ $Nombreviacargo = $productocuatro->nombrecargo;
 
         $soluconsumos = SoluconsumoModel::find($request->idsoluconsumo);
 
-        
+
         $soluconsumos->oficina = $request->input('oficina');
         $soluconsumos->cominterna = $request->input('cominterna');
 
-        
+
         $soluconsumos->dirigidoa = $request->get('dirigidoa');  //dirigido a
         $soluconsumos->dirnombre = $Nombrecompdir;
         $soluconsumos->diracargo = $Nombredircargo;
 
 
-        $soluconsumos->viauno = $request->get('viauno');  //via 
+        $soluconsumos->viauno = $request->get('viauno');  //via
         $soluconsumos->viaunonombre = $Nombrecompvia;
         $soluconsumos->viaunocargo = $Nombreviacargo;
 
 
         $soluconsumos->idarea = $personalArea->idarea;  //de , nombre, cargo oficina
-     
+
 
         $soluconsumos->idusuario =$id;
         $soluconsumos->usuarionombre = $Nombrecompusuario;
@@ -370,7 +370,7 @@ $Nombreviacargo = $productocuatro->nombrecargo;
         $id = $personal->id;
 
         $detalle = Temporal5Model::find($id);
-        
+
         if(is_null($detalle)){
             $detalle = new Temporal5Model;
             $detalle->idtemporal5=$id;
@@ -383,7 +383,7 @@ $Nombreviacargo = $productocuatro->nombrecargo;
             $detalle->idsoluconsumo = $idsoluconsumo;
             $detalle->update();
         }
-      
+
        return redirect()->route('transportes.detalle.index');
     }
 
@@ -392,7 +392,7 @@ $Nombreviacargo = $productocuatro->nombrecargo;
         $id = $personal->id;
 
         $detalle = Temporal5Model::find($id);
-        
+
         if(is_null($detalle)){
             $detalle = new Temporal5Model;
             $detalle->idtemporal5=$id;
@@ -405,25 +405,25 @@ $Nombreviacargo = $productocuatro->nombrecargo;
             $detalle->idsoluconsumo = $idsoluconsumo;
             $detalle->update();
         }
-      
+
        return redirect()->route('transportes.detalle.index2');
     }
 
-    
+
     public function pdf()
     {
-          
-        
+
+
        $localidads = DB::table('localidad')->get();
        $pdf = PDF::loadView('combustibles.localidad.pdf',compact('localidads'));
       return $pdf->stream();
     }
-  
+
     public function aprovar($idsoluconsumo)
     {
         $detalle = SoluconsumoModel::find($idsoluconsumo);
         $detalle->estadosoluconsumo =2;
-    
+
         if($detalle->save()){
             session()->flash('message', 'Registro Procesado');
         }else{
@@ -437,7 +437,7 @@ $Nombreviacargo = $productocuatro->nombrecargo;
     {
         $detalle = SoluconsumoModel::find($idsoluconsumo);
         $detalle->estadosoluconsumo =10;
-    
+
         if($detalle->save()){
             session()->flash('message', 'Registro Procesado');
         }else{

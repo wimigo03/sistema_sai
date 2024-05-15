@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 
 use App\Models\FileModel;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 
 use App\Models\Almacen\ValeModel;
 use App\Models\Almacen\Temporal2Model;
@@ -30,7 +30,7 @@ class ValeController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         if ($request->ajax()) {
 
@@ -146,7 +146,7 @@ class ValeController extends Controller
                     $personal = User::find(Auth::user()->id);
                     $id = $personal->id;
                     $userdate = User::find($id)->usuariosempleados;
-                    $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+                    $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
             
        return view('almacenes.pedido.index', ['idd' => $personalArea]);
     }
@@ -158,7 +158,7 @@ class ValeController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
         
          if ($request->ajax()) {
             $vales = DB::table('vale as v')
@@ -199,7 +199,7 @@ class ValeController extends Controller
             $personal = User::find(Auth::user()->id);
             $id = $personal->id;
             $userdate = User::find($id)->usuariosempleados;
-            $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+            $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
             if ($request->ajax()) {
                $vales = DB::table('vale as v')
    
@@ -370,12 +370,12 @@ class ValeController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
     
 
        // dirigido a
     $prod = $request->get('idusuario');
-    $producto = EmpleadosModel::find($prod);
+    $producto = Empleado::find($prod);
     $Nombredir = $producto->nombres;
     $Apellidopadir = $producto->ap_pat;
     $Apellidomadir = $producto->ap_mat;

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\AreasModel;
+use App\Models\Area;
 
 class PersonalFace extends Model
 {
@@ -21,7 +21,7 @@ class PersonalFace extends Model
     ];
 
     public function area(){
-        return $this->belongsTo(AreasModel::class,'id_area','idarea');
+        return $this->belongsTo(Area::class,'id_area','idarea');
     }
 
 }

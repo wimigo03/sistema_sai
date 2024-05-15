@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Activo;
 
 use App\Http\Controllers\Controller;
 use App\Models\Model_Activos\ActualModel;
-use App\Models\AreasModel;
+use App\Models\Area;
 use App\Models\Model_Activos\AuxiliarModel;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 use App\Models\Model_Activos\CodcontModel;
 use Illuminate\Http\Request;
 
@@ -37,8 +37,8 @@ class FiltrosController extends Controller
         $this->auxiliares = AuxiliarModel::query()
             ->where('entidad', 4601)
             ->where('unidad', $this->unidad);
-        $this->oficinas = AreasModel::query();
-        $this->empleados = EmpleadosModel::query();
+        $this->oficinas = Area::query();
+        $this->empleados = Empleado::query();
         $this->activos = ActualModel::query()
             ->where('unidad', $this->unidad)
             ->where('entidad', 4601);

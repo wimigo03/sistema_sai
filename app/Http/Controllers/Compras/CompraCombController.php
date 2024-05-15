@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Redirect;
 
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 
 
 class CompraCombController extends Controller
@@ -26,7 +26,7 @@ class CompraCombController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         if ($request->ajax()) {
         $compras = DB::table('compracomb as c')
@@ -158,7 +158,7 @@ class CompraCombController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
    
        return view('combustibles.pedido.index',['idd' => $personalArea]);
     }
@@ -170,7 +170,7 @@ class CompraCombController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         if ($request->ajax()) {
         $compras = DB::table('compracomb as c')
@@ -242,7 +242,7 @@ class CompraCombController extends Controller
                     $personal = User::find(Auth::user()->id);
                     $id = $personal->id;
                     $userdate = User::find($id)->usuariosempleados;
-                    $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+                    $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
             
        return view('combustibles.pedido.index2', ['idd' => $personalArea]);
     }

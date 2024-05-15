@@ -26,13 +26,13 @@
         <div class="row abs-center">
             <div class="col-md-9 bg-warning">
                 <div class="row font-roboto-12">
-                    <div class="col text-center border border-white"><b>L</b></div>
-                    <div class="col text-center border border-white"><b>M</b></div>
-                    <div class="col text-center border border-white"><b>X</b></div>
-                    <div class="col text-center border border-white"><b>J</b></div>
-                    <div class="col text-center border border-white"><b>V</b></div>
-                    <div class="col text-center border border-white"><b>S</b></div>
-                    <div class="col text-center border border-white"><b>D</b></div>
+                    <div class="col text-center border border-white table-responsive"><b>L</b></div>
+                    <div class="col text-center border border-white table-responsive"><b>M</b></div>
+                    <div class="col text-center border border-white table-responsive"><b>X</b></div>
+                    <div class="col text-center border border-white table-responsive"><b>J</b></div>
+                    <div class="col text-center border border-white table-responsive"><b>V</b></div>
+                    <div class="col text-center border border-white table-responsive"><b>S</b></div>
+                    <div class="col text-center border border-white table-responsive"><b>D</b></div>
                 </div>
             </div>
         </div>
@@ -42,7 +42,7 @@
                     <div class="row font-roboto-12">
                         @foreach ($weekdata['datos'] as $dayweek)
                             @if ($dayweek['mes'] == $mes)
-                                <div class="col text-center border border-warning hover-effect">
+                                <div class="col text-center border border-warning hover-effect table-responsive">
                                     <a href="{{ route('agenda.ejecutiva.detalle',['id' => $dayweek['dia'],'id2' => $mespanish, 'id3' => $data['year']]) }}" class="text-dark">
                                         <div style="position: relative; display: inline-block;">
                                             <i class="far fa-calendar fa-3x text-success"></i>
@@ -74,13 +74,13 @@
         <div class="row abs-center">
             <div class="col-md-9 bg-warning">
                 <div class="row font-roboto-12">
-                    <div class="col text-center border border-white"><b>L</b></div>
-                    <div class="col text-center border border-white"><b>M</b></div>
-                    <div class="col text-center border border-white"><b>X</b></div>
-                    <div class="col text-center border border-white"><b>J</b></div>
-                    <div class="col text-center border border-white"><b>V</b></div>
-                    <div class="col text-center border border-white"><b>S</b></div>
-                    <div class="col text-center border border-white"><b>D</b></div>
+                    <div class="col text-center border border-white table-responsive"><b>L</b></div>
+                    <div class="col text-center border border-white table-responsive"><b>M</b></div>
+                    <div class="col text-center border border-white table-responsive"><b>X</b></div>
+                    <div class="col text-center border border-white table-responsive"><b>J</b></div>
+                    <div class="col text-center border border-white table-responsive"><b>V</b></div>
+                    <div class="col text-center border border-white table-responsive"><b>S</b></div>
+                    <div class="col text-center border border-white table-responsive"><b>D</b></div>
                 </div>
             </div>
         </div>

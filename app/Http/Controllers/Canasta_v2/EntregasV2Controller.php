@@ -28,7 +28,7 @@ use PDF;
 use Carbon\Carbon;
 
 use App\Models\User;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 
 class EntregasV2Controller extends Controller
 {
@@ -412,7 +412,7 @@ class EntregasV2Controller extends Controller
                                         $personal = User::find(Auth::user()->id);
                                         $id = $personal->id;
                                         $userdate = User::find($id)->usuariosempleados;
-                                        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+                                        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
                                         $beneficiarios = Beneficiario::where('dea_id',Auth::user()->dea->id)
                                             ->get();
@@ -490,7 +490,7 @@ class EntregasV2Controller extends Controller
                         $personal = User::find(Auth::user()->id);
                         $id = $personal->id;
                         $userdate = User::find($id)->usuariosempleados;
-                        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+                        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
                         $beneficiarios = Beneficiario::where('dea_id',Auth::user()->dea->id)
                         ->get();
@@ -627,7 +627,7 @@ class EntregasV2Controller extends Controller
                                         $personal = User::find(Auth::user()->id);
                                         $id = $personal->id;
                                         $userdate = User::find($id)->usuariosempleados;
-                                        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+                                        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
                                         $beneficiarios = Beneficiario::where('dea_id',Auth::user()->dea->id)
                                             ->get();
@@ -676,7 +676,7 @@ class EntregasV2Controller extends Controller
                                                     $personal = User::find(Auth::user()->id);
                                                     $id = $personal->id;
                                                     $userdate = User::find($id)->usuariosempleados;
-                                                    $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+                                                    $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
                                                     $beneficiarios = Beneficiario::where('dea_id',Auth::user()->dea->id)
                                                         ->get();
@@ -739,7 +739,7 @@ class EntregasV2Controller extends Controller
                                     $personal = User::find(Auth::user()->id);
                                     $id = $personal->id;
                                     $userdate = User::find($id)->usuariosempleados;
-                                    $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+                                    $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
 
 

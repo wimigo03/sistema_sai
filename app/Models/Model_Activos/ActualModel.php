@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Model_Activos\AuxiliarModel;
-use App\Models\AreasModel;
+use App\Models\Area;
 use App\Models\Model_Activos\CodcontModel;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 
 use App\Models\Model_Activos\EntidadesModel;
 use App\Models\Model_Activos\OrganismofinModel;
@@ -83,12 +83,12 @@ class ActualModel extends Model
 
     public function areas()
     {
-        return $this->belongsTo(AreasModel::class, 'codarea');
+        return $this->belongsTo(Area::class, 'codarea');
     }
 
     public function empleados()
     {
-        return $this->belongsTo(EmpleadosModel::class, 'codemp', 'idemp');
+        return $this->belongsTo(Empleado::class, 'codemp', 'idemp');
     }
 
     public function entidades()
@@ -110,7 +110,7 @@ class ActualModel extends Model
     {
         return $this->hasMany(ImagenActivo::class, 'activo_id');
     }
-    
+
     public function ultimaImagen()
     {
         return $this->hasOne(ImagenActivo::class, 'activo_id')->latest();
@@ -125,7 +125,7 @@ class ActualModel extends Model
     {
         return $this->belongsTo(Ambiente::class);
     }
-    
+
     public function getIconoEstadoAttribute()
     {
         $status_icono = ['', 'badge-primary', 'badge-success', 'badge-danger'];
@@ -175,7 +175,7 @@ class ActualModel extends Model
             }
         }
     }
-    
+
     public function scopeByPreventivo($query, $preventivo)
     {
         if ($preventivo != null) {

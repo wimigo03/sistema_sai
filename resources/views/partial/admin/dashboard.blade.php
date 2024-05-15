@@ -273,11 +273,17 @@
                         </li>
                         <hr style="margin-top:0; margin-bottom:0;">
                     @endcan
-                    {{-- EVENTO --}}
                     @can('agenda.ejecutiva.index')
                         <li class="font-verdana-12">
                             <a href="{{ route('agenda.ejecutiva.index') }}">
                                 <i class="fa-sharp fa-solid fa-calendar fa-fw"></i>&nbsp;Agenda ejecutiva
+                            </a>
+                        </li>
+                    @endcan
+                    @can('facebook.index')
+                        <li class="font-verdana-12">
+                            <a href="{{ route('facebook.index') }}">
+                                <i class="fa-brands fa-twitter fa-fw"></i>&nbsp;Redes Sociales
                             </a>
                         </li>
                     @endcan
@@ -540,19 +546,37 @@
                         <hr style="margin-top:0; margin-bottom:0;">
                     @endcan
                     {{-- RRHH --}}
-                    @can('areas.index')
+                    @canany(['empleados.index','areas.index'])
                         <li class="font-verdana-12">
-                            <a href="" data-toggle="collapse" data-target="#dashboard_rrhh"
-                                class="active collapsed" aria-expanded="false">
-                                <i class="fa fa-users" style="color:green"></i>
-                                <span class="nav-label mr-3">RECURSOS HUMANOS</span>
-                                <span class="fa fa-arrow-circle-left float-right"></span>
+                            <a href="" data-toggle="collapse" data-target="#dashboard_rrhh" class="active collapsed" aria-expanded="false">
+                                <i class="fas fa-users fa-fw"></i>&nbsp;Recursos Humanos
+                                <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_rrhh">
-                                <li>
-                                    <a href="{{ route('areas.index') }}">
-                                        &nbsp; &nbsp; &nbsp;
-                                        <span class="nav-label mr-4">Areas-Files</span>
+                                @can('empleados.index')
+                                    <li>
+                                        <a href="{{ route('empleado.index') }}">
+                                            &nbsp;&nbsp;&nbsp;<i class="fas fa-user-friends fa-fw"></i>&nbsp;Personal
+                                        </a>
+                                    </li>
+                                @endcan
+                                {{--@can('empleados.index')--}}
+                                    <li>
+                                        <a href="{{ route('area.index') }}">
+                                            &nbsp;&nbsp;&nbsp;<i class="fas fa-sitemap fa-fw"></i>&nbsp;Organigrama
+                                        </a>
+                                    </li>
+                                {{--@endcan--}}
+                                @can('areas.index')
+                                    <li>
+                                        <a href="{{ route('areas.index') }}">
+                                            &nbsp;&nbsp;&nbsp;<i class="fas fa-id-card"></i>&nbsp;Areas-Files
+                                        </a>
+                                    </li>
+                                @endcan
+                                {{--<li>
+                                    <a href="{{ route('planta.listageneral') }}">
+                                        &nbsp;&nbsp;&nbsp;<i class="fas fa-user-friends fa-fw"></i>&nbsp;Lista Gral. Planta
                                     </a>
                                 </li>
                                 <li>
@@ -560,14 +584,8 @@
                                         &nbsp; &nbsp; &nbsp;
                                         <span class="nav-label mr-4">Gestionar P. Planta</span>
                                     </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('planta.listageneral') }}">
-                                        &nbsp; &nbsp; &nbsp;
-                                        <span class="nav-label mr-4">Lista Gral. Planta</span>
-                                    </a>
-                                </li>
-                                <li>
+                                </li>--}}
+                                {{--<li>
                                     <a href="{{ route('contrato.index') }}">
                                         &nbsp; &nbsp; &nbsp;
                                         <span class="nav-label mr-4">Gestionar P. Contrato</span>
@@ -578,11 +596,10 @@
                                         &nbsp; &nbsp; &nbsp;
                                         <span class="nav-label mr-4">Lista Gral. Contrato</span>
                                     </a>
-                                </li>
+                                </li>--}}
                             </ul>
                         </li>
-                        <hr style="margin-top:0; margin-bottom:0;">
-                    @endcan
+                    @endcanany
                     {{-- Personerias --}}
                     @can('activos.index')
                         <li class="font-verdana-12">

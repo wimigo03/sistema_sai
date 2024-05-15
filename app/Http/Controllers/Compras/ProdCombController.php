@@ -16,7 +16,7 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\User;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -27,7 +27,7 @@ class ProdCombController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         return view('combustibles.producto.index', ['idd' => $personalArea]);
     }
@@ -65,7 +65,7 @@ class ProdCombController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         $productos = new ProdcombModel();
         $productos -> codigoprodcomb = $request->input('codigoprodcomb');

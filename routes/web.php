@@ -208,8 +208,11 @@ Route::POST('compras/productos/store', [ProdServController::class,'store'])->nam
 
 ///////////////////////////--EMPLEADOS--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('compras/empleados/index', [EmpleadosController::class,'index'])->name('empleados.index');
-Route::get('compras/empleados/list', [EmpleadosController::class,'list'])->name('empleados.list');
+//Route::get('empleados/index', [EmpleadosController::class,'index'])->name('empleados.index')->middleware('can:empleados.index');
+//Route::get('empleados/create/{dea_id}', [EmpleadosController::class,'create'])->name('empleados.create')->middleware('can:empleados.create');
+//Route::get('empleados/editar/{idemp}', [EmpleadosController::class,'editar'])->name('empleados.editar')->middleware('can:empleados.editar');
+//Route::get('empleados/retirar/{idemp}', [EmpleadosController::class,'retirar'])->name('empleados.retirar')->middleware('can:empleados.retirar');
+//Route::get('empleados/list', [EmpleadosController::class,'list'])->name('empleados.list');
 
 
     /*RECURSOS HUMANOS PLANTA*/
@@ -253,9 +256,9 @@ Route::get('compras/empleados/list', [EmpleadosController::class,'list'])->name(
     Route::POST('compras/proveedores/insertar', [ProveedoresController::class,'insertar'])->name('ProveedoresController.insertar')->middleware('can:proveedores_access');*/
 
         /*COMPRAS AREAS*/
-        Route::get('compras/areas/index', [AreasController::class,'index'])->name('areas.index')->middleware('can:areas_access');
+        Route::get('compras/areas/index', [AreasController::class,'index'])->name('areas.index');//->middleware('can:areas_access');
         Route::get('compras/areas/list', [AreasController::class,'listado'])->name('areas.list')->middleware('can:areas_access');
-        Route::get('compras/areas/create', [AreasController::class,'create'])->name('areas.create')->middleware('can:areas_access');
+        Route::get('compras/areas/create', [AreasController::class,'create'])->name('areas.create');//->middleware('can:areas_access');
         Route::get('compras/areas/{id}/edit', [AreasController::class,'edit'])->name('areas.edit')->middleware('can:areas_access');
         Route::POST('compras/areas/{id}/update', [AreasController::class,'update'])->name('areas.update')->middleware('can:areas_access');
         Route::POST('compras/areas/store', [AreasController::class,'store'])->name('areas.store')->middleware('can:areas_access');

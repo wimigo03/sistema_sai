@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 use App\Models\RecepcionModel;
 use App\Models\Recepcion2Model;
 use App\Models\TipoCorresp2Model;
@@ -507,7 +507,7 @@ class CorrespondenciaLocalController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 //dd($personalArea ->idarea);
       $data = DerivCorrespModel::query()
      ->where('idarea', $personalArea->idarea)
@@ -567,7 +567,7 @@ class CorrespondenciaLocalController extends Controller
             //$personal = User::find(Auth::user()->id);
             //$id = $personal->id;
             //$userdate = User::find($id)->usuariosempleados;
-           // $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+           // $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
             //$dataderivacion = DB::table('derivCorresp as d')
             //->join('remitente as re', 're.id_remitente', '=', 'r.id_remitente')
@@ -628,7 +628,7 @@ class CorrespondenciaLocalController extends Controller
                 $personal = User::find(Auth::user()->id);
                 $id = $personal->id;
                 $userdate = User::find($id)->usuariosempleados;
-                $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+                $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
                 $dataderivacion = DB::table('derivCorresp as d')
                 //->join('remitente as re', 're.id_remitente', '=', 'r.id_remitente')

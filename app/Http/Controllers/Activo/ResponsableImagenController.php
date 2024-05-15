@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Activo;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveImagenActivoRequest;
 use App\Models\Model_Activos\ActualModel;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 use App\Models\Model_Activos\ImagenActivo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

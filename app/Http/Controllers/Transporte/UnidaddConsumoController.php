@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 
 use App\Models\User;
 
-use App\Models\EmpleadosModel;
-use App\Models\AreasModel;
+use App\Models\Empleado;
+use App\Models\Area;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -28,7 +28,7 @@ class UnidaddConsumoController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         if ($request->ajax()) {
 
@@ -36,15 +36,15 @@ class UnidaddConsumoController extends Controller
 
                         ->join('tipomovilidad as t', 't.idtipomovilidad', '=', 'u.idtipomovilidad')
                         ->join('programacomb as prog', 'prog.idprogramacomb', '=', 'u.idprogramacomb')
-                                       
+
                         ->join('areas as a', 'a.idarea', '=', 'u.idarea')
                         ->where('u.estadoconsumo',1)
                         ->select('u.idunidadconsumo','u.nombreuconsumo','u.codigoconsumo','u.desconsumo',
                         'u.colorconsumo','u.marcaconsumo','u.modeloconsumo',
                         'u.placaconsumo','u.kilometrajeinicialconsumo','u.documento',
 
-                        't.nombremovilidad','a.nombrearea','prog.nombreprograma'                      
-                        
+                        't.nombremovilidad','a.nombrearea','prog.nombreprograma'
+
                         )->orderBy('u.idunidadconsumo', 'desc');
 
                         return Datatables::of($consumos)
@@ -54,11 +54,11 @@ class UnidaddConsumoController extends Controller
                         ->rawColumns(['btn','btn2'])
                         ->make(true);
 
-                    }     
+                    }
 $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
             return view('transportes.uconsumo.index',
             ['idd'=>$personalArea]);
 
@@ -66,11 +66,11 @@ $personal = User::find(Auth::user()->id);
 
     public function index2(Request $request){
 
-  
+
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         if ($request->ajax()) {
 
@@ -78,33 +78,33 @@ $personal = User::find(Auth::user()->id);
 
                         ->join('tipomovilidad as t', 't.idtipomovilidad', '=', 'u.idtipomovilidad')
                         ->join('programacomb as prog', 'prog.idprogramacomb', '=', 'u.idprogramacomb')
-                                       
+
                         ->join('areas as a', 'a.idarea', '=', 'u.idarea')
 
-                        
+
                         ->where('u.estadoconsumo',2)
                         ->select('u.idunidadconsumo','u.nombreuconsumo','u.codigoconsumo','u.fechasalida',
                         'u.colorconsumo','u.marcaconsumo','u.modeloconsumo',
                         'u.placaconsumo','u.fecharetorno',
 
-                        't.nombremovilidad','a.nombrearea','prog.nombreprograma'                      
-                        
+                        't.nombremovilidad','a.nombrearea','prog.nombreprograma'
+
                         )->orderBy('u.idunidadconsumo', 'asc');
 
                         return Datatables::of($consumos)
                         ->addIndexColumn()
                         ->addColumn('btn3', 'transportes.uconsumo.btn3')
-                       
+
                         ->rawColumns(['btn3'])
                         ->make(true);
 
-                    }     
+                    }
 
                     $personal = User::find(Auth::user()->id);
                     $id = $personal->id;
                     $userdate = User::find($id)->usuariosempleados;
-                    $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
-            
+                    $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
+
             return view('transportes.uconsumo.index2', ['idd' => $personalArea]);
 
     }
@@ -119,13 +119,13 @@ $personal = User::find(Auth::user()->id);
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
-   
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
+
 
          $areas = DB::table('areas')
          ->where('estadoarea',1)
          ->pluck('nombrearea','idarea');
-       
+
 
          $tipos = DB::table('tipomovilidad')
          ->where('estadomovilidad',1)
@@ -136,7 +136,7 @@ $personal = User::find(Auth::user()->id);
          $programas = DB::table('programacomb')
          ->where('estadoprograma',1)
          ->pluck('nombreprograma','idprogramacomb');
-       
+
 
 
          return view('transportes.uconsumo.create',
@@ -155,12 +155,12 @@ $personal = User::find(Auth::user()->id);
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
 
         if ($request->hasFile("documento")) {
             $file = $request->file("documento");
-            
+
             $file_name = $file->getClientOriginalName();
             $nombre = "img_" . time() . "." . $file->guessExtension();
 
@@ -178,20 +178,20 @@ $personal = User::find(Auth::user()->id);
         $consumos->codigoconsumo = $request->input('codigoc');
         $consumos->nombreuconsumo = $request->input('nombreuconsumo');
         $consumos->desconsumo = $request->input('desconsumo');
-     
+
         $consumos->colorconsumo = $request->input('colorc');
-     
+
         $consumos->marcaconsumo = $request->input('marcac');
         $consumos->modeloconsumo = $request->input('modeloc');
         $consumos->placaconsumo = $request->input('placac');
         $consumos->kilometrajeinicialconsumo = $request->input('klminicialc');
-      
+
         $consumos->idarea = $personalArea->idarea;
         $consumos->idtipomovilidad = $request->input('idtipomovilidad');
         $consumos->idprogramacomb = $request->input('idprograma');
         $consumos->idusuario = $personal->id;
         $consumos->estadoconsumo = 1;
-        
+
         $consumos->kilometrajefinalconsumo = $request->input('klmfinal');
         $consumos->gasporklm = $request->input('gasklm');
 
@@ -219,7 +219,7 @@ $personal = User::find(Auth::user()->id);
         $areas = DB::table('areas')->get();
         $programas = DB::table('programacomb')->get();
 
-           
+
 
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
@@ -234,11 +234,11 @@ $personal = User::find(Auth::user()->id);
     }
 
     public function update(Request $request){
-       
+
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
 
         $consumos = UnidaddConsumoModel::find($request->idunidadconsumo);
@@ -268,7 +268,7 @@ $personal = User::find(Auth::user()->id);
         $consumos->modeloconsumo = $request->input('modeloc');
         $consumos->placaconsumo = $request->input('placac');
         $consumos->kilometrajeinicialconsumo = $request->input('klminicialc');
-      
+
         $consumos->gasporklm = $request->input('gasklm');
         $consumos->kilometrajefinalconsumo = $request->input('klmfinal');
 
@@ -291,30 +291,30 @@ $personal = User::find(Auth::user()->id);
         $consumos->modeloconsumo = $request->input('modeloc');
         $consumos->placaconsumo = $request->input('placac');
         $consumos->kilometrajeinicialconsumo = $request->input('klminicialc');
-      
+
         $consumos->gasporklm = $request->input('gasklm');
         $consumos->kilometrajefinalconsumo = $request->input('klmfinal');
 
         $consumos->idarea = $personalArea->idarea;
         $consumos->idtipomovilidad = $request->input('idtipomovilidad');
         $consumos->idprogramacomb = $request->input('idprograma');
-        $consumos->idusuario =$personal->id; 
+        $consumos->idusuario =$personal->id;
         $consumos->save();
 
     }
 
     return redirect()->action('App\Http\Controllers\Transporte\UnidaddConsumoController@index');
 }
-    
 
-    
-     
 
-   
+
+
+
+
 // primero es el boton btn2 de ahi manda el id de unidadconsumo
 // luego es la funcion del controlador  que lo manda aqui editardoc que recibe el id
     public function editardoc($idunidadconsumo){
-        
+
         // crea un nuevo modelo y selecciona las relaciones y tablas
         $docuconsumo = DB::table('docuconsumo as d')
 
@@ -327,16 +327,16 @@ $personal = User::find(Auth::user()->id);
         ->get();
 
         //  retorna la vista o el index
-         return view('transportes.uconsumo.docuconsumo', 
+         return view('transportes.uconsumo.docuconsumo',
         //  manda la variable docuconsumo que es el nuevo modelo y el id de unidadconsumo
          ['docuconsumo' => $docuconsumo,
          'idunidadconsumo' => $idunidadconsumo]);}
-    
 
-         
+
+
         //  createdoc es el boton para crear un nuevo documento
 public function createdoc($idunidadconsumo){
-           
+
              return view('transportes.uconsumo.createdocuconsumo',
               ['idunidadconsumo' => $idunidadconsumo]);}
 
@@ -347,10 +347,10 @@ public function insertar(Request $request){
     $personal = User::find(Auth::user()->id);
     $id = $personal->id;
     $userdate = User::find($id)->usuariosempleados;
-    $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
- 
+    $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
+
    $idunidadconsumo=$request->input('consumo');
- 
+
    if($request->hasFile("documento")){
     $file=$request->file("documento");
     $file_name = $file->getClientOriginalName();
@@ -374,7 +374,7 @@ public function insertar(Request $request){
 
    $docuconsumo->save();
 
-  
+
    return redirect()->action('App\Http\Controllers\Transporte\UnidadConsumoController@editardoc',
     [$idunidadconsumo]);
 }

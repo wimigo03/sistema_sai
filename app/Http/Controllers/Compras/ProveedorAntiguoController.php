@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 
 use App\Models\User;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -28,7 +28,7 @@ class ProveedorController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         return view('combustibles.proveedor.index', ['idd' => $personalArea]);
     }
@@ -141,7 +141,7 @@ class ProveedorController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
      
         $idproveedor = $request->input('proveedor');
       
@@ -205,7 +205,7 @@ class ProveedorController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         $docproveedor = DocProveedoresModel::find($iddocproveedores);
         $idproveedor =  $docproveedor->idproveedor;

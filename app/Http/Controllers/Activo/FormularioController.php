@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Model_Activos\Formulario;
 use App\Models\Model_Activos\UnidadadminModel;
 use App\Models\Model_Activos\EntidadesModel;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 use App\Http\Requests\SaveFormularioRequest;
@@ -45,7 +45,7 @@ class FormularioController extends Controller
 
   public function getEmleadoByCi(Request $request)
   {
-      $empleado = EmpleadosModel::with(['file','empleadosareas'])
+      $empleado = Empleado::with(['file','empleadosareas'])
           ->where('ci', $request->input('ci'))
           ->first();
       return response()->json([

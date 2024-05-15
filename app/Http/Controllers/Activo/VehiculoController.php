@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Activo;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreVehiculoRequest;
 use App\Models\Ambiente;
-use App\Models\AreasModel;
+use App\Models\Area;
 use App\Models\Model_Activos\ArchivoVehiculo;
 use App\Models\Model_Activos\AuxiliarModel;
 use App\Models\Model_Activos\CodcontModel;
@@ -71,7 +71,7 @@ class VehiculoController extends Controller
         return view('activo.vehiculo.index', compact('vehiculos', 'unidad'));
     }
 
-  
+
 
     public function listado()
     {
@@ -100,7 +100,7 @@ class VehiculoController extends Controller
         $unidad = UnidadadminModel::where('estadouni', 1)->first();
         return view('activo.vehiculo.create', compact('entidad', 'unidad'));
     }
-    
+
     public function store(StoreVehiculoRequest $request)
     {
         $vehiculo = (new Vehiculo)->fill($request->all());
@@ -159,7 +159,7 @@ class VehiculoController extends Controller
         $entidad = EntidadesModel::where('entidad', 4601)->first();
         $unidad = UnidadadminModel::where('estadouni', 1)->first();
         $vehiculo = Vehiculo::find($id);
-        
+
         return view('activo.vehiculo.show', compact('entidad', 'unidad','vehiculo'));
     }
 

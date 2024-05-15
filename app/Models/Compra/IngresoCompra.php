@@ -4,7 +4,7 @@ namespace App\Models\Compra;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\AreasModel;
+use App\Models\Area;
 use App\Models\User;
 use App\Models\Canasta\Dea;
 use App\Models\Compra\Proveedor;
@@ -93,7 +93,7 @@ class IngresoCompra extends Model
     }
 
     public function area(){
-        return $this->belongsTo(AreasModel::class,'idarea','idarea');
+        return $this->belongsTo(Area::class,'idarea','idarea');
     }
 
     public function orden_compra(){

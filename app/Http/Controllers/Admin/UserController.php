@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exportar\UsuariosExcel;
 use App\Models\Role;
 use App\Models\User;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 use App\Models\UserRolesModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -18,7 +18,7 @@ use App\Http\Requests\UpdateUserPhotoRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Models\Canasta\Dea;
-use App\Models\AreasModel;
+use App\Models\Area;
 use DB;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests;
@@ -95,7 +95,7 @@ class UserController extends Controller
         try{
             $input = $request->all();
             $id = $input['id'];
-            $areas = AreasModel::where('dea_id',$id)->where('estadoarea','1')->orderBy('idarea','asc')->get()->toJson();
+            $areas = Area::where('dea_id',$id)->where('estadoarea','1')->orderBy('idarea','asc')->get()->toJson();
             if($areas){
                 return response()->json([
                     'areas' => $areas
@@ -110,7 +110,7 @@ class UserController extends Controller
         try{
             $input = $request->all();
             $id = $input['id'];
-            $empleados = EmpleadosModel::select(DB::raw("concat(nombres,' ',ap_pat,' ',ap_mat) as nombre_completo"),'idemp as id')->where('idarea',$id)->orderBy('id','asc')->get()->toJson();
+            $empleados = Empleado::select(DB::raw("concat(nombres,' ',ap_pat,' ',ap_mat) as nombre_completo"),'idemp as id')->where('idarea',$id)->orderBy('id','asc')->get()->toJson();
             if($empleados){
                 return response()->json([
                     'empleados' => $empleados
@@ -204,16 +204,25 @@ class UserController extends Controller
     }
 
     public function baja($id){
-        $Users = User::find($id);
-        $Users->estadouser = 0;
-        $Users->save();
+        $users = User::find($id);
+        $users->estadouser = 0;
+        $users->save();
         return redirect()->route('users.index');
     }
 
     public function alta($id){
-        $Users = User::find($id);
-        $Users->estadouser = 1;
-        $Users->save();
-        return redirect()->route('users.index');
+        $users = User::find($id);
+        $empleado = Empleado::select('estado')->where('idemp',$users->idemp)->first();
+        if($empleado != null){
+            if($empleado->estado == '1'){
+                $users->estadouser = 1;
+                $users->save();
+                return redirect()->route('users.index')->with('info_message', 'Usuario habilitado correctamente...');
+            }else{
+                return redirect()->route('users.index')->with('info_message', 'El usuario no puede ser habilitado ya que no es un personal activo...');
+            }
+        }else{
+            return redirect()->route('users.index')->with('info_message', 'El usuario no puede ser habilitado ya que no es un personal activo...');
+        }
     }
 }

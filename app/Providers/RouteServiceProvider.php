@@ -105,5 +105,9 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/ventanilla/correspondencia-local-route.php'));
 
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/agenda-ejecutiva-route.php'));
+
+        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/recursos-humanos/empleado-route.php'));
+
+        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/recursos-humanos/area-route.php'));
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 use Illuminate\Http\Request;
 use App\Models\ProveedoresModel;
 use App\Models\DocProveedorModel;
@@ -33,7 +33,7 @@ class ArchivosController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         $data = DB::table('archivos as a')
             ->join('areas as ar', 'ar.idarea', '=', 'a.idarea')
@@ -73,7 +73,7 @@ class ArchivosController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
 
 
@@ -141,7 +141,7 @@ class ArchivosController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         $archivos = ArchivosModel::find($idarchivo);
         if ($request->file("documento") != null) {

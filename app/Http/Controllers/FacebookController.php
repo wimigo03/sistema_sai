@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rule;
@@ -13,222 +13,148 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Facebook;
-use App\Models\FacePubli;
+use App\Models\FacebookDetalle;
 use App\Models\NivelModel;
 use App\Models\PersonalFace;
-
-
 use DB;
 use PDF;
-
-
-use App\Models\AreasModel;
+use App\Models\Area;
 
 class FacebookController extends Controller
 {
 
     public function index()
     {
-
-        //$this->copiardistritos();
-        //$deas = Dea::pluck('nombre','id');
-       // $estados = Distrito::ESTADOS;
-        $facebook = Facebook::orderBy('id', 'desc')->paginate(10);
-        return view('facebook.index', compact('facebook'));
+        $dea_id = Auth::user()->dea->id;
+        $publicaciones = Facebook::query()
+                                ->ByDea($dea_id)
+                                ->orderBy('id','desc')
+                                ->paginate(10);
+        $estados = Facebook::ESTADOS;
+        return view('facebook.index', compact('dea_id','publicaciones','estados'));
     }
 
-    public function create(Request $request)
+    public function search(Request $request)
     {
-
-
-           $facebook = new Facebook();
-           $facebook->fecha = $request->fecha;
-           $facebook->publicacion = $request->publicacion;
-
-           $facebook->save();
-
-        return redirect()->route('facebook.index')->with($request->session()->flash('message', 'Registro Procesado'));
-
+        $dea_id = Auth::user()->dea->id;
+        $publicaciones = Facebook::query()
+                                ->ByDea($dea_id)
+                                ->ByFecha($request->fecha)
+                                ->ByTitulo($request->titulo)
+                                ->ByEstado($request->estado)
+                                ->orderBy('id','desc')
+                                ->paginate(10);
+        $estados = Facebook::ESTADOS;
+        return view('facebook.index', compact('dea_id','publicaciones','estados'));
     }
 
-    public function editar($id)
-
+    public function cargar_datos($id)
     {
-
-        //$barrio = Barrio::find($id);
-        //$distritos = Distrito::select('nombre','id')->where('dea_id',Auth::user()->dea->id)->get();
-        //$tipos = Barrio::TIPOS;
-        $facepubli1 = FacePubli::select('id_area')->where('id_facebook','=',$id)->pluck('id_area','id_area');
-        $facepubli2 = FacePubli::All()->where('id_facebook','=',$id);
-
-        //$areas = AreasModel::ALL()->pluck('nombrearea','nombrearea');
-        $niveles = NivelModel::ALL()->pluck('nombrenivel','nombrenivel');
-
-        if ($facepubli1->isEmpty()) {
-            $areas = AreasModel::ALL()->pluck('nombrearea','nombrearea');
-       } else {
-
-            $areas = DB::table('areas')
-            ->whereIn('idarea', $facepubli2->pluck('id_area'))
-            //->select('idarea', 'nombrearea')
-            ->pluck('nombrearea','nombrearea');
-       }
-
-
-       // dd($areas);
-       // $facepubli = FacePubli::orderBy('id', 'desc')->paginate(10);
-
-        $facepubli = FacePubli::where('id_facebook','=',$id)
-         ->paginate(10);
-        $estado1=0;
-        if ($facepubli->isEmpty()) {
-            $estado1=1;
-
-          }
-
-
-        $idfacebook=$id;
-//dd($idd);
-        return view('facebook.index2', compact('facepubli','idfacebook','areas','niveles','estado1'));
+        $facebook = Facebook::find($id);
+        $facebook_detalles = FacebookDetalle::where('facebook_id',$id)->get();
+        $cont = 1;
+        return view('facebook.cargar-datos', compact('facebook','facebook_detalles','cont'));
     }
 
-    public function deshabilitar(Request $request,$id){
-
-        $facepubli1 = FacePubli::select('id_area')->where('id_facebook','=',$id)->pluck('id_area','id_area');
-        $facepubli2 = FacePubli::All()->where('id_facebook','=',$id);
-        $idfacebook=$id;
-        //$areas = AreasModel::ALL()->pluck('nombrearea','nombrearea');
-        if ($facepubli1->isEmpty()) {
-            $areas = AreasModel::ALL()->pluck('nombrearea','nombrearea');
-       } else {
-
-            $areas = DB::table('areas')
-            ->whereIn('idarea', $facepubli2->pluck('id_area'))
-            //->select('idarea', 'nombrearea')
-            ->pluck('nombrearea','nombrearea');
-       }
-
-        $niveles = NivelModel::ALL()->pluck('nombrenivel','nombrenivel');
-        $facePubli2 = FacePubli::find($id);
-        $facePubli2->compartido = $request->compartido;
-        $facePubli2->megusta = $request->megusta;
-        $facePubli2->like = $request->like;
-
-        $facePubli2->save();
-        $facepubli = FacePubli::where('id_facebook','=',$id)
-        ->paginate(10);
-       $estado1=0;
-       if ($facepubli->isEmpty()) {
-           $estado1=1;
-            }
-        //return view('facebook.index2', compact('facepubli'));
-        return back();
-
-
-    }
-
-    public function search(Request $request,$id)
+    public function actualizar_datos(Request $request)
     {
-        $facepubli1 = FacePubli::select('id_area')->where('id_facebook','=',$id)->pluck('id_area','id_area');
-        $facepubli2 = FacePubli::All()->where('id_facebook','=',$id);
+        try{
+            ini_set('memory_limit','-1');
+            ini_set('max_execution_time','-1');
+                $shares = FacebookDetalle::whereIn('id',$request->share)->get();
+                foreach($shares as $share){
+                    $share_detalle = FacebookDetalle::find($share->id);
+                    $share_detalle->update([
+                        'user_id' => Auth::user()->id,
+                        '_share' => '1'
+                    ]);
+                }
+                $no_shares = FacebookDetalle::whereNotIn('id',$request->share)->get();
+                foreach($no_shares as $share){
+                    $share_detalle = FacebookDetalle::find($share->id);
+                    $share_detalle->update([
+                        'user_id' => Auth::user()->id,
+                        '_share' => '2'
+                    ]);
+                }
 
+                $likes = FacebookDetalle::whereIn('id',$request->like)->get();
+                foreach($likes as $like){
+                    $like_detalle = FacebookDetalle::find($like->id);
+                    $like_detalle->update([
+                        'user_id' => Auth::user()->id,
+                        '_like' => '1'
+                    ]);
+                }
+                $no_likes = FacebookDetalle::whereNotIn('id',$request->like)->get();
+                foreach($no_likes as $like){
+                    $like_detalle = FacebookDetalle::find($like->id);
+                    $like_detalle->update([
+                        'user_id' => Auth::user()->id,
+                        '_like' => '2'
+                    ]);
+                }
 
-        $idfacebook=$id;
-        //$areas = AreasModel::ALL()->pluck('nombrearea','nombrearea');
-        $niveles = NivelModel::ALL()->pluck('nombrenivel','nombrenivel');
+                $comments = FacebookDetalle::whereIn('id',$request->comment)->get();
+                foreach($comments as $comment){
+                    $comment_detalle = FacebookDetalle::find($comment->id);
+                    $comment_detalle->update([
+                        'user_id' => Auth::user()->id,
+                        '_comment' => '1'
+                    ]);
+                }
+                $no_comments = FacebookDetalle::whereNotIn('id',$request->comment)->get();
+                foreach($no_comments as $comment){
+                    $comment_detalle = FacebookDetalle::find($comment->id);
+                    $comment_detalle->update([
+                        'user_id' => Auth::user()->id,
+                        '_comment' => '2'
+                    ]);
+                }
 
-        if ($facepubli1->isEmpty()) {
-            $areas = AreasModel::ALL()->pluck('nombrearea','nombrearea');
-       } else {
-
-            $areas = DB::table('areas')
-            ->whereIn('idarea', $facepubli2->pluck('id_area'))
-            //->select('idarea', 'nombrearea')
-            ->pluck('nombrearea','nombrearea');
-       }
-
-        $facepubli = FacePubli::query()
-
-                            ->byNombre($request->nombre)
-                            ->byAp($request->ap)
-                            ->byAm($request->am)
-                            ->byArea($request->area)
-                            ->byNivel($request->nivell)
-                            ->where('id_facebook','=',$id)
-                            ->orderBy('id', 'desc')
-                            ->paginate(10);
-                            //dd($request->barrio);
-        $estado1=0;
-        //if ($facepubli->isEmpty()) {
-          //  $estado1=1;
-             //}
-         return view('facebook.index2', compact('facepubli','idfacebook','areas','niveles','estado1'));
+                return redirect()->route('facebook.cargar.datos',$request->facebook_id)->with('success_message', 'Se actualizaron los datos correctamente...');
+        } finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
     }
 
-
-
-    public function agregarEmpleados(Request $request,$id)
+    public function create($dea_id)
     {
-
-        $facepubli1 = FacePubli::select('id_area')->where('id_facebook','=',$id)->pluck('id_area','id_area');
-        $facepubli2 = FacePubli::All()->where('id_facebook','=',$id);
-
-                        $empleados = DB::table('personalface as e')
-                        ->join('areas as a', 'a.idarea', '=', 'e.idArea')
-                        ->join('niveles as n', 'a.idnivel', '=', 'n.idnivel')
-                        ->select('a.idarea', 'e.id','n.idnivel')
-                        //-> where('d.idcompra','=', $id2)
-                        //-> orderBy('e.idemp', 'desc')
-                        ->get();
-                        //dd($empleados);
-                                        foreach ($empleados as $data){
-
-                                        $datos=([
-
-                                            'id_empleado'=>$data->id,
-                                            'id_area'=>$data->idarea,
-                                            'id_nivel'=>$data->idnivel,
-                                            'id_facebook'=>$id,
-                                            'compartido'=>2,
-                                            'megusta'=>2,
-                                            'like'=>2
-                                                ]
-
-                                                );
-                                        $facePubli=FacePubli::CREATE($datos);
-                                        }
-
-
-
-                                        //$areas = AreasModel::ALL()->pluck('nombrearea','nombrearea');
-                                        if ($facepubli1->isEmpty()) {
-                                            $areas = AreasModel::ALL()->pluck('nombrearea','nombrearea');
-                                       } else {
-
-                                            $areas = DB::table('areas')
-                                            ->whereIn('idarea', $facepubli2->pluck('id_area'))
-                                            //->select('idarea', 'nombrearea')
-                                            ->pluck('nombrearea','nombrearea');
-                                       }
-                                        $niveles = NivelModel::ALL()->pluck('nombrenivel','nombrenivel');
-
-
-
-                                       // dd($areas);
-                                       $facepubli = FacePubli::where('id_facebook','=',$id)
-                                        ->paginate(10);
-                                        $estado1=0;
-                                        if ($facepubli->isEmpty()) {
-                                            $estado1=1;
-
-                                          }
-
-
-                                $idfacebook=$id;
-                                //dd($idd);
-                                        return view('facebook.index2', compact('facepubli','idfacebook','areas','niveles','estado1'));
-
+        return view('facebook.create', compact('dea_id'));
     }
 
+    public function store(Request $request)
+    {
+        try{
+            ini_set('memory_limit','-1');
+            ini_set('max_execution_time','-1');
+                $datos = Facebook::create([
+                    'dea_id' => $request->dea_id,
+                    'titulo' => $request->nombre,
+                    'fecha' => date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha))),
+                    'publicacion' => $request->enlace,
+                    'estado' => '1'
+                ]);
 
+                $empleados = Empleado::where('estado','1')->get();
+                foreach($empleados as $empleado){
+                    $datos_detalle = FacebookDetalle::create([
+                        'facebook_id' => $datos->id,
+                        'dea_id' => $empleado->dea_id,
+                        'idemp' => $empleado->idemp,
+                        'idarea' => $empleado->idarea,
+                        '_share' => '2',
+                        '_like' => '2',
+                        '_comment' => '2',
+                        'estado' => '1'
+                    ]);
+                }
+
+                return redirect()->route('facebook.index')->with('success_message', 'Operacion realizada correctamente..');
+        } finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
+    }
 }

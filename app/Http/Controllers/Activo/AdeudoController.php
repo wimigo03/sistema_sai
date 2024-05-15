@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Activo;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveAdeudoRequest;
 use App\Models\ActualModel;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 use App\Models\Model_Activos\Adeudo;
 use App\Models\Model_Activos\EntidadesModel;
 use App\Models\Model_Activos\UnidadadminModel;
@@ -67,7 +67,7 @@ class AdeudoController extends Controller
 
     public function getCi(Request $request)
     {
-        $empleado = EmpleadosModel::with(['file'])
+        $empleado = Empleado::with(['file'])
             ->withCount('actuals')
             ->where('ci', $request->input('ci'))
             ->first();

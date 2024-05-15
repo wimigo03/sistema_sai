@@ -413,7 +413,18 @@ main .post-content .post-meta {
     vertical-align: middle;
 }
 
+.align-vertical-bottom {
+    vertical-align: bottom;
+}
+
 .text-justify {
     text-align: justify;
 }
 
+.input-rojo {
+	border-color : #DC3545;
+}
+
+.select2-container-rojo .select2-selection {
+	border-color: #DC3545 !important;
+}

@@ -16,7 +16,7 @@ use App\Models\Canasta\Beneficiario;
 use App\Models\Canasta\Ocupaciones;
 use App\Models\Canasta\HistorialMod;
 use App\Models\User;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 
 
 use App\Models\Canasta\Dea;
@@ -256,7 +256,7 @@ public function update(Request $request)
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
         //dd($userdate);
 
         if ($request->file("documento") != null) {

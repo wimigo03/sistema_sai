@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Compra\OrdenCompra;
 use App\Models\Compra\OrdenCompraDetalle;
 use App\Models\Compra\SolicitudCompra;
-use App\Models\AreasModel;
+use App\Models\Area;
 use App\Models\Compra\Proveedor;
 use App\Models\User;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 use App\Models\Compra\Item;
 use App\Models\Canasta\Dea;
 use App\Models\Compra\CategoriaProgramatica;
@@ -26,7 +26,7 @@ class OrdenCompraController extends Controller
     public function index()
     {
         $dea_id = Auth::user()->dea->id;
-        $areas = AreasModel::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
+        $areas = Area::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
         $proveedores = Proveedor::where('dea_id',$dea_id)->pluck('nombre','id');
         $users = User::where('dea_id',$dea_id)->pluck('name','id');
         $orden_compras = OrdenCompra::query()
@@ -41,7 +41,7 @@ class OrdenCompraController extends Controller
     public function search(Request $request)
     {
         $dea_id = $request->dea_id;
-        $areas = AreasModel::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
+        $areas = Area::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
         $proveedores = Proveedor::where('dea_id',$dea_id)->pluck('nombre','id');
         $users = User::where('dea_id',$dea_id)->pluck('name','id');
         $orden_compras = OrdenCompra::query()
@@ -64,7 +64,7 @@ class OrdenCompraController extends Controller
 
     /*public function create($dea_id)
     {
-        $empleado = EmpleadosModel::find(Auth::user()->idemp);
+        $empleado = Empleado::find(Auth::user()->idemp);
         $user = User::find(Auth::user()->id);
         $tipos = SolicitudCompra::TIPOS;
         return view('compras.solicitud_compra.create',compact('dea_id','empleado','user','tipos'));
