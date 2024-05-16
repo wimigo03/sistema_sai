@@ -145,7 +145,84 @@
                 dateFormat: "dd/mm/yyyy",
                 autoClose: true,
             });
+
+            if($("#tipo >option:selected").val() != ''){
+                var id = $("#tipo >option:selected").val();
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                getAreas(id,CSRF_TOKEN);
+            }
+
+            if($("#area_id >option:selected").val() != ''){
+                var id = $("#area_id >option:selected").val();
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                getCargos(id,CSRF_TOKEN);
+            }
         });
+
+        $('#tipo').change(function() {
+            var id = $(this).val();
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            getAreas(id,CSRF_TOKEN);
+        });
+
+        $('#area_id').change(function() {
+            var id = $(this).val();
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            getCargos(id,CSRF_TOKEN);
+        });
+
+        function getAreas(id,CSRF_TOKEN){
+            $.ajax({
+                type: 'GET',
+                url: '/empleado/get_areas',
+                data: {
+                    _token: CSRF_TOKEN,
+                    id: id
+                },
+                success: function(data){
+                    if(data.areas){
+                        var arr = Object.values($.parseJSON(data.areas));
+                        $("#area_id").empty();
+                        $("#cargo_id").empty();
+                        var select = $("#area_id");
+                        select.append($("<option></option>").attr("value", '').text('--Seleccionar--'));
+                        $.each(arr, function(index, json) {
+                            var opcion = $("<option></option>").attr("value", json.idarea).text(json.nombrearea);
+                            select.append(opcion);
+                        });
+                    }
+                },
+                error: function(xhr){
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+
+        function getCargos(id,CSRF_TOKEN){
+            $.ajax({
+                type: 'GET',
+                url: '/empleado/get_cargos',
+                data: {
+                    _token: CSRF_TOKEN,
+                    id: id
+                },
+                success: function(data){
+                    if(data.cargos){
+                        var arr = Object.values($.parseJSON(data.cargos));
+                        $("#cargo_id").empty();
+                        var select = $("#cargo_id");
+                        select.append($("<option></option>").attr("value", '').text('--Seleccionar--'));
+                        $.each(arr, function(index, json) {
+                            var opcion = $("<option></option>").attr("value", json.idfile).text(json.full_cargo);
+                            select.append(opcion);
+                        });
+                    }
+                },
+                error: function(xhr){
+                    console.log(xhr.responseText);
+                }
+            });
+        }
 
         function check_poai() {
             var checkbox = document.getElementById('poai');
@@ -265,7 +342,7 @@
             })
         }
 
-        function validar() {
+        function validar() {console.log($("#cargo_id >option:selected").val());
             if ($("#nombre").val() == "") {
                 Modal('El campo <b>[Nombre]</b> es un dato obligaorio.');
                 return false;
@@ -278,20 +355,20 @@
                 Modal("El campo de seleccion <b>[Extension]</b> es un dato obligatorio...");
                 return false;
             }
-            if($("#area_id >option:selected").val() == ""){
+            if($("#tipo >option:selected").val() == ""){
+                Modal("El campo de seleccion <b>[Tipo]</b> es un dato obligatorio...");
+                return false;
+            }
+            if($("#area_id >option:selected").val() == "" || $("#area_id >option:selected").val() == undefined){
                 Modal("El campo de seleccion <b>[Area]</b> es un dato obligatorio...");
                 return false;
             }
-            if($("#cargo_id >option:selected").val() == ""){
+            if($("#cargo_id >option:selected").val() == "" || $("#cargo_id >option:selected").val() == undefined){
                 Modal("El campo de seleccion <b>[Cargo]</b> es un dato obligatorio...");
                 return false;
             }
             if ($("#fecha_ingreso").val() == "") {
                 Modal('El campo <b>[Fecha de ingreso]</b> es un dato obligatorio.');
-                return false;
-            }
-            if($("#tipo >option:selected").val() == ""){
-                Modal("El campo de seleccion <b>[Tipo]</b> es un dato obligatorio...");
                 return false;
             }
             if($("#tipo >option:selected").val() != ""){

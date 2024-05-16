@@ -28,7 +28,8 @@ class File extends Model
 
     const ESTADOS = [
         '1' => 'ASIGNADO',
-        '2' => 'NO ASIGNADO'
+        '2' => 'NO ASIGNADO',
+        '3' => 'INHABILITADO'
     ];
 
     const TIPOS = [
@@ -42,6 +43,8 @@ class File extends Model
                 return "ASIGNADO";
             case '2':
                 return "NO ASIGNADO";
+            case '3':
+                return "INHABILITADO";
         }
     }
 
@@ -60,6 +63,8 @@ class File extends Model
                 return "badge-with-padding badge badge-success";
             case '2':
                 return "badge-with-padding badge badge-danger";
+            case '3':
+                return "badge-with-padding badge badge-secondary";
         }
     }
 

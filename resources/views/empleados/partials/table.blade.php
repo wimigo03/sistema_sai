@@ -3,7 +3,8 @@
         <table class="table display table-striped table-bordered responsive hover-orange" style="width:100%;" id="#">
             <thead>
                 <tr class="font-roboto-11">
-                    <th class="text-left p-1">AREA - CARGO</th>
+                    <th class="text-left p-1">AREA</th>
+                    <th class="text-left p-1">CARGO</th>
                     <th class="text-left p-1">AP. PAT.</th>
                     <th class="text-left p-1">AP. MAT.</th>
                     <th class="text-left p-1">NOMBRE(S)</th>
@@ -11,7 +12,7 @@
                     <th class="text-center p-1">TIPO</th>
                     <th class="text-center p-1">INGRESO</th>
                     <th class="text-center p-1">RETIRO</th>
-                    <th class="text-center p-1">H-N</th>
+                    <th class="text-center p-1">HAB.</th>
                     @canany(['empleados.show','empleados.editar'])
                         <th class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></th>
                     @endcanany
@@ -20,7 +21,8 @@
             <tbody>
                 @foreach ($empleados as $datos)
                     <tr class="font-roboto-11">
-                        <td class="text-left p-1">{{ $datos->area->nombrearea . ' - ' . $datos->file_cargo }}</td>
+                        <td class="text-left p-1">{{ $datos->area->nombrearea }}</td>
+                        <td class="text-left p-1">{{ $datos->cargo_file . ' - ' . $datos->file_cargo }}</td>
                         <td class="text-left p-1">{{ $datos->ap_pat }}</td>
                         <td class="text-left p-1">{{ $datos->ap_mat }}</td>
                         <td class="text-left p-1">{{ $datos->nombres }}</td>
@@ -28,11 +30,7 @@
                         <td class="text-center p-1">{{ $datos->ultimo_tipo_contrato }}</td>
                         <td class="text-center p-1">{{ $datos->ultimo_contrato_ingreso != null ? \Carbon\Carbon::parse($datos->ultimo_contrato_ingreso)->format('d/m/Y') : '' }}</td>
                         <td class="text-center p-1">{{ $datos->ultimo_contrato_retiro != null ? \Carbon\Carbon::parse($datos->ultimo_contrato_retiro)->format('d/m/Y') : '' }}</td>
-                        <td class="text-center p-1">
-                            <span class="{{ $datos->colorStatus }}">
-                                {{ $datos->status }}
-                            </span>
-                        </td>
+                        <td class="text-center p-1"><i class='{{ $datos->status_check }}'></i></td>
                         @canany(['empleados.show','empleados.editar'])
                             <td class="text-center p-1">
                                 <div class="d-flex justify-content-center">

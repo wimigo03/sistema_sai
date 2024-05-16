@@ -2,7 +2,8 @@
     <thead>
         <tr>
             <th align="center"><b>NRO</b></th>
-            <th align="center"><b>AREA - CARGO</b></th>
+            <th align="center"><b>AREA</b></th>
+            <th align="center"><b>CARGO</b></th>
             <th align="center"><b>APELLIDO PATERNO</b></th>
             <th align="center"><b>APELLIDO MATERNO</b></th>
             <th align="center"><b>NOMBRE(S)</b></th>
@@ -20,7 +21,8 @@
         @foreach ($empleados as $datos)
             <tr>
                 <td align="center">{{ $cont++; }}</td>
-                <td>{{ $datos->area->nombrearea . ' - ' . $datos->file_cargo }}</td>
+                <td>{{ $datos->area->nombrearea }}</td>
+                <td>{{ $datos->cargo_file . ' - ' . $datos->file_cargo }}</td>
                 <td>{{ $datos->ap_pat }}</td>
                 <td>{{ $datos->ap_mat }}</td>
                 <td>{{ $datos->nombres }}</td>

@@ -133,7 +133,8 @@ class FileController extends Controller
                     'clase' => $request->clase,
                     'nivelsal' => $request->nivel_salarial,
                     'tipofile' => $request->tipo,
-                    'idarea' => $request->area_id
+                    'idarea' => $request->area_id,
+                    'estadofile' => isset($request->estado) ? $request->estado : '1'
                 ]);
 
                 return $file;
@@ -158,7 +159,7 @@ class FileController extends Controller
     }
 
     public function excel(Request $request)
-    {dd($request->all());
+    {
         try {
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');

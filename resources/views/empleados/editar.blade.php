@@ -147,6 +147,71 @@
             });
         });
 
+        $('#tipo').change(function() {
+            var id = $(this).val();
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            getAreas(id,CSRF_TOKEN);
+        });
+
+        $('#area_id').change(function() {
+            var id = $(this).val();
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            getCargos(id,CSRF_TOKEN);
+        });
+
+        function getAreas(id,CSRF_TOKEN){
+            $.ajax({
+                type: 'GET',
+                url: '/empleado/get_areas',
+                data: {
+                    _token: CSRF_TOKEN,
+                    id: id
+                },
+                success: function(data){
+                    if(data.areas){
+                        var arr = Object.values($.parseJSON(data.areas));
+                        $("#area_id").empty();
+                        $("#cargo_id").empty();
+                        var select = $("#area_id");
+                        select.append($("<option></option>").attr("value", '').text('--Seleccionar--'));
+                        $.each(arr, function(index, json) {
+                            var opcion = $("<option></option>").attr("value", json.idarea).text(json.nombrearea);
+                            select.append(opcion);
+                        });
+                    }
+                },
+                error: function(xhr){
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+
+        function getCargos(id,CSRF_TOKEN){
+            $.ajax({
+                type: 'GET',
+                url: '/empleado/get_cargos',
+                data: {
+                    _token: CSRF_TOKEN,
+                    id: id
+                },
+                success: function(data){
+                    if(data.cargos){
+                        var arr = Object.values($.parseJSON(data.cargos));
+                        $("#cargo_id").empty();
+                        var select = $("#cargo_id");
+                        select.append($("<option></option>").attr("value", '').text('--Seleccionar--'));
+                        $.each(arr, function(index, json) {
+                            var opcion = $("<option></option>").attr("value", json.idfile).text(json.full_cargo);
+                            select.append(opcion);
+                        });
+                    }
+                },
+                error: function(xhr){
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+
         function check_poai() {
             var checkbox = document.getElementById('poai');
             if (checkbox.checked) {

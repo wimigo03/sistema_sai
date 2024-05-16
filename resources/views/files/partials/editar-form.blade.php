@@ -108,6 +108,22 @@
             </div>
         </div>
     </div>
+    <div class="form-group row font-roboto-12 align-items-center">
+        <div class="col-md-4 pr-1 pl-1 text-right">
+            <label for="estado" class="d-inline"><b>Estado</b></label>
+        </div>
+        <div class="col-md-2 pr-1 pl-1">
+            @if ($file->estadofile == '1')
+                <input type="text" value="ASIGNADO" class="form-control font-roboto-12" disabled>
+            @else
+                <select name="estado" id="estado" class="form-control font-roboto-12 select2">
+                    <option value="">--Seleccionar--</option>
+                    <option value="2" @if($file->estadofile == '2') selected @endif >HABILITADO</option>
+                    <option value="3" @if($file->estadofile == '3') selected @endif >INHABILITADO</option>
+                </select>
+            @endif
+        </div>
+    </div>
 </form>
 <div class="form-group row">
     <div class="col-md-6 pr-1 pl-1">

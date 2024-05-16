@@ -4,6 +4,8 @@ Route::prefix('empleado')->name('empleado.')->middleware(['auth'])->group(functi
     Route::get('/', 'EmpleadoController@index')->name('index')->middleware('can:empleados.index');
     Route::get('search', 'EmpleadoController@search')->name('search')->middleware('can:empleados.index');
     Route::get('create/{dea_id}', 'EmpleadoController@create')->name('create')->middleware('can:empleados.create');
+    Route::get('/get_areas', 'EmpleadoController@getAreas')->name('get.areas')->middleware('can:empleados.create');
+    Route::get('/get_cargos', 'EmpleadoController@getCargos')->name('get.cargos')->middleware('can:empleados.create');
     Route::post('store', 'EmpleadoController@store')->name('store')->middleware('can:empleados.create');
     Route::get('editar/{idemp}', 'EmpleadoController@editar')->name('editar')->middleware('can:empleados.editar');
     Route::post('update', 'EmpleadoController@update')->name('update')->middleware('can:empleados.editar');

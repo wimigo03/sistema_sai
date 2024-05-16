@@ -23,7 +23,7 @@
         <table class="table-80 font-verdana-11">
             <thead class="bg-color-green">
                 <td colspan="2" class="align-center align-middle linea-inferior">
-                    <b>{{ $empleado->status }}</b>
+                    <b>{{ $empleado->status_completo }}</b>
                 </td>
             </thead>
             <tbody>
@@ -137,7 +137,11 @@
             <table class="table-80 font-verdana-11">
                 <thead class="bg-color-green">
                     <td colspan="2" class="align-center align-middle linea-inferior">
-                        <b>{{ $empleado_contrato->file->nombrecargo }} - {{ $empleado->area->nombrearea }}</b>
+                        <b>
+                            {{ $empleado->area->nombrearea }}
+                            <br>
+                            {{ $empleado_contrato->file->cargo . ' - ' . $empleado_contrato->file->nombrecargo }}
+                        </b>
                     </td>
                 </thead>
                 <tbody>

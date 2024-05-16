@@ -8,7 +8,8 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Carbon\Carbon;
 
-class FileExcel implements FromView,ShouldAutoSize{
+class FilesExcel implements FromView,ShouldAutoSize{
+
     use Exportable;
 
     public function __construct($files){

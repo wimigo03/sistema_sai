@@ -3,6 +3,7 @@
         <table class="table display table-striped table-bordered responsive hover-orange" style="width:100%;" id="#">
             <thead>
                 <tr class="font-roboto-11">
+                    <th class="text-center p-1">COD.</th>
                     <th class="text-center p-1">FECHA</th>
                     <th class="text-center p-1">TITULO</th>
                     <th class="text-center p-1">ESTADO</th>
@@ -12,6 +13,7 @@
             <tbody>
                 @foreach ($publicaciones as $datos)
                     <tr class="font-roboto-11">
+                        <td class="text-center p-1">{{ $datos->id }}</td>
                         <td class="text-center p-1">{{ \Carbon\Carbon::parse($datos->fecha)->format('d/m/Y') }}</td>
                         <td class="text-left p-1">
                             <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a enlace" style="cursor: pointer;">
@@ -55,26 +57,6 @@
                                             </a>
                                         </span>
                                     @endcan
-                                    {{--&nbsp;
-                                    @can('solicitud.compra.show')
-
-                                    @endcan--}}
-                                    {{--&nbsp;
-                                    @can('solicitud.compra.editar')
-                                        @if ($datos->estado == '1')
-                                            <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar" style="cursor: pointer;">
-                                                <a href="{{ route('solicitud.compra.editar',$datos->id) }}" class="badge-with-padding badge badge-warning text-white">
-                                                    <i class="fas fa-edit fa-fw"></i>
-                                                </a>
-                                            </span>
-                                        @else
-                                            <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar no permitido" style="cursor: pointer;">
-                                                <a href="#" class="badge-with-padding badge badge-secondary text-white">
-                                                    <i class="fas fa-edit fa-fw"></i>
-                                                </a>
-                                            </span>
-                                        @endif
-                                    @endcan--}}
                                 </div>
                             </td>
                         @endcanany

@@ -86,10 +86,54 @@ class EmpleadoController extends Controller
     {
         $extensiones = Empleado::EXTENSIONES;
         $grados_academicos = Empleado::GRADOS_ACADEMICOS;
-        $areas = Area::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
-        $cargos = File::where('dea_id',$dea_id)->pluck('nombrecargo','idfile');
+        //$areas = Area::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
+        //$cargos = File::where('dea_id',$dea_id)->pluck('nombrecargo','idfile');
         $tipos = EmpleadoContrato::TIPOS;
-        return view('empleados.create', compact('dea_id','extensiones','grados_academicos','areas','cargos','tipos'));
+        return view('empleados.create', compact('dea_id','extensiones','grados_academicos','tipos'));
+    }
+
+    public function getAreas(Request $request){
+        try{
+            $input = $request->all();
+            $id = $input['id'];
+            $dea_id = Auth::user()->dea->id;
+            $areas = DB::table('areas')
+                            ->where('dea_id',$dea_id)
+                            ->where('tipo', $id)
+                            ->where('estadoarea','1')
+                            ->select('nombrearea','idarea')
+                            ->get()
+                            ->toJson();
+            if($areas){
+                return response()->json([
+                    'areas' => $areas
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function getCargos(Request $request){
+        try{
+            $input = $request->all();
+            $id = $input['id'];
+            $dea_id = Auth::user()->dea->id;
+            $cargos = DB::table('file')
+                            ->where('dea_id',$dea_id)
+                            ->where('idarea', $id)
+                            ->where('estadofile','2')
+                            ->select(DB::raw("concat(cargo,' - ',nombrecargo) as full_cargo"),'idfile')
+                            ->get()
+                            ->toJson();
+            if($cargos){
+                return response()->json([
+                    'cargos' => $cargos
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function store(Request $request)
@@ -161,6 +205,11 @@ class EmpleadoController extends Controller
                     'url_foto' => $photo
                 ]);
 
+                $file = File::find($request->cargo_id);
+                $file->update([
+                    'estadofile' => '1'
+                ]);
+
                 return $empleado_contrato;
             });
 
@@ -170,7 +219,7 @@ class EmpleadoController extends Controller
                 "Usuario: " . Auth::user()->id . "\n"
             );
 
-            return redirect()->route('empleado.index')->with('success_message', 'Personal registrado correctamente...');
+            return redirect()->route('empleado.index')->with('success_message', 'Personal registrado correctamente...')->withInput();
         } catch (\Exception $e) {
             Log::channel('recursos_humanos')->info(
                 "\n" .
@@ -192,8 +241,8 @@ class EmpleadoController extends Controller
         }
         $extensiones = Empleado::EXTENSIONES;
         $grados_academicos = Empleado::GRADOS_ACADEMICOS;
-        $areas = Area::where('dea_id',$dea_id)->get();
-        $cargos = File::where('dea_id',$dea_id)->get();
+        $areas = Area::where('dea_id',$dea_id)->where('tipo',$empleado_contrato->tipo)->where('estadoarea','1')->get();
+        $cargos = File::where('dea_id',$dea_id)->where('idarea',$empleado->idarea)->where('estadofile','2')->get();
         $tipos = EmpleadoContrato::TIPOS;
         return view('empleados.editar', compact('empleado','dea_id','empleado_contrato','extensiones','grados_academicos','areas','cargos','tipos'));
     }
@@ -234,6 +283,12 @@ class EmpleadoController extends Controller
                     'kua' => $request->kua
                 ]);
                 $empleado_contrato = EmpleadoContrato::find($request->empleado_contrato_id);
+
+                $file_anterior = File::find($empleado_contrato->idfile);
+                $file_anterior->update([
+                    'estadofile' => '2'
+                ]);
+
                 $empleado_contrato->update([
                     'idfile' => $request->cargo_id,
                     'dea_id' => $request->dea_id,
@@ -267,6 +322,11 @@ class EmpleadoController extends Controller
                         'url_foto' => $photo
                     ]);
                 }
+
+                $file = File::find($request->cargo_id);
+                $file->update([
+                    'estadofile' => '1'
+                ]);
 
                 return $empleado_contrato;
             });
@@ -318,6 +378,11 @@ class EmpleadoController extends Controller
             'estado' => '2',
             'user_id' => Auth::user()->id,
             'obs_retiro' => $request->obs_retiro
+        ]);
+
+        $file = File::find($empleado_contrato->idfile);
+        $file->update([
+            'estadofile' => '2'
         ]);
 
         $euser = User::select('id')->where('idemp',$request->empleado_id)->first();

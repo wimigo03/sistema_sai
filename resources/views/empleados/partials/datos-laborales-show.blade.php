@@ -41,14 +41,16 @@
             <div class="col-md-2 pr-1 text-right">
                 <label for="area_id" class="d-inline"><b>Area:</b></label>
             </div>
-            <div class="col-md-2 pr-1 pl-1">
+            <div class="col-md-6 pr-1 pl-1">
                 {{ $empleado->area->nombrearea }}
             </div>
-            <div class="col-md-2 pr-1 pl-1 text-right">
+        </div>
+        <div class="form-group row font-roboto-12 abs-center">
+            <div class="col-md-2 pr-1 text-right">
                 <label for="cargo_id" class="d-inline"><b>Cargo:</b></label>
             </div>
-            <div class="col-md-2 pl-1">
-                {{ $empleado_contrato->file->nombrecargo }}
+            <div class="col-md-6 pr-1 pl-1">
+                {{ $empleado_contrato->file->cargo . ' - ' . $empleado_contrato->file->nombrecargo }}
             </div>
         </div>
         <div class="form-group row font-roboto-12 abs-center">

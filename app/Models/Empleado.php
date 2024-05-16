@@ -66,6 +66,15 @@ class Empleado extends Model
         'SUPERIOR' => 'SUPERIOR'
     ];
 
+    public function getStatusCheckAttribute(){
+        switch ($this->estado) {
+            case '1':
+                return "fas fa-check fa-fw";
+            case '2':
+                return "fas fa-times fa-fw";
+        }
+    }
+
     public function getStatusAttribute(){
         switch ($this->estado) {
             case '1':
