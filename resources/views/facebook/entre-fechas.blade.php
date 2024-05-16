@@ -9,8 +9,8 @@
     </div>
     <div class="card-body body">
         <form action="#" method="get" id="form">
-            <div class="form-group row">
-                <div class="col-md-7 pr-1 pl-1">
+            <div class="form-group row abs-center">
+                <div class="col-md-5 pr-1 pl-1">
                     <input type="hidden" name="dea_id" value="{{ $dea_id }}" id="dea_id">
                     <select name="area_id" id="area_id" class="form-control select2">
                         <option value="">-</option>
@@ -28,7 +28,7 @@
             </div>
             <div class="form-group row">
                 <div class="col-md-6 pr-1 pl-1">
-                    <span class="btn btn-outline-primary font-roboto-12" onclick="limpiar();">
+                    <span class="btn btn-outline-primary font-roboto-12" onclick="atras();">
                         <i class="fas fa-angle-double-left fa-fw"></i> Ir atras
                     </span>
                     <span class="tts:right tts-slideIn tts-custom root" aria-label="Exportar a excel" style="cursor: pointer;">
@@ -142,6 +142,11 @@
             var dea_id = $("#dea_id").val()
             var url = "{{ route('facebook.entre.fechas',':dea_id') }}";
             url = url.replace(':dea_id',dea_id);
+            window.location.href = url;
+        }
+
+        function atras(){
+            var url = "{{ route('facebook.index') }}";
             window.location.href = url;
         }
     </script>
