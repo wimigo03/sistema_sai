@@ -19,25 +19,28 @@ class Facebook extends Model
     ];
 
     const ESTADOS = [
-        '1' => 'EN ESPERA',
-        '2' => 'CONCLUIDO'
+        '1' => 'HABILITADO',
+        '2' => 'NO HABILITADO',
+        '3' => 'ELIMINADO'
     ];
 
     public function getStatusAttribute(){
         switch ($this->estado) {
             case '1':
-                return "EN ESPERA";
+                return "HABILITADO";
             case '2':
-                return "CONCLUIDO";
+                return "NO HABILITADO";
+            case '3':
+                return "ELIMINADO";
         }
     }
 
     public function getcolorStatusAttribute(){
         switch ($this->estado) {
             case '1':
-                return "badge-with-padding badge badge-secondary";
-            case '2':
                 return "badge-with-padding badge badge-success";
+            case '2':
+                return "badge-with-padding badge badge-danger";
         }
     }
 

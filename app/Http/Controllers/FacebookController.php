@@ -28,6 +28,7 @@ class FacebookController extends Controller
         $dea_id = Auth::user()->dea->id;
         $publicaciones = Facebook::query()
                                 ->ByDea($dea_id)
+                                ->where('estado','!=','3')
                                 ->orderBy('id','desc')
                                 ->paginate(10);
         $estados = Facebook::ESTADOS;
@@ -42,6 +43,7 @@ class FacebookController extends Controller
                                 ->ByFecha($request->fecha)
                                 ->ByTitulo($request->titulo)
                                 ->ByEstado($request->estado)
+                                ->where('estado','!=','3')
                                 ->orderBy('id','desc')
                                 ->paginate(10);
         $estados = Facebook::ESTADOS;
@@ -189,5 +191,35 @@ class FacebookController extends Controller
             ini_restore('memory_limit');
             ini_restore('max_execution_time');
         }
+    }
+
+    public function habilitar($facebook_id)
+    {
+        $facebook = Facebook::find($facebook_id);
+        $facebook->update([
+            'estado' => '1'
+        ]);
+
+        return redirect()->route('facebook.index')->with('success_message', 'Operacion realizada correctamente..');
+    }
+
+    public function deshabilitar($facebook_id)
+    {
+        $facebook = Facebook::find($facebook_id);
+        $facebook->update([
+            'estado' => '2'
+        ]);
+
+        return redirect()->route('facebook.index')->with('success_message', 'Operacion realizada correctamente..');
+    }
+
+    public function eliminar($facebook_id)
+    {
+        $facebook = Facebook::find($facebook_id);
+        $facebook->update([
+            'estado' => '3'
+        ]);
+
+        return redirect()->route('facebook.index')->with('success_message', 'Operacion realizada correctamente..');
     }
 }

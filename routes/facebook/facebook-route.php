@@ -7,7 +7,7 @@ Route::prefix('facebook')->name('facebook.')->middleware(['auth'])->group(functi
     Route::post('store', 'FacebookController@store')->name('store')->middleware('can:facebook.create');
     Route::get('cargar-datos/{id}', 'FacebookController@cargar_datos')->name('cargar.datos')->middleware('can:facebook.cargar.datos');
     Route::post('actualizar-datos', 'FacebookController@actualizar_datos')->name('actualizar.datos')->middleware('can:facebook.cargar.datos');
-    //Route::get('editar/{id}', 'FacebookController@editar')->name('editar');
-    //Route::get('agregarEmpleados/{id}', 'FacebookController@agregarEmpleados')->name('agregarEmpleados');
-    //Route::post('deshabilitar/{id}', 'FacebookController@deshabilitar')->name('deshabilitar');
+    Route::get('habilitar/{id}', 'FacebookController@habilitar')->name('habilitar')->middleware('can:facebook.cargar.datos');
+    Route::get('deshabilitar/{id}', 'FacebookController@deshabilitar')->name('deshabilitar')->middleware('can:facebook.cargar.datos');
+    Route::get('eliminar/{id}', 'FacebookController@eliminar')->name('eliminar')->middleware('can:facebook.cargar.datos');
 });
