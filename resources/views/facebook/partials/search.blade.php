@@ -1,5 +1,5 @@
 <form action="#" method="get" id="form">
-    <div class="form-group row abs-center">
+    <div class="form-group row">
         <div class="col-md-2 pr-1 pl-1">
             <input type="hidden" name="dea_id" value="{{ $dea_id }}" id="dea_id">
             <input type="text" name="fecha" value="{{ request('fecha') }}" id="fecha" placeholder="--Fecha--" class="form-control font-roboto-12 intro" data-language="es">
@@ -22,6 +22,13 @@
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Registrar Publicacion" style="cursor: pointer;">
                     <span class="btn btn-sm btn-outline-success font-verdana" onclick="create();">
                         <i class="fas fa-plus fa-fw"></i>
+                    </span>
+                </span>
+            @endcan
+            @can('facebook.cargar.datos')
+                <span class="tts:right tts-slideIn tts-custom" aria-label="Entre fechas" style="cursor: pointer;">
+                    <span class="btn btn-sm btn-outline-info font-verdana" onclick="entre_fechas();">
+                        <i class="fas fa-calendar-alt fa-fw"></i>
                     </span>
                 </span>
             @endcan

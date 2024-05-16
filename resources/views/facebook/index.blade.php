@@ -57,5 +57,12 @@
             var url = "{{ route('facebook.index') }}";
             window.location.href = url;
         }
+
+        function entre_fechas(){
+            var dea_id = $("#dea_id").val()
+            var url = "{{ route('facebook.entre.fechas',':dea_id') }}";
+            url = url.replace(':dea_id',dea_id);
+            window.location.href = url;
+        }
     </script>
 @endsection

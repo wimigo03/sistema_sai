@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Facebook;
 use App\Models\Area;
 use App\Models\Empleado;
+use DB;
 
 class FacebookDetalle extends Model
 {
@@ -70,9 +71,30 @@ class FacebookDetalle extends Model
         }
     }
 
+    public function scopeByArea($query, $area_id){
+        if($area_id){
+            return $query->where('idarea', $area_id);
+        }
+    }
+
     public function scopeByEstado($query, $estado){
         if($estado){
             return $query->where('estado', $estado);
+        }
+    }
+
+    public function scopeByEntreFechas($query, $from, $to){
+        if ($from && $to) {
+                $from = date('Y-m-d 00:00:00', strtotime(str_replace('/', '-', $from)));
+                $to = date('Y-m-d 23:59:59', strtotime(str_replace('/', '-', $to)));
+                return $query
+                    ->whereIn('facebook_id', function ($subquery) use($from, $to) {
+                        $subquery->select('id')
+                            ->from('facebook')
+                            ->where('estado','1')
+                            ->where('fecha','>=',$from)
+                            ->where('fecha','<=',$to);
+                    });
         }
     }
 }

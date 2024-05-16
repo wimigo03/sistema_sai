@@ -3,33 +3,37 @@
     <div class="card-header header">
         <div class="row">
             <div class="col-md-12 pr-1 pl-1 text-center">
-                <b>REGISTRAR PUBLICACION</b>
+                <b>REGISTRAR PUBLICACION - {{ Carbon\Carbon::parse($facebook->fecha)->format('d/m/Y') }}</b>
             </div>
         </div>
     </div>
     <div class="card-body body">
         <div class="form-group row font-roboto-12">
-            <div class="col-md-6 pr-1 pl-1">
-                <label for="titulo" class="d-inline"><b>Titulo.- </b></label>
-                {{ $facebook->titulo }}
-            </div>
-            <div class="col-md-6 pr-1 pl-1">
-                <label for="fecha" class="d-inline"><b>Fecha.- </b></label>
-                {{ Carbon\Carbon::parse($facebook->fecha)->format('d/m/Y') }}
+            <div class="col-md-12 pr-1 pl-1 text-center">
+                <input type="hidden" value="{{ $facebook->id }}" id="facebook_id">
+                <b><u>{{ $facebook->titulo }}</u></b>
             </div>
         </div>
         <div class="form-group row font-roboto-12">
-            <div class="col-md-12 pr-1 pl-1">
-                <label for="enlace" class="d-inline"><b>Enlace.- </b></label>
-                <a href="{{$facebook->publicacion}}" target="_blank">
-                    {{ $facebook->publicacion }}
-                </a>
+            <div class="col-md-1 pr-1 pl-1">
+                <label for="enlace" class="d-inline"><b>Share: </b></label>{{ $count_shares }}
+            </div>
+            <div class="col-md-1 pr-1 pl-1">
+                <label for="enlace" class="d-inline"><b>Like: </b></label>{{ $count_likes }}
+            </div>
+            <div class="col-md-1 pr-1 pl-1">
+                <label for="enlace" class="d-inline"><b>Comment: </b></label>{{ $count_comments }}
             </div>
         </div>
         <div class="form-group row">
             <div class="col-md-4 pr-1 pl-1">
                 <span class="btn btn-outline-primary font-roboto-12" onclick="cancelar();">
                     <i class="fas fa-angle-double-left fa-fw"></i> Ir atras
+                </span>
+                <span class="tts:right tts-slideIn tts-custom root" aria-label="Exportar a excel" style="cursor: pointer;">
+                    <span class="btn btn-outline-success font-roboto-12" onclick="excel();">
+                        <i class="fas fa-file-excel fa-fw"></i>
+                    </span>
                 </span>
                 <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
             </div>
@@ -63,7 +67,6 @@
                                 <th class="text-center p-1">SHARE</th>
                                 <th class="text-center p-1">LIKE</th>
                                 <th class="text-center p-1">COMMENT</th>
-                                {{--<th class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></th>--}}
                             </tr>
                         </thead>
                         <tbody>
@@ -71,7 +74,7 @@
                                 <tr class="font-roboto-11 fila {{ $datos->id }}">
                                     <td class="text-left p-1">{{ $cont++ }}</td>
                                     <td class="text-left p-1">{{ $datos->area->nombrearea }}</td>
-                                    <td class="text-left p-1">{{ $datos->empleado->file_cargo }}</td>
+                                    <td class="text-left p-1">{{ $datos->empleado->cargo_file . ' - ' . $datos->empleado->file_cargo }}</td>
                                     <td class="text-center p-1">{{ $datos->empleado->ultimo_tipo_contrato }}</td>
                                     <td class="text-left p-1 nombre_completo">{{ $datos->empleado->nombres . ' ' . $datos->empleado->ap_pat . ' ' . $datos->empleado->ap_mat }}</td>
                                     <td class="text-center p-1">{{ $datos->empleado->ci }}</td>
@@ -84,19 +87,6 @@
                                     <td class="text-center p-1">
                                         <input type="checkbox" name="comment[]" value="{{ $datos->id }}" {{ $datos->_comment == '1' ? 'checked' : '' }}>
                                     </td>
-                                    {{--@canany(['facebook.cargar.datos','facebook.editar'])
-                                        <td class="text-center p-1">
-                                            <div class="d-flex justify-content-center">
-                                                @can('facebook.cargar.datos')
-                                                    <span class="tts:left tts-slideIn tts-custom" aria-label="Cargar datos" style="cursor: pointer;">
-                                                        <a href="{{ route('facebook.cargar.datos',$datos->id) }}" class="badge-with-padding badge badge-primary">
-                                                            <i class="fas fa-list fa-fw"></i>
-                                                        </a>
-                                                    </span>
-                                                @endcan
-                                            </div>
-                                        </td>
-                                    @endcanany--}}
                                 </tr>
                             @endforeach
                         </tbody>
@@ -151,6 +141,13 @@
 
         function cancelar(){
             var url = "{{ route('facebook.index') }}";
+            window.location.href = url;
+        }
+
+        function excel(){
+            var facebook_id = $("#facebook_id").val()
+            var url = "{{ route('facebook.excel',':facebook_id') }}";
+            url = url.replace(':facebook_id',facebook_id);
             window.location.href = url;
         }
     </script>

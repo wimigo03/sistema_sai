@@ -10,4 +10,8 @@ Route::prefix('facebook')->name('facebook.')->middleware(['auth'])->group(functi
     Route::get('habilitar/{id}', 'FacebookController@habilitar')->name('habilitar')->middleware('can:facebook.cargar.datos');
     Route::get('deshabilitar/{id}', 'FacebookController@deshabilitar')->name('deshabilitar')->middleware('can:facebook.cargar.datos');
     Route::get('eliminar/{id}', 'FacebookController@eliminar')->name('eliminar')->middleware('can:facebook.cargar.datos');
+    Route::get('excel/{id}', 'FacebookController@excel')->name('excel')->middleware('can:facebook.cargar.datos');
+    Route::get('entre-fechas/{dea_id}', 'FacebookController@entre_fechas')->name('entre.fechas')->middleware('can:facebook.cargar.datos');
+    Route::get('search-entre-fechas', 'FacebookController@search_entre_fechas')->name('search.entre.fechas')->middleware('can:facebook.cargar.datos');
+    Route::get('excel-entre-fechas', 'FacebookController@excel_entre_fechas')->name('excel.entre.fechas')->middleware('can:facebook.cargar.datos');
 });

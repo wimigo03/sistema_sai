@@ -8,15 +8,15 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Carbon\Carbon;
 
-class EmpleadosExcel implements FromView,ShouldAutoSize{
+class FileExcel implements FromView,ShouldAutoSize{
     use Exportable;
 
-    public function __construct($empleados){
-        $this->empleados = $empleados;
+    public function __construct($files){
+        $this->files = $files;
     }
 
     public function view(): view{
-        $empleados = $this->empleados;
-        return view('files.excel',compact('empleados'));
+        $files = $this->files;
+        return view('files.excel',compact('files'));
     }
 }

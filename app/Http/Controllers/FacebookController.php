@@ -16,6 +16,8 @@ use App\Models\Facebook;
 use App\Models\FacebookDetalle;
 use App\Models\NivelModel;
 use App\Models\PersonalFace;
+use App\Exportar\FacebookExcel;
+use App\Exportar\FacebookEntreFechasExcel;
 use DB;
 use PDF;
 use App\Models\Area;
@@ -29,7 +31,7 @@ class FacebookController extends Controller
         $publicaciones = Facebook::query()
                                 ->ByDea($dea_id)
                                 ->where('estado','!=','3')
-                                ->orderBy('id','desc')
+                                ->orderBy('fecha','desc')
                                 ->paginate(10);
         $estados = Facebook::ESTADOS;
         return view('facebook.index', compact('dea_id','publicaciones','estados'));
@@ -44,7 +46,7 @@ class FacebookController extends Controller
                                 ->ByTitulo($request->titulo)
                                 ->ByEstado($request->estado)
                                 ->where('estado','!=','3')
-                                ->orderBy('id','desc')
+                                ->orderBy('fecha','desc')
                                 ->paginate(10);
         $estados = Facebook::ESTADOS;
         return view('facebook.index', compact('dea_id','publicaciones','estados'));
@@ -54,8 +56,11 @@ class FacebookController extends Controller
     {
         $facebook = Facebook::find($id);
         $facebook_detalles = FacebookDetalle::where('facebook_id',$id)->orderBy('id','asc')->get();
+        $count_shares = FacebookDetalle::where('facebook_id',$id)->where('_share','1')->get()->count();;
+        $count_likes = FacebookDetalle::where('facebook_id',$id)->where('_like','1')->get()->count();;
+        $count_comments = FacebookDetalle::where('facebook_id',$id)->where('_comment','1')->get()->count();;
         $cont = 1;
-        return view('facebook.cargar-datos', compact('facebook','facebook_detalles','cont'));
+        return view('facebook.cargar-datos', compact('facebook','facebook_detalles','count_shares','count_likes','count_comments','cont'));
     }
 
     public function actualizar_datos(Request $request)
@@ -72,7 +77,7 @@ class FacebookController extends Controller
                             '_share' => '1'
                         ]);
                     }
-                    $no_shares = FacebookDetalle::whereNotIn('id',$request->share)->get();
+                    $no_shares = FacebookDetalle::where('facebook_id',$request->facebook_id)->whereNotIn('id',$request->share)->get();
                     foreach($no_shares as $share){
                         $share_detalle = FacebookDetalle::find($share->id);
                         $share_detalle->update([
@@ -100,7 +105,7 @@ class FacebookController extends Controller
                             '_like' => '1'
                         ]);
                     }
-                    $no_likes = FacebookDetalle::whereNotIn('id',$request->like)->get();
+                    $no_likes = FacebookDetalle::where('facebook_id',$request->facebook_id)->whereNotIn('id',$request->like)->get();
                     foreach($no_likes as $like){
                         $like_detalle = FacebookDetalle::find($like->id);
                         $like_detalle->update([
@@ -128,7 +133,7 @@ class FacebookController extends Controller
                             '_comment' => '1'
                         ]);
                     }
-                    $no_comments = FacebookDetalle::whereNotIn('id',$request->comment)->get();
+                    $no_comments = FacebookDetalle::where('facebook_id',$request->facebook_id)->whereNotIn('id',$request->comment)->get();
                     foreach($no_comments as $comment){
                         $comment_detalle = FacebookDetalle::find($comment->id);
                         $comment_detalle->update([
@@ -221,5 +226,77 @@ class FacebookController extends Controller
         ]);
 
         return redirect()->route('facebook.index')->with('success_message', 'Operacion realizada correctamente..');
+    }
+
+    public function excel($id)
+    {
+        try {
+            ini_set('memory_limit','-1');
+            ini_set('max_execution_time','-1');
+                $facebook = Facebook::find($id);
+                $facebook_detalles = FacebookDetalle::where('facebook_id',$id)->orderBy('id','asc')->get();
+                $count_shares = FacebookDetalle::where('facebook_id',$id)->where('_share','1')->get()->count();;
+                $count_likes = FacebookDetalle::where('facebook_id',$id)->where('_like','1')->get()->count();;
+                $count_comments = FacebookDetalle::where('facebook_id',$id)->where('_comment','1')->get()->count();;
+                $cont = 1;
+                return Excel::download(new FacebookExcel($facebook,$facebook_detalles,$count_shares,$count_likes,$count_comments,$cont),'socials.xlsx');
+        } catch (\Throwable $th) {
+            return view('errors.500');
+        }finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
+    }
+
+    public function entre_fechas($dea_id)
+    {
+        $areas = Area::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
+        return view('facebook.entre-fechas', compact('areas','dea_id'));
+    }
+
+    public function search_entre_fechas(Request $request)
+    {
+        $dea_id = $request->dea_id;
+        $empleados = FacebookDetalle::query()
+                                        ->ByDea($dea_id)
+                                        ->ByArea($request->area_id)
+                                        ->ByEntreFechas($request->fecha_i, $request->fecha_f)
+                                        ->select('idemp',
+                                                DB::raw("SUM(CASE WHEN _share = '1' THEN 1 ELSE 0 END) as total_shares"),
+                                                DB::raw("SUM(CASE WHEN _like = '1' THEN 1 ELSE 0 END) as total_likes"),
+                                                DB::raw("SUM(CASE WHEN _comment = '1' THEN 1 ELSE 0 END) as total_comments")
+                                            )
+                                        ->groupBy('idemp')
+                                        ->get();
+        $areas = Area::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
+        $cont = 1;
+        return view('facebook.entre-fechas', compact('empleados','areas','dea_id','cont'));
+    }
+
+    public function excel_entre_fechas(Request $request)
+    {
+        try {
+            ini_set('memory_limit','-1');
+            ini_set('max_execution_time','-1');
+            $dea_id = $request->dea_id;
+            $empleados = FacebookDetalle::query()
+                                            ->ByDea($dea_id)
+                                            ->ByArea($request->area_id)
+                                            ->ByEntreFechas($request->fecha_i, $request->fecha_f)
+                                            ->select('idemp',
+                                                    DB::raw("SUM(CASE WHEN _share = '1' THEN 1 ELSE 0 END) as total_shares"),
+                                                    DB::raw("SUM(CASE WHEN _like = '1' THEN 1 ELSE 0 END) as total_likes"),
+                                                    DB::raw("SUM(CASE WHEN _comment = '1' THEN 1 ELSE 0 END) as total_comments")
+                                                )
+                                            ->groupBy('idemp')
+                                            ->get();
+            $cont = 1;
+            return Excel::download(new FacebookEntreFechasExcel($request->fecha_i,$request->fecha_f,$empleados,$cont),'socials_f.xlsx');
+        } catch (\Throwable $th) {
+            return view('errors.500');
+        }finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
     }
 }
