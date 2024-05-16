@@ -46,7 +46,7 @@
         <div class="col-md-9 pr-1">
             <label for="nombre" style="color: green">--- (Total: {{ $total }}) --</label>
             <label for="nombre" style="color: blue">(Entregados: {{ $entregados }}) --</label>
-            <label for="nombre" style="color: orange"">(Sin Entrega: {{ $sin_entrega }}) ---</label>
+            <label for="nombre" style="color: orange">(Sin Entrega: {{ $sin_entrega }}) ---</label>
 
         </div>
 

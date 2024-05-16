@@ -6,7 +6,7 @@
             <div class="col-md-6">
                 <select name="barrio4" id="barrio4" class="form-control form-control-sm">
                     <option value="">-</option>
-                    @foreach ($barrios3 as $barrio3)
+                    @foreach ($barrios1 as $barrio3)
                         <option value="{{ $barrio3->id }}">{{ $barrio3->nombre }}</option>
                     @endforeach
                 </select>

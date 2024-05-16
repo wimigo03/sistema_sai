@@ -40,11 +40,14 @@
 
 
                         <td class="text-center p-1">
+                            @if (App\Models\Canasta\Entrega::ESTADOS[$entregas->estado] == 'SIN ENT.(IMPRESO)')
+
                             <span class="tts:left tts-slideIn tts-custom" aria-label="Imprimir Boleta">
                                 <a  href="{{ route('entregas.generarboleta2',$entregas->id) }}" class="badge-with-padding badge badge-primary" target="_blank" >
                                     <i class='fa fa-print fa-fw'></i>
                                 </a>
                             </span>
+                            @endif
                         </td>
                         <td class="text-center p-1">
                             @if (App\Models\Canasta\Entrega::ESTADOS[$entregas->estado] == 'ENTREGADO' && $entregas->barrio->barrio_entrega->estado == 3)
