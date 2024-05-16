@@ -123,7 +123,7 @@ class EmpleadoController extends Controller
                             ->where('dea_id',$dea_id)
                             ->where('idarea', $id)
                             ->where('estadofile','2')
-                            ->select(DB::raw("concat(cargo,' - ',nombrecargo) as full_cargo"),'idfile')
+                            ->select(DB::raw("concat(nombrecargo,' - ',cargo) as full_cargo"),'idfile')
                             ->get()
                             ->toJson();
             if($cargos){

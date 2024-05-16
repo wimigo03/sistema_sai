@@ -32,18 +32,18 @@
     </div>
     <div class="form-group row font-roboto-12 align-items-center">
         <div class="col-md-4 pr-1 pl-1 text-right">
-            <label for="cargo" class="d-inline"><b>Cargo</b></label>
-        </div>
-        <div class="col-md-5 pr-1 pl-1">
-            <input type="text" name="cargo" value="{{ $file->cargo }}" id="cargo" class="form-control font-roboto-12 input-rojo" oninput="this.value = this.value.toUpperCase();">
-        </div>
-    </div>
-    <div class="form-group row font-roboto-12 align-items-center">
-        <div class="col-md-4 pr-1 pl-1 text-right">
             <label for="cargo_detalle" class="d-inline"><b>Nombre del cargo</b></label>
         </div>
         <div class="col-md-5 pr-1 pl-1">
             <input type="text" name="cargo_detalle" value="{{ $file->nombrecargo }}" id="cargo_detalle" class="form-control font-roboto-12 input-rojo" oninput="this.value = this.value.toUpperCase();">
+        </div>
+    </div>
+    <div class="form-group row font-roboto-12 align-items-center">
+        <div class="col-md-4 pr-1 pl-1 text-right">
+            <label for="cargo" class="d-inline"><b>Cargo Salarial</b></label>
+        </div>
+        <div class="col-md-5 pr-1 pl-1">
+            <input type="text" name="cargo" value="{{ $file->cargo }}" id="cargo" class="form-control font-roboto-12 input-rojo" oninput="this.value = this.value.toUpperCase();">
         </div>
     </div>
     <div class="form-group row font-roboto-12 align-items-center">

@@ -40,6 +40,7 @@
         <div class="col-md-3 text-center">
             <img src="{{ asset($empleado->url_foto) }}" alt="logo" style="width-min: 100px; width: 250px; height: auto; border-radius: 10%;">
         </div>
+        
         <div class="col-md-9">
             <div class="form-group row font-roboto-12 abs-center">
                 <div class="col-md-3 pr-1 text-right">

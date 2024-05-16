@@ -23,7 +23,7 @@
                     <tr class="font-roboto-11">
                         <td class="text-left p-1">{{ $datos->numfile }}</td>
                         <td class="text-left p-1">{{ $datos->area->nombrearea }}</td>
-                        <td class="text-left p-1">{{ $datos->cargo . ' - ' . $datos->nombrecargo }}</td>
+                        <td class="text-left p-1">{{ $datos->nombrecargo . ' - ' . $datos->cargo }}</td>
                         <td class="text-right p-1">{{ number_format($datos->habbasico,2,'.',',') }}</td>
                         <td class="text-center p-1">{{ $datos->categoria }}</td>
                         <td class="text-center p-1">{{ $datos->niveladm }}</td>
