@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Area;
 use App\Models\Canasta\Dea;
+use DB;
 
 class File extends Model
 {
@@ -65,6 +66,23 @@ class File extends Model
                 return "badge-with-padding badge badge-danger";
             case '3':
                 return "badge-with-padding badge badge-secondary";
+        }
+    }
+
+    public function getEmpleadoActualAttribute(){
+        $contrato = DB::table('empleados_contratos')
+                            ->where('idfile',$this->idfile)
+                            ->where('estado','1')
+                            ->first();
+        if($contrato != null){
+            $empleado = DB::table('empleados')->where('idemp',$contrato->idemp)->first();
+            if($empleado != null){
+                return $empleado->nombres . ' ' . $empleado->ap_pat . ' ' . $empleado->ap_mat;
+            }else{
+                return ['[Error]'];
+            }
+        }else{
+            return '[Error]';
         }
     }
 

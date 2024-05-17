@@ -6,6 +6,7 @@
                     <th class="text-center p-1">N°</th>
                     <th class="text-center p-1">AREA</th>
                     <th class="text-center p-1">CARGO</th>
+                    <th class="text-center p-1">CARGO SALARIAL</th>
                     <th class="text-center p-1">HABER BASICO</th>
                     <th class="text-center p-1">CATEGORIA</th>
                     <th class="text-center p-1">N. ADM.</th>
@@ -23,7 +24,8 @@
                     <tr class="font-roboto-11">
                         <td class="text-left p-1">{{ $datos->numfile }}</td>
                         <td class="text-left p-1">{{ $datos->area->nombrearea }}</td>
-                        <td class="text-left p-1">{{ $datos->nombrecargo . ' - ' . $datos->cargo }}</td>
+                        <td class="text-left p-1">{{ $datos->nombrecargo }}</td>
+                        <td class="text-left p-1">{{ $datos->cargo }}</td>
                         <td class="text-right p-1">{{ number_format($datos->habbasico,2,'.',',') }}</td>
                         <td class="text-center p-1">{{ $datos->categoria }}</td>
                         <td class="text-center p-1">{{ $datos->niveladm }}</td>
@@ -31,9 +33,18 @@
                         <td class="text-center p-1">{{ $datos->nivelsal }}</td>
                         <td class="text-center p-1">{{ $datos->tipos }}</td>
                         <td class="text-center p-1">
-                            <span class="{{ $datos->colorStatus }}">
-                                {{ $datos->status }}
-                            </span>
+                            @if ($datos->estadofile == '1')
+                                <span class="tts:left tts-slideIn tts-custom" aria-label="{{ $datos->empleado_actual }}" style="cursor: pointer;">
+                                    <span class="{{ $datos->colorStatus }}">
+                                        {{ $datos->status }}
+                                    </span>
+                                </span>
+                            @else
+                                <span class="{{ $datos->colorStatus }}">
+                                    {{ $datos->status }}
+                                </span>
+                            @endif
+
                         </td>
                         @canany(['files.editar'])
                             <td class="text-center p-1">
