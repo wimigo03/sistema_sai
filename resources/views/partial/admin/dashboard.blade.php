@@ -570,7 +570,7 @@
                                 @can('files.index')
                                     <li>
                                         <a href="{{ route('file.index') }}">
-                                            &nbsp;&nbsp;&nbsp;<i class="fas fa-id-card fa-fw"></i>&nbsp;Items
+                                            &nbsp;&nbsp;&nbsp;<i class="fas fa-id-card fa-fw"></i>&nbsp;Cargos
                                         </a>
                                     </li>
                                 @endcan
