@@ -119,10 +119,12 @@ class EmpleadoController extends Controller
         try{
             $input = $request->all();
             $id = $input['id'];
+            $tipo = $input['tipo'];
             $dea_id = Auth::user()->dea->id;
             $cargos = DB::table('file')
                             ->where('dea_id',$dea_id)
                             ->where('idarea', $id)
+                            ->where('tipofile', $tipo)
                             ->where('estadofile','2')
                             ->select(DB::raw("concat(numfile,' - ',nombrecargo,' - ',cargo) as full_cargo"),'idfile')
                             ->get()

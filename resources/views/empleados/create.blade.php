@@ -154,8 +154,9 @@
 
             if($("#area_id >option:selected").val() != ''){
                 var id = $("#area_id >option:selected").val();
+                var tipo = $("#tipo >option:selected").val();
                 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                getCargos(id,CSRF_TOKEN);
+                getCargos(id,tipo,CSRF_TOKEN);
             }
         });
 
@@ -167,8 +168,9 @@
 
         $('#area_id').change(function() {
             var id = $(this).val();
+            var tipo = $("#tipo >option:selected").val();
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            getCargos(id,CSRF_TOKEN);
+            getCargos(id,tipo,CSRF_TOKEN);
         });
 
         function getAreas(id,CSRF_TOKEN){
@@ -198,13 +200,14 @@
             });
         }
 
-        function getCargos(id,CSRF_TOKEN){
+        function getCargos(id,tipo,CSRF_TOKEN){
             $.ajax({
                 type: 'GET',
                 url: '/empleado/get_cargos',
                 data: {
                     _token: CSRF_TOKEN,
-                    id: id
+                    id: id,
+                    tipo: tipo
                 },
                 success: function(data){
                     if(data.cargos){
