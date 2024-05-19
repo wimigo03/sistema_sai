@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exportar\EmpleadosExcel;
 use App\Models\User;
+use App\Models\FacebookDetalle;
 use DB;
 use PDF;
 
@@ -99,7 +100,7 @@ class EmpleadoController extends Controller
             $dea_id = Auth::user()->dea->id;
             $areas = DB::table('areas')
                             ->where('dea_id',$dea_id)
-                            ->where('tipo', $id)
+                            //->where('tipo', $id)
                             ->where('estadoarea','1')
                             ->select('nombrearea','idarea')
                             ->get()
@@ -123,7 +124,7 @@ class EmpleadoController extends Controller
                             ->where('dea_id',$dea_id)
                             ->where('idarea', $id)
                             ->where('estadofile','2')
-                            ->select(DB::raw("concat(nombrecargo,' - ',cargo) as full_cargo"),'idfile')
+                            ->select(DB::raw("concat(numfile,' - ',nombrecargo,' - ',cargo) as full_cargo"),'idfile')
                             ->get()
                             ->toJson();
             if($cargos){
@@ -241,14 +242,17 @@ class EmpleadoController extends Controller
         }
         $extensiones = Empleado::EXTENSIONES;
         $grados_academicos = Empleado::GRADOS_ACADEMICOS;
-        $areas = Area::where('dea_id',$dea_id)->where('tipo',$empleado_contrato->tipo)->where('estadoarea','1')->get();
-        $cargos = File::where('dea_id',$dea_id)->where('idarea',$empleado->idarea)->where('estadofile','2')->get();
+        $areas = Area::where('dea_id',$dea_id)->where('estadoarea','1')->get();
+        $cargos = File::where('dea_id',$dea_id)
+                            ->where('idarea',$empleado->idarea)
+                            ->where('estadofile','2')
+                            ->orWhere('idfile',$empleado_contrato->idfile)->get();
         $tipos = EmpleadoContrato::TIPOS;
         return view('empleados.editar', compact('empleado','dea_id','empleado_contrato','extensiones','grados_academicos','areas','cargos','tipos'));
     }
 
     public function update(Request $request)
-    {
+    {//dd($request->all());
         $request->validate([
             'nro_carnet' => 'required|numeric|integer|unique:empleados,ci,' . $request->empleado_id . ',idemp,dea_id,'. $request->dea_id,
             'foto' => 'nullable|file|mimes:jpg,jpeg|max:2048'
@@ -285,9 +289,11 @@ class EmpleadoController extends Controller
                 $empleado_contrato = EmpleadoContrato::find($request->empleado_contrato_id);
 
                 $file_anterior = File::find($empleado_contrato->idfile);
-                $file_anterior->update([
-                    'estadofile' => '2'
-                ]);
+                if($file_anterior != null){
+                    $file_anterior->update([
+                        'estadofile' => '2'
+                    ]);
+                }
 
                 $empleado_contrato->update([
                     'idfile' => $request->cargo_id,

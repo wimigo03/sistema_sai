@@ -37,7 +37,7 @@
             $('#modal-alert').modal({keyboard: false});
         }
 
-        $('#emppp').autocomplete({
+        $('#emp').autocomplete({
             source: function(request, response){
                 $.ajax({
                     url: "{{ route('correspondencia.local.remitente.buscar.crear') }}",

@@ -26,7 +26,7 @@ class FileController extends Controller
         $estados = File::ESTADOS;
         $files = File::query()
                         ->ByDea($dea_id)
-                        ->orderBy('idfile','desc')
+                        ->orderBy('numfile','desc')
                         ->paginate(10);
         return view('files.index', compact('dea_id','areas','cargos','categorias','tipos','estados','files'));
     }
@@ -51,7 +51,7 @@ class FileController extends Controller
                         ->ByNivelSalarial($request->n_salarial)
                         ->ByTipo($request->tipo)
                         ->ByEstado($request->estado)
-                        ->orderBy('idfile','desc')
+                        ->orderBy('numfile','desc')
                         ->paginate(10);
         return view('files.index', compact('dea_id','areas','cargos','categorias','tipos','estados','files'));
     }

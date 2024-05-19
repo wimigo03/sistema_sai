@@ -255,7 +255,6 @@ class Empleado extends Model
                     ->whereIn('idemp', function ($subquery) use($tipo) {
                         $subquery->select('idemp')
                             ->from('empleados_contratos')
-                            ->where('estado','1')
                             ->where('tipo', $tipo);
                     });
         }
