@@ -18,12 +18,12 @@ class Transferencia extends Model
 
     public function empleadoEntrante()
     {
-        return $this->belongsTo(EmpleadosModel::class, 'empleado_destino_id');
+        return $this->belongsTo(Empleado::class, 'empleado_destino_id');
     }
 
     public function empleadoSaliente()
     {
-        return $this->belongsTo(EmpleadosModel::class, 'empleado_origen_id');
+        return $this->belongsTo(Empleado::class, 'empleado_origen_id');
     }
 
     public function getCreatedAtAttribute()

@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
 use App\Models\User;
-use App\Models\EmpleadosModel;
-use App\Models\AreasModel;
+use App\Models\Empleado;
+use App\Models\Area;
 use App\Models\CompraModel;
 use App\Models\DetalleCompraModel;
 use App\Models\TemporalModel;
@@ -27,9 +27,9 @@ class CompraController2 extends Controller
 {
     public function index()
     {
-        $empleado = EmpleadosModel::find(Auth::user()->idemp);
+        $empleado = Empleado::find(Auth::user()->idemp);
         $estados = CompraModel::ESTADOS_COMPRA;
-        $areas = AreasModel::pluck('nombrearea','idarea');
+        $areas = Area::pluck('nombrearea','idarea');
         $programas = ProgramaModel::pluck('nombreprograma','idprograma');
         $programaticas = CatProgModel::select(DB::raw("concat(codcatprogramatica,'_',nombrecatprogramatica) as categoria_programatica"),'idcatprogramatica')->pluck('categoria_programatica','idcatprogramatica');
         $compras = CompraModel::query()
@@ -42,9 +42,9 @@ class CompraController2 extends Controller
 
     public function search(Request $request)
     {
-        $empleado = EmpleadosModel::find(Auth::user()->idemp);
+        $empleado = Empleado::find(Auth::user()->idemp);
         $estados = CompraModel::ESTADOS_COMPRA;
-        $areas = AreasModel::pluck('nombrearea','idarea');
+        $areas = Area::pluck('nombrearea','idarea');
         $programas = ProgramaModel::pluck('nombreprograma','idprograma');
         $programaticas = CatProgModel::select(DB::raw("concat(codcatprogramatica,'_',nombrecatprogramatica) as categoria_programatica"),'idcatprogramatica')->pluck('categoria_programatica','idcatprogramatica');
         $compras = CompraModel::query()
@@ -65,7 +65,7 @@ class CompraController2 extends Controller
     public function create()
     {
         $dea = Dea::where('id',Auth::user()->dea_id)->first();
-        $empleado = EmpleadosModel::find(Auth::user()->idemp);
+        $empleado = Empleado::find(Auth::user()->idemp);
         $catprogramaticas = CatProgModel::select(DB::raw("concat(codcatprogramatica,' : ',nombrecatprogramatica) as programatica"), 'idcatprogramatica')
                                             ->where('estadocatprogramatica', 1)
                                             ->pluck('programatica', 'idcatprogramatica');
@@ -110,7 +110,7 @@ class CompraController2 extends Controller
                 'estadocompra' => 1,
                 'dea_id' => 1
                 ]);
-                
+
             $cont = 0;
             while($cont < count($request->producto_id)){
                 $detalle = DetalleCompraModel::create([
@@ -142,7 +142,7 @@ class CompraController2 extends Controller
     {
         $compra = CompraModel::find($id);
         $compra->update([
-            'estadocompra' => 2 
+            'estadocompra' => 2
         ]);
         return redirect()->route('compras.pedidoparcial.show',$id)->with('success_message', 'Orden de Compra Aprobada.')->with('scroll_to', 'seccion-especifica');
     }
@@ -156,7 +156,7 @@ class CompraController2 extends Controller
     {
         $compra = CompraModel::find($id);
         $dea = Dea::where('id',Auth::user()->dea_id)->first();
-        $empleado = EmpleadosModel::find(Auth::user()->idemp);
+        $empleado = Empleado::find(Auth::user()->idemp);
         $catprogramaticas = CatProgModel::select(DB::raw("concat(codcatprogramatica,' : ',nombrecatprogramatica) as programatica"), 'idcatprogramatica')
                                             ->where('estadocatprogramatica', 1)
                                             ->get();
@@ -209,7 +209,7 @@ class CompraController2 extends Controller
                     'idusuario' => Auth::user()->id,
                     'dea_id' => 1
                 ]);
-                
+
                 if($request->producto_id != null){
                     $cont = 0;
                     while($cont < count($request->producto_id)){
@@ -244,7 +244,7 @@ class CompraController2 extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         $encargados = DB::table('encargados as en')
             ->join('empleados as e', 'en.idemp', '=', 'e.idemp')
@@ -270,7 +270,7 @@ class CompraController2 extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
         //dd($personalArea->nombrearea);
 
         $empleados = DB::table('empleados as e')
@@ -290,7 +290,7 @@ class CompraController2 extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
 
         $responsable = new EncargadosModel();
@@ -317,7 +317,7 @@ class CompraController2 extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
 
         $empleados = DB::table('empleados as e')
@@ -334,7 +334,7 @@ class CompraController2 extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         $responsable = EncargadosModel::find($request->input('idenc'));
         //$responsable = new EncargadosModel();

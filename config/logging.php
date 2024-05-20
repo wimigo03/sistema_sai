@@ -153,6 +153,12 @@ return [
             'path' => storage_path('logs/ingresos_compras.log'),
             'level' => 'debug',
         ],
+
+        'recursos_humanos' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/recursos_humanos.log'),
+            'level' => 'debug',
+        ],
     ],
 
 ];

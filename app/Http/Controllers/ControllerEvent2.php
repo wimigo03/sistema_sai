@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\AgendaModel;
-use App\Models\Event;
+use App\Models\Evento;
 use App\Models\Event2;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\ArchivoAgendaModel;
 
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 use Illuminate\Support\Facades\Auth;
 use PDF;
 use DB;
@@ -24,7 +24,7 @@ class ControllerEvent2 extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
         //dd($userdate);
         // return view("evento/form");
         return view("evento2/form", [
@@ -38,7 +38,7 @@ class ControllerEvent2 extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         // validacion
         //$this->validate($request, [
@@ -87,7 +87,7 @@ class ControllerEvent2 extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
         // llamar evento por id
         $area =  $personalArea->idarea;
 
@@ -102,7 +102,7 @@ class ControllerEvent2 extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         $event = Event2::find($idevent);
 
@@ -140,7 +140,7 @@ class ControllerEvent2 extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
         // $mess=mesnumero($id2);
         $mess = $this->getmesnumero($mes);
         // llamar evento por id
@@ -303,7 +303,7 @@ class ControllerEvent2 extends Controller
                $personal = User::find(Auth::user()->id);
                 $id = $personal->id;
                $userdate = User::find($id)->usuariosempleados;
-                $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+                $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
                 $datanew['evento'] = Event2::where('fecha', '=', $datafecha)
                 //->where('that', '=', 1)

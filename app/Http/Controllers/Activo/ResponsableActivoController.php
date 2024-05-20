@@ -9,8 +9,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateActivoResponsableRequest;
 use App\Models\ActualModel as ModelsActualModel;
 use App\Models\Model_Activos\ActualModel;
-use App\Models\AreasModel;
-use App\Models\EmpleadosModel;
+use App\Models\Area;
+use App\Models\Empleado;
 use App\Models\Model_Activos\AuxiliarModel;
 use App\Models\Model_Activos\UnidadadminModel;
 use App\Models\Model_Activos\Transferencia;
@@ -21,8 +21,8 @@ class ResponsableActivoController extends Controller
     public function index($id)
     {
         $unidad = UnidadadminModel::where('estadouni', 1)->first();
-        $empleado = EmpleadosModel::find($id);
-        $areas = AreasModel::all();
+        $empleado = Empleado::find($id);
+        $areas = Area::all();
         $activos = ActualModel::orderBy('id', 'desc')
         ->with([
             'codconts',
@@ -45,8 +45,8 @@ class ResponsableActivoController extends Controller
     public function search(Request $request, $id)
     {
         $unidad = UnidadadminModel::where('estadouni', 1)->first();
-        $empleado = EmpleadosModel::find($id);
-        $areas = AreasModel::all();
+        $empleado = Empleado::find($id);
+        $areas = Area::all();
         $auxiliar = null;
        if ($request->has('auxiliar') && !empty($request->auxiliar)) {
            $auxiliar = AuxiliarModel::query()
@@ -94,7 +94,7 @@ class ResponsableActivoController extends Controller
             ->where('unidad', $unidad->unidad)
             ->where('codemp', $id)
             ->orderBy('id', 'desc');
-            
+
         return DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('btn', 'activo.responsableActivo.btn')

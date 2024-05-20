@@ -4,15 +4,15 @@ namespace App\Http\Controllers\Activo;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\AreasModel;
+use App\Models\Area;
 use App\Models\Model_Activos\UnidadadminModel;
 use App\Models\Model_Activos\EntidadesModel;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
-use App\Models\FileModel;
+use App\Models\File;
 
 class OficinaController extends Controller
 {
@@ -25,7 +25,7 @@ class OficinaController extends Controller
     // {
     //     $entidad = EntidadesModel::where('entidad', 4601)->first();
     //     $unidad = UnidadadminModel::where('unidad', 'A')->first();
-    //     $idarea = AreasModel::where('idarea', $id)->with('empleados')->with('file')->get();
+    //     $idarea = Area::where('idarea', $id)->with('empleados')->with('file')->get();
     //     $idarea = DB::table('areas')
     //         ->where('idarea', $id)
     //         ->get();
@@ -94,7 +94,7 @@ class OficinaController extends Controller
 
     public function list()
     {
-        $customers = AreasModel::select(['idarea', 'nombrearea', 'estadoarea', 'idnivel']);
+        $customers = Area::select(['idarea', 'nombrearea', 'estadoarea', 'idnivel']);
         return Datatables::of($customers)
             ->addColumn('url', function ($customer) {
                 return route('detalle', $customer->idarea);
@@ -144,7 +144,7 @@ class OficinaController extends Controller
     // public function contratonuevo($id)
     // {
 
-    //     $area = AreasModel::where('estadoarea', '=', 1)->with('iPais_all')->get();
+    //     $area = Area::where('estadoarea', '=', 1)->with('iPais_all')->get();
     //     $niveles = DB::table('niveles')->get();
 
     //     return view('rechumanos.contrato.create', ["niveles" => $niveles, "area" => $area, "idarea" => $id]);
@@ -168,7 +168,7 @@ class OficinaController extends Controller
             ->where('e.idarea', '=', $idarea)
             ->get();
 
-        $areas = AreasModel::find($idarea);
+        $areas = Area::find($idarea);
         $nombrearea = $areas->nombrearea;
 
         return view('activo.oficina.lista', ["empleados" => $empleados, "idarea" => $idarea, "nombrearea" => $nombrearea]);

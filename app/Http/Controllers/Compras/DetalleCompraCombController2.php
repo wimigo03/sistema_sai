@@ -29,8 +29,8 @@ use Carbon\Carbon;
 use NumerosEnLetras;
 use PDF;
 
-use App\Models\EmpleadosModel;
-use App\Models\AreasModel;
+use App\Models\Empleado;
+use App\Models\Area;
 
 
 class DetalleCompraCombController2 extends Controller
@@ -57,7 +57,7 @@ class DetalleCompraCombController2 extends Controller
 
         $productos = DB::table('prodcomb')
                         ->where('estadoprodcomb',1)
-                        ->select(DB::raw("concat(codigoprodcomb,' // ',nombreprodcomb,' // ',detalleprodcomb,' 
+                        ->select(DB::raw("concat(codigoprodcomb,' // ',nombreprodcomb,' // ',detalleprodcomb,'
                         // PRECIO BS. ',precioprodcomb) as prodservicio"),'idprodcomb')
                         ->pluck('prodservicio','idprodcomb');
 
@@ -88,7 +88,7 @@ class DetalleCompraCombController2 extends Controller
             ->where('c.idcompracomb', '=', $id2)
             ->first();
 
-            
+
 
         return view('combustibles.detalleparcial.index',
         ['prodserv'=>$prodserv,
@@ -96,7 +96,7 @@ class DetalleCompraCombController2 extends Controller
         'valor_total2'=>$valor_total2,
         'idcompracomb'=>$id2,
         'estado'=>$estado,
-        
+
         'compras'=>$compras]);
     }
 
@@ -122,7 +122,7 @@ class DetalleCompraCombController2 extends Controller
 
         $productos = DB::table('prodcomb')
                         ->where('estadoprodcomb',1)
-                        ->select(DB::raw("concat(codigoprodcomb,' // ',nombreprodcomb,' // ',detalleprodcomb,' 
+                        ->select(DB::raw("concat(codigoprodcomb,' // ',nombreprodcomb,' // ',detalleprodcomb,'
                         // PRECIO BS. ',precioprodcomb) as prodservicio"),'idprodcomb')
                         ->pluck('prodservicio','idprodcomb');
 
@@ -153,7 +153,7 @@ class DetalleCompraCombController2 extends Controller
             ->where('c.idcompracomb', '=', $id2)
             ->first();
             $consumos = DB::table('compracomb as s')
-                     
+
             ->where('s.idcompracomb', $id2)
             ->select('s.idcompracomb','s.estadocompracomb')
             ->first();
@@ -190,7 +190,7 @@ class DetalleCompraCombController2 extends Controller
 
         $productos = DB::table('prodcomb')
                         ->where('estadoprodcomb',1)
-                        ->select(DB::raw("concat(codigoprodcomb,' // ',nombreprodcomb,' // ',detalleprodcomb,' 
+                        ->select(DB::raw("concat(codigoprodcomb,' // ',nombreprodcomb,' // ',detalleprodcomb,'
                         // PRECIO BS. ',precioprodcomb) as prodservicio"),'idprodcomb')
                         ->pluck('prodservicio','idprodcomb');
 
@@ -221,7 +221,7 @@ class DetalleCompraCombController2 extends Controller
             ->where('c.idcompracomb', '=', $id2)
             ->first();
             $consumos = DB::table('compracomb as s')
-                     
+
             ->where('s.idcompracomb', $id2)
             ->select('s.idcompracomb','s.estadocompracomb')
             ->first();
@@ -258,7 +258,7 @@ class DetalleCompraCombController2 extends Controller
 
         $productos = DB::table('prodcomb')
                         ->where('estadoprodcomb',1)
-                        ->select(DB::raw("concat(codigoprodcomb,' // ',nombreprodcomb,' // ',detalleprodcomb,' 
+                        ->select(DB::raw("concat(codigoprodcomb,' // ',nombreprodcomb,' // ',detalleprodcomb,'
                         // PRECIO BS. ',precioprodcomb) as prodservicio"),'idprodcomb')
                         ->pluck('prodservicio','idprodcomb');
 
@@ -289,7 +289,7 @@ class DetalleCompraCombController2 extends Controller
             ->where('c.idcompracomb', '=', $id2)
             ->first();
             $consumos = DB::table('compracomb as s')
-                     
+
             ->where('s.idcompracomb', $id2)
             ->select('s.idcompracomb','s.estadocompracomb')
             ->first();
@@ -310,7 +310,7 @@ class DetalleCompraCombController2 extends Controller
         $id = $personal->id;
 
         $detalle = TemporalModel::find($id);
-        
+
         $id2 = $detalle->idcompra;
 //accede a la tabla producto servicio
         $prod = $request->get('producto');
@@ -345,8 +345,8 @@ class DetalleCompraCombController2 extends Controller
                             -> where('d.idcompracomb', $id2)->get();
 
         if($detallito->isEmpty()){
-            $detalle->save();     
-            
+            $detalle->save();
+
             $request->session()->flash('message', 'Registro Agregado');
         }else{
             $request->session()->flash('message', 'El Item Ya existe en la Planilla');
@@ -355,11 +355,11 @@ class DetalleCompraCombController2 extends Controller
     }
 
     public function show($idcompracomb){
-        
+
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         $id3 = $personalArea->idarea;
 
@@ -429,7 +429,7 @@ class DetalleCompraCombController2 extends Controller
             'datos' => $datos,
             'encargado' => $encargado
          ]);
-    
+
 
 
 } catch (Exception $ex) {

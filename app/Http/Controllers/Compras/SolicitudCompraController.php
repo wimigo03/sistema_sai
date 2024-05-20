@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Models\Compra\SolicitudCompra;
 use App\Models\Compra\SolicitudCompraDetalle;
-use App\Models\AreasModel;
+use App\Models\Area;
 use App\Models\User;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 use App\Models\Compra\Item;
 use App\Models\Canasta\Dea;
 use App\Models\Compra\OrdenCompra;
@@ -22,7 +22,7 @@ class SolicitudCompraController extends Controller
     public function index()
     {
         $dea_id = Auth::user()->dea->id;
-        $areas = AreasModel::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
+        $areas = Area::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
         $users = User::where('dea_id',$dea_id)->pluck('name','id');
         $solicitudes_compras = SolicitudCompra::query()
                                                 ->ByDea($dea_id)
@@ -36,7 +36,7 @@ class SolicitudCompraController extends Controller
     public function search(Request $request)
     {
         $dea_id = $request->dea_id;
-        $areas = AreasModel::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
+        $areas = Area::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
         $users = User::where('dea_id',$dea_id)->pluck('name','id');
         $solicitudes_compras = SolicitudCompra::query()
                                                 ->ByDea($dea_id)
@@ -57,7 +57,7 @@ class SolicitudCompraController extends Controller
 
     public function create($dea_id)
     {
-        $empleado = EmpleadosModel::find(Auth::user()->idemp);
+        $empleado = Empleado::find(Auth::user()->idemp);
         $user = User::find(Auth::user()->id);
         $tipos = SolicitudCompra::TIPOS;
         return view('compras.solicitud_compra.create',compact('dea_id','empleado','user','tipos'));
@@ -322,7 +322,7 @@ class SolicitudCompraController extends Controller
     {
         $solicitud_compra = SolicitudCompra::find($solicitud_compra_id);
         $dea_id = $solicitud_compra->dea_id;
-        $empleado = EmpleadosModel::find(Auth::user()->idemp);
+        $empleado = Empleado::find(Auth::user()->idemp);
         $user = User::find(Auth::user()->id);
         $tipos = SolicitudCompra::TIPOS;
         $solicitud_compra_detalles = SolicitudCompraDetalle::where('solicitud_compra_id',$solicitud_compra_id)->where('estado','1')->get();

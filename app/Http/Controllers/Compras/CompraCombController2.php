@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\User;
-use App\Models\EmpleadosModel;
-use App\Models\AreasModel;
+use App\Models\Empleado;
+use App\Models\Area;
 use App\Models\TemporalModel;
 
 
@@ -28,11 +28,11 @@ use Carbon\Carbon;
 class CompraCombController2 extends Controller
 {
     public function index(){
-        
+
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         $compras = DB::table('compracomb as c')
                         ->join('proveedor as p', 'p.idproveedor', '=', 'c.idproveedor')
@@ -50,9 +50,9 @@ class CompraCombController2 extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
-       
+
 
 
         return view('combustibles.pedidoparcial.index',
@@ -63,7 +63,7 @@ class CompraCombController2 extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         $compras = DB::table('compracomb as c')
                         ->join('proveedor as p', 'p.idproveedor', '=', 'c.idproveedor')
@@ -71,8 +71,8 @@ class CompraCombController2 extends Controller
                         ->join('programacomb as prog', 'prog.idprogramacomb', '=', 'c.idprogramacomb')
                         ->join('areas as a', 'a.idarea', '=', 'c.idarea')
 
-                       
-                        
+
+
                         ->select('c.idcompracomb','c.estado1','c.controlinterno','a.nombrearea',
                         'c.objeto', 'c.justificacion','p.nombreproveedor','c.preventivo',
                         'c.numcompra','c.estadocompracomb','cat.codcatprogramatica','prog.nombreprograma')
@@ -84,9 +84,9 @@ class CompraCombController2 extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
-     
+
 
         return view('combustibles.pedidoparcial.index2',
         ['compras'=>$compras,'idd'=>$personalArea]);
@@ -100,7 +100,7 @@ class CompraCombController2 extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         $produc ="PRODUCTO";
         $Tipos=$produc;
@@ -112,7 +112,7 @@ class CompraCombController2 extends Controller
         ->pluck('nombrearea','idarea');
 
         $catprogramaticas = DB::table('catprogramaticacomb')
-        ->select(DB::raw("concat(codcatprogramatica,' : ',nombrecatprogramatica) 
+        ->select(DB::raw("concat(codcatprogramatica,' : ',nombrecatprogramatica)
         as programatica"),'idcatprogramaticacomb')
         ->where('estadocatprogramatica',1)
         ->pluck('programatica','idcatprogramaticacomb');
@@ -135,7 +135,7 @@ class CompraCombController2 extends Controller
 
 
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         $produc ="PRODUCTO";
         $Tipos=$produc;
@@ -176,7 +176,7 @@ class CompraCombController2 extends Controller
     }
 
     public function edit($idcompracomb){//dd($idcomp);
-        
+
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $detalle = TemporalModel::find($id);
@@ -198,7 +198,7 @@ class CompraCombController2 extends Controller
     }
 
     public function editable($idcompracomb){//dd($idcomp);
-        
+
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $detalle = TemporalModel::find($id);
@@ -231,8 +231,8 @@ class CompraCombController2 extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
- 
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
+
         $produc ="PRODUCTO";
         $Tipos=$produc;
 
@@ -265,7 +265,7 @@ class CompraCombController2 extends Controller
     }
 
     public function editrecha($idcompracomb){//dd($idcomp);
-        
+
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $detalle = TemporalModel::find($id);
@@ -287,7 +287,7 @@ class CompraCombController2 extends Controller
     }
 
     public function editalma($idcompracomb){//dd($idcomp);
-        
+
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $detalle = TemporalModel::find($id);
@@ -317,7 +317,7 @@ class CompraCombController2 extends Controller
         $compras->objeto = $request->input('objeto');
         $compras->justificacion = $request->input('justificacion');
 
-               
+
         $compras->idproveedor = $request->input('idproveedor');
         $compras->numcompra =$request->input('numcompra');
         $compras->preventivo = $request->input('preventivo');

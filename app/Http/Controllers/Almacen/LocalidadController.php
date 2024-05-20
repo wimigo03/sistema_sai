@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use App\Models\EmpleadosModel;
-use App\Models\AreasModel;
+use App\Models\Empleado;
+use App\Models\Area;
 use App\Models\User;
 class LocalidadController extends Controller
 {
@@ -24,18 +24,18 @@ class LocalidadController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
- 
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
+
      return view('almacenes.localidad.index', ['idd' => $personalArea]);
-  
+
     }
-  
+
     public function listado()
     {
-        $data = DB::table('localidad') 
+        $data = DB::table('localidad')
         -> where('estadolocalidad','=', 1);
        // -> get();
-  
+
         return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('btn','almacenes.localidad.btn')
@@ -43,7 +43,7 @@ class LocalidadController extends Controller
                 ->make(true);
   ;
     }
-  
+
     /**
      * Show the form for creating a new resource.
      *
@@ -65,10 +65,10 @@ class LocalidadController extends Controller
         $localidads ->codlocalidad = $request->input('codigo');
         $localidads ->nombrelocalidad = $request->input('nombre');
         $localidads ->distancialocalidad = $request->input('distancia');
-        
+
         $localidads -> estadolocalidad = 1;
-      
-      
+
+
         if($localidads->save()){
             $request->session()->flash('message', 'Registro Procesado Exitosamente');
             //echo 'Cliente salvo com sucesso';
@@ -78,7 +78,7 @@ class LocalidadController extends Controller
         }
         return redirect()->route('localidad.index');
     }
-  
+
     /**
      * Display the specified resource.
      *
@@ -89,7 +89,7 @@ class LocalidadController extends Controller
     {
         //
     }
-  
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -99,10 +99,10 @@ class LocalidadController extends Controller
     public function editar($idlocalidad)
     {
         $localidads = LocalidadModel::find($idlocalidad);
-    
+
         return view('almacenes/localidad/edit')->with('localidads', $localidads);
     }
-  
+
     /**
      * Update the specified resource in storage.
      *
@@ -113,7 +113,7 @@ class LocalidadController extends Controller
     public function update(Request $request, $idlocalidad)
     {
         $localidads = LocalidadModel::find($idlocalidad);
-        
+
         $localidads -> codlocalidad = $request->input('codigo');
         $localidads -> nombrelocalidad = $request->input('nombre');
         $localidads ->distancialocalidad = $request->input('distancia');
@@ -125,7 +125,7 @@ class LocalidadController extends Controller
       }
         return redirect('almacenes/localidad/index');
     }
-  
+
     /**
      * Remove the specified resource from storage.
      *
@@ -137,4 +137,4 @@ class LocalidadController extends Controller
         //
     }
   }
-     
+

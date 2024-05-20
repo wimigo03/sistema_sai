@@ -12,10 +12,10 @@ use App\Models\Canasta\Dea;
 /*use App\Models\Compra\OrdenCompra;
 use App\Models\Compra\OrdenCompraDetalle;
 use App\Models\Compra\SolicitudCompra;
-use App\Models\AreasModel;
+use App\Models\Area;
 use App\Models\Compra\Proveedor;
 
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 use App\Models\Compra\Item;
 
 use App\Models\Compra\CategoriaProgramatica;

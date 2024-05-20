@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Activo;
 
 use App\Http\Controllers\Controller;
 use App\Models\Model_Activos\AuxiliarModel;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
@@ -25,7 +25,7 @@ class ResponsableController extends Controller
 
     public function listado($id)
     {
-        $data =  EmpleadosModel::query()
+        $data =  Empleado::query()
             ->join('areas as a', 'a.idarea', '=', 'empleados.idarea')
             ->join('file as f', 'f.idfile', '=', 'empleados.idfile')
             ->select('a.nombrearea', 'f.numfile', 'empleados.idemp', 'empleados.nombres', 'empleados.ap_pat', 'empleados.ap_mat', 'f.cargo', 'f.nombrecargo', 'f.habbasico', 'f.categoria', 'f.niveladm', 'f.clase', 'f.nivelsal', 'empleados.fechingreso', 'empleados.natalicio', 'empleados.edad', 'empleados.ci', 'empleados.poai', 'empleados.exppoai', 'empleados.decjurada', 'empleados.expdecjurada', 'empleados.sippase', 'empleados.expsippase', 'empleados.servmilitar', 'empleados.idioma', 'empleados.induccion', 'empleados.expinduccion', 'empleados.progvacacion', 'empleados.expprogvacacion', 'empleados.vacganadas', 'empleados.vacpendientes', 'empleados.vacusasdas', 'empleados.segsalud', 'empleados.inamovilidad', 'empleados.aservicios', 'empleados.cvitae', 'empleados.telefono', 'empleados.biometrico', 'empleados.gradacademico', 'empleados.rae', 'empleados.regprofesional', 'empleados.evdesempenio', 'empleados.rejap','empleados.estadoemp1')

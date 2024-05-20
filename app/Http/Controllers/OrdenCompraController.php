@@ -14,8 +14,8 @@ use App\Models\DetalleCompraModel;
 use App\Models\Canasta\Dea;
 use App\Models\ProveedoresModel;*/
 /*use App\Models\User;
-use App\Models\EmpleadosModel;
-use App\Models\AreasModel;
+use App\Models\Empleado;
+use App\Models\Area;
 use App\Models\TemporalModel;
 use App\Models\EncargadosModel;
 use App\Models\CatProgModel;
@@ -28,9 +28,9 @@ class OrdenCompraController extends Controller
 {
     public function index()
     {dd("okoko");
-        $empleado = EmpleadosModel::find(Auth::user()->idemp);
+        $empleado = Empleado::find(Auth::user()->idemp);
         $estados = CompraModel::ESTADOS_COMPRA;
-        $areas = AreasModel::pluck('nombrearea','idarea');
+        $areas = Area::pluck('nombrearea','idarea');
         $programas = ProgramaModel::pluck('nombreprograma','idprograma');
         $programaticas = CatProgModel::select(DB::raw("concat(codcatprogramatica,'_',nombrecatprogramatica) as categoria_programatica"),'idcatprogramatica')->pluck('categoria_programatica','idcatprogramatica');
         $compras = CompraModel::query()

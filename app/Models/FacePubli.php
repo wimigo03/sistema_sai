@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\EmpleadosModel;
-use App\Models\AreasModel;
+use App\Models\Empleado;
+use App\Models\Area;
 use App\Models\NivelModel;
 use App\Models\PersonalFace;
 
@@ -31,7 +31,7 @@ class FacePubli extends Model
     }
 
     public function area(){
-        return $this->belongsTo(AreasModel::class,'id_area','idarea');
+        return $this->belongsTo(Area::class,'id_area','idarea');
     }
 
     public function nivel(){

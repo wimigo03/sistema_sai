@@ -196,7 +196,7 @@
                                         {{ $userdate->nombres }} {{ $userdate->ap_pat }} {{ $userdate->ap_mat }}
                                         <br>
                                         <strong>
-                                            {{ $userdate->file->nombrecargo }}
+                                            {{ $userdate->file_cargo }}
                                         </strong>
                                     </div>
                                 </td>

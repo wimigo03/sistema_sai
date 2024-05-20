@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 
 
 use App\Models\User;
-use App\Models\EmpleadosModel;
-use App\Models\AreasModel;
+use App\Models\Empleado;
+use App\Models\Area;
 
 use App\Models\Almacen\Ingreso\IngresoModel;
 use App\Models\Almacen\Ingreso\ReporteAreaModel;
@@ -36,20 +36,20 @@ class ReporteAreasController extends Controller
 
         $id2 = $detalle->idingreso;
         $id3 = $detalle->idarea;
-      
+
 
        // $prodserv = DB::table('reportarea as rr')
 
 
         $prodserv = DB::table('detallevale as d')
 
-        ->join('ingreso as ing', 'ing.idingreso', '=', 'd.idingreso') 
+        ->join('ingreso as ing', 'ing.idingreso', '=', 'd.idingreso')
         ->join('vale as va', 'va.idvale', '=', 'd.idvale')
 
         ->join('areas as a', 'a.idarea', '=', 'va.idarea')
 
 
-       
+
         // ->select('rr.idreportarea',
         ->select(
          'ing.nombreprograma', 'ing.nombreproducto',
@@ -63,23 +63,23 @@ class ReporteAreasController extends Controller
 
         ->get();
 
-     
+
 
     $ingresos = DB::table('ingreso')
         ->where('estadocompracomb', 2)
         ->select(DB::raw("concat(idingreso,' // ',nombreproducto,' // ',nombreprograma,' // salida LTRS. ',cantidadsalida) as prodservicio"), 'idingreso')
         ->pluck('prodservicio', 'idingreso');
-        
-   
+
+
     $areas = DB::table('areas')
-     
+
     ->where('estadoarea', 1)
     ->select(DB::raw("concat(nombrearea,' // ',idarea) as prodservicios"), 'idarea')
     ->pluck('prodservicios', 'idarea');
 
-    return view('almacenes.reporte.index', 
-    ['prodserv' => $prodserv, 
-    'ingresos' => $ingresos, 
+    return view('almacenes.reporte.index',
+    ['prodserv' => $prodserv,
+    'ingresos' => $ingresos,
     'areas' => $areas]);
 }
 
@@ -93,14 +93,14 @@ public function store(Request $request)
         $prod = $request->get('ingreso');
         $proddos = $request->get('area');
 
-      
-        
+
+
         $detallereport = new ReporteAreaModel();
         $detallereport->idingreso = $request->get('ingreso');
         $detallereport->idarea = $request->get('area');
- 
+
         $detallereport->save();
-        
+
         if(is_null($detalle)){
             $detalle = new Temporal6Model;
             $detalle->idtemporal6=$id;
@@ -126,7 +126,7 @@ public function store(Request $request)
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         $tipoarea = new TipoAreaModel;
         $tipoarea->idarea = $personalArea->idarea;
@@ -152,7 +152,7 @@ public function store(Request $request)
         return redirect()->route('archivos2.tipo');
     }
 
-    
+
     public function delete($idtipoarea)
     {
         $tipoarea =TipoAreaModel::find($idtipoarea);

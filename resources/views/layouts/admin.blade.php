@@ -21,6 +21,7 @@
     <link href="{{ asset('dashboard/css/owl.carousel.min.css') }}" rel="stylesheet">
     <link href="{{ asset('dashboard/css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('font-awesome_6.0/css/all.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/treeview/style.min.css') }}" rel="stylesheet">
     <link href="{{ asset('datepicker/datepicker.min.css') }}" rel="stylesheet">
     <link href="{{ asset('dashboard/css/tooltips.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/notificaciones/Lobibox.min.css') }}" rel="stylesheet">
@@ -78,6 +79,7 @@
     <script src="{{ asset('js/jquery-ui-1.13.2/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('datepicker/datepicker.min.js') }}"></script>
     <script src="{{ asset('datepicker/datepicker.es.js') }}"></script>
+    <script src="{{ asset('js/treeview/jstree.min.js') }}"></script>
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/cleave.min.js"
         integrity="sha512-KaIyHb30iXTXfGyI9cyKFUIRSSuekJt6/vqXtyQKhQP6ozZEGY8nOtRS6fExqE4+RbYHus2yGyYg1BrqxzV6YA=="

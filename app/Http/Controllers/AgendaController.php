@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 use Illuminate\Http\Request;
 use App\Models\AgendaModel;
 use App\Models\AnioModel;
@@ -51,7 +51,7 @@ class AgendaController extends Controller
 
         }
         //dd($data2);
-        return view('agenda.index');
+        return view('agenda.ej.index');
         //return view("archivos2.index2")->with("idd", $personalArea);
 
         // return view('archivos2.index');
@@ -83,7 +83,7 @@ class AgendaController extends Controller
         //$personal = User::find(Auth::user()->id);
         //$id = $personal->id;
         // $userdate = User::find($id)->usuariosempleados;
-        // $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        // $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         $fecha = substr($request->fecha, 6, 4) . '-' . substr($request->fecha, 3, 2) . '-' . substr($request->fecha, 0, 2);
         //$fecha_final = substr($request->fechafin, 6, 4) . '-' . substr($request->fechafin, 3, 2) . '-' . substr($request->fechafin, 0, 2);
@@ -431,7 +431,7 @@ class AgendaController extends Controller
 
         $agenda->delete();
 
-        return redirect()->route('agenda.index');
+        return redirect()->route('agenda.ej.index');
     }
 
 

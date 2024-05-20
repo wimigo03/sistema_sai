@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Activo;
 
 use App\Http\Controllers\Controller;
-use App\Models\AreasModel;
-use App\Models\EmpleadosModel;
+use App\Models\Area;
+use App\Models\Empleado;
 use App\Models\Model_Activos\ActualModel;
 use App\Models\Model_Activos\Adeudo;
 use App\Models\Model_Activos\AuxiliarModel;
@@ -29,7 +29,7 @@ class ReportesController extends Controller
         $unidades = UnidadadminModel::all();
         $unidad = UnidadadminModel::where('estadouni', 1)->first();
         $codcont = CodcontModel::all();
-        $areas = AreasModel::all();
+        $areas = Area::all();
 
         $activos = DB::table('actual')
             ->join('unidadadmin', 'actual.unidad', '=', 'unidadadmin.unidad')
@@ -42,7 +42,7 @@ class ReportesController extends Controller
 
     public function asignacion(Request $request)
     {
-        $empleado = EmpleadosModel::find($request->input('empleado'));
+        $empleado = Empleado::find($request->input('empleado'));
         $unidad = UnidadadminModel::where('estadouni', 1)->first();
         $entidad = EntidadesModel::where('entidad', 4601)->first();
         $activosSeleccionados = json_decode($request->input('activos'), true);
@@ -94,7 +94,7 @@ class ReportesController extends Controller
 
     public function devolucion(Request $request)
     {
-        $empleado = EmpleadosModel::find($request->input('empleado'));
+        $empleado = Empleado::find($request->input('empleado'));
         $unidad = UnidadadminModel::where('estadouni', 1)->first();
         $entidad = EntidadesModel::where('entidad', 4601)->first();
         $activosSeleccionados = json_decode($request->input('activos'), true);
@@ -129,7 +129,7 @@ class ReportesController extends Controller
 
     public function kardex(Request $request)
     {
-        $empleado = EmpleadosModel::find($request->input('empleado'));
+        $empleado = Empleado::find($request->input('empleado'));
         $unidad = UnidadadminModel::where('estadouni', 1)->first();
         $entidad = EntidadesModel::where('entidad', 4601)->first();
         $activosSeleccionados = json_decode($request->input('activos'), true);
@@ -173,7 +173,7 @@ class ReportesController extends Controller
         $mes = $meses[($fecha->format('n')) - 1];
         $fecha_hoy = ucfirst($dia_semana) . ' ' . $fecha->format('d') . ' de ' . $mes . ' del ' . $fecha->format('Y') . ' Hora: ' . $fecha->format('H:i:s');
         $adeudo = Adeudo::find($id);
-        $empleado = EmpleadosModel::find($adeudo->empleado_id);
+        $empleado = Empleado::find($adeudo->empleado_id);
         $fecha_inicio = \Carbon\Carbon::parse($empleado->adeudo->fecha_inicio)->format('d/m/Y');
         $fecha_fin = \Carbon\Carbon::parse($empleado->adeudo->fecha_fin)->format('d/m/Y');
 
@@ -194,7 +194,7 @@ class ReportesController extends Controller
         return $pdf->stream($fileName);
     }
 
-    
+
     public function reporte1Pdf(Request $request)
     {
         $unidadSeleccionado = $request->input('unidad');
@@ -453,7 +453,7 @@ class ReportesController extends Controller
         $unidadSeleccionado = $request->input('unidad');
         $unidad = UnidadadminModel::where('unidad', $unidadSeleccionado)->first();
         $entidad = EntidadesModel::where('entidad', 4601)->first();
-        $oficina = AreasModel::where('idarea', $request->input('oficina_id'))->first();
+        $oficina = Area::where('idarea', $request->input('oficina_id'))->first();
         $activosSeleccionados = json_decode($request->input('activos'), true);
         $activos = ActualModel::with([
             'codconts',
@@ -539,8 +539,8 @@ class ReportesController extends Controller
         $unidadSeleccionado = $request->input('unidad');
         $unidad = UnidadadminModel::where('unidad', $unidadSeleccionado)->first();
         $entidad = EntidadesModel::where('entidad', 4601)->first();
-        $oficina = AreasModel::where('idarea', $request->input('oficina_id'))->first();
-        $responsable = EmpleadosModel::where('idemp', $request->input('empleado_id'))->first();
+        $oficina = Area::where('idarea', $request->input('oficina_id'))->first();
+        $responsable = Empleado::where('idemp', $request->input('empleado_id'))->first();
         $activosSeleccionados = json_decode($request->input('activos'), true);
         $activos = ActualModel::with([
             'codconts',
@@ -704,8 +704,8 @@ class ReportesController extends Controller
     {
         $entidad = EntidadesModel::where('entidad', 4601)->first();
         $unidad = UnidadadminModel::where('unidad', $request->input('unidad'))->first();
-        $responsables = EmpleadosModel::with('file')->where('idemp', $request->input('empleado_id'))->get()->toArray();
-        $oficina = AreasModel::where('idarea', $request->input('oficina_id'))->first();
+        $responsables = Empleado::with('file')->where('idemp', $request->input('empleado_id'))->get()->toArray();
+        $oficina = Area::where('idarea', $request->input('oficina_id'))->first();
         $activosPorPagina = array_chunk($responsables, 1);
         $pdf = PDF::loadView('activo.reportes.rep7Pdf', [
             'activosPorPagina' => $activosPorPagina,
@@ -841,7 +841,7 @@ class ReportesController extends Controller
         $unidadSeleccionado = $request->input('unidad');
         $unidad = UnidadadminModel::where('unidad', $unidadSeleccionado)->first();
         $entidad = EntidadesModel::where('entidad', 4601)->first();
-        $responsable = EmpleadosModel::where('idemp', $request->input('empleado_id'))->first();
+        $responsable = Empleado::where('idemp', $request->input('empleado_id'))->first();
         $activosSeleccionados = json_decode($request->input('activos'), true);
         $activos = ActualModel::with([
             'codconts',
@@ -998,7 +998,7 @@ class ReportesController extends Controller
         $unidadSeleccionado = $request->input('unidad');
         $unidad = UnidadadminModel::where('unidad', $unidadSeleccionado)->first();
         $entidad = EntidadesModel::where('entidad', 4601)->first();
-        $responsable = EmpleadosModel::where('idemp', $request->input('empleado_id'))->first();
+        $responsable = Empleado::where('idemp', $request->input('empleado_id'))->first();
         $activosSeleccionados = json_decode($request->input('activos'), true);
         $activos = ActualModel::with([
             'codconts',
@@ -1139,7 +1139,7 @@ class ReportesController extends Controller
         $unidad = UnidadadminModel::where('unidad', $unidadSeleccionado)->first();
         $entidad = EntidadesModel::where('entidad', 4601)->first();
         $grupo = CodcontModel::where('codcont', $request->input('grupo_id'))->first();
-        $responsable = EmpleadosModel::where('idemp', $request->input('empleado_id'))->first();
+        $responsable = Empleado::where('idemp', $request->input('empleado_id'))->first();
         $activosSeleccionados = json_decode($request->input('activos'), true);
         $activos = ActualModel::with([
             'auxiliars' => function ($query) {

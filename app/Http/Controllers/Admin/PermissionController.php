@@ -16,8 +16,28 @@ use DB;
 
 class PermissionController extends Controller
 {
+    private function completar_datos()
+    {
+        $permissions = Permission::get();
+        foreach($permissions as $datos){
+            $permission = Permission::find($datos->id);
+            if (strpos($datos->name, ".") !== false) {
+                $title = explode(".", $datos->name);
+            } else {
+                $title[0] = 'pendiente';
+            }
+            $permission->update([
+                'title' => $title[0],
+                'descripcion' => $datos->name
+            ]);
+        }
+
+        dd("completar_datos finalizado...");
+    }
+
     public function index()
     {
+        //$this->completar_datos();
         $dea_id = Auth::user()->dea->id;
         $titulos = Permission::select('title')
                                     ->where('dea_id',$dea_id)
@@ -105,7 +125,17 @@ class PermissionController extends Controller
     public function show($permission_id)
     {
         $permission = Permission::find($permission_id);
-        $roles_permissions = DB::table('role_permissions')->where('permission_id',$permission_id)->get();
+        $roles_permissions = DB::table('role_permissions as a')
+                                    ->join('roles as b','b.id','a.role_id')
+                                    ->where('a.permission_id',$permission_id)
+                                    ->select('a.role_id','a.permission_id','b.title')
+                                    ->get();
         return view('admin.permissions.show',compact('permission','roles_permissions'));
+    }
+
+    public function delete($role_id, $permission_id)
+    {
+        $role_permission = DB::table('role_permissions')->where('role_id',$role_id)->where('permission_id',$permission_id)->delete();
+        return redirect()->route('permissions.show',$permission_id)->with('info_message','Permiso eliminado...');
     }
 }

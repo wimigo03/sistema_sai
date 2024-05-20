@@ -35,10 +35,13 @@ class LoginController extends Controller
 
         $credentials = $request->only('name', 'password');
         if (Auth::attempt($credentials)) {
-            return redirect()->route('home.index');
+            $user = Auth::user();
+            if ($user->estadouser == 1) {
+                return redirect()->route('home.index');
+            }
         }
-
-        return redirect()->route('login')->with(['danger_message' => 'Credenciales inválidas']);
+        Auth::logout();
+        return redirect()->route('login')->with('error_message','[Credenciales inválidas. Por favor comunicarse con Recursos Humanos[2]]');
     }
 
     public function logout()

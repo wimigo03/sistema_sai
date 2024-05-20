@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Compra\ProveedorModel;
-use App\Models\AreasModel;
+use App\Models\Area;
 use App\Models\CatProgModel;
 use App\Models\ProgramaModel;
 use App\Models\User;
@@ -48,7 +48,7 @@ class CompraModel extends Model
     }
 
     public function area(){
-        return $this->belongsTo(AreasModel::class,'idarea','idarea');
+        return $this->belongsTo(Area::class,'idarea','idarea');
     }
 
     public function cat_prog(){
@@ -69,35 +69,35 @@ class CompraModel extends Model
 
     public function getEstadoAttribute(){
         switch ($this->estadocompra) {
-            case '1': 
+            case '1':
                 return "PENDIENTE";
-            case '2': 
+            case '2':
                 return "APROBADO";
-            case '3': 
+            case '3':
                 return "RECHAZADO";
-            case '4': 
+            case '4':
                 return "ANULADO";
         }
     }
 
     public function getColorEstadoAttribute(){
         switch ($this->estadocompra) {
-            case '1': 
+            case '1':
                 return "text-secondary";
-            case '2': 
+            case '2':
                 return "text-success";
-            case '3': 
+            case '3':
                 return "text-danger";
-            case '4': 
+            case '4':
                 return "text-warning";
         }
     }
 
     public function getTipoCompraAttribute(){
         switch ($this->tipo) {
-            case '1': 
+            case '1':
                 return "PRODUCTO";
-            case '2': 
+            case '2':
                 return "SERVICIO";
         }
     }

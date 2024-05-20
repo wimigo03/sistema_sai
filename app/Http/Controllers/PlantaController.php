@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\EmpleadosModel;
-use App\Models\AreasModel;
+use App\Models\Empleado;
+use App\Models\Area;
 use App\Models\Customer;
-use App\Models\FileModel;
+use App\Models\File;
 use App\Models\MovimientosPtModel;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests;
@@ -26,7 +26,7 @@ class PlantaController extends Controller
 
     public function list()
     {
-        $customers = AreasModel::select(['idarea', 'nombrearea', 'estadoarea', 'idnivel']);
+        $customers = Area::select(['idarea', 'nombrearea', 'estadoarea', 'idnivel']);
         return Datatables::of($customers)
             ->addColumn('details_url', function ($customer) {
                 return route('planta_detalle', $customer->idarea);
@@ -53,15 +53,15 @@ class PlantaController extends Controller
     }
 
     public function detallePlanta(){
-        $empleadoss = EmpleadosModel::where('tipo','1')->orderBy('fechingreso','desc')->paginate(10);
-        
+        $empleadoss = Empleado::where('tipo','1')->orderBy('fechingreso','desc')->paginate(10);
+
         $empleados = DB::table('empleados as e')
             ->join('areas as a', 'a.idarea', '=', 'e.idarea')
             ->join('file as f', 'f.idfile', '=', 'e.idfile')
-            ->select('a.nombrearea', 'f.numfile', 'e.idemp', 'e.nombres', 'e.ap_pat', 'e.ap_mat', 'f.cargo', 'f.nombrecargo', 'f.habbasico', 'f.categoria', 
-            'f.niveladm', 'f.clase', 'f.nivelsal', 'e.fechingreso', 'e.natalicio', 'e.edad', 'e.ci', 'e.poai', 'e.exppoai', 'e.decjurada', 'e.expdecjurada', 
-            'e.sippase', 'e.expsippase', 'e.servmilitar', 'e.idioma', 'e.induccion', 'e.expinduccion', 'e.progvacacion', 'e.expprogvacacion', 'e.vacganadas', 
-            'e.vacpendientes', 'e.vacusasdas', 'e.segsalud', 'e.inamovilidad', 'e.aservicios', 'e.cvitae', 'e.telefono', 'e.biometrico', 'e.gradacademico', 
+            ->select('a.nombrearea', 'f.numfile', 'e.idemp', 'e.nombres', 'e.ap_pat', 'e.ap_mat', 'f.cargo', 'f.nombrecargo', 'f.habbasico', 'f.categoria',
+            'f.niveladm', 'f.clase', 'f.nivelsal', 'e.fechingreso', 'e.natalicio', 'e.edad', 'e.ci', 'e.poai', 'e.exppoai', 'e.decjurada', 'e.expdecjurada',
+            'e.sippase', 'e.expsippase', 'e.servmilitar', 'e.idioma', 'e.induccion', 'e.expinduccion', 'e.progvacacion', 'e.expprogvacacion', 'e.vacganadas',
+            'e.vacpendientes', 'e.vacusasdas', 'e.segsalud', 'e.inamovilidad', 'e.aservicios', 'e.cvitae', 'e.telefono', 'e.biometrico', 'e.gradacademico',
             'e.rae', 'e.regprofesional', 'e.evdesempenio')
             ->where('e.tipo', '=', 1)
             ->orderBy('e.idemp','asc')
@@ -71,7 +71,7 @@ class PlantaController extends Controller
     }
 
     public function detallePlantaShow($id){
-        $empleado = EmpleadosModel::where('idemp',$id)->first();
+        $empleado = Empleado::where('idemp',$id)->first();
         return view('rechumanos.planta.lista2-show', compact('empleado'));
     }
 
@@ -82,10 +82,10 @@ class PlantaController extends Controller
 
     public function plantanuevo($id)
     {
-        $area = AreasModel::where('estadoarea', 1)->with('iPais_all')->get();
+        $area = Area::where('estadoarea', 1)->with('iPais_all')->get();
         $niveles = DB::table('niveles')->get();
         $idarea = $id;
-        $area_actual = AreasModel::find($id);
+        $area_actual = Area::find($id);
         $files = DB::table('areas as a')
             ->join('file as b', 'b.idarea', 'a.idarea')
             ->where('a.estadoarea', 1)
@@ -105,7 +105,7 @@ class PlantaController extends Controller
             ->select('a.nombrearea', 'f.numfile', 'e.idemp', 'e.nombres', 'e.ap_pat', 'e.ap_mat', 'f.cargo', 'f.nombrecargo', 'f.habbasico', 'f.categoria', 'f.niveladm', 'f.clase', 'f.nivelsal', 'e.fechingreso', 'e.natalicio', 'e.edad', 'e.ci', 'e.poai', 'e.exppoai', 'e.decjurada', 'e.expdecjurada', 'e.sippase', 'e.expsippase', 'e.servmilitar', 'e.idioma', 'e.induccion', 'e.expinduccion', 'e.progvacacion', 'e.expprogvacacion', 'e.vacganadas', 'e.vacpendientes', 'e.vacusasdas', 'e.segsalud', 'e.inamovilidad', 'e.aservicios', 'e.cvitae', 'e.telefono', 'e.biometrico', 'e.gradacademico', 'e.rae', 'e.regprofesional', 'e.evdesempenio', 'e.rejap')
             ->where('e.tipo', 1)
             ->where('e.idarea', $idarea)->get();
-        $areas = AreasModel::find($idarea);
+        $areas = Area::find($idarea);
         $nombrearea = $areas->nombrearea;
 
         return view('rechumanos.planta.lista', compact('empleados', 'idarea', 'nombrearea'));
@@ -114,7 +114,7 @@ class PlantaController extends Controller
 
     public function guardarplanta(Request $request)
     {
-        $empleados = new EmpleadosModel();
+        $empleados = new Empleado();
         $empleados->nombres = $request->input('nombres');
         $empleados->ap_pat = $request->input('ap_pat');
         $empleados->ap_mat = $request->input('ap_mat');
@@ -156,7 +156,7 @@ class PlantaController extends Controller
         $empleados->tipo = 1;
         $empleados->save();
 
-        $file = FileModel::find($request->input('idfile'));
+        $file = File::find($request->input('idfile'));
         $file->estadofile = 2;
         $file->save();
 
@@ -167,9 +167,9 @@ class PlantaController extends Controller
     public function editarplanta($idempledoPlanta)
     {
 
-        $area = AreasModel::where('estadoarea', '=', 1)->with('iPais_all')->get();
+        $area = Area::where('estadoarea', '=', 1)->with('iPais_all')->get();
         $niveles = DB::table('niveles')->get();
-        $empleados = EmpleadosModel::find($idempledoPlanta);
+        $empleados = Empleado::find($idempledoPlanta);
         $areaactual = DB::table('areas as a')
             ->join('empleados as e', 'e.idarea', '=', 'a.idarea')
             ->select('a.nombrearea')
@@ -182,7 +182,7 @@ class PlantaController extends Controller
 
     public function actualizarPlanta(Request $request)
     {
-        $empleados = EmpleadosModel::find($request->input('idemp'));
+        $empleados = Empleado::find($request->input('idemp'));
         $empleados->nombres = $request->input('nombres');
         $empleados->ap_pat = $request->input('ap_pat');
         $empleados->ap_mat = $request->input('ap_mat');
@@ -233,9 +233,9 @@ class PlantaController extends Controller
         $empleados->save();
 
         if ($request->input('idfile') != $request->input('idfileoriginal')) {
-            $file = FileModel::find($request->input('idfile'));
+            $file = File::find($request->input('idfile'));
             $file->estadofile = 2;
-            $file2 = FileModel::find($request->input('idfileoriginal'));
+            $file2 = File::find($request->input('idfileoriginal'));
             $file2->estadofile = 1;
             $file->save();
             $file2->save();
@@ -250,9 +250,9 @@ class PlantaController extends Controller
     public function editarplanta2($idempledoPlanta)
     {
 
-        $area = AreasModel::where('estadoarea', '=', 1)->with('iPais_all')->get();
+        $area = Area::where('estadoarea', '=', 1)->with('iPais_all')->get();
         $niveles = DB::table('niveles')->get();
-        $empleados = EmpleadosModel::find($idempledoPlanta);
+        $empleados = Empleado::find($idempledoPlanta);
 
         $areaactual = DB::table('areas as a')
             ->join('empleados as e', 'e.idarea', '=', 'a.idarea')
@@ -268,7 +268,7 @@ class PlantaController extends Controller
 
     public function deletePlanta(Request $request)
     {
-        $empleados = EmpleadosModel::find($request->input('idemp'));
+        $empleados = Empleado::find($request->input('idemp'));
         $empleados->nombres = $request->input('nombres');
         $empleados->ap_pat = $request->input('ap_pat');
         $empleados->ap_mat = $request->input('ap_mat');
@@ -319,9 +319,9 @@ class PlantaController extends Controller
         $empleados->save();
 
         if ($request->input('idfile') != $request->input('idfileoriginal')) {
-            $file = FileModel::find($request->input('idfile'));
+            $file = File::find($request->input('idfile'));
             $file->estadofile = 2;
-            $file2 = FileModel::find($request->input('idfileoriginal'));
+            $file2 = File::find($request->input('idfileoriginal'));
             $file2->estadofile = 1;
             $file->save();
             $file2->save();
@@ -331,12 +331,12 @@ class PlantaController extends Controller
                 ->select('f.numfile', 'f.cargo', 'f.habbasico', 'f.nombrecargo')
                 ->where('f.idfile', '=', $request->input('idfileoriginal'))->first();
 
-            // $fileactual = FileModel::find($request->input('idfile'))->first();
+            // $fileactual = File::find($request->input('idfile'))->first();
             $filenuevo = DB::table('file as f')
                 ->select('f.numfile', 'f.cargo', 'f.habbasico', 'f.nombrecargo')
                 ->where('f.idfile', '=', $request->input('idfile'))->first();
 
-            //$areaactual = AreasModel::find($request->input('idarea'))->first();
+            //$areaactual = Area::find($request->input('idarea'))->first();
             $areaactual = DB::table('areas as a')
                 ->select('a.nombrearea')
                 ->where('a.idarea', '=', $request->input('idarea'))->first();

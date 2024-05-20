@@ -29,7 +29,7 @@ use PDF;
 use Carbon\Carbon;
 
 use App\Models\User;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 
 class EntregasV2Controller extends Controller
 {
@@ -450,11 +450,11 @@ class EntregasV2Controller extends Controller
             'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
         );
 
-        $fecha_actual = $meses[date('n')] . '-' . date('Y');
-        $personal = User::find(Auth::user()->id);
-        $id = $personal->id;
-        $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+                                        $fecha_actual=$meses[date('n')] . '-' . date('Y');
+                                        $personal = User::find(Auth::user()->id);
+                                        $id = $personal->id;
+                                        $userdate = User::find($id)->usuariosempleados;
+                                        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         $beneficiarios = Beneficiario::where('dea_id', Auth::user()->dea->id)
             ->get();
@@ -545,18 +545,38 @@ class EntregasV2Controller extends Controller
         //dd($entregas);
         $entrega2 = Entrega::find($id_entrega);
 
-        $entrega2->estado = 2;
-        $entrega2->save();
+                        $personal = User::find(Auth::user()->id);
+                        $id = $personal->id;
+                        $userdate = User::find($id)->usuariosempleados;
+                        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
+
+                        $beneficiarios = Beneficiario::where('dea_id',Auth::user()->dea->id)
+                        ->get();
+
+                         $entrega = Entrega::where('dea_id',Auth::user()->dea->id)
+                        ->where('id','=',$id_entrega)
+                         //->where('idBarrio',$request->barrio3)
+                         //->take(2)
+                         ->first();
+                        //dd($entregas);
+                        $entrega2 = Entrega::find($id_entrega);
+
+                        $entrega2->estado = 2;
+                        $entrega2->save();
 
 
 
 
 
-        // $pdf = PDF::loadView('canasta_v2/entregas/generarboleta', compact(['entregas']));
-        //$pdf->setPaper('LETTER', 'portrait'); //landscape
-        //return $pdf->stream();
-        //dd($entregas);
-        //return view('canasta_v2/entregas/generarboleta2', ["entrega" => $entregas,"userdate" => $userdate,"personalArea" => $personalArea]);
+                         // $pdf = PDF::loadView('canasta_v2/entregas/generarboleta', compact(['entregas']));
+                        //$pdf->setPaper('LETTER', 'portrait'); //landscape
+                        //return $pdf->stream();
+                        //dd($entregas);
+                                        //return view('canasta_v2/entregas/generarboleta2', ["entrega" => $entregas,"userdate" => $userdate,"personalArea" => $personalArea]);
+
+                                        return view('canasta_v2.entregas/generarboleta2', compact('fecha_actual','entrega','userdate','personalArea'));
+                                        //return back();
+                                    }
 
         return view('canasta_v2.entregas/generarboleta2', compact('fecha_actual','entrega','userdate','personalArea'));
         //return back();
@@ -664,11 +684,11 @@ class EntregasV2Controller extends Controller
             'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
         );
 
-        $fecha_actual = $meses[date('n')] . '-' . date('Y');
-        $personal = User::find(Auth::user()->id);
-        $id = $personal->id;
-        $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+                                        $fecha_actual=$meses[date('n')] . '-' . date('Y');
+                                        $personal = User::find(Auth::user()->id);
+                                        $id = $personal->id;
+                                        $userdate = User::find($id)->usuariosempleados;
+                                        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
         $beneficiarios = Beneficiario::where('dea_id', Auth::user()->dea->id)
             ->get();
@@ -799,15 +819,120 @@ class EntregasV2Controller extends Controller
         }
 
 
-        $barrio_entrega = BarrioEntrega::where('idPaquete', $request->idpaquete)
-            ->where('idBarrio', $request->barrio6)
-            //->take(2)
-            ->first();
-        //dd($barrio_entrega->id);
-        $barrio_entrega2 = BarrioEntrega::find($barrio_entrega->id);
-        $barrio_entrega2->update([
-            'estado' => 3
-        ]);
+                }
+
+
+
+                public function detalleBarrio2(Request $request)
+                {
+                                                     $meses = array(1 => 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                                                     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
+
+                                                    $fecha_actual=$meses[date('n')] . '-' . date('Y');
+                                                    $personal = User::find(Auth::user()->id);
+                                                    $id = $personal->id;
+                                                    $userdate = User::find($id)->usuariosempleados;
+                                                    $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
+
+                                                    $beneficiarios = Beneficiario::where('dea_id',Auth::user()->dea->id)
+                                                        ->get();
+
+                                                        $entregas = DB::table('entrega as e')
+                                                        ->join('paquete as p', 'p.id', '=', 'e.id_paquete')
+                                                        ->join('barrios as b', 'b.id', '=', 'e.idBarrio')
+                                                        ->join('beneficiarios as be', 'be.id', '=', 'e.id_beneficiario')
+                                                        ->select('be.dirFoto', 'be.ci', 'be.nombres', 'be.ap', 'be.am', 'be.fechaNac', 'be.created_att')
+                                                        ->where('e.id_paquete',$request->idpaquete)
+                                                        ->where('e.idBarrio',$request->barrio5)
+                                                        ->orderBy('be.nombres', 'asc')
+                                                        ->get();
+
+                                                        //$entregass = Entrega::where('dea_id',Auth::user()->dea->id)
+                                                        //->where('id_paquete',$request->idpaquete)
+                                                        //->where('idBarrio',$request->barrio4)
+                                                        //->take(2)
+                                                        // ->get();
+
+                                                        $entrega_barrio = Entrega::where('dea_id',Auth::user()->dea->id)
+                                                        ->where('id_paquete',$request->idpaquete)
+                                                        ->where('idBarrio',$request->barrio5)
+                                                        //->take(2)
+                                                         ->first();
+
+                                                    //dd($entregas);
+
+                                                        // $pdf = PDF::loadView('canasta_v2/entregas/generarboleta', compact(['entregas']));
+                                                        //$pdf->setPaper('LETTER', 'portrait'); //landscape
+                                                       //return $pdf->stream();
+
+                                                    return view('canasta_v2/entregas/impDetallebarrio2', ["entrega_barrio" => $entrega_barrio, "fecha_actual" => $fecha_actual,"entregas" => $entregas,"userdate" => $userdate,"personalArea" => $personalArea]);
+
+
+                            }
+
+
+        public function deshabilitar($id,$idpaquete){
+
+           // dd($id);
+                                $entrega = Entrega::find($id);
+                                $entrega->update([
+                                    'estado' => 2
+                                ]);
+                                return redirect()->route('entregas.entrega_index',$idpaquete)->with('info_message', 'Se quitado el paquete seleccionado.');
+                            }
+
+        public function habilitar($id,$idpaquete){
+           // dd($id);
+                                $entrega = Entrega::find($id);
+                                $entrega->update([
+                                    'estado' => 3
+                                ]);
+                                return redirect()->route('entregas.entrega_index',$idpaquete)->with('info_message', 'Se ha entregado el paquete seleccionado.');
+                            }
+
+            public function confirmar_entrega(Request $request)
+                            {
+                                    $personal = User::find(Auth::user()->id);
+                                    $id = $personal->id;
+                                    $userdate = User::find($id)->usuariosempleados;
+                                    $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
+
+
+
+
+
+                                    $entregas2 = Entrega::where('dea_id',Auth::user()->dea->id)
+                                    ->where('id_paquete',$request->idpaquete)
+                                    ->where('idBarrio',$request->barrio6)
+                                    ->get();
+
+                                    foreach ($entregas2 as $data){
+                                    $entrega3 = Entrega::find($data->id);
+                                    $entrega3->estado = 3;
+                                     $entrega3->save();
+                                     }
+
+
+                                     $barrio_entrega = BarrioEntrega::where('idPaquete',$request->idpaquete)
+                                     ->where('idBarrio',$request->barrio6)
+                                     //->take(2)
+                                      ->first();
+                                      //dd($barrio_entrega->id);
+                                      $barrio_entrega2 = BarrioEntrega::find($barrio_entrega->id);
+                                      $barrio_entrega2->update([
+                                          'estado' => 3
+                                      ]);
+
+                                    //dd($entregas);
+
+                                    // $pdf = PDF::loadView('canasta_v2/entregas/generarboleta', compact(['entregas']));
+                                    //$pdf->setPaper('LETTER', 'portrait'); //landscape
+                                     //return $pdf->stream();
+
+                                     return redirect()->route('entregas.entrega_index',$request->idpaquete)->with('info_message', 'Se ha registrado la entrega del barrio seleccionado.');
+
+                                        }
+
 
         //dd($entregas);
 

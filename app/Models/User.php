@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Canasta\Dea;
-use App\Models\AreasModel;
+use App\Models\Area;
 
 class User extends Authenticatable
 {
@@ -42,7 +42,7 @@ class User extends Authenticatable
 
     public function area()
     {
-        return $this->belongsTo(AreasModel::class,'idarea','idarea');
+        return $this->belongsTo(Area::class,'idarea','idarea');
     }
 
     public function hasRole($role)
@@ -60,7 +60,7 @@ class User extends Authenticatable
     }*/
 
     public function usuariosEmpleados(){
-       return $this->belongsTo(EmpleadosModel::class, 'idemp', 'idemp');
+       return $this->belongsTo(Empleado::class, 'idemp', 'idemp');
     }
 
     public function dea(){
@@ -69,7 +69,7 @@ class User extends Authenticatable
 
     public function getNombreCompletoAttribute(){
         if($this->idemp != null){
-            $empleado = EmpleadosModel::where('idemp',$this->idemp)->first();
+            $empleado = Empleado::where('idemp',$this->idemp)->first();
             if($empleado != null){
                 $nombre_completo = $empleado->nombres . ' ' . $empleado->ap_pat . ' ' . $empleado->ap_mat;
                 return $nombre_completo;

@@ -16,7 +16,7 @@ use DB;
 use DataTables;
 
 use App\Models\User;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 use Illuminate\Support\Facades\Auth;
 
 class PartidaCombController extends Controller
@@ -28,7 +28,7 @@ class PartidaCombController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
 
      return view('combustibles.partida.index',['idd' => $personalArea]);

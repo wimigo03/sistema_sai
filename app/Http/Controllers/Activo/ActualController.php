@@ -6,10 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ActualStoreRequest;
 use App\Http\Requests\ActualUpdateRequest;
 use App\Models\Ambiente;
-use App\Models\AreasModel;
+use App\Models\Area;
 use App\Models\Model_Activos\UnidadadminModel;
 use App\Models\Model_Activos\CodcontModel;
-use App\Models\EmpleadosModel;
+use App\Models\Empleado;
 use App\Models\Model_Activos\ActualModel;
 use App\Models\Model_Activos\AuxiliarModel;
 use App\Models\Model_Activos\EntidadesModel;
@@ -145,7 +145,7 @@ class ActualController extends Controller
         $organismofins = OrganismofinModel::all();
         $codcont = CodcontModel::all();
         $auxiliars  = [];
-        $areas = AreasModel::all();
+        $areas = Area::all();
         $ambientes = Ambiente::where('unidad', $unidad->unidad)->get();
         $empleados  = [];
         // $organismofins = OrganismofinModel::all();
@@ -197,7 +197,7 @@ class ActualController extends Controller
     {
         $area = $request->input('area_id');
         $emp = $request->input('emp_id');
-        $query = EmpleadosModel::where('idarea', $area);
+        $query = Empleado::where('idarea', $area);
         if ($emp !== null) {
             $query->where('idemp', '!=', $emp);
         }
@@ -212,7 +212,7 @@ class ActualController extends Controller
     public function getCargo(Request $request)
     {
         $id = $request->input('emp_id');
-        $empleado = EmpleadosModel::find($id);
+        $empleado = Empleado::find($id);
         $file = DB::table('empleados')->where('idemp', $id)->select('idfile')->first();
 
         $files = DB::table('file')->where('idfile', $file->idfile)->get();
@@ -365,7 +365,7 @@ class ActualController extends Controller
             ->orderBy('id', 'DESC')
             ->first();
 
-        $empleado = EmpleadosModel::where('idemp', $actual->codemp)->first();
+        $empleado = Empleado::where('idemp', $actual->codemp)->first();
         return view('activo.gestionactivo.show', [
             'actual' => $actual,
             'auxiliar' => $auxiliar,
@@ -401,7 +401,7 @@ class ActualController extends Controller
         $ufActual = Ufv::query()
             ->orderBy('id', 'DESC')
             ->first()->indice_ufv;
-        $areas = AreasModel::all();
+        $areas = Area::all();
         // $organismofins = OrganismofinModel::all();
         return view('activo.gestionactivo.edit',  compact('actual', 'ufInicial', 'ufActual', 'ambientes', 'organismofins', 'auxiliars', 'entidad', 'unidad', 'codcont', 'areas'));
     }

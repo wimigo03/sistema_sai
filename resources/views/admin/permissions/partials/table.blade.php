@@ -23,7 +23,7 @@
                                     <i class="fa-solid fa-pen-to-square fa-fw"></i>
                                 </a>
                             </span>
-                            <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle" style="cursor: pointer;">
+                            <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle de roles" style="cursor: pointer;">
                                 <a href="{{ route('permissions.show',$datos->id) }}" class="badge-with-padding badge badge-primary">
                                     <i class="fa-solid fa-list fa-fw"></i>
                                 </a>
