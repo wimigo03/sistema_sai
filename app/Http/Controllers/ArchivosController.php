@@ -28,7 +28,8 @@ class ArchivosController extends Controller
         try{
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');
-            $archivos = Archivo::get()->take(100);
+            //$archivos = Archivo::where('idarchivo','>=',35001)->where('idarchivo','<=',40000)->orderBy('idarchivo','asc')->get();
+            //dd($archivos);
             foreach($archivos as $datos){
                 $archivo = Archivo::select('idarchivo')->where('idarchivo',$datos->idarchivo)->first();
                 $url = 'https://sistemas.granchaco.gob.bo/archivos/documentacion/' . $archivo->idarchivo;
@@ -43,7 +44,7 @@ class ArchivosController extends Controller
 
     public function index(Request $request)
     {
-        //if(Auth::user()->id == 101){
+        //if(Auth::user()->id == 102){
             //$this->generar_qr_general();
         //}
         $dea_id = Auth::user()->dea->id;
