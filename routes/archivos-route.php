@@ -8,4 +8,5 @@ Route::prefix('archivos')->name('archivos.')->middleware(['auth'])->group(functi
     Route::post('/update','ArchivosController@update')->name('update')->middleware('can:archivos.editar');
     Route::get('/index','ArchivosController@index_full')->name('index.full')->middleware('can:archivos.index.general');
     Route::get('/indexAjax','ArchivosController@index_ajax')->name('index.ajax')->middleware('can:archivos.index.general');
+    Route::get('/generar-qr/{id}','ArchivosController@generar_qr')->name('generar.qr')->middleware('can:archivos.generar.qr');
 });

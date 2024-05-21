@@ -61,14 +61,14 @@
 
 
                             <td>
-                             
+
                                 <span class="tts:right tts-slideIn tts-custom" aria-label="Ver Documento">
-                                <a href="/../Documentos/{{$docprov ->documento}}" target="blank_"
+                                <a href="/../documentos/{{$docprov ->documento}}" target="blank_"
                                 class="fa fa-eye fa-lg " ></a>
 
                             </span>
 
-                           
+
 
                             </td>
                             <td>
@@ -80,7 +80,7 @@
                                 </a>
                             </span>
 
-                                
+
                         </tr>
                         @empty
                         <tr>

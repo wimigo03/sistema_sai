@@ -2,6 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests;
+use DB;
+use Carbon\Carbon;
+use DataTables;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\User;
 use App\Models\Empleado;
 use Illuminate\Http\Request;
@@ -11,12 +18,6 @@ use App\Models\TipoAreaModel;
 use App\Models\ArchivosModel;
 use App\Models\TiposModel;
 use App\Models\AnioModel;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Requests;
-use DB;
-use Carbon\Carbon;
-use DataTables;
 
 
 class ArchivosController extends Controller
@@ -51,7 +52,8 @@ class ArchivosController extends Controller
                                 })*/
                                 ->addColumn('btn1', 'archivos.btn1')
                                 ->addColumn('btn2', 'archivos.btn2')
-                                ->rawColumns(['btn1', 'btn2'])
+                                ->addColumn('btn3', 'archivos.btn3')
+                                ->rawColumns(['btn1', 'btn2', 'btn3'])
                                 /*->filterColumn('fecha', function($query, $keyword) {
                                     $query->whereRaw("DATE_FORMAT(fecha, '%d-%m-%Y') like ?", ["%{$keyword}%"]);
                                 })*/
@@ -137,7 +139,7 @@ class ArchivosController extends Controller
                     $file_name = $file->getClientOriginalName();
                     $nombre = "pdf_" . time() . "." . $file->guessExtension();
 
-                    $ruta = public_path("/Documentos/" . $personalArea->area->nombrearea . '/' . $nombre);
+                    $ruta = public_path("/documentos/" . $personalArea->area->nombrearea . '/' . $nombre);
 
                     if ($file->guessExtension() == "pdf") {
                         copy($file, $ruta);
@@ -208,7 +210,7 @@ class ArchivosController extends Controller
                 $file = $request->file("documento");
                 $file_name = $file->getClientOriginalName();
                 $nombre = "pdf_" . time() . "." . $file->guessExtension();
-                $ruta = public_path("/Documentos/" . $personalArea->area->nombrearea . '/' . $nombre);
+                $ruta = public_path("/documentos/" . $personalArea->area->nombrearea . '/' . $nombre);
                 if ($file->guessExtension() == "pdf") {
                     copy($file, $ruta);
                 } else {
@@ -239,70 +241,16 @@ class ArchivosController extends Controller
         //return redirect()->route('archivos2.index', ['idd' => $personalArea]);
     }
 
-    public function tipo()
+    public function generar_qr($archivo_id)
     {
-        $personal = User::find(Auth::user()->id);
-        $id = $personal->id;
-        $userdate = User::find($id)->usuariosempleados;
-        $personalArea = Empleado::find($userdate->idemp);
-
-        $tipoarea = DB::table('tipoarea as tt')
-                        ->join('areas as ar', 'ar.idarea', 'tt.idarea')
-                        ->join('tipoarchivo as t', 't.idtipo', 'tt.idtipo')
-                        ->select('tt.idtipoarea', 'tt.idtipo', 'tt.idarea', 't.nombretipo')
-                        ->where('tt.idarea', $personalArea->idarea)
-                        ->orderBy('tt.idtipoarea', 'desc')
-                        ->get();
-
-        $tipos = DB::table('tipoarchivo')->get();
-        return view('archivos.tipos.index', ["tipos" => $tipos,"tipoareas" => $tipoarea,"personal" => $personalArea]);
-    }
-
-    public function guardartipoarea(Request $request)
-    {
-        $personal = User::find(Auth::user()->id);
-        $id = $personal->id;
-        $userdate = User::find($id)->usuariosempleados;
-        $personalArea = Empleado::find($userdate->idemp);
-        $tipoarea = new TipoAreaModel;
-        $tipoarea->idarea = $personalArea->idarea;
-        $tipoarea->idtipo = $request->input('tipo');
-        $detallito = DB::table('tipoarea as tt')
-                        ->join('areas as ar', 'ar.idarea', 'tt.idarea')
-                        ->join('tipoarchivo as t', 't.idtipo', 'tt.idtipo')
-                        ->select('tt.idtipoarea', 'tt.idtipo', 'tt.idarea', 't.nombretipo')
-                        ->where('tt.idarea', $personalArea->idarea)
-                        ->where('tt.idtipo', $request->input('tipo'))
-                        ->get();
-
-        if ($detallito->isEmpty()) {
-            $tipoarea->save();
-            return redirect()->route('archivos2.tipo')->with('success_message', 'Registro agregado correctamente.');
-        } else {
-            return redirect()->route('archivos2.tipo')->with('error_message', 'El item ya existe en la listado.');
-        }
-    }
-
-    public function delete($idtipoarea)
-    {
-        $tipoarea =TipoAreaModel::find($idtipoarea);
-        $tipoarea->delete();
-        return redirect()->route('archivos.tipo');
-    }
-
-    public function createtipoarchivo()
-    {
-        return view('archivos2.tipos.createtipo');
-    }
-
-    public function guardartipoarchivo(request $request)
-    {
-        $newestUser = TiposModel::orderBy('idtipo', 'desc')->first();
-        $maxId = $newestUser->idtipo;
-        $tipos2 = new TiposModel();
-        $tipos2->idtipo = $maxId + 1;
-        $tipos2->nombretipo = $request->input('nombretipo');
-        $tipos2->save();
-        return redirect()->route('archivos2.tipo')->with('success_message', 'Registro agregado correctamente.');
+        $archivo = ArchivosModel::find($archivo_id);
+        $url = 'https://sistemas.granchaco.gob.bo';
+        $qr = QrCode::format('svg')
+                        ->margin(0)
+                        ->backgroundColor(255, 255, 255)
+                        ->color(0, 0, 0)
+                        ->size(100)
+                        ->generate($url . '/documentos/pdf_1716242020.pdf');
+        return view('archivos.generar-qr',compact('qr'));
     }
 }

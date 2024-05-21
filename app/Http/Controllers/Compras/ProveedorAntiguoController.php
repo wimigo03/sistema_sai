@@ -40,7 +40,7 @@ class ProveedorController extends Controller
         $data = DB::table('proveedor')
             ->where('idproveedor', '!=', 1)
             ->where('estadoproveedor', '=', 1);
-      
+
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('btn', 'combustibles.proveedor.btn')
@@ -125,10 +125,10 @@ class ProveedorController extends Controller
         // dd($docproveedor);
         return view('combustibles.proveedor.docproveedor', ["docproveedor" => $docproveedor, "idproveedor" => $idproveedor]);
     }
-  
+
     public function createdoc($idproveedor)
     {
-       
+
         return view('combustibles.proveedor.createdocproveedor', ["idproveedor" => $idproveedor]);
     }
 
@@ -142,22 +142,22 @@ class ProveedorController extends Controller
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
         $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
-     
+
         $idproveedor = $request->input('proveedor');
-      
+
         if ($request->hasFile("documento")) {
             $file = $request->file("documento");
             $file_name = $file->getClientOriginalName();
             $nombre = "pdf_" . time() . "." . $file->guessExtension();
 
-            $ruta = public_path("/Documentos/" . $personalArea->nombrearea . '/' . $nombre);
+            $ruta = public_path("/documentos/" . $personalArea->nombrearea . '/' . $nombre);
 
             if ($file->guessExtension() == "pdf") {
                 copy($file, $ruta);
             } else {
              return back()->with(["error" => "File not available!"]);
             }
-   
+
         }
 
         $docproveedor = new DocProveedoresModel();
@@ -174,7 +174,7 @@ class ProveedorController extends Controller
        ini_restore('max_execution_time');
         }
    }
-     
+
     public function respuesta2(Request $request)    {
         $ot_antigua=$_POST['ot_antigua'];
             $data = "hola";
@@ -188,14 +188,14 @@ class ProveedorController extends Controller
         } else  return ['success' => false, 'data' => $data2];
     }
 
-  
+
     public function editararchivo($iddocproveedores)
     {
         $docproveedor = DocProveedoresModel::find($iddocproveedores);
-       
+
         return view('combustibles.proveedor.editardocproveedor', ["docproveedor" => $docproveedor]);
-    
-        
+
+
     }
     public function updatearchivoproveedor(Request $request, $iddocproveedores)
     {
@@ -215,7 +215,7 @@ class ProveedorController extends Controller
                 $file_name = $file->getClientOriginalName();
                 $nombre = "pdf_" . time() . "." . $file->guessExtension();
 
-                $ruta = public_path("/Documentos/" . $personalArea->nombrearea . '/' . $nombre);
+                $ruta = public_path("/documentos/" . $personalArea->nombrearea . '/' . $nombre);
 
                 if ($file->guessExtension() == "pdf") {
                     copy($file, $ruta);

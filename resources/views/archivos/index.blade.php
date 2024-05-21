@@ -67,6 +67,15 @@
                     class: 'text-center p-1 font-roboto-11',
                     orderable: false,
                     searchable: false
+                },
+                @endcan
+                @can('archivos.generar.qr')
+                {
+                    data: 'btn3',
+                    name: 'btn3',
+                    class: 'text-center p-1 font-roboto-11',
+                    orderable: false,
+                    searchable: false
                 }
                 @endcan
             ],

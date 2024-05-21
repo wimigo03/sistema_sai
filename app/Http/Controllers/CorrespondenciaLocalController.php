@@ -223,7 +223,7 @@ class CorrespondenciaLocalController extends Controller
                 $file = $request->file("documento");
                 $file_name = $file->getClientOriginalName();
                 $nombre = "pdf_" . time() . "." . $file->guessExtension();
-                $ruta = public_path("/Documentos_Correspondencia/" . '/' . $nombre);
+                $ruta = public_path("/documentos_Correspondencia/" . '/' . $nombre);
                 if ($file->guessExtension() == "pdf") {
                     copy($file, $ruta);
                 } else {
@@ -336,7 +336,7 @@ class CorrespondenciaLocalController extends Controller
             $file_name = $file->getClientOriginalName();
             $nombre = "pdf_" . time() . "." . $file->guessExtension();
 
-            $ruta = public_path("/Documentos_Correspondencia/" . '/' . $nombre);
+            $ruta = public_path("/documentos_Correspondencia/" . '/' . $nombre);
 
             if ($file->guessExtension() == "pdf") {
                 copy($file, $ruta);
@@ -379,7 +379,7 @@ class CorrespondenciaLocalController extends Controller
             $file_name = $file->getClientOriginalName();
             $nombre = "pdf_" . time() . "." . $file->guessExtension();
 
-            $ruta = public_path("/Documentos_Correspondencia/" . '/' . $nombre);
+            $ruta = public_path("/documentos_Correspondencia/" . '/' . $nombre);
 
             if ($file->guessExtension() == "pdf") {
                 copy($file, $ruta);
@@ -492,7 +492,7 @@ class CorrespondenciaLocalController extends Controller
                         ->where('r.id_recepcion', $recepcion_id)
                         ->first();
 
-        $redirect = '../Documentos_Correspondencia/';
+        $redirect = '../documentos_Correspondencia/';
 
         return redirect()->to($redirect . $data->documento);
     }
@@ -556,7 +556,7 @@ class CorrespondenciaLocalController extends Controller
 
             //dd($data->documento);
 
-            $redirect = '../public/Documentos_Correspondencia/';
+            $redirect = '../public/documentos_Correspondencia/';
             // return Redirect::to($redirect);
             //return Redirect::to($redirect)->with('_blank');
             return redirect()->to($redirect . $data->documento);

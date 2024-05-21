@@ -510,7 +510,7 @@ class IngresoController extends Controller
                 $file_name = $file->getClientOriginalName();
                 $nombre = "pdf_" . time() . "." . $file->guessExtension();
 
-                $ruta = public_path("/Documentos/" . $personalArea->nombrearea . '/' . $nombre);
+                $ruta = public_path("/documentos/" . $personalArea->nombrearea . '/' . $nombre);
 
                 if ($file->guessExtension() == "pdf") {
                     copy($file, $ruta);
