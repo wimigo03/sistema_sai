@@ -122,8 +122,8 @@ class ArchivosController extends Controller
 
         return DataTables::of($data)
                         ->addIndexColumn()
-                        ->addColumn('btn2', 'archivos.btn2')
-                        ->rawColumns(['btn2'])
+                        ->addColumn('btn', 'archivos.btn')
+                        ->rawColumns(['btn'])
                         ->make(true);
     }
 

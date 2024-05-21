@@ -57,8 +57,8 @@
                     class: 'text-center p-1 font-roboto-11'
                 },
                 {
-                    data: 'btn2',
-                    name: 'btn2',
+                    data: 'btn',
+                    name: 'btn',
                     orderable: false,
                     searchable: false
                 }
