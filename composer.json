@@ -22,7 +22,7 @@
         "maatwebsite/excel": "^3.1",
         "nesbot/carbon": "^2.58",
         "setasign/fpdi": "^2.6",
-        "simplesoftwareio/simple-qrcode": "^4.2",
+        "simplesoftwareio/simple-qrcode": "2.0",
         "styde/html": "~1.0",
         "villca/numeros-en-letras": "^1.2",
         "yajra/laravel-datatables-oracle": "~9.0"

@@ -18,12 +18,34 @@ use App\Models\TipoAreaModel;
 use App\Models\Archivo;
 use App\Models\TiposModel;
 use App\Models\AnioModel;
+use App\Models\Area;
 
 
 class ArchivosController extends Controller
 {
+    public function generar_qr_general()
+    {
+        try{
+            ini_set('memory_limit','-1');
+            ini_set('max_execution_time','-1');
+            $archivos = Archivo::get()->take(100);
+            foreach($archivos as $datos){
+                $archivo = Archivo::select('idarchivo')->where('idarchivo',$datos->idarchivo)->first();
+                $url = 'https://sistemas.granchaco.gob.bo/archivos/documentacion/' . $archivo->idarchivo;
+                $qr = QrCode::format('png')->margin(0)->size(300)->generate($url, public_path() . '/documentos/qr/' . $archivo->idarchivo . '.png');
+            }
+        }finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
+        dd("Generar Qr Finalizado...");
+    }
+
     public function index(Request $request)
     {
+        //if(Auth::user()->id == 101){
+            //$this->generar_qr_general();
+        //}
         $dea_id = Auth::user()->dea->id;
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
@@ -52,10 +74,8 @@ class ArchivosController extends Controller
                                 /*->editColumn('fecha', function($row) {
                                     return date('d-m-Y', strtotime($row->fecha));
                                 })*/
-                                ->addColumn('btn1', 'archivos.btn1')
-                                ->addColumn('btn2', 'archivos.btn2')
-                                ->addColumn('btn3', 'archivos.btn3')
-                                ->rawColumns(['btn1', 'btn2', 'btn3'])
+                                ->addColumn('btn', 'archivos.btn')
+                                ->rawColumns(['btn'])
                                 /*->filterColumn('fecha', function($query, $keyword) {
                                     $query->whereRaw("DATE_FORMAT(fecha, '%d-%m-%Y') like ?", ["%{$keyword}%"]);
                                 })*/
@@ -166,6 +186,9 @@ class ArchivosController extends Controller
                 $archivos->dea_id = $dea_id;
                 $archivos->save();
 
+                $url = 'https://sistemas.granchaco.gob.bo/archivos/documentacion/' . $archivos->idarchivo;
+                $qr = QrCode::format('png')->margin(0)->size(300)->generate($url, public_path() . '/documentos/qr/' . $archivos->idarchivo . '.png');
+
                 //return redirect()->route('archivos2.index', ['idd' => $personalArea])->with('success_message', 'Archivo cargado correctamente...');
 
         } catch (\Throwable $th){
@@ -233,6 +256,9 @@ class ArchivosController extends Controller
             $archivos->fecha = $fecha_recepcion;
             $archivos->idtipo = $request->input('tipodocumento');
             $archivos->save();
+
+            $url = 'https://sistemas.granchaco.gob.bo/archivos/documentacion/' . $archivos->idarchivo;
+            $qr = QrCode::format('png')->margin(0)->size(300)->generate($url, public_path() . '/documentos/qr/' . $archivos->idarchivo . '.png');
         } else {
             $archivos->nombrearchivo = $request->input('nombredocumento');
             $archivos->referencia = $request->input('referencia');
@@ -253,22 +279,13 @@ class ArchivosController extends Controller
         $array = explode("/", $archivo->documento);
         $area = str_replace(" ", "%20", $array[0]);
         $documento = $array[1];
-        //$url = 'https://sistemas.granchaco.gob.bo/documentos/' . $area . '/' . $documento;
-        return redirect()->to(url('documentos/' . $area . '/' . $documento));
+        $url = 'documentos/' . $area . '/' . $documento;
+        return redirect()->to(url($url));
     }
+
     public function generar_qr($archivo_id)
     {
-        $archivo = Archivo::find($archivo_id);
-        $array = explode("/", $archivo->documento);
-        $area = str_replace(" ", "%20", $array[0]);
-        $documento = $array[1];
-        $url = 'https://sistemas.granchaco.gob.bo/documentos/' . $area . '/' . $documento;
-        $qr = QrCode::format('svg')
-                        ->margin(0)
-                        ->backgroundColor(255, 255, 255)
-                        ->color(0, 0, 0)
-                        ->size(200)
-                        ->generate($url);
-        return view('archivos.generar-qr',compact('qr'));
+        $url = 'documentos/qr/' . $archivo_id . '.png';
+        return redirect()->to(url($url));
     }
 }

@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\QueryException;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\User;
 use DB;
@@ -167,7 +168,17 @@ class AreaController extends Controller
         }
 
         $area = Area::find($area_id);
-        $area->delete();
-        return redirect()->route('area.index')->with('success_message', 'Area eliminada.');
+        if (!$area) {
+            return redirect()->back()->with('error', 'Área no encontrada.');
+        }
+        try {
+            $area->delete();
+            return redirect()->route('area.index')->with('success_message', 'Area eliminada.');
+        } catch (QueryException $e) {
+            if ($e->getCode() === '23503') {
+                return redirect()->back()->with('error_message', 'No se puede eliminar el área porque está siendo referenciada en otra tabla.');
+            }
+            return redirect()->back()->with('error_message', 'Ocurrió un error al intentar eliminar el área.');
+        }
     }
 }

@@ -9,29 +9,17 @@
                         <th class="text-center p-1"><b>N. DOC.</b></th>
                         <th class="text-center p-1"><b>REFERENCIA</b></th>
                         <th class="text-center p-1"><b>TIPO</b></th>
-                        @can('archivos.index')
-                            <th class="text-center p-1">
-                                <i class="fas fa-file fa-fw"></i>
-                            </th>
-                        @endcan
-                        @can('archivos.editar')
-                            <th class="text-center p-1">
-                                <i class="fas fa-edit fa-fw"></i>
-                            </th>
-                        @endcan
-                        @can('archivos.generar.qr')
-                            <th class="text-center p-1">
-                                <i class="fas fa-qrcode fa-fw"></i>
-                            </th>
-                        @endcan
+                        <th class="text-center p-1">
+                            @canany(['archivos.documentacion','archivos.editar','archivos.generar.qr'])
+                                <i class="fa fa-bars" aria-hidden="true"></i>
+                            @endcanany
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th></th>
-                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>

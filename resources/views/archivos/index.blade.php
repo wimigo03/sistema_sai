@@ -51,33 +51,13 @@
                     name: 't.nombretipo',
                     class: 'text-justify p-1 font-roboto-11'
                 },
-                @can('archivos.index')
                 {
-                    data: 'btn2',
-                    name: 'btn2',
-                    class: 'text-center p-1 font-roboto-11',
-                    orderable: false,
-                    searchable: false
-                },
-                @endcan
-                @can('archivos.editar')
-                {
-                    data: 'btn1',
-                    name: 'btn1',
-                    class: 'text-center p-1 font-roboto-11',
-                    orderable: false,
-                    searchable: false
-                },
-                @endcan
-                @can('archivos.generar.qr')
-                {
-                    data: 'btn3',
-                    name: 'btn3',
+                    data: 'btn',
+                    name: 'btn',
                     class: 'text-center p-1 font-roboto-11',
                     orderable: false,
                     searchable: false
                 }
-                @endcan
             ],
 
             initComplete: function () {
