@@ -23,7 +23,6 @@ use App\Http\Controllers\ActivosController;
 use App\Http\Controllers\CanastaEntregaController;
 use App\Http\Controllers\ActivosVsiafController;
 use App\Http\Controllers\ArchivosController;
-use App\Http\Controllers\ArchivosController2;
 use App\Http\Controllers\AlmacenController;
 use App\Http\Controllers\CorrespondenciaController;
 use App\Http\Controllers\AgendaController;
@@ -602,34 +601,25 @@ Route::post('compras/pedidoparcial/responsableUpdate', [CompraController2::class
 
 ////////////////////////////--ARCHIVOS--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('archivos/index', [ArchivosController::class,'index'])->name('archivos.index');
-Route::get('archivos/createArchivo', [ArchivosController::class,'createArchivo'])->name('archivos.create');
-Route::get('archivos/create', [ArchivosController::class,'create'])->name('archivos.create');
-Route::POST('archivos/insertar', [ArchivosController::class,'insertar'])->name('archivos.insertar');
+//Route::get('archivos/index', [ArchivosController::class,'index'])->name('archivos.index');
+//Route::get('archivos/createArchivo', [ArchivosController::class,'createArchivo'])->name('archivos.create');
+//Route::get('archivos/create', [ArchivosController::class,'create'])->name('archivos.create');
+//Route::POST('archivos/insertar', [ArchivosController::class,'insertar'])->name('archivos.insertar');
 
-Route::get('archivos/{id}/edit', [ArchivosController::class,'editar'])->name('archivos.edit');
-Route::POST('archivos/{id}/update', [ArchivosController::class,'update'])->name('archivos.update');
+//Route::get('archivos/{id}/edit', [ArchivosController::class,'editar'])->name('archivos.edit');
+//Route::POST('archivos/{id}/update', [ArchivosController::class,'update'])->name('archivos.update');
 
 
 ////////////////////////////--ARCHIVOS2--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('archivos2/index', [ArchivosController2::class,'index'])->name('archivos2.index');
-Route::get('archivos2/createArchivo', [ArchivosController2::class,'createArchivo'])->name('archivos2.create');
-Route::get('archivos2/create', [ArchivosController2::class,'create'])->name('archivos2.create');
-Route::POST('archivos2/insertar', [ArchivosController2::class,'insertar'])->name('archivos2.insertar');
 
-Route::get('archivos2/{id}/edit', [ArchivosController2::class,'editar'])->name('archivos2.edit');
-Route::POST('archivos2/{id}/update', [ArchivosController2::class,'update'])->name('archivos2.update');
 
-Route::get('archivos2/index2', [ArchivosController2::class,'index2'])->name('archivos2.index2');
-Route::get('/archivos2/index22', [ArchivosController2::class,'index22'])->name('archivos2.index22');
 
-Route::get('archivos2/tipoarchivo', [ArchivosController2::class,'tipo'])->name('archivos2.tipo');
-Route::POST('archivos2/tipoarchivo', [ArchivosController2::class,'guardartipoarea'])->name('archivos2.guardartipo');
-Route::get('archivos2/delete{id}', [ArchivosController2::class,'delete'])->name('archivos2.delete');
+//Route::get('archivos2/createArchivo', [ArchivosController2::class,'createArchivo'])->name('archivos2.create');
 
-Route::get('archivos2/createtipo', [ArchivosController2::class,'createtipoarchivo'])->name('archivos2.createtipo');
-Route::POST('archivos2/createtipoarchivo', [ArchivosController2::class,'guardartipoarchivo'])->name('archivos2.storecreatetipo');
+
+
+
 
 /////////////////////////--ALMACEN--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

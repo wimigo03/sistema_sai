@@ -57,10 +57,10 @@
                             <tr class="font-roboto-11">
                                 <th class="text-center p-1">N°</th>
                                 <th class="text-left p-1">AREA</th>
-                                <th class="text-left p-1">CARGO</th>
+                                {{--<th class="text-left p-1">CARGO</th>--}}
                                 <th class="text-center p-1">TIPO</th>
                                 <th class="text-left p-1">NOMBRE COMPLETO</th>
-                                <th class="text-center p-1">NRO CI</th>
+                                {{--<th class="text-center p-1">NRO CI</th>--}}
                                 <th class="text-center p-1">SHARES</th>
                                 <th class="text-center p-1">LIKES</th>
                                 <th class="text-center p-1">COMMENTS</th>
@@ -71,10 +71,10 @@
                                 <tr class="font-roboto-11">
                                     <td class="text-left p-1">{{ $cont++ }}</td>
                                     <td class="text-left p-1">{{ $datos->empleado->area->nombrearea }}</td>
-                                    <td class="text-left p-1">{{ $datos->empleado->cargo_file . ' - ' . $datos->empleado->file_cargo }}</td>
+                                    {{--<td class="text-left p-1">{{ $datos->empleado->cargo_file . ' - ' . $datos->empleado->file_cargo }}</td>--}}
                                     <td class="text-center p-1">{{ $datos->empleado->ultimo_tipo_contrato }}</td>
                                     <td class="text-left p-1">{{ $datos->empleado->nombres . ' ' . $datos->empleado->ap_pat . ' ' . $datos->empleado->ap_mat }}</td>
-                                    <td class="text-center p-1">{{ $datos->empleado->ci . ' - ' . $datos->empleado->extension }}</td>
+                                    {{--<td class="text-center p-1">{{ $datos->empleado->ci . ' - ' . $datos->empleado->extension }}</td>--}}
                                     <td class="text-center p-1">{{ $datos->total_shares }}</td>
                                     <td class="text-center p-1">{{ $datos->total_likes }}</td>
                                     <td class="text-center p-1">{{ $datos->total_comments }}</td>

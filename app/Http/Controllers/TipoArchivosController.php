@@ -1,0 +1,90 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\User;
+use App\Models\Empleado;
+use Illuminate\Http\Request;
+use App\Models\ProveedoresModel;
+use App\Models\DocProveedorModel;
+use App\Models\TipoAreaModel;
+use App\Models\ArchivosModel;
+use App\Models\TiposModel;
+use App\Models\AnioModel;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests;
+use DB;
+use Carbon\Carbon;
+use DataTables;
+
+
+class TipoArchivosController extends Controller
+{
+    public function index()
+    {
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = Empleado::find($userdate->idemp);
+
+        $tipoarea = DB::table('tipoarea as tt')
+                        ->join('areas as ar', 'ar.idarea', 'tt.idarea')
+                        ->join('tipoarchivo as t', 't.idtipo', 'tt.idtipo')
+                        ->select('tt.idtipoarea', 'tt.idtipo', 'tt.idarea', 't.nombretipo')
+                        ->where('tt.idarea', $personalArea->idarea)
+                        ->orderBy('tt.idtipoarea', 'desc')
+                        ->get();
+
+        $tipos = DB::table('tipoarchivo')->get();
+        return view('archivos.tipos.index', ["tipos" => $tipos,"tipoareas" => $tipoarea,"personal" => $personalArea]);
+    }
+
+    public function store(request $request)
+    {
+        $newestUser = TiposModel::orderBy('idtipo', 'desc')->first();
+        $maxId = $newestUser->idtipo;
+        $tipos2 = new TiposModel();
+        $tipos2->idtipo = $maxId + 1;
+        $tipos2->nombretipo = $request->input('nombretipo');
+        $tipos2->save();
+        return redirect()->route('tipos.archivos.index')->with('success_message', 'Registro agregado correctamente.');
+    }
+
+    public function storeCargar(Request $request)
+    {
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = Empleado::find($userdate->idemp);
+        $tipoarea = new TipoAreaModel;
+        $tipoarea->idarea = $personalArea->idarea;
+        $tipoarea->idtipo = $request->input('tipo');
+        $detallito = DB::table('tipoarea as tt')
+                        ->join('areas as ar', 'ar.idarea', 'tt.idarea')
+                        ->join('tipoarchivo as t', 't.idtipo', 'tt.idtipo')
+                        ->select('tt.idtipoarea', 'tt.idtipo', 'tt.idarea', 't.nombretipo')
+                        ->where('tt.idarea', $personalArea->idarea)
+                        ->where('tt.idtipo', $request->input('tipo'))
+                        ->get();
+
+        if ($detallito->isEmpty()) {
+            $tipoarea->save();
+            return redirect()->route('tipos.archivos.index')->with('success_message', 'Registro agregado correctamente.');
+        } else {
+            return redirect()->route('tipos.archivos.index')->with('error_message', 'El item ya existe en la listado.');
+        }
+    }
+
+    public function delete($idtipoarea)
+    {
+        $tipoarea =TipoAreaModel::find($idtipoarea);
+        $tipoarea->delete();
+        return redirect()->route('tipos.archivos.index');
+    }
+
+    public function create()
+    {
+        return view('archivos.tipos.create');
+    }
+}

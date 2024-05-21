@@ -70,7 +70,6 @@
                 }
                 @endcan
             ],
-
             language: {
                 "decimal": "",
                 "emptyTable": "<span class='font-roboto-12'>No hay información</span>",

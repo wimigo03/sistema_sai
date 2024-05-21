@@ -518,33 +518,37 @@
                     @endcan
 
                     {{-- ARCHIVOS --}}
-                    @can('archivos2.index')
+                    @canany(['archivos.index','tipos.archivos.index','archivos.index.general'])
                         <li class="font-verdana-12">
-                            <a href="" data-toggle="collapse" data-target="#dashboard_archivos2"
-                                class="active collapsed" aria-expanded="false">
-                                <i class="fa fa-file-pdf" style="color:green"></i>
-                                <span class="nav-label mr-3">ARCHIVOS</span>
-                                <span class="fa fa-arrow-circle-left float-right"></span>
+                            <a href="" data-toggle="collapse" data-target="#dashboard_archivos" class="active collapsed" aria-expanded="false">
+                                <i class="fas fa-file fa-fw"></i>&nbsp;Archivos locales
+                                <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
                             </a>
-                            <ul class="sub-menu collapse" id="dashboard_archivos2">
-                                <li>
-                                    <a href="{{ route('archivos2.index') }}">
-                                        &nbsp; &nbsp; &nbsp;
-                                        <span class="nav-label mr-4">Acceder</span>
-                                    </a>
-                                </li>
-                            </ul>
-                            <ul class="sub-menu collapse" id="dashboard_archivos2">
-                                <li>
-                                    <a href="{{ route('archivos2.index2') }}">
-                                        &nbsp; &nbsp; &nbsp;
-                                        <span class="nav-label mr-4">Listado General</span>
-                                    </a>
-                                </li>
+                            <ul class="sub-menu collapse" id="dashboard_archivos">
+                                @can('archivos.index')
+                                    <li>
+                                        <a href="{{ route('archivos.index') }}">
+                                            &nbsp;&nbsp;&nbsp;<i class="fas fa-file fa-fw"></i>&nbsp;Listar
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('tipos.archivos.index')
+                                    <li>
+                                        <a href="{{ route('tipos.archivos.index') }}">
+                                            &nbsp;&nbsp;&nbsp;<i class="fas fa-file fa-fw"></i>&nbsp;Tipos
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('archivos.index.general')
+                                    <li>
+                                        <a href="{{ route('archivos.index.full') }}">
+                                            &nbsp;&nbsp;&nbsp;<i class="fas fa-file fa-fw"></i>&nbsp;General
+                                        </a>
+                                    </li>
+                                @endcan
                             </ul>
                         </li>
-                        <hr style="margin-top:0; margin-bottom:0;">
-                    @endcan
+                    @endcanany
                     {{-- RRHH --}}
                     @canany(['empleados.index','areas.index'])
                         <li class="font-verdana-12">

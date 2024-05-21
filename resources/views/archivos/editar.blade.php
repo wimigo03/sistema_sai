@@ -1,29 +1,29 @@
 @extends('layouts.admin')
 <style>
-     #progressBar {
-            width: 100%;
-            background-color: #f3f3f3;
-        }
+    #progressBar {
+           width: 100%;
+           background-color: #f3f3f3;
+       }
 
-        #progressBar div {
-            width: 0%;
-            height: 30px;
-            background-color: #4caf50;
-            text-align: center;
-            line-height: 30px;
-            color: white;
-        }
+       #progressBar div {
+           width: 0%;
+           height: 30px;
+           background-color: #4caf50;
+           text-align: center;
+           line-height: 30px;
+           color: white;
+       }
 </style>
 @section('content')
     <div class="card-header header">
         <div class="row">
             <div class="col-md-12 pr-1 pl-1 text-center">
-                <b>REGISTRAR ARCHIVO</b>
+                <b>MODIFICAR REGISTRO ARCHIVO</b>
             </div>
         </div>
     </div>
     <div class="card-body body">
-        @include('archivos.partials.create-form')
+        @include('archivos.partials.editar-form')
     </div>
 @endsection
 @section('scripts')
@@ -94,11 +94,6 @@
                 return false;
             }
 
-            if ($("#file").val() == "") {
-                Modal('El <b>[El archivo pdf]</b> es un campo obligatorio');
-                return false;
-            }
-
             return true;
         };
 
@@ -117,7 +112,8 @@
                 document.getElementById('progressBar').firstElementChild.innerHTML = Math.round(percentComplete) + '%';
             });
 
-            xhr.open('POST', '{{ route('archivos.store') }}', true);
+            var archivo_id = $("#archivo_id").val();
+            xhr.open('POST', '{{ route('archivos.update') }}', true);
             xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('input[name="_token"]').value);
 
             xhr.onload = function() {

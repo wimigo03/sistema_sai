@@ -1,6 +1,6 @@
 <form action="#" method="get" id="form">
-    <div class="form-group row abs-center">
-        <div class="col-md-4 pr-1 pl-1 font-roboto-12">
+    <div class="form-group row">
+        <div class="col-md-3 pr-1 pl-1 font-roboto-12">
             <input type="hidden" name="dea_id" value="{{ $dea_id }}" id="dea_id">
             <select name="titulo" id="titulo" class="form-control font-roboto-12">
                 <option value="">-</option>
@@ -15,7 +15,7 @@
             </select>
         </div>
         <div class="col-md-4 pr-1 pl-1">
-            <input type="text" name="nombre" placeholder="--Nombre del permiso--" value="{{ request('nombre') }}" class="form-control font-roboto-12 intro" onkeypress="return valideNumberInteger(event);">
+            <input type="text" name="nombre" placeholder="--Nombre del permiso--" value="{{ request('nombre') }}" class="form-control font-roboto-12 intro">
         </div>
     </div>
     <div class="form-group row">

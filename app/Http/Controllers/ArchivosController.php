@@ -7,7 +7,9 @@ use App\Models\Empleado;
 use Illuminate\Http\Request;
 use App\Models\ProveedoresModel;
 use App\Models\DocProveedorModel;
+use App\Models\TipoAreaModel;
 use App\Models\ArchivosModel;
+use App\Models\TiposModel;
 use App\Models\AnioModel;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
@@ -19,139 +21,194 @@ use DataTables;
 
 class ArchivosController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-
-    //index
-    public function index()
+    public function index(Request $request)
     {
-
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp);
+        if ($request->ajax()) {
+            $data = DB::table('archivos as a')
+                            ->join('areas as ar', 'ar.idarea', 'a.idarea')
+                            ->join('tipoarchivo as t', 'a.idtipo', 't.idtipo')
+                            ->select(
+                                'a.idarchivo',
+                                'a.referencia',
+                                'a.fecha',
+                                'a.gestion',
+                                'a.nombrearchivo',
+                                'a.documento',
+                                'ar.idarea',
+                                't.nombretipo'
+                            )
+                            ->where('ar.idarea', $personalArea->idarea)
+                            ->orderBy('a.fecha', 'desc');
 
-        $data = DB::table('archivos as a')
-            ->join('areas as ar', 'ar.idarea', '=', 'a.idarea')
-            ->join('tipoarchivo as t', 'a.idtipo', '=', 't.idtipo')
-            ->select('a.idarchivo', 'a.referencia', 'a.nombrearchivo', 'a.documento', 'a.idarea', 't.nombretipo')
-            ->where('ar.idarea', $personalArea->idarea)
-            ->get();
-
-
-        return view('archivos.index', ['data' => $data, 'idd' => $personalArea]);
-    }
-
-
-
-    public function create()
-
-    {
-
-
-
-        $date = Carbon::now();
-
-        $date = $date->format('Y');
-
-
-        $tipos = DB::table('tipoarchivo')->get();
-        $anio = DB::table('anio')->get();
-        return view('archivos.createArchivo', ["tipos" => $tipos, "date" => $date, "anio" => $anio]);
-    }
-
-    public function insertar(Request $request)
-    {
-        // try{
-        //  ini_set('memory_limit','-1');
-        // ini_set('max_execution_time','-1');
-
-        $personal = User::find(Auth::user()->id);
-        $id = $personal->id;
-        $userdate = User::find($id)->usuariosempleados;
-        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
-
-
-
-        if ($request->hasFile("documento")) {
-            $file = $request->file("documento");
-            $file_name = $file->getClientOriginalName();
-            $nombre = "pdf_" . time() . "." . $file->guessExtension();
-
-            $ruta = public_path("/Documentos/" . $personalArea->nombrearea . '/' . $nombre);
-
-            if ($file->guessExtension() == "pdf") {
-                copy($file, $ruta);
-            } else {
-                return back()->with(["error" => "File not available!"]);
-            }
+            return Datatables::of($data)
+                                ->addIndexColumn()
+                                /*->editColumn('fecha', function($row) {
+                                    return date('d-m-Y', strtotime($row->fecha));
+                                })*/
+                                ->addColumn('btn1', 'archivos.btn1')
+                                ->addColumn('btn2', 'archivos.btn2')
+                                ->rawColumns(['btn1', 'btn2'])
+                                /*->filterColumn('fecha', function($query, $keyword) {
+                                    $query->whereRaw("DATE_FORMAT(fecha, '%d-%m-%Y') like ?", ["%{$keyword}%"]);
+                                })*/
+                                ->make(true);
         }
 
-
-        //$nombre2='hola';
-        $archivos = new ArchivosModel();
-        $archivos->nombrearchivo = $request->input('nombredocumento');
-        $archivos->referencia = $request->input('referencia');
-        $archivos->gestion = $request->input('anio');
-        $archivos->documento = $personalArea->nombrearea . '/' . $nombre;
-        $archivos->idarea = $personalArea->idarea;
-        $archivos->estado1 = 1;
-        $archivos->idtipo = $request->input('tipodocumento');
-        $archivos->id = $personal->id;
-
-
-        $archivos->save();
-
-
-        return redirect()->action('App\Http\Controllers\ArchivosController@index');
-
-        //} catch (\Throwable $th){
-        // return '[ERROR_500]';
-        //}finally{
-        // ini_restore('memory_limit');
-        //ini_restore('max_execution_time');
-        // }
+        return view('archivos.index', ['idd' => $personalArea]);
     }
 
+    public function index_full(Request $request)
+    {
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
+        return view('archivos.index-full', ['idd' => $personalArea]);
+    }
+
+    public function index_ajax(Request $request)
+    {
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
+        $data = DB::table('archivos as a')
+                    ->join('areas as ar', 'ar.idarea', 'a.idarea')
+                    ->join('tipoarchivo as t', 'a.idtipo', 't.idtipo')
+                    ->select(
+                        'a.idarchivo',
+                        'a.referencia',
+                        'a.fecha',
+                        'a.gestion',
+                        'a.created_at',
+                        'a.nombrearchivo',
+                        'a.documento',
+                        'ar.nombrearea',
+                        'ar.idarea',
+                        't.nombretipo'
+                    )
+                    ->orderBy('a.gestion', 'desc');
+
+        return DataTables::of($data)
+                        ->addIndexColumn()
+                        ->addColumn('btn2', 'archivos.btn2')
+                        ->rawColumns(['btn2'])
+                        ->make(true);
+    }
+
+    public function create()
+    {
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = Empleado::find($userdate->idemp);
+
+        $tipoarea = DB::table('tipoarea as tt')
+                        ->join('areas as ar', 'ar.idarea', 'tt.idarea')
+                        ->join('tipoarchivo as t', 't.idtipo', 'tt.idtipo')
+                        ->select('tt.idtipoarea', 'tt.idtipo', 'tt.idarea', 't.nombretipo')
+                        ->where('tt.idarea', $personalArea->idarea)
+                        ->orderBy('tt.idtipoarea', 'desc')
+                        ->get();
+        $date = Carbon::now();
+        $date = $date->format('Y');
+        $anio = DB::table('anio')->get();
+
+        return view('archivos.create', ["tipos" => $tipoarea, "date" => $date, "anio" => $anio]);
+    }
+
+    public function store(Request $request)
+    {
+        try{
+            ini_set('memory_limit','-1');
+            ini_set('max_execution_time','-1');
+                $personal = User::find(Auth::user()->id);
+                $id = $personal->id;
+                $userdate = User::find($id)->usuariosempleados;
+                $personalArea = Empleado::find($userdate->idemp);
+                $fecha_recepcion = substr($request->fecha, 6, 4) . '-' . substr($request->fecha, 3, 2) . '-' . substr($request->fecha, 0, 2);
+                $fecha_gestion = substr($request->fecha, 6, 4);
+                if ($request->hasFile("documento")) {
+                    $file = $request->file("documento");
+                    $file_name = $file->getClientOriginalName();
+                    $nombre = "pdf_" . time() . "." . $file->guessExtension();
+
+                    $ruta = public_path("/Documentos/" . $personalArea->area->nombrearea . '/' . $nombre);
+
+                    if ($file->guessExtension() == "pdf") {
+                        copy($file, $ruta);
+                    } else {
+                        return back()->with(["error" => "File not available!"]);
+                    }
+                }
+
+                $archivos = new ArchivosModel();
+                $archivos->nombrearchivo = $request->input('nombredocumento');
+                $archivos->referencia = $request->input('referencia');
+                $archivos->gestion = $fecha_gestion;
+                $archivos->documento = $personalArea->area->nombrearea . '/' . $nombre;
+                $archivos->idarea = $personalArea->idarea;
+                $archivos->estado1 = 1;
+                $archivos->idtipo = $request->input('tipodocumento');
+                $archivos->id = $personal->id;
+                $archivos->fecha = $fecha_recepcion;
+                $archivos->save();
+
+                //return redirect()->route('archivos2.index', ['idd' => $personalArea])->with('success_message', 'Archivo cargado correctamente...');
+
+        } catch (\Throwable $th){
+            return '[ERROR_500]';
+        }finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
+    }
 
     public function editar($idarchivo)
     {
-        $tipos = DB::table('tipoarchivo')->get();
-        $archivos = ArchivosModel::find($idarchivo);
-        $date = Carbon::now();
-
-        $date = $date->format('Y');
-
-        // dd($compras);
-        return view('archivos.edit', ["tipos" => $tipos, "archivos" => $archivos, "date" => $date]);
-    }
-
-
-    public function update(Request $request, $idarchivo)
-    {
-
-
-
-
-
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
+        $personalArea = Empleado::find($userdate->idemp);
 
+        $tipoarea = DB::table('tipoarea as tt')
+                        ->join('areas as ar', 'ar.idarea', 'tt.idarea')
+                        ->join('tipoarchivo as t', 't.idtipo', 'tt.idtipo')
+                        ->select('tt.idtipoarea', 'tt.idtipo', 'tt.idarea', 't.nombretipo')
+                        ->where('tt.idarea', $personalArea->idarea)
+                        ->orderBy('tt.idtipoarea', 'desc')
+                        ->get();
+
+        $archivos = ArchivosModel::find($idarchivo);
+        $date = Carbon::now();
+        $date = $date->format('Y');
+        $date22 = $archivos->fecha;
+        $date2 = Carbon::createFromFormat('Y-m-d', $date22)->format('d/m/Y');
+        $anio = DB::table('anio')->get();
+
+        return view('archivos.editar', ["date2" => $date2, "tipos" => $tipoarea, "archivos" => $archivos, "date" => $date, "anio" => $anio]);
+    }
+
+    public function update(Request $request)
+    {
+        $idarchivo = $request->archivo_id;
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = Empleado::find($userdate->idemp);
+        $fecha_recepcion = substr($request->fecha, 6, 4) . '-' . substr($request->fecha, 3, 2) . '-' . substr($request->fecha, 0, 2);
+        $fecha_gestion = substr($request->fecha, 6, 4);
         $archivos = ArchivosModel::find($idarchivo);
         if ($request->file("documento") != null) {
             if ($request->hasFile("documento")) {
                 $file = $request->file("documento");
                 $file_name = $file->getClientOriginalName();
                 $nombre = "pdf_" . time() . "." . $file->guessExtension();
-
-                $ruta = public_path("/Documentos/" . $personalArea->nombrearea . '/' . $nombre);
-
+                $ruta = public_path("/Documentos/" . $personalArea->area->nombrearea . '/' . $nombre);
                 if ($file->guessExtension() == "pdf") {
                     copy($file, $ruta);
                 } else {
@@ -159,28 +216,93 @@ class ArchivosController extends Controller
                 }
             }
 
-
             $archivos->nombrearchivo = $request->input('nombredocumento');
             $archivos->referencia = $request->input('referencia');
-            $archivos->documento = $personalArea->nombrearea . '/' . $nombre;
+            $archivos->documento = $personalArea->area->nombrearea . '/' . $nombre;
             $archivos->idarea = $personalArea->idarea;
             $archivos->estado1 = 1;
+            $archivos->gestion = $fecha_gestion;
+            $archivos->fecha = $fecha_recepcion;
             $archivos->idtipo = $request->input('tipodocumento');
-
-
             $archivos->save();
         } else {
             $archivos->nombrearchivo = $request->input('nombredocumento');
             $archivos->referencia = $request->input('referencia');
-            //$archivos->documento = $personalArea->nombrearea . '/' . $nombre;
             $archivos->idarea = $personalArea->idarea;
             $archivos->estado1 = 1;
+            $archivos->gestion = $fecha_gestion;
+            $archivos->fecha = $fecha_recepcion;
             $archivos->idtipo = $request->input('tipodocumento');
-
-
             $archivos->save();
         }
 
-        return redirect()->action('App\Http\Controllers\ArchivosController@index');
+        //return redirect()->route('archivos2.index', ['idd' => $personalArea]);
+    }
+
+    public function tipo()
+    {
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = Empleado::find($userdate->idemp);
+
+        $tipoarea = DB::table('tipoarea as tt')
+                        ->join('areas as ar', 'ar.idarea', 'tt.idarea')
+                        ->join('tipoarchivo as t', 't.idtipo', 'tt.idtipo')
+                        ->select('tt.idtipoarea', 'tt.idtipo', 'tt.idarea', 't.nombretipo')
+                        ->where('tt.idarea', $personalArea->idarea)
+                        ->orderBy('tt.idtipoarea', 'desc')
+                        ->get();
+
+        $tipos = DB::table('tipoarchivo')->get();
+        return view('archivos.tipos.index', ["tipos" => $tipos,"tipoareas" => $tipoarea,"personal" => $personalArea]);
+    }
+
+    public function guardartipoarea(Request $request)
+    {
+        $personal = User::find(Auth::user()->id);
+        $id = $personal->id;
+        $userdate = User::find($id)->usuariosempleados;
+        $personalArea = Empleado::find($userdate->idemp);
+        $tipoarea = new TipoAreaModel;
+        $tipoarea->idarea = $personalArea->idarea;
+        $tipoarea->idtipo = $request->input('tipo');
+        $detallito = DB::table('tipoarea as tt')
+                        ->join('areas as ar', 'ar.idarea', 'tt.idarea')
+                        ->join('tipoarchivo as t', 't.idtipo', 'tt.idtipo')
+                        ->select('tt.idtipoarea', 'tt.idtipo', 'tt.idarea', 't.nombretipo')
+                        ->where('tt.idarea', $personalArea->idarea)
+                        ->where('tt.idtipo', $request->input('tipo'))
+                        ->get();
+
+        if ($detallito->isEmpty()) {
+            $tipoarea->save();
+            return redirect()->route('archivos2.tipo')->with('success_message', 'Registro agregado correctamente.');
+        } else {
+            return redirect()->route('archivos2.tipo')->with('error_message', 'El item ya existe en la listado.');
+        }
+    }
+
+    public function delete($idtipoarea)
+    {
+        $tipoarea =TipoAreaModel::find($idtipoarea);
+        $tipoarea->delete();
+        return redirect()->route('archivos.tipo');
+    }
+
+    public function createtipoarchivo()
+    {
+        return view('archivos2.tipos.createtipo');
+    }
+
+    public function guardartipoarchivo(request $request)
+    {
+        $newestUser = TiposModel::orderBy('idtipo', 'desc')->first();
+        $maxId = $newestUser->idtipo;
+        $tipos2 = new TiposModel();
+        $tipos2->idtipo = $maxId + 1;
+        $tipos2->nombretipo = $request->input('nombretipo');
+        $tipos2->save();
+        return redirect()->route('archivos2.tipo')->with('success_message', 'Registro agregado correctamente.');
     }
 }

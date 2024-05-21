@@ -76,7 +76,9 @@ class PermissionController extends Controller
     {
         $request->validate([
             'dea_id' => 'required',
-            'name' => 'required|unique:permissions,name,null,id,dea_id,' . $request->dea_id
+            'titulo' => 'required',
+            'name' => 'required|unique:permissions,name,null,id,dea_id,' . $request->dea_id,
+            'descripcion' => 'required',
         ]);
 
         if (strpos($request->name, ".") !== false) {
@@ -86,9 +88,10 @@ class PermissionController extends Controller
         }
 
         $permission = Permission::create([
-            'title' => $title[0],
+            'title' => ucfirst($request->titulo),
             'name' => $request->name,
-            'dea_id' => $request->dea_id
+            'dea_id' => $request->dea_id,
+            'descripcion' => ucfirst($request->descripcion)
         ]);
 
         return redirect()->route('permissions.index')->with('success_message','Se creo un registro en la tabla de permisos');
@@ -115,8 +118,10 @@ class PermissionController extends Controller
 
         $permission = Permission::find($request->permission_id);
         $permission->update([
-            'title' => $title[0],
-            'name' => $request->name
+            'title' => ucfirst($request->titulo),
+            'name' => $request->name,
+            'dea_id' => $request->dea_id,
+            'descripcion' => ucfirst($request->descripcion)
         ]);
 
         return redirect()->route('permissions.index')->with('info_message','Se actualizo un registro en la tabla de permisos');

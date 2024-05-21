@@ -1,6 +1,6 @@
 <form action="#" method="get" id="form">
     <div class="form-group row">
-        <div class="col-md-3 pr-1 pl-1">
+        <div class="col-md-5 pr-1 pl-1">
             <input type="hidden" name="dea_id" value="{{ $dea_id }}" id="dea_id">
             <select name="area_id" id="area_id" class="form-control select2">
                 <option value="">-</option>
@@ -9,7 +9,7 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-md-3 pr-1 pl-1">
+        <div class="col-md-4 pr-1 pl-1">
             <select name="file_id" id="file_id" class="form-control select2">
                 <option value="">-</option>
                 @foreach ($cargos as $index => $value)
@@ -18,15 +18,15 @@
             </select>
         </div>
         <div class="col-md-3 pr-1 pl-1">
+            <input type="text" name="nombre" value="{{ request('nombre') }}" id="nombre" placeholder="--Nombre(s)--" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3 pr-1 pl-1">
             <input type="text" name="ap_paterno" value="{{ request('ap_paterno') }}" id="ap_paterno" placeholder="--Apellido Paterno--" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
         </div>
         <div class="col-md-3 pr-1 pl-1">
             <input type="text" name="ap_materno" value="{{ request('ap_materno') }}" id="ap_materno" placeholder="--Apellido Materno--" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
-        </div>
-    </div>
-    <div class="form-group row">
-        <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="nombre" value="{{ request('nombre') }}" id="nombre" placeholder="--Nombre(s)--" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
         </div>
         <div class="col-md-2 pr-1 pl-1">
             <input type="text" name="nro_carnet" value="{{ request('nro_carnet') }}" id="nro_carnet" placeholder="--Nro carnet--" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
@@ -42,6 +42,8 @@
         <div class="col-md-2 pr-1 pl-1">
             <input type="text" name="fecha_ingreso" value="{{ request('fecha_ingreso') }}" id="fecha_ingreso" placeholder="--Ingreso--" class="form-control font-roboto-12 intro" data-language="es">
         </div>
+    </div>
+    <div class="form-group row">
         <div class="col-md-2 pr-1 pl-1">
             <input type="text" name="fecha_retiro" value="{{ request('fecha_retiro') }}" id="fecha_retiro" placeholder="--Retiro--" class="form-control font-roboto-12 intro" data-language="es">
         </div>

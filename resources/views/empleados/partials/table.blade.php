@@ -5,9 +5,9 @@
                 <tr class="font-roboto-11">
                     <th class="text-left p-1">AREA</th>
                     <th class="text-left p-1">CARGO</th>
+                    <th class="text-left p-1">NOMBRE(S)</th>
                     <th class="text-left p-1">AP. PAT.</th>
                     <th class="text-left p-1">AP. MAT.</th>
-                    <th class="text-left p-1">NOMBRE(S)</th>
                     <th class="text-left p-1">N° CARNET</th>
                     <th class="text-center p-1">TIPO</th>
                     <th class="text-center p-1">INGRESO</th>
@@ -23,9 +23,9 @@
                     <tr class="font-roboto-11">
                         <td class="text-left p-1">{{ $datos->area->nombrearea }}</td>
                         <td class="text-left p-1">{{ $datos->cargo_file . ' - ' . $datos->file_cargo }}</td>
+                        <td class="text-left p-1">{{ $datos->nombres }}</td>
                         <td class="text-left p-1">{{ $datos->ap_pat }}</td>
                         <td class="text-left p-1">{{ $datos->ap_mat }}</td>
-                        <td class="text-left p-1">{{ $datos->nombres }}</td>
                         <td class="text-left p-1">{{ $datos->ci .' ' . $datos->extension }}</td>
                         <td class="text-center p-1">{{ $datos->ultimo_tipo_contrato }}</td>
                         <td class="text-center p-1">{{ $datos->ultimo_contrato_ingreso != null ? \Carbon\Carbon::parse($datos->ultimo_contrato_ingreso)->format('d/m/Y') : '' }}</td>

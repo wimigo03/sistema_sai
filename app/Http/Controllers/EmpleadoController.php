@@ -222,7 +222,7 @@ class EmpleadoController extends Controller
                 "Usuario: " . Auth::user()->id . "\n"
             );
 
-            return redirect()->route('empleado.index')->with('success_message', 'Personal registrado correctamente...')->withInput();
+            return redirect()->route('empleado.index')->with('success_message', 'Personal registrado correctamente...');
         } catch (\Exception $e) {
             Log::channel('recursos_humanos')->info(
                 "\n" .

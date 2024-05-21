@@ -60,10 +60,10 @@
                             <tr class="font-roboto-11">
                                 <th class="text-center p-1">N°</th>
                                 <th class="text-center p-1">AREA</th>
-                                <th class="text-center p-1">CARGO</th>
+                                {{--<th class="text-center p-1">CARGO</th>--}}
                                 <th class="text-center p-1">TIPO</th>
                                 <th class="text-center p-1">NOMBRE COMPLETO</th>
-                                <th class="text-center p-1">NRO C.I.</th>
+                                {{--<th class="text-center p-1">NRO C.I.</th>--}}
                                 <th class="text-center p-1">SHARE</th>
                                 <th class="text-center p-1">LIKE</th>
                                 <th class="text-center p-1">COMMENT</th>
@@ -74,10 +74,10 @@
                                 <tr class="font-roboto-11 fila {{ $datos->id }}">
                                     <td class="text-left p-1">{{ $cont++ }}</td>
                                     <td class="text-left p-1">{{ $datos->area->nombrearea }}</td>
-                                    <td class="text-left p-1">{{ $datos->empleado->cargo_file . ' - ' . $datos->empleado->file_cargo }}</td>
+                                    {{--<td class="text-left p-1">{{ $datos->empleado->cargo_file . ' - ' . $datos->empleado->file_cargo }}</td>--}}
                                     <td class="text-center p-1">{{ $datos->empleado->ultimo_tipo_contrato }}</td>
                                     <td class="text-left p-1 nombre_completo">{{ $datos->empleado->nombres . ' ' . $datos->empleado->ap_pat . ' ' . $datos->empleado->ap_mat }}</td>
-                                    <td class="text-center p-1">{{ $datos->empleado->ci }}</td>
+                                    {{--<td class="text-center p-1">{{ $datos->empleado->ci }}</td>--}}
                                     <td class="text-center p-1">
                                         <input type="checkbox" name="share[]" value="{{ $datos->id }}" {{ $datos->_share == '1' ? 'checked' : '' }}>
                                     </td>

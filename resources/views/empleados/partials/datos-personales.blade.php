@@ -2,19 +2,19 @@
 <div class="form-group row font-roboto-12">
     <div class="col-md-8">
         <div class="form-group row">
-            <div class="col-md-5 pr-1">
+            <div class="col-md-6 pr-1">
+                <label for="nombre" class="d-inline"><b>Nombre Completo</b></label>
+                <input type="text" name="nombre" value="{{ old('nombre') }}" id="nombre" class="form-control font-roboto-12 input-rojo" oninput="this.value = this.value.toUpperCase();">
+            </div>
+            <div class="col-md-6 pr-1 pl-1">
                 <label for="apellido_paterno" class="d-inline"><b>Apellido Paterno</b></label>
                 <input type="text" name="apellido_paterno" value="{{ old('apellido_paterno') }}" id="apellido_paterno" class="form-control font-roboto-12" oninput="this.value = this.value.toUpperCase();">
-            </div>
-            <div class="col-md-5 pr-1 pl-1">
-                <label for="apellido_materno" class="d-inline"><b>Apellido Materno</b></label>
-                <input type="text" name="apellido_materno" value="{{ old('apellido_materno') }}" id="apellido_materno" class="form-control font-roboto-12" oninput="this.value = this.value.toUpperCase();">
             </div>
         </div>
         <div class="row">
             <div class="col-md-6 pr-1">
-                <label for="nombre" class="d-inline"><b>Nombre Completo</b></label>
-                <input type="text" name="nombre" value="{{ old('nombre') }}" id="nombre" class="form-control font-roboto-12 input-rojo" oninput="this.value = this.value.toUpperCase();">
+                <label for="apellido_materno" class="d-inline"><b>Apellido Materno</b></label>
+                <input type="text" name="apellido_materno" value="{{ old('apellido_materno') }}" id="apellido_materno" class="form-control font-roboto-12" oninput="this.value = this.value.toUpperCase();">
             </div>
             <div class="col-md-3 pr-1 pl-1">
                 <label for="nro_carnet" class="d-inline"><b>Nro. Carnet</b></label>
@@ -35,7 +35,7 @@
     </div>
     <div class="col-md-4 pl-1">
         <label for="foto" class="d-inline"><b>Foto</b></label>
-        <div id="imagePreview"></div>
+        <div id="imagePreview-prueba"></div>
         <input type="file" name="foto" id="fotoInput" class="form-control font-roboto-12" onchange="previewImage(event)">
     </div>
 </div>

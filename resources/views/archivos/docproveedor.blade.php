@@ -17,7 +17,7 @@
 
                 &nbsp;&nbsp;&nbsp;
 
-     
+          
                    
                     <a href="{{ route('ProveedoresController.createdoc', $idproveedor) }}" class="tts:left tts-slideIn tts-custom" aria-label="Agregar">
                             <button class="btn btn-sm btn-info   font-verdana" type="button" >
@@ -26,8 +26,7 @@
                         </a>
             
                         <i class="fa fa-spinner custom-spinner fa-spin fa-2x fa-fw spinner-btn-send" style="display: none;"></i>
-                   
-       
+           
             
                 
             </div>
@@ -62,13 +61,11 @@
 
 
                             <td>
-                    
                                 <span class="tts:right tts-slideIn tts-custom" aria-label="Ver Documento">
                                 <a href="/sai/public/Archivos/{{$docprov -> documento}}" target="blank_"
                                 class="fa fa-eye fa-lg " ></a>
                                 
                             </span>
-               
 
                             </td>
                         </tr>

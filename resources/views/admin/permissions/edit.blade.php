@@ -10,12 +10,30 @@
     <div class="card-body body">
         <form method="post" action="{{ route('permissions.update') }}" id="form">
             @csrf
-            <div class="form-group row font-roboto-12 abs-center">
-                <div class="col-md-4 pr-1 pl-1">
-                    <label for="nombre" class="d-inline"><b>Nombre del permiso</b></label>
-                    <input type="hidden" name="permission_id" value="{{ $permission->id }}">
-                    <input type="hidden" name="dea_id" value="{{ $permission->dea_id }}">
+            <input type="hidden" name="permission_id" value="{{ $permission->id }}">
+            <input type="hidden" name="dea_id" value="{{ $permission->dea_id }}">
+            <div class="form-group row font-roboto-12 align-items-center">
+                <div class="col-md-5 pr-1 pl-1 text-right">
+                    <label for="titulo" class="d-inline"><b>Titulo: </b></label>
+                </div>
+                <div class="col-md-2 pr-1 pl-1">
+                    <input type="text" name="titulo" value="{{ $permission->title }}" id="titulo" class="form-control font-roboto-12 intro">
+                </div>
+            </div>
+            <div class="form-group row font-roboto-12 align-items-center">
+                <div class="col-md-5 pr-1 pl-1 text-right">
+                    <label for="nombre" class="d-inline"><b>Nombre del permiso: </b></label>
+                </div>
+                <div class="col-md-3 pr-1 pl-1">
                     <input type="text" name="name" value="{{ $permission->name }}" id="name" class="form-control font-roboto-12 intro">
+                </div>
+            </div>
+            <div class="form-group row font-roboto-12 align-items-center">
+                <div class="col-md-5 pr-1 pl-1 text-right">
+                    <label for="descripcion" class="d-inline"><b>Descripcion: </b></label>
+                </div>
+                <div class="col-md-4 pr-1 pl-1">
+                    <input type="text" name="descripcion" value="{{ $permission->descripcion }}" id="name" class="form-control font-roboto-12 intro">
                 </div>
             </div>
             <div class="form-group row font-roboto-12 abs-center">
