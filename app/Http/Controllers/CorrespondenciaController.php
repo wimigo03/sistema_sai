@@ -9,7 +9,7 @@ use App\Models\ProveedoresModel;
 use App\Models\DocProveedorModel;
 use App\Models\RemitenteModel;
 use App\Models\LugarModel;
-use App\Models\ArchivosModel;
+use App\Models\Archivo;
 use App\Models\AnioModel;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;

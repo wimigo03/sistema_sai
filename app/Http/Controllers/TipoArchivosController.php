@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\ProveedoresModel;
 use App\Models\DocProveedorModel;
 use App\Models\TipoAreaModel;
-use App\Models\ArchivosModel;
+use App\Models\Archivo;
 use App\Models\TiposModel;
 use App\Models\AnioModel;
 use Illuminate\Support\Facades\Redirect;

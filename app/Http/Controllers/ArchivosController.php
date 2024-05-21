@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 use App\Models\ProveedoresModel;
 use App\Models\DocProveedorModel;
 use App\Models\TipoAreaModel;
-use App\Models\ArchivosModel;
+use App\Models\Archivo;
 use App\Models\TiposModel;
 use App\Models\AnioModel;
 
@@ -24,6 +24,7 @@ class ArchivosController extends Controller
 {
     public function index(Request $request)
     {
+        $dea_id = Auth::user()->dea->id;
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
@@ -43,6 +44,7 @@ class ArchivosController extends Controller
                                 't.nombretipo'
                             )
                             ->where('ar.idarea', $personalArea->idarea)
+                            ->where('a.dea_id',$dea_id)
                             ->orderBy('a.fecha', 'desc');
 
             return Datatables::of($data)
@@ -74,6 +76,7 @@ class ArchivosController extends Controller
 
     public function index_ajax(Request $request)
     {
+        $dea_id = Auth::user()->dea->id;
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
@@ -93,6 +96,7 @@ class ArchivosController extends Controller
                         'ar.idarea',
                         't.nombretipo'
                     )
+                    ->where('a.dea_id',$dea_id)
                     ->orderBy('a.gestion', 'desc');
 
         return DataTables::of($data)
@@ -128,6 +132,7 @@ class ArchivosController extends Controller
         try{
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');
+                $dea_id = Auth::user()->dea->id;
                 $personal = User::find(Auth::user()->id);
                 $id = $personal->id;
                 $userdate = User::find($id)->usuariosempleados;
@@ -148,7 +153,7 @@ class ArchivosController extends Controller
                     }
                 }
 
-                $archivos = new ArchivosModel();
+                $archivos = new Archivo();
                 $archivos->nombrearchivo = $request->input('nombredocumento');
                 $archivos->referencia = $request->input('referencia');
                 $archivos->gestion = $fecha_gestion;
@@ -158,6 +163,7 @@ class ArchivosController extends Controller
                 $archivos->idtipo = $request->input('tipodocumento');
                 $archivos->id = $personal->id;
                 $archivos->fecha = $fecha_recepcion;
+                $archivos->dea_id = $dea_id;
                 $archivos->save();
 
                 //return redirect()->route('archivos2.index', ['idd' => $personalArea])->with('success_message', 'Archivo cargado correctamente...');
@@ -185,7 +191,7 @@ class ArchivosController extends Controller
                         ->orderBy('tt.idtipoarea', 'desc')
                         ->get();
 
-        $archivos = ArchivosModel::find($idarchivo);
+        $archivos = Archivo::find($idarchivo);
         $date = Carbon::now();
         $date = $date->format('Y');
         $date22 = $archivos->fecha;
@@ -204,7 +210,7 @@ class ArchivosController extends Controller
         $personalArea = Empleado::find($userdate->idemp);
         $fecha_recepcion = substr($request->fecha, 6, 4) . '-' . substr($request->fecha, 3, 2) . '-' . substr($request->fecha, 0, 2);
         $fecha_gestion = substr($request->fecha, 6, 4);
-        $archivos = ArchivosModel::find($idarchivo);
+        $archivos = Archivo::find($idarchivo);
         if ($request->file("documento") != null) {
             if ($request->hasFile("documento")) {
                 $file = $request->file("documento");
@@ -241,16 +247,28 @@ class ArchivosController extends Controller
         //return redirect()->route('archivos2.index', ['idd' => $personalArea]);
     }
 
+    public function documentacion($archivo_id)
+    {
+        $archivo = Archivo::find($archivo_id);
+        $array = explode("/", $archivo->documento);
+        $area = str_replace(" ", "%20", $array[0]);
+        $documento = $array[1];
+        //$url = 'https://sistemas.granchaco.gob.bo/documentos/' . $area . '/' . $documento;
+        return redirect()->to(url('documentos/' . $area . '/' . $documento));
+    }
     public function generar_qr($archivo_id)
     {
-        $archivo = ArchivosModel::find($archivo_id);
-        $url = 'https://sistemas.granchaco.gob.bo';
+        $archivo = Archivo::find($archivo_id);
+        $array = explode("/", $archivo->documento);
+        $area = str_replace(" ", "%20", $array[0]);
+        $documento = $array[1];
+        $url = 'https://sistemas.granchaco.gob.bo/documentos/' . $area . '/' . $documento;
         $qr = QrCode::format('svg')
                         ->margin(0)
                         ->backgroundColor(255, 255, 255)
                         ->color(0, 0, 0)
-                        ->size(100)
-                        ->generate($url . '/documentos/pdf_1716242020.pdf');
+                        ->size(200)
+                        ->generate($url);
         return view('archivos.generar-qr',compact('qr'));
     }
 }
