@@ -23,13 +23,9 @@ Route::prefix('correspondencia-local')->name('correspondencia.local.')->middlewa
     Route::post('{id}/updateCodigo', 'CorrespondenciaLocalController@updateCodigo')->name('update')->middleware('can:correspondencia_local.edit');
     Route::get('{id}/derivar', 'CorrespondenciaLocalController@derivar')->name('derivar')->middleware('can:correspondencia_local.derivar');
     Route::get('derivar2', 'CorrespondenciaLocalController@guardarderivacion')->name('guardarderivacion')->middleware('can:correspondencia_local.derivar');
-
     Route::get('delete{id}', 'CorrespondenciaLocalController@delete')->name('delete')->middleware('can:correspondencia_local.derivar');
     Route::post('/ruta', 'CorrespondenciaLocalController@respuesta')->name('pregunta')->middleware('can:correspondencia_local.derivar');
     Route::get('derivacion/index', 'CorrespondenciaLocalController@indexderivacion')->name('derivacion.index')->middleware('can:correspondencia_local.derivar');
     Route::get('derivacion/{id}/gestionarCorrespondencia', 'CorrespondenciaLocalController@gestionarCorrespondencia2')->name('derivacion.gestionar')->middleware('can:correspondencia_local.derivar');
-    //Route::get('correspondencia2/urlfilederivacion/{id}', 'CorrespondenciaLocalController@urlfile')->name('derivacion.urlfilederivacion');
-    //Route::get('correspondencia2/pregunta', 'CorrespondenciaLocalController@pregunta2')->name('derivacion.pregunta');
-    //Route::get('/get-users', 'CorrespondenciaLocalController@getUsers')->name('get-users');
-    //Route::post('/ruta', 'CorrespondenciaLocalController@respuesta')->name('pregunta');
+    Route::get('/generar-qr/{id}','CorrespondenciaLocalController@generar_qr')->name('generar.qr')->middleware('can:correspondencia_local.generar.qr');
 });

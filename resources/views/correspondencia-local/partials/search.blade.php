@@ -10,7 +10,7 @@
             @endcan
             @can('correspondencia_local.remitente.index')
                 <a href="{{ route('correspondencia.local.remitente.index') }}" class="tts:left tts-slideIn tts-custom" aria-label="Ir a remitentes">
-                    <button class="btn btn-sm btn-outline-warning font-roboto-12" type="button">
+                    <button class="btn btn-sm btn-outline-primary font-roboto-12" type="button">
                         <i class="fas fa-users fa-fw"></i>
                     </button>
                 </a>

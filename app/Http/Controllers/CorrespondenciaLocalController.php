@@ -18,14 +18,38 @@ use App\Models\AnioModel;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use DB;
 use Carbon\Carbon;
 use DataTables;
 
 class CorrespondenciaLocalController extends Controller
 {
+    private function generar_qr_general()
+    {
+        try{
+            ini_set('memory_limit','-1');
+            ini_set('max_execution_time','-1');
+            $correspondencias = ArchivoCorrespModel::where('id_archivo','>=',1)->where('id_archivo','<=',5000)->orderBy('id_archivo','asc')->get();
+            //dd($correspondencias);
+            foreach($correspondencias as $datos){
+                $correspondencia = ArchivoCorrespModel::select('id_recepcion')->where('id_archivo',$datos->id_archivo)->first();
+
+                $url = 'https://sistemas.granchaco.gob.bo/correspondencia-local/urlfile/' . $correspondencia->id_recepcion;
+                $qr = QrCode::format('png')->margin(0)->size(300)->generate($url, public_path() . '/documentos_correspondencia/qr/' . $correspondencia->id_recepcion . '.png');
+            }
+        }finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
+        dd("Generar Qr Finalizado...");
+    }
+
     public function index(Request $request)
     {
+        //if(Auth::user()->id == 102){
+            //$this->generar_qr_general();
+        //}
         if ($request->ajax()) {
             $data = DB::table('recepcion as r')
                         ->join('remitente as re', 're.id_remitente', 'r.id_remitente')
@@ -43,14 +67,14 @@ class CorrespondenciaLocalController extends Controller
 
             return Datatables::of($data)->addIndexColumn()
                                         ->addColumn('btn', 'correspondencia-local.btn')
-                                        ->addColumn('btn3', function ($data) {
+                                        /*->addColumn('btn3', function ($data) {
                                             if ($data->estado_corresp == 0) {
                                                 return view('correspondencia-local.btn4', compact('data'));
                                             }
                                             if ($data->estado_corresp == 1) {
                                                 return view('correspondencia-local.btn3', compact('data'));
                                             }
-                                        })
+                                        })*/
                                         ->rawColumns(['btn'])
                                         ->make(true);
         }
@@ -250,6 +274,9 @@ class CorrespondenciaLocalController extends Controller
             $archivo->documento = $nombre;
             $archivo->estado_envio = 1;
             $archivo->save();
+
+            $url = 'https://sistemas.granchaco.gob.bo/correspondencia-local/urlfile/' . $recepcion->id_recepcion;
+            $qr = QrCode::format('png')->margin(0)->size(300)->generate($url, public_path() . '/documentos_correspondencia/qr/' . $recepcion->id_recepcion . '.png');
         } else {
             $fecha_recepcion = substr($request->fecha, 6, 4) . '-' . substr($request->fecha, 3, 2) . '-' . substr($request->fecha, 0, 2);
             $recepcion = new Recepcion2Model();
@@ -329,8 +356,6 @@ class CorrespondenciaLocalController extends Controller
 
     public function storepdf(Request $request)
     {
-
-
         if ($request->hasFile("documento")) {
             $file = $request->file("documento");
             $file_name = $file->getClientOriginalName();
@@ -372,8 +397,6 @@ class CorrespondenciaLocalController extends Controller
 
     public function updatepdf(Request $request)
     {
-
-
         if ($request->hasFile("documento")) {
             $file = $request->file("documento");
             $file_name = $file->getClientOriginalName();
@@ -389,14 +412,12 @@ class CorrespondenciaLocalController extends Controller
         }
 
         $data = DB::table('recepcion as r')
-            ->join('archivocorresp as a', 'a.id_recepcion', '=', 'r.id_recepcion')
-            //->join('unidad as u', 'u.id_unidad', '=', 're.id_unidad')
-            ->select('a.id_archivo', 'r.id_recepcion')
-            ->where('r.id_recepcion', $request->input('idrecepcion'))
-            ->first();
+                    ->join('archivocorresp as a', 'a.id_recepcion', '=', 'r.id_recepcion')
+                    ->select('a.id_archivo', 'r.id_recepcion')
+                    ->where('r.id_recepcion', $request->input('idrecepcion'))
+                    ->first();
 
         $archivos = ArchivoCorrespModel::find($data->id_archivo);
-        // $archivos = new ArchivoCorrespModel();
         $archivos->id_recepcion = $request->input('idrecepcion');
         $archivos->documento = $nombre;
         $archivos->estado_envio = 1;
@@ -492,14 +513,16 @@ class CorrespondenciaLocalController extends Controller
                         ->where('r.id_recepcion', $recepcion_id)
                         ->first();
 
-        $redirect = '../documentos_correspondencia/';
+        $url = 'documentos_correspondencia/' . $data->documento;
 
-        return redirect()->to($redirect . $data->documento);
+        return redirect()->to(url($url));
     }
 
-
-
-
+    public function generar_qr($recepcion_id)
+    {
+        $url = 'documentos_correspondencia/qr/' . $recepcion_id . '.png';
+        return redirect()->to(url($url));
+    }
 
     public function indexderivacion()
     {
@@ -651,6 +674,4 @@ class CorrespondenciaLocalController extends Controller
 
         }
     }
-
-
 }

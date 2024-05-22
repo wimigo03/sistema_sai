@@ -23,7 +23,7 @@ use App\Models\Area;
 
 class ArchivosController extends Controller
 {
-    public function generar_qr_general()
+    private function generar_qr_general()
     {
         try{
             ini_set('memory_limit','-1');

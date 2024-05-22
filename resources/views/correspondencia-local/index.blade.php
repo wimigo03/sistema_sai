@@ -49,9 +49,8 @@
                 {
                     data: 'n_oficio',
                     name: 'r.n_oficio',
-                    class: 'text-justify p-1 font-roboto-11'
+                    class: 'text-center p-1 font-roboto-11'
                 },
-                @can('correspondencia_local.gestionar')
                 {
                     data: 'btn',
                     name: 'btn',
@@ -59,16 +58,6 @@
                     orderable: false,
                     searchable: false
                 },
-                @endcan
-                @can('correspondencia_local.urlfile')
-                {
-                    data: 'btn3',
-                    name: 'btn3',
-                    class: 'text-center p-1 font-roboto-11',
-                    orderable: false,
-                    searchable: false
-                }
-                @endcan
             ],
             language: {
                 "decimal": "",
@@ -78,7 +67,7 @@
                 "infoFiltered": "<span class='font-roboto-12'>(Filtrado de _MAX_ total entradas)</span>",
                 "infoPostFix": "",
                 "thousands": ",",
-                "lengthMenu": "<span class='font-roboto-12'>Mostrar _MENU_ Entradas</span>",
+                "lengthMenu": "<span class='font-roboto-12'>_MENU_</span>",
                 "loadingRecords": "<span class='font-roboto-12'>Cargando...</span>",
                 "processing": "<span class='font-roboto-12'>Procesando...</span>",
                 "search": "<span class='font-roboto-12'>Buscar:</span>",
