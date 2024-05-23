@@ -6,12 +6,7 @@
                     <th class="text-center p-1">N°</th>
                     <th class="text-center p-1">AREA</th>
                     <th class="text-center p-1">CARGO</th>
-                    <th class="text-center p-1">CARGO SALARIAL</th>
-                    <th class="text-center p-1">HABER BASICO</th>
-                    <th class="text-center p-1">CATEGORIA</th>
-                    <th class="text-center p-1">N. ADM.</th>
-                    <th class="text-center p-1">CLASE</th>
-                    <th class="text-center p-1">N. SAL.</th>
+                    <th class="text-center p-1">ESCALA SALARIAL</th>
                     <th class="text-center p-1">TIPO</th>
                     <th class="text-center p-1">ESTADO</th>
                     @canany(['files.editar'])
@@ -25,12 +20,7 @@
                         <td class="text-left p-1">{{ $datos->numfile }}</td>
                         <td class="text-left p-1">{{ $datos->area->nombrearea }}</td>
                         <td class="text-left p-1">{{ $datos->nombrecargo }}</td>
-                        <td class="text-left p-1">{{ $datos->cargo }}</td>
-                        <td class="text-right p-1">{{ number_format($datos->habbasico,2,'.',',') }}</td>
-                        <td class="text-center p-1">{{ $datos->categoria }}</td>
-                        <td class="text-center p-1">{{ $datos->niveladm }}</td>
-                        <td class="text-center p-1">{{ $datos->clase }}</td>
-                        <td class="text-center p-1">{{ $datos->nivelsal }}</td>
+                        <td class="text-center p-1">{{ $datos->escala_salarial != null ? $datos->escala_salarial->nombre : '-' }}</td>
                         <td class="text-center p-1">{{ $datos->tipos }}</td>
                         <td class="text-center p-1">
                             @if ($datos->estadofile == '1')

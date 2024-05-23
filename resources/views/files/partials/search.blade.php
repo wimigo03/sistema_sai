@@ -12,35 +12,23 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-md-3 pr-1 pl-1">
-            <select name="cargo" id="cargo" class="form-control select2">
+        <div class="col-md-5 pr-1 pl-1">
+            <select name="cargo_id" id="cargo_id" class="form-control select2">
                 <option value="">-</option>
                 @foreach ($cargos as $index => $value)
-                    <option value="{{ $index }}" @if(request('cargo') == $index) selected @endif >{{ $value }}</option>
+                    <option value="{{ $index }}" @if(request('cargo_id') == $index) selected @endif >{{ $value }}</option>
                 @endforeach
             </select>
-        </div>
-        <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="haber_basico" value="{{ request('haber_basico') }}" id="haber_basico" placeholder="--Haber Basico--" class="form-control font-roboto-12 intro">
         </div>
     </div>
     <div class="form-group row">
-        <div class="col-md-2 pr-1 pl-1">
-            <select name="categoria" id="categoria" class="form-control select2">
+        <div class="col-md-4 pr-1 pl-1">
+            <select name="escala_salarial_id" id="escala_salarial_id" class="form-control select2">
                 <option value="">-</option>
-                @foreach ($categorias as $index => $value)
-                    <option value="{{ $index }}" @if(request('categoria') == $index) selected @endif >{{ $value }}</option>
+                @foreach ($escalas_salariales as $index => $value)
+                    <option value="{{ $index }}" @if(request('escala_salarial_id') == $index) selected @endif >{{ $value }}</option>
                 @endforeach
             </select>
-        </div>
-        <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="n_adm" value="{{ request('n_adm') }}" id="n_adm" placeholder="--N. Adm.--" class="form-control font-roboto-12 intro">
-        </div>
-        <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="clase" value="{{ request('clase') }}" id="clase" placeholder="--Clase--" class="form-control font-roboto-12 intro">
-        </div>
-        <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="n_salarial" value="{{ request('n_salarial') }}" id="n_salarial" placeholder="--N. Salarial--" class="form-control font-roboto-12 intro">
         </div>
         <div class="col-md-2 pr-1 pl-1">
             <select name="tipo" id="tipo" class="form-control select2">

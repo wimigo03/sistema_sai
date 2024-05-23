@@ -27,33 +27,12 @@
                 rawValueTrimPrefix: false
             });
 
-            var cleave = new Cleave('#haber_basico', {
+            /*var cleave = new Cleave('#haber_basico', {
                 numeral: true,
                 numeralDecimalScale: 2,
                 numeralThousandsGroupStyle: 'thousand',
                 rawValueTrimPrefix: false
-            });
-
-            var cleave = new Cleave('#nivel_administrativo', {
-                numeral: true,
-                numeralDecimalScale: 0,
-                numeralThousandsGroupStyle: 'none',
-                rawValueTrimPrefix: false
-            });
-
-            var cleave = new Cleave('#clase', {
-                numeral: true,
-                numeralDecimalScale: 0,
-                numeralThousandsGroupStyle: 'none',
-                rawValueTrimPrefix: false
-            });
-
-            var cleave = new Cleave('#nivel_salarial', {
-                numeral: true,
-                numeralDecimalScale: 0,
-                numeralThousandsGroupStyle: 'none',
-                rawValueTrimPrefix: false
-            });
+            });*/
         });
 
         var Modal = function(mensaje){
@@ -78,28 +57,24 @@
         }
 
         function validar() {
-            if($("#area_id >option:selected").val() == ""){
-                Modal("El campo de seleccion <b>[Area]</b> es un dato obligatorio...");
+            if($("#tipo >option:selected").val() == ""){
+                Modal("El campo de seleccion <b>[Tipo]</b> es un dato obligatorio...");
                 return false;
             }
-            if ($("#nro_file").val() == "") {
-                Modal('El campo <b>[Nro. de File]</b> es un dato obligaorio.');
+            if($("#area_id >option:selected").val() == ""){
+                Modal("El campo de seleccion <b>[Area]</b> es un dato obligatorio...");
                 return false;
             }
             if ($("#cargo").val() == "") {
                 Modal('El campo <b>[Cargo]</b> es un dato obligatorio.');
                 return false;
             }
-            if ($("#cargo_detalle").val() == "") {
-                Modal('El campo <b>[Nombre del Cargo]</b> es un dato obligatorio.');
+            if($("#escala_salarial_id >option:selected").val() == ""){
+                Modal("El campo de seleccion <b>[Escala Salarial]</b> es un dato obligatorio...");
                 return false;
             }
-            if($("#categoria >option:selected").val() == ""){
-                Modal("El campo de seleccion <b>[Categoria]</b> es un dato obligatorio...");
-                return false;
-            }
-            if($("#tipo >option:selected").val() == ""){
-                Modal("El campo de seleccion <b>[Tipo]</b> es un dato obligatorio...");
+            if ($("#nro_file").val() == "") {
+                Modal('El campo <b>[Nro. de File]</b> es un dato obligaorio.');
                 return false;
             }
             return true;

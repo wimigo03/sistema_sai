@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Area;
+use App\Models\EscalaSalarial;
 use App\Models\Canasta\Dea;
 use DB;
 
@@ -14,17 +15,12 @@ class File extends Model
     protected $primaryKey= 'idfile';
     protected $fillable = [
         'numfile',
-        'cargo',
         'nombrecargo',
-        'habbasico',
-        'categoria',
-        'niveladm',
-        'clase',
-        'nivelsal',
         'tipofile',
         'estadofile',
         'idarea',
-        'dea_id'
+        'dea_id',
+        'escala_salarial_id'
     ];
 
     const ESTADOS = [
@@ -96,6 +92,11 @@ class File extends Model
         return $this->belongsTo(Area::class, 'idarea', 'idarea');
     }
 
+    public function escala_salarial()
+    {
+        return $this->belongsTo(EscalaSalarial::class, 'escala_salarial_id', 'id');
+    }
+
     public function scopeByDea($query, $dea_id){
         if($dea_id){
             return $query->where('dea_id', $dea_id);
@@ -114,40 +115,15 @@ class File extends Model
         }
     }
 
-    public function scopeByCargo($query, $cargo){
-        if($cargo){
-            return $query->where('cargo', $cargo);
+    public function scopeByCargo($query, $cargo_id){
+        if($cargo_id){
+            return $query->where('idfile', $cargo_id);
         }
     }
 
-    public function scopeByHaberBasico($query, $haber_basico){
-        if($haber_basico){
-            $haber_basico = floatval(str_replace(",", "", $haber_basico));
-            return $query->where('habbasico', $haber_basico);
-        }
-    }
-
-    public function scopeByCategoria($query, $categoria){
-        if($categoria){
-            return $query->where('cargo', $categoria);
-        }
-    }
-
-    public function scopeByNivelAdministrativo($query, $n_adm){
-        if($n_adm){
-            return $query->where('niveladm', $n_adm);
-        }
-    }
-
-    public function scopeByClase($query, $clase){
-        if($clase){
-            return $query->where('clase', $clase);
-        }
-    }
-
-    public function scopeByNivelSalarial($query, $n_salarial){
-        if($n_salarial){
-            return $query->where('nivelsal', $n_salarial);
+    public function scopeByEscalaSalarial($query, $escala_salarial_id){
+        if($escala_salarial_id){
+            return $query->where('escala_salarial_id', $escala_salarial_id);
         }
     }
 

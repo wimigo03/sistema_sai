@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Models\Canasta\Dea;
 use App\Models\Area;
+use Illuminate\Support\Facades\Auth;
 use DB;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests;
@@ -183,6 +184,26 @@ class UserController extends Controller
             return redirect()->route('users.index')->with('success_message', 'Se modifico un usuario en el registro.');
         } catch (ValidationException $e) {
             return redirect()->route('users.edit')
+                ->withErrors($e->validator->errors())
+                ->withInput();
+        }
+    }
+
+    public function update_password_mi_perfil(Request $request)
+    {
+        $request->validate([
+            'password' => 'nullable|min:6|confirmed'
+        ]);
+        try{
+            $user = User::find($request->user_id);
+            $user->update([
+                'password' => $request->password
+            ]);
+
+            Auth::logout();
+            return redirect('/login');
+        } catch (ValidationException $e) {
+            return redirect()->route('empleado.mi.perfil')
                 ->withErrors($e->validator->errors())
                 ->withInput();
         }

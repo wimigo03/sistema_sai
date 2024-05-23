@@ -21,15 +21,15 @@
                 width: '100%'
             });
 
-            $('#cargo').select2({
+            $('#cargo_id').select2({
                 theme: "bootstrap4",
                 placeholder: "--Cargo--",
                 width: '100%'
             });
 
-            $('#categoria').select2({
+            $('#escala_salarial_id').select2({
                 theme: "bootstrap4",
-                placeholder: "--Categoria--",
+                placeholder: "--Escala Salarial--",
                 width: '100%'
             });
 

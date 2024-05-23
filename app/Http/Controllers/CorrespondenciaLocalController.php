@@ -30,8 +30,8 @@ class CorrespondenciaLocalController extends Controller
         try{
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');
-            $correspondencias = ArchivoCorrespModel::where('id_archivo','>=',1)->where('id_archivo','<=',5000)->orderBy('id_archivo','asc')->get();
-            //dd($correspondencias);
+            $correspondencias = ArchivoCorrespModel::where('id_archivo','>=',5001)->where('id_archivo','<=',10000)->orderBy('id_archivo','asc')->get();
+            dd($correspondencias);
             foreach($correspondencias as $datos){
                 $correspondencia = ArchivoCorrespModel::select('id_recepcion')->where('id_archivo',$datos->id_archivo)->first();
 

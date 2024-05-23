@@ -4,6 +4,21 @@
     <input type="hidden" name="file_id" value="{{ $file->idfile }}">
     <div class="form-group row font-roboto-12 align-items-center">
         <div class="col-md-4 pr-1 pl-1 text-right">
+            <label for="tipo" class="d-inline"><b>Tipo</b></label>
+        </div>
+        <div class="col-md-2 pr-1 pl-1">
+            <div class="select2-container-rojo">
+                <select name="tipo" id="tipo" class="form-control font-roboto-12 select2">
+                    <option value="">--Seleccionar--</option>
+                    @foreach ($tipos as $index => $value)
+                        <option value="{{ $index }}" @if($file->tipofile == $index) selected @endif >{{ $value }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row font-roboto-12 align-items-center">
+        <div class="col-md-4 pr-1 pl-1 text-right">
             <label for="area_id" class="d-inline"><b>Area</b></label>
         </div>
         <div class="col-md-5 pr-1 pl-1">
@@ -24,88 +39,38 @@
     </div>
     <div class="form-group row font-roboto-12 align-items-center">
         <div class="col-md-4 pr-1 pl-1 text-right">
+            <label for="cargo" class="d-inline"><b>Nombre del cargo: </b></label>
+        </div>
+        <div class="col-md-5 pr-1 pl-1">
+            <input type="text" name="cargo" value="{{ $file->nombrecargo }}" id="cargo" class="form-control font-roboto-12 input-rojo" oninput="this.value = this.value.toUpperCase();">
+        </div>
+    </div>
+    <div class="form-group row font-roboto-12 align-items-center">
+        <div class="col-md-4 pr-1 pl-1 text-right">
+            <label for="escala_salarial_id" class="d-inline"><b>Escala Salarial: </b></label>
+        </div>
+        <div class="col-md-5 pr-1 pl-1">
+            <div class="select2-container-rojo">
+                <select name="escala_salarial_id" id="escala_salarial_id" class="form-control font-roboto-12 select2">
+                    <option value="">--Seleccionar--</option>
+                    @foreach ($escalas_salariales as $escala_salarial)
+                        <option value="{{ $escala_salarial->id }}"
+                            @if($escala_salarial->id == old('escala_salarial_id') || (isset($file) && $file->escala_salarial_id == $escala_salarial->id))
+                                selected
+                            @endif>
+                            {{ $escala_salarial->nombre }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row font-roboto-12 align-items-center">
+        <div class="col-md-4 pr-1 pl-1 text-right">
             <label for="nro_file" class="d-inline"><b>Nro. File</b></label>
         </div>
         <div class="col-md-2 pr-1 pl-1">
             <input type="text" name="nro_file" value="{{ $file->numfile }}" id="nro_file" class="form-control font-roboto-12 input-rojo">
-        </div>
-    </div>
-    <div class="form-group row font-roboto-12 align-items-center">
-        <div class="col-md-4 pr-1 pl-1 text-right">
-            <label for="cargo_detalle" class="d-inline"><b>Nombre del cargo</b></label>
-        </div>
-        <div class="col-md-5 pr-1 pl-1">
-            <input type="text" name="cargo_detalle" value="{{ $file->nombrecargo }}" id="cargo_detalle" class="form-control font-roboto-12 input-rojo" oninput="this.value = this.value.toUpperCase();">
-        </div>
-    </div>
-    <div class="form-group row font-roboto-12 align-items-center">
-        <div class="col-md-4 pr-1 pl-1 text-right">
-            <label for="cargo" class="d-inline"><b>Cargo Salarial</b></label>
-        </div>
-        <div class="col-md-5 pr-1 pl-1">
-            <input type="text" name="cargo" value="{{ $file->cargo }}" id="cargo" class="form-control font-roboto-12 input-rojo" oninput="this.value = this.value.toUpperCase();">
-        </div>
-    </div>
-    <div class="form-group row font-roboto-12 align-items-center">
-        <div class="col-md-4 pr-1 pl-1 text-right">
-            <label for="haber_basico" class="d-inline"><b>Haber Basico</b></label>
-        </div>
-        <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="haber_basico" value="{{ number_format($file->habbasico,2,'.',',') }}" id="haber_basico" class="form-control font-roboto-12">
-        </div>
-    </div>
-    <div class="form-group row font-roboto-12 align-items-center">
-        <div class="col-md-4 pr-1 pl-1 text-right">
-            <label for="categoria" class="d-inline"><b>Categoria</b></label>
-        </div>
-        <div class="col-md-2 pr-1 pl-1">
-            <div class="select2-container-rojo">
-                <select name="categoria" id="categoria" class="form-control font-roboto-12 select2">
-                    <option value="">--Seleccionar--</option>
-                    <option value="OPERATIVO" @if($file->categoria == 'OPERATIVO') selected @endif >OPERATIVO</option>
-                    <option value="ADMINISTRATIVO" @if($file->categoria == 'ADMINISTRATIVO') selected @endif >ADMINISTRATIVO</option>
-                    <option value="SUPERIOR" @if($file->categoria == 'SUPERIOR') selected @endif >SUPERIOR</option>
-                </select>
-            </div>
-        </div>
-    </div>
-    <div class="form-group row font-roboto-12 align-items-center">
-        <div class="col-md-4 pr-1 pl-1 text-right">
-            <label for="nivel_administrativo" class="d-inline"><b>Nivel Administrativo</b></label>
-        </div>
-        <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="nivel_administrativo" value="{{ $file->niveladm }}" id="nivel_administrativo" class="form-control font-roboto-12">
-        </div>
-    </div>
-    <div class="form-group row font-roboto-12 align-items-center">
-        <div class="col-md-4 pr-1 pl-1 text-right">
-            <label for="clase" class="d-inline"><b>Clase</b></label>
-        </div>
-        <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="clase" value="{{ $file->clase }}" id="clase" class="form-control font-roboto-12">
-        </div>
-    </div>
-    <div class="form-group row font-roboto-12 align-items-center">
-        <div class="col-md-4 pr-1 pl-1 text-right">
-            <label for="nivel_salarial" class="d-inline"><b>Nivel Salarial</b></label>
-        </div>
-        <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="nivel_salarial" value="{{ $file->nivelsal }}" id="nivel_salarial" class="form-control font-roboto-12">
-        </div>
-    </div>
-    <div class="form-group row font-roboto-12 align-items-center">
-        <div class="col-md-4 pr-1 pl-1 text-right">
-            <label for="tipo" class="d-inline"><b>Tipo</b></label>
-        </div>
-        <div class="col-md-2 pr-1 pl-1">
-            <div class="select2-container-rojo">
-                <select name="tipo" id="tipo" class="form-control font-roboto-12 select2">
-                    <option value="">--Seleccionar--</option>
-                    @foreach ($tipos as $index => $value)
-                        <option value="{{ $index }}" @if($file->tipofile == $index) selected @endif >{{ $value }}</option>
-                    @endforeach
-                </select>
-            </div>
         </div>
     </div>
     <div class="form-group row font-roboto-12 align-items-center">

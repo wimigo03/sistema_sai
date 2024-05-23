@@ -50,7 +50,7 @@
                 <label for="cargo_id" class="d-inline"><b>Cargo:</b></label>
             </div>
             <div class="col-md-6 pr-1 pl-1">
-                {{ $empleado_contrato->file->cargo . ' - ' . $empleado_contrato->file->nombrecargo }}
+                {{ $empleado_contrato->file->nombrecargo . ' - ' . $empleado_contrato->escala_salarial->nombre }}
             </div>
         </div>
         <div class="form-group row font-roboto-12 abs-center">

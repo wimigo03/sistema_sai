@@ -345,6 +345,10 @@
                 Modal("El campo de seleccion <b>[Extension]</b> es un dato obligatorio...");
                 return false;
             }
+            if($("#sexo >option:selected").val() == ""){
+                Modal("El campo de seleccion <b>[Sexo]</b> es un dato obligatorio...");
+                return false;
+            }
             if($("#area_id >option:selected").val() == ""){
                 Modal("El campo de seleccion <b>[Area]</b> es un dato obligatorio...");
                 return false;

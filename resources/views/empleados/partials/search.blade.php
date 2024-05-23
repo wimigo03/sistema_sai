@@ -18,10 +18,18 @@
             </select>
         </div>
         <div class="col-md-3 pr-1 pl-1">
-            <input type="text" name="nombre" value="{{ request('nombre') }}" id="nombre" placeholder="--Nombre(s)--" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
+            <select name="escala_salarial_id" id="escala_salarial_id" class="form-control select2">
+                <option value="">-</option>
+                @foreach ($escalas_salariales as $index => $value)
+                    <option value="{{ $index }}" @if(request('escala_salarial_id') == $index) selected @endif >{{ $value }}</option>
+                @endforeach
+            </select>
         </div>
     </div>
     <div class="form-group row">
+        <div class="col-md-4 pr-1 pl-1">
+            <input type="text" name="nombre" value="{{ request('nombre') }}" id="nombre" placeholder="--Nombre(s)--" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
+        </div>
         <div class="col-md-3 pr-1 pl-1">
             <input type="text" name="ap_paterno" value="{{ request('ap_paterno') }}" id="ap_paterno" placeholder="--Apellido Paterno--" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
         </div>
@@ -30,6 +38,16 @@
         </div>
         <div class="col-md-2 pr-1 pl-1">
             <input type="text" name="nro_carnet" value="{{ request('nro_carnet') }}" id="nro_carnet" placeholder="--Nro carnet--" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-2 pr-1 pl-1">
+            <select name="sexo" id="sexo" class="form-control select2">
+                <option value="">-</option>
+                @foreach ($sexos as $index => $value)
+                    <option value="{{ $index }}" @if(request('sexo') == $index) selected @endif >{{ $value }}</option>
+                @endforeach
+            </select>
         </div>
         <div class="col-md-2 pr-1 pl-1">
             <select name="tipo" id="tipo" class="form-control select2">
@@ -42,8 +60,6 @@
         <div class="col-md-2 pr-1 pl-1">
             <input type="text" name="fecha_ingreso" value="{{ request('fecha_ingreso') }}" id="fecha_ingreso" placeholder="--Ingreso--" class="form-control font-roboto-12 intro" data-language="es">
         </div>
-    </div>
-    <div class="form-group row">
         <div class="col-md-2 pr-1 pl-1">
             <input type="text" name="fecha_retiro" value="{{ request('fecha_retiro') }}" id="fecha_retiro" placeholder="--Retiro--" class="form-control font-roboto-12 intro" data-language="es">
         </div>

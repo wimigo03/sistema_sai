@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Area;
+use App\Models\EscalaSalarial;
 use App\Models\EmpleadoContrato;
 use App\Models\File;
 
@@ -34,12 +35,12 @@ class Empleado extends Model
         'regprofesional',
         'estado',
         'cuentabanco',
-        'filecontrato',
         'nit',
         'sigep',
         'extension',
         'url_foto',
-        'kua'
+        'kua',
+        'sexo'
     ];
 
     const ESTADOS = [
@@ -64,6 +65,11 @@ class Empleado extends Model
         'PRIMARIA' => 'PRIMARIA',
         'SECUNDARIA' => 'SECUNDARIA',
         'SUPERIOR' => 'SUPERIOR'
+    ];
+
+    const SEXOS = [
+        '1' => 'MASCULINO',
+        '2' => 'FEMENINO'
     ];
 
     public function getStatusCheckAttribute(){
@@ -99,6 +105,24 @@ class Empleado extends Model
                 return "badge-with-padding badge badge-success";
             case '2':
                 return "badge-with-padding badge badge-danger";
+        }
+    }
+
+    public function getSexosAttribute(){
+        switch ($this->sexo) {
+            case '1':
+                return "M";
+            case '2':
+                return "F";
+        }
+    }
+
+    public function getSexoFullAttribute(){
+        switch ($this->sexo) {
+            case '1':
+                return "MASCULINO";
+            case '2':
+                return "FEMENINO";
         }
     }
 
@@ -149,7 +173,28 @@ class Empleado extends Model
         }
     }
 
-    public function getCargoFileAttribute(){
+    public function getEscalaSalarialFileAttribute(){
+        $contrato = EmpleadoContrato::select('escala_salarial_id')->where('idemp',$this->idemp)->orderBy('id','desc')->take(1)->first();
+        if($contrato){
+            $escala_salarial = EscalaSalarial::where('id',$contrato->escala_salarial_id)->first();
+            if($escala_salarial){
+                return $escala_salarial->nombre;
+            }
+        }
+    }
+
+    public function getAreaUnidadAttribute(){
+        $longitud = strlen($this->area->nombrearea);
+        if($longitud > 25){
+            $area_abreviada = mb_substr($this->area->nombrearea, 0, 25, 'UTF-8') . '...';
+        }else{
+            $area_abreviada = $this->area->nombrearea;
+        }
+
+        return $area_abreviada;
+    }
+
+    /*public function getCargoFileAttribute(){
         $contrato = EmpleadoContrato::select('idfile')->where('idemp',$this->idemp)->orderBy('id','desc')->take(1)->first();
         if($contrato){
             $cargo = File::where('idfile',$contrato->idfile)->first();
@@ -157,7 +202,7 @@ class Empleado extends Model
                 return $cargo->cargo;
             }
         }
-    }
+    }*/
 
     public function area()
     {
@@ -285,9 +330,26 @@ class Empleado extends Model
         }
     }
 
+    public function scopeByEscalaSalarial($query, $escala_salarial_id){
+        if ($escala_salarial_id) {
+                return $query
+                    ->whereIn('idemp', function ($subquery) use($escala_salarial_id) {
+                        $subquery->select('idemp')
+                            ->from('empleados_contratos')
+                            ->where('escala_salarial_id', $escala_salarial_id);
+                    });
+        }
+    }
+
     public function scopeByEstado($query, $estado){
         if($estado){
             return $query->where('estado', $estado);
+        }
+    }
+
+    public function scopeBySexo($query, $sexo){
+        if($sexo){
+            return $query->where('sexo', $sexo);
         }
     }
 }

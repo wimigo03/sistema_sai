@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Carbon\Carbon;
 
-class EmpleadosExcel implements FromView,ShouldAutoSize{
+class EmpleadosExcel implements FromView{
 
     use Exportable;
 

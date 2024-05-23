@@ -1,44 +1,51 @@
 <br>
 <div class="form-group row font-roboto-12">
-    <div class="col-md-8">
-        <div class="form-group row">
-            <div class="col-md-6 pr-1">
-                <label for="nombre" class="d-inline"><b>Nombre Completo</b></label>
-                <input type="text" name="nombre" value="{{ $empleado->nombres }}" id="nombre" class="form-control font-roboto-12 input-rojo" oninput="this.value = this.value.toUpperCase();">
-            </div>
-            <div class="col-md-6 pr-1 pl-1">
-                <label for="apellido_paterno" class="d-inline"><b>Apellido Paterno</b></label>
-                <input type="text" name="apellido_paterno" value="{{ $empleado->ap_pat }}" id="apellido_paterno" class="form-control font-roboto-12" oninput="this.value = this.value.toUpperCase();">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 pr-1">
-                <label for="apellido_materno" class="d-inline"><b>Apellido Materno</b></label>
-                <input type="text" name="apellido_materno" value="{{ $empleado->ap_mat }}" id="apellido_materno" class="form-control font-roboto-12" oninput="this.value = this.value.toUpperCase();">
-            </div>
-            <div class="col-md-3 pr-1 pl-1">
-                <label for="nro_carnet" class="d-inline"><b>Nro. Carnet</b></label>
-                <input type="text" name="nro_carnet" value="{{ $empleado->ci }}" id="nro_carnet" class="form-control font-roboto-12 input-rojo" oninput="this.value = this.value.toUpperCase();eliminarEspaciosEnBlanco();">
-            </div>
-            <div class="col-md-3 pr-1 pl-1">
-                <label for="extension" class="d-inline"><b>Extension</b></label>
-                <div class="select2-container-rojo">
-                    <select name="extension" id="extension" class="form-control font-roboto-12 select2">
-                        <option value="">--Seleccionar--</option>
-                        @foreach ($extensiones as $index => $value)
-                            <option value="{{ $index }}" @if($empleado->extension == $index) selected @endif >{{ $value }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-        </div>
+    <div class="col-md-4 pr-1">
+        <label for="nombre" class="d-inline"><b>Nombre (s)</b></label>
+        <input type="text" name="nombre" value="{{ $empleado->nombres }}" id="nombre" class="form-control font-roboto-12 input-rojo" oninput="this.value = this.value.toUpperCase();">
     </div>
-    <div class="col-md-4 pl-1">
+    <div class="col-md-3 pr-1 pl-1">
+        <label for="apellido_paterno" class="d-inline"><b>Apellido Paterno</b></label>
+        <input type="text" name="apellido_paterno" value="{{ $empleado->ap_pat }}" id="apellido_paterno" class="form-control font-roboto-12" oninput="this.value = this.value.toUpperCase();">
+    </div>
+    <div class="col-md-3 pr-1 pl-1">
+        <label for="apellido_materno" class="d-inline"><b>Apellido Materno</b></label>
+        <input type="text" name="apellido_materno" value="{{ $empleado->ap_mat }}" id="apellido_materno" class="form-control font-roboto-12" oninput="this.value = this.value.toUpperCase();">
+    </div>
+</div>
+<div class="form-group row font-roboto-12">
+    <div class="col-md-5 pr-1">
         <label for="foto" class="d-inline"><b>Foto</b></label>
         <div id="imagePreview-prueba">
             {{--<img src="{{ asset($empleado->url_foto) }}" alt="logo" style="width: 65px; height: auto;">--}}
         </div>
         <input type="file" name="foto" id="fotoInput" class="form-control font-roboto-12" onchange="previewImage(event)">
+    </div>
+    <div class="col-md-2 pr-1 pl-1">
+        <label for="nro_carnet" class="d-inline"><b>Nro. Carnet</b></label>
+        <input type="text" name="nro_carnet" value="{{ $empleado->ci }}" id="nro_carnet" class="form-control font-roboto-12 input-rojo" oninput="this.value = this.value.toUpperCase();eliminarEspaciosEnBlanco();">
+    </div>
+    <div class="col-md-2 pr-1 pl-1">
+        <label for="extension" class="d-inline"><b>Extension</b></label>
+        <div class="select2-container-rojo">
+            <select name="extension" id="extension" class="form-control font-roboto-12 select2">
+                <option value="">--Seleccionar--</option>
+                @foreach ($extensiones as $index => $value)
+                    <option value="{{ $index }}" @if($empleado->extension == $index) selected @endif >{{ $value }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    <div class="col-md-2 pr-1 pl-1">
+        <label for="sexo" class="d-inline"><b>Sexo</b></label>
+        <div class="select2-container-rojo">
+            <select name="sexo" id="sexo" class="form-control font-roboto-12 select2">
+                <option value="">--Seleccionar--</option>
+                @foreach ($sexos as $index => $value)
+                    <option value="{{ $index }}" @if($empleado->sexo == $index) selected @endif >{{ $value }}</option>
+                @endforeach
+            </select>
+        </div>
     </div>
 </div>
 <div class="form-group row font-roboto-12">

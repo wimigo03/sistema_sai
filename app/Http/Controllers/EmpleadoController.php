@@ -7,6 +7,7 @@ use App\Models\Empleado;
 use App\Models\EmpleadoContrato;
 use App\Models\Area;
 use App\Models\File;
+use App\Models\EscalaSalarial;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests;
@@ -50,13 +51,15 @@ class EmpleadoController extends Controller
         $dea_id = Auth::user()->dea->id;
         $areas = Area::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
         $cargos = File::where('dea_id',$dea_id)->pluck('nombrecargo','idfile');
+        $escalas_salariales = EscalaSalarial::where('dea_id',$dea_id)->pluck('nombre','id');
         $estados = Empleado::ESTADOS;
+        $sexos = Empleado::SEXOS;
         $tipos = EmpleadoContrato::TIPOS;
         $empleados = Empleado::query()
                                 ->ByDea($dea_id)
                                 ->orderBy('idemp','desc')
                                 ->paginate(10);
-        return view('empleados.index', compact('dea_id','areas','cargos','estados','tipos','empleados'));
+        return view('empleados.index', compact('dea_id','areas','cargos','escalas_salariales','estados','sexos','tipos','empleados'));
     }
 
     public function search(Request $request)
@@ -64,12 +67,15 @@ class EmpleadoController extends Controller
         $dea_id = $request->dea_id;
         $areas = Area::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
         $cargos = File::where('dea_id',$dea_id)->pluck('nombrecargo','idfile');
+        $escalas_salariales = EscalaSalarial::where('dea_id',$dea_id)->pluck('nombre','id');
         $estados = Empleado::ESTADOS;
+        $sexos = Empleado::SEXOS;
         $tipos = EmpleadoContrato::TIPOS;
         $empleados = Empleado::query()
                                 ->ByDea($dea_id)
                                 ->ByArea($request->area_id)
                                 ->ByCargo($request->file_id)
+                                ->ByEscalaSalarial($request->escala_salarial_id)
                                 ->ByApellidoPaterno($request->ap_paterno)
                                 ->ByApellidoMaterno($request->ap_materno)
                                 ->ByNombre($request->nombre)
@@ -78,19 +84,21 @@ class EmpleadoController extends Controller
                                 ->ByFechaIngreso($request->fecha_ingreso)
                                 ->ByFechaRetiro($request->fecha_retiro)
                                 ->ByEstado($request->estado)
+                                ->BySexo($request->sexo)
                                 ->orderBy('idemp','desc')
                                 ->paginate(10);
-        return view('empleados.index', compact('dea_id','areas','cargos','estados','tipos','empleados'));
+        return view('empleados.index', compact('dea_id','areas','cargos','escalas_salariales','estados','sexos','tipos','empleados'));
     }
 
     public function create($dea_id)
     {
         $extensiones = Empleado::EXTENSIONES;
         $grados_academicos = Empleado::GRADOS_ACADEMICOS;
+        $sexos = Empleado::SEXOS;
         //$areas = Area::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
         //$cargos = File::where('dea_id',$dea_id)->pluck('nombrecargo','idfile');
         $tipos = EmpleadoContrato::TIPOS;
-        return view('empleados.create', compact('dea_id','extensiones','grados_academicos','tipos'));
+        return view('empleados.create', compact('dea_id','extensiones','grados_academicos','sexos','tipos'));
     }
 
     public function getAreas(Request $request){
@@ -121,12 +129,13 @@ class EmpleadoController extends Controller
             $id = $input['id'];
             $tipo = $input['tipo'];
             $dea_id = Auth::user()->dea->id;
-            $cargos = DB::table('file')
-                            ->where('dea_id',$dea_id)
-                            ->where('idarea', $id)
-                            ->where('tipofile', $tipo)
-                            ->where('estadofile','2')
-                            ->select(DB::raw("concat(numfile,' - ',nombrecargo,' - ',cargo) as full_cargo"),'idfile')
+            $cargos = DB::table('file as a')
+                            ->join('escala_salarial as b','b.id','a.escala_salarial_id')
+                            ->where('a.dea_id',$dea_id)
+                            ->where('a.idarea', $id)
+                            ->where('a.tipofile', $tipo)
+                            ->where('a.estadofile','2')
+                            ->select(DB::raw("concat(a.numfile,' - ',a.nombrecargo,' - ',b.nombre) as full_cargo"),'idfile')
                             ->get()
                             ->toJson();
             if($cargos){
@@ -154,7 +163,7 @@ class EmpleadoController extends Controller
                     'nombres' => $request->nombre,
                     'ap_pat' => $request->apellido_paterno,
                     'ap_mat' => $request->apellido_materno,
-                    'natalicio' => date('Y-m-d', strtotime(str_replace('/', '-', $request->natalicio))),
+                    'natalicio' => $request->natalicio != null ? date('Y-m-d', strtotime(str_replace('/', '-', $request->natalicio))) : null,
                     'ci' => $request->nro_carnet,
                     'extension' => $request->extension,
                     'servmilitar' => $request->libreta_militar,
@@ -168,12 +177,13 @@ class EmpleadoController extends Controller
                     'regprofesional' => $request->registro_profesional,
                     'estado' => '1',
                     'cuentabanco' => $request->cuenta_banco,
-                    'filecontrato' => $request->file_contrato,
                     'nit' => $request->nit,
                     'sigep' => isset($request->sigep) ? '1' : '2',
-                    'kua' => $request->kua
+                    'kua' => $request->kua,
+                    'sexo' => $request->sexo
                 ]);
 
+                $file = File::select('escala_salarial_id')->where('idfile',$request->cargo_id)->first();
                 $empleado_contrato = EmpleadoContrato::create([
                     'idfile' => $request->cargo_id,
                     'dea_id' => $request->dea_id,
@@ -198,7 +208,8 @@ class EmpleadoController extends Controller
                     'ncontrato' => $request->n_contrato,
                     'npreventivo' => $request->n_preventivo,
                     'rejap' => isset($request->rejap) ? '1' : '2',
-                    'estado' => '1'
+                    'estado' => '1',
+                    'escala_salarial_id' => $file->escala_salarial_id
                 ]);
 
                 $foto = isset($request->foto) ? date('Ymdhis') . '_' . $empleado->idemp . '.'.pathinfo($request->foto->getClientOriginalName(), PATHINFO_EXTENSION) : null;
@@ -244,17 +255,18 @@ class EmpleadoController extends Controller
         }
         $extensiones = Empleado::EXTENSIONES;
         $grados_academicos = Empleado::GRADOS_ACADEMICOS;
+        $sexos = Empleado::SEXOS;
         $areas = Area::where('dea_id',$dea_id)->where('estadoarea','1')->get();
         $cargos = File::where('dea_id',$dea_id)
                             ->where('idarea',$empleado->idarea)
                             ->where('estadofile','2')
                             ->orWhere('idfile',$empleado_contrato->idfile)->get();
         $tipos = EmpleadoContrato::TIPOS;
-        return view('empleados.editar', compact('empleado','dea_id','empleado_contrato','extensiones','grados_academicos','areas','cargos','tipos'));
+        return view('empleados.editar', compact('empleado','dea_id','empleado_contrato','extensiones','grados_academicos','sexos','areas','cargos','tipos'));
     }
 
     public function update(Request $request)
-    {//dd($request->all());
+    {
         $request->validate([
             'nro_carnet' => 'required|numeric|integer|unique:empleados,ci,' . $request->empleado_id . ',idemp,dea_id,'. $request->dea_id,
             'foto' => 'nullable|file|mimes:jpg,jpeg|max:2048'
@@ -269,7 +281,7 @@ class EmpleadoController extends Controller
                     'nombres' => $request->nombre,
                     'ap_pat' => $request->apellido_paterno,
                     'ap_mat' => $request->apellido_materno,
-                    'natalicio' => date('Y-m-d', strtotime(str_replace('/', '-', $request->natalicio))),
+                    'natalicio' => $request->natalicio != null ? date('Y-m-d', strtotime(str_replace('/', '-', $request->natalicio))) : null,
                     'ci' => $request->nro_carnet,
                     'extension' => $request->extension,
                     'servmilitar' => $request->libreta_militar,
@@ -283,10 +295,10 @@ class EmpleadoController extends Controller
                     'regprofesional' => $request->registro_profesional,
                     'estado' => '1',
                     'cuentabanco' => $request->cuenta_banco,
-                    'filecontrato' => $request->file_contrato,
                     'nit' => $request->nit,
                     'sigep' => isset($request->sigep) ? '1' : '2',
-                    'kua' => $request->kua
+                    'kua' => $request->kua,
+                    'sexo' => $request->sexo
                 ]);
                 $empleado_contrato = EmpleadoContrato::find($request->empleado_contrato_id);
 
@@ -296,6 +308,8 @@ class EmpleadoController extends Controller
                         'estadofile' => '2'
                     ]);
                 }
+
+                $file = File::select('escala_salarial_id')->where('idfile',$request->cargo_id)->first();
 
                 $empleado_contrato->update([
                     'idfile' => $request->cargo_id,
@@ -319,7 +333,8 @@ class EmpleadoController extends Controller
                     'fecha_conclusion_contrato' => isset($request->fecha_conclusion_contrato) ? date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha_conclusion_contrato))) : null,
                     'ncontrato' => $request->n_contrato,
                     'npreventivo' => $request->n_preventivo,
-                    'rejap' => isset($request->rejap) ? '1' : '2'
+                    'rejap' => isset($request->rejap) ? '1' : '2',
+                    'escala_salarial_id' => $file->escala_salarial_id
                 ]);
 
                 if(isset($request->foto)){
@@ -567,6 +582,7 @@ class EmpleadoController extends Controller
                                         ->ByDea($dea_id)
                                         ->ByArea($request->area_id)
                                         ->ByCargo($request->file_id)
+                                        ->ByEscalaSalarial($request->escala_salarial_id)
                                         ->ByApellidoPaterno($request->ap_paterno)
                                         ->ByApellidoMaterno($request->ap_materno)
                                         ->ByNombre($request->nombre)
@@ -575,6 +591,7 @@ class EmpleadoController extends Controller
                                         ->ByFechaIngreso($request->fecha_ingreso)
                                         ->ByFechaRetiro($request->fecha_retiro)
                                         ->ByEstado($request->estado)
+                                        ->BySexo($request->sexo)
                                         ->orderBy('idemp','desc')
                                         ->get();
                 return Excel::download(new EmpleadosExcel($empleados),'personal.xlsx');
@@ -584,5 +601,12 @@ class EmpleadoController extends Controller
             ini_restore('memory_limit');
             ini_restore('max_execution_time');
         }
+    }
+
+    public function mi_perfil()
+    {
+        $user = User::find(Auth::user()->id);
+        $empleado = Empleado::find($user->idemp);;
+        return view('empleados.mi-perfil', compact('user','empleado'));
     }
 }

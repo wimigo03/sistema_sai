@@ -2,7 +2,7 @@
     @csrf
     <div class="form-group row font-roboto-12">
         <div class="col-md-3 pr-1 pl-1">
-            <label for="dea" class="d-inline"><b>DEA</b></label>
+            <label for="dea" class="d-inline"><b>Direccion Administrativa</b></label>
             <select name="dea" id="dea" class="form-control select2">
                 <option value="">-</option>
                 @foreach ($deas as $index => $value)

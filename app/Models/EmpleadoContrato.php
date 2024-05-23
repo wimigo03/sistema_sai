@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Area;
 use App\Models\File;
+use App\Models\EscalaSalarial;
 use App\Models\Empleado;
 use App\Models\Canasta\Dea;
 
@@ -90,6 +91,11 @@ class EmpleadoContrato extends Model
     public function file()
     {
         return $this->belongsTo(File::class, 'idfile','idfile');
+    }
+
+    public function escala_salarial()
+    {
+        return $this->belongsTo(EscalaSalarial::class, 'escala_salarial_id','id');
     }
 
     public function empleado()

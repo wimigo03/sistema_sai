@@ -27,6 +27,12 @@
                 width: '100%'
             });
 
+            $('#escala_salarial_id').select2({
+                theme: "bootstrap4",
+                placeholder: "--Escala Salarial--",
+                width: '100%'
+            });
+
             var cleave = new Cleave('#fecha_ingreso', {
                 date: true,
                 datePattern: ['d', 'm', 'Y']
@@ -52,6 +58,12 @@
             $('#estado').select2({
                 theme: "bootstrap4",
                 placeholder: "--Estado--",
+                width: '100%'
+            });
+
+            $('#sexo').select2({
+                theme: "bootstrap4",
+                placeholder: "--Sexo--",
                 width: '100%'
             });
 

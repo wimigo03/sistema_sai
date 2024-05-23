@@ -37,7 +37,9 @@
                         @if($cargo->idfile == old('cargo_id') || (isset($empleado_contrato) && $empleado_contrato->idfile == $cargo->idfile))
                             selected
                         @endif>
-                        {{ $cargo->numfile . ' - ' . $cargo->nombrecargo . ' - ' . $cargo->cargo }}
+                        {{ $cargo->numfile }} -
+                        {{ $cargo->nombrecargo }} -
+                        {{ $cargo->escala_salarial != null ? $cargo->escala_salarial->nombre : '#' }}
                     </option>
                 @endforeach
             </select>

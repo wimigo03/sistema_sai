@@ -12,6 +12,13 @@
         <div class="nav-menu">
             <div class="sidebar left">
                 <ul class="list-sidebar bg-defoult">
+                    @can('empleados.mi.perfil')
+                        <li class="font-verdana-12">
+                            <a href="{{ route('empleado.mi.perfil') }}">
+                                <i class="fa fa-user fa-fw"></i>&nbsp;Mi perfil
+                            </a>
+                        </li>
+                    @endcan
                     {{-- USUARIOS --}}
                     @canany(['users.index','roles.index','permissions.index'])
                         <li class="font-verdana-12">

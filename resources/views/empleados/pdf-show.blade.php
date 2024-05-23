@@ -140,7 +140,7 @@
                         <b>
                             {{ $empleado->area->nombrearea }}
                             <br>
-                            {{ $empleado_contrato->file->cargo . ' - ' . $empleado_contrato->file->nombrecargo }}
+                            {{ $empleado_contrato->file->nombrecargo . ' - ' . $empleado_contrato->escala_salarial->nombre }}
                         </b>
                     </td>
                 </thead>
