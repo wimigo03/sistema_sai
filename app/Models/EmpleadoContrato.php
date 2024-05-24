@@ -44,7 +44,8 @@ class EmpleadoContrato extends Model
         'progproy',
         'rejap',
         'obs_retiro',
-        'estado'
+        'estado',
+        'escala_salarial_id'
     ];
 
     const TIPOS = [

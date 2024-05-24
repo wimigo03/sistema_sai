@@ -571,17 +571,17 @@
                                         </a>
                                     </li>
                                 @endcan
-                                @can('areas.index')
-                                    <li>
-                                        <a href="{{ route('area.index') }}">
-                                            &nbsp;&nbsp;&nbsp;<i class="fas fa-sitemap fa-fw"></i>&nbsp;Organigrama
-                                        </a>
-                                    </li>
-                                @endcan
                                 @can('files.index')
                                     <li>
                                         <a href="{{ route('file.index') }}">
                                             &nbsp;&nbsp;&nbsp;<i class="fas fa-id-card fa-fw"></i>&nbsp;Cargos
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('areas.index')
+                                    <li>
+                                        <a href="{{ route('area.index') }}">
+                                            &nbsp;&nbsp;&nbsp;<i class="fas fa-sitemap fa-fw"></i>&nbsp;Organigrama
                                         </a>
                                     </li>
                                 @endcan

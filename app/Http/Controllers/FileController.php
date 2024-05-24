@@ -12,6 +12,7 @@ use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Validation\Rule;
 use DB;
 use PDF;
 
@@ -66,7 +67,16 @@ class FileController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nro_file' => 'required|unique:file,numfile,null,idfile,dea_id,' . $request->dea_id
+            'nro_file' => [
+                'required',
+                Rule::unique('file', 'numfile')
+                    ->where(function ($query) use ($request) {
+                        return $query->where('dea_id', $request->dea_id)
+                                     ->where('tipofile', $request->tipo);
+                    })
+            ]
+        ], [
+            'nro_file.unique' => 'El número de archivo ya existe para el dea y tipo proporcionados.',
         ]);
         try{
             $file = DB::transaction(function () use ($request) {

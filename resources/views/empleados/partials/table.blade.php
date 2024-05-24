@@ -105,7 +105,7 @@
             </tbody>
             <tfoot>
                 <tr class="font-roboto-11">
-                    <td colspan="12">
+                    <td colspan="13">
                         {{ $empleados->appends(Request::all())->links() }}
                         <p class="text- muted">Mostrando
                             <strong>{{$empleados->count()}}</strong> registros de
