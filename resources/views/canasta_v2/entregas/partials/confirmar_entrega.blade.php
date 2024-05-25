@@ -13,7 +13,7 @@
             </div>
             <div class="col-md-2 text-right">
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Confirmar">
-                    <span class="btn btn-success font-roboto-12" onclick="save6();" >
+                    <span class="btn btn-info font-roboto-12" onclick="save6();" >
                         <i class="fa fa-check fa-fw" aria-hidden="true"></i>
                     </span>
                 </span>

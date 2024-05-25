@@ -33,8 +33,8 @@
                 <option value="">-</option>
                 <option value="Soltero(a)" @if ($beneficiario->estadoCivil == 'Soltero(a)') selected @endif>Soltero(a)</option>
                 <option value="Casado(a)" @if ($beneficiario->estadoCivil == 'Casado(a)') selected @endif>Casado(a)</option>
-                <option value="Viudo(a)" @if (old('estadoCivil') == 'Viudo(a)') selected @endif>Viudo(a)</option>
-                <option value="Divorciado(a)" @if (old('estadoCivil') == 'Divorciado(a)') selected @endif>Divorciado(a)</option>
+                <option value="Viudo(a)" @if ($beneficiario->estadoCivil == 'Viudo(a)') selected @endif>Viudo(a)</option>
+                <option value="Divorciado(a)" @if ($beneficiario->estadoCivil == 'Divorciado(a)') selected @endif>Divorciado(a)</option>
             </select>
         </div>
 

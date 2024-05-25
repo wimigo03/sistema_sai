@@ -43,16 +43,22 @@
                 </span>
             </span>
         </div>
-        <div class="col-md-9 pr-1">
+        <div class="col-md-7 pr-1">
             <label for="nombre" style="color: green">--- (Total: {{ $total }}) --</label>
             <label for="nombre" style="color: blue">(Entregados: {{ $entregados }}) --</label>
-            <label for="nombre" style="color: orange"">(Sin Entrega: {{ $sin_entrega }}) ---</label>
+            <label for="nombre" style="color: orange">(Sin Entrega: {{ $sin_entrega }}) ---</label>
 
         </div>
 
 
 
-        <div class="col-md-2 pr-2 pl-1 text-right">
+        <div class="col-md-4 pr-2 pl-1 text-right">
+            <span class="btn btn-light font-roboto-12" >
+                <a  href="{{ route('entregas.entrega_index2', $idpaquete ) }}" >
+                    &nbsp;Agreg.Benef.
+                </a>
+            </span>
+            &nbsp;&nbsp;&nbsp;
             <span class="btn btn-outline-primary font-roboto-12" onclick="procesar();">
                 <i class="fa fa-search fa-fw" aria-hidden="true"></i>&nbsp;Buscar
             </span>
