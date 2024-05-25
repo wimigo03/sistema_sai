@@ -22,6 +22,7 @@
                         <i class="fa fa-address-book fa-fw" aria-hidden="true"></i> Agr.Benf.X.Barrio
                     </button>
                 @endcan
+
                 @can('canasta.entregas.generar.boleta')
                     @if ($botonImprimir == 1)
                         <button class="btn btn-outline-success font-roboto-12 tts:right tts-slideIn tts-custom" type="button" data-toggle="collapse" aria-label='Imprimir boletas por bloques o barrios.'
@@ -62,6 +63,7 @@
                 @include('canasta_v2.entregas.partials.detalle-barrio')
                 @include('canasta_v2.entregas.partials.detalle-barrio2')
                 @include('canasta_v2.entregas.partials.confirmar_entrega')
+                @include('canasta_v2.entregas.partials.agregar-beneficiario')
 
             </div>
         </div>
@@ -100,6 +102,13 @@
                 placeholder: "--Seleccionar un Barrio--",
                 width: '100%'
             });
+
+            $('#barrio10').select2({
+                theme: "bootstrap4",
+                placeholder: "--Seleccionar un Barrio--",
+                width: '100%'
+            });
+
             $('#barrio6').select2({
                 theme: "bootstrap4",
                 placeholder: "--Seleccionar un Barrio--",

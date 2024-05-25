@@ -21,6 +21,8 @@ Route::prefix('entregas')->name('entregas.')->middleware(['auth'])->group(functi
     Route::get('habilitar/{id}/{id2}', 'Canasta_v2\EntregasV2Controller@habilitar')->name('habilitar');
     Route::get('deshabilitar/{id3}/{id4}', 'Canasta_v2\EntregasV2Controller@deshabilitar')->name('deshabilitar');
     Route::get('confirmar_entrega', 'Canasta_v2\EntregasV2Controller@confirmar_entrega')->name('confirmar_entrega');
+    Route::get('entrega_index2/{id}', 'Canasta_v2\EntregasV2Controller@entrega_index2')->name('entrega_index2');
+    Route::get('createEntrega', 'Canasta_v2\EntregasV2Controller@createEntrega')->name('createEntrega');
 
 
 });

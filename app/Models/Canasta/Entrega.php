@@ -50,19 +50,19 @@ class Entrega extends Model
         return $this->belongsTo(User::class,'id','id_paquete');
     }
 
-   // public function getObtenerEstadoAttribute(){
-   //     $barrios_entrega = DB::table('barriosEntrega')
-   //                    ->where('idBarrio',$this->idBarrio)
-   //                    ->where('idPaquete',$this->id_paquete)
-   //                     ->select('estado')
-   //                      ->first();
-   //     if($barrios_entrega != null){
-   //         $estados =9;
-   //     }else{
-   //          $estados = 9;
-   //      }
-   //      return $estados=88;
-   //  }
+    public function name(){
+       $barrios_entrega = DB::table('barriosEntrega')
+                      ->where('idBarrio',$this->idBarrio)
+                    ->where('idPaquete',$this->id_paquete)
+                     ->select('estado')
+                        ->first();
+        if($barrios_entrega != null){
+            $estados =$barrios_entrega->estado;
+       }else{
+             $estados = null;
+         }
+         return $estados;
+     }
 
 
     public function dea(){

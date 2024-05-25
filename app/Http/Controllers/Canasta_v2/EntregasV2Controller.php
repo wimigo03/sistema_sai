@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Canasta_v2;
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -33,50 +32,40 @@ use App\Models\Empleado;
 
 class EntregasV2Controller extends Controller
 {
-
-
     public function index()
     {
-
-        return view('canasta_v2.entregas.index')->with(['paquetes' => Paquetes::where('dea_id', Auth::user()->dea->id)
-            ->orderBy('id', 'desc')
-            ->paginate(10), 'deas' => Dea::where('id', Auth::user()
-            ->dea->id)->pluck('nombre', 'id')]);
+        return view('canasta_v2.entregas.index')->with(['paquetes'=> Paquetes::where('dea_id',Auth::user()->dea->id)
+                                                ->orderBy('id', 'desc')
+                                                ->paginate(10),'deas'=>Dea::where('id',Auth::user()
+                                                ->dea->id)->pluck('nombre','id')]);
     }
-
-    ////////////////////////////////////////
 
     public function search(Request $request)
     {
         $tipos = Barrio::TIPOS;
-        $distritos = Distrito::where('dea_id', Auth::user()->dea->id)->pluck('nombre', 'id');
-        $deas = Dea::where('id', Auth::user()->dea->id)->pluck('nombre', 'id');
+        $distritos = Distrito::where('dea_id',Auth::user()->dea->id)->pluck('nombre','id');
+        $deas = Dea::where('id',Auth::user()->dea->id)->pluck('nombre','id');
         $estados = Barrio::ESTADOS;
 
-        return view('canasta_v2.entregas.index')->with([
-            'paquetes' => Paquetes::query()
-                ->byCodigo($request->codigo)
-                ->byGestion($request->gestion)
-                ->byPeriodo($request->periodo)
-                ->byDea($request->dea_id)
-                ->byUsuario($request->usuario)
-                ->byEstado($request->estado)
-                ->byEstado($request->estado)
-                ->where('dea_id', Auth::user()->dea->id)
-                ->orderBy('id', 'desc')
-                ->paginate(10),
-            'deas' => Dea::where('id', Auth::user()->dea->id)->pluck('nombre', 'id')
-        ]);
+        return view('canasta_v2.entregas.index')->with(['paquetes'=>Paquetes::query()
+                                                ->byCodigo($request->codigo)
+                                                ->byGestion($request->gestion)
+                                                ->byPeriodo($request->periodo)
+                                                ->byDea($request->dea_id)
+                                                ->byUsuario($request->usuario)
+                                                ->byEstado($request->estado)
+                                                ->byEstado($request->estado)
+                                                ->where('dea_id',Auth::user()->dea->id)
+                                                ->orderBy('id', 'desc')
+                                                ->paginate(10),
+                                                'deas'=>Dea::where('id',Auth::user()->dea->id)->pluck('nombre','id')]);
     }
-
-    //////////////////////////////////////
     public function create_paquete()
     {
-        $deas = Dea::pluck('nombre', 'id');
+        $deas = Dea::pluck('nombre','id');
         return view('canasta_v2.entregas.create', compact('deas'));
     }
 
-    /////////////////////////////////////
     public function store_paquete(Request $request)
     {
         $personal = User::find(Auth::user()->id);
@@ -91,17 +80,14 @@ class EntregasV2Controller extends Controller
         $paquetes->estado = 1;
         $paquetes->save();
         return redirect()->route('entregas.index')->with($request->session()->flash('message', 'Registro Procesado'));
-    }
 
-    ////////////////////////////////////
+    }
 
     public function edit_paquete($idPaquete)
     {
         $paquetes = Paquetes::find($idPaquete);
         return view('canasta_v2.entregas.editar', compact('paquetes'));
     }
-
-    ///////////////////////////////////
 
     public function update_paquete(Request $request)
     {
@@ -120,126 +106,67 @@ class EntregasV2Controller extends Controller
         return redirect()->route('entregas.index')->with($request->session()->flash('message', 'Registro Procesado'));
     }
 
-    //////////////////////////////////
-
     public function entrega_index($idpaquete)
     {
         $estados = Entrega::ESTADOS;
-        $deas = Dea::where('id', Auth::user()->dea->id)->get();
-        $barrioEntrega = BarrioEntrega::select('idBarrio')->where('idPaquete', '=', $idpaquete)->pluck('idBarrio', 'idBarrio');
+        $deas = Dea::where('id',Auth::user()->dea->id)->get();
+        $barrioEntrega = BarrioEntrega::select('idBarrio')->where('idPaquete','=',$idpaquete)->pluck('idBarrio','idBarrio');
 
-        $barrioEntregaSel = BarrioEntrega::All()->where('idPaquete', '=', $idpaquete);
+        $barrioEntregaSel = BarrioEntrega::All()->where('idPaquete','=',$idpaquete);
+       //$entregasel = Entrega::All()->where('id_paquete','=',$idpaquete);
+
+      //$beneficiarios2 = DB::table('beneficiarios')
+                          // ->whereNotIn('id', $entregasel->pluck('id_beneficiario'))
+                          // ->select('ci', 'nombres', 'ap', 'am')
+                           // ->take(10)
+                           // ->get();
+
+                           // dd( $beneficiarios2);
         $barrioEntregaSel2 = BarrioEntrega::All()
-            ->where('estado', '=', 2)
-            ->where('idPaquete', '=', $idpaquete);
+
+        ->where('estado','=',2)
+        ->where('idPaquete','=',$idpaquete);
 
         $botonImprimir = 0;
+
+
 
         if ($barrioEntrega->isEmpty()) {
             $barrios3 = DB::table('barrios')->select('id', 'nombre')->get();
         } else {
             $botonImprimir = 1;
             $barrios3 = DB::table('barrios')->whereIn('id', $barrioEntregaSel->pluck('idBarrio'))
-                ->select('id', 'nombre')
-                ->get();
+                                            ->select('id', 'nombre')
+                                            ->get();
         }
-        if ($barrioEntrega->isEmpty()) {
-            $barrios1 = DB::table('barrios')
-                ->select('id', 'nombre')
-                ->get();
-        } else {
-            $botonImprimir = 1;
-            $barrios1 = DB::table('barrios')
-                ->whereIn('id', $barrioEntregaSel2->pluck('idBarrio'))
-                ->select('id', 'nombre')
-                ->get();
-        }
+
 
         if ($barrioEntrega->isEmpty()) {
             $barrios4 = DB::table('barrios')->select('id', 'nombre')->get();
         } else {
             $botonImprimir = 1;
             $barrios4 = DB::table('barrios')->whereIn('id', $barrioEntregaSel2->pluck('idBarrio'))
-                ->select('id', 'nombre')
-                ->get();
+                                            ->select('id', 'nombre')
+                                            ->get();
         }
 
 
+
         if ($barrioEntrega->isEmpty()) {
-            $barrios = Barrio::where('dea_id', Auth::user()->dea->id)->get();
+            $barrios = Barrio::where('dea_id',Auth::user()->dea->id)->get();
         } else {
             $barrios = DB::table('barrios')
-                ->whereNotIn('id', $barrioEntregaSel->pluck('idBarrio'))
-                ->select('id', 'nombre')
-                ->get();
+                            ->whereNotIn('id', $barrioEntregaSel->pluck('idBarrio'))
+                            ->select('id', 'nombre')
+                            ->get();
         }
 
         if ($barrioEntrega->isEmpty()) {
             $barrios2 = DB::table('barrios')->select('nombre', 'nombre')->get();
         } else {
             $barrios2 = DB::table('barrios')->whereIn('id', $barrioEntregaSel->pluck('idBarrio'))
-                ->select('nombre', 'nombre')
-                ->get();
-        }
-
-        $beneficiarioControl = 0;
-        $entregas = Entrega::where('dea_id', Auth::user()->dea->id)
-            ->where('id_paquete', $idpaquete)
-            ->orderBy('id', 'desc')
-            ->paginate(10);
-
-        $entregados = Entrega::where('dea_id', Auth::user()->dea->id)
-            ->where('id_paquete', $idpaquete)
-            ->where('estado', '=', 3)
-            ->count();
-
-        $sin_entrega_imp = Entrega::where('dea_id', Auth::user()->dea->id)
-            ->where('id_paquete', $idpaquete)
-            ->where('estado', '=', 2)
-            ->count();
-
-        $sin_entrega_sinImp = Entrega::where('dea_id', Auth::user()->dea->id)
-            ->where('id_paquete', $idpaquete)
-            ->where('estado', '=', 1)
-            ->count();
-
-        $sin_entrega = $sin_entrega_imp + $sin_entrega_sinImp;
-
-
-        $total = Entrega::where('dea_id', Auth::user()->dea->id)
-            ->where('id_paquete', $idpaquete)
-            //->where('estado','=',1)
-            ->count();
-
-        return view('canasta_v2.entregas.entrega_index', ["sin_entrega" => $sin_entrega, "total" => $total, "entregados" => $entregados, "estados" => $estados, "botonImprimir" => $botonImprimir, "barrios1" => $barrios1, "barrios4" => $barrios4, "barrios3" => $barrios3, "barrios2" => $barrios2, "barrios" => $barrios, "beneficiarioControl" => $beneficiarioControl, "entrega" => $entregas, "idpaquete" => $idpaquete]);
-    }
-
-    ////////////////////////////////
-
-    public function search_entrega(Request $request, $idpaquete)
-
-    {
-        $estados = Entrega::ESTADOS;
-        $deas = Dea::where('id', Auth::user()->dea->id)->get();
-        $barrioEntrega = BarrioEntrega::select('idBarrio')->where('idPaquete', '=', $idpaquete)->pluck('idBarrio', 'idBarrio');
-        $barrioEntregaSel = BarrioEntrega::All()->where('idPaquete', '=', $idpaquete);
-        $barrioEntregaSel2 = BarrioEntrega::All()
-            ->where('estado', '=', 2)
-            ->where('idPaquete', '=', $idpaquete);
-            //dd($barrioEntrega);
-            // $barrios2 = Barrio::where('dea_id',Auth::user()->dea->id)->pluck('nombre','nombre');
-        $botonImprimir = 0;
-
-        if ($barrioEntrega->isEmpty()) {
-            $barrios3 = DB::table('barrios')
-                ->select('id', 'nombre')
-                ->get();
-        } else {
-            $botonImprimir = 1;
-            $barrios3 = DB::table('barrios')
-                ->whereIn('id', $barrioEntregaSel->pluck('idBarrio'))
-                ->select('id', 'nombre')
-                ->get();
+                                            ->select('nombre', 'nombre')
+                                            ->get();
         }
 
         if ($barrioEntrega->isEmpty()) {
@@ -254,201 +181,298 @@ class EntregasV2Controller extends Controller
                 ->get();
         }
 
-        if ($barrioEntrega->isEmpty()) {
-            $barrios4 = DB::table('barrios')->select('id', 'nombre')->get();
-        } else {
-            $botonImprimir = 1;
-            $barrios4 = DB::table('barrios')->whereIn('id', $barrioEntregaSel2->pluck('idBarrio'))
-                ->select('id', 'nombre')
-                ->get();
-        }
-
-        if ($barrioEntrega->isEmpty()) {
-            $barrios = Barrio::where('dea_id', Auth::user()->dea->id)
-                ->get();
-        } else {
-
-            $barrios = DB::table('barrios')
-                ->whereNotIn('id', DB::table('barriosEntrega')->pluck('idBarrio'))
-                ->select('id', 'nombre')
-                ->get();
-        }
 
 
-        if ($barrioEntrega->isEmpty()) {
-            $barrios2 = DB::table('barrios')
-                ->select('nombre', 'nombre')
-                ->get();
-        } else {
-            // $botonImprimir=1;
-            $barrios2 = DB::table('barrios')
-                ->whereIn('id', $barrioEntregaSel->pluck('idBarrio'))
-                ->select('nombre', 'nombre')
-                ->get();
-        }
+
+
         $beneficiarioControl = 0;
+        $entregas = Entrega::where('dea_id',Auth::user()->dea->id)
+                            ->where('id_paquete',$idpaquete)
+                            ->orderBy('id', 'desc')
+                            ->paginate(10);
 
-        if ($request->barrio != null || $request->estado != null) {
-            $entregas = Entrega::query()
-                ->byNombre($request->nombres)
-                ->byAp($request->ap)
-                ->byAm($request->am)
-                ->byCi($request->ci)
-                ->byBarrio($request->barrio)
-                ->byEstado($request->estado)
-                ->where('dea_id', Auth::user()->dea->id)
-                ->where('id_paquete', '=', $idpaquete)
-                ->orderBy('id', 'desc')
-                ->paginate(10);
+        $entregados = Entrega::where('dea_id',Auth::user()->dea->id)
+                            ->where('id_paquete',$idpaquete)
+                            ->where('estado','=',3)
+                             ->count();
 
-            $entregados = Entrega::query()
-                ->byBarrio($request->barrio)
-                ->where('dea_id', Auth::user()->dea->id)
-                ->where('id_paquete', '=', $idpaquete)
-                ->where('estado', '=', 3)
-                ->count();
+        $sin_entrega_imp = Entrega::where('dea_id',Auth::user()->dea->id)
+                            ->where('id_paquete',$idpaquete)
+                            ->where('estado','=',2)
+                             ->count();
 
-            $sin_entrega_imp = Entrega::query()
-                ->byBarrio($request->barrio)
-                ->where('dea_id', Auth::user()->dea->id)
-                ->where('id_paquete', '=', $idpaquete)
-                ->where('estado', '=', 2)
-                //->where('estado','=',1)
-                ->count();
+        $sin_entrega_sinImp = Entrega::where('dea_id',Auth::user()->dea->id)
+                             ->where('id_paquete',$idpaquete)
+                             ->where('estado','=',1)
+                              ->count();
 
-            $sin_entrega_sinImp = Entrega::query()
-                ->byBarrio($request->barrio)
-                ->where('dea_id', Auth::user()->dea->id)
-                ->where('id_paquete', '=', $idpaquete)
-                ->where('estado', '=', 1)
-                //->where('estado','=',1)
-                ->count();
-
-            $sin_entrega = $sin_entrega_imp + $sin_entrega_sinImp;
-
-            $total = Entrega::query()
-                ->byBarrio($request->barrio)
-                ->where('dea_id', Auth::user()->dea->id)
-                ->where('id_paquete', '=', $idpaquete)
-                ->count();
-        } else {
-
-            $entregas = Entrega::query()
-                ->byNombre($request->nombres)
-                ->byAp($request->ap)
-                ->byAm($request->am)
-                ->byCi($request->ci)
-                ->byBarrio($request->barrio)
-                ->byEstado($request->estado)
-                ->where('dea_id', Auth::user()->dea->id)
-                ->where('id_paquete', '=', $idpaquete)
-                ->orderBy('id', 'desc')
-                ->paginate(10);
-
-            $entregados = 0;
-
-            $sin_entrega_imp = 0;
-            $sin_entrega_sinImp = 0;
-            $sin_entrega = $sin_entrega_imp + $sin_entrega_sinImp;
-
-            $total = 0;
-        }
+        $sin_entrega=$sin_entrega_imp + $sin_entrega_sinImp;
 
 
+        $total = Entrega::where('dea_id',Auth::user()->dea->id)
+                             ->where('id_paquete',$idpaquete)
+                             //->where('estado','=',1)
+                              ->count();
 
-
-        return view('canasta_v2.entregas.entrega_index', ["sin_entrega" => $sin_entrega, "barrios1" => $barrios1, "entregados" => $entregados, "total" => $total, "estados" => $estados, "barrios4" => $barrios4, "barrios3" => $barrios3, "botonImprimir" => $botonImprimir, "barrios2" => $barrios2, "barrios" => $barrios, "beneficiarioControl" => $beneficiarioControl, "entrega" => $entregas, "idpaquete" => $idpaquete]);
+        return view('canasta_v2.entregas.entrega_index', ["sin_entrega" => $sin_entrega,"total" => $total,"entregados" => $entregados,"estados" => $estados,"botonImprimir" => $botonImprimir,"barrios1" => $barrios1,"barrios4" => $barrios4,"barrios3" => $barrios3,"barrios2" => $barrios2,"barrios" => $barrios,"beneficiarioControl" => $beneficiarioControl,"entrega" => $entregas,"idpaquete" => $idpaquete]);
     }
 
-    //////////////////////////////////
+    public function entrega_index2($idpaquete)
+    {
+        $estados = Entrega::ESTADOS;
+        $deas = Dea::where('id',Auth::user()->dea->id)->get();
+        $barrioEntrega = BarrioEntrega::select('idBarrio')->where('idPaquete','=',$idpaquete)->pluck('idBarrio','idBarrio');
+
+        $barrioEntregaSel = BarrioEntrega::All()->where('idPaquete','=',$idpaquete);
+       $entregasel = Entrega::All()->where('id_paquete','=',$idpaquete);
+
+      $beneficiarios = DB::table('beneficiarios')
+                          ->where('estado','=','A')
+                           ->whereNotIn('id', $entregasel->pluck('id_beneficiario'))
+                           ->select('id','ci', 'nombres', 'ap', 'am')
+                            //->take(10)
+                            ->get();
+
+                           // dd( $beneficiarios2);
+                           $tipos = Barrio::TIPOS;
+                           $distritos = Distrito::where('dea_id',Auth::user()->dea->id)->pluck('nombre','id');
+                           $barrios = Barrio::where('dea_id',Auth::user()->dea->id)->pluck('nombre','nombre');
+                           $deas = Dea::where('id',Auth::user()->dea->id)->pluck('nombre','id');
+                           $estados = Beneficiario::ESTADOS;
+
+             return view('canasta_v2.entregas.entrega_index2', compact('idpaquete','tipos','distritos','deas','estados','beneficiarios','barrios'));
+
+
+    }
+
+
+    public function search_entrega(Request $request,$idpaquete)
+
+    {
+                                                 $estados = Entrega::ESTADOS;
+                                                $deas = Dea::where('id',Auth::user()->dea->id)->get();
+                                                $barrioEntrega = BarrioEntrega::select('idBarrio')->where('idPaquete','=',$idpaquete)->pluck('idBarrio','idBarrio');
+                                                $barrioEntregaSel = BarrioEntrega::All()->where('idPaquete','=',$idpaquete);
+                                                $barrioEntregaSel2 = BarrioEntrega::All()
+                                                ->where('estado','=',2)
+                                                ->where('idPaquete','=',$idpaquete);
+                                                //dd($barrioEntrega);
+                                            // $barrios2 = Barrio::where('dea_id',Auth::user()->dea->id)->pluck('nombre','nombre');
+                                                $botonImprimir=0;
+
+                                                if ($barrioEntrega->isEmpty()) {
+                                                        $barrios3 = DB::table('barrios')
+                                                        ->select('id', 'nombre')
+                                                        ->get();
+
+                                                } else {
+                                                        $botonImprimir=1;
+                                                        $barrios3 = DB::table('barrios')
+                                                        ->whereIn('id', $barrioEntregaSel->pluck('idBarrio'))
+                                                        ->select('id', 'nombre')
+                                                        ->get();
+                                                }
+
+                                                if ($barrioEntrega->isEmpty()) {
+                                                    $barrios4 = DB::table('barrios')->select('id', 'nombre')->get();
+                                                } else {
+                                                    $botonImprimir = 1;
+                                                    $barrios4 = DB::table('barrios')->whereIn('id', $barrioEntregaSel2->pluck('idBarrio'))
+                                                                                    ->select('id', 'nombre')
+                                                                                    ->get();
+                                                }
+
+                                                if ($barrioEntrega->isEmpty()) {
+                                                        $barrios = Barrio::where('dea_id',Auth::user()->dea->id)
+                                                        ->get();
+                                                } else {
+
+                                                        $barrios = DB::table('barrios')
+                                                        ->whereNotIn('id', DB::table('barriosEntrega')->pluck('idBarrio'))
+                                                        ->select('id', 'nombre')
+                                                        ->get();
+                                                }
+
+
+
+                                                if ($barrioEntrega->isEmpty()) {
+                                                    $barrios2 = DB::table('barrios')
+                                                    ->select('nombre', 'nombre')
+                                                    ->get();
+
+                                            } else {
+                                                // $botonImprimir=1;
+                                                    $barrios2 = DB::table('barrios')
+                                                    ->whereIn('id', $barrioEntregaSel->pluck('idBarrio'))
+                                                    ->select('nombre', 'nombre')
+                                                    ->get();
+                                            }
+
+                                            if ($barrioEntrega->isEmpty()) {
+                                                $barrios1 = DB::table('barrios')
+                                                    ->select('id', 'nombre')
+                                                    ->get();
+                                            } else {
+                                                $botonImprimir = 1;
+                                                $barrios1 = DB::table('barrios')
+                                                    ->whereIn('id', $barrioEntregaSel2->pluck('idBarrio'))
+                                                    ->select('id', 'nombre')
+                                                    ->get();
+                                            }
+
+
+
+                                        $beneficiarioControl =0;
+
+                                        if ($request->barrio != null || $request->estado != null) {
+                                            $entregas = Entrega::query()
+                                            ->byNombre($request->nombres)
+                                            ->byAp($request->ap)
+                                            ->byAm($request->am)
+                                            ->byCi($request->ci)
+                                            ->byBarrio($request->barrio)
+                                            ->byEstado($request->estado)
+                                            ->where('dea_id',Auth::user()->dea->id)
+                                            ->where('id_paquete','=',$idpaquete)
+                                            ->orderBy('id', 'desc')
+                                            ->paginate(10);
+
+                                            $entregados = Entrega::query()
+                                            ->byBarrio($request->barrio)
+                                            ->where('dea_id',Auth::user()->dea->id)
+                                            ->where('id_paquete','=',$idpaquete)
+                                            ->where('estado','=',3)
+                                            ->count();
+
+                                            $sin_entrega_imp = Entrega::query()
+                                            ->byBarrio($request->barrio)
+                                            ->where('dea_id',Auth::user()->dea->id)
+                                            ->where('id_paquete','=',$idpaquete)
+                                            ->where('estado','=',2)
+                                            //->where('estado','=',1)
+                                            ->count();
+
+                                            $sin_entrega_sinImp = Entrega::query()
+                                            ->byBarrio($request->barrio)
+                                            ->where('dea_id',Auth::user()->dea->id)
+                                            ->where('id_paquete','=',$idpaquete)
+                                            ->where('estado','=',1)
+                                            //->where('estado','=',1)
+                                            ->count();
+
+                                            $sin_entrega=$sin_entrega_imp + $sin_entrega_sinImp;
+
+                                            $total = Entrega::query()
+                                            ->byBarrio($request->barrio)
+                                            ->where('dea_id',Auth::user()->dea->id)
+                                            ->where('id_paquete','=',$idpaquete)
+                                            ->count();
+
+                                    } else {
+
+                                        $entregas = Entrega::query()
+                                        ->byNombre($request->nombres)
+                                        ->byAp($request->ap)
+                                        ->byAm($request->am)
+                                        ->byCi($request->ci)
+                                        ->byBarrio($request->barrio)
+                                        ->byEstado($request->estado)
+                                        ->where('dea_id',Auth::user()->dea->id)
+                                        ->where('id_paquete','=',$idpaquete)
+                                        ->orderBy('id', 'desc')
+                                        ->paginate(10);
+
+                                        $entregados = 0;
+
+                                        $sin_entrega_imp = 0;
+                                        $sin_entrega_sinImp = 0;
+                                        $sin_entrega=$sin_entrega_imp + $sin_entrega_sinImp;
+
+                                         $total =0;
+                                    }
+
+
+
+
+     return view('canasta_v2.entregas.entrega_index', ["sin_entrega" => $sin_entrega,"entregados" => $entregados,"total" => $total,"estados" => $estados,"barrios1" => $barrios1,"barrios4" => $barrios4,"barrios3" => $barrios3,"botonImprimir" => $botonImprimir,"barrios2" => $barrios2,"barrios" => $barrios,"beneficiarioControl" => $beneficiarioControl,"entrega" => $entregas,"idpaquete" => $idpaquete]);
+}
+
 
     public function createEntrega(Request $request)
-    {
+        {
 
-        $personal = User::find(Auth::user()->id);
-        $id_usuario = $personal->id;
-        $dea_id = $personal->dea_id;
-        $date = Carbon::now();
+                                     $personal = User::find(Auth::user()->id);
+                                      $id_usuario = $personal->id;
+                                     $dea_id = $personal->dea_id;
+                                        $date = Carbon::now();
 
-        $deas = Dea::where('id', Auth::user()->dea->id)->pluck('nombre', 'id');
+                                        $deas = Dea::where('id',Auth::user()->dea->id)->pluck('nombre','id');
 
-        $beneficiarioControl = 0;
-        $entregas = Entrega::where('dea_id', Auth::user()->dea->id)
-            ->orderBy('id', 'desc')
-            ->paginate(10);
+                                        $beneficiarios = Beneficiario::find($request->beneficiario);
 
-        $entrega = new Entrega();
-        $entrega->fecha = $date;
-        $entrega->id_paquete = $request->idpaquete;
-        $entrega->id_beneficiario = $request->idbeneficiario;
 
-        $entrega->user_id = $id_usuario;
-        $entrega->dea_id = $dea_id;
-        $entrega->estado = 1;
+                                        //$entrega = Entrega::find($request->beneficiario);
+                                        $entrega = new Entrega();
+                                        $entrega->fecha = $date;
+                                        $entrega->id_paquete = $request->idpaquete;
+                                        $entrega->id_beneficiario = $beneficiarios->id;
+                                        $entrega->idBarrio = $beneficiarios->idBarrio;
+                                        $entrega->user_id = $id_usuario;
+                                        $entrega->dea_id = $dea_id;
+                                        $entrega->estado = 2;
 
-        $entregas2 = Entrega::where('dea_id', Auth::user()->dea->id)
-            ->where('id_beneficiario', '=', $request->idbeneficiario)
-            ->where('id_paquete', '=', $request->idpaquete)
-            ->orderBy('id', 'desc')
-            ->paginate(10);
+                                        $entrega->save();
+                                        $request->session()->flash('message', 'Registro Agregado');
 
-        if ($entregas2->isEmpty()) {
-            $entrega->save();
-            $request->session()->flash('message', 'Registro Agregado');
-        } else {
-            $request->session()->flash('message', 'El Item Ya existe en la Planilla');
-        }
 
-        return redirect()->route('entregas.entrega_index', $request->idpaquete);
+
+        return redirect()->route('entregas.entrega_index2',$request->idpaquete);
     }
 
-    ////////////////////////////////
 
-    public function agregarporbarrio(Request $request, $idpaquete)
+    public function agregarporbarrio(Request $request,$idpaquete)
     {
-        $personal = User::find(Auth::user()->id);
-        $id_usuario = $personal->id;
-        $dea_id = $personal->dea_id;
-        $beneficiarios = Beneficiario::where('dea_id', Auth::user()->dea->id)
-            ->Where('idBarrio', '=', $request->barrio)
-            ->Where('estado', '=', 'A')
-            ->get();
+                                            $personal = User::find(Auth::user()->id);
+                                            $id_usuario = $personal->id;
+                                        $dea_id = $personal->dea_id;
+                                        $beneficiarios= Beneficiario::where('dea_id',Auth::user()->dea->id)
+                                                        ->Where('idBarrio','=',$request->barrio)
+                                                        ->Where('estado','=','A')
+                                                        ->get();
 
-        $date = Carbon::now();
-        foreach ($beneficiarios as $data) {
+                                        $date = Carbon::now();
+                                        foreach ($beneficiarios as $data){
 
-            $datos = ([
+                                        $datos=([
 
-                'fecha' => $date,
-                'id_paquete' => $idpaquete,
-                'id_beneficiario' => $data->id,
-                'idBarrio' => $data->idBarrio,
-                'user_id' => $id_usuario,
-                'dea_id' => $dea_id,
-                'estado' => 1
-            ]
+                                            'fecha'=>$date,
+                                            'id_paquete'=>$idpaquete,
+                                            'id_beneficiario'=>$data->id,
+                                            'idBarrio'=>$data->idBarrio,
+                                            'user_id'=>$id_usuario,
+                                            'dea_id'=>$dea_id,
+                                            'estado'=>1
+                                                ]
 
-            );
-            $entrega = Entrega::CREATE($datos);
-        }
+                                                );
+                                        $entrega=Entrega::CREATE($datos);
+                                        }
 
-        $barrioEntrega = new BarrioEntrega;
-        $barrioEntrega->idBarrio = $request->barrio;
-        $barrioEntrega->idPaquete = $idpaquete;
-        $barrioEntrega->estado = 1;
-        $barrioEntrega->save();
+                                        $barrioEntrega = new BarrioEntrega;
+                                        $barrioEntrega->idBarrio = $request->barrio;
+                                        $barrioEntrega->idPaquete = $idpaquete;
+                                        $barrioEntrega->estado = 1;
+                                        $barrioEntrega->save();
 
-        return redirect()->route('entregas.entrega_index', $idpaquete);
+    return redirect()->route('entregas.entrega_index',$idpaquete);
+
     }
 
-    ///////////////////////////////
 
     public function generarboleta(Request $request)
     {
-        $meses = array(
-            1 => 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-        );
+                                         $meses = array(1 => 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                                         'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
 
                                         $fecha_actual=$meses[date('n')] . '-' . date('Y');
                                         $personal = User::find(Auth::user()->id);
@@ -456,94 +480,78 @@ class EntregasV2Controller extends Controller
                                         $userdate = User::find($id)->usuariosempleados;
                                         $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
-        $beneficiarios = Beneficiario::where('dea_id', Auth::user()->dea->id)
-            ->get();
+                                        $beneficiarios = Beneficiario::where('dea_id',Auth::user()->dea->id)
+                                            ->get();
 
-        $entregas = Entrega::join('beneficiarios as b', 'b.id', '=', 'entrega.id_beneficiario')
-            ->where('entrega.dea_id', Auth::user()->dea->id)
-            ->where('entrega.id_paquete', $request->idpaquete)
-            ->where('entrega.idBarrio', $request->barrio3)
-            ->orderBy('b.nombres', 'asc')
-            ->get();
+                                        $entregas = Entrega::join('beneficiarios as b', 'b.id', '=', 'entrega.id_beneficiario')
+                                        ->where('entrega.dea_id',Auth::user()->dea->id)
+                                        ->where('entrega.id_paquete',$request->idpaquete)
+                                        ->where('entrega.idBarrio',$request->barrio3)
+                                        ->orderBy('b.nombres', 'asc')
+                                        ->get();
 
-        //  $entregas = DB::table('entrega as e')
-        //->join('paquete as p', 'p.id', '=', 'e.id_paquete')
-        //->join('barrios as b', 'b.id', '=', 'e.idBarrio')
-        //->join('beneficiarios as be', 'be.id', '=', 'e.id_beneficiario')
-        //->select('e.id','p.periodo','p.items','p.gestion','b.nombre','be.dirFoto', 'be.ci', 'be.nombres', 'be.ap', 'be.am','be.firma', 'be.fechaNac', 'be.created_att')
-        //->where('e.id_paquete',$request->idpaquete)
-        //->where('e.idBarrio',$request->barrio3)
-        //->orderBy('be.nombres', 'asc')
-        //->get();
+                                          //  $entregas = DB::table('entrega as e')
+                                            //->join('paquete as p', 'p.id', '=', 'e.id_paquete')
+                                            //->join('barrios as b', 'b.id', '=', 'e.idBarrio')
+                                            //->join('beneficiarios as be', 'be.id', '=', 'e.id_beneficiario')
+                                            //->select('e.id','p.periodo','p.items','p.gestion','b.nombre','be.dirFoto', 'be.ci', 'be.nombres', 'be.ap', 'be.am','be.firma', 'be.fechaNac', 'be.created_att')
+                                            //->where('e.id_paquete',$request->idpaquete)
+                                            //->where('e.idBarrio',$request->barrio3)
+                                            //->orderBy('be.nombres', 'asc')
+                                            //->get();
 
-        $barrio_entrega = BarrioEntrega::where('idPaquete', $request->idpaquete)
-            ->where('idBarrio', $request->barrio3)
-            //->take(2)
-            ->first();
+                                            $barrio_entrega = BarrioEntrega::where('idPaquete',$request->idpaquete)
+                                            ->where('idBarrio',$request->barrio3)
+                                            //->take(2)
+                                             ->first();
 
-        if ($barrio_entrega->estado == 1) {
+                                             if ($barrio_entrega->estado == 1) {
 
-            $entregas2 = Entrega::where('dea_id', Auth::user()->dea->id)
-                ->where('id_paquete', $request->idpaquete)
-                ->where('idBarrio', $request->barrio3)
-                //->take(2)
-                ->get();
+                                                $entregas2 = Entrega::where('dea_id',Auth::user()->dea->id)
+                                                ->where('id_paquete',$request->idpaquete)
+                                                ->where('idBarrio',$request->barrio3)
+                                                //->take(2)
+                                                ->get();
 
-            foreach ($entregas2 as $data) {
-                $entrega3 = Entrega::find($data->id);
-
-
-                $entrega3->estado = 2;
+                                                foreach ($entregas2 as $data){
+                                                    $entrega3 = Entrega::find($data->id);
 
 
-                $entrega3->save();
-            }
-
-            //dd($barrio_entrega->id);
-            $barrio_entrega2 = BarrioEntrega::find($barrio_entrega->id);
-            $barrio_entrega2->update([
-                'estado' => 2
-            ]);
-        }
+                                                    $entrega3->estado = 2;
 
 
+                                                    $entrega3->save();
+                                                    }
 
-        //dd($entregas);
+                                          //dd($barrio_entrega->id);
+                                          $barrio_entrega2 = BarrioEntrega::find($barrio_entrega->id);
+                                          $barrio_entrega2->update([
+                                              'estado' => 2
+                                          ]);
+                                            }
 
-        // $pdf = PDF::loadView('canasta_v2/entregas/generarboleta', compact(['entregas']));
-        //$pdf->setPaper('LETTER', 'portrait'); //landscape
-        //return $pdf->stream();
 
-        return view('canasta_v2/entregas/generarboleta', ["fecha_actual" => $fecha_actual, "entregas" => $entregas, "userdate" => $userdate, "personalArea" => $personalArea]);
-    }
 
-    //////////////////////////////
+                                        //dd($entregas);
 
-    public function generarboleta2($id_entrega)
-    {
+                                            // $pdf = PDF::loadView('canasta_v2/entregas/generarboleta', compact(['entregas']));
+                                            //$pdf->setPaper('LETTER', 'portrait'); //landscape
+                                           //return $pdf->stream();
 
-        $meses = array(
-            1 => 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-        );
+                                        return view('canasta_v2/entregas/generarboleta', ["fecha_actual" => $fecha_actual,"entregas" => $entregas,"userdate" => $userdate,"personalArea" => $personalArea]);
 
-        $fecha_actual = $meses[date('n')] . '-' . date('Y');
 
-        $personal = User::find(Auth::user()->id);
-        $id = $personal->id;
-        $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
+                }
 
-        $beneficiarios = Beneficiario::where('dea_id', Auth::user()->dea->id)
-            ->get();
 
-        $entrega = Entrega::where('dea_id', Auth::user()->dea->id)
-            ->where('id', '=', $id_entrega)
-            //->where('idBarrio',$request->barrio3)
-            //->take(2)
-            ->first();
-        //dd($entregas);
-        $entrega2 = Entrega::find($id_entrega);
+
+   public function generarboleta2($id_entrega)
+                                        {
+
+                                            $meses = array(1 => 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                                            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
+
+                        $fecha_actual=$meses[date('n')] . '-' . date('Y');
 
                         $personal = User::find(Auth::user()->id);
                         $id = $personal->id;
@@ -578,111 +586,111 @@ class EntregasV2Controller extends Controller
                                         //return back();
                                     }
 
-        return view('canasta_v2.entregas/generarboleta2', compact('fecha_actual','entrega','userdate','personalArea'));
-        //return back();
-    }
 
-    /////////////////////////////////
 
     public function paquete_periodo($idPaquete)
     {
 
-        $paquetes = Paquetes::find($idPaquete);
-        $PaquetesPeriodos2 = PaquetePeriodo::select('id_periodo')->pluck('id_periodo', 'id_periodo');
+                                        $paquetes = Paquetes::find($idPaquete);
+                                        $PaquetesPeriodos2 = PaquetePeriodo::select('id_periodo')->pluck('id_periodo','id_periodo');
 
-        if ($PaquetesPeriodos2->isEmpty()) {
-            $periodos = Periodos::all();
-        } else {
+                                    if ($PaquetesPeriodos2->isEmpty()) {
+                                        $periodos= Periodos::all();
+                                    } else {
 
-            $periodos = DB::table('periodos')
-                ->whereNotIn('id', DB::table('paquete_periodo')
-                    ->where('gestion', '=', $paquetes->gestion)
-                    ->pluck('id_periodo'))
-                ->select('id', 'mes')
-                ->get();
-        }
-        $PaquetesPeriodos = PaquetePeriodo::where('id_paquete', '=', $idPaquete)->get();
+                                        $periodos = DB::table('periodos')
+                                                    ->whereNotIn('id', DB::table('paquete_periodo')
+                                                    ->where('gestion','=',$paquetes->gestion)
+                                                    ->pluck('id_periodo'))
+                                                    ->select('id', 'mes')
+                                                    ->get();
+                                    }
+                                        $PaquetesPeriodos= PaquetePeriodo::where('id_paquete','=',$idPaquete)->get();
 
-        return view('canasta_v2/entregas/paquete_periodo', ["idPaquete" => $idPaquete, "PaquetesPeriodos" => $PaquetesPeriodos, "periodos" => $periodos]);
+        return view('canasta_v2/entregas/paquete_periodo', ["idPaquete" => $idPaquete,"PaquetesPeriodos" => $PaquetesPeriodos, "periodos" => $periodos]);
+
     }
 
-    ////////////////////////////////
 
-    public function paquete_periodo_agregar(Request $request, $idPaquete)
-    {
-        $paquetes = Paquetes::find($idPaquete);
-        $PaquetesPeriodos3 = new PaquetePeriodo;
-        $PaquetesPeriodos3->id_periodo = $request->periodo;
-        $PaquetesPeriodos3->id_paquete = $idPaquete;
-        $PaquetesPeriodos3->gestion = $paquetes->gestion;
-        $PaquetesPeriodos3->save();
+    public function paquete_periodo_agregar(Request $request,$idPaquete)
+            {
+                                        $paquetes = Paquetes::find($idPaquete);
+                                        $PaquetesPeriodos3 = new PaquetePeriodo;
+                                        $PaquetesPeriodos3->id_periodo = $request->periodo;
+                                        $PaquetesPeriodos3->id_paquete = $idPaquete;
+                                        $PaquetesPeriodos3->gestion = $paquetes->gestion;
+                                        $PaquetesPeriodos3->save();
 
-        $PaquetesPeriodos2 = PaquetePeriodo::select('id_periodo')->pluck('id_periodo', 'id_periodo');
+                                        $PaquetesPeriodos2 = PaquetePeriodo::select('id_periodo')->pluck('id_periodo','id_periodo');
 
-        if ($PaquetesPeriodos2->isEmpty()) {
-            $periodos = Periodos::all();
-        } else {
+                                        if ($PaquetesPeriodos2->isEmpty()) {
+                                            $periodos= Periodos::all();
+                                        } else {
 
-            $periodos = DB::table('periodos')
-                ->whereNotIn('id', DB::table('paquete_periodo')
-                    ->where('gestion', '=', $paquetes->gestion)
-                    ->pluck('id_periodo'))
-                ->select('id', 'mes')
-                ->get();
-        }
-        $PaquetesPeriodos = PaquetePeriodo::where('id_paquete', '=', $idPaquete)->get();
+                                        $periodos = DB::table('periodos')
+                                                ->whereNotIn('id', DB::table('paquete_periodo')
+                                                ->where('gestion','=',$paquetes->gestion)
+                                                ->pluck('id_periodo'))
+                                                ->select('id', 'mes')
+                                                ->get();
+
+                                        }
+                                        $PaquetesPeriodos= PaquetePeriodo::where('id_paquete','=',$idPaquete)->get();
 
         return back();
     }
 
-    ///////////////////////////////
 
     public function finalizar($idPaquete)
     {
-        $PaquetesPeriodos = DB::table('paquete_periodo as p')
-            ->join('periodos as pe', 'pe.id', '=', 'p.id_periodo')
-            ->where('p.id_paquete', $idPaquete)
-            ->select('pe.mes')->get();
+                                    $PaquetesPeriodos = DB::table('paquete_periodo as p')
+                                                ->join('periodos as pe', 'pe.id', '=', 'p.id_periodo')
+                                                ->where('p.id_paquete', $idPaquete)
+                                                ->select('pe.mes')->get();
 
-        $alex = '';
+                                    $alex='';
 
-        if ($PaquetesPeriodos->isEmpty()) {
-        } else {
+                                            if ($PaquetesPeriodos->isEmpty()) {
 
-            foreach ($PaquetesPeriodos as $data) {
-                $alex = $alex . "-" . $data->mes;
-            }
+                                            }
 
-            $paquetes = Paquetes::find($idPaquete);
-            $paquetes->periodo = $alex;
-            //$PaquetesPeriodos3->id_paquete = $idPaquete;
-            $paquetes->save();
-        }
+                                            else {
 
-        return view('canasta_v2.entregas.index')->with(['paquetes' => Paquetes::where('dea_id', Auth::user()->dea->id)
-            ->orderBy('id', 'desc')
-            ->paginate(10), 'deas' => Dea::where('id', Auth::user()
-            ->dea->id)->pluck('nombre', 'id')]);
+                                                foreach ($PaquetesPeriodos as $data)
+
+                                                {
+                                                $alex=$alex."-".$data->mes;
+                                                }
+
+                                                $paquetes = Paquetes::find($idPaquete);
+                                                $paquetes->periodo = $alex;
+                                                //$PaquetesPeriodos3->id_paquete = $idPaquete;
+                                                $paquetes->save();
+                                            }
+
+        return view('canasta_v2.entregas.index')->with(['paquetes'=> Paquetes::where('dea_id',Auth::user()->dea->id)
+                                            ->orderBy('id', 'desc')
+                                            ->paginate(10),'deas'=>Dea::where('id',Auth::user()
+                                            ->dea->id)->pluck('nombre','id')]);
     }
 
-    /////////////////////////////
+
 
     public function eliminar_periodo($id)
     {
-        $PaquetesPeriodos = PaquetePeriodo::find($id);
-        $PaquetesPeriodos->delete();
+                                                $PaquetesPeriodos= PaquetePeriodo::find($id);
+                                                $PaquetesPeriodos->delete();
 
         return back();
     }
 
-    ///////////////////////////////
+
+
 
     public function detalleBarrio(Request $request)
     {
-        $meses = array(
-            1 => 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-        );
+                                         $meses = array(1 => 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                                         'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
 
                                         $fecha_actual=$meses[date('n')] . '-' . date('Y');
                                         $personal = User::find(Auth::user()->id);
@@ -690,133 +698,38 @@ class EntregasV2Controller extends Controller
                                         $userdate = User::find($id)->usuariosempleados;
                                         $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
-        $beneficiarios = Beneficiario::where('dea_id', Auth::user()->dea->id)
-            ->get();
+                                        $beneficiarios = Beneficiario::where('dea_id',Auth::user()->dea->id)
+                                            ->get();
 
-        $entregas = DB::table('entrega as e')
-            ->join('paquete as p', 'p.id', '=', 'e.id_paquete')
-            ->join('barrios as b', 'b.id', '=', 'e.idBarrio')
-            ->join('beneficiarios as be', 'be.id', '=', 'e.id_beneficiario')
-            ->select('be.dirFoto', 'be.ci', 'be.nombres', 'be.ap', 'be.am', 'be.fechaNac')
-            ->where('e.id_paquete', $request->idpaquete)
-            ->where('e.idBarrio', $request->barrio4)
-            ->orderBy('be.nombres', 'asc')
-            ->get();
+                                            $entregas = DB::table('entrega as e')
+                                            ->join('paquete as p', 'p.id', '=', 'e.id_paquete')
+                                            ->join('barrios as b', 'b.id', '=', 'e.idBarrio')
+                                            ->join('beneficiarios as be', 'be.id', '=', 'e.id_beneficiario')
+                                            ->select('be.dirFoto', 'be.ci', 'be.nombres', 'be.ap', 'be.am', 'be.fechaNac')
+                                            ->where('e.id_paquete',$request->idpaquete)
+                                            ->where('e.idBarrio',$request->barrio4)
+                                            ->orderBy('be.nombres', 'asc')
+                                            ->get();
 
-        //$entregass = Entrega::where('dea_id',Auth::user()->dea->id)
-        //->where('id_paquete',$request->idpaquete)
-        //->where('idBarrio',$request->barrio4)
-        //->take(2)
-        // ->get();
+                                            //$entregass = Entrega::where('dea_id',Auth::user()->dea->id)
+                                            //->where('id_paquete',$request->idpaquete)
+                                            //->where('idBarrio',$request->barrio4)
+                                            //->take(2)
+                                            // ->get();
 
-        $entrega_barrio = Entrega::where('dea_id', Auth::user()->dea->id)
-            ->where('id_paquete', $request->idpaquete)
-            ->where('idBarrio', $request->barrio4)
-            //->take(2)
-            ->first();
+                                            $entrega_barrio = Entrega::where('dea_id',Auth::user()->dea->id)
+                                            ->where('id_paquete',$request->idpaquete)
+                                            ->where('idBarrio',$request->barrio4)
+                                            //->take(2)
+                                             ->first();
 
-        //dd($entregas);
+                                        //dd($entregas);
 
-        // $pdf = PDF::loadView('canasta_v2/entregas/generarboleta', compact(['entregas']));
-        //$pdf->setPaper('LETTER', 'portrait'); //landscape
-        //return $pdf->stream();
+                                            // $pdf = PDF::loadView('canasta_v2/entregas/generarboleta', compact(['entregas']));
+                                            //$pdf->setPaper('LETTER', 'portrait'); //landscape
+                                           //return $pdf->stream();
 
-        return view('canasta_v2/entregas/impDetallebarrio', ["entrega_barrio" => $entrega_barrio, "fecha_actual" => $fecha_actual, "entregas" => $entregas, "userdate" => $userdate, "personalArea" => $personalArea]);
-    }
-
-    //////////////////////////////
-
-    public function detalleBarrio2(Request $request)
-    {
-        $meses = array(
-            1 => 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-        );
-
-        $fecha_actual = $meses[date('n')] . '-' . date('Y');
-        $personal = User::find(Auth::user()->id);
-        $id = $personal->id;
-        $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
-
-        $beneficiarios = Beneficiario::where('dea_id', Auth::user()->dea->id)
-            ->get();
-
-        $entregas = DB::table('entrega as e')
-            ->join('paquete as p', 'p.id', '=', 'e.id_paquete')
-            ->join('barrios as b', 'b.id', '=', 'e.idBarrio')
-            ->join('beneficiarios as be', 'be.id', '=', 'e.id_beneficiario')
-            ->select('be.dirFoto', 'be.ci', 'be.nombres', 'be.ap', 'be.am', 'be.fechaNac', 'be.created_att')
-            ->where('e.id_paquete', $request->idpaquete)
-            ->where('e.idBarrio', $request->barrio5)
-            ->orderBy('be.nombres', 'asc')
-            ->get();
-
-        //$entregass = Entrega::where('dea_id',Auth::user()->dea->id)
-        //->where('id_paquete',$request->idpaquete)
-        //->where('idBarrio',$request->barrio4)
-        //->take(2)
-        // ->get();
-
-        $entrega_barrio = Entrega::where('dea_id', Auth::user()->dea->id)
-            ->where('id_paquete', $request->idpaquete)
-            ->where('idBarrio', $request->barrio5)
-            //->take(2)
-            ->first();
-
-        //dd($entregas);
-
-        // $pdf = PDF::loadView('canasta_v2/entregas/generarboleta', compact(['entregas']));
-        //$pdf->setPaper('LETTER', 'portrait'); //landscape
-        //return $pdf->stream();
-
-        return view('canasta_v2/entregas/impDetallebarrio2', ["entrega_barrio" => $entrega_barrio, "fecha_actual" => $fecha_actual, "entregas" => $entregas, "userdate" => $userdate, "personalArea" => $personalArea]);
-    }
-
-     ///////////////////////////////
-
-    public function deshabilitar($id, $idpaquete)
-    {
-
-        // dd($id);
-        $entrega = Entrega::find($id);
-        $entrega->update([
-            'estado' => 2
-        ]);
-        return redirect()->route('entregas.entrega_index', $idpaquete)->with('info_message', 'Se quitado el paquete seleccionado.');
-    }
-
-    ///////////////////////////////
-
-    public function habilitar($id, $idpaquete)
-    {
-        // dd($id);
-        $entrega = Entrega::find($id);
-        $entrega->update([
-            'estado' => 3
-        ]);
-        return redirect()->route('entregas.entrega_index', $idpaquete)->with('info_message', 'Se ha entregado el paquete seleccionado.');
-    }
-
-    //////////////////////////////
-
-    public function confirmar_entrega(Request $request)
-    {
-        $personal = User::find(Auth::user()->id);
-        $id = $personal->id;
-        $userdate = User::find($id)->usuariosempleados;
-        $personalArea = EmpleadosModel::find($userdate->idemp)->empleadosareas;
-
-        $entregas2 = Entrega::where('dea_id', Auth::user()->dea->id)
-            ->where('id_paquete', $request->idpaquete)
-            ->where('idBarrio', $request->barrio6)
-            ->get();
-
-        foreach ($entregas2 as $data) {
-            $entrega3 = Entrega::find($data->id);
-            $entrega3->estado = 3;
-            $entrega3->save();
-        }
+                                        return view('canasta_v2/entregas/impDetallebarrio', ["entrega_barrio" => $entrega_barrio, "fecha_actual" => $fecha_actual,"entregas" => $entregas,"userdate" => $userdate,"personalArea" => $personalArea]);
 
 
                 }
@@ -881,6 +794,17 @@ class EntregasV2Controller extends Controller
                                 return redirect()->route('entregas.entrega_index',$idpaquete)->with('info_message', 'Se quitado el paquete seleccionado.');
                             }
 
+        public function eliminarBeneficiario($id,$idpaquete){
+
+                                // dd($id);
+                                                     $entrega = Entrega::find($id);
+                                                     $entrega->update([
+                                                         'estado' => 2
+                                                     ]);
+                                                     return redirect()->route('entregas.entrega_index',$idpaquete)->with('info_message', 'Se quitado el paquete seleccionado.');
+                                                 }
+
+
         public function habilitar($id,$idpaquete){
            // dd($id);
                                 $entrega = Entrega::find($id);
@@ -934,12 +858,6 @@ class EntregasV2Controller extends Controller
                                         }
 
 
-        //dd($entregas);
 
-        // $pdf = PDF::loadView('canasta_v2/entregas/generarboleta', compact(['entregas']));
-        //$pdf->setPaper('LETTER', 'portrait'); //landscape
-        //return $pdf->stream();
 
-        return redirect()->route('entregas.entrega_index', $request->idpaquete)->with('info_message', 'Se ha registrado la entrega del barrio seleccionado.');
-    }
 }
