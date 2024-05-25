@@ -404,9 +404,11 @@ class EmpleadoController extends Controller
         ]);
 
         $file = File::find($empleado_contrato->idfile);
-        $file->update([
-            'estadofile' => '2'
-        ]);
+        if($file != null){
+            $file->update([
+                'estadofile' => '2'
+            ]);
+        }
 
         $euser = User::select('id')->where('idemp',$request->empleado_id)->first();
         if($euser != null){
