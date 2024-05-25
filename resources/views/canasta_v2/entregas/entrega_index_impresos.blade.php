@@ -17,20 +17,19 @@
         <div class="form-group row">
             <div class="col-md-6 pr-1 pl-1">
                 @can('canasta.entregas.agregar.porbarrio')
-                    <button class="btn btn-outline-info font-roboto-12 tts:right tts-slideIn tts-custom" type="button" data-toggle="collapse"  aria-label='Agregar beneficiarios a la entrega por barrio.'
+                    <button class="btn btn-outline-info font-roboto-12 tts:right tts-slideIn tts-custom" type="button" data-toggle="collapse"  aria-label='Agregar beneficiarios a la entrega por barrio.' 
                         data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample">
                         <i class="fa fa-address-book fa-fw" aria-hidden="true"></i> Agr.Benf.X.Barrio
                     </button>
                 @endcan
-
                 @can('canasta.entregas.generar.boleta')
                     @if ($botonImprimir == 1)
-                        <button class="btn btn-outline-success font-roboto-12 tts:right tts-slideIn tts-custom" type="button" data-toggle="collapse" aria-label='Imprimir boletas por bloques o barrios.'
+                        <button class="btn btn-outline-success font-roboto-12 tts:right tts-slideIn tts-custom" type="button" data-toggle="collapse" aria-label='Imprimir boletas por bloques o barrios.' 
                             data-target="#collapseExample3" aria-expanded="false" aria-controls="collapseExample">
                             <i class="fa fa-print fa-fw" aria-hidden="true"></i> Imp.Bol.X.Barrio
                         </button>
                     @endif
-                @endcan
+                @endcan 
                 @can('canasta.entregas.generar.boleta')
                     @if ($botonImprimir == 1)
                         <button class="btn btn-outline-danger font-roboto-12 tts:right tts-slideIn tts-custom" type="button" data-toggle="collapse" aria-label='Impresión del detalle de la entrega por barrio - modelo 1'
@@ -63,7 +62,6 @@
                 @include('canasta_v2.entregas.partials.detalle-barrio')
                 @include('canasta_v2.entregas.partials.detalle-barrio2')
                 @include('canasta_v2.entregas.partials.confirmar_entrega')
-                @include('canasta_v2.entregas.partials.agregar-beneficiario')
 
             </div>
         </div>
@@ -102,13 +100,6 @@
                 placeholder: "--Seleccionar un Barrio--",
                 width: '100%'
             });
-
-            $('#barrio10').select2({
-                theme: "bootstrap4",
-                placeholder: "--Seleccionar un Barrio--",
-                width: '100%'
-            });
-
             $('#barrio6').select2({
                 theme: "bootstrap4",
                 placeholder: "--Seleccionar un Barrio--",
