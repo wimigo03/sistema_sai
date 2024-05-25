@@ -1,8 +1,8 @@
 <div class="form-group row">
-    <div class="col-md-12 table-responsive">
-        <table class="table display responsive" style="width:100%;">
+    <div class="col-md-12 pr-1 pl-1 table-responsive">
+        <table class="table display table-striped table-bordered responsive hover-orange" style="width:100%;" id="#">
             <thead>
-                <tr class="font-verdana">
+                <tr class="font-roboto-12">
                     <td class="text-left p-1"><b>TIPO</b></td>
                     <td class="text-left p-1"><b>NOMBRE</b></td>
                     <td class="text-left p-1"><b>DISTRITO</b></td>
@@ -17,14 +17,14 @@
             </thead>
             <tbody>
                 @foreach ($barrios as $datos)
-                    <tr class="font-verdana-11">
+                    <tr class="font-roboto-12">
                         <td class="text-left p-1">{{ $datos->tipo_b }}</td>
                         <td class="text-left p-1">{{ $datos->nombre }}</td>
                         <td class="text-left p-1">{{ $datos->distrito->nombre }}</td>
-                        <td class="text-center p-1" style="color: green;font-weight: bold;">{{ $datos->beneficiariosA()->count() }}</td>
-                        <td class="text-center p-1" style="color: red;font-weight: bold;">{{ $datos->beneficiariosB()->count() }}</td>
-                        <td class="text-center p-1" style="color: orange;font-weight: bold;">{{ $datos->beneficiariosF()->count() }}</td>
-                        <td class="text-center p-1" style="color: blue;font-weight: bold;">{{ $datos->beneficiariosX()->count() }}</td>
+                        <td class="text-center p-1">{{ $datos->beneficiariosA()->count() }}</td>
+                        <td class="text-center p-1">{{ $datos->beneficiariosB()->count() }}</td>
+                        <td class="text-center p-1">{{ $datos->beneficiariosF()->count() }}</td>
+                        <td class="text-center p-1">{{ $datos->beneficiariosX()->count() }}</td>
                         @canany(['canasta.barrios.editar', 'canasta.barrios.habilitar'])
                             <td class="text-center p-1">
                                 @can('canasta.barrios.editar')
