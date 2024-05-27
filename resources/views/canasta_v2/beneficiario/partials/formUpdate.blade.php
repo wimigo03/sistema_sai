@@ -118,7 +118,7 @@
     <div class="form-group row font-roboto-12">
         <div class="col-md-12 pr-1 pl-1">
             <label for="observacion" class="d-inline"><b>Observacion</b></label>
-            <textarea name="observacion" id="observacion" class="form-control font-roboto-12" onchange="javascript:this.value=this.value.toUpperCase();">{{ $beneficiario->obs }}</textarea>
+            <textarea name="observacion" id="observacion" class="form-control font-roboto-12" onchange="javascript:this.value=this.value.toUpperCase();"></textarea>
         </div>
     </div>
     <div class="form-group row font-roboto-12">
