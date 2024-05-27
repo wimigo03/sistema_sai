@@ -144,6 +144,7 @@ class BeneficiariosV2Controller extends Controller
                                                 ->byApellidoPaterno($request->ap)
                                                 ->byApellidoMaterno($request->am)
                                                 ->byNumeroCarnet($request->ci)
+                                                ->bySexo($request->sexo)
                                                 ->byBarrio($request->barrio)
                                                 ->byEstado($request->estado)
                                                 ->orderBy('id', 'desc')

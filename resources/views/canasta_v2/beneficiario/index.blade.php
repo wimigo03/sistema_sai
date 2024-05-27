@@ -123,10 +123,36 @@
             $("#form").submit();
         }
 
-        function excel(){
+        function excel() {
             var url = "{{ route('beneficiarios.excel') }}";
-            $("#form").attr('action', url);
-            $("#form").submit();
+            $(".btn").hide();
+            $(".spinner-btn-send").show();
+            var form = $("#form");
+            var formData = form.serialize();
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: formData,
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function(response) {
+                    var a = document.createElement('a');
+                    var url = window.URL.createObjectURL(response);
+                    a.href = url;
+                    a.download = 'beneficiarios.xlsx';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    $(".spinner-btn-send").hide();
+                    $(".btn").show();
+                },
+                error: function(xhr, status, error) {
+                    alert('Hubo un error al exportar el archivo: ' + xhr.responseText);
+                    $(".spinner-btn-send").hide();
+                    $(".btn").show();
+                }
+            });
         }
 
         function limpiar(){
