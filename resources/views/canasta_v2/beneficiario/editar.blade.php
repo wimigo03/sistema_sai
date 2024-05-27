@@ -121,6 +121,11 @@
                 return false;
             }
 
+            if ($("#observacion").val() == "") {
+                Modal("El campo <b>[Observacion]</b> es obligatorio.");
+                return false;
+            }
+
             return true;
         }
     </script>
