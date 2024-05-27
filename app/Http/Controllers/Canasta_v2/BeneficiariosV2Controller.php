@@ -17,105 +17,149 @@ use App\Models\Canasta\Ocupaciones;
 use App\Models\Canasta\HistorialMod;
 use App\Models\User;
 use App\Models\Empleado;
-
-
 use App\Models\Canasta\Dea;
 use App\Http\Requests;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exportar\Canasta\BarriosExcel;
+use App\Exportar\Canasta\BeneficiariosExcel;
+use DataTables;
 use DB;
 use PDF;
 
 class BeneficiariosV2Controller extends Controller
 {
-
      private function copiarbeneficiarios()
-    {
-         $beneficiarios = DB::connection('mysql_canasta')->table("usuarios")
-         //->join('ocupaciones as o', 'o.idOcupacion', '=', 'u.idOcupacion')
-        // ->select('o.ocupacion','u.nombres')
-        ->where('idUsuario','>',14822)
-        //->where('idUsuario','<',12000)
-         ->get();
+     {
+         $beneficiarios = DB::connection('mysql_canasta')
+                                ->table("usuarios")
+                                //->join('ocupaciones as o', 'o.idOcupacion', '=', 'u.idOcupacion')
+                                // ->select('o.ocupacion','u.nombres')
+                                ->where('idUsuario','>',14822)
+                                //->where('idUsuario','<',12000)
+                                ->get();
 
-       //dd($beneficiarios);
         foreach ($beneficiarios as $data){
-
-            $datos=([
-
-                'id'=>$data->idUsuario,
-                'nombres'=>$data->nombres,
-                'ap'=>$data->ap,
-                'am'=>$data->am,
-                'ci'=>$data->ci,
-                'expedido'=>$data->expedido,
-                'fechaNac'=>$data->fechaNac,
-                'estadoCivil'=>$data->estadoCivil,
-                'sexo'=>$data->sexo,
-                'direccion'=>$data->direccion,
-                'dirFoto'=>$data->dirFoto,
-                'firma'=>$data->firma,
-                'obs'=>$data->obs,
-                'idOcupacion'=>$data->idOcupacion,
-                'idBarrio'=>$data->idBarrio,
-                'dea_id'=>1,
-                'user_id'=>29,
-                'created_att'=>$data->_registrado,
-                'updated_att'=>$data->_modificado,
-                'idBarrio'=>$data->idBarrio,
-                'estado'=>$data->estado
-                      ]
-
-
-                     );
-              $beneficiario=Beneficiario::CREATE($datos);
+            $datos = ([
+                'id' => $data->idUsuario,
+                'nombres' => $data->nombres,
+                'ap' => $data->ap,
+                'am' => $data->am,
+                'ci' => $data->ci,
+                'expedido' => $data->expedido,
+                'fechaNac' => $data->fechaNac,
+                'estadoCivil' => $data->estadoCivil,
+                'sexo' => $data->sexo,
+                'direccion' => $data->direccion,
+                'dirFoto' => $data->dirFoto,
+                'firma' => $data->firma,
+                'obs' => $data->obs,
+                'idOcupacion' => $data->idOcupacion,
+                'idBarrio' => $data->idBarrio,
+                'dea_id' => 1,
+                'user_id' => 29,
+                'created_att' => $data->_registrado,
+                'updated_att' => $data->_modificado,
+                'idBarrio' => $data->idBarrio,
+                'estado' => $data->estado
+            ]);
+            $beneficiario=Beneficiario::create($datos);
+        }
     }
 
-    }
-
-
-    public function index()
+    public function index(Request $request)
     {
          //$this->copiarbeneficiarios();
+        if ($request->ajax()) {
+            $data = DB::table('beneficiarios as a')
+                    ->join('barrios as b','b.id','a.idBarrio')
+                    ->select(
+                        'a.id as beneficiario_id',
+                        'a.nombres',
+                        'a.ap',
+                        'a.am',
+                        DB::raw("CONCAT(a.ci,'-',a.expedido) as nro_carnet"),
+                        'b.nombre as barrio',
+                        'a.sexo',
+                        'a.dirFoto',
+                        'a.estado'
+                    );
+
+            return Datatables::of($data)
+                            ->orderColumn('beneficiario_id', 'a.id $1')
+                            ->addIndexColumn()
+                            ->addColumn('columna_foto', 'canasta_v2.beneficiario.partials.columna-foto')
+                            ->addColumn('columna_estado', 'canasta_v2.beneficiario.partials.columna-estado')
+                            ->addColumn('columna_btn', 'canasta_v2.beneficiario.partials.columna-btn')
+                            ->filterColumn('nro_carnet', function($query, $keyword) {
+                                $sql = "CONCAT(a.ci, ' - ', a.expedido) like ?";
+                                $query->whereRaw($sql, ["%{$keyword}%"]);
+                            })
+                            ->rawColumns(['columna_foto','columna_estado','columna_btn'])
+                            ->make(true);
+        }
+
+        $dea_id = Auth::user()->dea->id;
         $tipos = Barrio::TIPOS;
-        $distritos = Distrito::where('dea_id',Auth::user()->dea->id)->pluck('nombre','id');
-        $barrios = Barrio::where('dea_id',Auth::user()->dea->id)->pluck('nombre','nombre');
-        $deas = Dea::where('id',Auth::user()->dea->id)->pluck('nombre','id');
+        $distritos = Distrito::where('dea_id',$dea_id)->pluck('nombre','id');
+        $barrios = Barrio::where('dea_id',$dea_id)->pluck('nombre','nombre');
+        $sexos = Beneficiario::SEXOS;
         $estados = Beneficiario::ESTADOS;
-        $beneficiarios = Beneficiario::where('dea_id',Auth::user()->dea->id)
-        //->where('dirFoto','=',"../imagenes/fotos/1431100307.jpg")
-                            ->orderBy('id', 'desc')
-                            ->paginate(10);
-                            //dd($barrios);
-        return view('canasta_v2.beneficiario.index', compact('tipos','distritos','deas','estados','beneficiarios','barrios'));
+
+        return view('canasta_v2.beneficiario.index', compact('tipos','distritos','sexos','estados','barrios'));
     }
 
     public function search(Request $request)
     {
-
-       //dd($request->barrio);
-      // $barrrio='HEROES DEL CHACO';
+        $dea_id = Auth::user()->dea->id;
         $tipos = Barrio::TIPOS;
-        $distritos = Distrito::where('dea_id',Auth::user()->dea->id)->pluck('nombre','id');
-        $barrios = Barrio::where('dea_id',Auth::user()->dea->id)->pluck('nombre','nombre');
-        $deas = Dea::where('id',Auth::user()->dea->id)->pluck('nombre','id');
+        $distritos = Distrito::where('dea_id',$dea_id)->pluck('nombre','id');
+        $barrios = Barrio::where('dea_id',$dea_id)->pluck('nombre','nombre');
+        $sexos = Beneficiario::SEXOS;
         $estados = Beneficiario::ESTADOS;
         $beneficiarios = Beneficiario::query()
-                            ->byCodigo($request->codigo)
-                            ->byCi($request->ci)
-                            ->byNombre($request->nombre)
-                            ->byBarrio($request->barrio)
-                            ->byAp($request->ap)
-                            ->byAm($request->am)
-                            ->byDea($request->dea_id)
-                            ->byUsuario($request->usuario)
-                            ->byEstado($request->estado)
-                            ->where('dea_id',Auth::user()->dea->id)
-                            ->orderBy('id', 'desc')
-                            ->paginate(10);
-                            //dd($request->barrio);
+                                        ->byDea($dea_id)
+                                        ->byCodigo($request->codigo)
+                                        ->byNombre($request->nombre)
+                                        ->byApellidoPaterno($request->ap)
+                                        ->byApellidoMaterno($request->am)
+                                        ->byNumeroCarnet($request->ci)
+                                        ->bySexo($request->sexo)
+                                        ->byBarrio($request->barrio)
+                                        ->byEstado($request->estado)
+                                        ->orderBy('id', 'desc')
+                                        ->paginate(10);
 
-        return view('canasta_v2.beneficiario.index', compact('tipos','barrios','deas','estados','beneficiarios'));
+        return view('canasta_v2.beneficiario.index', compact('tipos','distritos','sexos','estados','beneficiarios','barrios'));
+    }
+
+    public function excel(Request $request)
+    {
+        try {
+            ini_set('memory_limit','-1');
+            ini_set('max_execution_time','-1');
+                $dea_id = Auth::user()->dea->id;
+                $beneficiarios = Beneficiario::query()
+                                                ->byDea($dea_id)
+                                                ->byCodigo($request->codigo)
+                                                ->byNombre($request->nombre)
+                                                ->byApellidoPaterno($request->ap)
+                                                ->byApellidoMaterno($request->am)
+                                                ->byNumeroCarnet($request->ci)
+                                                ->byBarrio($request->barrio)
+                                                ->byEstado($request->estado)
+                                                ->orderBy('id', 'desc')
+                                                ->get();
+                $contador = $beneficiarios->count();
+                if($contador >= 5000){
+                    return redirect()->route('beneficiarios.index')->with('info_message', 'Los datos de la consulta exceden el limite permitido. Por favor comunicarse con el area de sistemas para resolver esta situacion');
+                }
+
+                return Excel::download(new BeneficiariosExcel($beneficiarios),'beneficiarios.xlsx');
+        } catch (\Throwable $th) {
+            return view('errors.500');
+        }finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
     }
 
     public function create()
@@ -126,130 +170,98 @@ class BeneficiariosV2Controller extends Controller
         return view('canasta_v2.beneficiario.create',compact('barrios','ocupaciones'));
     }
 
-
     public function store(Request $request)
     {
-
         $personal = User::find(Auth::user()->id);
         $id_usuario = $personal->id;
         $dea_id = $personal->dea_id;
         $newestUser = Beneficiario::orderBy('id', 'desc')->first();
         $maxId = $newestUser->id;
 
-                                    $beneficiario = new Beneficiario();
-                                    $beneficiario->id = $maxId + 1;
-                                    $beneficiario->nombres = $request->nombres;
-                                    $beneficiario->ap = $request->ap;
-                                    $beneficiario->am = $request->am;
-                                    $beneficiario->fechaNac = $request->fnac;
-                                    $beneficiario->estadoCivil = $request->estadoCivil;
-                                    $beneficiario->sexo = $request->sexo;
-                                    $beneficiario->ci = $request->ci;
-                                    $beneficiario->expedido = $request->expedido;
-                                    $beneficiario->direccion = $request->direccion;
-                                    $beneficiario->firma = $request->firma;
-                                    $beneficiario->estado = $request->estado;
-                                    $beneficiario->obs = $request->observacion;
-                                    $beneficiario->idOcupacion = $request->ocupacion;
-                                    $beneficiario->idBarrio = $request->barrio;
-                                    $beneficiario->user_id = $id_usuario;
-                                    $beneficiario->dea_id = $dea_id;
+        $beneficiario = new Beneficiario();
+        $beneficiario->id = $maxId + 1;
+        $beneficiario->nombres = $request->nombres;
+        $beneficiario->ap = $request->ap;
+        $beneficiario->am = $request->am;
+        $beneficiario->fechaNac = date('Y-m-d', strtotime(str_replace('/', '-', $request->fnac)));
+        $beneficiario->estadoCivil = $request->estadoCivil;
+        $beneficiario->sexo = $request->sexo;
+        $beneficiario->ci = $request->ci;
+        $beneficiario->expedido = $request->expedido;
+        $beneficiario->direccion = $request->direccion;
+        $beneficiario->firma = $request->firma;
+        $beneficiario->estado = $request->estado;
+        $beneficiario->obs = $request->observacion;
+        $beneficiario->idOcupacion = $request->ocupacion;
+        $beneficiario->idBarrio = $request->barrio;
+        $beneficiario->user_id = $id_usuario;
+        $beneficiario->dea_id = $dea_id;
+        $beneficiario->save();
+        return redirect()->route('beneficiarios.index')->with('success_message', 'datos registrados correctamente...');
+    }
 
 
-                                    $beneficiario->save();
+    public function editar($idbeneficiario)
+    {
+        $barrios = Barrio::where('dea_id',Auth::user()->dea->id)->get();
+        $ocupaciones = Ocupaciones::where('estado','=',1)->get();
+        $beneficiario = Beneficiario::find($idbeneficiario);
 
-                                    $tipos = Barrio::TIPOS;
-                                    $distritos = Distrito::where('dea_id',Auth::user()->dea->id)->pluck('nombre','id');
-                                    $barrios = Barrio::where('dea_id',Auth::user()->dea->id)->pluck('nombre','nombre');
-                                    $deas = Dea::where('id',Auth::user()->dea->id)->pluck('nombre','id');
-                                    $estados = Beneficiario::ESTADOS;
-                                    $beneficiarios = Beneficiario::where('dea_id',Auth::user()->dea->id)
-                                                        //->orderBy('id', 'desc')
-                                                        ->paginate(10);
-                                                        //dd($barrios);
-                                                        return redirect()->route('beneficiarios.index', compact('tipos','distritos','deas','estados','beneficiarios','barrios'));
-}
+        return view('canasta_v2.beneficiario.editar',compact('barrios','ocupaciones','beneficiario'));
+    }
 
+    public function beneficiario_datos($idbeneficiario)
+    {
+        $barrios = Barrio::where('dea_id',Auth::user()->dea->id)->get();
+        $ocupaciones = Ocupaciones::where('estado','=',1)->get();
+        $beneficiario = Beneficiario::find($idbeneficiario);
 
-public function editar($idbeneficiario)
-{
-    $barrios = Barrio::where('dea_id',Auth::user()->dea->id)->get();
-    $ocupaciones = Ocupaciones::where('estado','=',1)->get();
-    $beneficiario = Beneficiario::find($idbeneficiario);
+        return view('canasta_v2.beneficiario.beneficiario_datos',compact('barrios','ocupaciones','beneficiario'));
+    }
 
-    return view('canasta_v2.beneficiario.editar',compact('barrios','ocupaciones','beneficiario'));
-}
+    public function update2(Request $request)
+    {
 
-public function beneficiario_datos($idbeneficiario)
-{
-    $barrios = Barrio::where('dea_id',Auth::user()->dea->id)->get();
-    $ocupaciones = Ocupaciones::where('estado','=',1)->get();
-    $beneficiario = Beneficiario::find($idbeneficiario);
+        $personal = User::find(Auth::user()->id);
+        $id_usuario = $personal->id;
+        $dea_id = $personal->dea_id;
+        $newestUser = HistorialMod::orderBy('id', 'desc')->first();
+        $maxId = $newestUser->id;
 
-    return view('canasta_v2.beneficiario.beneficiario_datos',compact('barrios','ocupaciones','beneficiario'));
-}
+        $beneficiario = Beneficiario::find($request->idBeneficiario);
+        $beneficiario->nombres = $request->nombres;
+        $beneficiario->ap = $request->ap;
+        $beneficiario->am = $request->am;
+        $beneficiario->fechaNac =  date('Y-m-d', strtotime(str_replace('/', '-', $request->fnac)));
+        $beneficiario->estadoCivil = $request->estadoCivil;
+        $beneficiario->sexo = $request->sexo;
+        $beneficiario->ci = $request->ci;
+        $beneficiario->expedido = $request->expedido;
+        $beneficiario->direccion = $request->direccion;
+        $beneficiario->firma = $request->firma;
+        $beneficiario->estado = $request->estado;
+        $beneficiario->idOcupacion = $request->ocupacion;
+        $beneficiario->idBarrio = $request->barrio;
+        $beneficiario->user_id = $id_usuario;
+        $beneficiario->dea_id = $dea_id;
+        $beneficiario->save();
 
-public function update2(Request $request)
-{
+        $Historialmod = new HistorialMod();
+        $Historialmod->id = $maxId + 1;
+        $Historialmod->observacion = $request->observacion;
+        $Historialmod->id_beneficiario = $request->idBeneficiario;
+        $Historialmod->user_id = 16;
+        $Historialmod->dea_id = 1;
+        $Historialmod->save();
 
-    $personal = User::find(Auth::user()->id);
-    $id_usuario = $personal->id;
-    $dea_id = $personal->dea_id;
-    $newestUser = HistorialMod::orderBy('id', 'desc')->first();
-    $maxId = $newestUser->id;
+        return redirect()->route('beneficiarios.index')->with('info_message', 'datos actualizados correctamente...');
+    }
 
-    //dd($maxId);
-                                //dd($request->idBeneficiario);
-                                $beneficiario = Beneficiario::find($request->idBeneficiario);
-                                //$beneficiario = new Beneficiario();
-                                $beneficiario->nombres = $request->nombres;
-                                $beneficiario->ap = $request->ap;
-                                $beneficiario->am = $request->am;
-                                $beneficiario->fechaNac = $request->fnac;
-                                $beneficiario->estadoCivil = $request->estadoCivil;
-                                $beneficiario->sexo = $request->sexo;
-                                $beneficiario->ci = $request->ci;
-                                $beneficiario->expedido = $request->expedido;
-                                $beneficiario->direccion = $request->direccion;
-                                $beneficiario->firma = $request->firma;
-                                $beneficiario->estado = $request->estado;
-                                //$beneficiario->obs = $request->observacion;
-                                $beneficiario->idOcupacion = $request->ocupacion;
-                                $beneficiario->idBarrio = $request->barrio;
-                                $beneficiario->user_id = $id_usuario;
-                                $beneficiario->dea_id = $dea_id;
-                                $beneficiario->save();
-
-
-                                $Historialmod = new HistorialMod();
-                                $Historialmod->id = $maxId + 1;
-                                    $Historialmod->observacion = $request->observacion;
-                                    $Historialmod->id_beneficiario = $request->idBeneficiario;
-                                    $Historialmod->user_id = 16;
-                                    $Historialmod->dea_id = 1;
-                                    $Historialmod->save();
-
-                                $tipos = Barrio::TIPOS;
-                                $distritos = Distrito::where('dea_id',Auth::user()->dea->id)->pluck('nombre','id');
-                                $barrios = Barrio::where('dea_id',Auth::user()->dea->id)->pluck('nombre','nombre');
-                                $deas = Dea::where('id',Auth::user()->dea->id)->pluck('nombre','id');
-                                $estados = Beneficiario::ESTADOS;
-                                $beneficiarios = Beneficiario::where('dea_id',Auth::user()->dea->id)
-                                                    //->orderBy('id', 'desc')
-                                                    ->paginate(10);
-                                                    //dd($barrios);
-                                                    return redirect()->route('beneficiarios.index', compact('tipos','distritos','deas','estados','beneficiarios','barrios'));
-}
-
-
-public function update(Request $request)
-{
-
-//dd($request->documento);
-              $personal = User::find(Auth::user()->id);
-              $id_usuario = $personal->id;
-              $dea_id = $personal->dea_id;
-
+    public function update(Request $request)
+    {
+        $personal = User::find(Auth::user()->id);
+        $id_usuario = $personal->id;
+        $dea_id = $personal->dea_id;
         $newestUser = HistorialMod::orderBy('id', 'desc')->first();
         $maxId = $newestUser->id;
 
@@ -257,7 +269,6 @@ public function update(Request $request)
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
         $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
-        //dd($userdate);
 
         if ($request->file("documento") != null) {
             if ($request->hasFile("documento")) {
@@ -274,76 +285,54 @@ public function update(Request $request)
                 }
             }
 
+            $beneficiario = Beneficiario::find($request->idBeneficiario);
+            $beneficiario->nombres = $request->nombres;
+            $beneficiario->ap = $request->ap;
+            $beneficiario->am = $request->am;
+            $beneficiario->fechaNac = date('Y-m-d', strtotime(str_replace('/', '-', $request->fnac)));
+            $beneficiario->estadoCivil = $request->estadoCivil;
+            $beneficiario->sexo = $request->sexo;
+            $beneficiario->ci = $request->ci;
+            $beneficiario->expedido = $request->expedido;
+            $beneficiario->direccion = $request->direccion;
+            $beneficiario->firma = $request->firma;
+            $beneficiario->obs = $request->observacion;
+            $beneficiario->estado = $request->estado;
+            $beneficiario->dirFoto = '../imagenes/fotos/' . $nombre;;
+            $beneficiario->idOcupacion = $request->ocupacion;
+            $beneficiario->idBarrio = $request->barrio;
+            $beneficiario->user_id = $id_usuario;
+            $beneficiario->dea_id = $dea_id;
+            $beneficiario->update();
+        } else {
+            $beneficiario = Beneficiario::find($request->idBeneficiario);
+            $beneficiario->nombres = $request->nombres;
+            $beneficiario->ap = $request->ap;
+            $beneficiario->am = $request->am;
+            $beneficiario->fechaNac = date('Y-m-d', strtotime(str_replace('/', '-', $request->fnac)));
+            $beneficiario->estadoCivil = $request->estadoCivil;
+            $beneficiario->sexo = $request->sexo;
+            $beneficiario->ci = $request->ci;
+            $beneficiario->expedido = $request->expedido;
+            $beneficiario->direccion = $request->direccion;
+            $beneficiario->firma = $request->firma;
+            $beneficiario->obs = $request->observacion;
+            $beneficiario->estado = $request->estado;
+            $beneficiario->idOcupacion = $request->ocupacion;
+            $beneficiario->idBarrio = $request->barrio;
+            $beneficiario->user_id = $id_usuario;
+            $beneficiario->dea_id = $dea_id;
+            $beneficiario->update();
+        }
 
-        $beneficiario = Beneficiario::find($request->idBeneficiario);
-        //$beneficiario = new Beneficiario();
-        $beneficiario->nombres = $request->nombres;
-        $beneficiario->ap = $request->ap;
-        $beneficiario->am = $request->am;
-        $beneficiario->fechaNac = $request->fnac;
-        $beneficiario->estadoCivil = $request->estadoCivil;
-        $beneficiario->sexo = $request->sexo;
-        $beneficiario->ci = $request->ci;
-        $beneficiario->expedido = $request->expedido;
-        $beneficiario->direccion = $request->direccion;
-        $beneficiario->firma = $request->firma;
-        $beneficiario->estado = $request->estado;
-        $beneficiario->dirFoto = '../imagenes/fotos/' . $nombre;;
-        $beneficiario->idOcupacion = $request->ocupacion;
-        $beneficiario->idBarrio = $request->barrio;
-        $beneficiario->user_id = $id_usuario;
-        $beneficiario->dea_id = $dea_id;
-        $beneficiario->save();
-
-
-    } else {
-
-
-
-
-        $beneficiario = Beneficiario::find($request->idBeneficiario);
-        //$beneficiario = new Beneficiario();
-        $beneficiario->nombres = $request->nombres;
-        $beneficiario->ap = $request->ap;
-        $beneficiario->am = $request->am;
-        $beneficiario->fechaNac = $request->fnac;
-        $beneficiario->estadoCivil = $request->estadoCivil;
-        $beneficiario->sexo = $request->sexo;
-        $beneficiario->ci = $request->ci;
-        $beneficiario->expedido = $request->expedido;
-        $beneficiario->direccion = $request->direccion;
-        $beneficiario->firma = $request->firma;
-        $beneficiario->estado = $request->estado;
-
-        $beneficiario->idOcupacion = $request->ocupacion;
-        $beneficiario->idBarrio = $request->barrio;
-        $beneficiario->user_id = $id_usuario;
-        $beneficiario->dea_id = $dea_id;
-        $beneficiario->save();
-    }
-
-
-    $Historialmod = new HistorialMod();
-    $Historialmod->id = $maxId + 1;
+        $Historialmod = new HistorialMod();
+        $Historialmod->id = $maxId + 1;
         $Historialmod->observacion = $request->observacion;
         $Historialmod->id_beneficiario = $request->idBeneficiario;
         $Historialmod->user_id = $id_usuario;
         $Historialmod->dea_id = $dea_id;
         $Historialmod->save();
 
-    $tipos = Barrio::TIPOS;
-    $distritos = Distrito::where('dea_id',Auth::user()->dea->id)->pluck('nombre','id');
-    $barrios = Barrio::where('dea_id',Auth::user()->dea->id)->pluck('nombre','nombre');
-    $deas = Dea::where('id',Auth::user()->dea->id)->pluck('nombre','id');
-    $estados = Beneficiario::ESTADOS;
-    $beneficiarios = Beneficiario::where('dea_id',Auth::user()->dea->id)
-                        //->orderBy('id', 'desc')
-                        ->paginate(10);
-                        //dd($barrios);
-                        return redirect()->route('beneficiarios.index', compact('tipos','distritos','deas','estados','beneficiarios','barrios'));
-
-
-    //return redirect()->action('App\Http\Controllers\ArchivosController@index');
-}
-
+        return redirect()->route('beneficiarios.index')->with('info_message', 'datos actualizados correctamente...');
+    }
 }

@@ -1,30 +1,43 @@
 @extends('layouts.admin')
 @section('content')
-    <link rel="stylesheet" href="/css/font-verdana.css" rel="stylesheet">
-    <div class="card card-custom">
-        <div class="card-header font-verdana-bgt">
-            <b>FORMULARIO REGISTRO</b>
+    <div class="card-header header">
+        <div class="row">
+            <div class="col-md-12 pr-1 pl-1 text-center">
+                <b>REGISTRO DE BENEFICIARIO</b>
+            </div>
         </div>
-        <div class="card-body">
-            @include('canasta_v2.beneficiario.partials.formCreate')
-        </div>
+    </div>
+    <div class="card-body body">
+        @include('canasta_v2.beneficiario.partials.formCreate')
     </div>
 @endsection
 @section('scripts')
     <script>
         $(document).ready(function() {
             $('.select2').select2({
-                placeholder: "--Seleccionar--"
+                theme: "bootstrap4",
+                placeholder: "--Seleccionar--",
+                width: '100%'
+            });
+
+            var cleave = new Cleave('#fnac', {
+                date: true,
+                datePattern: ['d', 'm', 'Y']
+            });
+
+            $("#fnac").datepicker({
+                inline: false,
+                dateFormat: "dd/mm/yyyy",
+                autoClose: true,
             });
         });
 
-        function message_alert(mensaje) {
+        function Modal(mensaje) {
             $("#modal-alert .modal-body").html(mensaje);
             $('#modal-alert').modal({
                 keyboard: false
             });
         }
-
 
         function cancelar(){
             $(".btn").hide();
@@ -40,78 +53,71 @@
             }
         }
 
-
-
         function validar_formulario() {
             if ($("#nombres").val() == "") {
-                message_alert("El campo <b>[NOMBRES]</b> es un dato obligatorio...");
+                Modal("El campo <b>[NOMBRES]</b> es obligatorio.");
                 return false;
             }
 
             if ($("#ap").val() == "") {
-                message_alert("El campo <b>[AP.Paterno]</b> es un dato obligatorio...");
-                return false;
+                if ($("#am").val() == "") {
+                    Modal("El campo <b>[Apellido Paterno o Apellido Materno]</b> es obligatorio.");
+                    return false;
+                }
             }
 
             if ($("#am").val() == "") {
-                message_alert("El campo <b>[Ap.Materno]</b> es un dato obligatorio...");
-                return false;
+                if ($("#ap").val() == "") {
+                    Modal("El campo <b>[Apellido Paterno o Apellido Materno]</b> es un dato obligatorio.");
+                    return false;
+                }
             }
             if ($("#fnac").val() == "") {
-                message_alert("El campo <b>[F.Nacimiento]</b> es un dato obligatorio...");
+                Modal("El campo <b>[Fecha de Nacimiento]</b> es obligatorio.");
                 return false;
             }
 
             if ($("#estadoCivil>option:selected").val() == "") {
-                message_alert("El campo <b>[Est.Civil]</b> es un dato obligatorio...");
+                Modal("El campo <b>[Estado Civil]</b> es obligatorio.");
                 return false;
             }
             if ($("#sexo>option:selected").val() == "") {
-                message_alert("El campo <b>[Sexo]</b> es un dato obligatorio...");
+                Modal("El campo <b>[Sexo]</b> es obligatorio.");
                 return false;
             }
 
             if ($("#ci").val() == "") {
-                message_alert("El campo <b>[C.I No]</b> es un dato obligatorio...");
+                Modal("El campo <b>[Nro de Carnet]</b> es obligatorio.");
                 return false;
             }
 
             if ($("#expedido").val() == "") {
-                message_alert("El campo <b>[Expedido]</b> es un dato obligatorio...");
+                Modal("El campo <b>[Expedido]</b> es obligatorio.");
                 return false;
             }
 
             if ($("#firma").val() == "") {
-                message_alert("El campo <b>[Firma]</b> es un dato obligatorio...");
-                return false;
-            }
-
-            if ($("#direccion").val() == "") {
-                message_alert("El campo <b>[Direccion]</b> es un dato obligatorio...");
+                Modal("El campo <b>[Firma]</b> es obligatorio.");
                 return false;
             }
 
             if ($("#estado>option:selected").val() == "") {
-                message_alert("El campo <b>[Estado]</b> es un dato obligatorio...");
+                Modal("El campo <b>[Estado]</b> es obligatorio.");
+                return false;
+            }
+
+            if ($("#direccion").val() == "") {
+                Modal("El campo <b>[Direccion]</b> es obligatorio.");
                 return false;
             }
 
             if ($("#barrio>option:selected").val() == "") {
-                message_alert("El campo <b>[Barrio]</b> es un dato obligatorio...");
+                Modal("El campo <b>[Barrio]</b> es obligatorio.");
                 return false;
             }
 
             if ($("#ocupacion>option:selected").val() == "") {
-                message_alert("El campo <b>[Ocupacion]</b> es un dato obligatorio...");
-                return false;
-            }
-
-            if ($("#fregistro").val() == "") {
-                message_alert("El campo <b>[F.Registro]</b> es un dato obligatorio...");
-                return false;
-            }
-            if ($("#observacion").val() == "") {
-                message_alert("El campo <b>[Observacion]</b> es un dato obligatorio...");
+                Modal("El campo <b>[Ocupacion]</b> es obligatorio.");
                 return false;
             }
 

@@ -428,3 +428,10 @@ main .post-content .post-meta {
 .select2-container-rojo .select2-selection {
 	border-color: #DC3545 !important;
 }
+
+.mi-clase-personalizada {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+    width: 2000px; /* ajusta según sea necesario */
+}

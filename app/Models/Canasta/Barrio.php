@@ -43,6 +43,15 @@ class Barrio extends Model
         }
     }
 
+    public function getcolorStatusAttribute(){
+        switch ($this->estado) {
+            case '1':
+                return "badge-with-padding badge badge-success";
+            case '2':
+                return "badge-with-padding badge badge-danger";
+        }
+    }
+
     public function getTipoBAttribute(){
         switch ($this->tipo) {
             case '1':

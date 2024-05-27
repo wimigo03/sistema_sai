@@ -23,6 +23,13 @@
             });
         });
 
+        $('.intro').on('keypress', function(event) {
+            if (event.which === 13) {
+                procesar();
+                event.preventDefault();
+            }
+        });
+
         function create(){
             window.location.href = "{{ route('roles.create') }}";
         }

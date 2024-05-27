@@ -1,37 +1,118 @@
 @extends('layouts.admin')
 @section('content')
-<link rel="stylesheet" href="/css/font-verdana.css" rel="stylesheet">
-<div class="card card-custom">
-    <div class="card-header font-verdana-15">
-        <b>BENEFICIARIOS</b>
+    <div class="card-header header">
+        <div class="row">
+            <div class="col-md-12 pr-1 pl-1 text-center">
+                <b>BENEFICIARIOS</b>
+            </div>
+        </div>
     </div>
-    <div class="card-body">
+    <div class="card-body body">
         @include('canasta_v2.beneficiario.partials.search')
         @include('canasta_v2.beneficiario.partials.table')
     </div>
-</div>
 @endsection
 @section('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
             $('#tipo').select2({
-                placeholder: "--Tipo--"
-            });
-
-            $('#dea').select2({
-                placeholder: "--DEA--"
+                theme: "bootstrap4",
+                placeholder: "--Tipo--",
+                width: '100%'
             });
 
             $('#idBarrio').select2({
-                placeholder: "--Barrios--"
+                theme: "bootstrap4",
+                placeholder: "--Barrio--",
+                width: '100%'
             });
 
             $('#estado').select2({
-                placeholder: "--Estado--"
+                theme: "bootstrap4",
+                placeholder: "--Estado--",
+                width: '100%'
             });
-            $('#ocupacion').select2({
-                placeholder: "--Estado--"
+
+            $('#sexo').select2({
+                theme: "bootstrap4",
+                placeholder: "--Sexo--",
+                width: '100%'
             });
+
+            $('#dataTable').DataTable({
+                bFilter: true,
+                responsive: true,
+                processing: true,
+                serverSide: true,
+                autoWidth: false,
+                ajax: "{{ route('beneficiarios.index') }}",
+                columns: [{
+                        data: 'beneficiario_id',
+                        name: 'a.id',
+                        class: 'text-center p-1 font-roboto-11'
+                    },
+                    {
+                        data: 'nombres',
+                        name: 'a.nombres',
+                        class: 'text-center p-1 font-roboto-11'
+                    },
+                    {
+                        data: 'ap',
+                        name: 'a.ap',
+                        class: 'text-center p-1 font-roboto-11'
+                    },
+                    {
+                        data: 'am',
+                        name: 'a.am',
+                        class: 'text-center p-1 font-roboto-11'
+                    },
+                    {
+                        data: 'nro_carnet',
+                        name: 'nro_carnet',
+                        class: 'text-center p-1 font-roboto-11'
+                    },
+                    {
+                        data: 'sexo',
+                        name: 'a.sexo',
+                        class: 'text-center p-1 font-roboto-11'
+                    },
+                    {
+                        data: 'barrio',
+                        name: 'b.nombre',
+                        class: 'text-center p-1 font-roboto-11'
+                    },
+                    {
+                        data: 'columna_foto',
+                        name: 'columna_foto',
+                        class: 'text-center p-1 font-roboto-11',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'columna_estado',
+                        name: 'columna_estado',
+                        class: 'text-center p-1 font-roboto-11',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'columna_btn',
+                        name: 'columna_btn',
+                        class: 'text-center p-1 font-roboto-11',
+                        orderable: false,
+                        searchable: false
+                    },
+                ],
+                order: [[0, 'desc']],
+                language: datatableLanguageConfig
+            });
+        });
+
+        $('.intro').on('keypress', function(event) {
+            if (event.which === 13) {
+                procesar();
+                event.preventDefault();
+            }
         });
 
         function procesar(){
@@ -39,6 +120,12 @@
             $("#form").attr('action', url);
             $(".btn").hide();
             $(".spinner-btn-send").show();
+            $("#form").submit();
+        }
+
+        function excel(){
+            var url = "{{ route('beneficiarios.excel') }}";
+            $("#form").attr('action', url);
             $("#form").submit();
         }
 

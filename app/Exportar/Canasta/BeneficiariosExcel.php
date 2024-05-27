@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exportar;
+namespace App\Exportar\Canasta;
 
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
@@ -14,9 +14,9 @@ class BeneficiariosExcel implements FromView,ShouldAutoSize{
     public function __construct($beneficiarios){
         $this->beneficiarios = $beneficiarios;
     }
-    
+
     public function view(): view{
         $beneficiarios = $this->beneficiarios;
-        return view('canasta.beneficiarios.excel',compact('beneficiarios'));
+        return view('canasta_v2.beneficiario.excel',compact('beneficiarios'));
     }
 }

@@ -1,5 +1,6 @@
 <form action="#" method="post" id="form">
     @csrf
+    <input type="hidden" name="dea_id" value="{{ $dea_id }}">
     <div class="form-group row font-verdana-12">
         <div class="col-md-3 pr-1">
             <label for="tipo" class="d-inline">Tipo</label>

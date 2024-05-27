@@ -19,54 +19,48 @@ use App\Models\User;
 use DB;
 use PDF;
 
-
 class DistritosV2Controller extends Controller
 {
-
     private function copiardistritos()
     {
          $distritos = DB::connection('mysql_canasta')->table("barrios")->get();
         foreach ($distritos as $data){
-
-            $datos=([
-
+            $datos = ([
                 'nombre'=>$data->distrito,
                 'user_id'=>16,
                 'dea_id'=>1,
                 'estado'=>1
-                      ]
+                ]);
 
-
-                     );
-              $distrito=Distrito::CREATE($datos);
-    }
-       // dd($distritos);
-
+            $distrito=Distrito::CREATE($datos);
+        }
     }
 
     public function index()
     {
-
         //$this->copiardistritos();
-        $deas = Dea::pluck('nombre','id');
+        $dea_id = Auth::user()->dea->id;
         $estados = Distrito::ESTADOS;
-        $distritos = Distrito::orderBy('id', 'desc')->paginate(10);
-        return view('canasta_v2.distrito.index', compact('deas','estados','distritos'));
+        $distritos = Distrito::query()
+                                ->byDea($dea_id)
+                                ->orderBy('id', 'desc')
+                                ->paginate(10);
+        return view('canasta_v2.distrito.index', compact('estados','distritos'));
     }
 
     public function search(Request $request)
     {
-        $deas = Dea::pluck('nombre','id');
+        $dea_id = Auth::user()->dea->id;
         $estados = Distrito::ESTADOS;
         $distritos = Distrito::query()
+                                ->byDea($dea_id)
                                 ->byCodigo($request->codigo)
                                 ->byNombre($request->nombre)
                                 ->byUsuario($request->usuario)
-                                ->byDea($request->dea_id)
                                 ->byEstado($request->estado)
                                 ->orderBy('id', 'desc')
                                 ->paginate(10);
-        return view('canasta_v2.distrito.index', compact('deas','estados','distritos'));
+        return view('canasta_v2.distrito.index', compact('estados','distritos'));
     }
 
     public function excel(Request $request)
@@ -74,11 +68,12 @@ class DistritosV2Controller extends Controller
         try {
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');
+            $dea_id = Auth::user()->dea->id;
             $distritos = Distrito::query()
+                                ->byDea($dea_id)
                                 ->byCodigo($request->codigo)
                                 ->byNombre($request->nombre)
                                 ->byUsuario($request->usuario)
-                                ->byDea($request->dea_id)
                                 ->byEstado($request->estado)
                                 ->orderBy('id', 'desc')
                                 ->get();
@@ -93,18 +88,17 @@ class DistritosV2Controller extends Controller
 
     public function create()
     {
-        $deas = Dea::pluck('nombre','id');
-        return view('canasta_v2.distrito.create', compact('deas'));
+        return view('canasta_v2.distrito.create');
     }
 
     public function store(Request $request)
     {
+        $dea_id = Auth::user()->dea->id;
         $request->validate([
-            'dea' => ['required'],
             'nombre' => [
                 'required',
-                Rule::unique('distritos', 'nombre')->where(function ($query) use ($request) {
-                    return $query->where('dea_id', $request->dea);
+                Rule::unique('distritos', 'nombre')->where(function ($query) use ($dea_id) {
+                    return $query->where('dea_id', $dea_id);
                 }),
             ]
         ]);
@@ -112,7 +106,7 @@ class DistritosV2Controller extends Controller
             $distrito = Distrito::create([
                 'nombre' => $request->nombre,
                 'user_id' => Auth::user()->id,
-                'dea_id' => $request->dea,
+                'dea_id' => $dea_id,
                 'estado' => 1
             ]);
             return redirect()->route('distritos.index')->with('success_message', 'Se agrego un distrito al registro.');
@@ -126,27 +120,29 @@ class DistritosV2Controller extends Controller
     public function editar($id)
     {
         $distrito = Distrito::find($id);
-        $deas = Dea::select('nombre','id')->get();
-        return view('canasta_v2.distrito.editar', compact('distrito','deas'));
+        return view('canasta_v2.distrito.editar', compact('distrito'));
     }
 
     public function update(Request $request)
     {
+        $dea_id = Auth::user()->dea->id;
         $request->validate([
-            'dea' => ['required'],
             'nombre' => [
                 'required',
-                Rule::unique('distritos', 'nombre')->where(function ($query) use ($request) {
-                    return $query->where('dea_id', $request->dea);
+                Rule::unique('distritos', 'nombre')->where(function ($query) use ($request,$dea_id) {
+                    return $query->where('dea_id', $dea_id)
+                                ->where('id','!=',$request->distrito_id);;
                 }),
             ]
+        ], [
+            'nombre.unique' => 'El nombre ya existe para el dea proporcionada.',
         ]);
         try{
             $distrito = Distrito::find($request->distrito_id);
             $distrito->update([
                 'nombre' => $request->nombre,
                 'user_id' => Auth::user()->id,
-                'dea_id' => $request->dea
+                'dea_id' => $dea_id
             ]);
             return redirect()->route('distritos.index')->with('success_message', 'Se modifico un registro de distrito.');
         } catch (ValidationException $e) {

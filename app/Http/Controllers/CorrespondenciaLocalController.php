@@ -82,7 +82,6 @@ class CorrespondenciaLocalController extends Controller
         return view('correspondencia-local.index');
     }
 
-
     public function create()
     {
         $date = Carbon::now();

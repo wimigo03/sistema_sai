@@ -12,21 +12,21 @@
     <link rel="stylesheet" href="{{ asset('admin_assets/plugins/slim-select/slimselect.min.css') }}">
     <link rel="stylesheet" href="{{ asset('dataTable_1.10.22/css/jquery.dataTables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('dataTable_1.10.22/css/responsive.dataTables.min.css') }}">
-    <link href="{{ asset('dashboard/css/select2.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('dashboard/css/select2-bootstrap4.css') }}" rel="stylesheet">
-    <link href="{{ asset('dashboard/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('dashboard/css/fonts/roboto.css') }}" rel="stylesheet">
-    <link href="{{ asset('dashboard/css/fonts/poppins.css') }}" rel="stylesheet">
-    <link href="{{ asset('dashboard/css/fonts/sourceserif.css') }}" rel="stylesheet">
-    <link href="{{ asset('dashboard/css/owl.carousel.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('dashboard/css/style.css') }}" rel="stylesheet">
-    <link href="{{ asset('font-awesome_6.0/css/all.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/treeview/style.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('datepicker/datepicker.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('dashboard/css/tooltips.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/notificaciones/Lobibox.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/notificaciones/notifications.css') }}" rel="stylesheet">
-    <link href="{{ asset('js/jquery-ui-1.13.2/jquery-ui.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('dashboard/css/select2.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('dashboard/css/select2-bootstrap4.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('dashboard/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('dashboard/css/fonts/roboto.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('dashboard/css/fonts/poppins.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('dashboard/css/fonts/sourceserif.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('dashboard/css/owl.carousel.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('dashboard/css/style.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('font-awesome_6.0/css/all.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/treeview/style.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('datepicker/datepicker.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('dashboard/css/tooltips.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/notificaciones/Lobibox.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/notificaciones/notifications.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('js/jquery-ui-1.13.2/jquery-ui.min.css') }}" rel="stylesheet">
     <style>
         #customers-table tbody td.details-control {
             background-image: url('{{ asset('admin_assets/images/details_open.png') }}');
@@ -70,6 +70,7 @@
     <script src="{{ asset('dataTable_1.10.22/js/jquery-3.5.1.js') }}"></script>
     <script src="{{ asset('dataTable_1.10.22/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('dataTable_1.10.22/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('dataTable_1.10.22/js/datatable-language.js') }}"></script>
     <script src="{{ asset('dashboard/js/select2.min.js') }}"></script>
     <script src="{{ asset('dashboard/js/popper.min.js') }}"></script>
     <script src="{{ asset('dashboard/js/bootstrap.min.js') }}"></script>

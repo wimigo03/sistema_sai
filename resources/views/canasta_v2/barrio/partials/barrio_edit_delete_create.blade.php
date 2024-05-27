@@ -1,60 +1,56 @@
 <div class="modal fade" id="create">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"><b>NUEVO BARRIO</b></h5>
+            <div class="modal-header font-roboto-18">
+                <span class="modal-title"><b>NUEVO BARRIO</b></span>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span></button>
-
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class="modal-body text-left">
-                <form class="form-horizontal" method="post" action="{{ route('barrios.store') }}">
-                    @csrf
-
-
-                    <div class="form-group">
-                        <label for="nombre" style="font-weight: bold;">Tipo:</label>
-
-
-                        <select name="tipo" id="tipo" class="form-control form-control-sm select2" required>
-                            <option value="">-- Elija una opcion --</option>
-                            @foreach ($tipos as $index => $value)
-                                <option value="{{ $index }}" @if (request('tipo') == $index) selected @endif>
-                                    {{ $value }}</option>
-                            @endforeach
-                        </select>
-
+            <form class="form-horizontal" method="post" action="{{ route('barrios.store') }}">
+                @csrf
+                <input type="hidden" name="dea_id" value="{{ $dea_id }}">
+                <div class="modal-body text-left">
+                    <div class="form-group row font-roboto-14">
+                        <div class="col-md-12">
+                            <label for="nombre" class="d-inline"><b>Tipo</b></label>
+                            <select name="tipo" id="tipo_add" class="form-control font-roboto-12 select2" required>
+                                <option value="">--</option>
+                                @foreach ($tipos as $index => $value)
+                                    <option value="{{ $index }}" @if (request('tipo') == $index) selected @endif>
+                                        {{ $value }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="nombre" class="d-inline">Nombre</label>
-                        <input type="text" name="nombre" required id="nombre" value="{{old('nombre')}}" oninput="this.value = this.value.toUpperCase()" class="form-control form-control-sm font-verdana-12 intro {{ $errors->has('nombre') ? ' is-invalid' : '' }}">
-
+                    <div class="form-group row font-roboto-14">
+                        <div class="col-md-12">
+                            <label for="nombre" class="d-inline"><b>Nombre</b></label>
+                            <input type="text" name="nombre" id="nombre" value="{{ old('nombre') }}" oninput="this.value = this.value.toUpperCase()" class="form-control font-roboto-12 intro {{ $errors->has('nombre') ? ' is-invalid' : '' }}" required>
+                        </div>
                     </div>
-
-                    <div class="form-group">
-                        <label for="distrito" style="font-weight: bold;">Distrito:</label>
-                        <select name="distrito" id="distrito" class="form-control form-control-sm select2" required>
-                            <option value="">-- Elija una opcion --</option>
-                            @foreach ($distritos as $index => $value)
-                                <option value="{{ $index }}" @if (request('distrito') == $index) selected @endif>
-                                    {{ $value }}</option>
-                            @endforeach
-                        </select>
+                    <div class="form-group row font-roboto-14">
+                        <div class="col-md-12">
+                            <label for="distrito" class="d-inline"><b>Distrito:</b></label>
+                            <select name="distrito" id="distrito_add" class="form-control font-roboto-12 select2" required>
+                                <option value="">-</option>
+                                @foreach ($distritos as $index => $value)
+                                    <option value="{{ $index }}" @if (request('distrito') == $index) selected @endif>
+                                        {{ $value }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
-
-
-            </div>
-            <div class="modal-footer">
-                <a href="{{ url('/barrios') }}">
-                    <button type="button" class="btn btn-default btn-flat pull-left"><i class="fa fa-close"></i>
-                        Cerrar</button>
-                </a>
-                <button type="submit" class="btn  btn-flat" name="edit"><i class="fa fa-check-square"></i>
-                    Guardar</button>
-
-                </form>
-
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger font-roboto-12" data-dismiss="modal" aria-label="Close">
+                        <i class="fa fa-close fa-fw"></i>&nbsp;Cerrar
+                    </button>
+                    <button type="submit" class="btn btn-outline-primary font-roboto-12" name="edit">
+                        <i class="fa fa-check-square fa-fw"></i>&nbsp;Guardar
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

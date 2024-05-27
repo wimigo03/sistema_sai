@@ -9,7 +9,7 @@
             </select>
         </div>
         <div class="col-md-4 pr-1 pl-1">
-            <input type="text" name="nombre" placeholder="--Nombre--" value="{{request('nombre')}}" class="form-control font-roboto-12 intro">
+            <input type="text" name="nombre" placeholder="--Nombre--" value="{{request('nombre')}}" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
         </div>
         <div class="col-md-3 pr-1 pl-1">
             <select name="distrito_id" id="distrito" class="form-control font-roboto-12">
@@ -32,12 +32,19 @@
         <div class="col-md-6 pr-1 pl-1">
             @can('canasta.barrios.create')
                 <a href="#create" data-toggle="modal" >
-                    <button class="btn btn-outline-success font-roboto-12" type="button" >
-                        <i class="fa fa-plus"></i>&nbsp;Crear
-                    </button>
+                    <span class="tts:right tts-slideIn tts-custom root" aria-label="Registrar" style="cursor: pointer;">
+                        <span class="btn btn-outline-success font-roboto-12">
+                            <i class="fa fa-plus"></i>
+                        </span>
+                    </span>
                     <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn-send" style="display: none;"></i>
                 </a>
             @endcan
+            <span class="tts:right tts-slideIn tts-custom root" aria-label="Exportar a Excel" style="cursor: pointer;">
+                <span class="btn btn-outline-success font-roboto-12" onclick="excel();">
+                    <i class="fa fa-file-excel"></i>
+                </span>
+            </span>
         </div>
         <div class="col-md-6 pr-1 pl-1 text-right">
             <button class="btn btn-outline-primary font-roboto-12" type="button" onclick="procesar();">

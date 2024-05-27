@@ -41,22 +41,40 @@ class Beneficiario extends Model
     ];
 
     const ESTADOS = [
-        'A' => 'ACTIVO',
+        'A' => 'HABILITADO',
         'F' => 'FALLECIDO',
         'B' => 'BAJA',
         'X' => 'PENDIENTE'
     ];
 
+    const SEXOS = [
+        'H' => 'MASCULINO',
+        'M' => 'FEMENINO',
+    ];
+
     public function getStatusAttribute(){
         switch ($this->estado) {
             case 'A':
-                return "ACTIVO";
+                return "HABILITADO";
             case 'F':
                 return "FALLECIDO";
             case 'B':
                     return "BAJA";
             case 'X':
                     return "PENDIENTE";
+        }
+    }
+
+    public function getcolorStatusAttribute(){
+        switch ($this->estado) {
+            case 'A':
+                return "badge-with-padding badge badge-success";
+            case 'F':
+                return "badge-with-padding badge badge-danger";
+            case 'B':
+                return "badge-with-padding badge badge-warning";
+            case 'X':
+                return "badge-with-padding badge badge-secondary";
         }
     }
 
@@ -73,8 +91,6 @@ class Beneficiario extends Model
         return $this->belongsTo(Dea::class,'dea_id','id');
     }
 
-
-
     public function scopeByCodigo($query, $codigo){
         if($codigo){
             return $query->where('id', $codigo);
@@ -88,23 +104,30 @@ class Beneficiario extends Model
         }
     }
 
-    public function scopeByAp($query, $ap){
+    public function scopeByApellidoPaterno($query, $ap){
         if($ap){
             return $query->whereRaw('upper(ap) like ?', ['%'.strtoupper($ap).'%']);
 
         }
     }
 
-    public function scopeByAm($query, $am){
+    public function scopeByApellidoMaterno($query, $am){
         if($am){
             return $query->whereRaw('upper(am) like ?', ['%'.strtoupper($am).'%']);
 
         }
     }
 
-    public function scopeByCi($query, $ci){
+    public function scopeByNumeroCarnet($query, $ci){
         if($ci){
             return $query->whereRaw('upper(ci) like ?', ['%'.strtoupper($ci).'%']);
+
+        }
+    }
+
+    public function scopeBySexo($query, $sexo){
+        if($sexo){
+            return $query->where('sexo',$sexo);
 
         }
     }

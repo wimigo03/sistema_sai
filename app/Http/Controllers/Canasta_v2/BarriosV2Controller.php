@@ -128,54 +128,46 @@ class BarriosV2Controller extends Controller
         //if(Auth::user()->id == 102){
             //$this->copiarhistorialBaja();
         //}
+        $dea_id = Auth::user()->dea->id;
         $tipos = Barrio::TIPOS;
-        $distritos = Distrito::where('dea_id',Auth::user()->dea->id)->pluck('nombre','id');
-        $distritos2 = Distrito::where('dea_id',Auth::user()->dea->id)->get();
-        $deas = Dea::where('id',Auth::user()->dea->id)->get('nombre','id');
-        //total habilitados
-        $beneficiariosA = Beneficiario::where('dea_id',Auth::user()->dea->id)->where('estado','A')->count();
-        // total dados de baja//
-        $beneficiariosB = Beneficiario::where('dea_id',Auth::user()->dea->id)->where('estado','B')->count();
-        // total fallecidos//
-        $beneficiariosF = Beneficiario::where('dea_id',Auth::user()->dea->id)->where('estado','F')->count();
-        // total pendientes//
-        $beneficiariosX = Beneficiario::where('dea_id',Auth::user()->dea->id)->where('estado','X')->count();
+        $distritos = Distrito::where('dea_id',$dea_id)->pluck('nombre','id');
+        $distritos2 = Distrito::where('dea_id',$dea_id)->get();
+        $deas = Dea::where('id',$dea_id)->get('nombre','id');
+        $beneficiariosA = Beneficiario::where('dea_id',$dea_id)->where('estado','A')->count();
+        $beneficiariosB = Beneficiario::where('dea_id',$dea_id)->where('estado','B')->count();
+        $beneficiariosF = Beneficiario::where('dea_id',$dea_id)->where('estado','F')->count();
+        $beneficiariosX = Beneficiario::where('dea_id',$dea_id)->where('estado','X')->count();
 
         $estados = Barrio::ESTADOS;
-        $barrios = Barrio::where('dea_id',Auth::user()->dea->id)
+        $barrios = Barrio::where('dea_id',$dea_id)
                             ->orderBy('id', 'desc')
                             ->paginate(10);
-        return view('canasta_v2.barrio.index', compact('tipos','distritos','distritos2','deas','estados','barrios','beneficiariosA','beneficiariosB','beneficiariosF','beneficiariosX'));
+        return view('canasta_v2.barrio.index', compact('dea_id','tipos','distritos','distritos2','deas','estados','barrios','beneficiariosA','beneficiariosB','beneficiariosF','beneficiariosX'));
     }
 
     public function search(Request $request)
     {
+        $dea_id = Auth::user()->dea->id;
         $tipos = Barrio::TIPOS;
-        $distritos = Distrito::where('dea_id',Auth::user()->dea->id)->pluck('nombre','id');
-        $deas = Dea::where('id',Auth::user()->dea->id)->pluck('nombre','id');
-        $distritos2 = Distrito::where('dea_id',Auth::user()->dea->id)->get();
+        $distritos = Distrito::where('dea_id',$dea_id)->pluck('nombre','id');
+        $deas = Dea::where('id',$dea_id)->pluck('nombre','id');
+        $distritos2 = Distrito::where('dea_id',$dea_id)->get();
         $estados = Barrio::ESTADOS;
-        // total habilitados//
-        $beneficiariosA = Beneficiario::where('dea_id',Auth::user()->dea->id)->where('estado','A')->count();
-        // total dados de baja//
-        $beneficiariosB = Beneficiario::where('dea_id',Auth::user()->dea->id)->where('estado','B')->count();
-        // total fallecidos//
-        $beneficiariosF = Beneficiario::where('dea_id',Auth::user()->dea->id)->where('estado','F')->count();
-        // total pendientes//
-        $beneficiariosX = Beneficiario::where('dea_id',Auth::user()->dea->id)->where('estado','=','X')->count();
+        $beneficiariosA = Beneficiario::where('dea_id',$dea_id)->where('estado','A')->count();
+        $beneficiariosB = Beneficiario::where('dea_id',$dea_id)->where('estado','B')->count();
+        $beneficiariosF = Beneficiario::where('dea_id',$dea_id)->where('estado','F')->count();
+        $beneficiariosX = Beneficiario::where('dea_id',$dea_id)->where('estado','X')->count();
 
         $barrios = Barrio::query()
                             ->byCodigo($request->codigo)
                             ->byTipo($request->tipo)
                             ->byNombre($request->nombre)
-                            ->byDea($request->dea_id)
+                            ->byDea($dea_id)
                             ->byDistrito($request->distrito_id)
-                            ->byUsuario($request->usuario)
                             ->byEstado($request->estado)
-                            ->where('dea_id',Auth::user()->dea->id)
                             ->orderBy('id', 'desc')
                             ->paginate(10);
-                            return view('canasta_v2.barrio.index', compact('tipos','distritos','distritos2','deas','estados','barrios','beneficiariosA','beneficiariosB','beneficiariosF','beneficiariosX'));
+                            return view('canasta_v2.barrio.index', compact('dea_id','tipos','distritos','distritos2','deas','estados','barrios','beneficiariosA','beneficiariosB','beneficiariosF','beneficiariosX'));
     }
 
     public function excel(Request $request)
@@ -183,15 +175,14 @@ class BarriosV2Controller extends Controller
         try {
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');
+            $dea_id = Auth::user()->dea->id;
             $barrios = Barrio::query()
                             ->byCodigo($request->codigo)
                             ->byTipo($request->tipo)
                             ->byNombre($request->nombre)
-                            ->byDea($request->dea_id)
+                            ->byDea($dea_id)
                             ->byDistrito($request->distrito_id)
-                            ->byUsuario($request->usuario)
                             ->byEstado($request->estado)
-                            ->where('dea_id',Auth::user()->dea->id)
                             ->orderBy('id', 'desc')
                             ->get();
             return Excel::download(new BarriosExcel($barrios),'barrios.xlsx');
@@ -205,9 +196,10 @@ class BarriosV2Controller extends Controller
 
     public function create()
     {
-        $distritos = Distrito::where('dea_id',Auth::user()->dea->id)->pluck('nombre','id');
+        $dea_id = Auth::user()->dea->id;
+        $distritos = Distrito::where('dea_id',$dea_id)->pluck('nombre','id');
         $tipos = Barrio::TIPOS;
-        return view('canasta_v2.barrio.create', compact('distritos','tipos'));
+        return view('canasta_v2.barrio.create', compact('dea_id','distritos','tipos'));
     }
 
     public function store(Request $request)
@@ -217,10 +209,14 @@ class BarriosV2Controller extends Controller
             'nombre' => [
                 'required',
                 Rule::unique('barrios', 'nombre')->where(function ($query) use ($request) {
-                    return $query->where('distrito_id', $request->distrito);
+                    return $query->where('distrito_id', $request->distrito)
+                                ->where('tipo', $request->tipo)
+                                ->where('dea_id', $request->dea_id);
                 }),
             ],
             'distrito' => ['required']
+        ], [
+            'nombre.unique' => 'El nombre ya existe para el dea y tipo proporcionados.',
         ]);
         try{
             $distrito = Distrito::select('dea_id')->where('id',$request->distrito)->first();
@@ -242,17 +238,15 @@ class BarriosV2Controller extends Controller
 
     public function editar($id)
     {
+        $dea_id = Auth::user()->dea->id;
         $barrio = Barrio::find($id);
-        $distritos = Distrito::select('nombre','id')->where('dea_id',Auth::user()->dea->id)->get();
+        $distritos = Distrito::select('nombre','id')->where('dea_id',$dea_id)->get();
         $tipos = Barrio::TIPOS;
-        return view('canasta_v2.barrio.editar', compact('barrio','distritos','tipos'));
+        return view('canasta_v2.barrio.editar', compact('dea_id','barrio','distritos','tipos'));
     }
 
     public function update(Request $request)
     {
-
-
-        //dd($request->distrito);
         $request->validate([
             'tipo' => ['required'],
             'distrito' => ['required'],
@@ -260,9 +254,13 @@ class BarriosV2Controller extends Controller
                 'required',
                 Rule::unique('barrios', 'nombre')->where(function ($query) use ($request) {
                     return $query->where('distrito_id', $request->distrito)
-                                    ->where('tipo', $request->tipo);
+                                    ->where('tipo', $request->tipo)
+                                    ->where('dea_id', $request->dea_id)
+                                    ->where('id','!=',$request->barrio_id);
                 }),
             ]
+        ], [
+            'nombre.unique' => 'El nombre ya existe para el dea y tipo proporcionados.',
         ]);
         try{
             $barrio = Barrio::find($request->barrio_id);
