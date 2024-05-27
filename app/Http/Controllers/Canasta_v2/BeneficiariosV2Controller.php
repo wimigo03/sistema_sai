@@ -296,7 +296,6 @@ class BeneficiariosV2Controller extends Controller
             $beneficiario->expedido = $request->expedido;
             $beneficiario->direccion = $request->direccion;
             $beneficiario->firma = $request->firma;
-            $beneficiario->obs = $request->observacion;
             $beneficiario->estado = $request->estado;
             $beneficiario->dirFoto = '../imagenes/fotos/' . $nombre;;
             $beneficiario->idOcupacion = $request->ocupacion;
@@ -316,7 +315,6 @@ class BeneficiariosV2Controller extends Controller
             $beneficiario->expedido = $request->expedido;
             $beneficiario->direccion = $request->direccion;
             $beneficiario->firma = $request->firma;
-            $beneficiario->obs = $request->observacion;
             $beneficiario->estado = $request->estado;
             $beneficiario->idOcupacion = $request->ocupacion;
             $beneficiario->idBarrio = $request->barrio;
