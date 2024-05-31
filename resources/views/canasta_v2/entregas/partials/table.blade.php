@@ -1,12 +1,11 @@
 <div class="form-group row abs-center">
-    <div class="col-md-12 pr-1 pl-1">
+    <div class="col-md-10 pr-1 pl-1">
         <table class="table table-borderless hoverTable table-striped hover-orange" id="#" style="width:100%;">
             <thead>
                 <tr class="font-roboto-11">
                     <td class="text-center p-1"><b>GESTION</b></td>
                     <td class="text-center p-1"><b>PERIODO</b></td>
                     <td class="text-center p-1"><b>NUM.ENTREGA</b></td>
-                    <td class="text-center p-1"><b>DEA</b></td>
                     @canany(['canasta.paquete.editar','canasta.paquete.periodo','canasta.entregas.paquete.index'])
                         <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
                     @endcanany
@@ -18,7 +17,6 @@
                     <td class="text-center p-1">{{ $datos->gestion }}</td>
                     <td class="text-center p-1">{{ $datos->periodo }}</td>
                     <td class="text-center p-1">{{ $datos->numero }}</td>
-                    <td class="text-center p-1">{{ $datos->dea->descripcion }}</td>
                     @canany(['canasta.paquete.editar','canasta.paquete.periodo','canasta.entregas.paquete.index'])
                         <td class="text-center p-1">
                             @can('canasta.paquete.editar')

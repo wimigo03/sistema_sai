@@ -1,5 +1,5 @@
 <form action="#" method="get" id="form">
-    <div class="form-group row abs-center">
+    <div class="form-group row">
         <div class="col-md-2 pr-1 pl-1">
             <input type="text" name="gestion" placeholder="-- Gestion --" value="{{request('gestion')}}" class="form-control font-roboto-12 intro">
         </div>
