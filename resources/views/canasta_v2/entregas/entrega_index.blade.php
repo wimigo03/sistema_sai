@@ -1,11 +1,5 @@
 @extends('layouts.admin')
 @section('content')
-    {{-- @include('layouts.message_alert')
-    @if (Session::has('message'))
-        <div class="alert alert-success">
-            <em> {!! session('message') !!}</em>
-        </div>
-    @endif --}}
     <div class="card-header header">
         <div class="row">
             <div class="col-md-12 pr-1 pl-1 text-center">
@@ -17,41 +11,34 @@
         <div class="form-group row">
             <div class="col-md-6 pr-1 pl-1">
                 @can('canasta.entregas.agregar.porbarrio')
-                    <button class="btn btn-outline-info font-roboto-12 tts:right tts-slideIn tts-custom" type="button" data-toggle="collapse"  aria-label='Agregar beneficiarios a la entrega por barrio.'
-                        data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample">
+                    <button class="btn btn-outline-info font-roboto-12 tts:right tts-slideIn tts-custom" type="button" data-toggle="collapse"  aria-label='Agregar beneficiarios a la entrega por barrio.' data-target="#collapseBeneficiariosPorBarrio" aria-expanded="false" aria-controls="collapseExample">
                         <i class="fa fa-address-book fa-fw" aria-hidden="true"></i> Agr.Benf.X.Barrio
                     </button>
                 @endcan
-
                 @can('canasta.entregas.generar.boleta')
                     @if ($botonImprimir == 1)
-                        <button class="btn btn-outline-success font-roboto-12 tts:right tts-slideIn tts-custom" type="button" data-toggle="collapse" aria-label='Imprimir boletas por bloques o barrios.'
-                            data-target="#collapseExample3" aria-expanded="false" aria-controls="collapseExample">
+                        <button class="btn btn-outline-success font-roboto-12 tts:right tts-slideIn tts-custom" type="button" data-toggle="collapse" aria-label='Imprimir boletas por bloques o barrios.' data-target="#collapseExample3" aria-expanded="false" aria-controls="collapseExample">
                             <i class="fa fa-print fa-fw" aria-hidden="true"></i> Imp.Bol.X.Barrio
                         </button>
                     @endif
                 @endcan
                 @can('canasta.entregas.generar.boleta')
                     @if ($botonImprimir == 1)
-                        <button class="btn btn-outline-danger font-roboto-12 tts:right tts-slideIn tts-custom" type="button" data-toggle="collapse" aria-label='Impresión del detalle de la entrega por barrio - modelo 1'
-                            data-target="#collapseExample4" aria-expanded="false" aria-controls="collapseExample">
+                        <button class="btn btn-outline-danger font-roboto-12 tts:right tts-slideIn tts-custom" type="button" data-toggle="collapse" aria-label='Impresión del detalle de la entrega por barrio - modelo 1' data-target="#collapseExample4" aria-expanded="false" aria-controls="collapseExample">
                             <i class="fa fa-print fa-fw" aria-hidden="true"></i> Imp.Det.X.Barrio
                         </button>
                     @endif
                 @endcan
                 @can('canasta.entregas.generar.boleta')
                     @if ($botonImprimir == 1)
-                        <button class="btn btn-outline-warning font-roboto-12 tts:right tts-slideIn tts-custom" type="button" data-toggle="collapse" aria-label='Impresión del detalle de la entrega por barrio - modelo 2'
-                            data-target="#collapseExample5" aria-expanded="false" aria-controls="collapseExample">
+                        <button class="btn btn-outline-warning font-roboto-12 tts:right tts-slideIn tts-custom" type="button" data-toggle="collapse" aria-label='Impresión del detalle de la entrega por barrio - modelo 2' data-target="#collapseExample5" aria-expanded="false" aria-controls="collapseExample">
                             <i class="fa fa-print fa-fw" aria-hidden="true"></i> Imp.Det.X.Barrio2
                         </button>
                     @endif
                 @endcan
-
                 @can('canasta.entregas.generar.boleta')
                     @if ($botonImprimir == 1)
-                        <button class="btn btn-outline-info font-roboto-12 tts:right tts-slideIn tts-custom" type="button" data-toggle="collapse" aria-label='Confirmar la entrega de paquetes por barrio.'
-                            data-target="#collapseExample6" aria-expanded="false" aria-controls="collapseExample">
+                        <button class="btn btn-outline-info font-roboto-12 tts:right tts-slideIn tts-custom" type="button" data-toggle="collapse" aria-label='Confirmar la entrega de paquetes por barrio.' data-target="#collapseExample6" aria-expanded="false" aria-controls="collapseExample">
                             <i class="fa fa-check fa-fw" aria-hidden="true"></i> Confirmar.Ent.
                         </button>
                     @endif
@@ -63,8 +50,7 @@
                 @include('canasta_v2.entregas.partials.detalle-barrio')
                 @include('canasta_v2.entregas.partials.detalle-barrio2')
                 @include('canasta_v2.entregas.partials.confirmar_entrega')
-                @include('canasta_v2.entregas.partials.agregar-beneficiario')
-
+                {{--@include('canasta_v2.entregas.partials.agregar-beneficiario')--}}
             </div>
         </div>
         @include('canasta_v2.entregas.partials.search_entrega')

@@ -1,140 +1,90 @@
 @extends('layouts.admin')
 @section('content')
-@include('layouts.message_alert')
-@if(Session::has('message'))
-    <div class="alert alert-success">
-        <em> {!! session('message') !!}</em>
-    </div>
-@endif
-<br>
-<div class="row font-verdana-12">
-    <div class="col-md-2 titulo">
-        <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder">
-            <a href="{{ url('entregas') }}">
-                <span class="color-icon-1">
-                    &nbsp;<i class="fa-solid fa-xl fa-circle-chevron-left"></i>&nbsp;
-                </span>
-            </a>
-        </span>
-    </div>
-    <div class="col-md-10 text-right titulo">
-        <b>AGREGAR PERIODOS</b>
-    </div>
-    <div class="col-md-12">
-        <hr class="hrr">
-    </div>
-
-</div>
-<div class="body-border" style="background-color: #FFFFFF;">
-    <form action="{{ route('entregas.paquete_periodo_agregar',$idPaquete) }}" method="post" id="form">
-        @csrf
-        <br>
-            <div class="form-group row">
-            <div class="col-md-4">
-                <label for="producto" class="d-inline font-verdana-12">
-                    <b>Periodo</b>&nbsp;<span style="font-size:10px; color: red;"></span>
-                </label>
-                <select name="periodo" id="periodo" placeholder="--Seleccionar--" class="form-control form-control-sm select2">
-                    <option value="">-</option>
-
-                    @foreach ($periodos as $periodo)
-                        <option value="{{ $periodo->id }}">{{ $periodo->mes }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="col-md-2 text-right">
-                <br>
-                <button class="btn btn-primary font-verdana-12" type="button" onclick="save();">
-                    <i class="fa-solid fa-plus"></i>
-                    &nbsp;Adicionar
-                </button>
-            </div>
-            <div class="col-md-2 text-right">
-                <br>
-                <button class="btn btn-success font-verdana-bg" type="button" >
-                    <a href="{{ route('entregas.finalizar',$idPaquete) }}" class="btn btn-xs btn-success">
-                        <i class="fa-regular fa-lg fa-circle-up">&nbsp;Procesar</i>
-                    </a>
-                </button>
+    <div class="card-header header">
+        <div class="row">
+            <div class="col-md-12 pr-1 pl-1 text-center">
+                <b>AGREGAR PERIODOS</b>
             </div>
         </div>
-    </form>
-</div>
-<div class="row">
-    <div class="col-md-12 table-responsive">
-        <center>
-            <table id="dataTable" class="table display table-bordered responsive font-verdana" style="width:100%">
-                <thead>
-                    <tr>
-                        <td class="text-justify p-1"><b>Gestion</b></td>
-                        <td class="text-justify p-1"><b>Periodo</b></td>
-
-                        <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
-                    </tr>
-                </thead>
-                <tbody>
-
-                     @forelse ($PaquetesPeriodos as $PaquetesPeriodo)
-                        <tr>
-                            <td class="text-justify p-1">{{$PaquetesPeriodo->paquete->gestion}}</td>
-                            <td class="text-justify p-1">{{$PaquetesPeriodo->periodo->mes}}</td>
-
-                            <td class="text-center p-1">
-
-
-
-                                <span class="tts:left tts-slideIn tts-custom" aria-label="Eliminar">
-                                    <a href="{{ route('entregas.eliminar_periodo',$PaquetesPeriodo->id) }}" onclick="return confirm('Se va a eliminar el Item...')">
-                                        <span class="text-danger">
-                                            <i class="fa-solid fa-xl fa-trash" aria-hidden="true"></i>
-                                        </span>
-                                    </a>
-                                </span>
-
-
-
-
-
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-
-            </table>
-        </center>
     </div>
-</div>
+    <div class="card-body body">
+        <div class="form-group row font-roboto-12 abs-center">
+            <div class="col-md-12 pr-1 pl-1">
+                <a href="{{ route('entregas.index') }}" class="btn btn-outline-primary font-roboto-12">
+                    <i class="fa-solid fa-angles-left fa-fw"></i> Ir atras
+                </a>
+            </div>
+        </div>
+        <form action="{{ route('entregas.paquete_periodo_agregar',$idPaquete) }}" method="post" id="form">
+            @csrf
+            <div class="form-group row font-roboto-12 abs-center">
+                <div class="col-md-3 pr-1 pl-1">
+                    <select name="periodo" id="periodo" placeholder="--Seleccionar--" class="form-control font-roboto-12">
+                        <option value="">-</option>
+                        @foreach ($periodos as $periodo)
+                            <option value="{{ $periodo->id }}">{{ $periodo->mes }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-3 pr-1 pl-1 text-right">
+                    <span class="btn btn-primary font-roboto-12" onclick="save();">
+                        <i class="fa-solid fa-plus fa-fw"></i>&nbsp;Adicionar
+                    </span>
+                    <a href="{{ route('entregas.finalizar',$idPaquete) }}" class="btn btn-success font-roboto-12">
+                        <i class="fa-regular fa-circle-up fa-fw"></i>&nbsp;Procesar
+                    </a>
+                </div>
+            </div>
+        </form>
+        <br>
+        <div class="form-group row abs-center">
+            <div class="col-md-6 pr-1 pl-1 table-responsive">
+                <table class="table display table-striped table-bordered responsive hover-orange" style="width:100%;" id="#{{--dataTable--}}">
+                    <thead>
+                        <tr class="font-roboto-11">
+                            <td class="text-center p-1"><b>GESTION</b></td>
+                            <td class="text-center p-1"><b>PERIODO</b></td>
+                            <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($PaquetesPeriodos as $PaquetesPeriodo)
+                           <tr class="font-roboto-11">
+                               <td class="text-center p-1">{{$PaquetesPeriodo->paquete->gestion}}</td>
+                               <td class="text-center p-1">{{$PaquetesPeriodo->periodo->mes}}</td>
+                               <td class="text-center p-1">
+                                   <span class="tts:left tts-slideIn tts-custom" aria-label="Eliminar">
+                                       <a href="{{ route('entregas.eliminar_periodo',$PaquetesPeriodo->id) }}" onclick="return confirm('Se va a eliminar el Item...')" class="badge-with-padding badge badge-danger">
+                                            <i class="fa-solid fa-trash fa-fw" aria-hidden="true"></i>
+                                       </a>
+                                   </span>
+                               </td>
+                           </tr>
+                       @endforeach
+                   </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('scripts')
     <script>
         $(document).ready(function() {
             $('#dataTable').DataTable({
-                language: {
-"decimal": "",
-"emptyTable": "No hay información",
-"info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
-"infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-"infoFiltered": "(Filtrado de _MAX_ total entradas)",
-"infoPostFix": "",
-"thousands": ",",
-"lengthMenu": "Mostrar _MENU_ Entradas",
-"loadingRecords": "Cargando...",
-"processing": "Procesando...",
-"search": "Buscar:",
-"zeroRecords": "Sin resultados encontrados",
-"paginate": {
-    "first": "Primero",
-    "last": "Ultimo",
-    "next": "Siguiente",
-    "previous": "Anterior"
-}
-},
+                language: datatableLanguageConfig,
                 order: [[ 0, "asc" ]]
             });
 
             $('.select2').select2({
-                placeholder: "--Seleccionar--"
+                theme: "bootstrap4",
+                placeholder: "--Seleccionar--",
+                width: '100%'
+            });
+
+            $('#periodo').select2({
+                theme: "bootstrap4",
+                placeholder: "--Periodo--",
+                width: '100%'
             });
         });
 
