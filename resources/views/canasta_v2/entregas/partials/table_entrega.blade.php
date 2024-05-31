@@ -1,6 +1,6 @@
 <div class="form-group row">
     <div class="col-md-12 pr-1 pl-1 table-responsive">
-        <table class="table display table-striped table-bordered responsive hover-orange" style="width:100%;">
+        <table class="table display table-striped table-bordered responsive hover-orange sortable" style="width:100%;">
             <thead>
                 <tr class="font-roboto-11">
                     <th class="text-center p-1">GESTION</th>
@@ -27,7 +27,7 @@
                         <td class="text-justify p-1">{{ $entregas->beneficiario->am }}</td>
                         <td class="text-center p-1">{{ $entregas->beneficiario->ci }}</td>
                         <td class="text-center p-1">{{ $entregas->beneficiario->barrio->nombre }}</td>
-                        <td class="text-center p-1"><img src="{{ asset(substr($entregas->beneficiario->dirFoto , 3)) }}" align="center" height="30" with="30" /></td>
+                        <td class="text-center p-1"><img src="{{ asset(substr($entregas->beneficiario->dir_foto , 3)) }}" align="center" height="30" with="30" /></td>
                         @if (strtoupper($entregas->status) == 'SIN ENT.(SIN IMPRESION)')
                         <td class="text-left p-1" style="color: RED;font-weight: bold;">{{ strtoupper($entregas->status) }}</td>
                         @elseif(strtoupper($entregas->status) == 'SIN ENT.(IMPRESO)')

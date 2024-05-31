@@ -9,7 +9,7 @@ class CanastaOcupacionModel extends Model
 {
     protected $connection = 'mysql_canasta';
     protected $table = 'ocupaciones';
-    protected $primaryKey= 'idOcupacion';
+    protected $primaryKey= 'id_ocupacion';
 
     protected $fillable = [
         'ocupacion',
@@ -22,7 +22,7 @@ class CanastaOcupacionModel extends Model
 
     public function getStatusAttribute(){
         switch ($this->estado) {
-            case 'A': 
+            case 'A':
                 return "A";
         }
     }

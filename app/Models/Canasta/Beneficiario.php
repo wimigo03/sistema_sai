@@ -22,17 +22,17 @@ class Beneficiario extends Model
         'nombres',
         'ap',
         'am',
-        'fechaNac',
-        'estadoCivil',
+        'fecha_nac',
+        'estado_civil',
         'sexo',
         'direccion',
-        'dirFoto',
+        'dir_foto',
         'firma',
         'obs',
-        'idOcupacion',
+        'id_ocupacion',
         'created_att',
         'updated_att',
-        'idBarrio',
+        'id_barrio',
         'user_id',
         'dea_id',
         'expedido',
@@ -83,7 +83,7 @@ class Beneficiario extends Model
     }
 
     public function ocupacion(){
-        return $this->belongsTo(Ocupaciones::class,'idOcupacion','id');
+        return $this->belongsTo(Ocupaciones::class,'id_ocupacion','id');
     }
 
 
@@ -156,13 +156,13 @@ class Beneficiario extends Model
     }
 
     public function barrio(){
-        return $this->belongsTo(Barrio::class,'idBarrio','id');
+        return $this->belongsTo(Barrio::class,'id_barrio','id');
     }
 
     public function scopeByBarrio($query, $barrio){
         if ($barrio) {
                 return $query
-                    ->whereIn('idBarrio', function ($subquery) use($barrio) {
+                    ->whereIn('id_barrio', function ($subquery) use($barrio) {
                         $subquery->select('id')
                             ->from('barrios')
                             ->whereRaw('upper(nombre) like ?', [strtoupper($barrio)]);
@@ -175,7 +175,7 @@ class Beneficiario extends Model
 
     {
 
-        return Carbon::parse($this->attributes['fechaNac'])->age;
+        return Carbon::parse($this->attributes['fecha_nac'])->age;
 
 
     }

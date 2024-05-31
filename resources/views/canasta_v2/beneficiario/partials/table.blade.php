@@ -58,7 +58,7 @@
                             <td class="text-center p-1">{{ $datos->sexo }}</td>
                             <td class="text-center p-1">{{ $datos->barrio->nombre }}</td>
                             {{--<td class="text-left p-1">{{ $datos->direccion }}</td>--}}
-                            <td class="text-center p-1"><img src="{{ asset(substr($datos->dirFoto , 3)) }}" align="center" height="30" with="30" /></td>
+                            <td class="text-center p-1"><img src="{{ asset(substr($datos->dir_foto , 3)) }}" align="center" height="30" with="30" /></td>
                             <td class="text-center p-1">
                                 <span class="{{ $datos->colorStatus }}">
                                     {{ $datos->status }}

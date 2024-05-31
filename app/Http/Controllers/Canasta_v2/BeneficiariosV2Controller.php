@@ -31,7 +31,7 @@ class BeneficiariosV2Controller extends Controller
      {
          $beneficiarios = DB::connection('mysql_canasta')
                                 ->table("usuarios")
-                                //->join('ocupaciones as o', 'o.idOcupacion', '=', 'u.idOcupacion')
+                                //->join('ocupaciones as o', 'o.id_ocupacion', '=', 'u.id_ocupacion')
                                 // ->select('o.ocupacion','u.nombres')
                                 ->where('idUsuario','>',14822)
                                 //->where('idUsuario','<',12000)
@@ -45,20 +45,20 @@ class BeneficiariosV2Controller extends Controller
                 'am' => $data->am,
                 'ci' => $data->ci,
                 'expedido' => $data->expedido,
-                'fechaNac' => $data->fechaNac,
-                'estadoCivil' => $data->estadoCivil,
+                'fecha_nac' => $data->fecha_nac,
+                'estado_civil' => $data->estado_civil,
                 'sexo' => $data->sexo,
                 'direccion' => $data->direccion,
-                'dirFoto' => $data->dirFoto,
+                'dir_foto' => $data->dir_foto,
                 'firma' => $data->firma,
                 'obs' => $data->obs,
-                'idOcupacion' => $data->idOcupacion,
-                'idBarrio' => $data->idBarrio,
+                'id_ocupacion' => $data->id_ocupacion,
+                'id_barrio' => $data->id_barrio,
                 'dea_id' => 1,
                 'user_id' => 29,
                 'created_att' => $data->_registrado,
                 'updated_att' => $data->_modificado,
-                'idBarrio' => $data->idBarrio,
+                'id_barrio' => $data->id_barrio,
                 'estado' => $data->estado
             ]);
             $beneficiario=Beneficiario::create($datos);
@@ -70,7 +70,7 @@ class BeneficiariosV2Controller extends Controller
          //$this->copiarbeneficiarios();
         if ($request->ajax()) {
             $data = DB::table('beneficiarios as a')
-                    ->join('barrios as b','b.id','a.idBarrio')
+                    ->join('barrios as b','b.id','a.id_barrio')
                     ->select(
                         'a.id as beneficiario_id',
                         'a.nombres',
@@ -79,7 +79,7 @@ class BeneficiariosV2Controller extends Controller
                         DB::raw("CONCAT(a.ci,'-',a.expedido) as nro_carnet"),
                         'b.nombre as barrio',
                         'a.sexo',
-                        'a.dirFoto',
+                        'a.dir_foto',
                         'a.estado'
                     );
 
@@ -184,8 +184,8 @@ class BeneficiariosV2Controller extends Controller
         $beneficiario->nombres = $request->nombres;
         $beneficiario->ap = $request->ap;
         $beneficiario->am = $request->am;
-        $beneficiario->fechaNac = date('Y-m-d', strtotime(str_replace('/', '-', $request->fnac)));
-        $beneficiario->estadoCivil = $request->estadoCivil;
+        $beneficiario->fecha_nac = date('Y-m-d', strtotime(str_replace('/', '-', $request->fnac)));
+        $beneficiario->estado_civil = $request->estado_civil;
         $beneficiario->sexo = $request->sexo;
         $beneficiario->ci = $request->ci;
         $beneficiario->expedido = $request->expedido;
@@ -193,8 +193,8 @@ class BeneficiariosV2Controller extends Controller
         $beneficiario->firma = $request->firma;
         $beneficiario->estado = $request->estado;
         $beneficiario->obs = $request->observacion;
-        $beneficiario->idOcupacion = $request->ocupacion;
-        $beneficiario->idBarrio = $request->barrio;
+        $beneficiario->id_ocupacion = $request->ocupacion;
+        $beneficiario->id_barrio = $request->barrio;
         $beneficiario->user_id = $id_usuario;
         $beneficiario->dea_id = $dea_id;
         $beneficiario->save();
@@ -233,16 +233,16 @@ class BeneficiariosV2Controller extends Controller
         $beneficiario->nombres = $request->nombres;
         $beneficiario->ap = $request->ap;
         $beneficiario->am = $request->am;
-        $beneficiario->fechaNac =  date('Y-m-d', strtotime(str_replace('/', '-', $request->fnac)));
-        $beneficiario->estadoCivil = $request->estadoCivil;
+        $beneficiario->fecha_nac =  date('Y-m-d', strtotime(str_replace('/', '-', $request->fnac)));
+        $beneficiario->estado_civil = $request->estado_civil;
         $beneficiario->sexo = $request->sexo;
         $beneficiario->ci = $request->ci;
         $beneficiario->expedido = $request->expedido;
         $beneficiario->direccion = $request->direccion;
         $beneficiario->firma = $request->firma;
         $beneficiario->estado = $request->estado;
-        $beneficiario->idOcupacion = $request->ocupacion;
-        $beneficiario->idBarrio = $request->barrio;
+        $beneficiario->id_ocupacion = $request->ocupacion;
+        $beneficiario->id_barrio = $request->barrio;
         $beneficiario->user_id = $id_usuario;
         $beneficiario->dea_id = $dea_id;
         $beneficiario->save();
@@ -290,17 +290,17 @@ class BeneficiariosV2Controller extends Controller
             $beneficiario->nombres = $request->nombres;
             $beneficiario->ap = $request->ap;
             $beneficiario->am = $request->am;
-            $beneficiario->fechaNac = date('Y-m-d', strtotime(str_replace('/', '-', $request->fnac)));
-            $beneficiario->estadoCivil = $request->estadoCivil;
+            $beneficiario->fecha_nac = date('Y-m-d', strtotime(str_replace('/', '-', $request->fnac)));
+            $beneficiario->estado_civil = $request->estado_civil;
             $beneficiario->sexo = $request->sexo;
             $beneficiario->ci = $request->ci;
             $beneficiario->expedido = $request->expedido;
             $beneficiario->direccion = $request->direccion;
             $beneficiario->firma = $request->firma;
             $beneficiario->estado = $request->estado;
-            $beneficiario->dirFoto = '../imagenes/fotos/' . $nombre;;
-            $beneficiario->idOcupacion = $request->ocupacion;
-            $beneficiario->idBarrio = $request->barrio;
+            $beneficiario->dir_foto = '../imagenes/fotos/' . $nombre;;
+            $beneficiario->id_ocupacion = $request->ocupacion;
+            $beneficiario->id_barrio = $request->barrio;
             $beneficiario->user_id = $id_usuario;
             $beneficiario->dea_id = $dea_id;
             $beneficiario->update();
@@ -309,16 +309,16 @@ class BeneficiariosV2Controller extends Controller
             $beneficiario->nombres = $request->nombres;
             $beneficiario->ap = $request->ap;
             $beneficiario->am = $request->am;
-            $beneficiario->fechaNac = date('Y-m-d', strtotime(str_replace('/', '-', $request->fnac)));
-            $beneficiario->estadoCivil = $request->estadoCivil;
+            $beneficiario->fecha_nac = date('Y-m-d', strtotime(str_replace('/', '-', $request->fnac)));
+            $beneficiario->estado_civil = $request->estado_civil;
             $beneficiario->sexo = $request->sexo;
             $beneficiario->ci = $request->ci;
             $beneficiario->expedido = $request->expedido;
             $beneficiario->direccion = $request->direccion;
             $beneficiario->firma = $request->firma;
             $beneficiario->estado = $request->estado;
-            $beneficiario->idOcupacion = $request->ocupacion;
-            $beneficiario->idBarrio = $request->barrio;
+            $beneficiario->id_ocupacion = $request->ocupacion;
+            $beneficiario->id_barrio = $request->barrio;
             $beneficiario->user_id = $id_usuario;
             $beneficiario->dea_id = $dea_id;
             $beneficiario->update();

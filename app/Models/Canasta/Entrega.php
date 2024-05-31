@@ -18,7 +18,7 @@ class Entrega extends Model
         'id_beneficiario',
         'user_id',
         'dea_id',
-        'idBarrio',
+        'id_barrio',
         'created_at',
         'updated_at',
         'estado'
@@ -52,8 +52,8 @@ class Entrega extends Model
 
     public function name(){
        $barrios_entrega = DB::table('barriosEntrega')
-                      ->where('idBarrio',$this->idBarrio)
-                    ->where('idPaquete',$this->id_paquete)
+                      ->where('id_barrio',$this->id_barrio)
+                    ->where('id_paquete',$this->id_paquete)
                      ->select('estado')
                         ->first();
         if($barrios_entrega != null){
@@ -137,7 +137,7 @@ class Entrega extends Model
     public function scopeByBarrio($query, $barrio){
         if ($barrio) {
                 return $query
-                    ->whereIn('idBarrio', function ($subquery) use($barrio) {
+                    ->whereIn('id_barrio', function ($subquery) use($barrio) {
                         $subquery->select('id')
                             ->from('barrios')
                             ->whereRaw('upper(nombre) like ?', [strtoupper($barrio)]);
@@ -172,7 +172,7 @@ class Entrega extends Model
     }
 
     public function barrio(){
-        return $this->belongsTo(Barrio::class,'idBarrio','id');
+        return $this->belongsTo(Barrio::class,'id_barrio','id');
     }
 
     public function paquete(){

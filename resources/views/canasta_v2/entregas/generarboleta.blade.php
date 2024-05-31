@@ -137,7 +137,7 @@
                         <table width="100%" height="320" class="tabla1">
                             <tr height="150">
                                 <td colspan="2">
-                                    <center><img src="{{ $entrega->beneficiario->dirFoto }}" width='120'
+                                    <center><img src="{{ $entrega->beneficiario->dir_foto }}" width='120'
                                             height='120' />
                                     </center>
                                 </td>

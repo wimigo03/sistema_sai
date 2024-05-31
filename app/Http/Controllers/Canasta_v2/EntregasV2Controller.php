@@ -83,9 +83,9 @@ class EntregasV2Controller extends Controller
 
     }
 
-    public function edit_paquete($idPaquete)
+    public function edit_paquete($id_paquete)
     {
-        $paquetes = Paquetes::find($idPaquete);
+        $paquetes = Paquetes::find($id_paquete);
         return view('canasta_v2.entregas.editar', compact('paquetes'));
     }
 
@@ -110,9 +110,9 @@ class EntregasV2Controller extends Controller
     {
         $estados = Entrega::ESTADOS;
         $deas = Dea::where('id',Auth::user()->dea->id)->get();
-        $barrioEntrega = BarrioEntrega::select('idBarrio')->where('idPaquete','=',$idpaquete)->pluck('idBarrio','idBarrio');
+        $barrioEntrega = BarrioEntrega::select('id_barrio')->where('id_paquete','=',$idpaquete)->pluck('id_barrio','id_barrio');
 
-        $barrioEntregaSel = BarrioEntrega::All()->where('idPaquete','=',$idpaquete);
+        $barrioEntregaSel = BarrioEntrega::All()->where('id_paquete','=',$idpaquete);
        //$entregasel = Entrega::All()->where('id_paquete','=',$idpaquete);
 
       //$beneficiarios2 = DB::table('beneficiarios')
@@ -125,7 +125,7 @@ class EntregasV2Controller extends Controller
         $barrioEntregaSel2 = BarrioEntrega::All()
 
         ->where('estado','=',2)
-        ->where('idPaquete','=',$idpaquete);
+        ->where('id_paquete','=',$idpaquete);
 
         $botonImprimir = 0;
 
@@ -135,7 +135,7 @@ class EntregasV2Controller extends Controller
             $barrios3 = DB::table('barrios')->select('id', 'nombre')->get();
         } else {
             $botonImprimir = 1;
-            $barrios3 = DB::table('barrios')->whereIn('id', $barrioEntregaSel->pluck('idBarrio'))
+            $barrios3 = DB::table('barrios')->whereIn('id', $barrioEntregaSel->pluck('id_barrio'))
                                             ->select('id', 'nombre')
                                             ->get();
         }
@@ -145,7 +145,7 @@ class EntregasV2Controller extends Controller
             $barrios4 = DB::table('barrios')->select('id', 'nombre')->get();
         } else {
             $botonImprimir = 1;
-            $barrios4 = DB::table('barrios')->whereIn('id', $barrioEntregaSel2->pluck('idBarrio'))
+            $barrios4 = DB::table('barrios')->whereIn('id', $barrioEntregaSel2->pluck('id_barrio'))
                                             ->select('id', 'nombre')
                                             ->get();
         }
@@ -156,7 +156,7 @@ class EntregasV2Controller extends Controller
             $barrios = Barrio::where('dea_id',Auth::user()->dea->id)->get();
         } else {
             $barrios = DB::table('barrios')
-                            ->whereNotIn('id', $barrioEntregaSel->pluck('idBarrio'))
+                            ->whereNotIn('id', $barrioEntregaSel->pluck('id_barrio'))
                             ->select('id', 'nombre')
                             ->get();
         }
@@ -164,7 +164,7 @@ class EntregasV2Controller extends Controller
         if ($barrioEntrega->isEmpty()) {
             $barrios2 = DB::table('barrios')->select('nombre', 'nombre')->get();
         } else {
-            $barrios2 = DB::table('barrios')->whereIn('id', $barrioEntregaSel->pluck('idBarrio'))
+            $barrios2 = DB::table('barrios')->whereIn('id', $barrioEntregaSel->pluck('id_barrio'))
                                             ->select('nombre', 'nombre')
                                             ->get();
         }
@@ -176,7 +176,7 @@ class EntregasV2Controller extends Controller
         } else {
             $botonImprimir = 1;
             $barrios1 = DB::table('barrios')
-                ->whereIn('id', $barrioEntregaSel2->pluck('idBarrio'))
+                ->whereIn('id', $barrioEntregaSel2->pluck('id_barrio'))
                 ->select('id', 'nombre')
                 ->get();
         }
@@ -221,9 +221,9 @@ class EntregasV2Controller extends Controller
     {
         $estados = Entrega::ESTADOS;
         $deas = Dea::where('id',Auth::user()->dea->id)->get();
-        $barrioEntrega = BarrioEntrega::select('idBarrio')->where('idPaquete','=',$idpaquete)->pluck('idBarrio','idBarrio');
+        $barrioEntrega = BarrioEntrega::select('id_barrio')->where('id_paquete','=',$idpaquete)->pluck('id_barrio','id_barrio');
 
-        $barrioEntregaSel = BarrioEntrega::All()->where('idPaquete','=',$idpaquete);
+        $barrioEntregaSel = BarrioEntrega::All()->where('id_paquete','=',$idpaquete);
        $entregasel = Entrega::All()->where('id_paquete','=',$idpaquete);
 
       $beneficiarios = DB::table('beneficiarios')
@@ -251,11 +251,11 @@ class EntregasV2Controller extends Controller
     {
                                                  $estados = Entrega::ESTADOS;
                                                 $deas = Dea::where('id',Auth::user()->dea->id)->get();
-                                                $barrioEntrega = BarrioEntrega::select('idBarrio')->where('idPaquete','=',$idpaquete)->pluck('idBarrio','idBarrio');
-                                                $barrioEntregaSel = BarrioEntrega::All()->where('idPaquete','=',$idpaquete);
+                                                $barrioEntrega = BarrioEntrega::select('id_barrio')->where('id_paquete','=',$idpaquete)->pluck('id_barrio','id_barrio');
+                                                $barrioEntregaSel = BarrioEntrega::All()->where('id_paquete','=',$idpaquete);
                                                 $barrioEntregaSel2 = BarrioEntrega::All()
                                                 ->where('estado','=',2)
-                                                ->where('idPaquete','=',$idpaquete);
+                                                ->where('id_paquete','=',$idpaquete);
                                                 //dd($barrioEntrega);
                                             // $barrios2 = Barrio::where('dea_id',Auth::user()->dea->id)->pluck('nombre','nombre');
                                                 $botonImprimir=0;
@@ -268,7 +268,7 @@ class EntregasV2Controller extends Controller
                                                 } else {
                                                         $botonImprimir=1;
                                                         $barrios3 = DB::table('barrios')
-                                                        ->whereIn('id', $barrioEntregaSel->pluck('idBarrio'))
+                                                        ->whereIn('id', $barrioEntregaSel->pluck('id_barrio'))
                                                         ->select('id', 'nombre')
                                                         ->get();
                                                 }
@@ -277,7 +277,7 @@ class EntregasV2Controller extends Controller
                                                     $barrios4 = DB::table('barrios')->select('id', 'nombre')->get();
                                                 } else {
                                                     $botonImprimir = 1;
-                                                    $barrios4 = DB::table('barrios')->whereIn('id', $barrioEntregaSel2->pluck('idBarrio'))
+                                                    $barrios4 = DB::table('barrios')->whereIn('id', $barrioEntregaSel2->pluck('id_barrio'))
                                                                                     ->select('id', 'nombre')
                                                                                     ->get();
                                                 }
@@ -288,7 +288,7 @@ class EntregasV2Controller extends Controller
                                                 } else {
 
                                                         $barrios = DB::table('barrios')
-                                                        ->whereNotIn('id', DB::table('barriosEntrega')->pluck('idBarrio'))
+                                                        ->whereNotIn('id', DB::table('barriosEntrega')->pluck('id_barrio'))
                                                         ->select('id', 'nombre')
                                                         ->get();
                                                 }
@@ -303,7 +303,7 @@ class EntregasV2Controller extends Controller
                                             } else {
                                                 // $botonImprimir=1;
                                                     $barrios2 = DB::table('barrios')
-                                                    ->whereIn('id', $barrioEntregaSel->pluck('idBarrio'))
+                                                    ->whereIn('id', $barrioEntregaSel->pluck('id_barrio'))
                                                     ->select('nombre', 'nombre')
                                                     ->get();
                                             }
@@ -315,7 +315,7 @@ class EntregasV2Controller extends Controller
                                             } else {
                                                 $botonImprimir = 1;
                                                 $barrios1 = DB::table('barrios')
-                                                    ->whereIn('id', $barrioEntregaSel2->pluck('idBarrio'))
+                                                    ->whereIn('id', $barrioEntregaSel2->pluck('id_barrio'))
                                                     ->select('id', 'nombre')
                                                     ->get();
                                             }
@@ -416,7 +416,7 @@ class EntregasV2Controller extends Controller
                                         $entrega->fecha = $date;
                                         $entrega->id_paquete = $request->idpaquete;
                                         $entrega->id_beneficiario = $beneficiarios->id;
-                                        $entrega->idBarrio = $beneficiarios->idBarrio;
+                                        $entrega->id_barrio = $beneficiarios->id_barrio;
                                         $entrega->user_id = $id_usuario;
                                         $entrega->dea_id = $dea_id;
                                         $entrega->estado = 2;
@@ -436,7 +436,7 @@ class EntregasV2Controller extends Controller
                                             $id_usuario = $personal->id;
                                         $dea_id = $personal->dea_id;
                                         $beneficiarios= Beneficiario::where('dea_id',Auth::user()->dea->id)
-                                                        ->Where('idBarrio','=',$request->barrio)
+                                                        ->Where('id_barrio','=',$request->barrio)
                                                         ->Where('estado','=','A')
                                                         ->get();
 
@@ -448,7 +448,7 @@ class EntregasV2Controller extends Controller
                                             'fecha'=>$date,
                                             'id_paquete'=>$idpaquete,
                                             'id_beneficiario'=>$data->id,
-                                            'idBarrio'=>$data->idBarrio,
+                                            'id_barrio'=>$data->id_barrio,
                                             'user_id'=>$id_usuario,
                                             'dea_id'=>$dea_id,
                                             'estado'=>1
@@ -459,8 +459,8 @@ class EntregasV2Controller extends Controller
                                         }
 
                                         $barrioEntrega = new BarrioEntrega;
-                                        $barrioEntrega->idBarrio = $request->barrio;
-                                        $barrioEntrega->idPaquete = $idpaquete;
+                                        $barrioEntrega->id_barrio = $request->barrio;
+                                        $barrioEntrega->id_paquete = $idpaquete;
                                         $barrioEntrega->estado = 1;
                                         $barrioEntrega->save();
 
@@ -486,22 +486,22 @@ class EntregasV2Controller extends Controller
                                         $entregas = Entrega::join('beneficiarios as b', 'b.id', '=', 'entrega.id_beneficiario')
                                         ->where('entrega.dea_id',Auth::user()->dea->id)
                                         ->where('entrega.id_paquete',$request->idpaquete)
-                                        ->where('entrega.idBarrio',$request->barrio3)
+                                        ->where('entrega.id_barrio',$request->barrio3)
                                         ->orderBy('b.nombres', 'asc')
                                         ->get();
 
                                           //  $entregas = DB::table('entrega as e')
                                             //->join('paquete as p', 'p.id', '=', 'e.id_paquete')
-                                            //->join('barrios as b', 'b.id', '=', 'e.idBarrio')
+                                            //->join('barrios as b', 'b.id', '=', 'e.id_barrio')
                                             //->join('beneficiarios as be', 'be.id', '=', 'e.id_beneficiario')
-                                            //->select('e.id','p.periodo','p.items','p.gestion','b.nombre','be.dirFoto', 'be.ci', 'be.nombres', 'be.ap', 'be.am','be.firma', 'be.fechaNac', 'be.created_att')
+                                            //->select('e.id','p.periodo','p.items','p.gestion','b.nombre','be.dir_foto', 'be.ci', 'be.nombres', 'be.ap', 'be.am','be.firma', 'be.fecha_nac', 'be.created_att')
                                             //->where('e.id_paquete',$request->idpaquete)
-                                            //->where('e.idBarrio',$request->barrio3)
+                                            //->where('e.id_barrio',$request->barrio3)
                                             //->orderBy('be.nombres', 'asc')
                                             //->get();
 
-                                            $barrio_entrega = BarrioEntrega::where('idPaquete',$request->idpaquete)
-                                            ->where('idBarrio',$request->barrio3)
+                                            $barrio_entrega = BarrioEntrega::where('id_paquete',$request->idpaquete)
+                                            ->where('id_barrio',$request->barrio3)
                                             //->take(2)
                                              ->first();
 
@@ -509,7 +509,7 @@ class EntregasV2Controller extends Controller
 
                                                 $entregas2 = Entrega::where('dea_id',Auth::user()->dea->id)
                                                 ->where('id_paquete',$request->idpaquete)
-                                                ->where('idBarrio',$request->barrio3)
+                                                ->where('id_barrio',$request->barrio3)
                                                 //->take(2)
                                                 ->get();
 
@@ -563,7 +563,7 @@ class EntregasV2Controller extends Controller
 
                          $entrega = Entrega::where('dea_id',Auth::user()->dea->id)
                         ->where('id','=',$id_entrega)
-                         //->where('idBarrio',$request->barrio3)
+                         //->where('id_barrio',$request->barrio3)
                          //->take(2)
                          ->first();
                         //dd($entregas);
@@ -588,10 +588,10 @@ class EntregasV2Controller extends Controller
 
 
 
-    public function paquete_periodo($idPaquete)
+    public function paquete_periodo($id_paquete)
     {
 
-                                        $paquetes = Paquetes::find($idPaquete);
+                                        $paquetes = Paquetes::find($id_paquete);
                                         $PaquetesPeriodos2 = PaquetePeriodo::select('id_periodo')->pluck('id_periodo','id_periodo');
 
                                     if ($PaquetesPeriodos2->isEmpty()) {
@@ -605,19 +605,19 @@ class EntregasV2Controller extends Controller
                                                     ->select('id', 'mes')
                                                     ->get();
                                     }
-                                        $PaquetesPeriodos= PaquetePeriodo::where('id_paquete','=',$idPaquete)->get();
+                                        $PaquetesPeriodos= PaquetePeriodo::where('id_paquete','=',$id_paquete)->get();
 
-        return view('canasta_v2/entregas/paquete_periodo', ["idPaquete" => $idPaquete,"PaquetesPeriodos" => $PaquetesPeriodos, "periodos" => $periodos]);
+        return view('canasta_v2/entregas/paquete_periodo', ["id_paquete" => $id_paquete,"PaquetesPeriodos" => $PaquetesPeriodos, "periodos" => $periodos]);
 
     }
 
 
-    public function paquete_periodo_agregar(Request $request,$idPaquete)
+    public function paquete_periodo_agregar(Request $request,$id_paquete)
             {
-                                        $paquetes = Paquetes::find($idPaquete);
+                                        $paquetes = Paquetes::find($id_paquete);
                                         $PaquetesPeriodos3 = new PaquetePeriodo;
                                         $PaquetesPeriodos3->id_periodo = $request->periodo;
-                                        $PaquetesPeriodos3->id_paquete = $idPaquete;
+                                        $PaquetesPeriodos3->id_paquete = $id_paquete;
                                         $PaquetesPeriodos3->gestion = $paquetes->gestion;
                                         $PaquetesPeriodos3->save();
 
@@ -635,17 +635,17 @@ class EntregasV2Controller extends Controller
                                                 ->get();
 
                                         }
-                                        $PaquetesPeriodos= PaquetePeriodo::where('id_paquete','=',$idPaquete)->get();
+                                        $PaquetesPeriodos= PaquetePeriodo::where('id_paquete','=',$id_paquete)->get();
 
         return back();
     }
 
 
-    public function finalizar($idPaquete)
+    public function finalizar($id_paquete)
     {
                                     $PaquetesPeriodos = DB::table('paquete_periodo as p')
                                                 ->join('periodos as pe', 'pe.id', '=', 'p.id_periodo')
-                                                ->where('p.id_paquete', $idPaquete)
+                                                ->where('p.id_paquete', $id_paquete)
                                                 ->select('pe.mes')->get();
 
                                     $alex='';
@@ -662,9 +662,9 @@ class EntregasV2Controller extends Controller
                                                 $alex=$alex."-".$data->mes;
                                                 }
 
-                                                $paquetes = Paquetes::find($idPaquete);
+                                                $paquetes = Paquetes::find($id_paquete);
                                                 $paquetes->periodo = $alex;
-                                                //$PaquetesPeriodos3->id_paquete = $idPaquete;
+                                                //$PaquetesPeriodos3->id_paquete = $id_paquete;
                                                 $paquetes->save();
                                             }
 
@@ -703,23 +703,23 @@ class EntregasV2Controller extends Controller
 
                                             $entregas = DB::table('entrega as e')
                                             ->join('paquete as p', 'p.id', '=', 'e.id_paquete')
-                                            ->join('barrios as b', 'b.id', '=', 'e.idBarrio')
+                                            ->join('barrios as b', 'b.id', '=', 'e.id_barrio')
                                             ->join('beneficiarios as be', 'be.id', '=', 'e.id_beneficiario')
-                                            ->select('be.dirFoto', 'be.ci', 'be.nombres', 'be.ap', 'be.am', 'be.fechaNac')
+                                            ->select('be.dir_foto', 'be.ci', 'be.nombres', 'be.ap', 'be.am', 'be.fecha_nac')
                                             ->where('e.id_paquete',$request->idpaquete)
-                                            ->where('e.idBarrio',$request->barrio4)
+                                            ->where('e.id_barrio',$request->barrio4)
                                             ->orderBy('be.nombres', 'asc')
                                             ->get();
 
                                             //$entregass = Entrega::where('dea_id',Auth::user()->dea->id)
                                             //->where('id_paquete',$request->idpaquete)
-                                            //->where('idBarrio',$request->barrio4)
+                                            //->where('id_barrio',$request->barrio4)
                                             //->take(2)
                                             // ->get();
 
                                             $entrega_barrio = Entrega::where('dea_id',Auth::user()->dea->id)
                                             ->where('id_paquete',$request->idpaquete)
-                                            ->where('idBarrio',$request->barrio4)
+                                            ->where('id_barrio',$request->barrio4)
                                             //->take(2)
                                              ->first();
 
@@ -752,23 +752,23 @@ class EntregasV2Controller extends Controller
 
                                                         $entregas = DB::table('entrega as e')
                                                         ->join('paquete as p', 'p.id', '=', 'e.id_paquete')
-                                                        ->join('barrios as b', 'b.id', '=', 'e.idBarrio')
+                                                        ->join('barrios as b', 'b.id', '=', 'e.id_barrio')
                                                         ->join('beneficiarios as be', 'be.id', '=', 'e.id_beneficiario')
-                                                        ->select('be.dirFoto', 'be.ci', 'be.nombres', 'be.ap', 'be.am', 'be.fechaNac', 'be.created_att')
+                                                        ->select('be.dir_foto', 'be.ci', 'be.nombres', 'be.ap', 'be.am', 'be.fecha_nac', 'be.created_att')
                                                         ->where('e.id_paquete',$request->idpaquete)
-                                                        ->where('e.idBarrio',$request->barrio5)
+                                                        ->where('e.id_barrio',$request->barrio5)
                                                         ->orderBy('be.nombres', 'asc')
                                                         ->get();
 
                                                         //$entregass = Entrega::where('dea_id',Auth::user()->dea->id)
                                                         //->where('id_paquete',$request->idpaquete)
-                                                        //->where('idBarrio',$request->barrio4)
+                                                        //->where('id_barrio',$request->barrio4)
                                                         //->take(2)
                                                         // ->get();
 
                                                         $entrega_barrio = Entrega::where('dea_id',Auth::user()->dea->id)
                                                         ->where('id_paquete',$request->idpaquete)
-                                                        ->where('idBarrio',$request->barrio5)
+                                                        ->where('id_barrio',$request->barrio5)
                                                         //->take(2)
                                                          ->first();
 
@@ -827,7 +827,7 @@ class EntregasV2Controller extends Controller
 
                                     $entregas2 = Entrega::where('dea_id',Auth::user()->dea->id)
                                     ->where('id_paquete',$request->idpaquete)
-                                    ->where('idBarrio',$request->barrio6)
+                                    ->where('id_barrio',$request->barrio6)
                                     ->get();
 
                                     foreach ($entregas2 as $data){
@@ -837,8 +837,8 @@ class EntregasV2Controller extends Controller
                                      }
 
 
-                                     $barrio_entrega = BarrioEntrega::where('idPaquete',$request->idpaquete)
-                                     ->where('idBarrio',$request->barrio6)
+                                     $barrio_entrega = BarrioEntrega::where('id_paquete',$request->idpaquete)
+                                     ->where('id_barrio',$request->barrio6)
                                      //->take(2)
                                       ->first();
                                       //dd($barrio_entrega->id);

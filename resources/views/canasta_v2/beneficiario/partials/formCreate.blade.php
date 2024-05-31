@@ -21,13 +21,13 @@
             {{--<input type="date" name="fnac" id="fnac" class="form-control font-roboto-12">--}}
         </div>
         <div class="col-md-2 pr-1 pl-1">
-            <label for="estadoCivil" class="d-inline"><b>Estado Civil</b></label>
-            <select name="estadoCivil" id="estadoCivil" class="form-control select2 font-roboto-12">
+            <label for="estado_civil" class="d-inline"><b>Estado Civil</b></label>
+            <select name="estado_civil" id="estado_civil" class="form-control select2 font-roboto-12">
                 <option value="">-</option>
-                <option value="Soltero(a)" @if (old('estadoCivil') == 'Soltero(a)') selected @endif>Soltero(a)</option>
-                <option value="Casado(a)" @if (old('estadoCivil') == 'Casado(a)') selected @endif>Casado(a)</option>
-                <option value="Viudo(a)" @if (old('estadoCivil') == 'Viudo(a)') selected @endif>Viudo(a)</option>
-                <option value="Divorciado(a)" @if (old('estadoCivil') == 'Divorciado(a)') selected @endif>Divorciado(a)</option>
+                <option value="Soltero(a)" @if (old('estado_civil') == 'Soltero(a)') selected @endif>Soltero(a)</option>
+                <option value="Casado(a)" @if (old('estado_civil') == 'Casado(a)') selected @endif>Casado(a)</option>
+                <option value="Viudo(a)" @if (old('estado_civil') == 'Viudo(a)') selected @endif>Viudo(a)</option>
+                <option value="Divorciado(a)" @if (old('estado_civil') == 'Divorciado(a)') selected @endif>Divorciado(a)</option>
             </select>
         </div>
         <div class="col-md-2 pr-1 pl-1">

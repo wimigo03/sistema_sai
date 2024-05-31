@@ -21,7 +21,7 @@
                 width: '100%'
             });
 
-            $('#idBarrio').select2({
+            $('#id_barrio').select2({
                 theme: "bootstrap4",
                 placeholder: "--Barrio--",
                 width: '100%'

@@ -12,8 +12,8 @@ class BarrioEntrega extends Model
     public $timestamps = false;
     protected $fillable = [
         'id',
-        'idBarrio',
-        'idPaquete',
+        'id_barrio',
+        'id_paquete',
         'estado'
     ];
 }

@@ -80,12 +80,12 @@
 
                 <tr >
                     <td style=" border-bottom: 1px solid #ccc;">{{$num++}}</td>
-                    <td style=" border-bottom: 1px solid #ccc;"><img src="{{ asset(substr($entrega->dirFoto , 3)) }}" align="center" height="30" with="30" /></td>
+                    <td style=" border-bottom: 1px solid #ccc;"><img src="{{ asset(substr($entrega->dir_foto , 3)) }}" align="center" height="30" with="30" /></td>
                     <td style=" border-bottom: 1px solid #ccc;">{{ $entrega->ci }}</td>
                     <td style=" border-bottom: 1px solid #ccc;">{{ $entrega->nombres }}</td>
                     <td style=" border-bottom: 1px solid #ccc;">{{ $entrega->ap }}</td>
                     <td style=" border-bottom: 1px solid #ccc;">{{ $entrega->am }}</td>
-                    <td style=" border-bottom: 1px solid #ccc;">{{ $entrega->fechaNac }}</td>
+                    <td style=" border-bottom: 1px solid #ccc;">{{ $entrega->fecha_nac }}</td>
                     <td style=" border-bottom: 1px solid #ccc;"> {{ \Carbon\Carbon::parse($entrega->created_att)->format('d/m/Y') }}</td>
                 </tr>
             @endforeach

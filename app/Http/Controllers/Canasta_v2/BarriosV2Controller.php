@@ -45,7 +45,7 @@ class BarriosV2Controller extends Controller
            }
 
             $datos=([
-                'id' => $data->idBarrio,
+                'id' => $data->id_barrio,
                 'tipo' => $tipo,
                 'nombre' => $data->barrio,
                 'distrito_id' => $data->distrito,
@@ -68,7 +68,7 @@ class BarriosV2Controller extends Controller
 
         foreach ($ocupaciones as $data){
             $datos = ([
-                'id' => $data->idOcupacion,
+                'id' => $data->id_ocupacion,
                 'ocupacion' => $data->ocupacion,
                 'estado' => 1
             ]);

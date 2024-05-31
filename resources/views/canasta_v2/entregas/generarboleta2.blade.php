@@ -138,7 +138,7 @@
                             <tr height="150">
                                 <td colspan="2">
                                     <center>
-                                        <img src="{{ asset(substr($entrega->beneficiario->dirFoto , 3)) }}"  width='120' height='120' />
+                                        <img src="{{ asset(substr($entrega->beneficiario->dir_foto , 3)) }}"  width='120' height='120' />
                                     </center>
                                 </td>
                             </TR>

@@ -65,18 +65,18 @@ class Barrio extends Model
         return $this->belongsTo(User::class,'user_id','id');
     }
     public function beneficiariosA(){
-        return $this->belongsTo(Beneficiario::class,'id','idBarrio')->where('estado','A');
+        return $this->belongsTo(Beneficiario::class,'id','id_barrio')->where('estado','A');
     }
     public function beneficiariosB(){
-        return $this->belongsTo(Beneficiario::class,'id','idBarrio')->where('estado','B');
+        return $this->belongsTo(Beneficiario::class,'id','id_barrio')->where('estado','B');
     }
 
     public function beneficiariosF(){
-        return $this->belongsTo(Beneficiario::class,'id','idBarrio')->where('estado','F');
+        return $this->belongsTo(Beneficiario::class,'id','id_barrio')->where('estado','F');
     }
 
     public function beneficiariosX(){
-        return $this->belongsTo(Beneficiario::class,'id','idBarrio')->where('estado','X');
+        return $this->belongsTo(Beneficiario::class,'id','id_barrio')->where('estado','X');
     }
 
 
@@ -90,7 +90,7 @@ class Barrio extends Model
     }
 
     public function barrio_entrega(){
-        return $this->belongsTo(BarrioEntrega::class,'id','idBarrio');
+        return $this->belongsTo(BarrioEntrega::class,'id','id_barrio');
     }
 
     public function scopeByCodigo($query, $codigo){

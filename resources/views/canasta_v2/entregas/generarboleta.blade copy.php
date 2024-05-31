@@ -89,7 +89,7 @@
                     <td colspan="2" rowspan="4"
                         style="width:120.05pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border:0.5pt single;">
 
-                        <img src="{{$beneficiario->dirFoto }}" width="80" height="80"/>
+                        <img src="{{$beneficiario->dir_foto }}" width="80" height="80"/>
                     </td>
                     <td colspan="2"
                         style="width:115.4pt; border-style:solid; border-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top; -aw-border:0.5pt single">

@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <table border="1" cellspacing="0" cellpadding="0" width="0">
+    <table border="0" cellspacing="0" cellpadding="0" width="0">
         <tbody>
             <tr>
                 <td width="671" colspan="2" valign="top" bgcolor= "#DDDDDD">
@@ -38,7 +38,7 @@
                 </td>
                 <td width="302" rowspan="23" valign="top" align="center">
                 </br></br></br></br>
-                        <img src="{{ asset(substr($beneficiario->dirFoto, 2)) }}" width="200" >
+                        <img src="{{ asset(substr($beneficiario->dir_foto, 2)) }}" width="200" >
 
                 </td>
             </tr>
@@ -94,7 +94,7 @@
             <tr>
                 <td width="369" valign="top">
                     <p>
-                        {{ $beneficiario->fechaNac }}
+                        {{ $beneficiario->fecha_nac }}
                     </p>
                 </td>
             </tr>
@@ -108,7 +108,7 @@
             <tr>
                 <td width="369" valign="top">
                     <p>
-                        {{ $beneficiario->estadoCivil }}
+                        {{ $beneficiario->estado_civil }}
                     </p>
                 </td>
             </tr>

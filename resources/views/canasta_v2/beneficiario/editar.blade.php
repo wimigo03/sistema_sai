@@ -77,7 +77,7 @@
                 return false;
             }
 
-            if ($("#estadoCivil>option:selected").val() == "") {
+            if ($("#estado_civil>option:selected").val() == "") {
                 Modal("El campo <b>[Estado Civil]</b> es obligatorio.");
                 return false;
             }

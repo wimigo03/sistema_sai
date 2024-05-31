@@ -19,16 +19,16 @@
     <div class="form-group row font-roboto-12">
         <div class="col-md-2 pr-1 pl-1">
             <label for="fnac" class="d-inline"><b>Fecha de Nacimiento</b></label>
-            <input type="text" name="fnac" value="{{ $beneficiario->fechaNac != null ? \Carbon\Carbon::parse($beneficiario->fechaNac)->format('d/m/Y') : '' }}" id="fnac" placeholder="dd/mm/aaaa" class="form-control font-roboto-12" data-language="es">
+            <input type="text" name="fnac" value="{{ $beneficiario->fecha_nac != null ? \Carbon\Carbon::parse($beneficiario->fecha_nac)->format('d/m/Y') : '' }}" id="fnac" placeholder="dd/mm/aaaa" class="form-control font-roboto-12" data-language="es">
         </div>
         <div class="col-md-2 pr-1 pl-1">
-            <label for="estadoCivil" class="d-inline"><b>Estado Civil</b></label>
-            <select name="estadoCivil" id="estadoCivil" class="form-control select2 font-roboto-12">
+            <label for="estado_civil" class="d-inline"><b>Estado Civil</b></label>
+            <select name="estado_civil" id="estado_civil" class="form-control select2 font-roboto-12">
                 <option value="">-</option>
-                <option value="Soltero(a)" @if ($beneficiario->estadoCivil == 'Soltero(a)') selected @endif>Soltero(a)</option>
-                <option value="Casado(a)" @if ($beneficiario->estadoCivil == 'Casado(a)') selected @endif>Casado(a)</option>
-                <option value="Viudo(a)" @if ($beneficiario->estadoCivil == 'Viudo(a)') selected @endif>Viudo(a)</option>
-                <option value="Divorciado(a)" @if ($beneficiario->estadoCivil == 'Divorciado(a)') selected @endif>Divorciado(a)</option>
+                <option value="Soltero(a)" @if ($beneficiario->estado_civil == 'Soltero(a)') selected @endif>Soltero(a)</option>
+                <option value="Casado(a)" @if ($beneficiario->estado_civil == 'Casado(a)') selected @endif>Casado(a)</option>
+                <option value="Viudo(a)" @if ($beneficiario->estado_civil == 'Viudo(a)') selected @endif>Viudo(a)</option>
+                <option value="Divorciado(a)" @if ($beneficiario->estado_civil == 'Divorciado(a)') selected @endif>Divorciado(a)</option>
             </select>
         </div>
         <div class="col-md-2 pr-1 pl-1">
@@ -90,7 +90,7 @@
                 @foreach ($barrios as $barrio)
                     <option value="">-</option>
                     <option value="{{ $barrio->id }}"
-                            @if ($beneficiario->idBarrio == $barrio->id) selected @endif
+                            @if ($beneficiario->id_barrio == $barrio->id) selected @endif
                         >
                         {{ $barrio->nombre }}
                     </option>
@@ -103,7 +103,7 @@
                 @foreach ($ocupaciones as $ocupacion)
                     <option value="">-</option>
                     <option value="{{ $ocupacion->id }}"
-                            @if ($beneficiario->idOcupacion == $ocupacion->id) selected @endif
+                            @if ($beneficiario->id_ocupacion == $ocupacion->id) selected @endif
                         >
                         {{ $ocupacion->ocupacion }}
                     </option>
@@ -123,7 +123,7 @@
     </div>
     <div class="form-group row font-roboto-12">
         <div class="col-md-12 pr-1 pl-1 text-center">
-            <img src="{{ asset(substr($beneficiario->dirFoto, 2)) }}" width="150" />
+            <img src="{{ asset(substr($beneficiario->dir_foto, 2)) }}" width="150" />
         </div>
     </div>
     <div class="form-group row font-roboto-12 abs-center">
