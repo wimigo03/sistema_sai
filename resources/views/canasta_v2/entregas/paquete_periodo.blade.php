@@ -15,7 +15,7 @@
                 </a>
             </div>
         </div>
-        <form action="{{ route('entregas.paquete_periodo_agregar',$idPaquete) }}" method="post" id="form">
+        <form action="{{ route('entregas.paquete_periodo_agregar',$id_paquete) }}" method="post" id="form">
             @csrf
             <div class="form-group row font-roboto-12 abs-center">
                 <div class="col-md-3 pr-1 pl-1">
@@ -30,7 +30,7 @@
                     <span class="btn btn-primary font-roboto-12" onclick="save();">
                         <i class="fa-solid fa-plus fa-fw"></i>&nbsp;Adicionar
                     </span>
-                    <a href="{{ route('entregas.finalizar',$idPaquete) }}" class="btn btn-success font-roboto-12">
+                    <a href="{{ route('entregas.finalizar',$id_paquete) }}" class="btn btn-success font-roboto-12">
                         <i class="fa-regular fa-circle-up fa-fw"></i>&nbsp;Procesar
                     </a>
                 </div>
