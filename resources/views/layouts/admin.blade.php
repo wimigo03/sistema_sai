@@ -15,10 +15,10 @@
     <link rel="stylesheet" href="{{ asset('dashboard/css/select2.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('dashboard/css/select2-bootstrap4.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('dashboard/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('dashboard/css/fonts/roboto.css') }}" rel="stylesheet">
+    {{--<link rel="stylesheet" href="{{ asset('dashboard/css/fonts/roboto.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('dashboard/css/fonts/poppins.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('dashboard/css/fonts/sourceserif.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('dashboard/css/owl.carousel.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('dashboard/css/fonts/sourceserif.css') }}" rel="stylesheet">--}}
+    {{--<link rel="stylesheet" href="{{ asset('dashboard/css/owl.carousel.min.css') }}" rel="stylesheet">--}}
     <link rel="stylesheet" href="{{ asset('dashboard/css/style.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('font-awesome_6.0/css/all.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/treeview/style.min.css') }}" rel="stylesheet">

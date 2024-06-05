@@ -320,15 +320,7 @@ main .post-content .post-meta {
     color: #003d75;
     font-weight: 900;
 }
-/**SELECT2 CONTENIDO*/
-.select2 + .select2-container .select2-selection__rendered {
-  font-size: 11px;
-}
 
-.select2-results__option {
-  font-size: 11px;
-}
-/***/
 .body{
 	/*background-color: #fafafa;*/
     background-color: #ffffff;
@@ -409,7 +401,7 @@ main .post-content .post-meta {
 	justify-content: center;
 }
 
-.align-vertical-align {
+.align-vertical-middle {
     vertical-align: middle;
 }
 

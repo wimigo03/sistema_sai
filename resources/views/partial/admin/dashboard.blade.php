@@ -59,9 +59,9 @@
                                 <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_canasta_v2">
-                                @can('canasta.entregas.index')
+                                @can('canasta.paquetes.index')
                                     <li>
-                                        <a href="{{ route('entregas.index') }}">
+                                        <a href="{{ route('paquetes.index') }}">
                                             &nbsp;&nbsp;<i class="fa-solid fa-shopping-bag fa-fw"></i>&nbsp;Paquetes
                                         </a>
                                     </li>

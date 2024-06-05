@@ -8,13 +8,9 @@
         </div>
     </div>
     <div class="card-body body">
+        @include('canasta_v2.entregas.partials.search_entrega')
         <div class="form-group row">
             <div class="col-md-6 pr-1 pl-1">
-                @can('canasta.entregas.agregar.porbarrio')
-                    <button class="btn btn-outline-info font-roboto-12 tts:right tts-slideIn tts-custom" type="button" data-toggle="collapse"  aria-label='Agregar beneficiarios a la entrega por barrio.' data-target="#collapseBeneficiariosPorBarrio" aria-expanded="false" aria-controls="collapseExample">
-                        <i class="fa fa-address-book fa-fw" aria-hidden="true"></i> Agr.Benf.X.Barrio
-                    </button>
-                @endcan
                 @can('canasta.entregas.generar.boleta')
                     @if ($botonImprimir == 1)
                         <button class="btn btn-outline-success font-roboto-12 tts:right tts-slideIn tts-custom" type="button" data-toggle="collapse" aria-label='Imprimir boletas por bloques o barrios.' data-target="#collapseExample3" aria-expanded="false" aria-controls="collapseExample">
@@ -45,7 +41,6 @@
                 @endcan
             </div>
             <div class="col-md-6 pr-1 pl-1">
-                @include('canasta_v2.entregas.partials.agregar-por-barrio')
                 @include('canasta_v2.entregas.partials.generar-boleta')
                 @include('canasta_v2.entregas.partials.detalle-barrio')
                 @include('canasta_v2.entregas.partials.detalle-barrio2')
@@ -53,7 +48,8 @@
                 {{--@include('canasta_v2.entregas.partials.agregar-beneficiario')--}}
             </div>
         </div>
-        @include('canasta_v2.entregas.partials.search_entrega')
+
+        @include('canasta_v2.entregas.partials.agregar-por-barrio')
         @include('canasta_v2.entregas.partials.table_entrega')
     </div>
 @endsection

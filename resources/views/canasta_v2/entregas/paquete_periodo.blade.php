@@ -13,9 +13,10 @@
                 <a href="{{ route('entregas.index') }}" class="btn btn-outline-primary font-roboto-12">
                     <i class="fa-solid fa-angles-left fa-fw"></i> Ir atras
                 </a>
+                <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
             </div>
         </div>
-        <form action="{{ route('entregas.paquete_periodo_agregar',$id_paquete) }}" method="post" id="form">
+        <form actidason="{{ route('entregas.paquete_periodo_agregar',$id_paquete) }}" method="post" id="form">
             @csrf
             <div class="form-group row font-roboto-12 abs-center">
                 <div class="col-md-3 pr-1 pl-1">
@@ -33,6 +34,7 @@
                     <a href="{{ route('entregas.finalizar',$id_paquete) }}" class="btn btn-success font-roboto-12">
                         <i class="fa-regular fa-circle-up fa-fw"></i>&nbsp;Procesar
                     </a>
+                    <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
                 </div>
             </div>
         </form>

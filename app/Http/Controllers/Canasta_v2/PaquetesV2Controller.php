@@ -26,14 +26,13 @@ use App\Exportar\Canasta\BarriosExcel;
 use DB;
 use PDF;
 use Carbon\Carbon;
-
 use App\Models\User;
 use App\Models\Empleado;
 
-class EntregasV2Controller extends Controller
+class PaquetesV2Controller extends Controller
 {
     public function index()
-    {
+    {dd("ok");
         return view('canasta_v2.entregas.index')->with(['paquetes'=> Paquetes::where('dea_id',Auth::user()->dea->id)
                                                 ->orderBy('id', 'desc')
                                                 ->paginate(10),'deas'=>Dea::where('id',Auth::user()
