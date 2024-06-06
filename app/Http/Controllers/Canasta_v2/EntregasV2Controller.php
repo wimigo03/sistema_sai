@@ -170,7 +170,21 @@ class EntregasV2Controller extends Controller
         }
 
         $beneficiarioControl = 0;
-        $entregas = Entrega::where('dea_id',Auth::user()->dea->id)->where('id_paquete',$idpaquete)->orderBy('id', 'desc')->paginate(10);
+        $entregas =Entrega::query()
+        ->join('beneficiarios as b','b.id','entrega.id_beneficiario')
+        ->join('paquete as p','p.id','entrega.id_paquete')
+        ->join('barrios as bb','bb.id','entrega.id_barrio')
+        //->Join('barriosEntrega as be','be.id_paquete','p.id')
+        ->select('entrega.id','entrega.estado','entrega.id_paquete','p.gestion','p.periodo','bb.id AS idbarrio','b.nombres', 'b.ap', 'b.am', 'b.ci', 'bb.nombre', 'b.dir_foto')
+        ->where('entrega.dea_id',Auth::user()->dea->id)
+        ->where('entrega.id_paquete',$idpaquete)
+        ->where('entrega.estado','=',3)
+        ->orderBy('b.nombres', 'asc')
+        ->paginate(10);
+//dd($entregas);
+
+        //Entrega::where('dea_id',Auth::user()->dea->id)->where('id_paquete',$idpaquete)->orderBy('id', 'desc')->paginate(100);
+
         $entregados = Entrega::where('dea_id',Auth::user()->dea->id)->where('id_paquete',$idpaquete)->where('estado',3)->count();
         $sin_entrega_imp = Entrega::where('dea_id',Auth::user()->dea->id)->where('id_paquete',$idpaquete)->where('estado',2)->count();
         $sin_entrega_sinImp = Entrega::where('dea_id',Auth::user()->dea->id)->where('id_paquete',$idpaquete)->where('estado',1)->count();
@@ -287,19 +301,30 @@ class EntregasV2Controller extends Controller
 
                                         $beneficiarioControl =0;
 
-                                        if ($request->barrio != null || $request->estado != null) {
-                                            $entregas = Entrega::query()
-                                            ->byNombre($request->nombres)
-                                            ->byAp($request->ap)
-                                            ->byAm($request->am)
-                                            ->byCi($request->ci)
-                                            ->byBarrio($request->barrio)
-                                            ->byEstado($request->estado)
-                                            ->where('dea_id',Auth::user()->dea->id)
-                                            ->where('id_paquete','=',$idpaquete)
-                                            ->orderBy('id', 'desc')
-                                            ->paginate(10);
+                                        if ($request->barrio == null || $request->estado == null) {
+                                            $entregas =Entrega::query()
+        ->join('beneficiarios as b','b.id','entrega.id_beneficiario')
+        ->join('paquete as p','p.id','entrega.id_paquete')
+        ->join('barrios as bb','bb.id','entrega.id_barrio')
+        //->Join('barriosEntrega as be','be.id_paquete','p.id')
 
+        ->select('entrega.id','entrega.estado','entrega.id_paquete','p.gestion','p.periodo','bb.id AS idbarrio','b.nombres', 'b.ap', 'b.am', 'b.ci', 'bb.nombre', 'b.dir_foto')
+        ->where('entrega.dea_id',Auth::user()->dea->id)
+        ->where('entrega.id_paquete',$idpaquete)
+        //->where('entrega.estado','=',3)
+        //->where('entrega.estado',$request->estado)
+
+        ->byNombre($request->nombres)
+                                       ->byAp($request->ap)
+                                       ->byAm($request->am)
+                                        ->byCi($request->ci)
+                                       ->byBarrio($request->barrio)
+                                        ->byEstado($request->estado)
+        ->orderBy('b.nombres', 'asc')
+        ->paginate(10);
+
+
+//dd($request->barrio);
                                             $entregados = Entrega::query()
                                             ->byBarrio($request->barrio)
                                             ->where('dea_id',Auth::user()->dea->id)
@@ -754,7 +779,8 @@ class EntregasV2Controller extends Controller
                                 $entrega->update([
                                     'estado' => 2
                                 ]);
-                                return redirect()->route('entregas.entrega_index',$idpaquete)->with('info_message', 'Se quitado el paquete seleccionado.');
+                                //return redirect()->route('entregas.entrega_index',$idpaquete)->with('info_message', 'Se quitado el paquete seleccionado.');
+return back();
                             }
 
         public function eliminarBeneficiario($id,$idpaquete){
@@ -774,7 +800,8 @@ class EntregasV2Controller extends Controller
                                 $entrega->update([
                                     'estado' => 3
                                 ]);
-                                return redirect()->route('entregas.entrega_index',$idpaquete)->with('info_message', 'Se ha entregado el paquete seleccionado.');
+                               // return redirect()->route('entregas.entrega_index',$idpaquete)->with('info_message', 'Se ha entregado el paquete seleccionado.');
+                           return back();
                             }
 
             public function confirmar_entrega(Request $request)
