@@ -92,7 +92,7 @@ class Entrega extends Model
     public function scopeByNombre($query, $nombre){
         if ($nombre) {
                 return $query
-                    ->whereIn('id_beneficiario', function ($subquery) use($nombre) {
+                    ->whereIn('entrega.id_beneficiario', function ($subquery) use($nombre) {
                         $subquery->select('id')
                             ->from('beneficiarios')
                             ->whereRaw('upper(nombres) like ?', ['%'.strtoupper($nombre).'%']);
@@ -103,7 +103,7 @@ class Entrega extends Model
     public function scopeByAp($query, $ap){
         if ($ap) {
                 return $query
-                    ->whereIn('id_beneficiario', function ($subquery) use($ap) {
+                    ->whereIn('entrega.id_beneficiario', function ($subquery) use($ap) {
                         $subquery->select('id')
                             ->from('beneficiarios')
                             ->whereRaw('upper(ap) like ?', ['%'.strtoupper($ap).'%']);
@@ -114,7 +114,7 @@ class Entrega extends Model
     public function scopeByAm($query, $am){
         if ($am) {
                 return $query
-                    ->whereIn('id_beneficiario', function ($subquery) use($am) {
+                    ->whereIn('entrega.id_beneficiario', function ($subquery) use($am) {
                         $subquery->select('id')
                             ->from('beneficiarios')
                             ->whereRaw('upper(am) like ?', ['%'.strtoupper($am).'%']);
@@ -125,7 +125,7 @@ class Entrega extends Model
     public function scopeByCi($query, $ci){
         if ($ci) {
                 return $query
-                    ->whereIn('id_beneficiario', function ($subquery) use($ci) {
+                    ->whereIn('entrega.id_beneficiario', function ($subquery) use($ci) {
                         $subquery->select('id')
                             ->from('beneficiarios')
                             ->whereRaw('upper(ci) like ?', [strtoupper($ci)]);
@@ -136,14 +136,19 @@ class Entrega extends Model
 
     public function scopeByBarrio($query, $barrio){
         if ($barrio) {
+            //dd($barrio);
                 return $query
-                    ->whereIn('id_barrio', function ($subquery) use($barrio) {
-                        $subquery->select('id')
+                    ->whereIn('entrega.id_barrio', function ($subquery) use($barrio) {
+                        $subquery->select('barrios.id')
                             ->from('barrios')
-                            ->whereRaw('upper(nombre) like ?', [strtoupper($barrio)]);
+                            //->whereRaw('upper(nombre) like ?', [strtoupper($barrio)]);
+                            ->where('nombre','like',$barrio);
                     });
         }
     }
+
+
+
 
     public function scopeByUsuario($query, $usuario){
         if ($usuario) {
@@ -181,7 +186,7 @@ class Entrega extends Model
 
     public function scopeByEstado($query, $estado){
         if($estado){
-            return $query->where('estado',$estado);
+            return $query->where('entrega.estado',$estado);
         }
     }
 }
