@@ -163,7 +163,7 @@ class BeneficiariosV2Controller extends Controller
                                 $query->whereRaw($sql, ["%{$keyword}%"]);
                             })
                             ->filterColumn('edad', function($query, $keyword) {
-                                $sql = "DATE_PART('year',AGE(a.fecha_nac)) = ?";
+                                $sql = "DATE_PART('year',AGE(a.fecha_nac))::text like ?";
                                 $query->whereRaw($sql, ["$keyword"]);
                             })
                             ->rawColumns(['columna_foto','columna_estado','columna_btn'])

@@ -94,7 +94,7 @@
                     },
                     {
                         data: 'edad',
-                        name: 'edad',
+                        name: 'a.ci',
                         class: 'text-center p-1 font-roboto-11'
                     },
                     {
