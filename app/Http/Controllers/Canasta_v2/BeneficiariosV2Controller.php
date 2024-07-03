@@ -84,7 +84,7 @@ class BeneficiariosV2Controller extends Controller
                     );
 
             return Datatables::of($data)
-                            ->orderColumn('beneficiario_id', 'a.id $1')
+                            //->orderColumn('beneficiario_id', 'a.id $1')
                             ->addIndexColumn()
                             ->addColumn('columna_foto', 'canasta_v2.beneficiario.partials.columna-foto')
                             ->addColumn('columna_estado', 'canasta_v2.beneficiario.partials.columna-estado')
