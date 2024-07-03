@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Auth;
+use App\Models\User;
+use App\Models\Empleado;
 
 class HomeController extends Controller
 {
@@ -16,9 +18,8 @@ class HomeController extends Controller
 
     public function index()
     {
-        //dd(auth()->user()->roles()->where('title', 'administrador')->toSql());
-
-        //dd(auth()->user()->hasRole('superadmin'));
-        return view('admin.home');
+        $user = User::find(Auth::user()->id);
+        $empleado = Empleado::find($user->idemp);
+        return view('admin.home',compact('user','empleado'));
     }
 }

@@ -312,7 +312,7 @@ main .post-content .post-meta {
     background-color: #ffffff;
     font-weight: 900;
     padding: 0em 0em 0em 1em !important;
-    font-size: 17px;
+    font-size: 20px;
     font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
@@ -320,15 +320,7 @@ main .post-content .post-meta {
     color: #003d75;
     font-weight: 900;
 }
-/**SELECT2 CONTENIDO*/
-.select2 + .select2-container .select2-selection__rendered {
-  font-size: 11px;
-}
 
-.select2-results__option {
-  font-size: 11px;
-}
-/***/
 .body{
 	/*background-color: #fafafa;*/
     background-color: #ffffff;
@@ -409,7 +401,7 @@ main .post-content .post-meta {
 	justify-content: center;
 }
 
-.align-vertical-align {
+.align-vertical-middle {
     vertical-align: middle;
 }
 
@@ -421,10 +413,35 @@ main .post-content .post-meta {
     text-align: justify;
 }
 
+.content-alinear-texto {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.texto {
+    margin: 0;
+}
+
 .input-rojo {
 	border-color : #DC3545;
 }
 
 .select2-container-rojo .select2-selection {
 	border-color: #DC3545 !important;
+}
+
+.imagen-beneficiario-table {
+    width: 15px;
+	height: auto;
+    transition: width 0.3s ease, height 0.3s ease;
+	border-radius: 10%;
+	overflow: hidden;
+}
+
+.imagen-beneficiario-table:hover {
+    transform: scale(5.33);
+    z-index: 10;
+	border-radius: 10%;
+	overflow: hidden;
 }

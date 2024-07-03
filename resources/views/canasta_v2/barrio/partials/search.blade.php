@@ -40,11 +40,13 @@
                     <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn-send" style="display: none;"></i>
                 </a>
             @endcan
-            <span class="tts:right tts-slideIn tts-custom root" aria-label="Exportar a Excel" style="cursor: pointer;">
-                <span class="btn btn-outline-success font-roboto-12" onclick="excel();">
-                    <i class="fa fa-file-excel"></i>
+            @can('canasta.barrios.excel')
+                <span class="tts:right tts-slideIn tts-custom root" aria-label="Exportar a Excel" style="cursor: pointer;">
+                    <span class="btn btn-outline-success font-roboto-12" onclick="excel();">
+                        <i class="fa fa-file-excel"></i>
+                    </span>
                 </span>
-            </span>
+            @endcan
         </div>
         <div class="col-md-6 pr-1 pl-1 text-right">
             <button class="btn btn-outline-primary font-roboto-12" type="button" onclick="procesar();">

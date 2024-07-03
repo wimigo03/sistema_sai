@@ -10,7 +10,6 @@ class Distrito extends Model
 {
     protected $table = 'distritos';
     protected $fillable = [
-
         'nombre',
         'user_id',
         'dea_id',

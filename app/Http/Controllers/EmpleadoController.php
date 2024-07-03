@@ -608,7 +608,7 @@ class EmpleadoController extends Controller
     public function mi_perfil()
     {
         $user = User::find(Auth::user()->id);
-        $empleado = Empleado::find($user->idemp);;
+        $empleado = Empleado::find($user->idemp);
         return view('empleados.mi-perfil', compact('user','empleado'));
     }
 }

@@ -13,12 +13,9 @@ use Carbon\Carbon;
 class Beneficiario extends Model
 {
     protected $table = 'beneficiarios';
-    protected $primaryKey= 'id';
-    //public $timestamps = false;
     const CREATED_AT = 'created_att';
     const UPDATED_AT = 'updated_att';
     protected $fillable = [
-        'id',
         'nombres',
         'ap',
         'am',
@@ -29,15 +26,16 @@ class Beneficiario extends Model
         'dir_foto',
         'firma',
         'obs',
-        'id_ocupacion',
+        'estado',
         'created_att',
         'updated_att',
         'id_barrio',
         'user_id',
         'dea_id',
-        'expedido',
         'ci',
-        'estado'
+        'expedido',
+        'id_ocupacion',
+        'distrito_id'
     ];
 
     const ESTADOS = [
@@ -50,6 +48,18 @@ class Beneficiario extends Model
     const SEXOS = [
         'H' => 'MASCULINO',
         'M' => 'FEMENINO',
+    ];
+
+    const EXTENSIONES = [
+        'TJA' => 'TARIJA',
+        'SCZ' => 'SANTA CRUZ',
+        'BN' => 'BENI',
+        'LPZ' => 'LA PAZ',
+        'CBBA' => 'COCHABAMBA',
+        'SC' => 'CHUQUISACA',
+        'ORU' => 'ORURO',
+        'PTS' => 'POTOSI',
+        'PND' => 'PANDO',
     ];
 
     public function getStatusAttribute(){
@@ -86,6 +96,13 @@ class Beneficiario extends Model
         return $this->belongsTo(Ocupaciones::class,'id_ocupacion','id');
     }
 
+    public function distrito(){
+        return $this->belongsTo(Distrito::class,'distrito_id','id');
+    }
+
+    public function barrio(){
+        return $this->belongsTo(Barrio::class,'id_barrio','id');
+    }
 
     public function dea(){
         return $this->belongsTo(Dea::class,'dea_id','id');
@@ -97,43 +114,65 @@ class Beneficiario extends Model
         }
     }
 
+    public function scopeByDistrito($query, $distrito){
+        if($distrito != null){
+            return $query->where('distrito_id', $distrito);
+        }
+    }
+
+    public function scopeByBarrio($query, $barrio){
+        if($barrio != null){
+            return $query->where('id_barrio', $barrio);
+        }
+    }
+
     public function scopeByNombre($query, $nombre){
-        if($nombre){
+        if($nombre != null){
             return $query->whereRaw('upper(nombres) like ?', ['%'.strtoupper($nombre).'%']);
 
         }
     }
 
     public function scopeByApellidoPaterno($query, $ap){
-        if($ap){
+        if($ap != null){
             return $query->whereRaw('upper(ap) like ?', ['%'.strtoupper($ap).'%']);
 
         }
     }
 
     public function scopeByApellidoMaterno($query, $am){
-        if($am){
+        if($am != null){
             return $query->whereRaw('upper(am) like ?', ['%'.strtoupper($am).'%']);
 
         }
     }
 
     public function scopeByNumeroCarnet($query, $ci){
-        if($ci){
+        if($ci != null){
             return $query->whereRaw('upper(ci) like ?', ['%'.strtoupper($ci).'%']);
 
         }
     }
 
     public function scopeBySexo($query, $sexo){
-        if($sexo){
+        if($sexo != null){
             return $query->where('sexo',$sexo);
 
         }
     }
 
+    public function scopeByEdad($query, $edad_inicial, $edad_final){
+        if ($edad_inicial != null && $edad_final != null) {
+            $fecha_actual = Carbon::now();
+            $fecha_nacimiento_final = $fecha_actual->copy()->subYears($edad_final + 1)->startOfDay();
+            $fecha_nacimiento_inicial = $fecha_actual->copy()->subYears($edad_inicial)->addDay()->startOfDay();
+
+            return $query->whereBetween('fecha_nac', [$fecha_nacimiento_final, $fecha_nacimiento_inicial]);
+        }
+    }
+
     public function scopeByUsuario($query, $usuario){
-        if ($usuario) {
+        if ($usuario != null) {
                 return $query
                     ->whereIn('user_id', function ($subquery) use($usuario) {
                         $subquery->select('id')
@@ -144,39 +183,19 @@ class Beneficiario extends Model
     }
 
     public function scopeByDea($query, $dea_id){
-        if($dea_id){
+        if($dea_id != null){
             return $query->where('dea_id',$dea_id);
         }
     }
 
     public function scopeByEstado($query, $estado){
-        if($estado){
+        if($estado != null){
             return $query->where('estado',$estado);
         }
     }
 
-    public function barrio(){
-        return $this->belongsTo(Barrio::class,'id_barrio','id');
-    }
-
-    public function scopeByBarrio($query, $barrio){
-        if ($barrio) {
-                return $query
-                    ->whereIn('id_barrio', function ($subquery) use($barrio) {
-                        $subquery->select('id')
-                            ->from('barrios')
-                            ->whereRaw('upper(nombre) like ?', [strtoupper($barrio)]);
-                    });
-        }
-    }
-
-
     public function age()
-
     {
-
         return Carbon::parse($this->attributes['fecha_nac'])->age;
-
-
     }
 }

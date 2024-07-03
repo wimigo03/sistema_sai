@@ -3,74 +3,81 @@
     <div class="card-header header">
         <div class="row">
             <div class="col-md-12 pr-1 pl-1 text-center">
-                <b>MODIFICAR PAQUETE</b>
+                <b>MODIFICAR BARRIO DE ENTREGA CANASTA</b>
             </div>
         </div>
     </div>
     <div class="card-body body">
-        @include('canasta_v2.entregas.partials.editar-form')
+        <div class="form-group row">
+            <div class="col-md-12 pr-1 pl-1 text-center">
+                <b>
+                    {{ $entrega->paquete->numero }} ENTREGA
+                    /
+                    {{ $entrega->paquete_barrio->periodos }} ({{ $entrega->paquete->gestion }})
+                    /
+                    {{ $entrega->distrito->nombre }}
+                    -
+                    {{ $entrega->barrio->nombre }}
+                </b>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-12 pr-1 pl-1 text-center">
+                <b>
+                    <u>
+                        {{ $entrega->beneficiario->nombres . ' ' . $entrega->beneficiario->ap . ' ' . $entrega->beneficiario->am }}
+                    </u>
+                </b>
+            </div>
+        </div>
+        @include('canasta_v2.entregas.partials.editar')
     </div>
 @endsection
 @section('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
-            $('.select2').select2({
+            $('#barrio_id').select2({
                 theme: "bootstrap4",
-                placeholder: "--Seleccionar--",
+                placeholder: "--Seleccionar barrio--",
                 width: '100%'
             });
         });
 
         function procesar() {
+            if(!validar()){
+                return false;
+            }
             $('#modal_confirmacion').modal({
                 keyboard: false
             })
         }
-        function message_alert(mensaje) {
+
+        function validar() {
+            if ($("#barrio_id >option:selected").val() == "") {
+                Modal('[Para continuar debe seleccionar un barrio]');
+                return false;
+            }
+            return true;
+        }
+
+        function confirmar(){
+            var url = "{{ route('entregas.update') }}";
+            $("#form").attr('action', url);
+            $("#form").submit();
+        }
+
+        function Modal(mensaje) {
             $("#modal-alert .modal-body").html(mensaje);
             $('#modal-alert').modal({
                 keyboard: false
             });
         }
 
-        function confirmar(){
-            var url = "{{ route('barrios.store') }}";
-            $("#form").attr('action', url);
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            $("#form").submit();
-        }
-
         function cancelar(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            window.location.href = "{{ route('entregas.index') }}";
-        }
-
-        function save() {
-            if (validar_formulario() == true) {
-                $(".btn").hide();
-                $(".spinner-btn-send").show();
-                $("#form").submit();
-            }
-        }
-
-        function validar_formulario() {
-
-            if ($("#gestion>option:selected").val() == "") {
-                message_alert("El campo <b>[Gestion]</b> es un dato obligatorio...");
-                return false;
-            }
-
-
-            if ($("#items").val() == "") {
-                message_alert("El campo <b>[Items]</b> es un dato obligatorio...");
-                return false;
-            }
-
-
-
-            return true;
+            var paquete_barrio_id = $("#paquete_barrio_id").val();
+            var url = "{{ route('entregas.index', ':id') }}";
+            url = url.replace(':id', paquete_barrio_id);
+            window.location.href = url;
         }
     </script>
 @endsection

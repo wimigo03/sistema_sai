@@ -5,9 +5,9 @@
         </a>
     </div>
     <div class="side-inner">
-        <div class="profile">
-            <img src="{{ asset('logos/logo2.png') }}" alt="Image" class="img-fluid" />
-            <span class="font-roboto-15 text-success"><b>G.A.R.G.CH.</b></span>
+        <div class="profiles text-center">
+            <img src="{{ asset('logos/logo_gober.png') }}" alt="Image" class="imagen-header" />
+            {{--<span class="font-roboto-15 text-success"><b>G.A.R.G.CH.</b></span>--}}
         </div>
         <div class="nav-menu">
             <div class="sidebar left">
@@ -52,16 +52,16 @@
                         </li>
                     @endcanany
                     {{-- CANASTA --}}
-                    @canany(['canasta.entregas.index','canasta.beneficiarios.index','canasta.distritos.index','canasta.barrios.index'])
+                    @canany(['canasta.paquetes.index','canasta.beneficiarios.index','canasta.entregas.beneficiario.index','canasta.distritos.index','canasta.barrios.index'])
                         <li class="font-verdana-12">
                             <a href="" data-toggle="collapse" data-target="#dashboard_canasta_v2" class="active collapsed" aria-expanded="false">
                                 <i class="fa-solid fa-gift fa-fw"></i>&nbsp;Canasta
                                 <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_canasta_v2">
-                                @can('canasta.entregas.index')
+                                @can('canasta.paquetes.index')
                                     <li>
-                                        <a href="{{ route('entregas.index') }}">
+                                        <a href="{{ route('paquetes.index') }}">
                                             &nbsp;&nbsp;<i class="fa-solid fa-shopping-bag fa-fw"></i>&nbsp;Paquetes
                                         </a>
                                     </li>
@@ -70,6 +70,13 @@
                                     <li>
                                         <a href="{{ route('beneficiarios.index') }}">
                                             &nbsp;&nbsp;<i class="fas fa-user-friends"></i>&nbsp;Beneficiarios
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('canasta.entregas.beneficiario.index')
+                                    <li>
+                                        <a href="{{ route('entrega.beneficiario.index') }}">
+                                            &nbsp;&nbsp;<i class="fa-solid fa-search fa-fw"></i>&nbsp;Buscar
                                         </a>
                                     </li>
                                 @endcan

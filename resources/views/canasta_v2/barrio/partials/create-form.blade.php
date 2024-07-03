@@ -37,7 +37,7 @@
                 <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>&nbsp;Procesar
             </button>
             <button class="btn btn-outline-danger font-verdana" type="button" onclick="cancelar();">
-                &nbsp;<i class="fa-solid fa-xmark"></i>&nbsp;Cancelar
+                <i class="fa-solid fa-xmark"></i>&nbsp;Cancelar
             </button>
             <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
         </div>

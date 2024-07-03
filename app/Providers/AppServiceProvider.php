@@ -28,6 +28,6 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrap();
         Carbon::setUTF8(true);
         Carbon::setLocale(config('app.locale'));
-        setlocale(LC_ALL, 'es_MX', 'es', 'ES', 'es_MX.utf8');
+        setlocale(LC_TIME, 'es_ES.UTF-8', 'es_MX.UTF-8', 'es.UTF-8');
     }
 }
