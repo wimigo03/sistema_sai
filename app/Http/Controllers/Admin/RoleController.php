@@ -16,10 +16,9 @@ class RoleController extends Controller
 
     public function index()
     {
-        $unidades = Dea::pluck('descripcion','id');
         $estados = Role::ESTADOS;
         $roles = Role::orderBy('id','desc')->paginate(10);
-        return view('admin.roles.index',compact('unidades','estados','roles'));
+        return view('admin.roles.index',compact('estados','roles'));
     }
 
     public function search(Request $request)
@@ -100,7 +99,7 @@ class RoleController extends Controller
     {
         $role = Role::find($id);
         $deas = Dea::select('descripcion','id')->get();
-        $permissions = Permission::all()->pluck('name', 'id');
+        $permissions = Permission::select(DB::Raw("CONCAT(title,' - ',descripcion) as permiso"),'id')->pluck('permiso', 'id');
         return view('admin.roles.edit', compact('role','deas','permissions'));
     }
 
@@ -109,7 +108,7 @@ class RoleController extends Controller
         $request->validate([
             'dea_id' => 'required',
             'titulo' => 'required|unique:roles,title,' . $request->role_id,
-            'permissions' => 'required|array|min:1'
+            'permissions' => 'array|min:1'
         ]);
         try{
             $role = Role::find($request->role_id);

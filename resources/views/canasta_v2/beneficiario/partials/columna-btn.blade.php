@@ -9,10 +9,10 @@
                 </span>
                 &nbsp;
             @endcan
-            @can('canasta.beneficiarios.datos')
+            @can('canasta.beneficiarios.show')
                 <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a kardex">
-                    <a href="{{ route('beneficiarios.beneficiario_datos', $beneficiario_id) }}" class="badge-with-padding badge badge-primary" target="_blank">
-                        <i class="fa fa-id-card fa-fw" aria-hidden="true"></i>
+                    <a href="{{ route('beneficiarios.show', $beneficiario_id) }}" class="badge-with-padding badge badge-info" target="_blank">
+                        <i class="fa fa-list fa-fw" aria-hidden="true"></i>
                     </a>
                 </span>
                 &nbsp;

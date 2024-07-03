@@ -8,12 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class PaquetePeriodo extends Model
 {
     protected $table = 'paquete_periodo';
-    protected $primaryKey= 'id';
-    public $timestamps = false;
+    //protected $primaryKey= 'id';
+    //public $timestamps = false;
     protected $fillable = [
-        'id',
         'id_paquete',
-        'id_periodo'
+        'id_periodo',
+        'dea_id',
+        'estado'
     ];
 
     public function periodo(){

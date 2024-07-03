@@ -88,6 +88,30 @@ class Area extends Model
         return $this->belongsTo(Dea::class,'dea_id','id');
     }
 
+    public function children()
+    {
+        return $this->hasMany(Area::class, 'parent_id');
+    }
+
+    public function getAllChildren($area_id)
+    {
+        $children = collect();
+
+        $dd = $this->getChildrenRecursively($children, $area_id);
+
+        return $children;
+    }
+
+    private function getChildrenRecursively($children, $parent_id)
+    {
+        $directChildren = $this->where('parent_id', $parent_id)->get();
+
+        foreach ($directChildren as $child) {
+            $children->push($child);
+            $this->getChildrenRecursively($children, $child->idarea);
+        }
+    }
+
     public function getParentAttribute(){
         $area_parent = Area::where('parent_id',$this->idarea)->first();
         if($area_parent != null){

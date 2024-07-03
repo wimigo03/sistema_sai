@@ -21,6 +21,12 @@
                 width: '100%'
             });
 
+            $('#id_distrito').select2({
+                theme: "bootstrap4",
+                placeholder: "--Distrito--",
+                width: '100%'
+            });
+
             $('#id_barrio').select2({
                 theme: "bootstrap4",
                 placeholder: "--Barrio--",
@@ -52,19 +58,29 @@
                         class: 'text-center p-1 font-roboto-11'
                     },
                     {
+                        data: 'distrito',
+                        name: 'c.nombre',
+                        class: 'text-center p-1 font-roboto-11'
+                    },
+                    {
+                        data: 'barrio',
+                        name: 'b.nombre',
+                        class: 'text-justify p-1 font-roboto-11'
+                    },
+                    {
                         data: 'nombres',
                         name: 'a.nombres',
-                        class: 'text-center p-1 font-roboto-11'
+                        class: 'text-justify p-1 font-roboto-11'
                     },
                     {
                         data: 'ap',
                         name: 'a.ap',
-                        class: 'text-center p-1 font-roboto-11'
+                        class: 'text-justify p-1 font-roboto-11'
                     },
                     {
                         data: 'am',
                         name: 'a.am',
-                        class: 'text-center p-1 font-roboto-11'
+                        class: 'text-justify p-1 font-roboto-11'
                     },
                     {
                         data: 'nro_carnet',
@@ -77,16 +93,9 @@
                         class: 'text-center p-1 font-roboto-11'
                     },
                     {
-                        data: 'barrio',
-                        name: 'b.nombre',
+                        data: 'edad',
+                        name: 'edad',
                         class: 'text-center p-1 font-roboto-11'
-                    },
-                    {
-                        data: 'columna_foto',
-                        name: 'columna_foto',
-                        class: 'text-center p-1 font-roboto-11',
-                        orderable: false,
-                        searchable: false
                     },
                     {
                         data: 'columna_estado',
@@ -96,13 +105,39 @@
                         searchable: false
                     },
                     {
+                        data: 'columna_foto',
+                        name: 'columna_foto',
+                        class: 'text-center p-1 font-roboto-11',
+                        orderable: false,
+                        searchable: false
+                    },
+                    @canany(['canasta.beneficiarios.editar', 'canasta.beneficiarios.show'])
+                    {
                         data: 'columna_btn',
                         name: 'columna_btn',
                         class: 'text-center p-1 font-roboto-11',
                         orderable: false,
                         searchable: false
                     },
+                    @endcanany
                 ],
+                initComplete: function () {
+                    var api = this.api();
+                    var columnCount = api.columns().nodes().length;
+
+                    api.columns().every(function (index) {
+                        if (index >= columnCount - 2) {
+                            return;
+                        }
+                        var column = this;
+                        var input = document.createElement("input");
+                        input.style.width = "100%";
+                        $(input).addClass('form-control font-roboto-12').appendTo($(column.footer()).empty()).on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                            column.search(val ? val : '', true, false).draw();
+                        });
+                    });
+                },
                 order: [[0, 'desc']],
                 language: datatableLanguageConfig
             });

@@ -52,7 +52,7 @@
                             <td class="text-center p-1">
                                 <div class="d-flex justify-content-center">
                                     @can('canasta.barrios.editar')
-                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar" style="cursor: pointer;">
+                                        <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Modificar" style="cursor: pointer;">
                                             <a href="{{ route('barrios.editar', $datos->id) }}" class="badge-with-padding badge badge-warning">
                                                 <i class="fa-solid fa-pen-to-square fa-fw"></i>
                                             </a>
@@ -60,7 +60,7 @@
                                     @endcan
                                     @can('canasta.barrios.habilitar')
                                         @if (App\Models\Canasta\Barrio::ESTADOS[$datos->estado] == 'HABILITADO')
-                                            <span class="tts:left tts-slideIn tts-custom" aria-label="Dehabilitar" style="cursor: pointer;">
+                                            <span class="tts:left tts-slideIn tts-custom" aria-label="Deshabilitar" style="cursor: pointer;">
                                                 <a href="{{ route('barrios.deshabilitar', $datos->id) }}" class="badge-with-padding badge badge-danger">
                                                     <i class="fa-regular fa-circle-down fa-lg"></i>
                                                 </a>

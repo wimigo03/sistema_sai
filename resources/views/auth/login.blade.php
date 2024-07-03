@@ -1,48 +1,93 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ asset('dashboard/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('font-awesome_6.0/css/all.css') }}" rel="stylesheet">
+    <title>Login</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 80vh;
+            margin: 0;
+        }
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-          <div class="card-group mb-0">
-            <div class="card p-4 body-border" >
-            <form class="form-horizontal was-validated" method="POST" action="{{ route('login') }}">
-                {{-- csrf_field() --}}
-                @csrf
-                <div class="body-border">
-                <h1>Acceder</h1>
-                <p class="text-muted">Control de acceso al sistema</p>
-                <div class="form-group mb-3({$errors->has('usuario' ? 'is-valid' : '')})">
-                  <span class="input-group-addon"><i class="icon-user"></i></span>
-                <input type="text" value="{{old('name')}}" autofocus name="name" id="email" class="form-control @error('name') is-invalid @enderror" placeholder="Usuario">
-                @error('name')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-                </div>
-                <div class="form-group mb-3({$errors->has('password' ? 'is-valid' : '')})">
-                  <span class="input-group-addon"><i class="icon-lock"></i></span>
-                  <input type="password" name="password" id="password" placeholder="Password" class="form-control @error('password') is-invalid @enderror">
-                  @error('password')
-                  <span class="invalid-feedback" role="alert">
-                      <strong>{{ $message }}</strong>
-                  </span>
-              @enderror
-                </div>
-                <div class="row row justify-content-center">
+        .font-roboto-14 {font-size: 14px; font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";}
+        .font-roboto-12 {font-size: 12px; font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";}
 
-                    <button class="btn color-icon-2 font-verdana-12" type="submit" >
+        .imagen-central {
+            width: 100px;
+            height: auto;
+            overflow: hidden;
+            opacity: 0.8;
+        }
 
-                      Acceder
-                  </button>
+        .card-custom {
+            margin-top: 20px;
+        }
 
-                </div>
-              </div>
-            </form>
+        .abs-center {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container text-center">
+        <div class="row abs-center">
+            <div class="col-md-4">
+                <form action="{{ route('login') }}" method="post">
+                    @csrf
+                    <div class="card card-custom">
+                        <div class="card-header font-roboto-14 text-center">
+                            <b>
+                                INGRESO AL SISTEMA
+                            </b>
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <div class="col-md-12">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text font-roboto-14 bg-success text-white" id="basic-addon1">
+                                                <i class="fa-solid fa-user"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" name="name" class="form-control font-roboto-14" value="{{ old('name') }}" placeholder="Usuario" aria-label="Usuario" aria-describedby="basic-addon1">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-12">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text font-roboto-14 bg-success text-white" id="basic-addon2">
+                                                <i class="fa-solid fa-lock"></i>
+                                                </span>
+                                            </div>
+                                            <input type="password" name="password" class="form-control font-roboto-14" placeholder="Contraseña" aria-label="password" aria-describedby="basic-addon2">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button type=submit class="btn btn-block btn-outline-primary font-roboto-14">
+                                        <span class="fas fa-sign-in-alt"></span>&nbsp;Iniciar sesion
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <span class="font-roboto-12">© 2023 Gobierno Autonomo Regional del Gran Chaco</span>
+                <br>
+                <img src="/logos/logoderecha.png" alt="img" class="imagen-central">
             </div>
-          </div>
         </div>
-      </div>
-</div>
-@endsection
+    </div>
+    <script src="{{ asset('dataTable_1.10.22/js/jquery-3.5.1.js') }}"></script>
+    <script src="{{ asset('js/jquery-ui-1.13.2/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('dashboard/js/bootstrap.min.js') }}"></script>
+</body>
+</html>

@@ -71,10 +71,27 @@ class FacebookDetalle extends Model
         }
     }
 
-    public function scopeByArea($query, $area_id){
-        if($area_id){
+    /*public function scopeByArea($query, $area_id){
+        if($area_id != null){
             return $query->where('idarea', $area_id);
         }
+    }*/
+
+    public function scopeByArea($query, $area_id)
+    {
+        if ($area_id != null) {
+            $areaModel = new Area();
+            $children = $areaModel->getAllChildren($area_id);
+            $childrenIds = $children->pluck('idarea')->toArray();
+
+            if (empty($childrenIds)) {
+                return $query->where('idarea', $area_id);
+            } else {
+                $childrenIds[] = $area_id;
+                return $query->whereIn('idarea', $childrenIds);
+            }
+        }
+        return $query;
     }
 
     public function scopeByEstado($query, $estado){
