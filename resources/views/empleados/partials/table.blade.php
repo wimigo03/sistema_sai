@@ -13,7 +13,7 @@
                     <th class="text-center p-1">SEXO</th>
                     <th class="text-center p-1">TIPO</th>
                     <th class="text-center p-1">INGRESO</th>
-                    <th class="text-center p-1">RETIRO</th>
+                    <th class="text-center p-1">CONC.CONT.</th>
                     <th class="text-center p-1">HAB.</th>
                     @canany(['empleados.show','empleados.editar'])
                         <th class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></th>
@@ -37,7 +37,7 @@
                         <td class="text-center p-1">{{ $datos->sexos }}</td>
                         <td class="text-center p-1">{{ $datos->ultimo_tipo_contrato }}</td>
                         <td class="text-center p-1">{{ $datos->ultimo_contrato_ingreso != null ? \Carbon\Carbon::parse($datos->ultimo_contrato_ingreso)->format('d/m/Y') : '' }}</td>
-                        <td class="text-center p-1">{{ $datos->ultimo_contrato_retiro != null ? \Carbon\Carbon::parse($datos->ultimo_contrato_retiro)->format('d/m/Y') : '' }}</td>
+                        <td class="text-center p-1">{{ $datos->fecha_conclusion_contrato != null ? \Carbon\Carbon::parse($datos->fecha_conclusion_contrato)->format('d/m/Y') : '' }}</td>
                         <td class="text-center p-1"><i class='{{ $datos->status_check }}'></i></td>
                         @canany(['empleados.show','empleados.editar'])
                             <td class="text-center p-1">

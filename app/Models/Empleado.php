@@ -133,6 +133,13 @@ class Empleado extends Model
         }
     }
 
+    public function getFechaConclusionContratoAttribute(){
+        $contratos = EmpleadoContrato::select('fecha_conclusion_contrato')->where('idemp',$this->idemp)->orderBy('id','desc')->take(1)->first();
+        if($contratos){
+            return $contratos->fecha_conclusion_contrato;
+        }
+    }
+
     public function getUltimoContratoRetiroAttribute(){
         $contratos = EmpleadoContrato::select('fecha_retiro')->where('idemp',$this->idemp)->orderBy('id','desc')->take(1)->first();
         if($contratos){
