@@ -3,7 +3,7 @@
     <div class="card-header header">
         <div class="row">
             <div class="col-md-12 pr-1 pl-1 text-center">
-                <b>TIPOS DE ARCHIVOS - {{ $personal->area->nombrearea }}</b>
+                <b>TIPOS DE ARCHIVOS - {{ $personal->nombrearea }}</b>
             </div>
         </div>
     </div>

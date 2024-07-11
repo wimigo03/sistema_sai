@@ -95,10 +95,10 @@ class EmpleadoController extends Controller
         $extensiones = Empleado::EXTENSIONES;
         $grados_academicos = Empleado::GRADOS_ACADEMICOS;
         $sexos = Empleado::SEXOS;
-        //$areas = Area::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
+        $areas = Area::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
         //$cargos = File::where('dea_id',$dea_id)->pluck('nombrecargo','idfile');
         $tipos = EmpleadoContrato::TIPOS;
-        return view('empleados.create', compact('dea_id','extensiones','grados_academicos','sexos','tipos'));
+        return view('empleados.create', compact('dea_id','extensiones','grados_academicos','sexos','tipos','areas'));
     }
 
     public function getAreas(Request $request){
@@ -157,6 +157,9 @@ class EmpleadoController extends Controller
 
         try{
             $empleado_contrato = DB::transaction(function () use ($request) {
+
+                //dd($request->area_asignada);
+
                 $empleado = Empleado::create([
                     'dea_id' => $request->dea_id,
                     'idarea' => $request->area_id,
@@ -206,6 +209,7 @@ class EmpleadoController extends Controller
                     'tipo' => $request->tipo,
                     'fecha_conclusion_contrato' => isset($request->fecha_conclusion_contrato) ? date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha_conclusion_contrato))) : null,
                     'ncontrato' => $request->n_contrato,
+                    'idarea_asignada' => $request->area_asignada,
                     'npreventivo' => $request->n_preventivo,
                     'rejap' => isset($request->rejap) ? '1' : '2',
                     'estado' => '1',
@@ -257,12 +261,13 @@ class EmpleadoController extends Controller
         $grados_academicos = Empleado::GRADOS_ACADEMICOS;
         $sexos = Empleado::SEXOS;
         $areas = Area::where('dea_id',$dea_id)->where('estadoarea','1')->get();
+        $areas2 = Area::where('dea_id',$dea_id)->where('estadoarea','1')->get();
         $cargos = File::where('dea_id',$dea_id)
                             ->where('idarea',$empleado->idarea)
                             ->where('estadofile','2')
                             ->orWhere('idfile',$empleado_contrato->idfile)->get();
         $tipos = EmpleadoContrato::TIPOS;
-        return view('empleados.editar', compact('empleado','dea_id','empleado_contrato','extensiones','grados_academicos','sexos','areas','cargos','tipos'));
+        return view('empleados.editar', compact('empleado','dea_id','empleado_contrato','extensiones','grados_academicos','sexos','areas','areas2','cargos','tipos'));
     }
 
     public function update(Request $request)
@@ -334,6 +339,7 @@ class EmpleadoController extends Controller
                     'ncontrato' => $request->n_contrato,
                     'npreventivo' => $request->n_preventivo,
                     'rejap' => isset($request->rejap) ? '1' : '2',
+                    'idarea_asignada' => $request->area_asignada,
                     'escala_salarial_id' => $file->escala_salarial_id
                 ]);
 

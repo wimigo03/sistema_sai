@@ -45,6 +45,7 @@ class EmpleadoContrato extends Model
         'rejap',
         'obs_retiro',
         'estado',
+        'idarea_asignada',
         'escala_salarial_id'
     ];
 

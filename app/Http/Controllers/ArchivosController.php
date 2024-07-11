@@ -14,6 +14,7 @@ use App\Models\Empleado;
 use Illuminate\Http\Request;
 use App\Models\ProveedoresModel;
 use App\Models\DocProveedorModel;
+use App\Models\EmpleadoContrato;
 use App\Models\TipoAreaModel;
 use App\Models\Archivo;
 use App\Models\TiposModel;
@@ -47,13 +48,20 @@ class ArchivosController extends Controller
         //if(Auth::user()->id == 102){
             //$this->generar_qr_general();
         //}
+
+        //dd('hola');
         $dea_id = Auth::user()->dea->id;
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = Empleado::find($userdate->idemp);
-        if ($request->ajax()) {
-            $data = DB::table('archivos as a')
+        $personalArea2 = Empleado::find($userdate->idemp);
+
+        $contratos = EmpleadoContrato::select('idarea_asignada')->where('idemp',$userdate->idemp)->orderBy('id','desc')->take(1)->first();
+
+       $personalArea = Area::find($contratos->idarea_asignada);
+       //dd($personalArea);
+       // dd($contratos->idarea_asignada);
+          $data = DB::table('archivos as a')
                             ->join('areas as ar', 'ar.idarea', 'a.idarea')
                             ->join('tipoarchivo as t', 'a.idtipo', 't.idtipo')
                             ->select(
@@ -66,7 +74,26 @@ class ArchivosController extends Controller
                                 'ar.idarea',
                                 't.nombretipo'
                             )
-                            ->where('ar.idarea', $personalArea->idarea)
+                            ->where('ar.idarea', $contratos->idarea_asignada)
+                            ->where('a.dea_id',$dea_id)
+                            ->orderBy('a.fecha', 'desc');
+       // dd($personalArea);
+        if ($request->ajax()) {
+            $data = DB::table('archivos as a')
+                            ->join('areas as ar', 'ar.idarea', 'a.idarea')
+                            ->join('tipoarchivo as t', 'a.idtipo', 't.idtipo')
+
+                            ->select(
+                                'a.idarchivo',
+                                'a.referencia',
+                                'a.fecha',
+                                'a.gestion',
+                                'a.nombrearchivo',
+                                'a.documento',
+                                'ar.idarea',
+                                't.nombretipo'
+                            )
+                            ->where('ar.idarea', $contratos->idarea_asignada)
                             ->where('a.dea_id',$dea_id)
                             ->orderBy('a.fecha', 'desc');
 
@@ -132,7 +159,11 @@ class ArchivosController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = Empleado::find($userdate->idemp);
+        $personalArea2 = Empleado::find($userdate->idemp);
+        $contratos = EmpleadoContrato::select('idarea_asignada')->where('idemp',$userdate->idemp)->orderBy('id','desc')->take(1)->first();
+
+        $personalArea = Area::find($contratos->idarea_asignada);
+        //dd($personalArea);
 
         $tipoarea = DB::table('tipoarea as tt')
                         ->join('areas as ar', 'ar.idarea', 'tt.idarea')
@@ -157,7 +188,11 @@ class ArchivosController extends Controller
                 $personal = User::find(Auth::user()->id);
                 $id = $personal->id;
                 $userdate = User::find($id)->usuariosempleados;
-                $personalArea = Empleado::find($userdate->idemp);
+                $personalArea2 = Empleado::find($userdate->idemp);
+                $contratos = EmpleadoContrato::select('idarea_asignada')->where('idemp',$userdate->idemp)->orderBy('id','desc')->take(1)->first();
+
+                $personalArea = Area::find($contratos->idarea_asignada);
+                //dd($personalArea);
                 $fecha_recepcion = substr($request->fecha, 6, 4) . '-' . substr($request->fecha, 3, 2) . '-' . substr($request->fecha, 0, 2);
                 $fecha_gestion = substr($request->fecha, 6, 4);
                 if ($request->hasFile("documento")) {
@@ -165,7 +200,7 @@ class ArchivosController extends Controller
                     $file_name = $file->getClientOriginalName();
                     $nombre = "pdf_" . time() . "." . $file->guessExtension();
 
-                    $ruta = public_path("/documentos/" . $personalArea->area->nombrearea . '/' . $nombre);
+                    $ruta = public_path("/documentos/" . $personalArea->nombrearea . '/' . $nombre);
 
                     if ($file->guessExtension() == "pdf") {
                         copy($file, $ruta);
@@ -178,7 +213,7 @@ class ArchivosController extends Controller
                 $archivos->nombrearchivo = $request->input('nombredocumento');
                 $archivos->referencia = $request->input('referencia');
                 $archivos->gestion = $fecha_gestion;
-                $archivos->documento = $personalArea->area->nombrearea . '/' . $nombre;
+                $archivos->documento = $personalArea->nombrearea . '/' . $nombre;
                 $archivos->idarea = $personalArea->idarea;
                 $archivos->estado1 = 1;
                 $archivos->idtipo = $request->input('tipodocumento');
@@ -205,7 +240,11 @@ class ArchivosController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = Empleado::find($userdate->idemp);
+        $personalArea2 = Empleado::find($userdate->idemp);
+        $contratos = EmpleadoContrato::select('idarea_asignada')->where('idemp',$userdate->idemp)->orderBy('id','desc')->take(1)->first();
+
+        $personalArea = Area::find($contratos->idarea_asignada);
+//dd($personalArea->nombrearea);
 
         $tipoarea = DB::table('tipoarea as tt')
                         ->join('areas as ar', 'ar.idarea', 'tt.idarea')
@@ -231,7 +270,12 @@ class ArchivosController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = Empleado::find($userdate->idemp);
+        $personalArea2 = Empleado::find($userdate->idemp);
+
+        $contratos = EmpleadoContrato::select('idarea_asignada')->where('idemp',$userdate->idemp)->orderBy('id','desc')->take(1)->first();
+
+        $personalArea = Area::find($contratos->idarea_asignada);
+//dd($personalArea->nombrearea);
         $fecha_recepcion = substr($request->fecha, 6, 4) . '-' . substr($request->fecha, 3, 2) . '-' . substr($request->fecha, 0, 2);
         $fecha_gestion = substr($request->fecha, 6, 4);
         $archivos = Archivo::find($idarchivo);
@@ -240,7 +284,7 @@ class ArchivosController extends Controller
                 $file = $request->file("documento");
                 $file_name = $file->getClientOriginalName();
                 $nombre = "pdf_" . time() . "." . $file->guessExtension();
-                $ruta = public_path("/documentos/" . $personalArea->area->nombrearea . '/' . $nombre);
+                $ruta = public_path("/documentos/" . $personalArea->nombrearea . '/' . $nombre);
                 if ($file->guessExtension() == "pdf") {
                     copy($file, $ruta);
                 } else {
@@ -250,7 +294,7 @@ class ArchivosController extends Controller
 
             $archivos->nombrearchivo = $request->input('nombredocumento');
             $archivos->referencia = $request->input('referencia');
-            $archivos->documento = $personalArea->area->nombrearea . '/' . $nombre;
+            $archivos->documento = $personalArea->nombrearea . '/' . $nombre;
             $archivos->idarea = $personalArea->idarea;
             $archivos->estado1 = 1;
             $archivos->gestion = $fecha_gestion;

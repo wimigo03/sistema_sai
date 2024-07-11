@@ -11,8 +11,8 @@
             </select>
         </div>
     </div>
-    <div class="col-md-4 pr-1 pl-1">
-        <label for="area_id" class="d-inline"><b>Area</b></label>
+    <div class="col-md-5 pr-1 pl-1">
+        <label for="area_id" class="d-inline"><b>Area-Item</b></label>
         <div class="select2-container-rojo">
             <select id="area_id" name="area_id" class="form-control font-roboto-12 select2">
                 <option value="">--Seleccionar--</option>
@@ -25,7 +25,24 @@
             </select>--}}
         </div>
     </div>
-    <div class="col-md-6 pl-1">
+    <div class="col-md-5 pr-1 pl-1">
+        <label for="area_asignada" class="d-inline"><b>Area-Asignada</b></label>
+        <div class="select2-container-rojo">
+
+            <select name="area_asignada" id="area_asignada" class="form-control font-roboto-12 select2">
+                <option value="">--Seleccionar--</option>
+                @foreach ($areas as $index => $value)
+                    <option value="{{ $index }}" @if(old('area_id') == $index) selected @endif >{{ $value }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+
+
+
+</div>
+<div class="form-group row font-roboto-12">
+    <div class="col-md-4">
         <label for="cargo_id" class="d-inline"><b>Cargo</b></label>
         <div class="select2-container-rojo">
             <select id="cargo_id" name="cargo_id" class="form-control font-roboto-12 select2">
@@ -39,8 +56,6 @@
             </select>--}}
         </div>
     </div>
-</div>
-<div class="form-group row font-roboto-12">
     <div class="col-md-2 pr-1">
         <label for="fecha_ingreso" class="d-inline"><b>Fecha de ingreso</b></label>
         <input type="text" name="fecha_ingreso" value="{{ old('fecha_ingreso') }}" id="fecha_ingreso" placeholder="dd/mm/aaaa" class="form-control font-roboto-12 input-rojo" data-language="es">

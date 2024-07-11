@@ -10,6 +10,9 @@ use App\Models\DocProveedorModel;
 use App\Models\TipoAreaModel;
 use App\Models\Archivo;
 use App\Models\TiposModel;
+use App\Models\EmpleadoContrato;
+use App\Models\Area;
+
 use App\Models\AnioModel;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +29,10 @@ class TipoArchivosController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = Empleado::find($userdate->idemp);
+        $personalArea2 = Empleado::find($userdate->idemp);
+        $contratos = EmpleadoContrato::select('idarea_asignada')->where('idemp',$userdate->idemp)->orderBy('id','desc')->take(1)->first();
+
+       $personalArea = Area::find($contratos->idarea_asignada);
 
         $tipoarea = DB::table('tipoarea as tt')
                         ->join('areas as ar', 'ar.idarea', 'tt.idarea')
@@ -56,7 +62,10 @@ class TipoArchivosController extends Controller
         $personal = User::find(Auth::user()->id);
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
-        $personalArea = Empleado::find($userdate->idemp);
+        $personalArea2 = Empleado::find($userdate->idemp);
+        $contratos = EmpleadoContrato::select('idarea_asignada')->where('idemp',$userdate->idemp)->orderBy('id','desc')->take(1)->first();
+
+       $personalArea = Area::find($contratos->idarea_asignada);
         $tipoarea = new TipoAreaModel;
         $tipoarea->idarea = $personalArea->idarea;
         $tipoarea->idtipo = $request->input('tipo');

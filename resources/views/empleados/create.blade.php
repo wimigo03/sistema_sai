@@ -370,6 +370,12 @@
                 Modal("El campo de seleccion <b>[Area]</b> es un dato obligatorio...");
                 return false;
             }
+
+            if($("#area_asignada >option:selected").val() == "" || $("#area_asignada >option:selected").val() == undefined){
+                Modal("El campo de seleccion <b>[Area-Asignada]</b> es un dato obligatorio...");
+                return false;
+            }
+
             if($("#cargo_id >option:selected").val() == "" || $("#cargo_id >option:selected").val() == undefined){
                 Modal("El campo de seleccion <b>[Cargo]</b> es un dato obligatorio...");
                 return false;
