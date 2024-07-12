@@ -82,17 +82,17 @@ class BeneficiariosV2Controller extends Controller
                'nombres' => $data->nombres,
                'ap' => $data->ap,
                'am' => $data->am,
-               'ci' => $data->ci,
+               'ci' => $data->cedula,
                'expedido' => $data->expedido,
-               'fecha_nac' => $data->fecha_nac,
-               'estado_civil' => $data->estado_civil,
+               'fecha_nac' => $data->fnacimiento,
+               'estado_civil' => 'VACIO',
                'sexo' => $data->sexo,
                'direccion' => $data->direccion,
-               'dir_foto' => $data->dir_foto,
+               'dir_foto' => $data->foto,
                'firma' => $data->firma,
-               'obs' => $data->obs,
-               'id_ocupacion' => $data->id_ocupacion,
-               'id_barrio' => $data->id_barrio,
+               'obs' => '',
+               'id_ocupacion' => 67,
+               'id_barrio' => $data->barrio,
                'dea_id' => 1,
                'user_id' => 29,
                'created_att' => $data->_registrado,
@@ -171,7 +171,7 @@ class BeneficiariosV2Controller extends Controller
             $this->actualizar_distritos();
             $this->actualizar_historial();
         }*/
-
+        $this->copiarbeneficiarios2();
         if ($request->ajax()) {
             $data = DB::table('beneficiarios as a')
                     ->join('barrios as b','b.id','a.id_barrio')
