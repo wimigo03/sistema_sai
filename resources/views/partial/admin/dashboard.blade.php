@@ -97,6 +97,55 @@
                             </ul>
                         </li>
                     @endcanany
+
+                            {{-- CANASTA DISCAPACIDAD --}}
+                    @canany(['canasta.paquetes.index','canasta.beneficiarios.index','canasta.entregas.beneficiario.index','canasta.distritos.index','canasta.barrios.index'])
+                    <li class="font-verdana-12">
+                        <a href="" data-toggle="collapse" data-target="#dashboard_canasta_didsc_v2" class="active collapsed" aria-expanded="false">
+                            <i class="fa-solid fa-gift fa-fw"></i>&nbsp;Canasta-Disc.
+                            <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
+                        </a>
+                        <ul class="sub-menu collapse" id="dashboard_canasta_didsc_v2">
+                            @can('canasta.paquetes.index')
+                                <li>
+                                    <a href="{{ route('paquetes.index') }}">
+                                        &nbsp;&nbsp;<i class="fa-solid fa-shopping-bag fa-fw"></i>&nbsp;Paquetes
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('canasta.beneficiarios.index')
+                                <li>
+                                    <a href="{{ route('beneficiarios.index') }}">
+                                        &nbsp;&nbsp;<i class="fas fa-user-friends"></i>&nbsp;Beneficiarios
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('canasta.entregas.beneficiario.index')
+                                <li>
+                                    <a href="{{ route('entrega.beneficiario.index') }}">
+                                        &nbsp;&nbsp;<i class="fa-solid fa-search fa-fw"></i>&nbsp;Buscar
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('canasta.distritos.index')
+                                <li>
+                                    <a href="{{ route('distritos.index') }}">
+                                        &nbsp;&nbsp;<i class="fa-solid fa-house"></i>&nbsp;Distritos
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('canasta.barrios.index')
+                                <li>
+                                    <a href="{{ route('barrios.index') }}">
+                                        &nbsp;&nbsp;<i class="fa-solid fa-house"></i>&nbsp;Barrios
+                                    </a>
+                                </li>
+                            @endcan
+                        </ul>
+                    </li>
+                @endcanany
+
+
                     {{-- COMPRAS --}}
                     @canany(['solicitud.compra.index','orden.compra.index','proveedor.index','programa.index','categoria.programatica.index','item.index','unidad.medida.index','partida.index'])
                         <li class="font-verdana-12">

@@ -66,6 +66,44 @@ class BeneficiariosV2Controller extends Controller
         }
     }
 
+    private function copiarbeneficiarios2()
+    {
+        $beneficiarios = DB::connection('mysql_canasta')
+                               ->table("beneficiarios")
+                               //->join('ocupaciones as o', 'o.id_ocupacion', '=', 'u.id_ocupacion')
+                               // ->select('o.ocupacion','u.nombres')
+                               ->where('id','=',1)
+                               //->where('idUsuario','<',12000)
+                               ->get();
+
+       foreach ($beneficiarios as $data){
+           $datos = ([
+              // 'id' => $data->idUsuario,
+               'nombres' => $data->nombres,
+               'ap' => $data->ap,
+               'am' => $data->am,
+               'ci' => $data->cedula,
+               'expedido' => $data->expedido,
+               'fecha_nac' => $data->fnacimiento,
+               'estado_civil' => 'VACIO',
+               'sexo' => $data->sexo,
+               'direccion' => $data->direccion,
+               'dir_foto' => $data->foto,
+               'firma' => $data->firma,
+               'obs' => '',
+               'id_ocupacion' => 67,
+               'id_barrio' => $data->barrio,
+               'dea_id' => 1,
+               'user_id' => 29,
+               'created_att' => $data->_registrado,
+               'updated_att' => $data->_modificado,
+               'id_barrio' => $data->id_barrio,
+               'estado' => $data->estado
+           ]);
+           $beneficiario=Beneficiario::create($datos);
+       }
+   }
+
     private function actualizar_distritos(){
         try{
             ini_set('memory_limit','-1');
@@ -133,7 +171,7 @@ class BeneficiariosV2Controller extends Controller
             $this->actualizar_distritos();
             $this->actualizar_historial();
         }*/
-
+        $this->copiarbeneficiarios2();
         if ($request->ajax()) {
             $data = DB::table('beneficiarios as a')
                     ->join('barrios as b','b.id','a.id_barrio')
