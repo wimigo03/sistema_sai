@@ -15,6 +15,7 @@
                     <th class="text-center p-1">REG.</th>
                     <th class="text-center p-1">ENT.</th>
                     <th class="text-center p-1">NO ENT.</th>
+                    <th class="text-center p-1">R.</th>
                     <th class="text-center p-1">ESTADO</th>
                     @canany(['canasta.entregas.index','canasta.paquetes.barrio.editar'])
                         <th class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></th>
@@ -50,6 +51,7 @@
                         <td class="text-center p-1">{{ $datos->total_registrados }}</td>
                         <td class="text-center p-1">{{ $datos->total_entregados }}</td>
                         <td class="text-center p-1">{{ $datos->total_no_entregados }}</td>
+                        <td class="text-center p-1">{{ $datos->total_resagados }}</td>
                         <td class="text-center p-1">
                             <span class="{{ $datos->colorStatus }}">
                                 {{ $datos->status }}

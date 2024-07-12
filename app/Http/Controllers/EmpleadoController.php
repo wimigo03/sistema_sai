@@ -56,8 +56,20 @@ class EmpleadoController extends Controller
         $sexos = Empleado::SEXOS;
         $tipos = EmpleadoContrato::TIPOS;
         $empleados = Empleado::query()
+                                ->leftJoin('empleados_contratos', function($join) {
+                                    $join->on('empleados.idemp', '=', 'empleados_contratos.idemp')
+                                        ->where('empleados_contratos.id', '=', function($query) {
+                                            $query->select('id')
+                                                ->from('empleados_contratos')
+                                                ->whereColumn('empleados_contratos.idemp', 'empleados.idemp')
+                                                ->orderBy('id', 'desc')
+                                                ->limit(1);
+                                        });
+                                })
                                 ->ByDea($dea_id)
-                                ->orderBy('idemp','desc')
+                                ->where('empleados.estado','1')
+                                ->orderBy('empleados_contratos.tipo','desc')
+                                ->orderBy('empleados_contratos.fecha_conclusion_contrato', 'asc')
                                 ->paginate(10);
         return view('empleados.index', compact('dea_id','areas','cargos','escalas_salariales','estados','sexos','tipos','empleados'));
     }
@@ -74,6 +86,7 @@ class EmpleadoController extends Controller
         $empleados = Empleado::query()
                                 ->ByDea($dea_id)
                                 ->ByArea($request->area_id)
+                                ->ByAreaAsignada($request->area_asignada_id)
                                 ->ByCargo($request->file_id)
                                 ->ByEscalaSalarial($request->escala_salarial_id)
                                 ->ByApellidoPaterno($request->ap_paterno)
@@ -83,6 +96,7 @@ class EmpleadoController extends Controller
                                 ->ByTipo($request->tipo)
                                 ->ByFechaIngreso($request->fecha_ingreso)
                                 ->ByFechaRetiro($request->fecha_retiro)
+                                ->ByEntreFechaConclusion($request->fecha_conclusion_inicio, $request->fecha_conclusion_final)
                                 ->ByEstado($request->estado)
                                 ->BySexo($request->sexo)
                                 ->orderBy('idemp','desc')
@@ -589,6 +603,7 @@ class EmpleadoController extends Controller
                 $empleados = Empleado::query()
                                         ->ByDea($dea_id)
                                         ->ByArea($request->area_id)
+                                        ->ByAreaAsignada($request->area_asignada_id)
                                         ->ByCargo($request->file_id)
                                         ->ByEscalaSalarial($request->escala_salarial_id)
                                         ->ByApellidoPaterno($request->ap_paterno)
@@ -598,6 +613,7 @@ class EmpleadoController extends Controller
                                         ->ByTipo($request->tipo)
                                         ->ByFechaIngreso($request->fecha_ingreso)
                                         ->ByFechaRetiro($request->fecha_retiro)
+                                        ->ByEntreFechaConclusion($request->fecha_conclusion_inicio, $request->fecha_conclusion_final)
                                         ->ByEstado($request->estado)
                                         ->BySexo($request->sexo)
                                         ->orderBy('idemp','desc')

@@ -212,7 +212,7 @@
             confirmar_entrega();
         }
 
-        function confirmar_entrega(){console.log("okok");
+        function confirmar_entrega(){
             var url = "{{ route('entregas.habilitar') }}";
             $("#form-resagado").attr('action', url);
             $("#form-resagado").submit();

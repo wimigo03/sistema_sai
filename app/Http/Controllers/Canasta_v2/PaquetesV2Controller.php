@@ -13,12 +13,14 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Canasta\Paquetes;
 use App\Models\Canasta\PaquetePeriodo;
 use App\Models\Canasta\PaqueteBarrio;
+use App\Models\Canasta\Beneficiario;
 use App\Models\Canasta\Barrio;
 use App\Models\Canasta\Distrito;
 use App\Models\Canasta\Entrega;
 use App\Models\Canasta\Dea;
 use App\Http\Requests;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Exportar\Canasta\EntregasBeneficiariosExcel;
 use DB;
 use PDF;
 use Carbon\Carbon;
@@ -225,5 +227,214 @@ class PaquetesV2Controller extends Controller
         $paquetes->estado = 1;
         $paquetes->save();
         return redirect()->route('paquetes.index')->with('success_message', 'Registro procesado correctamente...');
+    }
+
+    public function beneficiarios($paquete_id)
+    {
+        $paquete_barrio = PaqueteBarrio::where('id_paquete',$paquete_id)->first();
+        $extensiones = Beneficiario::EXTENSIONES;
+        $sexos = Beneficiario::SEXOS;
+        $estados = Entrega::ESTADOS;
+        $distritos = Distrito::where('dea_id',Auth::user()->dea->id)->pluck('nombre','id');
+        $barrios = Barrio::where('dea_id',Auth::user()->dea->id)->pluck('nombre','id');
+
+        $entregas = Entrega::query()
+                            ->join('beneficiarios as b','b.id','entrega.id_beneficiario')
+                            ->join('barrios as c','c.id','entrega.id_barrio')
+                            ->join('distritos as d','d.id','entrega.distrito_id')
+                            ->byDea(Auth::user()->dea->id)
+                            ->byPaquete($paquete_id)
+                            ->select(
+                                'c.nombre as _barrio',
+                                'd.nombre as _distrito',
+                                'b.nombres',
+                                'b.ap',
+                                'b.am',
+                                'b.ci',
+                                'b.expedido',
+                                'b.fecha_nac',
+                                'b.sexo',
+                                'b.dir_foto',
+                                'entrega.estado',
+                                'entrega.id as entrega_id',
+                                'entrega.resagado')
+                            ->where('entrega.estado','!=','3')
+                            ->orderBy('b.nombres','asc')
+                            ->orderBy('b.ap','asc')
+                            ->paginate(10);
+
+        return view('canasta_v2.paquetes.beneficiarios', compact('paquete_barrio','extensiones','sexos','estados','distritos','barrios','entregas'));
+    }
+
+    public function beneficiariosSearch($paquete_id, Request $request)
+    {
+        $paquete_barrio = PaqueteBarrio::where('id_paquete',$paquete_id)->first();
+        $extensiones = Beneficiario::EXTENSIONES;
+        $sexos = Beneficiario::SEXOS;
+        $estados = Entrega::ESTADOS;
+        $distritos = Distrito::where('dea_id',Auth::user()->dea->id)->pluck('nombre','id');
+        $barrios = Barrio::where('dea_id',Auth::user()->dea->id)->pluck('nombre','id');
+
+        $entregas = Entrega::query()
+                            ->join('beneficiarios as b','b.id','entrega.id_beneficiario')
+                            ->join('barrios as c','c.id','entrega.id_barrio')
+                            ->join('distritos as d','d.id','entrega.distrito_id')
+                            ->byDea(Auth::user()->dea->id)
+                            ->byPaquete($paquete_id)
+                            ->byDistritos($request->distrito_id)
+                            ->byBarrios($request->barrio_id)
+                            ->byNombre($request->nombre)
+                            ->byApellidoPaterno($request->ap_paterno)
+                            ->byApellidoMaterno($request->ap_materno)
+                            ->byNroCarnet($request->nro_carnet)
+                            ->byExtension($request->extension)
+                            ->byFechaNacimiento($request->fecha_nac)
+                            ->byEdad($request->edad_inicial, $request->edad_final)
+                            ->bySexo($request->sexo)
+                            ->byEstado($request->estado)
+                            ->select(
+                                'c.nombre as _barrio',
+                                'd.nombre as _distrito',
+                                'b.nombres',
+                                'b.ap',
+                                'b.am',
+                                'b.ci',
+                                'b.expedido',
+                                'b.fecha_nac',
+                                'b.sexo',
+                                'b.dir_foto',
+                                'entrega.estado',
+                                'entrega.id as entrega_id',
+                                'entrega.resagado')
+                            ->where('entrega.estado','!=','3')
+                            ->orderBy('c.nombre','asc')
+                            ->orderBy('d.nombre','asc')
+                            ->orderBy('b.nombres','asc')
+                            ->orderBy('b.ap','asc')
+                            ->paginate(10);
+
+        return view('canasta_v2.paquetes.beneficiarios', compact('paquete_barrio','extensiones','sexos','estados','distritos','barrios','entregas'));
+    }
+
+    public function beneficiariosExcel($paquete_id, Request $request)
+    {
+        try{
+            ini_set('memory_limit','-1');
+            ini_set('max_execution_time','-1');
+
+            $paquete_barrio = PaqueteBarrio::where('id_paquete',$paquete_id)->first();
+            $entregas = Entrega::query()
+                        ->join('beneficiarios as b','b.id','entrega.id_beneficiario')
+                        ->join('barrios as c','c.id','entrega.id_barrio')
+                        ->join('distritos as d','d.id','entrega.distrito_id')
+                        ->byDea(Auth::user()->dea->id)
+                        ->byPaquete($paquete_id)
+                        ->byDistritos($request->distrito_id)
+                        ->byBarrios($request->barrio_id)
+                        ->byNombre($request->nombre)
+                        ->byApellidoPaterno($request->ap_paterno)
+                        ->byApellidoMaterno($request->ap_materno)
+                        ->byNroCarnet($request->nro_carnet)
+                        ->byExtension($request->extension)
+                        ->byFechaNacimiento($request->fecha_nac)
+                        ->byEdad($request->edad_inicial, $request->edad_final)
+                        ->bySexo($request->sexo)
+                        ->byEstado($request->estado)
+                        ->select(
+                            'c.nombre as _barrio',
+                            'd.nombre as _distrito',
+                            'b.nombres',
+                            'b.ap',
+                            'b.am',
+                            'b.ci',
+                            'b.expedido',
+                            'b.fecha_nac',
+                            'b.sexo',
+                            'b.dir_foto',
+                            'entrega.estado',
+                            'entrega.id as entrega_id',
+                            'entrega.resagado',
+                            'b.created_att')
+                        ->where('entrega.estado','!=','3')
+                        ->orderBy('c.nombre','asc')
+                        ->orderBy('d.nombre','asc')
+                        ->orderBy('b.nombres','asc')
+                        ->orderBy('b.ap','asc')
+                        ->get();
+            $cont = 1;
+
+            return Excel::download(new EntregasBeneficiariosExcel($paquete_barrio,$entregas,$cont),'entrega_beneficiarios_canasta.xlsx');
+        } catch (\Throwable $th) {
+            return response()->view('errors.500', [
+                'error' => $th->getMessage(),
+                'trace' => $th->getTraceAsString()
+            ], 500);
+        }finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
+    }
+
+    public function beneficiariosPdf($paquete_id, Request $request)
+    {
+        try{
+            ini_set('memory_limit','-1');
+            ini_set('max_execution_time','-1');
+
+                $paquete_barrio = PaqueteBarrio::where('id_paquete',$paquete_id)->first();
+                $entregas = Entrega::query()
+                            ->join('beneficiarios as b','b.id','entrega.id_beneficiario')
+                            ->join('barrios as c','c.id','entrega.id_barrio')
+                            ->join('distritos as d','d.id','entrega.distrito_id')
+                            ->byDea(Auth::user()->dea->id)
+                            ->byPaquete($paquete_id)
+                            ->byDistritos($request->distrito_id)
+                            ->byBarrios($request->barrio_id)
+                            ->byNombre($request->nombre)
+                            ->byApellidoPaterno($request->ap_paterno)
+                            ->byApellidoMaterno($request->ap_materno)
+                            ->byNroCarnet($request->nro_carnet)
+                            ->byExtension($request->extension)
+                            ->byFechaNacimiento($request->fecha_nac)
+                            ->byEdad($request->edad_inicial, $request->edad_final)
+                            ->bySexo($request->sexo)
+                            ->byEstado($request->estado)
+                            ->select(
+                                'c.nombre as _barrio',
+                                'd.nombre as _distrito',
+                                'b.nombres',
+                                'b.ap',
+                                'b.am',
+                                'b.ci',
+                                'b.expedido',
+                                'b.fecha_nac',
+                                'b.sexo',
+                                'b.dir_foto',
+                                'entrega.estado',
+                                'entrega.id as entrega_id',
+                                'entrega.resagado',
+                                'b.created_att')
+                            ->where('entrega.estado','!=','3')
+                            ->orderBy('c.nombre','asc')
+                            ->orderBy('d.nombre','asc')
+                            ->orderBy('b.nombres','asc')
+                            ->orderBy('b.ap','asc')
+                            ->get();
+                $cont = 1;
+
+                $pdf = PDF::loadView('canasta_v2.paquetes.beneficiarios-pdf', compact(['paquete_barrio','entregas','cont']));
+                $pdf->setPaper(array(0,0,612,935.43));
+                $pdf->render();
+                return $pdf->stream('Paquete_beneficiarios.pdf');
+
+        } catch (\Throwable $th) {
+            return response()->view('errors.500', [
+                'error' => $th->getMessage(),
+                'trace' => $th->getTraceAsString()
+            ], 500);
+        }finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
     }
 }

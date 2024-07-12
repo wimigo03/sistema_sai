@@ -55,7 +55,7 @@
                         <td align="center" class="align-superior">{{ $datos->barrio->nombre }}</td>
                         <td align="center" class="align-superior">{{ $datos->lugar_entrega }}</td>
                         <td align="center" class="align-superior">{{ $datos->fecha_entrega != null ? mb_strtoupper(strftime('%A', strtotime($datos->fecha_entrega)), 'UTF-8') : '' }}</td>
-                        <td align="center" class="align-superior">{{ $datos->fecha_entrega = null ? \Carbon\Carbon::parse($datos->fecha_entrega)->format('d/m/Y') : '' }}</td>
+                        <td align="center" class="align-superior">{{ $datos->fecha_entrega != null ? \Carbon\Carbon::parse($datos->fecha_entrega)->format('d/m/Y') : '' }}</td>
                         <td align="center" class="align-superior">
                             @if ($datos->hora_inicio && $datos->hora_final != null)
                                 {{ $datos->hora_inicio . ' A ' . $datos->hora_final }}

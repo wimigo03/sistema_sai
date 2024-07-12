@@ -137,6 +137,17 @@ class PaqueteBarrio extends Model
         }
     }
 
+    public function getTotalResagadosAttribute(){
+        $resagados = DB::table('entrega')
+                                        ->select('id')
+                                        ->where('paquete_barrio_id',$this->id)
+                                        ->where('estado','4')
+                                        ->get();
+        if($resagados != null){
+            return count($resagados);
+        }
+    }
+
     public function paquete(){
         return $this->belongsTo(Paquetes::class,'id_paquete','id');
     }

@@ -135,7 +135,7 @@ class Empleado extends Model
 
     public function getFechaConclusionContratoAttribute(){
         $contratos = EmpleadoContrato::select('fecha_conclusion_contrato')->where('idemp',$this->idemp)->orderBy('id','desc')->take(1)->first();
-        if($contratos){
+        if($contratos != null){
             return $contratos->fecha_conclusion_contrato;
         }
     }
@@ -180,6 +180,48 @@ class Empleado extends Model
         }
     }
 
+    public function getFileCargoCortoAttribute(){
+        $contrato = EmpleadoContrato::select('idfile')->where('idemp',$this->idemp)->orderBy('id','desc')->take(1)->first();
+        if($contrato != null){
+            $cargo = File::where('idfile',$contrato->idfile)->first();
+            if($cargo != null){
+                $longitud = strlen($cargo->nombrecargo);
+                if($longitud > 20){
+                    $cargo_abreviado = mb_substr($cargo->nombrecargo, 0, 20, 'UTF-8') . '...';
+                }else{
+                    $cargo_abreviado = $cargo->nombrecargo;
+                }
+                return $cargo_abreviado;
+            }
+        }
+    }
+
+    public function getAreaAsignadaAttribute(){
+        $contrato = EmpleadoContrato::select('idarea_asignada')->where('idemp',$this->idemp)->orderBy('id','desc')->take(1)->first();
+        if($contrato != null){
+            $area = Area::where('idarea',$contrato->idarea_asignada)->first();
+            if($area != null){
+                return $area->nombrearea;
+            }
+        }
+    }
+
+    public function getAreaAsignadaCortaAttribute(){
+        $contrato = EmpleadoContrato::select('idarea_asignada')->where('idemp',$this->idemp)->orderBy('id','desc')->take(1)->first();
+        if($contrato != null){
+            $area = Area::where('idarea',$contrato->idarea_asignada)->first();
+            if($area != null){
+                $longitud = strlen($area->nombrearea);
+                if($longitud > 20){
+                    $area_abreviada = mb_substr($area->nombrearea, 0, 20, 'UTF-8') . '...';
+                }else{
+                    $area_abreviada = $area->nombrearea;
+                }
+                return $area_abreviada;
+            }
+        }
+    }
+
     public function getEscalaSalarialFileAttribute(){
         $contrato = EmpleadoContrato::select('escala_salarial_id')->where('idemp',$this->idemp)->orderBy('id','desc')->take(1)->first();
         if($contrato){
@@ -192,8 +234,8 @@ class Empleado extends Model
 
     public function getAreaUnidadAttribute(){
         $longitud = strlen($this->area->nombrearea);
-        if($longitud > 25){
-            $area_abreviada = mb_substr($this->area->nombrearea, 0, 25, 'UTF-8') . '...';
+        if($longitud > 20){
+            $area_abreviada = mb_substr($this->area->nombrearea, 0, 20, 'UTF-8') . '...';
         }else{
             $area_abreviada = $this->area->nombrearea;
         }
@@ -255,13 +297,24 @@ class Empleado extends Model
 
     public function scopeByDea($query, $dea_id){
         if($dea_id){
-            return $query->where('dea_id', $dea_id);
+            return $query->where('empleados.dea_id', $dea_id);
         }
     }
 
     public function scopeByArea($query, $area_id){
         if($area_id){
             return $query->where('idarea', $area_id);
+        }
+    }
+
+    public function scopeByAreaAsignada($query, $area_asignada_id){
+        if ($area_asignada_id != null) {
+                return $query
+                    ->whereIn('idemp', function ($subquery) use($area_asignada_id) {
+                        $subquery->select('idemp')
+                            ->from('empleados_contratos')
+                            ->where('idarea_asignada', $area_asignada_id);
+                    });
         }
     }
 
@@ -333,6 +386,20 @@ class Empleado extends Model
                         $subquery->select('idemp')
                             ->from('empleados_contratos')
                             ->where('fecha_retiro', $fecha_retiro);
+                    });
+        }
+    }
+
+    public function scopeByEntreFechaConclusion($query, $fecha_i , $fecha_f){
+        if ($fecha_i && $fecha_f) {
+            $fecha_i = date('Y-m-d', strtotime(str_replace('/', '-', $fecha_i)));
+            $fecha_f = date('Y-m-d', strtotime(str_replace('/', '-', $fecha_f)));
+                return $query
+                    ->whereIn('idemp', function ($subquery) use($fecha_i, $fecha_f) {
+                        $subquery->select('idemp')
+                            ->from('empleados_contratos')
+                            ->where('fecha_conclusion_contrato','!=',null)
+                            ->whereBetween('fecha_conclusion_contrato', [$fecha_i,$fecha_f]);
                     });
         }
     }

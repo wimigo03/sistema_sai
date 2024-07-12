@@ -427,6 +427,13 @@ main .post-content .post-meta {
 	border-color : #DC3545;
 }
 
+.select2 + .select2-container .select2-selection__rendered {
+	font-size: 12px;
+}
+.select2-results__option {
+	font-size: 11px;
+}
+	
 .select2-container-rojo .select2-selection {
 	border-color: #DC3545 !important;
 }

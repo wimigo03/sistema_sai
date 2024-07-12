@@ -75,6 +75,13 @@ class Paquetes extends Model
         }
     }
 
+    public function getResagadosAttribute(){
+        $resagados = DB::table('entrega')->select('id')->where('id_paquete',$this->id)->where('estado','4')->get();
+        if($resagados != null){
+            return count($resagados);
+        }
+    }
+
     public function user(){
         return $this->belongsTo(User::class,'user_id','id');
     }

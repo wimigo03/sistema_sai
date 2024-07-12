@@ -3,6 +3,7 @@
         <tr>
             <th align="center"><b>NRO</b></th>
             <th align="center"><b>AREA - UNIDAD</b></th>
+            <th align="center"><b>AREA ASIGNADA</b></th>
             <th align="center"><b>CARGO</b></th>
             <th align="center"><b>ESCALA SALARIAL</b></th>
             <th align="center"><b>NOMBRE(S)</b></th>
@@ -13,6 +14,7 @@
             <th align="center"><b>TIPO</b></th>
             <th align="center"><b>INGRESO</b></th>
             <th align="center"><b>RETIRO</b></th>
+            <th align="center"><b>C.C.</b></th>
             <th align="center"><b>ESTADO</b></th>
         </tr>
     </thead>
@@ -24,6 +26,7 @@
             <tr>
                 <td align="center">{{ $cont++; }}</td>
                 <td>{{ $datos->area->nombrearea }}</td>
+                <td>{{ $datos->area_asignada }}</td>
                 <td>{{ $datos->file_cargo }}</td>
                 <td>{{ $datos->escala_salarial_file }}</td>
                 <td>{{ $datos->nombres }}</td>
@@ -34,6 +37,7 @@
                 <td align="center">{{ $datos->ultimo_tipo_contrato }}</td>
                 <td align="center">{{ $datos->ultimo_contrato_ingreso != null ? \Carbon\Carbon::parse($datos->ultimo_contrato_ingreso)->format('d/m/Y') : '' }}</td>
                 <td align="center">{{ $datos->ultimo_contrato_retiro != null ? \Carbon\Carbon::parse($datos->ultimo_contrato_retiro)->format('d/m/Y') : '' }}</td>
+                <td align="center">{{ $datos->fecha_conclusion_contrato != null ? \Carbon\Carbon::parse($datos->fecha_conclusion_contrato)->format('d/m/Y') : '' }}</td>
                 <td align="center">{{ $datos->status_completo }}</td>
             </tr>
         @endforeach

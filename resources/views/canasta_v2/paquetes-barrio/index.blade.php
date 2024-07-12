@@ -33,6 +33,8 @@
                 <b class="font-roboto-12">Entregados =&nbsp;</b> <span class="font-roboto-12">{{ $paquete->entregados }}</span>
                 &nbsp;|&nbsp;
                 <b class="font-roboto-12">No entregados =&nbsp;</b> <span class="font-roboto-12">{{ $paquete->no_entregados }}</span>
+                &nbsp;|&nbsp;
+                <b class="font-roboto-12">Resagados =&nbsp;</b> <span class="font-roboto-12">{{ $paquete->resagados }}</span>
             </div>
         </div>
         @include('canasta_v2.paquetes-barrio.partials.search')

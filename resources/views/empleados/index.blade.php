@@ -1,4 +1,15 @@
 @extends('layouts.admin')
+<style>
+    @keyframes parpadeo {
+        0% { background-color: #FFC107; }
+        50% { background-color: white; }
+        100% { background-color: #FFC107; }
+    }
+
+    .parpadear {
+        animation: parpadeo 1s infinite;
+    }
+</style>
 @section('content')
     <div class="card-header header">
         <div class="row">
@@ -15,9 +26,21 @@
 @section('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
+            $('.select2').select2({
+                theme: "bootstrap4",
+                placeholder: "--Seleccionar--",
+                width: '100%'
+            });
+
             $('#area_id').select2({
                 theme: "bootstrap4",
-                placeholder: "--Area--",
+                placeholder: "--Area - Unidad--",
+                width: '100%'
+            });
+
+            $('#area_asignada_id').select2({
+                theme: "bootstrap4",
+                placeholder: "--Area Asignada--",
                 width: '100%'
             });
 
@@ -43,6 +66,16 @@
                 datePattern: ['d', 'm', 'Y']
             });
 
+            var cleave = new Cleave('#fecha_conclusion_inicio', {
+                date: true,
+                datePattern: ['d', 'm', 'Y']
+            });
+
+            var cleave = new Cleave('#fecha_conclusion_final', {
+                date: true,
+                datePattern: ['d', 'm', 'Y']
+            });
+
             $("#fecha_ingreso").datepicker({
                 inline: false,
                 dateFormat: "dd/mm/yyyy",
@@ -50,6 +83,18 @@
             });
 
             $("#fecha_retiro").datepicker({
+                inline: false,
+                dateFormat: "dd/mm/yyyy",
+                autoClose: true,
+            });
+
+            $("#fecha_conclusion_inicio").datepicker({
+                inline: false,
+                dateFormat: "dd/mm/yyyy",
+                autoClose: true,
+            });
+
+            $("#fecha_conclusion_final").datepicker({
                 inline: false,
                 dateFormat: "dd/mm/yyyy",
                 autoClose: true,

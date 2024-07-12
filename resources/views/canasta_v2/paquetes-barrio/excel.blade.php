@@ -56,6 +56,7 @@
             <td align="center"><b>HAB.</b></td>
             <td align="center"><b>ENT.</b></td>
             <td align="center"><b>NO ENT.</b></td>
+            <td align="center"><b>RESAGADOS</b></td>
             <td align="center"><b>ESTADO</b></td>
         </tr>
     </thead>
@@ -74,6 +75,7 @@
                 <td align="center">{{ $datos->total_habilitados }}</td>
                 <td align="center">{{ $datos->total_entregados }}</td>
                 <td align="center">{{ $datos->total_no_entregados }}</td>
+                <td align="center">{{ $datos->total_resagados }}</td>
                 <td align="center">{{ $datos->status }}</td>
             </tr>
         @endforeach

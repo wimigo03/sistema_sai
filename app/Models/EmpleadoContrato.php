@@ -115,6 +115,11 @@ class EmpleadoContrato extends Model
         return $this->belongsTo(Area::class, 'idarea', 'idarea');
     }
 
+    public function _area_asignada()
+    {
+        return $this->belongsTo(Area::class, 'idarea', 'idarea_asignada');
+    }
+
     public function scopeByDea($query, $dea_id){
         if($dea_id){
             return $query->where('dea_id', $dea_id);

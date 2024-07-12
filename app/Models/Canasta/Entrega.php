@@ -32,8 +32,9 @@ class Entrega extends Model
 
     const ESTADOS = [
         '1' => 'NO ENTREGADO',
-        '2' => 'ENTREGADO'
-        //'3' => 'ELIMINADO' //NO ME MOSTRARA PERO EXISTEN
+        '2' => 'ENTREGADO',
+        '3' => 'ELIMINADO',
+        '4' => 'RESAGADO',
     ];
 
     const RESAGADOS = [
@@ -48,6 +49,8 @@ class Entrega extends Model
                 return "ENTREGADO";
             case '3':
                 return "ELIMINADO";
+            case '4':
+                return "RESAGADO";
         }
     }
 
@@ -68,6 +71,8 @@ class Entrega extends Model
                 return "badge-with-padding badge badge-success font-roboto-10";
             case '3':
                 return "badge-with-padding badge badge-danger font-roboto-10";
+            case '4':
+                return "badge-with-padding badge badge-success font-roboto-10";
         }
     }
 
@@ -131,6 +136,18 @@ class Entrega extends Model
     public function scopeByCodigo($query, $codigo){
         if($codigo != null){
             return $query->where('id', $codigo);
+        }
+    }
+
+    public function scopeByDistritos($query, $distrito_id){
+        if($distrito_id != null){
+            return $query->where('entrega.distrito_id', $distrito_id);
+        }
+    }
+
+    public function scopeByBarrios($query, $barrio_id){
+        if($barrio_id != null){
+            return $query->where('entrega.id_barrio', $barrio_id);
         }
     }
 
@@ -278,6 +295,12 @@ class Entrega extends Model
     public function scopeByPaqueteBarrio($query, $paquete_barrio_id){
         if($paquete_barrio_id != null){
             return $query->where('paquete_barrio_id',$paquete_barrio_id);
+        }
+    }
+
+    public function scopeByPaquete($query, $paquete_id){
+        if($paquete_id != null){
+            return $query->where('id_paquete',$paquete_id);
         }
     }
 

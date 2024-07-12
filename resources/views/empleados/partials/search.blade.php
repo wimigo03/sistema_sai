@@ -1,15 +1,24 @@
 <form action="#" method="get" id="form">
     <div class="form-group row">
-        <div class="col-md-5 pr-1 pl-1">
+        <div class="col-md-3 pr-1 pl-1">
             <input type="hidden" name="dea_id" value="{{ $dea_id }}" id="dea_id">
-            <select name="area_id" id="area_id" class="form-control select2">
+            {{--<select name="area_id" id="area_id" class="form-control font-roboto-10">--}}
+            <select name="area_id" id="area_id" class="form-control select2 font-roboto-10">
                 <option value="">-</option>
                 @foreach ($areas as $index => $value)
                     <option value="{{ $index }}" @if(request('area_id') == $index) selected @endif >{{ $value }}</option>
                 @endforeach
             </select>
         </div>
-        <div class="col-md-4 pr-1 pl-1">
+        <div class="col-md-3 pr-1 pl-1">
+            <select name="area_asignada_id" id="area_asignada_id" class="form-control select2">
+                <option value="">-</option>
+                @foreach ($areas as $index => $value)
+                    <option value="{{ $index }}" @if(request('area_asignada_id') == $index) selected @endif >{{ $value }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-3 pr-1 pl-1">
             <select name="file_id" id="file_id" class="form-control select2">
                 <option value="">-</option>
                 @foreach ($cargos as $index => $value)
@@ -27,7 +36,7 @@
         </div>
     </div>
     <div class="form-group row">
-        <div class="col-md-4 pr-1 pl-1">
+        <div class="col-md-2 pr-1 pl-1">
             <input type="text" name="nombre" value="{{ request('nombre') }}" id="nombre" placeholder="--Nombre(s)--" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
         </div>
         <div class="col-md-3 pr-1 pl-1">
@@ -39,8 +48,6 @@
         <div class="col-md-2 pr-1 pl-1">
             <input type="text" name="nro_carnet" value="{{ request('nro_carnet') }}" id="nro_carnet" placeholder="--Nro carnet--" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
         </div>
-    </div>
-    <div class="form-group row">
         <div class="col-md-2 pr-1 pl-1">
             <select name="sexo" id="sexo" class="form-control select2">
                 <option value="">-</option>
@@ -49,6 +56,8 @@
                 @endforeach
             </select>
         </div>
+    </div>
+    <div class="form-group row">
         <div class="col-md-2 pr-1 pl-1">
             <select name="tipo" id="tipo" class="form-control select2">
                 <option value="">-</option>
@@ -62,6 +71,12 @@
         </div>
         <div class="col-md-2 pr-1 pl-1">
             <input type="text" name="fecha_retiro" value="{{ request('fecha_retiro') }}" id="fecha_retiro" placeholder="--Retiro--" class="form-control font-roboto-12 intro" data-language="es">
+        </div>
+        <div class="col-md-2 pr-1 pl-1">
+            <input type="text" name="fecha_conclusion_inicio" value="{{ request('fecha_conclusion_inicio') }}" id="fecha_conclusion_inicio" placeholder="--Conclusion Inicio--" class="form-control font-roboto-12 bg-light intro" data-language="es">
+        </div>
+        <div class="col-md-2 pr-1 pl-1">
+            <input type="text" name="fecha_conclusion_final" value="{{ request('fecha_conclusion_final') }}" id="fecha_conclusion_final" placeholder="--Conclusion Final--" class="form-control font-roboto-12 bg-light intro" data-language="es">
         </div>
         <div class="col-md-2 pr-1 pl-1">
             <select name="estado" id="estado" class="form-control select2">

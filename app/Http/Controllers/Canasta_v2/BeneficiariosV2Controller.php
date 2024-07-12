@@ -66,44 +66,6 @@ class BeneficiariosV2Controller extends Controller
         }
     }
 
-    private function copiarbeneficiarios2()
-    {
-        $beneficiarios = DB::connection('mysql_canasta')
-                               ->table("beneficiarios")
-                               //->join('ocupaciones as o', 'o.id_ocupacion', '=', 'u.id_ocupacion')
-                               // ->select('o.ocupacion','u.nombres')
-                               ->where('id','=',1)
-                               //->where('idUsuario','<',12000)
-                               ->get();
-
-       foreach ($beneficiarios as $data){
-           $datos = ([
-              // 'id' => $data->idUsuario,
-               'nombres' => $data->nombres,
-               'ap' => $data->ap,
-               'am' => $data->am,
-               'ci' => $data->ci,
-               'expedido' => $data->expedido,
-               'fecha_nac' => $data->fecha_nac,
-               'estado_civil' => $data->estado_civil,
-               'sexo' => $data->sexo,
-               'direccion' => $data->direccion,
-               'dir_foto' => $data->dir_foto,
-               'firma' => $data->firma,
-               'obs' => $data->obs,
-               'id_ocupacion' => $data->id_ocupacion,
-               'id_barrio' => $data->id_barrio,
-               'dea_id' => 1,
-               'user_id' => 29,
-               'created_att' => $data->_registrado,
-               'updated_att' => $data->_modificado,
-               'id_barrio' => $data->id_barrio,
-               'estado' => $data->estado
-           ]);
-           $beneficiario=Beneficiario::create($datos);
-       }
-   }
-
     private function actualizar_distritos(){
         try{
             ini_set('memory_limit','-1');
