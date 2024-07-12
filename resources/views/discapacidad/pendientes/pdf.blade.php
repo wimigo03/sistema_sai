@@ -63,19 +63,19 @@
                         <td class="table-border" align="left">{{$datos->afiliado == null ? 'S/N':$datos->afiliado->carnet_discap}}</td>
                         <td class="table-border" align="left">{{$datos->afiliado == null ? 'S/N':\Carbon\Carbon::parse($datos->afiliado->f_vencimiento)->format('d/m/Y')}}</td>
                         <td class="table-border" align="left">{{$datos->afiliado == null ? 'S/N':$datos->afiliado->nombre_tutor}}</td>
-                    </tr> 
+                    </tr>
                 @endforeach
             @endif
         </tbody>
     </table>
-    <script type="text/php">
+    {{--<script type="text/php">
         if ( isset($pdf) ) {
             $pdf->page_script('
                 $font = $fontMetrics->get_font("Serif", "normal");
-                $pdf->text(50, 570, "{{ date('d-m-Y H:i') }} / {{ Auth()->user()->name }}", $font, 7); 
-                $pdf->text(700, 565, "Pagina $PAGE_NUM de $PAGE_COUNT", $font, 7); 
+                $pdf->text(50, 570, "{{ date('d-m-Y H:i') }} / {{ Auth()->user()->name }}", $font, 7);
+                $pdf->text(700, 565, "Pagina $PAGE_NUM de $PAGE_COUNT", $font, 7);
             ');
         }
-    </script>
+    </script>--}}
 </body>
 </html>

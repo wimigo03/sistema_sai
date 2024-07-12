@@ -81,7 +81,7 @@
         </div>
     </body>
 </html>
-<script type="text/php">
+{{--<script type="text/php">
     if ( isset($pdf) ) {
         $pdf->page_script('
             $font = $fontMetrics->get_font("verdana");
@@ -89,4 +89,4 @@
             $pdf->text(540, 910, "Pagina $PAGE_NUM de $PAGE_COUNT", $font, 7);
         ');
     }
-</script>
+</script>--}}

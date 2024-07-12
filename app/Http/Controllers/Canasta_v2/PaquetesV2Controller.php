@@ -262,7 +262,9 @@ class PaquetesV2Controller extends Controller
                             ->orderBy('b.nombres','asc')
                             ->orderBy('b.ap','asc')
                             ->paginate(10);
-
+        if($entregas->count() == 0){
+            return back()->with('info_message', '[No existen datos para mostrar.]');
+        }
         return view('canasta_v2.paquetes.beneficiarios', compact('paquete_barrio','extensiones','sexos','estados','distritos','barrios','entregas'));
     }
 
