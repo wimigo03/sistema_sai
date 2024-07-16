@@ -10,7 +10,7 @@ use App\Models\User;
 use App\Models\Area;
 use App\Models\TipoArea;
 use App\Models\Archivo;
-use App\Models\Tipoarchivo;
+use App\Models\TipoArchivo;
 use App\Models\ControlInterno;
 use DB;
 use DataTables;
@@ -94,7 +94,7 @@ class ControlInternoController extends Controller
     public function getDatosTipo(Request $request)
     {
         try{
-            $tipo = Tipoarchivo::find($request->tipo_id);
+            $tipo = TipoArchivo::find($request->tipo_id);
             $control_interno = ControlInterno::select('nro')
                                 ->where('idarea',Auth::user()->area_asignada_id)
                                 ->where('idtipo',$request->tipo_id)
