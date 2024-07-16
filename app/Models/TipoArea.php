@@ -5,27 +5,27 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Archivo extends Model
+class TipoArea extends Model
 {
-    protected $table = 'archivos';
-    protected $primaryKey= 'idarchivo';
-    public $timestamps = true;
+    protected $table = 'tipoarea';
+    protected $primaryKey= 'idtipoarea';
+    public $timestamps = false;
     protected $fillable = [
-        'idarea',
-        'dea_id',
         'idtipo',
-        'nombrearchivo',
-        'documento',
-        'estado1',
-        'referencia',
-        'gestion',
-        'id',
-        'fecha'
+        'idarea',
+        'dea_id'
+
     ];
 
     public function scopeByDea($query, $dea_id){
         if($dea_id != null){
             return $query->where('dea_id', $dea_id);
+        }
+    }
+
+    public function scopeByArea($query, $area_id){
+        if($area_id != null){
+            return $query->where('idarea', $area_id);
         }
     }
 }

@@ -66,44 +66,6 @@ class BeneficiariosV2Controller extends Controller
         }
     }
 
-    private function copiarbeneficiarios2()
-    {
-        $beneficiarios = DB::connection('mysql_canasta')
-                               ->table("beneficiarios")
-                               //->join('ocupaciones as o', 'o.id_ocupacion', '=', 'u.id_ocupacion')
-                               // ->select('o.ocupacion','u.nombres')
-                               ->where('id','=',1)
-                               //->where('idUsuario','<',12000)
-                               ->get();
-
-       foreach ($beneficiarios as $data){
-           $datos = ([
-              // 'id' => $data->idUsuario,
-               'nombres' => $data->nombres,
-               'ap' => $data->ap,
-               'am' => $data->am,
-               'ci' => $data->cedula,
-               'expedido' => $data->expedido,
-               'fecha_nac' => $data->fnacimiento,
-               'estado_civil' => 'VACIO',
-               'sexo' => $data->sexo,
-               'direccion' => $data->direccion,
-               'dir_foto' => $data->foto,
-               'firma' => $data->firma,
-               'obs' => '',
-               'id_ocupacion' => 67,
-               'id_barrio' => $data->barrio,
-               'dea_id' => 1,
-               'user_id' => 29,
-               'created_att' => $data->_registrado,
-               'updated_att' => $data->_modificado,
-               'id_barrio' => $data->id_barrio,
-               'estado' => $data->estado
-           ]);
-           $beneficiario=Beneficiario::create($datos);
-       }
-   }
-
     private function actualizar_distritos(){
         try{
             ini_set('memory_limit','-1');
@@ -171,7 +133,7 @@ class BeneficiariosV2Controller extends Controller
             $this->actualizar_distritos();
             $this->actualizar_historial();
         }*/
-        $this->copiarbeneficiarios2();
+
         if ($request->ajax()) {
             $data = DB::table('beneficiarios as a')
                     ->join('barrios as b','b.id','a.id_barrio')
@@ -277,19 +239,19 @@ class BeneficiariosV2Controller extends Controller
             ini_set('max_execution_time','-1');
                 $dea_id = Auth::user()->dea->id;
                 $beneficiarios = Beneficiario::query()
-                                                ->byDea($dea_id)
-                                                ->byDistrito($request->distrito)
-                                                ->byBarrio($request->barrio)
-                                                ->byCodigo($request->codigo)
-                                                ->byNombre($request->nombre)
-                                                ->byApellidoPaterno($request->ap)
-                                                ->byApellidoMaterno($request->am)
-                                                ->byNumeroCarnet($request->ci)
-                                                ->bySexo($request->sexo)
-                                                ->byEdad($request->edad_inicial, $request->edad_final)
-                                                ->byEstado($request->estado)
-                                                ->orderBy('id', 'desc')
-                                                ->get();
+                                        ->byDea($dea_id)
+                                        ->byDistrito($request->distrito)
+                                        ->byBarrio($request->barrio)
+                                        ->byCodigo($request->codigo)
+                                        ->byNombre($request->nombre)
+                                        ->byApellidoPaterno($request->ap)
+                                        ->byApellidoMaterno($request->am)
+                                        ->byNumeroCarnet($request->ci)
+                                        ->bySexo($request->sexo)
+                                        ->byEdad($request->edad_inicial, $request->edad_final)
+                                        ->byEstado($request->estado)
+                                        ->orderBy('id', 'desc')
+                                        ->get();
                 /*$contador = $beneficiarios->count();
                 if($contador >= 5000){
                     return redirect()->route('beneficiarios.index')->with('info_message', 'Los datos de la consulta exceden el limite permitido. Por favor comunicarse con el area de sistemas para resolver esta situacion');
@@ -498,5 +460,49 @@ class BeneficiariosV2Controller extends Controller
         $Historialmod->save();
 
         return redirect()->route('beneficiarios.index')->with('info_message', 'datos actualizados correctamente...');
+    }
+
+    public function pdfListar(Request $request)
+    {
+        try{
+            ini_set('memory_limit','-1');
+            ini_set('max_execution_time','-1');
+
+                $dea_id = Auth::user()->dea->id;
+                $beneficiarios = Beneficiario::query()
+                                    ->byDea($dea_id)
+                                    ->byDistrito($request->distrito)
+                                    ->byBarrio($request->barrio)
+                                    ->byCodigo($request->codigo)
+                                    ->byNombre($request->nombre)
+                                    ->byApellidoPaterno($request->ap)
+                                    ->byApellidoMaterno($request->am)
+                                    ->byNumeroCarnet($request->ci)
+                                    ->bySexo($request->sexo)
+                                    ->byEdad($request->edad_inicial, $request->edad_final)
+                                    ->byEstado($request->estado)
+                                    ->orderBy('distrito_id')
+                                    ->orderBy('id_barrio')
+                                    ->get();
+
+                $contador = $beneficiarios->count();
+                if($contador >= 1000){
+                    return redirect()->route('beneficiarios.index')->with('info_message', 'Los datos de la consulta exceden el limite permitido. Por favor comunicarse con el area de sistemas.');
+                }
+                $cont = 1;
+                $pdf = PDF::loadView('canasta_v2.beneficiario.pdf-listar', compact(['beneficiarios','cont']));
+                $pdf->setPaper(array(0,0,935.43,612));
+                $pdf->render();
+                return $pdf->stream('beneficiarios.pdf');
+
+        } catch (\Throwable $th) {
+            return response()->view('errors.500', [
+                'error' => $th->getMessage(),
+                'trace' => $th->getTraceAsString()
+            ], 500);
+        }finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
     }
 }

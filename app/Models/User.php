@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Canasta\Dea;
 use App\Models\Area;
+use App\Models\EmpleadoContrato;
 
 class User extends Authenticatable
 {
@@ -65,7 +66,17 @@ class User extends Authenticatable
 
     public function dea(){
         return $this->belongsTo(Dea::class, 'dea_id', 'id');
-     }
+    }
+
+    public function getAreaAsignadaIdAttribute(){
+        if($this->idemp != null){
+            $contrato = EmpleadoContrato::select('idarea_asignada')->where('idemp',$this->idemp)->orderBy('id','desc')->take(1)->first();
+            if($contrato != null){
+                $area_asignada_id = $contrato->idarea_asignada;
+                return $area_asignada_id;
+            }
+        }
+    }
 
     public function getNombreCompletoAttribute(){
         if($this->idemp != null){

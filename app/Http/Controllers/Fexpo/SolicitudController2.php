@@ -18,7 +18,7 @@ use PDF;
 
 use App\Models\User;
 use App\Models\Empleado;
-use App\Models\TipoAreaModel;
+use App\Models\TipoArea;
 use App\Models\AnioModel;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;

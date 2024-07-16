@@ -580,6 +580,14 @@
                         <hr style="margin-top:0; margin-bottom:0;">
                     @endcan
 
+                    {{-- DOCUMENTACION INTERNA DE SALIDA --}}
+                    {{--@can('control.interno.index')--}}
+                        <li class="font-verdana-12">
+                            <a href="{{ route('control.interno.index') }}">
+                                <i class="fa fa-envelope fa-fw"></i>&nbsp;Control Interno
+                            </a>
+                        </li>
+                    {{--@endcan--}}
                     {{-- ARCHIVOS --}}
                     @canany(['archivos.index','tipos.archivos.index','archivos.index.general'])
                         <li class="font-verdana-12">

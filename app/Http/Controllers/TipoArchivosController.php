@@ -7,12 +7,11 @@ use App\Models\Empleado;
 use Illuminate\Http\Request;
 use App\Models\ProveedoresModel;
 use App\Models\DocProveedorModel;
-use App\Models\TipoAreaModel;
+use App\Models\TipoArea;
 use App\Models\Archivo;
-use App\Models\TiposModel;
+use App\Models\TipoArchivo;
 use App\Models\EmpleadoContrato;
 use App\Models\Area;
-
 use App\Models\AnioModel;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
@@ -48,9 +47,9 @@ class TipoArchivosController extends Controller
 
     public function store(request $request)
     {
-        $newestUser = TiposModel::orderBy('idtipo', 'desc')->first();
+        $newestUser = TipoArchivo::orderBy('idtipo', 'desc')->first();
         $maxId = $newestUser->idtipo;
-        $tipos2 = new TiposModel();
+        $tipos2 = new TipoArchivo();
         $tipos2->idtipo = $maxId + 1;
         $tipos2->nombretipo = $request->input('nombretipo');
         $tipos2->save();
@@ -66,7 +65,7 @@ class TipoArchivosController extends Controller
         $contratos = EmpleadoContrato::select('idarea_asignada')->where('idemp',$userdate->idemp)->orderBy('id','desc')->take(1)->first();
 
        $personalArea = Area::find($contratos->idarea_asignada);
-        $tipoarea = new TipoAreaModel;
+        $tipoarea = new TipoArea;
         $tipoarea->idarea = $personalArea->idarea;
         $tipoarea->idtipo = $request->input('tipo');
         $detallito = DB::table('tipoarea as tt')
@@ -87,7 +86,7 @@ class TipoArchivosController extends Controller
 
     public function delete($idtipoarea)
     {
-        $tipoarea =TipoAreaModel::find($idtipoarea);
+        $tipoarea =TipoArea::find($idtipoarea);
         $tipoarea->delete();
         return redirect()->route('tipos.archivos.index');
     }

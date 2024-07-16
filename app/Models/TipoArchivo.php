@@ -5,20 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TiposModel extends Model
+class TipoArchivo extends Model
 {
     protected $table = 'tipoarchivo';
-
     protected $primaryKey= 'idtipo';
-
-    public $timestamps = false;
-
     protected $fillable = [
-        'nombretipo'
+        'codigo',
+        'nombretipo',
+        'subtipo',
+        'estado'
     ];
 
-    protected $guarded = [
-
-
+    const SUBTIPOS = [
+        '1' => 'SALIDA',
+        '2' => 'ENTRADA'
     ];
 }

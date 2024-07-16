@@ -11,4 +11,5 @@ Route::prefix('beneficiarios')->name('beneficiarios.')->middleware(['auth'])->gr
     Route::get('show/{id}', 'Canasta_v2\BeneficiariosV2Controller@show')->name('show')->middleware('can:canasta.beneficiarios.show');
     Route::get('pdf/{id}', 'Canasta_v2\BeneficiariosV2Controller@pdf')->name('pdf')->middleware('can:canasta.beneficiarios.pdf');
     Route::get('excel', 'Canasta_v2\BeneficiariosV2Controller@excel')->name('excel')->middleware('can:canasta.beneficiarios.excel');
+    Route::get('pdf-listar', 'Canasta_v2\BeneficiariosV2Controller@pdfListar')->name('pdf.listar')->middleware('can:canasta.beneficiarios.pdf.listar');
 });

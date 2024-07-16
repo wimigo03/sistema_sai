@@ -455,7 +455,7 @@ class CorrespondenciaLocalController extends Controller
     {
 
         $fechaActual = date('d/m/Y');
-        // $newestUser = TiposModel::orderBy('idtipo', 'desc')->first();
+        // $newestUser = TipoArchivo::orderBy('idtipo', 'desc')->first();
         //$maxId = $newestUser->idtipo;
         // for ($i = 1; $i <= 10000; $i++) {
         $deriv = new DerivCorrespModel();

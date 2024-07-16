@@ -15,9 +15,9 @@ use Illuminate\Http\Request;
 use App\Models\ProveedoresModel;
 use App\Models\DocProveedorModel;
 use App\Models\EmpleadoContrato;
-use App\Models\TipoAreaModel;
+use App\Models\TipoArea;
 use App\Models\Archivo;
-use App\Models\TiposModel;
+use App\Models\TipoArchivo;
 use App\Models\AnioModel;
 use App\Models\Area;
 

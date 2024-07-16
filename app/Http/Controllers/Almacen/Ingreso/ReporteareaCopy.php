@@ -128,7 +128,7 @@ public function store(Request $request)
         $userdate = User::find($id)->usuariosempleados;
         $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
-        $tipoarea = new TipoAreaModel;
+        $tipoarea = new TipoArea;
         $tipoarea->idarea = $personalArea->idarea;
         $tipoarea->idtipo = $request->input('tipo');
 
@@ -155,7 +155,7 @@ public function store(Request $request)
 
     public function delete($idtipoarea)
     {
-        $tipoarea =TipoAreaModel::find($idtipoarea);
+        $tipoarea =TipoArea::find($idtipoarea);
 
         $tipoarea->delete();
 

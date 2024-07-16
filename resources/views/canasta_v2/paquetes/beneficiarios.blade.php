@@ -13,7 +13,7 @@
             <div class="col-md-12 pr-1 pl-1 text-center">
                 <b>
                     <u>
-                        {{ $paquete_barrio->paquete->numero }} ENTREGA
+                        {{ $paquete_barrio->paquete->numero }} ENTREGAs
                         /
                         {{ $paquete_barrio->periodos }} ({{ $paquete_barrio->paquete->gestion }})
                     </u>

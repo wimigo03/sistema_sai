@@ -72,6 +72,13 @@
                     </span>
                 </span>
             @endcan
+            @can('canasta.beneficiarios.pdf.listar')
+                <span class="tts:right tts-slideIn tts-custom root" aria-label="Exportar a pdf" style="cursor: pointer;">
+                    <span class="btn btn-outline-danger font-roboto-12" onclick="pdf();">
+                        <i class="fa-solid fa-file-pdf fa-fw"></i>
+                    </span>
+                </span>
+            @endcan
             <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn-send" style="display: none;"></i>
         </div>
         <div class="col-md-6 pr-1 pl-1 text-right">

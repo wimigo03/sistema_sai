@@ -147,6 +147,13 @@ class Empleado extends Model
         }
     }
 
+    public function getUltimaAreaAsignadaIdAttribute(){
+        $contratos = EmpleadoContrato::select('idarea_asignada')->where('idemp',$this->idemp)->orderBy('id','desc')->take(1)->first();
+        if($contratos){
+            return $contratos->idarea_asignada;
+        }
+    }
+
     public function getUltimoTipoContratoAttribute(){
         $contratos = EmpleadoContrato::select('tipo')->where('idemp',$this->idemp)->orderBy('id','desc')->take(1)->first();
         if($contratos){
