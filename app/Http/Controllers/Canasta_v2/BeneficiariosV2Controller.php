@@ -485,10 +485,13 @@ class BeneficiariosV2Controller extends Controller
                                     ->orderBy('id_barrio')
                                     ->get();
 
-                $contador = $beneficiarios->count();
-                if($contador >= 1000){
-                    return redirect()->route('beneficiarios.index')->with('info_message', 'Los datos de la consulta exceden el limite permitido. Por favor comunicarse con el area de sistemas.');
+                if(Auth::user()->id != 102){
+                    $contador = $beneficiarios->count();
+                    if($contador >= 1000){
+                        return redirect()->route('beneficiarios.index')->with('info_message', 'Los datos de la consulta exceden el limite permitido. Por favor comunicarse con el area de sistemas.');
+                    }
                 }
+
                 $cont = 1;
                 $pdf = PDF::loadView('canasta_v2.beneficiario.pdf-listar', compact(['beneficiarios','cont']));
                 $pdf->setPaper(array(0,0,935.43,612));
