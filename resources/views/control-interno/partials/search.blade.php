@@ -44,13 +44,13 @@
     </div>
     <div class="form-group row">
         <div class="col-md-12 pr-1 pl-1">
-            {{--@can('control.interno.create')--}}
+            @can('control.interno.index')
                 <span class="tts:right tts-slideIn tts-custom root" aria-label="Registrar" style="cursor: pointer;">
                     <span class="btn btn-outline-success font-roboto-12" onclick="create();">
                         <i class="fa fa-plus fa-fw"></i>
                     </span>
                 </span>
-            {{--@endcan--}}
+            @endcan
             <span class="btn btn-outline-danger font-roboto-12  float-right" onclick="limpiar();">
                 <i class="fa fa-eraser fa-fw"></i>&nbsp;Limpiar
             </span>

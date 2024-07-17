@@ -11,9 +11,9 @@
                     <td class="text-justify p-1"><b>REFERENCIA</b></td>
                     <td class="text-center p-1"><b>FECHA</b></td>
                     <td class="text-center p-1"><b>ESTADO</b></td>
-                    {{--@canany(['canasta.beneficiarios.editar', 'canasta.beneficiarios.show'])--}}
+                    @canany(['control.interno.index'])
                         <td class="text-center p-1"><i class="fa fa-bars fa-fw"></i></td>
-                    {{--@endcanany--}}
+                    @endcanany
                 </tr>
             </thead>
             <tbody>
@@ -37,39 +37,45 @@
                                 </span>
                             </span>
                         </td>
-                        {{--@canany(['canasta.beneficiarios.editar', 'canasta.beneficiarios.show'])--}}
+                        @canany(['control.interno.index'])
                             <td class="text-center p-1">
                                 <div class="d-flex justify-content-center">
-                                    {{--@can('canasta.beneficiarios.show')--}}
-                                        <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Modificar">
-                                            <a href="{{ route('control.interno.editar', $datos->id) }}" class="badge-with-padding badge badge-secondary">
-                                                <i class="fa fa-edit fa-fw"></i>
-                                            </a>
-                                        </span>
+                                    <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Modificar">
+                                        <a href="{{ route('control.interno.editar', $datos->id) }}" class="badge-with-padding badge badge-warning">
+                                            <i class="fa fa-edit fa-fw"></i>
+                                        </a>
+                                    </span>
+                                    @if ($datos->nombre_archivo != null)
                                         <span class="tts:left tts-slideIn tts-custom mr-1" aria-label=".docx">
                                             <a href="{{ route('control.interno.descargar.word', $datos->id) }}" class="badge-with-padding badge badge-primary">
                                                 <i class="fa fa-file-word fa-fw"></i>
                                             </a>
                                         </span>
-                                        @can('archivos.documentacion')
-                                            @if ($datos->idarchivo != null)
-                                                <span class="tts:left tts-slideIn tts-custom" aria-label=".pdf">
-                                                    <a href="{{ route('archivos.documentacion', $datos->idarchivo) }}" class="badge-with-padding badge badge-danger" target="_blank">
-                                                        <i class="fa fa-file-pdf fa-fw"></i>
-                                                    </a>
-                                                </span>
-                                            @else
-                                                <span class="tts:left tts-slideIn tts-custom" aria-label=".pdf no encontrado">
-                                                    <a href="#" class="badge-with-padding badge badge-danger">
-                                                        <i class="fa fa-file-pdf fa-fw"></i>
-                                                    </a>
-                                                </span>
-                                            @endif
-                                        @endcan
-                                    {{--@endcan--}}
+                                    @else
+                                        <span class="tts:left tts-slideIn tts-custom mr-1" aria-label=".docx no encontrado">
+                                            <a href="" class="badge-with-padding badge badge-secondary">
+                                                <i class="fa fa-file-word fa-fw"></i>
+                                            </a>
+                                        </span>
+                                    @endif
+                                    @can('archivos.documentacion')
+                                        @if ($datos->idarchivo != null)
+                                            <span class="tts:left tts-slideIn tts-custom" aria-label=".pdf">
+                                                <a href="{{ route('archivos.documentacion', $datos->idarchivo) }}" class="badge-with-padding badge badge-danger" target="_blank">
+                                                    <i class="fa fa-file-pdf fa-fw"></i>
+                                                </a>
+                                            </span>
+                                        @else
+                                            <span class="tts:left tts-slideIn tts-custom" aria-label=".pdf no encontrado">
+                                                <a href="#" class="badge-with-padding badge badge-secondary">
+                                                    <i class="fa fa-file-pdf fa-fw"></i>
+                                                </a>
+                                            </span>
+                                        @endif
+                                    @endcan
                                 </div>
                             </td>
-                        {{--@endcanany--}}
+                        @endcanany
                     </tr>
                 @endforeach
             </tbody>
