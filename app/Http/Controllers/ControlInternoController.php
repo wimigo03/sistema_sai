@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\Empleado;
 use App\Models\User;
 use App\Models\Area;
@@ -239,6 +240,9 @@ class ControlInternoController extends Controller
                         'id' => Auth::user()->id,
                         'fecha' => $fecha
                     ]);
+
+                    $url = 'https://sistemas.granchaco.gob.bo/archivos/documentacion/' . $archivo_local->idarchivo;
+                    $qr = QrCode::format('png')->margin(0)->size(300)->generate($url, public_path() . '/documentos/qr/' . $archivo_local->idarchivo . '.png');
 
                     $control_interno->update([
                         'idarchivo' => $archivo_local->idarchivo
