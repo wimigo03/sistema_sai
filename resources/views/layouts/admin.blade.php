@@ -44,7 +44,7 @@
             background-position: center;
             background-origin: content-box;
             background-size: 20px;
-            padding: 7px;
+            padding: 17px;
         }
         .imagen-header {
             width: 150px;
