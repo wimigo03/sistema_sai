@@ -28,7 +28,8 @@ class ControlInterno extends Model
         'fecha',
         'observaciones',
         'nombre_archivo',
-        'estado'
+        'estado',
+        'idfile'
     ];
 
     const ESTADOS = [
@@ -40,9 +41,9 @@ class ControlInterno extends Model
     public function getStatusAttribute(){
         switch ($this->estado) {
             case '1':
-                return "H";
+                return "fa fa-check fa-fw";
             case '2':
-                return "A";
+                return "fa fa-xmark fa-fw";
         }
     }
 
@@ -71,10 +72,10 @@ class ControlInterno extends Model
         return $this->belongsTo(Empleado::class,'idemp','empleado_destinatario_id');
     }
 
-    public function getSolicitanteAttribute(){
+    public function getSolicitanteAreaAttribute(){
         $empleado = Empleado::where('idemp',$this->empleado_solicitante_id)->first();
         if($empleado != null){
-            $solicitante = $empleado->nombres . ' ' . $empleado->ap_pat . ' '. $empleado->ap_mat;
+            $solicitante = $empleado->nombres;
             return $solicitante;
         }
     }

@@ -22,7 +22,25 @@
             <label for="numero" class="d-inline"><b>Numero:</b></label>
         </div>
         <div class="col-md-1 pr-1 pl-1">
-            <input type="text" name="numero" id="numero" value="{{ $control_interno->nro }}" class="form-control font-roboto-12 intro" disabled>
+            <input type="text" name="numero" id="numero" value="{{ $control_interno->nro }}" class="form-control font-roboto-12 intro">
+        </div>
+    </div>
+    <div class="form-group row font-roboto-12 align-items-center">
+        <div class="col-md-4 pr-1 pl-1 text-right">
+            <label for="solicitante" class="d-inline"><b>Solicitante:</b></label>
+        </div>
+        <div class="col-md-5 pr-1 pl-1">
+            <select name="solicitante_id" id="solicitante_id" class="form-control font-roboto-12 select2">
+                <option value="">--Seleccionar--</option>
+                @foreach ($solicitantes as $solicitante)
+                    <option value="{{ $solicitante->id }}"
+                        @if($solicitante->id == old('solicitante_id') || (isset($control_interno) && $control_interno->empleado_solicitante_id == $solicitante->id))
+                            selected
+                        @endif>
+                        {{ $solicitante->empleado }}
+                    </option>
+                @endforeach
+            </select>
         </div>
     </div>
     <div class="form-group row font-roboto-12 align-items-center">
@@ -77,7 +95,7 @@
             <input type="file" class="form-control font-roboto-12" id="word_file" name="word_file" accept=".docx,.doc">
         </div>
     </div>
-    @if ($control_interno == null)
+    @if ($control_interno->idarchivo == null)
         <div class="form-group row font-roboto-12 align-items-center">
             <div class="col-md-4 pr-1 pl-1 text-right">
                 <label for="pdf" class="d-inline">
@@ -91,17 +109,17 @@
     <div class="form-group row">
         <div class="col-md-12 text-center">
             @if ($control_interno->estado == '1')
-                <span class="btn btn-outline-primary font-roboto-12" onclick="procesar();">
-                    <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>&nbsp;Procesar
-                </span>
-                <span class="btn btn-outline-danger font-roboto-12" onclick="cancelar();">
+                <span class="btn btn-outline-danger font-roboto-12 float-right" onclick="cancelar();">
                     <i class="fa-solid fa-xmark fa-fw"></i>&nbsp;Cancelar
                 </span>
-                <span class="btn btn-outline-warning font-roboto-12 float-right" onclick="anular();">
+                <span class="btn btn-outline-primary font-roboto-12 float-right mr-1" onclick="procesar();">
+                    <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>&nbsp;Procesar
+                </span>
+                <span class="btn btn-outline-warning font-roboto-12 float-left" onclick="anular();">
                     <i class="fa-solid fa-xmark fa-fw"></i>&nbsp;Anular
                 </span>
             @else
-                <span class="btn btn-outline-success font-roboto-12 float-right" onclick="habilitar();">
+                <span class="btn btn-outline-success font-roboto-12 float-left" onclick="habilitar();">
                     <i class="fa-solid fa-check fa-fw"></i>&nbsp;Habilitar
                 </span>
             @endif

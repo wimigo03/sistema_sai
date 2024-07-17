@@ -187,6 +187,13 @@ class Empleado extends Model
         }
     }
 
+    public function getUltimoFileAsignadoIdAttribute(){
+        $contrato = EmpleadoContrato::select('idfile')->where('idemp',$this->idemp)->orderBy('id','desc')->take(1)->first();
+        if($contrato != null){
+            return $contrato->idfile;
+        }
+    }
+
     public function getFileCargoCortoAttribute(){
         $contrato = EmpleadoContrato::select('idfile')->where('idemp',$this->idemp)->orderBy('id','desc')->take(1)->first();
         if($contrato != null){

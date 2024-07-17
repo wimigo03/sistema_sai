@@ -21,7 +21,7 @@
                     <tr class="font-roboto-10">
                         <td class="text-center p-1">{{ $datos->nro }}</td>
                         <td class="text-center p-1">{{ $datos->tipo->nombretipo }}</td>
-                        <td class="text-justify p-1">{{ $datos->solicitante }}</td>
+                        <td class="text-justify p-1">{{ $datos->solicitante_area }}</td>
                         <td class="text-justify p-1">
                             <span class="tts:right tts-slideIn tts-custom" aria-label="{{ $datos->area_dirigido }}" style="cursor: pointer;">
                                 {{ $datos->area_dirigido_corto }}
@@ -31,8 +31,10 @@
                         <td class="text-justify p-1">{{ $datos->referencia }}</td>
                         <td class="text-center p-1">{{ \Carbon\Carbon::parse($datos->fecha)->format('d/m/Y') }}</td>
                         <td class="text-center p-1">
-                            <span class="{{ $datos->colorStatus }}">
-                                {{ $datos->status }}
+                            <span class="tts:left tts-slideIn tts-custom" aria-label="{{ $datos->observaciones }}" style="cursor: pointer;">
+                                <span class="{{ $datos->colorStatus }}">
+                                    <i class="{{ $datos->status }}"></i>
+                                </span>
                             </span>
                         </td>
                         {{--@canany(['canasta.beneficiarios.editar', 'canasta.beneficiarios.show'])--}}

@@ -31,9 +31,22 @@
     </div>
     <div class="form-group row font-roboto-12 align-items-center">
         <div class="col-md-4 pr-1 pl-1 text-right">
-            <label for="destinatario" class="d-inline"><b>Dirigido a:</b></label>
+            <label for="destinatario" class="d-inline"><b>Solicitante:</b></label>
         </div>
         <div class="col-md-5 pr-1 pl-1">
+            <select name="solicitante_id" id="solicitante_id" class="form-control form-control-sm select2">
+                <option value="">-</option>
+                @foreach ($solicitantes as $index => $value)
+                    <option value="{{ $index }}" @if(old('solicitante_id') == $index) selected @endif >{{ $value }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    <div class="form-group row font-roboto-12 align-items-center">
+        <div class="col-md-4 pr-1 pl-1 text-right">
+            <label for="destinatario" class="d-inline"><b>Dirigido a:</b></label>
+        </div>
+        <div class="col-md-7 pr-1 pl-1">
             <select name="destinatario_id" id="destinatario_id" class="form-control form-control-sm select2">
                 <option value="">-</option>
                 @foreach ($destinatarios as $index => $value)

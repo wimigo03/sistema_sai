@@ -34,7 +34,8 @@ class ControlInternoController extends Controller
         $controles_internos = ControlInterno::query()
                                 ->byDea(Auth::user()->dea->id)
                                 ->byArea(Auth::user()->area_asignada_id)
-                                ->orderBy('id','desc')
+                                ->orderBy('fecha','desc')
+                                ->orderBy('nro','desc')
                                 ->paginate(10);
 
         return view('control-interno.index', compact('tipos','areas','estados','controles_internos'));
@@ -64,7 +65,8 @@ class ControlInternoController extends Controller
                                 ->byReferencia($request->referencia)
                                 ->byFecha($request->fecha)
                                 ->byEstado($request->estado)
-                                ->orderBy('id','desc')
+                                ->orderBy('fecha','desc')
+                                ->orderBy('nro','desc')
                                 ->paginate(10);
 
         return view('control-interno.index', compact('tipos','areas','estados','controles_internos'));
@@ -80,6 +82,14 @@ class ControlInternoController extends Controller
                     ->where('b.subtipo','1')
                     ->pluck('tipo','id');
 
+        $solicitantes = DB::TABLE('empleados_contratos as a')
+                        ->join('empleados as b','b.idemp','a.idemp')
+                        ->where('a.dea_id',Auth::user()->dea->id)
+                        ->where('a.idarea_asignada',Auth::user()->area_asignada_id)
+                        ->where('a.estado','1')
+                        ->select(DB::raw("concat(b.ap_pat, ' ', b.ap_mat, ' ', b.nombres) as empleado"),'a.idemp as id')
+                        ->pluck('empleado','id');
+
         $destinatarios = DB::TABLE('empleados as a')
                         ->join('empleados_contratos as b','b.idemp','a.idemp')
                         ->join('areas as c','c.idarea','b.idarea_asignada')
@@ -88,7 +98,7 @@ class ControlInternoController extends Controller
                         ->select(DB::raw("concat(c.nombrearea , ' - ',a.ap_pat, ' ', a.ap_mat, ' ', a.nombres) as empleado"),'a.idemp as id')
                         ->pluck('empleado','id');
 
-        return view('control-interno.create',compact('destinatarios','tipos'));
+        return view('control-interno.create',compact('destinatarios','solicitantes','tipos'));
     }
 
     public function getDatosTipo(Request $request)
@@ -124,10 +134,11 @@ class ControlInternoController extends Controller
             ini_set('max_execution_time','-1');
 
                 $empleado = Empleado::find($request->destinatario_id);
+                $_empleado = Empleado::find($request->solicitante_id);
                 $tipo_area = TipoArea::where('idtipo',$request->tipo_id)->first();
                 $control_interno = ControlInterno::create([
-                    'empleado_solicitante_id' => Auth::user()->idemp,
-                    'solicitante_idarea' => Auth::user()->area_asignada_id,
+                    'empleado_solicitante_id' => $request->solicitante_id,
+                    'solicitante_idarea' => $_empleado->ultima_area_asignada_id,
                     'empleado_destinatario_id' => $request->destinatario_id,
                     'destinatario_idarea' => $empleado->ultima_area_asignada_id,
                     'idarea' => Auth::user()->idarea,
@@ -139,7 +150,8 @@ class ControlInternoController extends Controller
                     'referencia' => $request->referencia,
                     'fecha' => date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha))),
                     'observaciones' => $request->observaciones,
-                    'estado' => '1'
+                    'estado' => '1',
+                    'idfile' => $_empleado->ultimo_file_asignado_id,
                 ]);
 
                 return redirect()->route('control.interno.index')->with('success_message', 'Proceso realizado exitosamente.');
@@ -155,6 +167,14 @@ class ControlInternoController extends Controller
     {
         $control_interno = ControlInterno::find($id);
 
+        $solicitantes = DB::TABLE('empleados_contratos as a')
+                        ->join('empleados as b','b.idemp','a.idemp')
+                        ->where('a.dea_id',Auth::user()->dea->id)
+                        ->where('a.idarea_asignada',Auth::user()->area_asignada_id)
+                        ->where('a.estado','1')
+                        ->select(DB::raw("concat(b.ap_pat, ' ', b.ap_mat, ' ', b.nombres) as empleado"),'a.idemp as id')
+                        ->get();
+
         $destinatarios = DB::TABLE('empleados as a')
                         ->join('empleados_contratos as b','b.idemp','a.idemp')
                         ->join('areas as c','c.idarea','b.idarea_asignada')
@@ -163,7 +183,7 @@ class ControlInternoController extends Controller
                         ->select(DB::raw("concat(c.nombrearea , ' - ',a.ap_pat, ' ', a.ap_mat, ' ', a.nombres) as empleado"),'a.idemp as id')
                         ->get();
 
-        return view('control-interno.editar',compact('control_interno','destinatarios'));
+        return view('control-interno.editar',compact('control_interno','solicitantes','destinatarios'));
     }
 
     public function update(Request $request)
@@ -176,6 +196,7 @@ class ControlInternoController extends Controller
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');
                 $empleado = Empleado::find($request->destinatario_id);
+                $_empleado = Empleado::find($request->solicitante_id);
                 $control_interno = ControlInterno::find($request->control_interno_id);
                 $area_id = $control_interno->idarea;
                 $tipo_id = $control_interno->idtipo;
@@ -185,7 +206,9 @@ class ControlInternoController extends Controller
                 $gestion = substr($fecha, 0, 4);
                 $control_interno->update([
                     'empleado_destinatario_id' => $request->destinatario_id,
+                    'empleado_solicitante_id' => $request->solicitante_id,
                     'destinatario_idarea' => $empleado->ultima_area_asignada_id,
+                    'nro' => $request->numero,
                     'referencia' => $request->referencia,
                     'fecha' => date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha))),
                     'observaciones' => $request->observaciones
