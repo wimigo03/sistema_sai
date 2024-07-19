@@ -24,37 +24,37 @@
             columns: [{
                     data: 'nombres_remitente',
                     name: 're.nombres_remitente',
-                    class: 'text-justify p-1 font-roboto-11'
+                    class: 'text-justify p-1 font-roboto-10'
                 },
                 {
                     data: 'apellidos_remitente',
                     name: 're.apellidos_remitente',
-                    class: 'text-justify p-1 font-roboto-11'
+                    class: 'text-justify p-1 font-roboto-10'
                 },
                 {
                     data: 'nombre_unidad',
                     name: 'u.nombre_unidad',
-                    class: 'text-justify p-1 font-roboto-11'
+                    class: 'text-justify p-1 font-roboto-10'
                 },
                 {
                     data: 'asunto',
                     name: 'r.asunto',
-                    class: 'text-justify p-1 font-roboto-11'
+                    class: 'text-justify p-1 font-roboto-10'
                 },
                 {
                     data: 'fecha_recepcion',
                     name: 'r.fecha_recepcion',
-                    class: 'text-justify p-1 font-roboto-11'
+                    class: 'text-justify p-1 font-roboto-10'
                 },
                 {
                     data: 'n_oficio',
                     name: 'r.n_oficio',
-                    class: 'text-center p-1 font-roboto-11'
+                    class: 'text-center p-1 font-roboto-10'
                 },
                 {
                     data: 'btn',
                     name: 'btn',
-                    class: 'text-center p-1 font-roboto-11',
+                    class: 'text-center p-1 font-roboto-10',
                     orderable: false,
                     searchable: false
                 },

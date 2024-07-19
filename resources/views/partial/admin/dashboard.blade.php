@@ -544,18 +544,10 @@
                         <hr style="margin-top:0; margin-bottom:0;">
                     @endcan
                     {{-- CORRESPONDENCIA --}}
-                    @can('correspondencia.index')
-                        <li class="font-verdana-12">
-                            <a href="{{ route('correspondencia.index') }}">
-                                <i class="fa fa-folder-open fa-fw"></i>&nbsp;Correspondencia
-                            </a>
-                        </li>
-                    @endcan
-                    {{-- CORRESPONDENCIA LOCAL --}}
                     @can('correspondencia_local.index')
                         <li class="font-verdana-12">
                             <a href="{{ route('correspondencia.local.index') }}">
-                                <i class="fa fa-envelope fa-fw"></i>&nbsp;Correspondencia Local
+                                <i class="fa fa-envelope fa-fw"></i>&nbsp;Correspondencia
                             </a>
                         </li>
                     @endcan
