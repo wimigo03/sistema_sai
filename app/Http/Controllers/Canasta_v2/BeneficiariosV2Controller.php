@@ -8,7 +8,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Foundation\Validation\ValidatesRequests;
+//use Intervention\Image\Laravel\Facades\Image;
 use Illuminate\Support\Facades\Log;
 use App\Models\Canasta\Barrio;
 use App\Models\Canasta\Distrito;
@@ -25,6 +25,7 @@ use App\Exportar\Canasta\BeneficiariosExcel;
 use DataTables;
 use DB;
 use PDF;
+use Image;
 
 class BeneficiariosV2Controller extends Controller
 {
@@ -321,6 +322,13 @@ class BeneficiariosV2Controller extends Controller
         $barrios = Barrio::where('dea_id',Auth::user()->dea->id)->get();
         $ocupaciones = Ocupaciones::where('estado',1)->get();
         $beneficiario = Beneficiario::find($idbeneficiario);
+
+        $img = Image::make(public_path('Imagenes/fotos/1721426822.jpg'));
+        // Aplicar una transformación (por ejemplo, redimensionar)
+        $img->resize(100, 100);
+        // Guardar la imagen procesada
+        $img->save(public_path('Imagenes/fotos/processed_image.jpg'));
+
         $historial = HistorialMod::where('id_beneficiario',$idbeneficiario)->orderBy('fecha','desc')->get();
 
         return view('canasta_v2.beneficiario.show',compact('barrios','ocupaciones','beneficiario','historial'));
