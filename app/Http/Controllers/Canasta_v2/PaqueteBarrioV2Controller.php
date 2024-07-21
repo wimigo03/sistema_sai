@@ -116,10 +116,10 @@ class PaqueteBarrioV2Controller extends Controller
                                     ->get();
 
                 $pdf = PDF::loadView('canasta_v2.paquetes-barrio.pdf', compact(['paquete','paquetes_barrios']));
+                //$pdf->render();
                 $pdf->setPaper('LETTER', 'portrait');
-                $pdf->render();
+
                 return $pdf->stream('cronograma_' . $paquete->numero .  '.pdf');
-                //return $pdf->download('cronograma_' . $paquete->numero .  '.pdf');
         } finally{
             ini_restore('memory_limit');
             ini_restore('max_execution_time');

@@ -86,7 +86,9 @@
                                     {{ $datos->status }}
                                 </span>
                             </td>
-                            <td class="text-center p-1"><img src="{{ asset(substr($datos->dir_foto , 3)) }}" align="center" height="30" with="30" /></td>
+                            <td class="text-center p-1">
+                                <img src="{{ asset('imagenes/fotos-30px/' . $datos->photo) }}" align="center" height="30" with="30" />
+                            </td>
                             @canany(['canasta.beneficiarios.editar', 'canasta.beneficiarios.show'])
                                 <td class="text-center p-1">
                                     <div class="d-flex justify-content-center">

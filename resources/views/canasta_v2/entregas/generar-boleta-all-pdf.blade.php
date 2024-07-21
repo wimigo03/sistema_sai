@@ -2,9 +2,55 @@
 <html lang="en">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style>
-        <?php echo file_get_contents(public_path('css/font-verdana-pdf.css')); ?>
         html {
             margin: 20px 30px 15px 30px;
+        }
+
+        td, th {
+            padding: 5px;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100%; /*311.81 pt*/
+            background-color: #ffffff;
+        }
+
+        .watermark {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        .font-verdana-11 {font-size: 11px; font-family: verdana,arial,helvetica;}
+        .font-verdana-10 {font-size: 10px; font-family: verdana,arial,helvetica;}
+        .font-verdana-9 {font-size: 9px; font-family: verdana,arial,helvetica;}
+        .font-verdana-8 {font-size: 8px; font-family: verdana,arial,helvetica;}
+        .font-verdana-7 {font-size: 7px; font-family: verdana,arial,helvetica;}
+        .text-justify {text-align: justify;}
+        .align-center {text-align: center;}
+        .align-middle {vertical-align: middle;}
+        .align-superior {vertical-align: top;}
+        .linea-superior {border-top: 1px solid #000;}
+        .linea-inferior {border-bottom: 1px solid #000;}
+        .linea-derecha {border-right: 1px solid #000;}
+        .linea-izquierda {border-left: 1px solid #000;}
+        .text-color-green {color: #198754;}
+
+        .qr-boleta-pdf {
+            width: 80px;
+            height: auto;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            position: absolute;
+            top: 70%;
+            left: 62.5%;
+            transform: translateX(-50%);
         }
     </style>
     <body>
@@ -13,13 +59,11 @@
         @endphp
         @while ($cont < count($array_entrega))
             <div class="container">
-                {{--<img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('logos/canastaalimentaria.jpeg'))) }}" class="watermark" alt="#"/>--}}
-                <img src="{{ ('logos/canastaalimentaria.jpeg') }}" class="watermark" alt="#"/>
                 <table class="font-verdana-11" cellspacing="0" cellpadding="0" width="100%" style="width: 100%; padding: 0px; margin: 0;">
+                    <img src="{{ ('logos/canastaalimentaria.jpeg') }}" class="watermark" alt="#"/>
                     <tr>
                         <td width="20%" class="align-center linea-superior linea-izquierda linea-inferior">
-                            {{--<img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('logos/gobiernoregional.jpg'))) }}" class="logo-gran-chaco-sm" alt="#"/>--}}
-                            <img src="{{ ('logos/gobiernoregional.jpg') }}" class="logo-gran-chaco-sm" alt="#"/>
+                            <img src="{{ ('logos/gobiernoregional.jpg') }}" width="90px" alt="#"/>
                         </td>
                         <td class="align-center align-middle linea-superior linea-inferior">
                             <b>
@@ -28,8 +72,7 @@
                             </b>
                         </td>
                         <td width="20%" class="align-center linea-superior linea-derecha linea-inferior">
-                            {{--<img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('logos/mapa.png'))) }}" class="logo-nueva-historia-sm" alt="#"/>--}}
-                            <img src="{{ ('logos/mapa.png') }}" class="logo-nueva-historia-sm" alt="#"/>
+                            <img src="{{ ('logos/mapa.png') }}" width="80px" alt="#"/>
                         </td>
                     </tr>
                 </table>
@@ -42,7 +85,8 @@
                         </td>
                         <td rowspan="3" width="25%" class="align-center align-middle linea-derecha linea-inferior" style="padding: 2px;">
                             @php
-                                $imagePath = substr($array_entrega[$cont]->beneficiario->dir_foto, 3);
+                                //$imagePath = substr($array_entrega[$cont]->beneficiario->dir_foto, 3);
+                                $imagePath = 'imagenes/fotos-150px/' . $array_entrega[$cont]->beneficiario->photo;
                                 $imageData = '';
                                 if (file_exists($imagePath)) {
                                     $imageData = $imagePath;
@@ -53,7 +97,7 @@
                                     }
                                 }
                             @endphp
-                            <img src="{{ $imageData }}" class="foto-boleta-pdf" alt="#"/>
+                            <img src="{{ $imageData }}" width="80px" height="80px" alt="#" style="border-radius: 10%; overflow: hidden;"/>
                         </td>
                         <td class="align-center align-superior linea-derecha">
                             <b>Firma en conformidad</b>
@@ -137,7 +181,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="3" class="align-center linea-izquierda linea-inferior linea-derecha linea-superior font-verdana-9"">
+                        <td colspan="3" class="align-center linea-izquierda linea-inferior linea-derecha linea-superior font-verdana-9">
                             <b class="text-color-green">Una Nueva Historia... Jose Luis Abrego Gobernador - Gestion {{ $array_entrega[$cont]->paquete->gestion }} RUMBO AL BICENTENARIO</b>
                         </td>
                     </tr>

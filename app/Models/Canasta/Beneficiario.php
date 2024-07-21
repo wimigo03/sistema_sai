@@ -35,7 +35,8 @@ class Beneficiario extends Model
         'ci',
         'expedido',
         'id_ocupacion',
-        'distrito_id'
+        'distrito_id',
+        'photo'
     ];
 
     const ESTADOS = [

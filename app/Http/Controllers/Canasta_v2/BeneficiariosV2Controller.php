@@ -8,7 +8,6 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-//use Intervention\Image\Laravel\Facades\Image;
 use Illuminate\Support\Facades\Log;
 use App\Models\Canasta\Barrio;
 use App\Models\Canasta\Distrito;
@@ -118,21 +117,72 @@ class BeneficiariosV2Controller extends Controller
                 $baja_historial = HistorialMod::create($data);
             }
 
+            dd("actualizar_historial Finalizado...");
         } catch (\Throwable $th) {
             return view('errors.500');
         }finally{
             ini_restore('memory_limit');
             ini_restore('max_execution_time');
         }
-        dd("actualizar_historial Finalizado...");
+    }
+
+    public function copiar_nombre_foto()
+    {
+        try{
+            ini_set('memory_limit','-1');
+            ini_set('max_execution_time','-1');
+                $beneficiarios = DB::table('beneficiarios')->select('id','dir_foto')->where('dir_foto','!=',null)->get();
+                foreach($beneficiarios as $datos){
+                    $nombre = explode("/", $datos->dir_foto);
+                    $beneficiario = Beneficiario::find($datos->id);
+                    $beneficiario->update([
+                        'photo' => $nombre[3]
+                    ]);
+                }
+
+                dd("copiar_nombre_foto Finalizado...");
+        } catch (\Throwable $th) {
+            return view('errors.500');
+        }finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
+    }
+
+    public function resize_photos()
+    {
+        try{
+            ini_set('memory_limit','-1');
+            ini_set('max_execution_time','-1');
+                $beneficiarios = DB::table('beneficiarios')->select('dir_foto')->where('dir_foto','!=',null)->get();
+                foreach($beneficiarios as $beneficiario){
+                    $nombre = explode("/", $beneficiario->dir_foto);
+                    if (file_exists(substr($beneficiario->dir_foto, 3))){
+                        $img = Image::make(substr($beneficiario->dir_foto,3));
+                        $img->resize(150, 150);
+                        $img->save(public_path('imagenes/fotos-150px/' . $nombre[3]));
+                    }else{
+                        echo '[ERROR] - ' . $nombre[3] . '<br>';
+                    }
+                }
+
+                dd("resize_photos Finalizado...");
+        } catch (\Throwable $th) {
+            return view('errors.500');
+        }finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
     }
 
     public function index(Request $request)
     {
         /*if(Auth::user()->dea->id == 1){
-            $this->copiarbeneficiarios();
-            $this->actualizar_distritos();
-            $this->actualizar_historial();
+            //$this->copiarbeneficiarios();
+            //$this->actualizar_distritos();
+            //$this->actualizar_historial();
+            //$this->copiar_nombre_foto();
+            //$this->resize_photos();
         }*/
 
         if ($request->ajax()) {
@@ -150,7 +200,8 @@ class BeneficiariosV2Controller extends Controller
                         'a.sexo',
                         DB::raw("DATE_PART('year',AGE(a.fecha_nac)) as edad"),
                         'a.dir_foto',
-                        'a.estado'
+                        'a.estado',
+                        'a.photo'
                     );
 
             return Datatables::of($data)
@@ -322,13 +373,6 @@ class BeneficiariosV2Controller extends Controller
         $barrios = Barrio::where('dea_id',Auth::user()->dea->id)->get();
         $ocupaciones = Ocupaciones::where('estado',1)->get();
         $beneficiario = Beneficiario::find($idbeneficiario);
-
-        $img = Image::make(public_path('Imagenes/fotos/1721426822.jpg'));
-        // Aplicar una transformación (por ejemplo, redimensionar)
-        $img->resize(100, 100);
-        // Guardar la imagen procesada
-        $img->save(public_path('Imagenes/fotos/processed_image.jpg'));
-
         $historial = HistorialMod::where('id_beneficiario',$idbeneficiario)->orderBy('fecha','desc')->get();
 
         return view('canasta_v2.beneficiario.show',compact('barrios','ocupaciones','beneficiario','historial'));
