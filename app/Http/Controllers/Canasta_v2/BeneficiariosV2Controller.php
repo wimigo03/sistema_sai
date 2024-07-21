@@ -481,7 +481,24 @@ class BeneficiariosV2Controller extends Controller
             $beneficiario->user_id = $id_usuario;
             $beneficiario->dea_id = $dea_id;
             $beneficiario->distrito_id = $barrio->distrito_id;
+            $beneficiario->photo = $nombre;
             $beneficiario->update();
+
+            $img_25 = Image::make(substr($beneficiario->dir_foto,3));
+            $img_25->resize(25, 25);
+            $img_25->save(public_path('imagenes/fotos-25px/' . $nombre));
+
+            $img_30 = Image::make(substr($beneficiario->dir_foto,3));
+            $img_30->resize(30, 30);
+            $img_30->save(public_path('imagenes/fotos-30px/' . $nombre));
+
+            $img_80 = Image::make(substr($beneficiario->dir_foto,3));
+            $img_80->resize(80, 80);
+            $img_80->save(public_path('imagenes/fotos-80px/' . $nombre));
+
+            $img_150 = Image::make(substr($beneficiario->dir_foto,3));
+            $img_150->resize(150, 150);
+            $img_150->save(public_path('imagenes/fotos-150px/' . $nombre));
         } else {
             $beneficiario = Beneficiario::find($request->idBeneficiario);
             $beneficiario->nombres = $request->nombres;
