@@ -8,6 +8,15 @@
         </div>
     </div>
     <div class="card-body body">
+        <div class="form-group row">
+            <div class="col-md-12 pr-1 pl-1">
+                @can('correspondencia_local.index')
+                    <a href="{{ route('correspondencia.local.index') }}" class="btn btn-warning font-roboto-12">
+                        <i class="fa fa-envelope fa-fw"></i> Ir a correspondencia actual
+                    </a>
+                @endcan
+            </div>
+        </div>
         @include('correspondencia.partials.table')
     </div>
 @endsection

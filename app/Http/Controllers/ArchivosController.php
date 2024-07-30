@@ -15,11 +15,13 @@ use Illuminate\Http\Request;
 use App\Models\ProveedoresModel;
 use App\Models\DocProveedorModel;
 use App\Models\EmpleadoContrato;
-use App\Models\TipoAreaModel;
+use App\Models\TipoArea;
 use App\Models\Archivo;
-use App\Models\TiposModel;
+use App\Models\TipoArchivo;
 use App\Models\AnioModel;
 use App\Models\Area;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exportar\ArchivosExcel;
 
 
 class ArchivosController extends Controller
@@ -48,41 +50,21 @@ class ArchivosController extends Controller
         //if(Auth::user()->id == 102){
             //$this->generar_qr_general();
         //}
-
-        //dd('hola');
         $dea_id = Auth::user()->dea->id;
-        $personal = User::find(Auth::user()->id);
-        $id = $personal->id;
-        $userdate = User::find($id)->usuariosempleados;
-        $personalArea2 = Empleado::find($userdate->idemp);
+        $contratos = EmpleadoContrato::select('idarea_asignada')->where('idemp',Auth::user()->idemp)->orderBy('id','desc')->take(1)->first();
+        $personal = Area::find($contratos->idarea_asignada);
 
-        $contratos = EmpleadoContrato::select('idarea_asignada')->where('idemp',$userdate->idemp)->orderBy('id','desc')->take(1)->first();
+        $tipos = DB::table('tipoarea as a')
+                    ->join('tipoarchivo as b','b.idtipo','a.idtipo')
+                    ->select('b.nombretipo as tipo','b.idtipo as id')
+                    ->where('a.idarea',Auth::user()->area_asignada_id)
+                    ->where('a.dea_id',Auth::user()->dea->id)
+                    ->pluck('tipo','id');
 
-       $personalArea = Area::find($contratos->idarea_asignada);
-       //dd($personalArea);
-       // dd($contratos->idarea_asignada);
-          $data = DB::table('archivos as a')
-                            ->join('areas as ar', 'ar.idarea', 'a.idarea')
-                            ->join('tipoarchivo as t', 'a.idtipo', 't.idtipo')
-                            ->select(
-                                'a.idarchivo',
-                                'a.referencia',
-                                'a.fecha',
-                                'a.gestion',
-                                'a.nombrearchivo',
-                                'a.documento',
-                                'ar.idarea',
-                                't.nombretipo'
-                            )
-                            ->where('ar.idarea', $contratos->idarea_asignada)
-                            ->where('a.dea_id',$dea_id)
-                            ->orderBy('a.fecha', 'desc');
-       // dd($personalArea);
         if ($request->ajax()) {
             $data = DB::table('archivos as a')
                             ->join('areas as ar', 'ar.idarea', 'a.idarea')
                             ->join('tipoarchivo as t', 'a.idtipo', 't.idtipo')
-
                             ->select(
                                 'a.idarchivo',
                                 'a.referencia',
@@ -99,18 +81,71 @@ class ArchivosController extends Controller
 
             return Datatables::of($data)
                                 ->addIndexColumn()
-                                /*->editColumn('fecha', function($row) {
-                                    return date('d-m-Y', strtotime($row->fecha));
-                                })*/
                                 ->addColumn('btn', 'archivos.btn')
                                 ->rawColumns(['btn'])
-                                /*->filterColumn('fecha', function($query, $keyword) {
-                                    $query->whereRaw("DATE_FORMAT(fecha, '%d-%m-%Y') like ?", ["%{$keyword}%"]);
-                                })*/
                                 ->make(true);
         }
 
-        return view('archivos.index', ['idd' => $personalArea]);
+        return view('archivos.index', compact('personal','tipos'));
+    }
+
+    public function search(Request $request)
+    {
+        $dea_id = Auth::user()->dea->id;
+        $contratos = EmpleadoContrato::select('idarea_asignada')->where('idemp',Auth::user()->idemp)->orderBy('id','desc')->take(1)->first();
+        $personal = Area::find($contratos->idarea_asignada);
+
+        $tipos = DB::TABLE('tipoarea as a')
+                    ->join('tipoarchivo as b','b.idtipo','a.idtipo')
+                    ->select('b.nombretipo as tipo','b.idtipo as id')
+                    ->where('a.idarea',Auth::user()->area_asignada_id)
+                    ->where('a.dea_id',Auth::user()->dea->id)
+                    ->pluck('tipo','id');
+
+        $archivos = Archivo::query()
+                            ->byDea(Auth::user()->dea->id)
+                            ->byArea(Auth::user()->area_asignada_id)
+                            ->byGestion($request->gestion)
+                            ->byFecha($request->fecha)
+                            ->byNumero($request->nro_documento)
+                            ->byReferencia($request->referencia)
+                            ->byTipo($request->tipo_id)
+                            ->orderBy('fecha','desc')
+                            ->orderBy('nombrearchivo')
+                            ->paginate(10);
+
+        $cont = 1;
+
+        return view('archivos.index', compact('archivos','personal','tipos','cont'));
+    }
+
+    public function excel(Request $request)
+    {
+        try {
+            ini_set('memory_limit','-1');
+            ini_set('max_execution_time','-1');
+
+                $archivos = Archivo::query()
+                                ->byDea(Auth::user()->dea->id)
+                                ->byArea(Auth::user()->area_asignada_id)
+                                ->byGestion($request->gestion)
+                                ->byFecha($request->fecha)
+                                ->byNumero($request->nro_documento)
+                                ->byReferencia($request->referencia)
+                                ->byTipo($request->tipo_id)
+                                ->orderBy('fecha','desc')
+                                ->orderBy('nombrearchivo')
+                                ->get();
+
+                $cont = 1;
+
+                return Excel::download(new ArchivosExcel($archivos, $cont),'archivos.xlsx');
+        } catch (\Throwable $th) {
+            return view('errors.500');
+        }finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
     }
 
     public function index_full(Request $request)

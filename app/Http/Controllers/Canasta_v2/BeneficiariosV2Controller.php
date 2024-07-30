@@ -8,7 +8,6 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Log;
 use App\Models\Canasta\Barrio;
 use App\Models\Canasta\Distrito;
@@ -25,6 +24,7 @@ use App\Exportar\Canasta\BeneficiariosExcel;
 use DataTables;
 use DB;
 use PDF;
+use Image;
 
 class BeneficiariosV2Controller extends Controller
 {
@@ -65,44 +65,6 @@ class BeneficiariosV2Controller extends Controller
             $beneficiario=Beneficiario::create($datos);
         }
     }
-
-    private function copiarbeneficiarios2()
-    {
-        $beneficiarios = DB::connection('mysql_canasta')
-                               ->table("beneficiarios")
-                               //->join('ocupaciones as o', 'o.id_ocupacion', '=', 'u.id_ocupacion')
-                               // ->select('o.ocupacion','u.nombres')
-                               ->where('id','=',1)
-                               //->where('idUsuario','<',12000)
-                               ->get();
-
-       foreach ($beneficiarios as $data){
-           $datos = ([
-              // 'id' => $data->idUsuario,
-               'nombres' => $data->nombres,
-               'ap' => $data->ap,
-               'am' => $data->am,
-               'ci' => $data->cedula,
-               'expedido' => $data->expedido,
-               'fecha_nac' => $data->fnacimiento,
-               'estado_civil' => 'VACIO',
-               'sexo' => $data->sexo,
-               'direccion' => $data->direccion,
-               'dir_foto' => $data->foto,
-               'firma' => $data->firma,
-               'obs' => '',
-               'id_ocupacion' => 67,
-               'id_barrio' => $data->barrio,
-               'dea_id' => 1,
-               'user_id' => 29,
-               'created_att' => $data->_registrado,
-               'updated_att' => $data->_modificado,
-               'id_barrio' => $data->id_barrio,
-               'estado' => $data->estado
-           ]);
-           $beneficiario=Beneficiario::create($datos);
-       }
-   }
 
     private function actualizar_distritos(){
         try{
@@ -155,21 +117,72 @@ class BeneficiariosV2Controller extends Controller
                 $baja_historial = HistorialMod::create($data);
             }
 
+            dd("actualizar_historial Finalizado...");
         } catch (\Throwable $th) {
             return view('errors.500');
         }finally{
             ini_restore('memory_limit');
             ini_restore('max_execution_time');
         }
-        dd("actualizar_historial Finalizado...");
+    }
+
+    public function copiar_nombre_foto()
+    {
+        try{
+            ini_set('memory_limit','-1');
+            ini_set('max_execution_time','-1');
+                $beneficiarios = DB::table('beneficiarios')->select('id','dir_foto')->where('dir_foto','!=',null)->get();
+                foreach($beneficiarios as $datos){
+                    $nombre = explode("/", $datos->dir_foto);
+                    $beneficiario = Beneficiario::find($datos->id);
+                    $beneficiario->update([
+                        'photo' => $nombre[3]
+                    ]);
+                }
+
+                dd("copiar_nombre_foto Finalizado...");
+        } catch (\Throwable $th) {
+            return view('errors.500');
+        }finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
+    }
+
+    public function resize_photos()
+    {
+        try{
+            ini_set('memory_limit','-1');
+            ini_set('max_execution_time','-1');
+                $beneficiarios = DB::table('beneficiarios')->select('dir_foto')->where('dir_foto','!=',null)->get();
+                foreach($beneficiarios as $beneficiario){
+                    $nombre = explode("/", $beneficiario->dir_foto);
+                    if (file_exists(substr($beneficiario->dir_foto, 3))){
+                        $img = Image::make(substr($beneficiario->dir_foto,3));
+                        $img->resize(150, 150);
+                        $img->save(public_path('imagenes/fotos-150px/' . $nombre[3]));
+                    }else{
+                        echo '[ERROR] - ' . $nombre[3] . '<br>';
+                    }
+                }
+
+                dd("resize_photos Finalizado...");
+        } catch (\Throwable $th) {
+            return view('errors.500');
+        }finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
     }
 
     public function index(Request $request)
     {
         /*if(Auth::user()->dea->id == 1){
-            $this->copiarbeneficiarios();
-            $this->actualizar_distritos();
-            $this->actualizar_historial();
+            //$this->copiarbeneficiarios();
+            //$this->actualizar_distritos();
+            //$this->actualizar_historial();
+            //$this->copiar_nombre_foto();
+            //$this->resize_photos();
         }*/
         //$this->copiarbeneficiarios2();
         if ($request->ajax()) {
@@ -189,7 +202,8 @@ class BeneficiariosV2Controller extends Controller
                         'a.sexo',
                         DB::raw("DATE_PART('year',AGE(a.fecha_nac)) as edad"),
                         'a.dir_foto',
-                        'a.estado'
+                        'a.estado',
+                        'a.photo'
                     );
 
             return Datatables::of($data)
@@ -280,19 +294,19 @@ class BeneficiariosV2Controller extends Controller
             ini_set('max_execution_time','-1');
                 $dea_id = Auth::user()->dea->id;
                 $beneficiarios = Beneficiario::query()
-                                                ->byDea($dea_id)
-                                                ->byDistrito($request->distrito)
-                                                ->byBarrio($request->barrio)
-                                                ->byCodigo($request->codigo)
-                                                ->byNombre($request->nombre)
-                                                ->byApellidoPaterno($request->ap)
-                                                ->byApellidoMaterno($request->am)
-                                                ->byNumeroCarnet($request->ci)
-                                                ->bySexo($request->sexo)
-                                                ->byEdad($request->edad_inicial, $request->edad_final)
-                                                ->byEstado($request->estado)
-                                                ->orderBy('id', 'desc')
-                                                ->get();
+                                        ->byDea($dea_id)
+                                        ->byDistrito($request->distrito)
+                                        ->byBarrio($request->barrio)
+                                        ->byCodigo($request->codigo)
+                                        ->byNombre($request->nombre)
+                                        ->byApellidoPaterno($request->ap)
+                                        ->byApellidoMaterno($request->am)
+                                        ->byNumeroCarnet($request->ci)
+                                        ->bySexo($request->sexo)
+                                        ->byEdad($request->edad_inicial, $request->edad_final)
+                                        ->byEstado($request->estado)
+                                        ->orderBy('id', 'desc')
+                                        ->get();
                 /*$contador = $beneficiarios->count();
                 if($contador >= 5000){
                     return redirect()->route('beneficiarios.index')->with('info_message', 'Los datos de la consulta exceden el limite permitido. Por favor comunicarse con el area de sistemas para resolver esta situacion');
@@ -471,7 +485,24 @@ class BeneficiariosV2Controller extends Controller
             $beneficiario->user_id = $id_usuario;
             $beneficiario->dea_id = $dea_id;
             $beneficiario->distrito_id = $barrio->distrito_id;
+            $beneficiario->photo = $nombre;
             $beneficiario->update();
+
+            $img_25 = Image::make(substr($beneficiario->dir_foto,3));
+            $img_25->resize(25, 25);
+            $img_25->save(public_path('imagenes/fotos-25px/' . $nombre));
+
+            $img_30 = Image::make(substr($beneficiario->dir_foto,3));
+            $img_30->resize(30, 30);
+            $img_30->save(public_path('imagenes/fotos-30px/' . $nombre));
+
+            $img_80 = Image::make(substr($beneficiario->dir_foto,3));
+            $img_80->resize(80, 80);
+            $img_80->save(public_path('imagenes/fotos-80px/' . $nombre));
+
+            $img_150 = Image::make(substr($beneficiario->dir_foto,3));
+            $img_150->resize(150, 150);
+            $img_150->save(public_path('imagenes/fotos-150px/' . $nombre));
         } else {
             $beneficiario = Beneficiario::find($request->idBeneficiario);
             $beneficiario->nombres = $request->nombres;
@@ -502,5 +533,52 @@ class BeneficiariosV2Controller extends Controller
         $Historialmod->save();
 
         return redirect()->route('beneficiarios.index')->with('info_message', 'datos actualizados correctamente...');
+    }
+
+    public function pdfListar(Request $request)
+    {
+        try{
+            ini_set('memory_limit','-1');
+            ini_set('max_execution_time','-1');
+
+                $dea_id = Auth::user()->dea->id;
+                $beneficiarios = Beneficiario::query()
+                                    ->byDea($dea_id)
+                                    ->byDistrito($request->distrito)
+                                    ->byBarrio($request->barrio)
+                                    ->byCodigo($request->codigo)
+                                    ->byNombre($request->nombre)
+                                    ->byApellidoPaterno($request->ap)
+                                    ->byApellidoMaterno($request->am)
+                                    ->byNumeroCarnet($request->ci)
+                                    ->bySexo($request->sexo)
+                                    ->byEdad($request->edad_inicial, $request->edad_final)
+                                    ->byEstado($request->estado)
+                                    ->orderBy('distrito_id')
+                                    ->orderBy('id_barrio')
+                                    ->get();
+
+                if(Auth::user()->id != 102){
+                    $contador = $beneficiarios->count();
+                    if($contador >= 1000){
+                        return redirect()->route('beneficiarios.index')->with('info_message', 'Los datos de la consulta exceden el limite permitido. Por favor comunicarse con el area de sistemas.');
+                    }
+                }
+
+                $cont = 1;
+                $pdf = PDF::loadView('canasta_v2.beneficiario.pdf-listar', compact(['beneficiarios','cont']));
+                $pdf->setPaper(array(0,0,935.43,612));
+                $pdf->render();
+                return $pdf->stream('beneficiarios.pdf');
+
+        } catch (\Throwable $th) {
+            return response()->view('errors.500', [
+                'error' => $th->getMessage(),
+                'trace' => $th->getTraceAsString()
+            ], 500);
+        }finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
     }
 }

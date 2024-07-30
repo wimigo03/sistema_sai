@@ -1,0 +1,78 @@
+@extends('layouts.admin')
+@section('content')
+    <div class="card-header header">
+        <div class="row">
+            <div class="col-md-12 pr-1 pl-1 text-center">
+                <b>CONTROL INTERNO</b>
+            </div>
+        </div>
+    </div>
+    <div class="card-body body">
+        @include('control-interno.partials.search')
+        @include('control-interno.partials.table')
+    </div>
+@endsection
+@section('scripts')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#tipo_id').select2({
+                theme: "bootstrap4",
+                placeholder: "-- Tipo --",
+                width: '100%'
+            });
+
+            $('#area_id').select2({
+                theme: "bootstrap4",
+                placeholder: "-- Area --",
+                width: '100%'
+            });
+
+            $('#estado').select2({
+                theme: "bootstrap4",
+                placeholder: "-- Estado --",
+                width: '100%'
+            });
+
+            var cleave = new Cleave('#fecha', {
+                date: true,
+                datePattern: ['d', 'm', 'Y']
+            });
+
+            $("#fecha").datepicker({
+                inline: false,
+                dateFormat: "dd/mm/yyyy",
+                autoClose: true,
+            });
+        });
+
+        $('.intro').on('keypress', function(event) {
+            if (event.which === 13) {
+                procesar();
+                event.preventDefault();
+            }
+        });
+
+        function valideNumberSinDecimal(evt) {
+            var code = (evt.which) ? evt.which : evt.keyCode;
+            if ((code >= 48 && code <= 57) || code === 8) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function procesar(){
+            var url = "{{ route('control.interno.search') }}";
+            $("#form").attr('action', url);
+            $("#form").submit();
+        }
+
+        function limpiar(){
+            window.location.href = "{{ route('control.interno.index') }}";
+        }
+
+        function create(){
+            window.location.href = "{{ route('control.interno.create') }}";
+        }
+    </script>
+@endsection

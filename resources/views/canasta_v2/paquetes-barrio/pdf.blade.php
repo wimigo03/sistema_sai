@@ -3,9 +3,18 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Cronograma de Entrega</title>
     <style>
-        <?php echo file_get_contents(public_path('css/font-verdana-pdf.css')); ?>
         html {
             margin: 15px 50px 30px 50px;
+        }
+
+        td, th {
+            padding: 5px;
+        }
+
+        .font-verdana-9 {font-size: 9px; font-family: verdana,arial,helvetica;}
+        .font-verdana-10 {font-size: 10px; font-family: verdana,arial,helvetica;}
+        .align-superior {
+            vertical-align: top;
         }
 
         .my-custom-table,
@@ -19,9 +28,10 @@
         <table cellspacing="0" cellpadding="0" width="100%">
             <tr>
                 <td width="20%">
-                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('logos/gobiernoregional.jpg'))) }}" class="logo-gran-chaco" alt="#"/>
+                    <img src="{{ ('logos/gobiernoregional.jpg') }}" width="140px" alt="#"/>
                 </td>
                 <td align="center" class="align-inferior">
+                    <img src="{{ ('logos/canastaalimentaria.jpeg') }}" width="60px" alt="#"/>
                     <br>
                     <span class="font-verdana-10">
                         <b>
@@ -32,7 +42,7 @@
                     </span>
                 </td>
                 <td width="20%" class="align-right">
-                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('logos/logoderecha.png'))) }}" class="logo-nueva-historia" alt="#"/>
+                    <img src="{{ ('logos/logoderecha-header.png') }}" width="100px"  alt="#"/>
                 </td>
             </tr>
         </table>
@@ -69,12 +79,11 @@
         </table>
     </body>
 </html>
-{{--<script type="text/php">
+<script type="text/php">
     if ( isset($pdf) ) {
         $pdf->page_script('
-            $font = $fontMetrics->get_font("verdana");
-            $pdf->text(30, 770, "{{ date('d-m-Y H:i') }} / {{ Auth()->user()->name }}", $font, 7);
-            $pdf->text(530, 770, "Pagina $PAGE_NUM de $PAGE_COUNT", $font, 7);
+            $pdf->text(38, 770, "{{ strtoupper(Auth()->user()->name) }} | {{ date('d/m/Y | H:i') }}", "sans-serif", 6);
+            $pdf->text(558, 770, "$PAGE_NUM de $PAGE_COUNT", "sans-serif", 6);
         ');
     }
-</script>--}}
+</script>

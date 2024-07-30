@@ -153,8 +153,6 @@
         function procesar(){
             var url = "{{ route('beneficiarios.search') }}";
             $("#form").attr('action', url);
-            $(".btn").hide();
-            $(".spinner-btn-send").show();
             $("#form").submit();
         }
 
@@ -188,6 +186,11 @@
                     $(".btn").show();
                 }
             });
+        }
+
+        function pdf() {
+            var url = "{{ route('beneficiarios.pdf.listar') }}"+"?"+$('#form').serialize();
+            window.open(url,"_blank")
         }
 
         function limpiar(){

@@ -67,14 +67,6 @@ class CorrespondenciaLocalController extends Controller
 
             return Datatables::of($data)->addIndexColumn()
                                         ->addColumn('btn', 'correspondencia-local.btn')
-                                        /*->addColumn('btn3', function ($data) {
-                                            if ($data->estado_corresp == 0) {
-                                                return view('correspondencia-local.btn4', compact('data'));
-                                            }
-                                            if ($data->estado_corresp == 1) {
-                                                return view('correspondencia-local.btn3', compact('data'));
-                                            }
-                                        })*/
                                         ->rawColumns(['btn'])
                                         ->make(true);
         }
@@ -455,7 +447,7 @@ class CorrespondenciaLocalController extends Controller
     {
 
         $fechaActual = date('d/m/Y');
-        // $newestUser = TiposModel::orderBy('idtipo', 'desc')->first();
+        // $newestUser = TipoArchivo::orderBy('idtipo', 'desc')->first();
         //$maxId = $newestUser->idtipo;
         // for ($i = 1; $i <= 10000; $i++) {
         $deriv = new DerivCorrespModel();

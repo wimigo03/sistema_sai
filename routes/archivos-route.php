@@ -1,8 +1,9 @@
 <?php
 
 Route::prefix('archivos')->name('archivos.')->middleware(['auth'])->group(function () {
-    //dd('hola');
     Route::get('/rr','ArchivosController@index')->name('index')->middleware('can:archivos.index');
+    Route::get('/search','ArchivosController@search')->name('search')->middleware('can:archivos.index');
+    Route::get('/excel','ArchivosController@excel')->name('excel')->middleware('can:archivos.index');
     Route::get('/create','ArchivosController@create')->name('create')->middleware('can:archivos.create');
     Route::post('/store','ArchivosController@store')->name('store')->middleware('can:archivos.create');
     Route::get('/editar/{id}','ArchivosController@editar')->name('editar')->middleware('can:archivos.editar');
