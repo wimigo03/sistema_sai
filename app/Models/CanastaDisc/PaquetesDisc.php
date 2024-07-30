@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Models\Canasta;
+namespace App\Models\CanastaDisc;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Canasta\Periodos;
 use DB;
 
-class Paquetes extends Model
+class PaquetesDisc extends Model
 {
 
     protected $table = 'paquete';
@@ -19,7 +19,6 @@ class Paquetes extends Model
         'user_id',
         'dea_id',
         'estado',
-        'id_tipo',
         'numero'
     ];
 

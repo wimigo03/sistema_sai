@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Canasta_v2;
+namespace App\Http\Controllers\Canasta_v2disc;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -12,7 +12,8 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Log;
 use App\Models\Canasta\Barrio;
 use App\Models\Canasta\Distrito;
-use App\Models\Canasta\Beneficiario;
+use App\Models\CanastaDisc\BeneficiarioDisc;
+use App\Models\CanastaDisc\Discgrado;
 use App\Models\Canasta\Ocupaciones;
 use App\Models\Canasta\HistorialMod;
 use App\Models\Canasta\HistorialBaja;
@@ -34,7 +35,7 @@ class BeneficiariosV2Controller extends Controller
                                 ->table("usuarios")
                                 //->join('ocupaciones as o', 'o.id_ocupacion', '=', 'u.id_ocupacion')
                                 // ->select('o.ocupacion','u.nombres')
-                                ->where('idUsuario','>',14822)
+                                ->where('idUsuario','<=',14923)
                                 //->where('idUsuario','<',12000)
                                 ->get();
 
@@ -62,7 +63,7 @@ class BeneficiariosV2Controller extends Controller
                 'id_barrio' => $data->id_barrio,
                 'estado' => $data->estado
             ]);
-            $beneficiario=Beneficiario::create($datos);
+            $beneficiario=BeneficiarioDisc::create($datos);
         }
     }
 
@@ -72,13 +73,18 @@ class BeneficiariosV2Controller extends Controller
                                ->table("beneficiarios")
                                //->join('ocupaciones as o', 'o.id_ocupacion', '=', 'u.id_ocupacion')
                                // ->select('o.ocupacion','u.nombres')
-                               ->where('id','=',1)
+                               ->where('id','<=',14926)
                                //->where('idUsuario','<',12000)
                                ->get();
-
+//dd( $beneficiarios);
        foreach ($beneficiarios as $data){
+        $newestUser = BeneficiarioDisc::orderBy('id', 'desc')->first();
+        $maxId = $newestUser->id;
+
            $datos = ([
               // 'id' => $data->idUsuario,
+              'id' => $maxId + 1,
+              'codigo' => $data->codigo,
                'nombres' => $data->nombres,
                'ap' => $data->ap,
                'am' => $data->am,
@@ -88,19 +94,25 @@ class BeneficiariosV2Controller extends Controller
                'estado_civil' => 'VACIO',
                'sexo' => $data->sexo,
                'direccion' => $data->direccion,
-               'dir_foto' => $data->foto,
+               'dir_foto' => $data->foto2,
                'firma' => $data->firma,
                'obs' => '',
                'id_ocupacion' => 67,
                'id_barrio' => $data->barrio,
+               'distrito_id' => $data->distrito,
+               'id_discgrado' => $data->id_discgrado,
+               'tutor' => $data->tutor,
+               'parentesco' => $data->firmatutor,
+               'celular' => $data->celular,
+               'id_tipo' => 2,
                'dea_id' => 1,
                'user_id' => 29,
-               'created_att' => $data->_registrado,
-               'updated_att' => $data->_modificado,
-               'id_barrio' => $data->id_barrio,
-               'estado' => $data->estado
+               'created_att' => $data->fafiliacion,
+               'updated_att' => $data->fafiliacion,
+
+               'estado' => $data->estado2
            ]);
-           $beneficiario=Beneficiario::create($datos);
+           $beneficiario=BeneficiarioDisc::create($datos);
        }
    }
 
@@ -109,10 +121,10 @@ class BeneficiariosV2Controller extends Controller
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');
 
-            $beneficiarios = Beneficiario::where('distrito_id',null)->get();
+            $beneficiarios = BeneficiarioDisc::where('distrito_id',null)->get();
             foreach($beneficiarios as $datos){
                 $barrio = Barrio::select('distrito_id')->where('id',$datos->id_barrio)->first();
-                $beneficiario = Beneficiario::find($datos->id);
+                $beneficiario = BeneficiarioDisc::find($datos->id);
                 $beneficiario->update([
                     'distrito_id' => $barrio->distrito_id
                 ]);
@@ -166,18 +178,19 @@ class BeneficiariosV2Controller extends Controller
 
     public function index(Request $request)
     {
+        //dd('hola');
         /*if(Auth::user()->dea->id == 1){
             $this->copiarbeneficiarios();
             $this->actualizar_distritos();
             $this->actualizar_historial();
         }*/
-        //$this->copiarbeneficiarios2();
+
         if ($request->ajax()) {
             $data = DB::table('beneficiarios as a')
                     ->join('barrios as b','b.id','a.id_barrio')
                     ->join('distritos as c','c.id','a.distrito_id')
                    // ->join('distritos as c','c.id','a.distrito_id')
-                    ->where('a.id_tipo','=',1)
+                    ->where('a.id_tipo','=',2)
                     ->select(
                         'a.id as beneficiario_id',
                         'c.nombre as distrito',
@@ -195,9 +208,9 @@ class BeneficiariosV2Controller extends Controller
             return Datatables::of($data)
                             //->orderColumn('beneficiario_id', 'a.id $1')
                             ->addIndexColumn()
-                            ->addColumn('columna_foto', 'canasta_v2.beneficiario.partials.columna-foto')
-                            ->addColumn('columna_estado', 'canasta_v2.beneficiario.partials.columna-estado')
-                            ->addColumn('columna_btn', 'canasta_v2.beneficiario.partials.columna-btn')
+                            ->addColumn('columna_foto', 'canasta_v2disc.beneficiario.partials.columna-foto')
+                            ->addColumn('columna_estado', 'canasta_v2disc.beneficiario.partials.columna-estado')
+                            ->addColumn('columna_btn', 'canasta_v2disc.beneficiario.partials.columna-btn')
                             ->filterColumn('nro_carnet', function($query, $keyword) {
                                 $sql = "CONCAT(a.ci, ' - ', a.expedido) like ?";
                                 $query->whereRaw($sql, ["%{$keyword}%"]);
@@ -209,7 +222,7 @@ class BeneficiariosV2Controller extends Controller
                             ->rawColumns(['columna_foto','columna_estado','columna_btn'])
                             ->make(true);
         }
-
+        //$this->copiarbeneficiarios2();
         $dea_id = Auth::user()->dea->id;
         $tipos = Barrio::TIPOS;
         $distritos = Distrito::where('dea_id',$dea_id)->pluck('nombre','id');
@@ -217,10 +230,10 @@ class BeneficiariosV2Controller extends Controller
                             ->where('dea_id',$dea_id)
                             ->orderBy('id','asc')
                             ->pluck('nombre','id');
-        $sexos = Beneficiario::SEXOS;
-        $estados = Beneficiario::ESTADOS;
+        $sexos = BeneficiarioDisc::SEXOS;
+        $estados = BeneficiarioDisc::ESTADOS;
 
-        return view('canasta_v2.beneficiario.index', compact('tipos','distritos','barrios','sexos','estados'));
+        return view('canasta_v2disc.beneficiario.index', compact('tipos','distritos','barrios','sexos','estados'));
     }
 
     public function getBarrios(Request $request){
@@ -252,9 +265,9 @@ class BeneficiariosV2Controller extends Controller
                             ->where('dea_id',$dea_id)
                             ->orderBy('id','asc')
                             ->pluck('nombre','id');
-        $sexos = Beneficiario::SEXOS;
-        $estados = Beneficiario::ESTADOS;
-        $beneficiarios = Beneficiario::query()
+        $sexos = BeneficiarioDisc::SEXOS;
+        $estados = BeneficiarioDisc::ESTADOS;
+        $beneficiarios = BeneficiarioDisc::query()
                                         ->byDea($dea_id)
                                         ->byDistrito($request->distrito)
                                         ->byBarrio($request->barrio)
@@ -266,11 +279,11 @@ class BeneficiariosV2Controller extends Controller
                                         ->bySexo($request->sexo)
                                         ->byEdad($request->edad_inicial, $request->edad_final)
                                         ->byEstado($request->estado)
-                                        ->where('id_tipo','=',1)
+                                        ->where('id_tipo','=',2)
                                         ->orderBy('id', 'desc')
                                         ->paginate(10);
 
-        return view('canasta_v2.beneficiario.index', compact('tipos','distritos','barrios','sexos','estados','beneficiarios'));
+        return view('canasta_v2disc.beneficiario.index', compact('tipos','distritos','barrios','sexos','estados','beneficiarios'));
     }
 
     public function excel(Request $request)
@@ -279,7 +292,7 @@ class BeneficiariosV2Controller extends Controller
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');
                 $dea_id = Auth::user()->dea->id;
-                $beneficiarios = Beneficiario::query()
+                $beneficiarios = BeneficiarioDisc::query()
                                                 ->byDea($dea_id)
                                                 ->byDistrito($request->distrito)
                                                 ->byBarrio($request->barrio)
@@ -309,10 +322,12 @@ class BeneficiariosV2Controller extends Controller
 
     public function create()
     {
+        //dd('hola create');
         $barrios = Barrio::where('dea_id',Auth::user()->dea->id)->get();
         $ocupaciones = Ocupaciones::where('estado',1)->get();
+        $discgrado = Discgrado::where('estado',1)->get();
 
-        return view('canasta_v2.beneficiario.create',compact('barrios','ocupaciones'));
+        return view('canasta_v2disc.beneficiario.create',compact('barrios','ocupaciones','discgrado'));
     }
 
     public function store(Request $request)
@@ -320,17 +335,17 @@ class BeneficiariosV2Controller extends Controller
         $personal = User::find(Auth::user()->id);
         $id_usuario = $personal->id;
         $dea_id = $personal->dea_id;
-        $newestUser = Beneficiario::orderBy('id', 'desc')->first();
+        $newestUser = BeneficiarioDisc::orderBy('id', 'desc')->first();
         $maxId = $newestUser->id;
 
         $barrio = Barrio::select('distrito_id')->where('id',$request->barrio)->first();
-        $beneficiario = new Beneficiario();
+        $beneficiario = new BeneficiarioDisc();
         $beneficiario->id = $maxId + 1;
         $beneficiario->nombres = $request->nombres;
         $beneficiario->ap = $request->ap;
         $beneficiario->am = $request->am;
         $beneficiario->fecha_nac = date('Y-m-d', strtotime(str_replace('/', '-', $request->fnac)));
-        $beneficiario->estado_civil = $request->estado_civil;
+        $beneficiario->estado_civil = 'Soltero(a)';
         $beneficiario->sexo = $request->sexo;
         $beneficiario->direccion = $request->direccion;
         $beneficiario->firma = $request->firma;
@@ -340,32 +355,40 @@ class BeneficiariosV2Controller extends Controller
         $beneficiario->user_id = $id_usuario;
         $beneficiario->dea_id = $dea_id;
         $beneficiario->ci = $request->ci;
-        $beneficiario->id_tipo = 1;
         $beneficiario->expedido = $request->expedido;
-        $beneficiario->id_ocupacion = $request->ocupacion;
+        $beneficiario->tutor = $request->tutor;
+        $beneficiario->parentesco = $request->parentesco;
+        $beneficiario->id_ocupacion = 67;
+        //$beneficiario->id_ocupacion = $request->ocupacion;
+        $beneficiario->codigo = $request->codigo;
+        $beneficiario->id_discgrado = $request->discgrado;
         $beneficiario->distrito_id = $barrio->distrito_id;
+        $beneficiario->celular = $request->celular;
+        $beneficiario->id_tipo = 2;
         $beneficiario->save();
-        return redirect()->route('beneficiarios.index')->with('success_message', 'datos registrados correctamente...');
+        return redirect()->route('beneficiariosdisc.index')->with('success_message', 'datos registrados correctamente...');
     }
 
 
     public function editar($idbeneficiario)
     {
+        //dd('hola editar');
         $barrios = Barrio::where('dea_id',Auth::user()->dea->id)->get();
         $ocupaciones = Ocupaciones::where('estado','=',1)->get();
-        $beneficiario = Beneficiario::find($idbeneficiario);
+        $beneficiario = BeneficiarioDisc::find($idbeneficiario);
+        $discgrado = Discgrado::where('estado',1)->get();
 
-        return view('canasta_v2.beneficiario.editar',compact('barrios','ocupaciones','beneficiario'));
+        return view('canasta_v2disc.beneficiario.editar',compact('barrios','ocupaciones','beneficiario','discgrado'));
     }
 
     public function show($idbeneficiario)
     {
         $barrios = Barrio::where('dea_id',Auth::user()->dea->id)->get();
         $ocupaciones = Ocupaciones::where('estado',1)->get();
-        $beneficiario = Beneficiario::find($idbeneficiario);
+        $beneficiario = BeneficiarioDisc::find($idbeneficiario);
         $historial = HistorialMod::where('id_beneficiario',$idbeneficiario)->orderBy('fecha','desc')->get();
 
-        return view('canasta_v2.beneficiario.show',compact('barrios','ocupaciones','beneficiario','historial'));
+        return view('canasta_v2disc.beneficiario.show',compact('barrios','ocupaciones','beneficiario','historial'));
     }
 
     public function pdf($beneficiario_id)
@@ -373,7 +396,7 @@ class BeneficiariosV2Controller extends Controller
         try{
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');
-                $beneficiario = Beneficiario::find($beneficiario_id);
+                $beneficiario = BeneficiarioDisc::find($beneficiario_id);
                 $historial = HistorialMod::where('id_beneficiario',$beneficiario_id)->orderBy('fecha','desc')->get();
                 $pdf = PDF::loadView('canasta_v2.beneficiario.pdf', compact(['beneficiario','historial']));
                 $pdf->set_paper('letter','portrait');
@@ -395,7 +418,7 @@ class BeneficiariosV2Controller extends Controller
         $newestUser = HistorialMod::orderBy('id', 'desc')->first();
         $maxId = $newestUser->id;
 
-        $beneficiario = Beneficiario::find($request->idBeneficiario);
+        $beneficiario = BeneficiarioDisc::find($request->idBeneficiario);
         $beneficiario->nombres = $request->nombres;
         $beneficiario->ap = $request->ap;
         $beneficiario->am = $request->am;
@@ -444,7 +467,7 @@ class BeneficiariosV2Controller extends Controller
                 $file_name = $file->getClientOriginalName();
                 $nombre = time() . "." . $file->guessExtension();
 
-                $ruta = public_path("/imagenes/fotos/". $nombre);
+                $ruta = public_path("/imagenes/fotosdisc/". $nombre);
 
                 if ($file->guessExtension() == "jpg") {
                     copy($file, $ruta);
@@ -453,40 +476,50 @@ class BeneficiariosV2Controller extends Controller
                 }
             }
 
-            $beneficiario = Beneficiario::find($request->idBeneficiario);
+            $beneficiario = BeneficiarioDisc::find($request->idBeneficiario);
             $beneficiario->nombres = $request->nombres;
             $beneficiario->ap = $request->ap;
             $beneficiario->am = $request->am;
             $beneficiario->fecha_nac = date('Y-m-d', strtotime(str_replace('/', '-', $request->fnac)));
-            $beneficiario->estado_civil = $request->estado_civil;
+           // $beneficiario->estado_civil = $request->estado_civil;
+           $beneficiario->estado_civil = 'Soltero(a)';
             $beneficiario->sexo = $request->sexo;
             $beneficiario->ci = $request->ci;
             $beneficiario->expedido = $request->expedido;
             $beneficiario->direccion = $request->direccion;
             $beneficiario->firma = $request->firma;
             $beneficiario->estado = $request->estado;
-            $beneficiario->dir_foto = '../imagenes/fotos/' . $nombre;;
-            $beneficiario->id_ocupacion = $request->ocupacion;
+            $beneficiario->dir_foto = '../imagenes/fotosdisc/' . $nombre;;
+           // $beneficiario->id_ocupacion = $request->ocupacion;
+           $beneficiario->id_ocupacion = 67;
             $beneficiario->id_barrio = $request->barrio;
+            $beneficiario->codigo = $request->codigo;
             $beneficiario->user_id = $id_usuario;
             $beneficiario->dea_id = $dea_id;
             $beneficiario->distrito_id = $barrio->distrito_id;
             $beneficiario->update();
         } else {
-            $beneficiario = Beneficiario::find($request->idBeneficiario);
+            $beneficiario = BeneficiarioDisc::find($request->idBeneficiario);
             $beneficiario->nombres = $request->nombres;
             $beneficiario->ap = $request->ap;
             $beneficiario->am = $request->am;
             $beneficiario->fecha_nac = date('Y-m-d', strtotime(str_replace('/', '-', $request->fnac)));
-            $beneficiario->estado_civil = $request->estado_civil;
+            //$beneficiario->estado_civil = $request->estado_civil;
+            $beneficiario->estado_civil = 'Soltero(a)';
             $beneficiario->sexo = $request->sexo;
             $beneficiario->ci = $request->ci;
             $beneficiario->expedido = $request->expedido;
             $beneficiario->direccion = $request->direccion;
             $beneficiario->firma = $request->firma;
             $beneficiario->estado = $request->estado;
-            $beneficiario->id_ocupacion = $request->ocupacion;
+            //$beneficiario->id_ocupacion = $request->ocupacion;
+            $beneficiario->id_ocupacion = 67;
             $beneficiario->id_barrio = $request->barrio;
+            $beneficiario->tutor = $request->tutor;
+            $beneficiario->parentesco = $request->parentesco;
+            $beneficiario->id_discgrado = $request->discgrado;
+            $beneficiario->codigo = $request->codigo;
+            $beneficiario->celular = $request->celular;
             $beneficiario->user_id = $id_usuario;
             $beneficiario->dea_id = $dea_id;
             $beneficiario->distrito_id = $barrio->distrito_id;
@@ -501,6 +534,6 @@ class BeneficiariosV2Controller extends Controller
         $Historialmod->dea_id = $dea_id;
         $Historialmod->save();
 
-        return redirect()->route('beneficiarios.index')->with('info_message', 'datos actualizados correctamente...');
+        return redirect()->route('beneficiariosdisc.index')->with('info_message', 'datos actualizados correctamente...');
     }
 }

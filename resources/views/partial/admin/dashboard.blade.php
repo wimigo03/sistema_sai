@@ -102,7 +102,7 @@
                     @canany(['canasta.paquetes.index','canasta.beneficiarios.index','canasta.entregas.beneficiario.index','canasta.distritos.index','canasta.barrios.index'])
                     <li class="font-verdana-12">
                         <a href="" data-toggle="collapse" data-target="#dashboard_canasta_didsc_v2" class="active collapsed" aria-expanded="false">
-                            <i class="fa-solid fa-gift fa-fw"></i>&nbsp;Canasta-Disc.
+                            <i class="fa fa-wheelchair"></i>&nbsp;Canasta-Disc.
                             <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
                         </a>
                         <ul class="sub-menu collapse" id="dashboard_canasta_didsc_v2">
@@ -115,7 +115,7 @@
                             @endcan
                             @can('canasta.beneficiarios.index')
                                 <li>
-                                    <a href="{{ route('beneficiarios.index') }}">
+                                    <a href="{{ route('beneficiariosdisc.index') }}">
                                         &nbsp;&nbsp;<i class="fas fa-user-friends"></i>&nbsp;Beneficiarios
                                     </a>
                                 </li>
