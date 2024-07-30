@@ -6,11 +6,11 @@
                     <td class="text-center p-1"><b>CODIGO</b></td>
                     <td class="text-center p-1"><b>N° SOLICITUD</b></td>
                     <td class="text-center p-1"><b>N° PREV.</b></td>
-                    <td class="text-center p-1"><b>TIPO</b></td>
+                    {{--<td class="text-center p-1"><b>TIPO</b></td>--}}
                     <td class="text-center p-1"><b>AREA</b></td>
                     <td class="text-center p-1"><b>PROVEEDOR</b></td>
                     <td class="text-center p-1"><b>SOLICITANTE</b></td>
-                    <td class="text-center p-1"><b>FECHA&nbsp;R.</b></td>
+                    <td class="text-center p-1"><b>REGISTRO</b></td>
                     <td class="text-center p-1"><b>ESTADO</b></td>
                     @canany(['orden.compra.show','orden.compra.editar'])
                         <td class="text-center p-1"><b><i class="fa-solid fa-bars"></i></b></td>
@@ -23,7 +23,7 @@
                         <td class="text-center p-1">{{ $datos->codigo }}</td>
                         <td class="text-center p-1">{{ $datos->solicitud_compra->codigo }}</td>
                         <td class="text-center p-1">{{ $datos->nro_preventivo }}</td>
-                        <td class="text-center p-1">{{ $datos->tipos }}</td>
+                        {{--<td class="text-center p-1">{{ $datos->tipos }}</td>--}}
                         <td class="text-center p-1">{{ $datos->area->nombrearea }}</td>
                         <td class="text-center p-1">{{ $datos->proveedor != null ? $datos->proveedor->nombre : '#' }}</td>
                         <td class="text-center p-1">{{ strtoupper($datos->solicitante->name) }}</td>
@@ -47,7 +47,7 @@
                                     @can('orden.compra.editar')
                                         @if ($datos->estado == '1')
                                             <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar" style="cursor: pointer;">
-                                                <a href="{{ route('orden.compra.editar',$datos->id) }}" class="badge-with-padding badge badge-warning text-white">
+                                                <a href="{{ route('orden.compra.editar',$datos->id) }}" class="badge-with-padding badge badge-warning">
                                                     <i class="fas fa-edit fa-fw"></i>
                                                 </a>
                                             </span>

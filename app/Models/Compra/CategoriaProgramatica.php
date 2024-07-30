@@ -13,10 +13,8 @@ class CategoriaProgramatica extends Model
     protected $table = 'categorias_programaticas';
     protected $fillable = [
         'dea_id',
-        'user_id',
         'codigo',
         'nombre',
-        'fecha_registro',
         'estado'
     ];
 
@@ -27,18 +25,18 @@ class CategoriaProgramatica extends Model
 
     public function getStatusAttribute(){
         switch ($this->estado) {
-            case '1': 
+            case '1':
                 return "HABILITADO";
-            case '2': 
+            case '2':
                 return "NO HABILITADO";
         }
     }
 
     public function getcolorStatusAttribute(){
         switch ($this->estado) {
-            case '1': 
+            case '1':
                 return "badge-with-padding badge badge-success";
-            case '2': 
+            case '2':
                 return "badge-with-padding badge badge-danger";
         }
     }

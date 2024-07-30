@@ -9,100 +9,98 @@
     </div>
     <div class="card-body body">
         <input type="hidden" value="{{ $orden_compra->id }}" id="orden_compra_id">
-        <input type="hidden" value="{{ $orden_compra->dea->descripcion }}" id="dea">
-        <div class="form-group row">
-            <div class="col-md-6 pr-1 pl-1">
-                <button class="btn btn-outline-primary font-roboto-12" type="button" onclick="cancelar();">
-                    <i class="fas fa-arrow-left fa-sm"></i> Ir atras
-                </button>
-                <i class="fa fa-spinner fa-spin fa-lg fa-sm spinner-btn" style="display: none;"></i>
+        @canany(['orden.compra.aprobar','orden.compra.pdf'])
+            <div class="form-group row">
+                <div class="col-md-12 pr-1 pl-1">
+                    <span class="btn btn-outline-primary font-roboto-12" onclick="cancelar();">
+                        <i class="fas fa-arrow-left fa-fw"></i>
+                    </span>
+                    @can('orden.compra.pdf')
+                        <span class="btn btn-warning font-roboto-12 float-right" onclick="imprimir();">
+                            <i class="fas fa-print fa-fw"></i>
+                        </span>
+                    @endcan
+                    @can('orden.compra.aprobar')
+                        @if ($orden_compra->estado == '1')
+                            <span class="btn btn-danger font-roboto-12 float-right mr-1" onclick="rechazar();">
+                                <i class="fas fa-times fa-fw"></i> Rechazar
+                            </span>
+                            <span class="btn btn-success font-roboto-12 float-right mr-1" id="btn-registro" onclick="procesar();">
+                                <i class="fas fa-paper-plane fa-fw"></i> Aprobar
+                            </span>
+                        @endif
+                    @endcan
+                    <i class="fa fa-spinner fa-spin fa-lg fa-sm spinner-btn" style="display: none;"></i>
+                </div>
             </div>
-            <div class="col-md-6 pr-1 pl-1 text-right">
-                @can('orden.compra.pdf')
-                    <button class="btn btn-outline-warning font-roboto-12" type="button" onclick="imprimir();">
-                        <i class="fas fa-file-pdf fa-sm"></i> Imprimir
-                    </button>
-                @endcan
-                <i class="fa fa-spinner fa-spin fa-lg fa-sm spinner-btn" style="display: none;"></i>
-            </div>
-        </div>
+        @endcanany
         <div class="form-group row font-roboto-12">
             <div class="col-md-4 pr-1 pl-1">
                 <label for="area_solicitante" class="d-inline"><b>Unidad Solicitante</b></label>
-                <input type="text" value="{{ $orden_compra->area->nombrearea }}" id="area_solicitante" class="form-control font-roboto-12" disabled>
+                <input type="text" value="{{ $orden_compra->area->nombrearea }}" id="area_solicitante" class="form-control font-roboto-11" disabled>
             </div>
             <div class="col-md-3 pr-1 pl-1">
                 <label for="user" class="d-inline"><b>Solicitante</b></label>
-                <input type="text" value="{{ strtoupper($orden_compra->solicitante->name) }}" id="user" class="form-control font-roboto-12" disabled>
+                <input type="text" value="{{ strtoupper($orden_compra->solicitante->name) }}" id="user" class="form-control font-roboto-11" disabled>
             </div>
             <div class="col-md-2 pr-1 pl-1">
-                <label for="fecha_registro" class="d-inline"><b>F. Registro</b></label>
-                <input type="text" value="{{ \Carbon\Carbon::parse($orden_compra->fecha_registro)->format('d/m/Y') }}" id="fecha_registro" class="form-control font-roboto-12" disabled>
+                <label for="fecha_registro" class="d-inline"><b>Registro</b></label>
+                <input type="text" value="{{ \Carbon\Carbon::parse($orden_compra->fecha_registro)->format('d/m/Y') }}" id="fecha_registro" class="form-control font-roboto-11" disabled>
             </div>
         </div>
         <div class="form-group row font-roboto-12">
             <div class="col-md-2 pr-1 pl-1">
                 <label for="nro_oc" class="d-inline"><b>Nro. O.C</b></label>
-                <input type="text" value="{{ $orden_compra->codigo }}" id="nro_oc" class="form-control font-roboto-12" disabled>
+                <input type="text" value="{{ $orden_compra->codigo }}" id="nro_oc" class="form-control font-roboto-11" disabled>
             </div>
             <div class="col-md-2 pr-1 pl-1">
                 <label for="nro_solicitud" class="d-inline"><b>Nro. Solicitud</b></label>
-                <input type="text" value="{{ $orden_compra->solicitud_compra->codigo }}" id="nro_solicitud" class="form-control font-roboto-12" disabled>
+                <input type="text" value="{{ $orden_compra->solicitud_compra->codigo }}" id="nro_solicitud" class="form-control font-roboto-11" disabled>
             </div>
-            <div class="col-md-3 pr-1 pl-1">
+            <div class="col-md-4 pr-1 pl-1">
                 <label for="almacen" class="d-inline"><b>Almacen</b></label>
-                <input type="text" value="{{ $orden_compra->almacen != null ? $orden_compra->almacen->nombre : '' }}" id="almacen" class="form-control font-roboto-12" disabled>
+                <input type="text" value="{{ $orden_compra->almacen != null ? $orden_compra->almacen->nombre : '' }}" id="almacen" class="form-control font-roboto-11" disabled>
             </div>
             <div class="col-md-2 pr-1 pl-1">
                 <label for="tipo" class="d-inline"><b>Tipo</b></label>
-                <input type="text" value="{{ $orden_compra->tipos }}" id="tipo" class="form-control font-roboto-12" disabled>
+                <input type="text" value="{{ $orden_compra->tipos }}" id="tipo" class="form-control font-roboto-11" disabled>
             </div>
             <div class="col-md-2 pr-1 pl-1">
                 <label for="estado" class="d-inline"><b>Estado</b></label>
-                <input type="text" value="{{ $orden_compra->status }}" id="estado" class="form-control font-roboto-12 {{ $orden_compra->colorInputStatus}}" disabled>
+                <input type="text" value="{{ $orden_compra->status }}" id="estado" class="form-control font-roboto-11 {{ $orden_compra->colorInputStatus}}" disabled>
             </div>
         </div>
         <div class="form-group row font-roboto-12">
             <div class="col-md-2 pr-1 pl-1">
                 <label for="c_interno" class="d-inline"><b>N° C. Interno</b></label>
-                <input type="text" value="{{ $orden_compra->c_interno }}" id="c_interno" class="form-control font-roboto-12" disabled>
+                <input type="text" value="{{ $orden_compra->c_interno }}" id="c_interno" class="form-control font-roboto-11" disabled>
             </div>
             <div class="col-md-2 pr-1 pl-1">
                 <label for="nro_preventivo" class="d-inline"><b>N° Preventivo</b></label>
-                <input type="text" value="{{ $orden_compra->nro_preventivo }}" id="nro_preventivo" class="form-control font-roboto-12" disabled>
+                <input type="text" value="{{ $orden_compra->nro_preventivo }}" id="nro_preventivo" class="form-control font-roboto-11" disabled>
             </div>
             <div class="col-md-4 pr-1 pl-1">
-                <label for="categoria_programatica" class="d-inline"><b>Categoria Programatica</b></label>
-                <input type="text" value="{{ isset($orden_compra->programatica) ? $orden_compra->programatica->nombre : '' }}" id="categoria_programatica" class="form-control font-roboto-12" disabled>
-            </div>
-            <div class="col-md-4 pr-1 pl-1">
-                <label for="programa" class="d-inline"><b>Programa</b></label>
-                <input type="text" value="{{ isset($orden_compra->programa) ? $orden_compra->programa->nombre : '' }}" id="programa" class="form-control font-roboto-12" disabled>
-            </div>
-        </div>
-        <div class="form-group row font-roboto-12">
-            <div class="col-md-5 pr-1 pl-1">
                 <label for="proveedor" class="d-inline"><b>Proveedor</b></label>
-                <input type="text" value="{{ isset($orden_compra->proveedor) ? $orden_compra->proveedor->nombre : '' }}" id="proveedor" class="form-control font-roboto-12" disabled>
+                <input type="text" value="{{ isset($orden_compra->proveedor) ? $orden_compra->proveedor->nombre : '' }}" id="proveedor" class="form-control font-roboto-11" disabled>
             </div>
             <div class="col-md-2 pr-1 pl-1">
                 <label for="fecha_aprob" class="d-inline"><b>Aprobado el</b></label>
                 {{$orden_compra->fecha_aprob}}
-                <input type="text" value="{{ isset($orden_compra->fecha_aprob) ? \Carbon\Carbon::parse($orden_compra->fecha_aprob)->format('d/m/Y') : '' }}" id="fecha_aprob" class="form-control font-roboto-12" disabled>
+                <input type="text" value="{{ isset($orden_compra->fecha_aprob) ? \Carbon\Carbon::parse($orden_compra->fecha_aprob)->format('d/m/Y') : '' }}" id="fecha_aprob" class="form-control font-roboto-11" disabled>
             </div>
             <div class="col-md-2 pr-1 pl-1">
                 <label for="aprobado_por" class="d-inline"><b>Aprobado por</b></label>
-                <input type="text" value="{{ isset($orden_compra->aprobante) ? $orden_compra->aprobante->name : '' }}" id="aprobado_por" class="form-control font-roboto-12" disabled>
+                <input type="text" value="{{ isset($orden_compra->aprobante) ? $orden_compra->aprobante->name : '' }}" id="aprobado_por" class="form-control font-roboto-11" disabled>
             </div>
         </div>
         <div class="form-group row font-roboto-12">
             <div class="col-md-6 pr-1 pl-1">
                 <label for="objeto" class="d-inline"><b>Objeto</b></label>
-                <textarea id="objeto" rows="2" class="form-control font-roboto-12" disabled>{{ $orden_compra->objeto }}</textarea>
+                <textarea id="objeto" rows="2" class="form-control font-roboto-11" disabled>{{ $orden_compra->objeto }}</textarea>
             </div>
             <div class="col-md-6 pr-1 pl-1">
                 <label for="justificacion" class="d-inline"><b>Justificacion</b></label>
-                <textarea id="justificacion" rows="2" class="form-control font-roboto-12" disabled>{{ $orden_compra->justificacion }}</textarea>
+                <textarea id="justificacion" rows="2" class="form-control font-roboto-11" disabled>{{ $orden_compra->justificacion }}</textarea>
             </div>
         </div>
         <div class="form-group row font-roboto-12">
@@ -116,20 +114,22 @@
                             <div class="col-md-12 pr-1 pl-1 table-responsive">
                                 <table id="detalle_tabla" class="table display table-bordered responsive hover-orange" style="width:100%;">
                                     <thead>
-                                        <tr class="font-roboto-12">
-                                            <th class="text-center p-1">P. PRESUPUESTARIA</th>
-                                            <th class="text-center p-1">ITEM</th>
+                                        <tr class="font-roboto-11">
+                                            <th class="text-left p-1">CATEGORIA PROGRAMATICA</th>
+                                            <th class="text-left p-1">PARTIDA PRESUPUESTARIA</th>
+                                            <th class="text-left p-1">ITEM</th>
                                             <th class="text-center p-1">MEDIDA</th>
-                                            <th class="text-center p-1">CANTIDAD</th>
-                                            <th class="text-center p-1">PRECIO</th>
+                                            <th class="text-right p-1">CANTIDAD</th>
+                                            <th class="text-right p-1">PRECIO</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($orden_compra_detalles as $datos)
-                                            <tr class="font-roboto-12">
-                                                <td class="text-left p-1">{{ $datos->partida->nombre }}</td>
+                                            <tr class="font-roboto-11">
+                                                <td class="text-left p-1">{{ $datos->categoriaProgramatica->codigo . ' - ' . $datos->categoriaProgramatica->nombre }}</td>
+                                                <td class="text-left p-1">{{ $datos->partidaPresupuestaria->numeracion . ' - ' . $datos->partidaPresupuestaria->nombre }}</td>
                                                 <td class="text-left p-1">{{ $datos->item->nombre }}</td>
-                                                <td class="text-left p-1">{{ $datos->unidad_medida->nombre }}</td>
+                                                <td class="text-center p-1">{{ $datos->unidad_medida->nombre }}</td>
                                                 <td class="text-right p-1">{{ number_format($datos->cantidad,2,'.',',') }}</td>
                                                 <td class="text-right p-1">{{ number_format($datos->precio,2,'.',',') }}</td>
                                             </tr>
@@ -142,37 +142,6 @@
                 </div>
             </div>
         </div>
-        @canany(['orden.compra.aprobar','orden.compra.pdf'])
-            <div class="form-group row">
-                <div class="col-md-2 pr-1 pl-1">
-                    <span class="btn btn-outline-primary font-roboto-12" onclick="cancelar();">
-                        <i class="fas fa-arrow-left fa-sm"></i> Ir atras
-                    </span>
-                    <i class="fa fa-spinner fa-spin fa-lg fa-sm spinner-btn" style="display: none;"></i>
-                </div>
-                <div class="col-md-8 pr-1 pl-1 text-center">
-                    @can('orden.compra.aprobar')
-                        @if ($orden_compra->estado == '1')
-                            <span class="btn btn-success font-roboto-12" id="btn-registro" onclick="procesar();">
-                                <i class="fas fa-paper-plane fa-sm"></i> Aprobar
-                            </span>
-                            <span class="btn btn-danger font-roboto-12" onclick="rechazar();">
-                                <i class="fas fa-times fa-sm"></i> Rechazar
-                            </span>
-                        @endif
-                    @endcan
-                    <i class="fa fa-spinner fa-spin fa-lg fa-sm spinner-btn" style="display: none;"></i>
-                </div>
-                <div class="col-md-2 pr-1 pl-1 text-right">
-                    @can('orden.compra.pdf')
-                        <span class="btn btn-outline-warning font-roboto-12" onclick="imprimir();">
-                            <i class="fas fa-file-pdf fa-sm"></i> Imprimir
-                        </span>
-                    @endcan
-                    <i class="fa fa-spinner fa-spin fa-lg fa-sm spinner-btn" style="display: none;"></i>
-                </div>
-            </div>
-        @endcanany
     </div>
 @section('scripts')
     <script type="text/javascript">
@@ -196,75 +165,65 @@
 
         function validar(){
             if($("#dea").val() == ""){
-                Modal("<center>[ERROR AL VALIDAR DEA]</center>");
+                Modal("<center><b>[ERROR. ]</b> AL VALIDAR DEA</center>");
                 return false;
             }
             if($("#area_solicitante").val() == ""){
-                Modal("<center>[ERROR AL VALIDAR EL AREA SOLICITANTE]</center>");
+                Modal("<center><b>[ERROR. ]</b> AL VALIDAR EL AREA SOLICITANTE</center>");
                 return false;
             }
             if($("#user").val() == ""){
-                Modal("<center>[ERROR AL VALIDAR EL SOLICITANTE]</center>");
+                Modal("<center><b>[ERROR. ]</b> AL VALIDAR EL SOLICITANTE</center>");
                 return false;
             }
             if($("#fecha_registro").val() == ""){
-                Modal("<center>[ERROR AL VALIDAR LA FECHA DE REGISTRO]</center>");
+                Modal("<center><b>[ERROR. ]</b> AL VALIDAR LA FECHA DE REGISTRO</center>");
                 return false;
             }
             if($("#nro_oc").val() == ""){
-                Modal("<center>[ERROR AL VALIDAR EL NUMERO DE LA ORDEN DE COMPRA]</center>");
+                Modal("<center><b>[ERROR. ]</b> AL VALIDAR EL NUMERO DE LA ORDEN DE COMPRA</center>");
                 return false;
             }
             if($("#nro_solicitud").val() == ""){
-                Modal("<center>[ERROR AL VALIDAR EL NUMERO DE LA SOLICITUD DE COMPRA]</center>");
+                Modal("<center><b>[ERROR. ]</b> AL VALIDAR EL NUMERO DE LA SOLICITUD DE COMPRA</center>");
                 return false;
             }
             if($("#almacen").val() == ""){
-                Modal("<center>[ERROR AL VALIDAR EL ALMACEN]</center>");
+                Modal("<center><b>[ERROR. ]</b> AL VALIDAR EL ALMACEN</center>");
                 return false;
             }
             if($("#tipo").val() == ""){
-                Modal("<center>[ERROR AL VALIDAR EL TIPO DE ORDEN DE COMPRA]</center>");
+                Modal("<center><b>[ERROR. ]</b> AL VALIDAR EL TIPO DE ORDEN DE COMPRA</center>");
                 return false;
             }
             if($("#estado").val() == ""){
-                Modal("<center>[ERROR AL VALIDAR EL ESTADO DE LA ORDEN DE COMPRA]</center>");
+                Modal("<center><b>[ERROR. ]</b> AL VALIDAR EL ESTADO DE LA ORDEN DE COMPRA</center>");
                 return false;
             }
             if($("#c_interno").val() == ""){
-                Modal("<center>[ERROR AL VALIDAR EL NUMERO DE CONTROL INTERNO]</center>");
+                Modal("<center><b>[ERROR. ]</b> AL VALIDAR EL NUMERO DE CONTROL INTERNO</center>");
                 return false;
             }
             if($("#nro_preventivo").val() == ""){
-                Modal("<center>[ERROR AL VALIDAR EL NUMERO DE PREVENTIVO]</center>");
-                return false;
-            }
-            if($("#categoria_programatica").val() == ""){
-                Modal("<center>[ERROR AL VALIDAR LA CATEGORIA PROGRAMATICA]</center>");
-                return false;
-            }
-            if($("#programa").val() == ""){
-                Modal("<center>[ERROR AL VALIDAR EL PROGRAMA]</center>");
+                Modal("<center><b>[ERROR. ]</b> AL VALIDAR EL NUMERO DE PREVENTIVO</center>");
                 return false;
             }
             if($("#proveedor").val() == ""){
-                Modal("<center>[ERROR AL VALIDAR EL PROVEEDOR]</center>");
+                Modal("<center><b>[ERROR. ]</b> AL VALIDAR EL PROVEEDOR</center>");
                 return false;
             }
             if($("#objeto").val() == ""){
-                Modal("<center>[ERROR AL VALIDAR EL OBJETO DE LA ORDEN DE COMPRA]</center>");
+                Modal("<center><b>[ERROR. ]</b> AL VALIDAR EL OBJETO DE LA ORDEN DE COMPRA</center>");
                 return false;
             }
             if($("#justificacion").val() == ""){
-                Modal("<center>[ERROR AL VALIDAR LA JUSTIFICACION DE LA ORDEN DE COMPRA]</center>");
+                Modal("<center><b>[ERROR. ]</b> AL VALIDAR LA JUSTIFICACION DE LA ORDEN DE COMPRA</center>");
                 return false;
             }
             return true;
         }
 
         function confirmar(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
             var id = $("#orden_compra_id").val();
             var url = "{{ route('orden.compra.aprobar',':id') }}";
             url = url.replace(':id',id);

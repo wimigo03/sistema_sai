@@ -9,10 +9,9 @@ use App\Models\User;
 use App\Models\Canasta\Dea;
 use App\Models\Compra\Proveedor;
 use App\Models\Compra\CategoriaProgramatica;
-use App\Models\Compra\Programa;
 use App\Models\Compra\SolicitudCompra;
 use App\Models\Compra\Item;
-use App\Models\Compra\Partida;
+use App\Models\Compra\PartidaPresupuestaria;
 use App\Models\Compra\UnidadMedida;
 use App\Models\Compra\OrdenCompra;
 use App\Models\Compra\SolicitudCompraDetalle;
@@ -24,18 +23,18 @@ class OrdenCompraDetalle extends Model
     protected $table = 'orden_compra_detalles';
     protected $fillable = [
         'item_id',
+        'orden_compra_id',
         'dea_id',
         'user_id',
-        'partida_id',
+        'partida_presupuestaria_id',
         'unidad_id',
-        'orden_compra_id',
         'proveedor_id',
         'idarea',
         'almacen_id',
         'categoria_programatica_id',
-        'programa_id',
         'solicitud_compra_id',
         'solicitud_compra_detalle_id',
+        'idemp',
         'cantidad',
         'precio',
         'saldo',
@@ -77,8 +76,12 @@ class OrdenCompraDetalle extends Model
         return $this->belongsTo(User::class,'user_id','id');
     }
 
-    public function partida(){
-        return $this->belongsTo(Partida::class,'partida_id','id');
+    public function categoriaProgramatica(){
+        return $this->belongsTo(CategoriaProgramatica::class,'categoria_programatica_id','id');
+    }
+
+    public function partidaPresupuestaria(){
+        return $this->belongsTo(PartidaPresupuestaria::class,'partida_presupuestaria_id','id');
     }
 
     public function unidad_medida(){
@@ -100,14 +103,6 @@ class OrdenCompraDetalle extends Model
     /*public function almacen(){
         return $this->belongsTo(Almacen::class,'almacen_id','id');
     }*/
-
-    public function programatica(){
-        return $this->belongsTo(CategoriaProgramatica::class,'categoria_programatica_id','id');
-    }
-
-    public function programa(){
-        return $this->belongsTo(Programa::class,'programa_id','id');
-    }
 
     public function solicitud_compra(){
         return $this->belongsTo(SolicitudCompra::class,'solicitud_compra_id','id');

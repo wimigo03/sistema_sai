@@ -4,7 +4,8 @@ namespace App\Models\Compra;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Compra\Partida;
+use App\Models\Compra\CategoriaProgramatica;
+use App\Models\Compra\PartidaPresupuestaria;
 use App\Models\Compra\Item;
 use App\Models\Compra\UnidadMedida;
 
@@ -19,16 +20,22 @@ class SolicitudCompraDetalle extends Model
         'user_id',
         'dea_id',
         'item_id',
-        'partida_id',
+        'partida_presupuestaria_id',
+        'categoria_programatica_id',
         'unidad_id',
+        'idemp',
         'user_aprob_id',
         'cantidad',
         'saldo',
         'estado'
     ];
 
-    public function partida(){
-        return $this->belongsTo(Partida::class,'partida_id','id');
+    public function partidaPresupuestaria(){
+        return $this->belongsTo(PartidaPresupuestaria::class,'partida_presupuestaria_id','id');
+    }
+
+    public function categoriaProgramatica(){
+        return $this->belongsTo(CategoriaProgramatica::class,'categoria_programatica_id','id');
     }
 
     public function item(){

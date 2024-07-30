@@ -1,13 +1,13 @@
 @extends('layouts.admin')
 @section('content')
-    <div class="card-header header">
-        <div class="row">
-            <div class="col-md-12 pr-1">
-                <b>REGISTRAR ALMACEN - {{ $dea->descripcion }}</b>
-            </div>
+<div class="card-body">
+    <div class="form-group row font-roboto-20">
+        <div class="col-md-12 text-center linea-completa">
+            <strong>REGISTRAR ALMACEN</strong>
         </div>
     </div>
     @include('almacenes.almacen.partials.form-create')
+</div>
 @section('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
@@ -43,8 +43,6 @@
         function confirmar(){
             var url = "{{ route('almacen.store') }}";
             $("#form").attr('action', url);
-            $(".btn").hide();
-            $(".spinner-btn").show();
             $("#form").submit();
         }
 

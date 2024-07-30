@@ -13,24 +13,39 @@ use DB;
 
 class UnidadMedidaController extends Controller
 {
+    private function copiar()
+    {
+        $unidades = DB::table('umedida')->get();
+        foreach($unidades as $datos){
+            $unidad_medida = UnidadMedida::create([
+                'dea_id' => Auth::user()->dea->id,
+                'nombre' => $datos->nombreumedida,
+                'tipo' => '1',
+                'estado' => $datos->estadoumedida
+            ]);
+        }
+
+        dd("copiar finalizado...");
+    }
 
     public function index()
     {
-        $dea_id = Auth::user()->dea->id;
+        /*if(Auth::user()->id == 102){
+            //$this->copiar();
+        }*/
         $unidades = UnidadMedida::query()
-                                ->ByDea($dea_id)
+                                ->ByDea(Auth::user()->dea->id)
                                 ->orderBy('id','desc')
                                 ->paginate(10);
         $tipos = UnidadMedida::TIPOS;
         $estados = UnidadMedida::ESTADOS;
-        return view('compras.unidad_medida.index',compact('dea_id','unidades','tipos','estados'));
+        return view('compras.unidad_medida.index',compact('unidades','tipos','estados'));
     }
 
     public function search(Request $request)
     {
-        $dea_id = $request->dea_id;
         $unidades = UnidadMedida::query()
-                                ->ByDea($dea_id)
+                                ->ByDea(Auth::user()->dea->id)
                                 ->ByNombre($request->nombre)
                                 ->ByAlias($request->alias)
                                 ->ByTipo($request->tipo)
@@ -39,26 +54,26 @@ class UnidadMedidaController extends Controller
                                 ->paginate(10);
         $tipos = UnidadMedida::TIPOS;
         $estados = UnidadMedida::ESTADOS;
-        return view('compras.unidad_medida.index',compact('dea_id','unidades','tipos','estados'));
+        return view('compras.unidad_medida.index',compact('unidades','tipos','estados'));
     }
 
-    public function create($dea_id)
+    public function create()
     {
         $tipos = UnidadMedida::TIPOS;
-        return view('compras.unidad_medida.create',compact('dea_id','tipos'));
+        return view('compras.unidad_medida.create',compact('tipos'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'tipo' => 'required',
-            'nombre' => 'required|unique:unidades,nombre,null,id,dea_id,' . $request->dea_id,
-            'alias' => 'required|unique:unidades,alias,null,id,dea_id,' . $request->dea_id
+            'nombre' => 'required|unique:unidades,nombre,null,id,dea_id,' . Auth::user()->dea->id,
+            'alias' => 'required|unique:unidades,alias,null,id,dea_id,' . Auth::user()->dea->id
         ]);
         try{
             $function = DB::transaction(function () use ($request) {
                 $datos = [
-                    'dea_id' => $request->dea_id,
+                    'dea_id' => Auth::user()->dea->id,
                     'nombre' => $request->nombre,
                     'alias' => $request->alias,
                     'tipo' => $request->tipo,

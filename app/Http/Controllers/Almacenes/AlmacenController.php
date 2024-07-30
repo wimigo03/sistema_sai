@@ -9,17 +9,17 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Almacenes\Almacen;
 use App\Models\User;
 use App\Models\Canasta\Dea;
-/*use App\Models\Compra\OrdenCompra;
-use App\Models\Compra\OrdenCompraDetalle;
-use App\Models\Compra\SolicitudCompra;
+use App\Models\Compra\IngresoCompraDetalle;
+use App\Models\Compra\PartidaPresupuestaria;
+
+/*use App\Models\Compra\SolicitudCompra;
 use App\Models\Area;
 use App\Models\Compra\Proveedor;
 
 use App\Models\Empleado;
 use App\Models\Compra\Item;
 
-use App\Models\Compra\CategoriaProgramatica;
-use App\Models\Compra\Programa;*/
+use App\Models\Compra\CategoriaProgramatica;*/
 use DB;
 
 class AlmacenController extends Controller
@@ -33,7 +33,7 @@ class AlmacenController extends Controller
                                 ->orderBy('id','desc')
                                 ->paginate(10);
         $estados = Almacen::ESTADOS;
-        return view('almacenes.almacen.index',compact('dea_id','users','almacenes','estados'));
+        return view('almacenes.almacen.index',compact('users','almacenes','estados'));
     }
 
     public function search(Request $request)
@@ -49,14 +49,18 @@ class AlmacenController extends Controller
                                 ->orderBy('id','desc')
                                 ->paginate(10);
         $estados = Almacen::ESTADOS;
-        return view('almacenes.almacen.index',compact('dea_id','users','almacenes','estados'));
+        return view('almacenes.almacen.index',compact('users','almacenes','estados'));
     }
 
-    public function create($dea_id)
+    public function create()
     {
-        $dea = Dea::find($dea_id);
-        $encargados = User::where('dea_id',$dea_id)->pluck('name','id');
-        return view('almacenes.almacen.create',compact('dea','encargados'));
+        $encargados = DB::table('users as a')
+                        ->join('empleados as b','b.idemp','a.idemp')
+                        ->select(DB::raw("concat(upper(a.name),' - ',b.nombres,' ',b.ap_pat,' ',b.ap_mat) as empleado"),'a.id as id')
+                        ->where('a.dea_id',Auth::user()->dea->id)
+                        ->pluck('empleado','id');
+
+        return view('almacenes.almacen.create',compact('encargados'));
     }
 
     public function store(Request $request)
@@ -64,7 +68,7 @@ class AlmacenController extends Controller
         try{
             $function = DB::transaction(function () use ($request) {
                 $almacen = Almacen::create([
-                    'dea_id' => $request->dea_id,
+                    'dea_id' => Auth::user()->dea->id,
                     'user_id' => $request->user_id,
                     'nombre' => $request->nombre,
                     'direccion' => $request->direccion,
@@ -90,18 +94,58 @@ class AlmacenController extends Controller
     }
 
     public function show($almacen_id)
-    {dd($almacen_id);
-        $orden_compra = OrdenCompra::find($orden_compra_id);
-        $orden_compra_detalles = OrdenCompraDetalle::where('orden_compra_id',$orden_compra_id)->where('estado','1')->get();
-        return view('compras.orden_compra.show',compact('orden_compra','orden_compra_detalles'));
+    {
+        $almacen = Almacen::find($almacen_id);
+        $partidas_presupuestarias = PartidaPresupuestaria::query()
+                                        ->byDea(Auth::user()->dea->id)
+                                        ->select(DB::raw("concat(codigo,' - ',nombre) as partida_presupuestaria"),'id')
+                                        ->pluck('partida_presupuestaria','id');
+
+        $ingreso_compra_detalles = IngresoCompraDetalle::query()
+                                            ->whereHas('ingresoCompra', function ($query) {
+                                                $query->where('estado', '2');
+                                            })
+                                            ->byDea(Auth::user()->dea->id)
+                                            ->byAlmacen($almacen_id)
+                                            ->select('item_id','partida_presupuestaria_id','unidad_id',DB::raw("sum(cantidad) as saldo_total"))
+                                            ->groupBy('item_id','partida_presupuestaria_id','unidad_id')
+                                            ->paginate(10);
+
+        return view('almacenes.almacen.show',compact('almacen','partidas_presupuestarias','ingreso_compra_detalles'));
+    }
+
+    public function showSearch(Request $request)
+    {
+        $almacen = Almacen::find($request->almacen_id);
+        $partidas_presupuestarias = Partida::query()
+                                        ->byDea(Auth::user()->dea->id)
+                                        ->select(DB::raw("concat(codigo,' - ',nombre) as partida_presupuestaria"),'id')
+                                        ->pluck('partida_presupuestaria','id');
+
+        $ingreso_compra_detalles = IngresoCompraDetalle::query()
+                                            ->whereHas('ingresoCompra', function ($query) {
+                                                $query->where('estado', '2');
+                                            })
+                                            ->byDea(Auth::user()->dea->id)
+                                            ->byAlmacen($request->almacen_id)
+                                            ->byPartidaPresupuestaria($request->partida_presupuestaria_id)
+                                            ->byItem($request->item)
+                                            ->select('item_id','partida_id','unidad_id',DB::raw("sum(saldo) as saldo_total"))
+                                            ->groupBy('item_id','partida_id','unidad_id')
+                                            ->paginate(10);
+
+        return view('almacenes.almacen.show',compact('almacen','partidas_presupuestarias','ingreso_compra_detalles'));
     }
 
     public function editar($almacen_id)
     {
         $almacen = Almacen::find($almacen_id);
-        $dea = Dea::find($almacen->dea_id);
-        $encargados = User::where('dea_id',$almacen->dea_id)->get();
-        return view('almacenes.almacen.editar',compact('almacen','dea','encargados'));
+        $encargados = DB::table('users as a')
+                        ->join('empleados as b','b.idemp','a.idemp')
+                        ->select(DB::raw("concat(upper(a.name),' - ',b.nombres,' ',b.ap_pat,' ',b.ap_mat) as empleado"),'a.id as id')
+                        ->where('a.dea_id',Auth::user()->dea->id)
+                        ->get();
+        return view('almacenes.almacen.editar',compact('almacen','encargados'));
     }
 
     public function update(Request $request)

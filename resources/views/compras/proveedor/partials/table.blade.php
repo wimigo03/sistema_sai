@@ -36,23 +36,22 @@
                                 <div class="d-flex justify-content-center">
                                     @can('proveedor.habilitar')
                                         @if($datos->status == "HABILITADO")
-                                            <span class="tts:left tts-slideIn tts-custom" aria-label="Deshabilitar" style="cursor: pointer;">
+                                            <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Deshabilitar" style="cursor: pointer;">
                                                 <a href="{{ route('proveedor.deshabilitar',$datos->id) }}" class="badge-with-padding badge badge-danger">
                                                     <i class="fas fa-arrow-alt-circle-down fa-fw"></i>
                                                 </a>
                                             </span>
                                         @else
-                                            <span class="tts:left tts-slideIn tts-custom" aria-label="Habilitar" style="cursor: pointer;">
+                                            <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Habilitar" style="cursor: pointer;">
                                                 <a href="{{ route('proveedor.habilitar',$datos->id) }}" class="badge-with-padding badge badge-success">
                                                     <i class="fas fa-arrow-alt-circle-up fa-fw"></i>
                                                 </a>
                                             </span>
                                         @endif
                                     @endcan
-                                    &nbsp;
                                     @can('proveedor.editar')
                                         <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar" style="cursor: pointer;">
-                                            <a href="{{ route('proveedor.editar',$datos->id) }}" class="badge-with-padding badge badge-secondary text-white">
+                                            <a href="{{ route('proveedor.editar',$datos->id) }}" class="badge-with-padding badge badge-warning">
                                                 <i class="fas fa-edit fa-fw"></i>
                                             </a>
                                         </span>

@@ -16,7 +16,6 @@ use App\Models\Empleado;
 use App\Models\Compra\Item;
 use App\Models\Canasta\Dea;
 use App\Models\Compra\CategoriaProgramatica;
-use App\Models\Compra\Programa;
 use App\Models\Compra\IngresoCompra;
 use App\Models\Compra\IngresoCompraDetalle;
 use DB;
@@ -35,7 +34,7 @@ class OrdenCompraController extends Controller
                                         ->paginate(10);
         $tipos = OrdenCompra::TIPOS;
         $estados = OrdenCompra::ESTADOS;
-        return view('compras.orden_compra.index',compact('dea_id','areas','proveedores','users','orden_compras','tipos','estados'));
+        return view('compras.orden_compra.index',compact('areas','proveedores','users','orden_compras','tipos','estados'));
     }
 
     public function search(Request $request)
@@ -191,8 +190,6 @@ class OrdenCompraController extends Controller
                     'proveedor_id' => $orden_compra->proveedor_id,
                     'idarea' => $orden_compra->idarea,
                     'orden_compra_id' => $orden_compra->id,
-                    'categoria_programatica_id' => $orden_compra->categoria_programatica_id,
-                    'programa_id' => $orden_compra->programa_id,
                     'solicitud_compra_id' => $orden_compra->solicitud_compra_id,
                     'codigo' => $codigo,
                     'estado' => '1'
@@ -207,15 +204,16 @@ class OrdenCompraController extends Controller
                         'proveedor_id' => $datos->proveedor_id,
                         'idarea' => $datos->idarea,
                         'orden_compra_id' => $datos->orden_compra_id,
-                        'categoria_programatica_id' => $datos->categoria_programatica_id,
-                        'programa_id' => $datos->programa_id,
                         'solicitud_compra_id' => $datos->solicitud_compra_id,
                         'orden_compra_detalle_id' => $datos->id,
                         'item_id' => $datos->item_id,
-                        'partida_id' => $datos->partida_id,
+                        'partida_presupuestaria_id' => $datos->partida_presupuestaria_id,
                         'unidad_id' => $datos->unidad_id,
+                        'categoria_programatica_id' => $datos->categoria_programatica_id,
                         'solicitud_compra_detalle_id' => $datos->solicitud_compra_detalle_id,
-                        'cantidad' => $datos->cantidad
+                        'cantidad' => $datos->cantidad,
+                        'saldo' => $datos->saldo,
+                        'estado' => '1'
                     ]);
                 }
 
@@ -279,11 +277,7 @@ class OrdenCompraController extends Controller
         $orden_compra = OrdenCompra::find($orden_compra_id);
         $orden_compra_detalles = OrdenCompraDetalle::where('orden_compra_id',$orden_compra_id)->where('estado','1')->get();
         $proveedores = Proveedor::where('dea_id',$orden_compra->dea_id)->where('estado','1')->get();
-        $categorias_programaticas = CategoriaProgramatica::select(DB::raw("concat(codigo,' ',nombre) as categoria"),'id')
-                                                            ->where('dea_id',$orden_compra->dea_id)
-                                                            ->where('estado','1')->get();
-        $programas = Programa::where('dea_id',$orden_compra->dea_id)->where('estado','1')->get();
-        return view('compras.orden_compra.editar',compact('orden_compra','orden_compra_detalles','proveedores','categorias_programaticas','programas'));
+        return view('compras.orden_compra.editar',compact('orden_compra','orden_compra_detalles','proveedores'));
     }
 
     public function update(Request $request)
@@ -293,8 +287,6 @@ class OrdenCompraController extends Controller
                 $orden_compra = OrdenCompra::find($request->orden_compra_id);
                 $orden_compra->update([
                     'proveedor_id' => $request->proveedor_id,
-                    'categoria_programatica_id' => $request->categoria_programatica_id,
-                    'programa_id' => $request->programa_id,
                     'objeto' => $request->objeto,
                     'justificacion' => $request->justificacion,
                     'nro_preventivo' => $request->nro_preventivo,
@@ -305,11 +297,10 @@ class OrdenCompraController extends Controller
                 foreach($orden_compras_detalles as $datos){
                     $orden_compra_detalle = OrdenCompraDetalle::find($datos->id);
                     $orden_compra_detalle->update([
-                        'proveedor_id' => $request->proveedor_id,
-                        'categoria_programatica_id' => $request->categoria_programatica_id,
-                        'programa_id' => $request->programa_id,
+                        'proveedor_id' => $request->proveedor_id
                     ]);
                 }
+
                 return $orden_compra;
             });
             Log::channel('orden_compras')->info(

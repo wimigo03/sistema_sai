@@ -7,79 +7,147 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Models\Compra\Item;
-use App\Models\Compra\Partida;
+use App\Models\Compra\CategoriaProgramatica;
+use App\Models\Compra\PartidaPresupuestaria;
 use App\Models\Compra\UnidadMedida;
 use DB;
 
-
-
 class ItemController extends Controller
 {
+    private function copiar()
+    {
+        $productos = DB::table('prodserv')->where('partida_idpartida',124)->get();
+        foreach($productos as $datos){
+            $producto = Item::create([
+                //'partida_id' => 125,
+                //'partida_id' => 151,
+                'dea_id' => Auth::user()->dea->id,
+                'user_id' => Auth::user()->id,
+                'unidad_id' => 3,
+                'nombre' => $datos->nombreprodserv,
+                'detalle' => $datos->detalleprodserv,
+                'precio' => $datos->precioprodserv,
+                'tipo' => '1',
+                'fecha_registro' => date('Y-m-d'),
+                'estado' => $datos->estadoprodserv
+            ]);
+        }
+
+        dd("copiar finalizado....");
+    }
 
     public function index()
     {
-        $dea_id = Auth::user()->dea->id;
+        /*if(Auth::user()->id == 102){
+            //$this->copiar();
+        }*/
         $items = Item::query()
-                        ->ByDea($dea_id)
+                        ->ByDea(Auth::user()->dea->id)
                         ->orderBy('id','desc')
                         ->paginate(10);
         $tipos = Item::TIPOS;
-        $unidades = UnidadMedida::where('dea_id',$dea_id)->pluck('nombre','id');
+        $unidades = UnidadMedida::where('dea_id',Auth::user()->dea->id)->pluck('nombre','id');
+
+        $categorias_programaticas = CategoriaProgramatica::query()
+                                        ->byDea(Auth::user()->dea->id)
+                                        ->select(DB::raw("concat(codigo,' - ',nombre) as categoria_programatica"),'id')
+                                        ->orderBy('codigo','asc')
+                                        ->pluck('categoria_programatica','id');
+
+        $partidas_presupuestarias = PartidaPresupuestaria::query()
+                                        ->byDea(Auth::user()->dea->id)
+                                        ->where('detalle','1')
+                                        ->where('estado','1')
+                                        ->select(DB::raw("concat(numeracion,' (',codigo,') ',nombre) as partida_presupuestaria"),'id')
+                                        ->pluck('partida_presupuestaria','id');
         $estados = Item::ESTADOS;
-        return view('compras.item.index',compact('dea_id','items','tipos','unidades','estados'));
+        return view('compras.item.index',compact('items','tipos','unidades','categorias_programaticas','partidas_presupuestarias','estados'));
     }
 
     public function search(Request $request)
     {
-        $dea_id = $request->dea_id;
         $items = Item::query()
-                        ->ByDea($dea_id)
+                        ->ByDea(Auth::user()->dea->id)
                         ->ByNombre($request->nombre)
                         ->ByDetalle($request->detalle)
-                        ->ByPrecio($request->precio)
-                        ->ByTipo($request->tipo)
+                        //->ByPrecio($request->precio)
+                        //->ByTipo($request->tipo)
                         ->ByUnidadMedida($request->unidad_id)
-                        ->ByCodigoPartidaPresupuestaria($request->codigo_partida)
-                        ->ByPartidaPresupuestaria($request->partida_presupuestaria)
-                        ->ByFechaRegistro($request->fecha_registro)
+                        ->ByCategoriaProgramatica($request->categoria_programatica_id)
+                        ->ByPartidaPresupuestaria($request->partida_presupuestaria_id)
                         ->ByEstado($request->estado)
                         ->orderBy('id','desc')
                         ->paginate(10);
         $tipos = Item::TIPOS;
-        $unidades = UnidadMedida::where('dea_id',$dea_id)->pluck('nombre','id');
+        $unidades = UnidadMedida::where('dea_id',Auth::user()->dea->id)->pluck('nombre','id');
         $estados = Item::ESTADOS;
-        return view('compras.item.index',compact('dea_id','items','tipos','unidades','estados'));
+
+        $categorias_programaticas = CategoriaProgramatica::query()
+                                        ->byDea(Auth::user()->dea->id)
+                                        ->select(DB::raw("concat(codigo,' - ',nombre) as categoria_programatica"),'id')
+                                        ->orderBy('codigo','asc')
+                                        ->pluck('categoria_programatica','id');
+
+        $partidas_presupuestarias = PartidaPresupuestaria::query()
+                                        ->byDea(Auth::user()->dea->id)
+                                        ->where('detalle','1')
+                                        ->where('estado','1')
+                                        ->select(DB::raw("concat(numeracion,' (',codigo,') ',nombre) as partida_presupuestaria"),'id')
+                                        ->pluck('partida_presupuestaria','id');
+        return view('compras.item.index',compact('items','tipos','unidades','categorias_programaticas','partidas_presupuestarias','estados'));
     }
 
-    public function create($dea_id)
+    public function create()
     {
-        $partidas_presupuestarias = Partida::where('dea_id',$dea_id)->where('estado','1')->pluck('nombre','id');
-        $unidades = UnidadMedida::where('dea_id',$dea_id)->where('tipo','1')->where('estado','1')->pluck('nombre','id');
+        $categorias_programaticas = CategoriaProgramatica::query()
+                                        ->byDea(Auth::user()->dea->id)
+                                        ->select(DB::raw("concat(codigo,' - ',nombre) as categoria_programatica"),'id')
+                                        ->orderBy('codigo','asc')
+                                        ->pluck('categoria_programatica','id');
+
+        $unidades = UnidadMedida::where('dea_id',Auth::user()->dea->id)->where('tipo','1')->where('estado','1')->pluck('nombre','id');
         $tipos = Item::TIPOS;
-        return view('compras.item.create',compact('dea_id','partidas_presupuestarias','unidades','tipos'));
+        return view('compras.item.create',compact('categorias_programaticas','unidades','tipos'));
+    }
+
+    public function getPartidasPresupuestarias(Request $request)
+    {
+        try{
+            $partidas_presupuestarias = PartidaPresupuestaria::query()
+                                        ->byDea(Auth::user()->dea->id)
+                                        ->where('detalle','1')
+                                        ->where('estado','1')
+                                        ->where('categoria_programatica_id',$request->id)
+                                        ->select(DB::raw("concat(numeracion,' (',codigo,') ',nombre) as partida_presupuestaria"),'id')
+                                        ->get()
+                                        ->toJson();
+            if($partidas_presupuestarias){
+                return response()->json([
+                    'partidas_presupuestarias' => $partidas_presupuestarias
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'partida_id' => 'required',
-            'nombre' => 'required',
-            'unidad_id' => 'required',
-            'precio' => 'required',
-            'tipo' => 'required',
-            'detalle' => 'required'
+            'nombre' => 'required|unique:items,nombre,null,null,dea_id,'. Auth::user()->dea->id
         ]);
         try{
             $function = DB::transaction(function () use ($request) {
                 $datos = [
-                    'partida_id' => $request->partida_id,
-                    'dea_id' => $request->dea_id,
+                    'partida_presupuestaria_id' => $request->partida_presupuestaria_id,
+                    'categoria_programatica_id' => $request->categoria_programatica_id,
+                    'dea_id' => Auth::user()->dea->id,
                     'user_id' => Auth::user()->id,
                     'unidad_id' => $request->unidad_id,
                     'nombre' => $request->nombre,
                     'detalle' => $request->detalle,
                     'precio' => floatval(str_replace(",", "", $request->precio)),
-                    'tipo' => $request->tipo,
+                    'tipo' => '1',
                     'fecha_registro' => date('Y-m-d'),
                     'estado' => '1'
                 ];
@@ -107,12 +175,10 @@ class ItemController extends Controller
     {
         try{
             $function = DB::transaction(function () use ($item_id) {
-                $datos = [
-                    'estado' => '1'
-                ];
-
                 $item = Item::find($item_id);
-                $item->update($datos);
+                $item->update([
+                    'estado' => '1'
+                ]);
 
                 return $item;
             });
@@ -120,7 +186,7 @@ class ItemController extends Controller
                 "Item: " . $function->nombre . " fue habilitado con éxito" . "\n" .
                 "Usuario: " . Auth::user()->id . "\n"
             );
-            return redirect()->route('item.index')->with('success_message', '[El item ' . $function->nombre . ' fue habilitado correctamente.]');
+            return redirect()->route('item.editar',$item_id)->with('success_message', '[El item ' . $function->nombre . ' fue habilitado correctamente.]');
         } catch (\Exception $e) {
             Log::channel('items')->info(
                 "Error al habilitar item: " . "\n" .
@@ -131,16 +197,14 @@ class ItemController extends Controller
         }
     }
 
-    public function deshabilitar($item_id)
+    public function inhabilitar($item_id)
     {
         try{
             $function = DB::transaction(function () use ($item_id) {
-                $datos = [
-                    'estado' => '2'
-                ];
-
                 $item = Item::find($item_id);
-                $item->update($datos);
+                $item->update([
+                    'estado' => '2'
+                ]);
 
                 return $item;
             });
@@ -162,37 +226,39 @@ class ItemController extends Controller
     public function editar($item_id)
     {
         $item = Item::find($item_id);
-        $partidas_presupuestarias = Partida::where('dea_id',$item->dea_id)->where('estado','1')->get();
+        $categorias_programaticas = CategoriaProgramatica::query()
+                                        ->byDea(Auth::user()->dea->id)
+                                        ->select(DB::raw("concat(codigo,' - ',nombre) as categoria_programatica"),'id')
+                                        ->orderBy('codigo','asc')
+                                        ->get();
+        /*$partidas_presupuestarias = PartidaPresupuestaria::query()
+                                        ->byDea(Auth::user()->dea->id)
+                                        ->where('detalle','1')
+                                        ->where('estado','1')
+                                        ->select(DB::raw("concat(numeracion,' (',codigo,') ',nombre) as partida_presupuestaria"),'id')
+                                        ->get();*/
         $unidades = UnidadMedida::where('dea_id',$item->dea_id)->where('estado','1')->get();
         $tipos = Item::TIPOS;
-        return view('compras.item.editar',compact('item','partidas_presupuestarias','unidades','tipos'));
+        return view('compras.item.editar',compact('item','categorias_programaticas','unidades','tipos'));
     }
 
     public function update(Request $request)
     {
         $request->validate([
-            'partida_id' => 'required',
-            'nombre' => 'required',
-            'unidad_id' => 'required',
-            'precio' => 'required',
-            'tipo' => 'required',
-            'detalle' => 'required'
+            'nombre' => 'required|unique:items,nombre,' . $request->item_id . ',id,dea_id,'. Auth::user()->dea->id
         ]);
         try{
             $function = DB::transaction(function () use ($request) {
-                $datos = [
-                    'partida_id' => $request->partida_id,
-                    'dea_id' => $request->dea_id,
+                $item = Item::find($request->item_id);
+                $item->update([
+                    'partida_presupuestaria_id' => $request->partida_presupuestaria_id,
+                    'categoria_programatica_id' => $request->categoria_programatica_id,
                     'user_id' => Auth::user()->id,
                     'unidad_id' => $request->unidad_id,
                     'nombre' => $request->nombre,
                     'detalle' => $request->detalle,
-                    'precio' => floatval(str_replace(",", "", $request->precio)),
-                    'tipo' => $request->tipo
-                ];
-
-                $item = Item::find($request->item_id);
-                $item->update($datos);
+                    'precio' => floatval(str_replace(",", "", $request->precio))
+                ]);
 
                 return $item;
             });

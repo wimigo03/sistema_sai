@@ -60,14 +60,6 @@
                 Modal("<center>[ERROR AL VALIDAR EL NUMERO DE PREVENTIVO]</center>");
                 return false;
             }
-            if($("#categoria_programatica_id").val() == ""){
-                Modal("<center>[ERROR AL VALIDAR LA CATEGORIA PROGRAMATICA]</center>");
-                return false;
-            }
-            if($("#programa_id").val() == ""){
-                Modal("<center>[ERROR AL VALIDAR EL PROGRAMA]</center>");
-                return false;
-            }
             if($("#proveedor_id").val() == ""){
                 Modal("<center>[ERROR AL VALIDAR EL PROVEEDOR]</center>");
                 return false;

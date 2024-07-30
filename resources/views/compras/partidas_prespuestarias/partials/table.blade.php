@@ -48,7 +48,7 @@
                                     &nbsp;
                                     @can('partida.editar')
                                         <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar" style="cursor: pointer;">
-                                            <a href="{{ route('partida.editar',$datos->id) }}" class="badge-with-padding badge badge-secondary text-white">
+                                            <a href="{{ route('partida.editar',$datos->id) }}" class="badge-with-padding badge badge-warning">
                                                 <i class="fas fa-edit fa-fw"></i>
                                             </a>
                                         </span>

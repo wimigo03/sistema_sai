@@ -1,11 +1,10 @@
-<div class="form-group row">
-    <div class="col-md-12 pr-1 pl-1 table-responsive">
+<div class="form-group row abs-center">
+    <div class="col-md-9 pr-1 pl-1 table-responsive">
         <table class="table display table-bordered responsive hover-orange" style="width:100%;">
             <thead>
                 <tr class="font-roboto-11">
                     <td class="text-left p-1"><b>CODIGO</b></td>
-                    <td class="text-left p-1"><b>NOMBRE</b></td>
-                    <td class="text-center p-1"><b>FECHA&nbsp;R.</b></td>
+                    <td class="text-left p-1"><b>CATEGORIA PROGRAMATICA</b></td>
                     <td class="text-center p-1"><b>ESTADO</b></td>
                     @canany(['categoria.programatica.habilitar','categoria.programatica.editar'])
                         <td class="text-center p-1"><b><i class="fa-solid fa-bars"></i></b></td>
@@ -17,7 +16,6 @@
                     <tr class="font-roboto-11">
                         <td class="text-left p-1">{{ $datos->codigo }}</td>
                         <td class="text-left p-1">{{ $datos->nombre }}</td>
-                        <td class="text-center p-1">{{ \Carbon\Carbon::parse($datos->fecha_registro)->format('d/m/Y') }}</td>
                         <td class="text-center p-1">
                             <span class="{{ $datos->colorStatus }}">
                                 {{ $datos->status }}
@@ -44,7 +42,7 @@
                                     &nbsp;
                                     @can('categoria.programatica.editar')
                                         <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar" style="cursor: pointer;">
-                                            <a href="{{ route('categoria.programatica.editar',$datos->id) }}" class="badge-with-padding badge badge-secondary text-white">
+                                            <a href="{{ route('categoria.programatica.editar',$datos->id) }}" class="badge-with-padding badge badge-warning">
                                                 <i class="fas fa-edit fa-fw"></i>
                                             </a>
                                         </span>

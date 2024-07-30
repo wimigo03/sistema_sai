@@ -1,13 +1,11 @@
 @extends('layouts.admin')
 @section('content')
-    <div class="card-header header">
-        <div class="row">
-            <div class="col-md-12 pr-1 pl-1 text-center">
-                <b>CATEGORIAS PROGRAMATICAS</b>
+    <div class="card-body">
+        <div class="form-group row abs-center font-roboto-20">
+            <div class="col-md-12 text-center linea-completa">
+                <strong>CATEGORIAS PROGRAMATICAS</strong>
             </div>
         </div>
-    </div>
-    <div class="card-body body">
         @include('compras.categoria_programatica.partials.search')
         @include('compras.categoria_programatica.partials.table')
     </div>
@@ -19,17 +17,6 @@
                 placeholder: "--Estado--",
                 width: '100%'
             });
-
-            var cleave = new Cleave('#fecha_registro', {
-                date: true,
-                datePattern: ['d', 'm', 'Y']
-            });
-
-            $("#fecha_registro").datepicker({
-                inline: false,
-                dateFormat: "dd/mm/yyyy",
-                autoClose: true,
-            });
         });
 
         $('.intro').on('keypress', function(event) {
@@ -40,25 +27,17 @@
         });
 
         function create(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            var dea_id = $("#dea_id").val()
-            var url = "{{ route('categoria.programatica.create',':dea_id') }}";
-            url = url.replace(':dea_id',dea_id);
+            var url = "{{ route('categoria.programatica.create') }}";
             window.location.href = url;
         }
 
         function search(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
             var url = "{{ route('categoria.programatica.search') }}";
             $("#form").attr('action', url);
             $("#form").submit();
         }
 
         function limpiar(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
             var url = "{{ route('categoria.programatica.index') }}";
             window.location.href = url;
         }

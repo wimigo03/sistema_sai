@@ -1,16 +1,15 @@
 @extends('layouts.admin')
 @section('content')
-    <div class="card-header header">
-        <div class="row">
-            <div class="col-md-12 pr-1 pl-1">
-                <b>ALMACENES</b>
+    <div class="card-body">
+        <div class="form-group row font-roboto-20">
+            <div class="col-md-12 text-center linea-completa">
+                <strong>ALMACENES</strong>
             </div>
         </div>
-    </div>
-    <div class="card-body body">
         @include('almacenes.almacen.partials.search')
         @include('almacenes.almacen.partials.table')
     </div>
+@endsection
 @section('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
@@ -35,9 +34,12 @@
         });
 
         function create(){
-            var dea_id = $("#dea_id").val()
-            var url = "{{ route('almacen.create',':dea_id') }}";
-            url = url.replace(':dea_id',dea_id);
+            var url = "{{ route('almacen.create') }}";
+            window.location.href = url;
+        }
+
+        function inventarioGeneral(){
+            var url = "{{ route('inventario.index') }}";
             window.location.href = url;
         }
 
@@ -52,5 +54,4 @@
             window.location.href = url;
         }
     </script>
-@endsection
 @endsection

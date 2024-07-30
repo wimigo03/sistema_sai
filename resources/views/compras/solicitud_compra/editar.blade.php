@@ -1,27 +1,47 @@
 @extends('layouts.admin')
 @section('content')
-    <div class="card-header header">
-        <div class="row">
-            <div class="col-md-12 pr-1 pl-1 text-center">
-                <b>MODIFICAR SOLICITUD DE COMPRA</b>
+    <div class="card-body">
+        <div class="form-group row font-roboto-20">
+            <div class="col-md-12 text-center linea-completa">
+                <strong>MODIFICAR SOLICITUD DE COMPRA DE MATERIAL</strong>
             </div>
         </div>
+        @include('compras.solicitud_compra.partials.form-editar')
     </div>
-    @include('compras.solicitud_compra.partials.form-editar')
 @section('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
-            localStorage.clear();
+            //localStorage.clear();
             $("#btn-registro").show();
-            document.getElementById("tipo").disabled = true;
             $('.select2').select2({
                 theme: "bootstrap4",
                 placeholder: "--Seleccionar--",
                 width: '100%'
             });
 
-            if($("#tipo >option:selected").val() != ''){
-                var id = $("#tipo >option:selected").val();
+            $('#partida_presupuestaria_id').on('select2:open', function(e) {
+                if($("#categoria_programatica_id >option:selected").val() == ""){
+                    Modal("Para continuar se debe seleccionar una <b>[CATEGORIA PROGRAMATICA]</b>.");
+                }
+            });
+
+            $('#item_id').on('select2:open', function(e) {
+                if($("#partida_presupuestaria_id >option:selected").val() == ""){
+                    Modal("Para continuar se debe seleccionar una <b>[PARTIDA PRESUPUESTARIA]</b>.");
+                }
+                if($("#categoria_programatica_id >option:selected").val() == ""){
+                    Modal("Para continuar se debe seleccionar un <b>[CATEGORIA PROGRAMATICA]</b>.");
+                }
+            });
+
+            if($("#categoria_programatica_id >option:selected").val() != ''){
+                var id = $("#categoria_programatica_id >option:selected").val();
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                getPartidasPresupuestarias(id,CSRF_TOKEN);
+            }
+
+            if($("#partida_presupuestaria_id >option:selected").val() != ''){
+                var id = $("#partida_presupuestaria_id >option:selected").val();
                 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
                 getItems(id,CSRF_TOKEN);
             }
@@ -31,9 +51,53 @@
                 numeralDecimalScale: 2,
                 numeralThousandsGroupStyle: 'thousand'
             });
+
+            initializeCleave();
         });
 
-        $('#tipo').change(function() {
+        function initializeCleave() {
+            document.querySelectorAll('.input-cantidad-old').forEach(function (input) {
+                new Cleave(input, {
+                    numeral: true,
+                    numeralDecimalScale: 2,
+                    numeralThousandsGroupStyle: 'thousand'
+                });
+            });
+        }
+
+        $('#categoria_programatica_id').change(function() {
+            var id = $(this).val();
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            getPartidasPresupuestarias(id,CSRF_TOKEN);
+        });
+
+        function getPartidasPresupuestarias(id,CSRF_TOKEN){
+            $.ajax({
+                type: 'GET',
+                url: '/solicitud-compra/get_partidas_presupuestarias',
+                data: {
+                    _token: CSRF_TOKEN,
+                    id: id
+                },
+                success: function(data){
+                    if(data.partidas_presupuestarias){
+                        var arr = Object.values($.parseJSON(data.partidas_presupuestarias));
+                        $("#partida_presupuestaria_id").empty();
+                        var select = $("#partida_presupuestaria_id");
+                        select.append($("<option></option>").attr("value", '').text('--Partida Presupuestaria--'));
+                        $.each(arr, function(index, json) {
+                            var opcion = $("<option></option>").attr("value", json.id).text(json.partida_presupuestaria);
+                            select.append(opcion);
+                        });
+                    }
+                },
+                error: function(xhr){
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+
+        $('#partida_presupuestaria_id').change(function() {
             var id = $(this).val();
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             getItems(id,CSRF_TOKEN);
@@ -53,16 +117,9 @@
                         $("#item_id").empty();
                         var select = $("#item_id");
                         select.append($("<option></option>").attr("value", '').text('--Item--'));
-                        var itemIdSeleccionado = localStorage.getItem('itemIdSeleccionado');
                         $.each(arr, function(index, json) {
                             var opcion = $("<option></option>").attr("value", json.item_id).text(json.producto);
-                            if (json.item_id == itemIdSeleccionado) {
-                                opcion.attr('selected', 'selected');
-                            }
                             select.append(opcion);
-                        });
-                        select.on('change', function() {
-                            localStorage.setItem('itemIdSeleccionado', $(this).val());
                         });
                     }
                 },
@@ -86,16 +143,12 @@
         }
 
         function validarHeader(){
-            if($("#tipo >option:selected").val() == ""){
-                Modal("Se debe seleccionar el [TIPO] de producto para continuar");
-                return false;
-            }
             if($("#c_interno").val() == ""){
-                Modal("Se debe agregar un numero de [CONTRO INTERNO] para continuar.");
+                Modal("<b>[ERROR. ]</b> Se debe agregar un numero de [CONTRO INTERNO] para continuar.");
                 return false;
             }
             if($("#detalle").val() == ""){
-                Modal("Se debe agregar un [DETALLE] para continuar.");
+                Modal("<b>[ERROR. ]</b> Se debe agregar un [DETALLE] para continuar.");
                 return false;
             }
             return true;
@@ -103,15 +156,15 @@
 
         function validarProductos(){
             if($("#item_id >option:selected").val() == ""){
-                Modal("Se debe seleccionar un [ITEM PRODUCTO / SERVICIO] para continuar.");
+                Modal("<b>[ERROR. ]</b> Se debe seleccionar un [MATERIAL] para continuar.");
                 return false;
             }
-            if($("#cantidad").val() == ""){
-                Modal("Se debe agregar una [CANTIDAD] para continuar.");
+            /*if($("#cantidad").val() == ""){
+                Modal("<b>[ERROR. ]</b> Se debe agregar una [CANTIDAD] para continuar.");
                 return false;
-            }
+            }*/
             if($("#cantidad").val() === '0'){
-                Modal("La [CANTIDAD] debe ser mayor a 0.");
+                Modal("<b>[ERROR. ]</b> La [CANTIDAD] debe ser mayor a 0.");
                 return false;
             }
             return true;
@@ -125,7 +178,7 @@
                     var tr = productos[i];
                     var producto_id = $(tr).find(".item_id").val();
                     if(producto == producto_id){
-                        Modal("El registro ya se encuentra en la tabla actual.");
+                        Modal("<b>[ERROR. ]</b> El registro ya se encuentra en la tabla actual.");
                         return false;
                     }
                 }
@@ -134,6 +187,10 @@
         }
 
         function cargarProductos(){
+            var categoria_programatica_id = $("#categoria_programatica_id >option:selected").val();
+            var categoria_programatica = $("#categoria_programatica_id option:selected").text();
+            var partida_presupuestaria_id = $("#partida_presupuestaria_id >option:selected").val();
+            var partida_presupuestaria = $("#partida_presupuestaria_id option:selected").text();
             var producto_id = $("#item_id >option:selected").val();
             var producto_texto = $("#item_id option:selected").text();
             var quitar = /[()]/g;
@@ -143,18 +200,24 @@
             var medida = string_texto[1];
             var cantidad = $("#cantidad").val();
             var fila = "<tr class='font-roboto-11'>"+
-                            "<td class='text-justify p-1'>"+
+                            "<td class='text-justify p-1' style='vertical-align: middle;'>"+
+                                "<input type='hidden' name='categoria_programatica_id[]' value='" + categoria_programatica_id + "'>" + categoria_programatica +
+                            "</td>" +
+                            "<td class='text-justify p-1' style='vertical-align: middle;'>"+
+                                "<input type='hidden' name='partida_presupuestaria_id[]' value='" + partida_presupuestaria_id + "'>" + partida_presupuestaria +
+                            "</td>" +
+                            "<td class='text-justify p-1' style='vertical-align: middle;'>"+
                                 "<input type='hidden' class='item_id' name='item_id[]' value='" + producto_id + "'>" + producto +
                             "</td>"+
-                            "<td class='text-justify p-1'>"+
+                            "<td class='text-justify p-1' style='vertical-align: middle;'>"+
                                 medida +
                             "</td>"+
-                            "<td class='text-right p-1'>"+
-                                "<input type='hidden' name='cantidad[]' value='" + cantidad + "'>" + cantidad +
-                            "</td>"+
-                            "<td class='text-center p-1'>"+
+                            "<td class='text-right p-1' width='80px'>"+
+                                "<input type='text' name='cantidad[]' value='" + cantidad + "' class='form-control form-control-sm font-roboto-12 text-right input-cantidad' disabled>" +
+                            "</td>" +
+                            "<td class='text-center p-1' style='vertical-align: middle;'>" +
                                 "<span class='badge-with-padding badge badge-danger' onclick='eliminarItem(this);'>" +
-                                      "<i class='fa-solid fa-trash'></i>" +
+                                      "<i class='fa-solid fa-trash fa-fw'></i>" +
                                  "</span>" +
                             "</td>"
                         "</tr>";
@@ -162,14 +225,27 @@
             $("#detalle_tabla").append(fila);
             $('#item_id').val('').trigger('change');
             document.getElementById('cantidad').value = '';
-            $("#btn-registro").show();
+            contar_registros();
         }
 
         function eliminarItem(thiss,solicitud_compra_detalle_id){
             var tr = $(thiss).parents("tr:eq(0)");
             tr.remove();
-            if (typeof solicitud_compra_detalle_id !== "undefined") {
+            /*if (typeof solicitud_compra_detalle_id !== "undefined") {
                 eliminar_registro(solicitud_compra_detalle_id);
+            }*/
+            contar_registros();
+        }
+
+        function contar_registros(){
+            var table = document.getElementById("detalle_tabla");
+            var registros = table.rows.length - 1;
+            if(registros === 0){
+                $("#btn-registro").hide();
+                document.getElementById('categoria_programatica_id').disabled = false;
+            }else{
+                document.getElementById('categoria_programatica_id').disabled = true;
+                $("#btn-registro").show();
             }
         }
 
@@ -196,17 +272,36 @@
         }
 
         function procesar() {
+            if(!validarCantidades()){
+                return false;
+            }
             $('#modal_confirmacion').modal({
                 keyboard: false
-            })
+            });
+        }
+
+        function validarCantidades(){
+            var filas = $("#detalle_tabla tbody tr");
+            if(filas.length>0){
+                for(var i=0;i<filas.length;i++){
+                    var tr = filas[i];
+                    var cantidad_old = $(tr).find(".input-cantidad-old").val();
+                    if (cantidad_old && cantidad_old.trim() !== ''){
+                        if(cantidad_old === '0'){
+                            Modal("<b>[ERROR. ]</b> Existen cantidades no con valor nulo o igual a 0.");
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
         }
 
         function confirmar(){
-            document.getElementById("tipo").disabled = false;
+            $('.input-cantidad').removeAttr('disabled');
             var url = "{{ route('solicitud.compra.update') }}";
             $("#form").attr('action', url);
-            $(".btn").hide();
-            $(".spinner-btn").show();
             $("#form").submit();
         }
 

@@ -43,6 +43,20 @@ class Almacen extends Model
         }
     }
 
+    /*public function getSaldoTotalAttribute(){
+        $ingreso_compra_detalles = IngresoCompraDetalle::query()
+                                            ->whereHas('ingresoCompra', function ($query) {
+                                                $query->where('estado', '2');
+                                            })
+                                            ->byDea(Auth::user()->dea->id)
+                                            ->byItem($this->id)
+                                            ->byAlmacen($this->almacen_id)
+                                            ->select('item_id',DB::raw("sum(saldo) as saldo_total"))
+                                            ->groupBy('item_id')
+                                            ->get()->sum('saldo_total');
+        return $ingreso_compra_detalles;
+    }*/
+
     public function dea(){
         return $this->belongsTo(Dea::class,'dea_id','id');
     }
@@ -52,31 +66,31 @@ class Almacen extends Model
     }
 
     public function scopeByDea($query, $dea_id){
-        if($dea_id){
-            return $query->where('dea_id', $dea_id);
+        if($dea_id != null){
+            return $query->where('almacenes.dea_id', $dea_id);
         }
     }
 
     public function scopeByNombre($query, $nombre){
-        if($nombre){
+        if($nombre != null){
             return $query->where('nombre', 'like', '%'.$nombre.'%');
         }
     }
 
     public function scopeByDireccion($query, $direccion){
-        if($direccion){
+        if($direccion != null){
             return $query->where('direccion', 'like', '%'.$direccion.'%');
         }
     }
 
     public function scopeByEncargado($query, $user_id){
-        if($user_id){
+        if($user_id != null){
             return $query->where('user_id', $user_id);
         }
     }
 
     public function scopeByEstado($query, $estado){
-        if($estado){
+        if($estado != null){
             return $query->where('estado', $estado);
         }
     }

@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="modal-alert-titulo">
-          <i class="fa fa-lg fa-exclamation-triangle text-warning" aria-hidden="true"></i>&nbsp;AVISO
+          <i class="fa fa-lg fa-exclamation-triangle text-warning" aria-hidden="true"></i>&nbsp;[ERROR]
         </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -14,7 +14,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-primary font-roboto-12" type="button" data-dismiss="modal">
-          <i class="fas fa-paper-plane fa-fw"></i> Aceptar
+          <i class="fas fa-paper-plane fa-fw"></i> Entendido
         </button>
       </div>
     </div>

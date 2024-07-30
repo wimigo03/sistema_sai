@@ -1,7 +1,6 @@
 <div class="card-body body">
     <form action="#" method="post" id="form">
         @csrf
-        <input type="hidden" name="dea_id" value="{{ $dea_id }}" id="dea_id">
         <div class="form-group row font-roboto-12">
             <div class="col-md-4 pr-1 pl-1">
                 <label for="nombre" class="d-inline"><b>Nombre</b></label>

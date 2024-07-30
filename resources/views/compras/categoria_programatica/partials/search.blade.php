@@ -1,14 +1,10 @@
 <form action="#" method="get" id="form">
-    <div class="form-group row">
-        <div class="col-md-3 pr-1 pl-1">
-            <input type="hidden" name="dea_id" value="{{ $dea_id }}" id="dea_id">
+    <div class="form-group row abs-center">
+        <div class="col-md-2 pr-1 pl-1">
             <input type="text" name="codigo" value="{{ request('codigo') }}" placeholder="--Codigo--" class="form-control font-roboto-12 intro">
         </div>
         <div class="col-md-5 pr-1 pl-1">
-            <input type="text" name="nombre" value="{{ request('nombre') }}" placeholder="--Nombre--" class="form-control font-roboto-12 intro">
-        </div>
-        <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="fecha_registro" value="{{ request('fecha_registro') }}" id="fecha_registro" placeholder="--Fecha Registro--" class="form-control font-roboto-12" data-language="es">
+            <input type="text" name="nombre" value="{{ request('nombre') }}" placeholder="--Categoria Programatica--" class="form-control font-roboto-12 intro">
         </div>
         <div class="col-md-2 pr-1 pl-1">
             <select name="estado" id="estado" class="form-control">
@@ -19,24 +15,21 @@
             </select>
         </div>
     </div>
-    <div class="form-group row">
-        <div class="col-md-6 pr-1 pl-1">
+    <div class="form-group row abs-center">
+        <div class="col-md-9 pr-1 pl-1">
             @can('programa.create')
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Registrar Proveedor" style="cursor: pointer;">
-                    <button class="btn btn-sm btn-outline-success font-roboto-12" type="button" onclick="create();">
+                    <span class="btn btn-outline-success font-roboto-12" onclick="create();">
                         <i class="fas fa-plus fa-fw"></i>
-                    </button>
+                    </span>
                 </span>
             @endcan
-            <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-        </div>
-        <div class="col-md-6 pr-1 pl-1 text-right">
-            <button class="btn btn-outline-primary font-roboto-12" type="button" onclick="search();">
-                <i class="fas fa-search fa-fw"></i> Buscar
-            </button>
-            <button class="btn btn-outline-danger font-roboto-12" type="button" onclick="limpiar();">
+            <span class="btn btn-outline-danger font-roboto-12 float-right" onclick="limpiar();">
                 <i class="fas fa-eraser fa-fw"></i> Limpiar
-            </button>
+            </span>
+            <span class="btn btn-outline-primary font-roboto-12 float-right mr-1" onclick="search();">
+                <i class="fas fa-search fa-fw"></i> Buscar
+            </span>
             <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
         </div>
     </div>

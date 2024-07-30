@@ -1,5 +1,5 @@
-<div class="form-group row">
-    <div class="col-md-12 pr-1 pl-1 table-responsive">
+<div class="form-group row abs-center">
+    <div class="col-md-10 pr-1 pl-1 table-responsive">
         <table class="table display table-bordered responsive hover-orange" style="width:100%;">
             <thead>
                 <tr class="font-roboto-11">
@@ -26,23 +26,22 @@
                                 <div class="d-flex justify-content-center">
                                     @can('programa.habilitar')
                                         @if($datos->status == "HABILITADO")
-                                            <span class="tts:left tts-slideIn tts-custom" aria-label="Deshabilitar" style="cursor: pointer;">
+                                            <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Deshabilitar" style="cursor: pointer;">
                                                 <a href="{{ route('programa.deshabilitar',$datos->id) }}" class="badge-with-padding badge badge-danger">
                                                     <i class="fas fa-arrow-alt-circle-down fa-fw"></i>
                                                 </a>
                                             </span>
                                         @else
-                                            <span class="tts:left tts-slideIn tts-custom" aria-label="Habilitar" style="cursor: pointer;">
+                                            <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Habilitar" style="cursor: pointer;">
                                                 <a href="{{ route('programa.habilitar',$datos->id) }}" class="badge-with-padding badge badge-success">
                                                     <i class="fas fa-arrow-alt-circle-up fa-fw"></i>
                                                 </a>
                                             </span>
                                         @endif
                                     @endcan
-                                    &nbsp;
                                     @can('programa.editar')
                                         <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar" style="cursor: pointer;">
-                                            <a href="{{ route('programa.editar',$datos->id) }}" class="badge-with-padding badge badge-secondary text-white">
+                                            <a href="{{ route('programa.editar',$datos->id) }}" class="badge-with-padding badge badge-warning">
                                                 <i class="fas fa-edit fa-fw"></i>
                                             </a>
                                         </span>

@@ -3,12 +3,11 @@
         <table class="table display table-striped table-bordered responsive hover-orange" style="width:100%;">
             <thead>
                 <tr class="font-roboto-11">
-                    <td class="text-center p-1"><b>CODIGO</b></td>
-                    <td class="text-center p-1"><b>ALMACEN</b></td>
-                    <td class="text-center p-1"><b>PROVEEDOR</b></td>
-                    <td class="text-center p-1"><b>NRO. O.C.</b></td>
-                    <td class="text-center p-1"><b>CAT. PROGR.</b></td>
-                    <td class="text-center p-1"><b>PROGRAMA</b></td>
+                    <td class="text-left p-1"><b>CODIGO</b></td>
+                    <td class="text-left p-1"><b>AREA SOLICITANTE</b></td>
+                    <td class="text-left p-1"><b>ALMACEN</b></td>
+                    <td class="text-left p-1"><b>PROVEEDOR</b></td>
+                    <td class="text-left p-1"><b>NRO. O.C.</b></td>
                     <td class="text-center p-1"><b>ESTADO</b></td>
                     @canany(['ingreso.compra.show'])
                         <td class="text-center p-1"><b><i class="fa-solid fa-bars"></i></b></td>
@@ -18,12 +17,11 @@
             <tbody>
                 @foreach ($ingresos_compras as $datos)
                     <tr class="font-roboto-11">
-                        <td class="text-center p-1">{{ $datos->codigo }}</td>
-                        <td class="text-center p-1">{{ $datos->almacen->nombre }}</td>
-                        <td class="text-center p-1">{{ $datos->proveedor->nombre }}</td>
-                        <td class="text-center p-1">{{ $datos->orden_compra->codigo }}</td>
-                        <td class="text-center p-1">{{ $datos->programatica->nombre }}</td>
-                        <td class="text-center p-1">{{ $datos->programa->nombre }}</td>
+                        <td class="text-left p-1">{{ $datos->codigo }}</td>
+                        <td class="text-left p-1">{{ $datos->area->nombrearea }}</td>
+                        <td class="text-left p-1">{{ $datos->almacen->nombre }}</td>
+                        <td class="text-left p-1">{{ $datos->proveedor->nombre }}</td>
+                        <td class="text-left p-1">{{ $datos->orden_compra->codigo }}</td>
                         <td class="text-center p-1">
                             <span class="{{ $datos->colorBadgeStatus }}">
                                 {{ $datos->status }}

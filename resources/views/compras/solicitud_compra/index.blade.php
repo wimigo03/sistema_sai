@@ -1,16 +1,15 @@
 @extends('layouts.admin')
 @section('content')
-    <div class="card-header header">
-        <div class="row">
-            <div class="col-md-12 pr-1 pl-1 text-center">
-                <b>SOLICITUDES DE COMPRAS</b>
+    <div class="card-body">
+        <div class="form-group row font-roboto-20">
+            <div class="col-md-12 text-center linea-completa">
+                <strong>SOLICITUDES DE COMPRAS MATERIAL</strong>
             </div>
         </div>
-    </div>
-    <div class="card-body body">
         @include('compras.solicitud_compra.partials.search')
         @include('compras.solicitud_compra.partials.table')
     </div>
+@endsection
 @section('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
@@ -64,9 +63,7 @@
         });
 
         function create(){
-            var dea_id = $("#dea_id").val()
-            var url = "{{ route('solicitud.compra.create',':dea_id') }}";
-            url = url.replace(':dea_id',dea_id);
+            var url = "{{ route('solicitud.compra.create') }}";
             window.location.href = url;
         }
 
@@ -81,5 +78,4 @@
             window.location.href = url;
         }
     </script>
-@endsection
 @endsection

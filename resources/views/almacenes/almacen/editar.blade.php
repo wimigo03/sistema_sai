@@ -1,13 +1,13 @@
 @extends('layouts.admin')
 @section('content')
-    <div class="card-header header">
-        <div class="row">
-            <div class="col-md-12 pr-1 pl-1 text-center">
-                <b>MODIFICAR ALMACEN - {{ $dea->descripcion }}</b>
+    <div class="card-body">
+        <div class="form-group row font-roboto-20">
+            <div class="col-md-12 text-center linea-completa">
+                <strong>MODIFICAR DATOS DE ALMACEN</strong>
             </div>
         </div>
+        @include('almacenes.almacen.partials.form-editar')
     </div>
-    @include('almacenes.almacen.partials.form-editar')
 @section('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
@@ -43,8 +43,6 @@
         function confirmar(){
             var url = "{{ route('almacen.update') }}";
             $("#form").attr('action', url);
-            $(".btn").hide();
-            $(".spinner-btn").show();
             $("#form").submit();
         }
 

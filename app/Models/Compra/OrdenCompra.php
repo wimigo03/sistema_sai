@@ -8,8 +8,6 @@ use App\Models\Area;
 use App\Models\User;
 use App\Models\Canasta\Dea;
 use App\Models\Compra\Proveedor;
-use App\Models\Compra\CategoriaProgramatica;
-use App\Models\Compra\Programa;
 use App\Models\Compra\SolicitudCompra;
 use App\Models\Almacenes\Almacen;
 
@@ -24,9 +22,8 @@ class OrdenCompra extends Model
         'idarea',
         'user_id',
         'almacen_id',
-        'categoria_programatica_id',
-        'programa_id',
         'solicitud_compra_id',
+        'idemp',
         'user_aprob_id',
         'codigo',
         'objeto',
@@ -43,6 +40,7 @@ class OrdenCompra extends Model
         '1' => 'PENDIENTE',
         '2' => 'APROBADO',
         '3' => 'RECHAZADO',
+        '4' => 'INGRESADO',
     ];
 
     const TIPOS = [
@@ -58,6 +56,8 @@ class OrdenCompra extends Model
                 return "APROBADO";
             case '3':
                 return "RECHAZADO";
+            case '4':
+                return "INGRESADO";
         }
     }
 
@@ -78,6 +78,8 @@ class OrdenCompra extends Model
                 return "badge-with-padding badge badge-success";
             case '3':
                 return "badge-with-padding badge badge-danger";
+            case '4':
+                return "badge-with-padding badge badge-info";
         }
     }
 
@@ -89,6 +91,8 @@ class OrdenCompra extends Model
                 return "text-white bg-success";
             case '3':
                 return "text-white bg-danger";
+            case '4':
+                return "text-white bg-info";
         }
     }
 
@@ -100,6 +104,8 @@ class OrdenCompra extends Model
                 return "text-success";
             case '3':
                 return "text-danger";
+            case '4':
+                return "text-info";
         }
     }
 
@@ -121,14 +127,6 @@ class OrdenCompra extends Model
 
     public function almacen(){
         return $this->belongsTo(Almacen::class,'almacen_id','id');
-    }
-
-    public function programatica(){
-        return $this->belongsTo(CategoriaProgramatica::class,'categoria_programatica_id','id');
-    }
-
-    public function programa(){
-        return $this->belongsTo(Programa::class,'programa_id','id');
     }
 
     public function solicitud_compra(){

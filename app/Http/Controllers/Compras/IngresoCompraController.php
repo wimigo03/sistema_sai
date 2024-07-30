@@ -6,23 +6,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Models\Compra\OrdenCompra;
 use App\Models\Compra\IngresoCompra;
 use App\Models\Compra\IngresoCompraDetalle;
 use App\Models\User;
 use App\Models\Almacenes\Almacen;
 use App\Models\Compra\Proveedor;
 use App\Models\Compra\CategoriaProgramatica;
-use App\Models\Compra\Programa;
-/*use App\Models\Compra\OrdenCompra;
-use App\Models\Compra\OrdenCompraDetalle;
-use App\Models\Compra\SolicitudCompra;
 use App\Models\Area;
-
-
-use App\Models\Empleado;
-use App\Models\Compra\Item;
 use App\Models\Canasta\Dea;
-*/
 use DB;
 
 class IngresoCompraController extends Controller
@@ -30,38 +22,35 @@ class IngresoCompraController extends Controller
     public function index()
     {
         $dea_id = Auth::user()->dea->id;
+        $areas = Area::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
         $almacenes = Almacen::where('dea_id',$dea_id)->pluck('nombre','id');
         $proveedores = Proveedor::where('dea_id',$dea_id)->pluck('nombre','id');
-        $categorias_programaticas = CategoriaProgramatica::select(DB::raw("concat(codigo,' ',nombre) as categoria"),'id')->where('dea_id',$dea_id)->pluck('categoria','id');
-        $programas = Programa::where('dea_id',$dea_id)->pluck('nombre','id');
         $ingresos_compras = IngresoCompra::query()
                                             ->ByDea($dea_id)
                                             ->orderBy('id','desc')
                                             ->paginate(10);
         $estados = IngresoCompra::ESTADOS;
-        return view('compras.ingreso_compra.index',compact('dea_id','almacenes','proveedores','categorias_programaticas','programas','ingresos_compras','estados'));
+        return view('compras.ingreso_compra.index',compact('areas','almacenes','proveedores','ingresos_compras','estados'));
     }
 
     public function search(Request $request)
     {
-        $dea_id = $request->dea_id;
+        $dea_id = Auth::user()->dea->id;
+        $areas = Area::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
         $almacenes = Almacen::where('dea_id',$dea_id)->pluck('nombre','id');
         $proveedores = Proveedor::where('dea_id',$dea_id)->pluck('nombre','id');
-        $categorias_programaticas = CategoriaProgramatica::select(DB::raw("concat(codigo,' ',nombre) as categoria"),'id')->where('dea_id',$dea_id)->pluck('categoria','id');
-        $programas = Programa::where('dea_id',$dea_id)->pluck('nombre','id');
         $ingresos_compras = IngresoCompra::query()
                                             ->ByDea($dea_id)
                                             ->ByCodigo($request->codigo)
+                                            ->ByArea($request->area_id)
                                             ->ByAlmacen($request->almacen_id)
                                             ->ByProveedor($request->proveedor_id)
                                             ->ByCodigoOC($request->codigo_oc)
-                                            ->ByCategoriaProgramatica($request->categoria_programatica_id)
-                                            ->ByPrograma($request->programa_id)
                                             ->ByEstado($request->estado)
                                             ->orderBy('id','desc')
                                             ->paginate(10);
         $estados = IngresoCompra::ESTADOS;
-        return view('compras.ingreso_compra.index',compact('dea_id','almacenes','proveedores','categorias_programaticas','programas','ingresos_compras','estados'));
+        return view('compras.ingreso_compra.index',compact('areas','almacenes','proveedores','ingresos_compras','estados'));
     }
 
     public function show($ingreso_compra_id)
@@ -76,9 +65,15 @@ class IngresoCompraController extends Controller
         try{
             $function = DB::transaction(function () use ($request) {
                 $ingreso_compra = IngresoCompra::find($request->ingreso_compra_id);
+                $orden_compra = OrdenCompra::find($ingreso_compra->orden_compra_id);
+                $orden_compra->update([
+                    'estado' => '4'
+                ]);
+
                 $ingreso_compra->update([
                     'user_id' => Auth::user()->id,
                     'fecha_ingreso' => date('Y-m-d'),
+                    'idemp' => Auth::user()->idemp,
                     'obs' => $request->obs,
                     'estado' => '2'
                 ]);
@@ -87,7 +82,9 @@ class IngresoCompraController extends Controller
                 foreach($ingreso_compra_detalles as $datos){
                     $ingreso_compra_detalle = IngresoCompraDetalle::find($datos->id);
                     $ingreso_compra_detalle->update([
-                        'user_id' => Auth::user()->id
+                        'user_id' => Auth::user()->id,
+                        'idemp' => Auth::user()->idemp,
+                        'saldo' => 0,
                     ]);
                 }
                 return $ingreso_compra;

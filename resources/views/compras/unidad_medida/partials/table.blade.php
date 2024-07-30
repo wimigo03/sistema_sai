@@ -1,5 +1,5 @@
-<div class="form-group row">
-    <div class="col-md-12 pr-1 pl-1 table-responsive">
+<div class="form-group row abs-center">
+    <div class="col-md-10 pr-1 pl-1 table-responsive">
         <table class="table display table-striped table-bordered responsive hover-orange" style="width:100%;">
             <thead>
                 <tr class="font-roboto-11">
@@ -44,7 +44,7 @@
                                     &nbsp;
                                     @can('unidad.medida.editar')
                                         <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar" style="cursor: pointer;">
-                                            <a href="{{ route('unidad.medida.editar',$datos->id) }}" class="badge-with-padding badge badge-secondary text-white">
+                                            <a href="{{ route('unidad.medida.editar',$datos->id) }}" class="badge-with-padding badge badge-warning">
                                                 <i class="fas fa-edit fa-fw"></i>
                                             </a>
                                         </span>

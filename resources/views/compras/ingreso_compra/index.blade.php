@@ -1,16 +1,15 @@
 @extends('layouts.admin')
 @section('content')
-    <div class="card-header header">
-        <div class="row">
-            <div class="col-md-12 pr-1 pl-1 text-center">
-                <b>INGRESOS POR COMPRAS</b>
+    <div class="card-body">
+        <div class="form-group row font-roboto-20">
+            <div class="col-md-12 text-center linea-completa">
+                <strong>INGRESO DE MATERIALES</strong>
             </div>
         </div>
-    </div>
-    <div class="card-body body">
         @include('compras.ingreso_compra.partials.search')
         @include('compras.ingreso_compra.partials.table')
     </div>
+@endsection
 @section('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
@@ -26,15 +25,9 @@
                 width: '100%'
             });
 
-            $('#categoria_programatica_id').select2({
+            $('#area_id').select2({
                 theme: "bootstrap4",
-                placeholder: "--Categoria Programatica--",
-                width: '100%'
-            });
-
-            $('#programa_id').select2({
-                theme: "bootstrap4",
-                placeholder: "--Programa--",
+                placeholder: "--Area Solicitante--",
                 width: '100%'
             });
 
@@ -63,5 +56,4 @@
             window.location.href = url;
         }
     </script>
-@endsection
 @endsection

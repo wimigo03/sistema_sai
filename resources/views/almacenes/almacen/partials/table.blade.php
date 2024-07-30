@@ -3,9 +3,9 @@
         <table class="table display table-bordered responsive hover-orange" style="width:100%;">
             <thead>
                 <tr class="font-roboto-11">
-                    <td class="text-center p-1"><b>NOMRBE</b></td>
-                    <td class="text-center p-1"><b>DIRECCION</b></td>
-                    <td class="text-center p-1"><b>ENCARGADO</b></td>
+                    <td class="text-left p-1"><b>NOMRBE</b></td>
+                    <td class="text-left p-1"><b>DIRECCION</b></td>
+                    <td class="text-left p-1"><b>ENCARGADO</b></td>
                     <td class="text-center p-1"><b>ESTADO</b></td>
                     @canany(['almacen.show','almacen.editar'])
                         <td class="text-center p-1"><b><i class="fa-solid fa-bars"></i></b></td>
@@ -17,7 +17,7 @@
                     <tr class="font-roboto-11">
                         <td class="text-left p-1">{{ $datos->nombre }}</td>
                         <td class="text-left p-1">{{ $datos->direccion }}</td>
-                        <td class="text-center p-1">{{ $datos->user != null ? strtoupper($datos->user->name) : '' }}</td>
+                        <td class="text-left p-1">{{ $datos->user != null ? strtoupper($datos->user->nombre_completo) : '' }}</td>
                         <td class="text-center p-1">
                             <span class="{{ $datos->colorBadgeStatus }}">
                                 {{ $datos->status }}
@@ -36,7 +36,7 @@
                                     &nbsp;
                                     @can('almacen.editar')
                                         <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar" style="cursor: pointer;">
-                                            <a href="{{ route('almacen.editar',$datos->id) }}" class="badge-with-padding badge badge-warning text-white">
+                                            <a href="{{ route('almacen.editar',$datos->id) }}" class="badge-with-padding badge badge-warning">
                                                 <i class="fas fa-edit fa-fw"></i>
                                             </a>
                                         </span>

@@ -1,16 +1,15 @@
 @extends('layouts.admin')
 @section('content')
-    <div class="card-header header">
-        <div class="row">
-            <div class="col-md-12 pr-1 pl-1 text-center">
-                <b>ORDENES DE COMPRAS</b>
-            </div>
+<div class="card-body">
+    <div class="form-group row font-roboto-20">
+        <div class="col-md-12 text-center linea-completa">
+            <strong>ORDENES DE COMPRA - MATERIAL</strong>
         </div>
     </div>
-    <div class="card-body body">
-        @include('compras.orden_compra.partials.search')
-        @include('compras.orden_compra.partials.table')
-    </div>
+    @include('compras.orden_compra.partials.search')
+    @include('compras.orden_compra.partials.table')
+</div>
+@endsection
 @section('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
@@ -77,5 +76,4 @@
             window.location.href = url;
         }
     </script>
-@endsection
 @endsection

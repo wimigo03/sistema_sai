@@ -13,20 +13,18 @@ class ProveedorController extends Controller
 {
     public function index()
     {
-        $dea_id = Auth::user()->dea->id;
         $proveedores = Proveedor::query()
-                                ->ByDea($dea_id)
+                                ->ByDea(Auth::user()->dea->id)
                                 ->orderBy('id','desc')
                                 ->paginate(10);
         $estados = Proveedor::ESTADOS;
-        return view('compras.proveedor.index',compact('dea_id','proveedores','estados'));
+        return view('compras.proveedor.index',compact('proveedores','estados'));
     }
 
     public function search(Request $request)
     {
-        $dea_id = $request->dea_id;
         $proveedores = Proveedor::query()
-                                ->ByDea($dea_id)
+                                ->ByDea(Auth::user()->dea->id)
                                 ->ByNro($request->nro)
                                 ->ByNombre($request->nombre)
                                 ->ByRepresentante($request->representante)
@@ -38,26 +36,26 @@ class ProveedorController extends Controller
                                 ->orderBy('id','desc')
                                 ->paginate(10);
         $estados = Proveedor::ESTADOS;
-        return view('compras.proveedor.index',compact('dea_id','proveedores','estados'));
+        return view('compras.proveedor.index',compact('proveedores','estados'));
     }
 
-    public function create($dea_id)
+    public function create()
     {
-        return view('compras.proveedor.create',compact('dea_id'));
+        return view('compras.proveedor.create');
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'nombre' => 'required',
-            'nro_carnet' => 'required|unique:proveedor,nro_ci,null,id,dea_id,' . $request->dea_id,
+            'nro_carnet' => 'required|unique:proveedor,nro_ci,null,id,dea_id,' . Auth::user()->dea->id,
             'representante' => 'required',
             'nit' => 'required'
         ]);
         try{
             $function = DB::transaction(function () use ($request) {
                 $datos = [
-                    'dea_id' => $request->dea_id,
+                    'dea_id' => Auth::user()->dea->id,
                     'user_id' => Auth::user()->id,
                     'nombre' => $request->nombre,
                     'representante' => $request->representante,

@@ -5,17 +5,20 @@ namespace App\Models\Compra;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Canasta\Dea;
+use App\Models\Compra\CategoriaProgramatica;
 
-class Partida extends Model
+class PartidaPresupuestaria extends Model
 {
-    protected $table = 'partidas';
+    protected $table = 'partidas_presupuestarias';
     protected $fillable = [
         'dea_id',
-        'user_id',
+        'categoria_programatica_id',
+        'numeracion',
         'codigo',
+        'parent_id',
         'nombre',
+        'descripcion',
         'detalle',
-        'fecha_registro',
         'estado'
     ];
 
@@ -46,43 +49,42 @@ class Partida extends Model
         return $this->belongsTo(Dea::class,'dea_id','id');
     }
 
+    public function categoria_programatica(){
+        return $this->belongsTo(CategoriaProgramatica::class,'categoria_programatica_id','id');
+    }
+
     public function scopeByDea($query, $dea_id){
-        if($dea_id){
+        if($dea_id != null){
             return $query->where('dea_id', $dea_id);
         }
     }
 
+    public function scopeByHijos($query, $parent_id){
+        if($parent_id != null){
+            return $query->where('parent_id', $parent_id);
+        }
+    }
+
     public function scopeByCodigo($query, $codigo){
-        if($codigo){
+        if($codigo != null){
             return $query->where('codigo', $codigo);
         }
     }
 
     public function scopeByNombre($query, $nombre){
-        if($nombre){
+        if($nombre != null){
             return $query->where('nombre','like', '%' . $nombre . '%');
         }
     }
 
     public function scopeByDetalle($query, $detalle){
-        if($detalle){
+        if($detalle != null){
             return $query->where('detalle','like', '%' . $detalle . '%');
         }
     }
 
-    public function scopeByFechaRegistro($query, $from){
-        if ($from) {
-            $from = date('Y-m-d 00:00:00', strtotime(str_replace('/', '-', $from)));
-            $to = date('Y-m-d 23:59:59', strtotime(str_replace('/', '-', $from)));
-            return $query->where(
-                'fecha_registro','>=',$from
-            )
-            ->where('fecha_registro', '<=', $to);
-        }
-    }
-
     public function scopeByEstado($query, $estado){
-        if($estado){
+        if($estado != null){
             return $query->where('estado', $estado);
         }
     }

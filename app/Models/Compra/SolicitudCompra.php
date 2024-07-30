@@ -18,6 +18,7 @@ class SolicitudCompra extends Model
         'user_id',
         'dea_id',
         'user_aprob_id',
+        'idemp',
         'codigo',
         'detalle',
         'tipo',
@@ -36,7 +37,7 @@ class SolicitudCompra extends Model
 
     const TIPOS = [
         '1' => 'PRODUCTO',
-        '2' => 'SERVICIO'
+        //'2' => 'SERVICIO'
     ];
 
     public function getStatusAttribute(){

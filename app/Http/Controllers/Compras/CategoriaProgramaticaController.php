@@ -13,33 +13,30 @@ class CategoriaProgramaticaController extends Controller
 {
     public function index()
     {
-        $dea_id = Auth::user()->dea->id;
         $categorias_programaticas = CategoriaProgramatica::query()
-                                                            ->ByDea($dea_id)
+                                                            ->ByDea(Auth::user()->dea->id)
                                                             ->orderBy('id','desc')
                                                             ->paginate(10);
         $estados = CategoriaProgramatica::ESTADOS;
-        return view('compras.categoria_programatica.index',compact('dea_id','categorias_programaticas','estados'));
+        return view('compras.categoria_programatica.index',compact('categorias_programaticas','estados'));
     }
 
     public function search(Request $request)
     {
-        $dea_id = $request->dea_id;
         $categorias_programaticas = CategoriaProgramatica::query()
-                                                            ->ByDea($dea_id)
+                                                            ->ByDea(Auth::user()->dea->id)
                                                             ->ByCodigo($request->codigo)
                                                             ->ByNombre($request->nombre)
-                                                            ->ByFechaRegistro($request->fecha_registro)
                                                             ->ByEstado($request->estado)
                                                             ->orderBy('id','desc')
                                                             ->paginate(10);
         $estados = CategoriaProgramatica::ESTADOS;
-        return view('compras.categoria_programatica.index',compact('dea_id','categorias_programaticas','estados'));
+        return view('compras.categoria_programatica.index',compact('categorias_programaticas','estados'));
     }
 
-    public function create($dea_id)
+    public function create()
     {
-        return view('compras.categoria_programatica.create',compact('dea_id'));
+        return view('compras.categoria_programatica.create');
     }
 
     public function store(Request $request)
@@ -51,7 +48,7 @@ class CategoriaProgramaticaController extends Controller
         try{
             $function = DB::transaction(function () use ($request) {
                 $datos = [
-                    'dea_id' => $request->dea_id,
+                    'dea_id' => Auth::user()->dea->id,
                     'user_id' => Auth::user()->id,
                     'codigo' => $request->codigo,
                     'nombre' => $request->nombre,

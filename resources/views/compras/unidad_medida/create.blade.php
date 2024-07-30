@@ -32,14 +32,10 @@
         function confirmar(){
             var url = "{{ route('unidad.medida.store') }}";
             $("#form").attr('action', url);
-            $(".btn").hide();
-            $(".spinner-btn").show();
             $("#form").submit();
         }
 
         function cancelar(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
             var url = "{{ route('unidad.medida.index') }}";
             window.location.href = url;
         }

@@ -1,13 +1,13 @@
 @extends('layouts.admin')
 @section('content')
-    <div class="card-header header">
-        <div class="row">
-            <div class="col-md-12 pr-1 pl-1 text-center">
-                <b>MODIFICAR PARTIDA PRESUPUESTARIA</b>
+    <div class="card-body">
+        <div class="form-group row font-roboto-20">
+            <div class="col-md-12 text-center linea-completa">
+                <strong>MODIFICAR DATOS DE ALMACEN</strong>
             </div>
         </div>
+        @include('almacenes.almacen.partials.form-editar')
     </div>
-    @include('compras.partida.partials.form-editar')
 @section('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
@@ -15,13 +15,6 @@
                 theme: "bootstrap4",
                 placeholder: "--Seleccionar--",
                 width: '100%'
-            });
-
-            var cleave = new Cleave('#codigo', {
-                numeral: true,
-                numeralDecimalMark: '',
-                numeralThousandsGroupStyle: 'none',
-                rawValueTrimPrefix: true
             });
         });
 
@@ -31,23 +24,30 @@
         }
 
         function procesar() {
+            if(!validar()){
+                return false;
+            }
             $('#modal_confirmacion').modal({
                 keyboard: false
             })
         }
 
+        function validar(){
+            if($("#nombre").val() == ""){
+                Modal("<center>[ERROR AL VALIDAR NOMBRE DEL ALMACEN]</center>");
+                return false;
+            }
+            return true;
+        }
+
         function confirmar(){
-            var url = "{{ route('partida.update') }}";
+            var url = "{{ route('almacen.update') }}";
             $("#form").attr('action', url);
-            $(".btn").hide();
-            $(".spinner-btn").show();
             $("#form").submit();
         }
 
         function cancelar(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            var url = "{{ route('partida.index') }}";
+            var url = "{{ route('almacen.index') }}";
             window.location.href = url;
         }
     </script>
