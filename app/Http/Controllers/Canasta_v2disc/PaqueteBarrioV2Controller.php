@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Canasta_v2;
+namespace App\Http\Controllers\Canasta_v2disc;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -161,7 +161,7 @@ class PaqueteBarrioV2Controller extends Controller
     {
         $distritos = Distrito::where('dea_id',Auth::user()->dea->id)->pluck('nombre','id');
 
-        return view('canasta_v2.paquetes-barrio.create', compact('paquete_id','distritos'));
+        return view('canasta_v2disc.paquetes-barrio.create', compact('paquete_id','distritos'));
     }
 
     public function getBarrios(Request $request){

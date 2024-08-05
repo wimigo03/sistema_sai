@@ -3,7 +3,7 @@
     <div class="card-header header">
         <div class="row">
             <div class="col-md-12 pr-1 pl-1 text-center">
-                <b>CRONOGRAMA DE ENTREGA - BARRIOS</b>
+                <b>CRONOGRAMA DE ENTREGA - BARRIOS - DISC.</b>
             </div>
         </div>
     </div>
@@ -37,8 +37,8 @@
                 <b class="font-roboto-12">Resagados =&nbsp;</b> <span class="font-roboto-12">{{ $paquete->resagados }}</span>
             </div>
         </div>
-        @include('canasta_v2.paquetes-barrio.partials.search')
-        @include('canasta_v2.paquetes-barrio.partials.table')
+        @include('canasta_v2disc.paquetes-barrio.partials.search')
+        @include('canasta_v2disc.paquetes-barrio.partials.table')
     </div>
 @endsection
 @section('scripts')
@@ -168,7 +168,7 @@
 
         function create() {
             var paquete_id = $("#paquete_id").val();
-            var url = "{{ route('paquetes.barrio.create', ':id') }}";
+            var url = "{{ route('paquetes.barriodisc.create', ':id') }}";
             url = url.replace(':id', paquete_id);
             window.location.href = url;
         }

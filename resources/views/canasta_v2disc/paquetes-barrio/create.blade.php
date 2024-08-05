@@ -3,12 +3,12 @@
     <div class="card-header header">
         <div class="row">
             <div class="col-md-12 pr-1 pl-1 text-center">
-                <b>REGISTRO DE CRONOGRAMA DE ENTREGA - BARRIOS</b>
+                <b>REGISTRO DE CRONOGRAMA DE ENTREGA - BARRIOS - DISC.</b>
             </div>
         </div>
     </div>
     <div class="card-body body">
-        @include('canasta_v2.paquetes-barrio.partials.create')
+        @include('canasta_v2disc.paquetes-barrio.partials.create')
     </div>
 @endsection
 @section('scripts')
@@ -226,7 +226,7 @@
 
         function confirmar(){
             var paquete_id = $("#paquete_id").val();
-            var url = "{{ route('paquetes.barrio.store', ':id') }}";
+            var url = "{{ route('paquetes.barriodisc.store', ':id') }}";
             url = url.replace(':id', paquete_id);
             $("#form").attr('action', url);
             $("#form").submit();

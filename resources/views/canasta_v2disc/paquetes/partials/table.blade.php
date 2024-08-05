@@ -50,7 +50,7 @@
                                 @endcan
                                 @can('canasta.paquetes.barrio.index')
                                     <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Ir a cronograma de entrega">
-                                        <a  href="{{ route('paquetes.barrio.index',$datos->id) }}" class="badge-with-padding badge badge-warning font-roboto-11">
+                                        <a  href="{{ route('paquetes.barriodisc.index',$datos->id) }}" class="badge-with-padding badge badge-warning font-roboto-11">
                                             <i class="fas fa-box fa-fw"></i>
                                         </a>
                                     </span>
