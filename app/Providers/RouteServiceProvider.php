@@ -90,5 +90,15 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/archivos-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/control-interno-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/tipo-archivos-route.php'));
+
+
+        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/CanastaV2disc/barrios-route.php'));
+        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/CanastaV2disc/distritos-route.php'));
+        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/CanastaV2disc/beneficiarios-route.php'));
+        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/CanastaV2disc/paquetes-route.php'));
+        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/CanastaV2disc/paquetes-barrio-route.php'));
+        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/CanastaV2disc/entregas-route.php'));
+        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/CanastaV2disc/entrega-beneficiario-route.php'));
+        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/CanastaV2disc/periodos-route.php'));
     }
 }

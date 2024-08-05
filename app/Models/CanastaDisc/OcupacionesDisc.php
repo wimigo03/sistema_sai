@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Models\Canasta;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class OcupacionesDisc extends Model
+{
+    protected $table = 'ocupaciones';
+    public $timestamps = false;
+    protected $fillable = [
+        'id',
+        'ocupacion',
+        'estado'
+    ];
+}

@@ -19,7 +19,7 @@ use DB;
 use PDF;
 use Carbon\Carbon;
 
-class EntregasV2Controller extends Controller
+class EntregasV2cController extends Controller
 {
     public function index($paquete_barrio_id)
     {
@@ -103,7 +103,6 @@ class EntregasV2Controller extends Controller
                         ->byDistrito($paquete_barrio->distrito_id)
                         ->byBarrio($paquete_barrio->id_barrio)
                         ->byEstado('A')
-                        ->where('id_tipo','=',1)
                         ->whereNotIn('id', function ($query) use ($paquete_barrio_id) {
                             $query->select('id_beneficiario')
                                   ->from('entrega')

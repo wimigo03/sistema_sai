@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Canasta;
+namespace App\Models\CanastaDisc;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +10,7 @@ use App\Models\Canasta\Distrito;
 use App\Models\Canasta\Barrio;
 use App\Models\Canasta\Ocupaciones;
 use Carbon\Carbon;
-class Beneficiario extends Model
+class BeneficiarioDisc extends Model
 {
     protected $table = 'beneficiarios';
     const CREATED_AT = 'created_att';
@@ -41,6 +41,7 @@ class Beneficiario extends Model
         'id_discgrado',
         'tutor',
         'parentesco',
+        'celular',
         'distrito_id'
     ];
 
