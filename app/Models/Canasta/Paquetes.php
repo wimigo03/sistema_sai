@@ -29,6 +29,14 @@ class Paquetes extends Model
         'B' => 'BAJA'
     ];
 
+    const TERCERA_EDAD = 1;
+    const DISCAPACIDAD = 2;
+
+    const TIPOS = [
+        '1' => '3RA EDAD',
+        '2' => 'DISCAPACIDAD'
+    ];
+
     const NUMEROS_ENTREGA = [
         '1RA.' => '1RA ENTREGA',
         '2DA.' => '2DA ENTREGA',
@@ -132,6 +140,12 @@ class Paquetes extends Model
     public function scopeByDea($query, $dea_id){
         if($dea_id){
             return $query->where('dea_id',$dea_id);
+        }
+    }
+
+    public function scopeByTipoSistema($query, $tipo){
+        if($tipo != null){
+            return $query->where('id_tipo',$tipo);
         }
     }
 

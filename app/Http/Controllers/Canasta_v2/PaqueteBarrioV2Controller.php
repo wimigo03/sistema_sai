@@ -46,6 +46,7 @@ class PaqueteBarrioV2Controller extends Controller
         $lugares_entregas = PaqueteBarrio::query()
                             ->select(DB::raw("COALESCE(lugar_entrega, 'LUGARES NO DEFINIDOS') as lugar_entrega"))
                             ->byDea(Auth::user()->dea->id)
+                            ->byTipoSistema(Paquetes::TERCERA_EDAD)
                             ->byPaquete($idpaquete)
                             ->groupBy('lugar_entrega')
                             ->orderByRaw("CASE WHEN lugar_entrega IS NULL THEN 0 ELSE 1 END, lugar_entrega ASC")
@@ -55,6 +56,7 @@ class PaqueteBarrioV2Controller extends Controller
 
         $paquetes_barrios = PaqueteBarrio::query()
                             ->byDea(Auth::user()->dea->id)
+                            ->byTipoSistema(Paquetes::TERCERA_EDAD)
                             ->byPaquete($idpaquete)
                             ->orderBy('id','desc')
                             ->paginate(10);
@@ -76,6 +78,7 @@ class PaqueteBarrioV2Controller extends Controller
         $lugares_entregas = PaqueteBarrio::query()
                             ->select(DB::raw("COALESCE(lugar_entrega, 'LUGARES NO DEFINIDOS') as lugar_entrega"))
                             ->byDea(Auth::user()->dea->id)
+                            ->byTipoSistema(Paquetes::TERCERA_EDAD)
                             ->byPaquete($idpaquete)
                             ->groupBy('lugar_entrega')
                             ->orderByRaw("CASE WHEN lugar_entrega IS NULL THEN 0 ELSE 1 END, lugar_entrega ASC")
@@ -85,6 +88,7 @@ class PaqueteBarrioV2Controller extends Controller
 
         $paquetes_barrios = PaqueteBarrio::query()
                             ->byDea(Auth::user()->dea->id)
+                            ->byTipoSistema(Paquetes::TERCERA_EDAD)
                             ->byPaquete($idpaquete)
                             ->byDistrito($request->distrito_id)
                             ->byBarrio($request->barrio_id)
@@ -106,6 +110,7 @@ class PaqueteBarrioV2Controller extends Controller
                 $paquete = Paquetes::find($idpaquete);
                 $paquetes_barrios = PaqueteBarrio::query()
                                     ->byDea(Auth::user()->dea->id)
+                                    ->byTipoSistema(Paquetes::TERCERA_EDAD)
                                     ->byPaquete($idpaquete)
                                     ->byDistrito($request->distrito_id)
                                     ->byBarrio($request->barrio_id)
@@ -135,6 +140,7 @@ class PaqueteBarrioV2Controller extends Controller
             $paquete = Paquetes::find($idpaquete);
             $paquetes_barrios = PaqueteBarrio::query()
                                 ->byDea(Auth::user()->dea->id)
+                                ->byTipoSistema(Paquetes::TERCERA_EDAD)
                                 ->byPaquete($idpaquete)
                                 ->byDistrito($request->distrito_id)
                                 ->byBarrio($request->barrio_id)
@@ -207,7 +213,8 @@ class PaqueteBarrioV2Controller extends Controller
                     'fecha_entrega' => date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha_entrega[$cont]))),
                     'hora_inicio' => $request->hora_inicio[$cont],
                     'hora_final' => $request->hora_final[$cont],
-                    'estado' => '1'
+                    'estado' => '1',
+                    'id_tipo' => Paquetes::TERCERA_EDAD
                 ]);
 
                 $paquete_barrio_id = PaqueteBarrio::create($datos_paquete_barrio);

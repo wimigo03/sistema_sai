@@ -14,5 +14,15 @@ class Periodos extends Model
         'mes'
     ];
 
+    public function scopeByDea($query, $dea_id){
+        if($dea_id){
+            return $query->where('dea_id',$dea_id);
+        }
+    }
 
+    public function scopeByTipoSistema($query, $tipo){
+        if($tipo != null){
+            return $query->where('id_tipo',$tipo);
+        }
+    }
 }

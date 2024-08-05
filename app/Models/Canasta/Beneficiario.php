@@ -194,6 +194,12 @@ class Beneficiario extends Model
         }
     }
 
+    public function scopeByTipoSistema($query, $tipo){
+        if($tipo != null){
+            return $query->where('id_tipo',$tipo);
+        }
+    }
+
     public function scopeByEstado($query, $estado){
         if($estado != null){
             return $query->where('estado',$estado);

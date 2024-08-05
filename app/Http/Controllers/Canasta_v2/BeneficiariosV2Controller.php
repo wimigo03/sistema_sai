@@ -15,6 +15,7 @@ use App\Models\Canasta\Beneficiario;
 use App\Models\Canasta\Ocupaciones;
 use App\Models\Canasta\HistorialMod;
 use App\Models\Canasta\HistorialBaja;
+use App\Models\Canasta\Paquetes;
 use App\Models\User;
 use App\Models\Empleado;
 use App\Models\Canasta\Dea;
@@ -28,44 +29,6 @@ use Image;
 
 class BeneficiariosV2Controller extends Controller
 {
-     private function copiarbeneficiarios()
-     {
-         $beneficiarios = DB::connection('mysql_canasta')
-                                ->table("usuarios")
-                                //->join('ocupaciones as o', 'o.id_ocupacion', '=', 'u.id_ocupacion')
-                                // ->select('o.ocupacion','u.nombres')
-                                ->where('idUsuario','>',14822)
-                                //->where('idUsuario','<',12000)
-                                ->get();
-
-        foreach ($beneficiarios as $data){
-            $datos = ([
-                'id' => $data->idUsuario,
-                'nombres' => $data->nombres,
-                'ap' => $data->ap,
-                'am' => $data->am,
-                'ci' => $data->ci,
-                'expedido' => $data->expedido,
-                'fecha_nac' => $data->fecha_nac,
-                'estado_civil' => $data->estado_civil,
-                'sexo' => $data->sexo,
-                'direccion' => $data->direccion,
-                'dir_foto' => $data->dir_foto,
-                'firma' => $data->firma,
-                'obs' => $data->obs,
-                'id_ocupacion' => $data->id_ocupacion,
-                'id_barrio' => $data->id_barrio,
-                'dea_id' => 1,
-                'user_id' => 29,
-                'created_att' => $data->_registrado,
-                'updated_att' => $data->_modificado,
-                'id_barrio' => $data->id_barrio,
-                'estado' => $data->estado
-            ]);
-            $beneficiario=Beneficiario::create($datos);
-        }
-    }
-
     private function actualizar_distritos(){
         try{
             ini_set('memory_limit','-1');
@@ -131,7 +94,7 @@ class BeneficiariosV2Controller extends Controller
         try{
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');
-                $beneficiarios = DB::table('beneficiarios')->select('id','dir_foto')->where('dir_foto','!=',null)->get();
+                $beneficiarios = DB::table('beneficiarios')->select('id','dir_foto')->where('id_tipo',Paquetes::TERCERA_EDAD)->where('dir_foto','!=',null)->get();
                 foreach($beneficiarios as $datos){
                     $nombre = explode("/", $datos->dir_foto);
                     $beneficiario = Beneficiario::find($datos->id);
@@ -154,7 +117,7 @@ class BeneficiariosV2Controller extends Controller
         try{
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');
-                $beneficiarios = DB::table('beneficiarios')->select('dir_foto')->where('dir_foto','!=',null)->get();
+                $beneficiarios = DB::table('beneficiarios')->select('dir_foto')->where('id_tipo',Paquetes::TERCERA_EDAD)->where('dir_foto','!=',null)->get();
                 foreach($beneficiarios as $beneficiario){
                     $nombre = explode("/", $beneficiario->dir_foto);
                     if (file_exists(substr($beneficiario->dir_foto, 3))){
@@ -190,7 +153,7 @@ class BeneficiariosV2Controller extends Controller
                     ->join('barrios as b','b.id','a.id_barrio')
                     ->join('distritos as c','c.id','a.distrito_id')
                    // ->join('distritos as c','c.id','a.distrito_id')
-                    ->where('a.id_tipo','=',1)
+                    ->where('a.id_tipo',Paquetes::TERCERA_EDAD)
                     ->select(
                         'a.id as beneficiario_id',
                         'c.nombre as distrito',
@@ -270,6 +233,7 @@ class BeneficiariosV2Controller extends Controller
         $estados = Beneficiario::ESTADOS;
         $beneficiarios = Beneficiario::query()
                                         ->byDea($dea_id)
+                                        ->byTipoSistema(Paquetes::TERCERA_EDAD)
                                         ->byDistrito($request->distrito)
                                         ->byBarrio($request->barrio)
                                         ->byCodigo($request->codigo)
@@ -295,6 +259,7 @@ class BeneficiariosV2Controller extends Controller
                 $dea_id = Auth::user()->dea->id;
                 $beneficiarios = Beneficiario::query()
                                         ->byDea($dea_id)
+                                        ->byTipoSistema(Paquetes::TERCERA_EDAD)
                                         ->byDistrito($request->distrito)
                                         ->byBarrio($request->barrio)
                                         ->byCodigo($request->codigo)
@@ -354,7 +319,7 @@ class BeneficiariosV2Controller extends Controller
         $beneficiario->user_id = $id_usuario;
         $beneficiario->dea_id = $dea_id;
         $beneficiario->ci = $request->ci;
-        $beneficiario->id_tipo = 1;
+        $beneficiario->id_tipo = Paquetes::TERCERA_EDAD;
         $beneficiario->expedido = $request->expedido;
         $beneficiario->id_ocupacion = $request->ocupacion;
         $beneficiario->distrito_id = $barrio->distrito_id;
@@ -544,6 +509,7 @@ class BeneficiariosV2Controller extends Controller
                 $dea_id = Auth::user()->dea->id;
                 $beneficiarios = Beneficiario::query()
                                     ->byDea($dea_id)
+                                    ->byTipoSistema(Paquetes::TERCERA_EDAD)
                                     ->byDistrito($request->distrito)
                                     ->byBarrio($request->barrio)
                                     ->byCodigo($request->codigo)

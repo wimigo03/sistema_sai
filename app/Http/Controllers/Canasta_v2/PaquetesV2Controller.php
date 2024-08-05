@@ -134,7 +134,7 @@ class PaquetesV2Controller extends Controller
         $entregas = Paquetes::select('numero')->groupBy('numero')->pluck('numero','numero');
         $paquetes = Paquetes::query()
                         ->byDea(Auth::user()->dea->id)
-                        ->where('id_tipo','=', 1)
+                        ->byTipoSistema(Paquetes::TERCERA_EDAD)
                         ->orderBy('id', 'desc')
                         ->paginate(10);
 
@@ -147,6 +147,7 @@ class PaquetesV2Controller extends Controller
         $entregas = Paquetes::select('numero')->groupBy('numero')->pluck('numero','numero');
         $paquetes = Paquetes::query()
                         ->byDea(Auth::user()->dea->id)
+                        ->byTipoSistema(Paquetes::TERCERA_EDAD)
                         ->byGestion($request->gestion)
                         ->byPeriodo($request->periodo_id)
                         ->byEntrega($request->entrega)
@@ -175,7 +176,7 @@ class PaquetesV2Controller extends Controller
             'user_id' => Auth::user()->id,
             'dea_id' => Auth::user()->dea->id,
             'estado' => 1,
-            'id_tipo' => 1,
+            'id_tipo' => Paquetes::TERCERA_EDAD,
             'numero' => $request->numero
         ]);
 
@@ -193,18 +194,6 @@ class PaquetesV2Controller extends Controller
 
             $cont++;
         }
-
-        /*$barrios = Barrio::where('dea_id',Auth::user()->dea->id)->where('estado','1')->get();
-        foreach($barrios as $barrio){
-            $datos_paquete_barrio = ([
-                'id_paquete' => $paquete->id,
-                'dea_id' => Auth::user()->dea->id,
-                'id_barrio' => $barrio->id,
-                'distrito_id' => $barrio->distrito_id,
-                'estado' => '1',
-            ]);
-            $paquete_barrio = PaqueteBarrio::create($datos_paquete_barrio);
-        }*/
 
         return redirect()->route('paquetes.index')->with('success_message', 'Registro procesado correctamente...');
     }
@@ -226,14 +215,16 @@ class PaquetesV2Controller extends Controller
         $paquetes->numero = $request->numero;
         $paquetes->user_id = $id_usuario;
         $paquetes->dea_id = $dea_id;
-        $paquetes->estado = 1;
+        $paquetes->id_tipo = Paquetes::TERCERA_EDAD;
         $paquetes->save();
+
         return redirect()->route('paquetes.index')->with('success_message', 'Registro procesado correctamente...');
     }
 
     public function beneficiarios($paquete_id)
     {
         $paquete_barrio = PaqueteBarrio::where('id_paquete',$paquete_id)->first();
+
         $extensiones = Beneficiario::EXTENSIONES;
         $sexos = Beneficiario::SEXOS;
         $estados = Entrega::ESTADOS;
@@ -245,6 +236,7 @@ class PaquetesV2Controller extends Controller
                             ->join('barrios as c','c.id','entrega.id_barrio')
                             ->join('distritos as d','d.id','entrega.distrito_id')
                             ->byDea(Auth::user()->dea->id)
+                            ->byTipoSistema(Paquetes::TERCERA_EDAD)
                             ->byPaquete($paquete_id)
                             ->select(
                                 'c.nombre as _barrio',
@@ -284,6 +276,7 @@ class PaquetesV2Controller extends Controller
                             ->join('barrios as c','c.id','entrega.id_barrio')
                             ->join('distritos as d','d.id','entrega.distrito_id')
                             ->byDea(Auth::user()->dea->id)
+                            ->byTipoSistema(Paquetes::TERCERA_EDAD)
                             ->byPaquete($paquete_id)
                             ->byDistritos($request->distrito_id)
                             ->byBarrios($request->barrio_id)
@@ -332,6 +325,7 @@ class PaquetesV2Controller extends Controller
                         ->join('barrios as c','c.id','entrega.id_barrio')
                         ->join('distritos as d','d.id','entrega.distrito_id')
                         ->byDea(Auth::user()->dea->id)
+                        ->byTipoSistema(Paquetes::TERCERA_EDAD)
                         ->byPaquete($paquete_id)
                         ->byDistritos($request->distrito_id)
                         ->byBarrios($request->barrio_id)
@@ -391,6 +385,7 @@ class PaquetesV2Controller extends Controller
                             ->join('barrios as c','c.id','entrega.id_barrio')
                             ->join('distritos as d','d.id','entrega.distrito_id')
                             ->byDea(Auth::user()->dea->id)
+                            ->byTipoSistema(Paquetes::TERCERA_EDAD)
                             ->byPaquete($paquete_id)
                             ->byDistritos($request->distrito_id)
                             ->byBarrios($request->barrio_id)

@@ -73,8 +73,8 @@ class BeneficiariosV2Controller extends Controller
                                ->table("beneficiarios")
                                //->join('ocupaciones as o', 'o.id_ocupacion', '=', 'u.id_ocupacion')
                                // ->select('o.ocupacion','u.nombres')
-                               ->where('id','>=',14921)
-                               //->where('id','<=',15499)
+                               ->where('id','>=',15400)
+                               ->where('id','<=',15499)
                                //->where('idUsuario','<',12000)
                                ->get();
 //dd( $beneficiarios);
@@ -223,7 +223,7 @@ class BeneficiariosV2Controller extends Controller
                             ->rawColumns(['columna_foto','columna_estado','columna_btn'])
                             ->make(true);
         }
-     // $this->copiarbeneficiarios2();
+      //$this->copiarbeneficiarios2();
         $dea_id = Auth::user()->dea->id;
         $tipos = Barrio::TIPOS;
         $distritos = Distrito::where('dea_id',$dea_id)->pluck('nombre','id');

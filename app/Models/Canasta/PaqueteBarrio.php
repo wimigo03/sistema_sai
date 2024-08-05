@@ -23,7 +23,8 @@ class PaqueteBarrio extends Model
         'fecha_entrega',
         'hora_inicio',
         'hora_final',
-        'estado'
+        'estado',
+        'id_tipo'
     ];
     const ESTADOS = [
         '1' => 'PENDIENTE',
@@ -167,6 +168,12 @@ class PaqueteBarrio extends Model
     public function scopeByDea($query, $dea_id){
         if($dea_id != null){
             return $query->where('dea_id', $dea_id);
+        }
+    }
+
+    public function scopeByTipoSistema($query, $tipo){
+        if($tipo != null){
+            return $query->where('id_tipo',$tipo);
         }
     }
 

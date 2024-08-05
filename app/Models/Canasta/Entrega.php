@@ -27,7 +27,8 @@ class Entrega extends Model
         'user_id',
         'estado',
         'resagado',
-        'observacion'
+        'observacion',
+        'id_tipo'
     ];
 
     const ESTADOS = [
@@ -289,6 +290,12 @@ class Entrega extends Model
     public function scopeByDea($query, $dea_id){
         if($dea_id){
             return $query->where('entrega.dea_id',$dea_id);
+        }
+    }
+
+    public function scopeByTipoSistema($query, $tipo){
+        if($tipo != null){
+            return $query->where('entrega.id_tipo',$tipo);
         }
     }
 

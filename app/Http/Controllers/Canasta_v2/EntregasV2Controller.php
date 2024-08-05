@@ -12,6 +12,7 @@ use App\Models\Canasta\Entrega;
 use App\Models\Canasta\Distrito;
 use App\Models\Canasta\Beneficiario;
 use App\Models\Canasta\PaqueteBarrio;
+use App\Models\Canasta\Paquetes;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exportar\Canasta\EntregasExcel;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -31,6 +32,7 @@ class EntregasV2Controller extends Controller
         $entregas = Entrega::query()
                             ->join('beneficiarios as b','b.id','entrega.id_beneficiario')
                             ->byDea(Auth::user()->dea->id)
+                            ->byTipoSistema(Paquetes::TERCERA_EDAD)
                             ->byPaqueteBarrio($paquete_barrio_id)
                             ->select(
                                 'b.nombres',
@@ -63,6 +65,7 @@ class EntregasV2Controller extends Controller
         $entregas = Entrega::query()
                             ->join('beneficiarios as b','b.id','entrega.id_beneficiario')
                             ->byDea(Auth::user()->dea->id)
+                            ->byTipoSistema(Paquetes::TERCERA_EDAD)
                             ->byPaqueteBarrio($paquete_barrio_id)
                             ->byNombre($request->nombre)
                             ->byApellidoPaterno($request->ap_paterno)
@@ -100,6 +103,7 @@ class EntregasV2Controller extends Controller
 
         $beneficiarios = Beneficiario::query()
                         ->byDea(Auth::user()->dea->id)
+                        ->byTipoSistema(Paquetes::TERCERA_EDAD)
                         ->byDistrito($paquete_barrio->distrito_id)
                         ->byBarrio($paquete_barrio->id_barrio)
                         ->byEstado('A')
@@ -141,7 +145,8 @@ class EntregasV2Controller extends Controller
                     'paquete_barrio_id' => $paquete_barrio->id,
                     'fecha' => date('Y-m-d'),
                     'user_id' => Auth::user()->id,
-                    'estado' => '1'
+                    'estado' => '1',
+                    'id_tipo' => Paquetes::TERCERA_EDAD
                 ]);
 
                 $entrega = Entrega::create($datos_entrega);
@@ -190,7 +195,10 @@ class EntregasV2Controller extends Controller
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');
 
-            $entregas = Entrega::where('paquete_barrio_id',$paquete_barrio_id)->whereIn('estado',['1','2'])->get();;
+            $entregas = Entrega::query()
+                                ->byDea(Auth::user()->dea->id)
+                                ->byTipoSistema(Paquetes::TERCERA_EDAD)
+                                ->where('paquete_barrio_id',$paquete_barrio_id)->whereIn('estado',['1','2'])->get();;
             foreach($entregas as $datos){
                 $entrega = Entrega::find($datos->id);
                 $entrega->update([
@@ -277,6 +285,7 @@ class EntregasV2Controller extends Controller
             $entregas = Entrega::query()
                             ->join('beneficiarios as b','b.id','entrega.id_beneficiario')
                             ->byDea(Auth::user()->dea->id)
+                            ->byTipoSistema(Paquetes::TERCERA_EDAD)
                             ->byPaqueteBarrio($paquete_barrio_id)
                             ->byNombre($request->nombre)
                             ->byApellidoPaterno($request->ap_paterno)
@@ -337,6 +346,7 @@ class EntregasV2Controller extends Controller
                 $entregas = Entrega::query()
                             ->join('beneficiarios as b','b.id','entrega.id_beneficiario')
                             ->byDea(Auth::user()->dea->id)
+                            ->byTipoSistema(Paquetes::TERCERA_EDAD)
                             ->byPaqueteBarrio($paquete_barrio_id)
                             ->byNombre($request->nombre)
                             ->byApellidoPaterno($request->ap_paterno)
@@ -390,6 +400,7 @@ class EntregasV2Controller extends Controller
                 $entregas = Entrega::query()
                             ->join('beneficiarios as b','b.id','entrega.id_beneficiario')
                             ->byDea(Auth::user()->dea->id)
+                            ->byTipoSistema(Paquetes::TERCERA_EDAD)
                             ->byPaqueteBarrio($paquete_barrio_id)
                             ->byNombre($request->nombre)
                             ->byApellidoPaterno($request->ap_paterno)
@@ -444,6 +455,7 @@ class EntregasV2Controller extends Controller
             $entregas = Entrega::query()
                         ->join('beneficiarios as b','b.id','entrega.id_beneficiario')
                         ->byDea(Auth::user()->dea->id)
+                        ->byTipoSistema(Paquetes::TERCERA_EDAD)
                         ->byPaqueteBarrio($paquete_barrio_id)
                         ->byNombre($request->nombre)
                         ->byApellidoPaterno($request->ap_paterno)
