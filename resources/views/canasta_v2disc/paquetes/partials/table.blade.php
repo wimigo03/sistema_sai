@@ -57,7 +57,7 @@
                                 @endcan
                                 @can('canasta.paquetes.beneficiarios')
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a beneficiarios">
-                                        <a  href="{{ route('paquetes.beneficiarios',$datos->id) }}" class="badge-with-padding badge badge-primary font-roboto-11">
+                                        <a  href="{{ route('paquetesdisc.beneficiarios',$datos->id) }}" class="badge-with-padding badge badge-primary font-roboto-11">
                                             <i class="fas fa-users fa-fw"></i>
                                         </a>
                                     </span>

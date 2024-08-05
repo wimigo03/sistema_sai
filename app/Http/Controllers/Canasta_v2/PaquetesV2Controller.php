@@ -134,7 +134,7 @@ class PaquetesV2Controller extends Controller
         $entregas = Paquetes::select('numero')->groupBy('numero')->pluck('numero','numero');
         $paquetes = Paquetes::query()
                         ->byDea(Auth::user()->dea->id)
-                        ->where('id_tipo','=', 2)
+                        ->where('id_tipo','=', 1)
                         ->orderBy('id', 'desc')
                         ->paginate(10);
 
@@ -175,7 +175,7 @@ class PaquetesV2Controller extends Controller
             'user_id' => Auth::user()->id,
             'dea_id' => Auth::user()->dea->id,
             'estado' => 1,
-            'id_tipo' => 2,
+            'id_tipo' => 1,
             'numero' => $request->numero
         ]);
 

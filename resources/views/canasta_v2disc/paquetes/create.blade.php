@@ -3,12 +3,12 @@
     <div class="card-header header">
         <div class="row">
             <div class="col-md-12 pr-1 pl-1 text-center">
-                <b>REGISTRAR PAQUETE</b>
+                <b>REGISTRAR PAQUETE DISC.</b>
             </div>
         </div>
     </div>
     <div class="card-body body">
-        @include('canasta_v2.paquetes.partials.create-form')
+        @include('canasta_v2disc.paquetes.partials.create-form')
     </div>
 @endsection
 @section('scripts')
@@ -107,7 +107,7 @@
         }
 
         function confirmar(){
-            var url = "{{ route('paquetes.store') }}";
+            var url = "{{ route('paquetesdisc.store') }}";
             $("#form").attr('action', url);
             $("#form").submit();
         }

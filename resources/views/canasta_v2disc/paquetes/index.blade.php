@@ -3,13 +3,13 @@
     <div class="card-header header">
         <div class="row">
             <div class="col-md-12 pr-1 pl-1 text-center">
-                <b>PAQUETES</b>
+                <b>PAQUETES Disc.</b>
             </div>
         </div>
     </div>
     <div class="card-body body">
-        @include('canasta_v2.paquetes.partials.search')
-        @include('canasta_v2.paquetes.partials.table')
+        @include('canasta_v2disc.paquetes.partials.search')
+        @include('canasta_v2disc.paquetes.partials.table')
     </div>
 @endsection
 @section('scripts')
@@ -58,7 +58,7 @@
         }
 
         function create(){
-            window.location.href = "{{ route('paquetes.create') }}";
+            window.location.href = "{{ route('paquetesdisc.create') }}";
         }
     </script>
 @endsection

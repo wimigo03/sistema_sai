@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Canasta_v2;
+namespace App\Http\Controllers\Canasta_v2disc;
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
@@ -134,10 +134,11 @@ class PaquetesV2Controller extends Controller
         $entregas = Paquetes::select('numero')->groupBy('numero')->pluck('numero','numero');
         $paquetes = Paquetes::query()
                         ->byDea(Auth::user()->dea->id)
+                        ->where('id_tipo','=',2)
                         ->orderBy('id', 'desc')
                         ->paginate(10);
 
-        return view('canasta_v2.paquetes.index',compact('periodos','entregas','paquetes'));
+        return view('canasta_v2disc.paquetes.index',compact('periodos','entregas','paquetes'));
     }
 
     public function search(Request $request)
@@ -163,7 +164,7 @@ class PaquetesV2Controller extends Controller
         }
         $numeros_entrega = Paquetes::NUMEROS_ENTREGA;
         $periodos = Periodos::pluck('mes','id');
-        return view('canasta_v2.paquetes.create',compact('gestiones','numeros_entrega','periodos'));
+        return view('canasta_v2disc.paquetes.create',compact('gestiones','numeros_entrega','periodos'));
     }
 
     public function store(Request $request)
@@ -174,6 +175,7 @@ class PaquetesV2Controller extends Controller
             'user_id' => Auth::user()->id,
             'dea_id' => Auth::user()->dea->id,
             'estado' => 1,
+            'id_tipo' => 2,
             'numero' => $request->numero
         ]);
 
@@ -204,7 +206,7 @@ class PaquetesV2Controller extends Controller
             $paquete_barrio = PaqueteBarrio::create($datos_paquete_barrio);
         }*/
 
-        return redirect()->route('paquetes.index')->with('success_message', 'Registro procesado correctamente...');
+        return redirect()->route('paquetesdisc.index')->with('success_message', 'Registro procesado correctamente...');
     }
 
     public function editar($id_paquete)
@@ -265,7 +267,7 @@ class PaquetesV2Controller extends Controller
         if($entregas->count() == 0){
             return back()->with('info_message', '[No existen datos para mostrar.]');
         }
-        return view('canasta_v2.paquetes.beneficiarios', compact('paquete_barrio','extensiones','sexos','estados','distritos','barrios','entregas'));
+        return view('canasta_v2disc.paquetes.beneficiarios', compact('paquete_barrio','extensiones','sexos','estados','distritos','barrios','entregas'));
     }
 
     public function beneficiariosSearch($paquete_id, Request $request)

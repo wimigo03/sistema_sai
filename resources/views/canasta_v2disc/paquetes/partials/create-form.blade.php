@@ -1,4 +1,4 @@
-<form action="{{ route('paquetes.store') }}"  method="post" id="form">
+<form action="{{ route('paquetesdisc.store') }}"  method="post" id="form">
     @csrf
     <div class="form-group row font-roboto-12 align-items-center">
         <div class="col-md-2 pr-1 pl-1">
@@ -10,7 +10,7 @@
             </select>
         </div>
         <div class="col-md-2 pr-1 pl-1">
-            <label for="numero" class="d-inline"><b>Nro. Entrega :</b></label>
+            <label for="numero" class="d-inline"><b>Nro. Entregasss :</b></label>
             <select  name="numero" id="numero" class="form-control font-roboto-12 select2">
                 <option value="">-</option>
                 @foreach ($numeros_entrega as $index => $value)

@@ -108,7 +108,7 @@
                         <ul class="sub-menu collapse" id="dashboard_canasta_didsc_v2">
                             @can('canasta.paquetes.index')
                                 <li>
-                                    <a href="{{ route('paquetes.index') }}">
+                                    <a href="{{ route('paquetesdisc.index') }}">
                                         &nbsp;&nbsp;<i class="fa-solid fa-shopping-bag fa-fw"></i>&nbsp;Paquetes
                                     </a>
                                 </li>

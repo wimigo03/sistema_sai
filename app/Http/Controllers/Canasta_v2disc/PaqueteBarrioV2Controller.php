@@ -59,7 +59,7 @@ class PaqueteBarrioV2Controller extends Controller
                             ->orderBy('id','desc')
                             ->paginate(10);
 
-        return view('canasta_v2.paquetes-barrio.index', compact('paquete','distritos','barrios','lugares_entregas','estados','paquetes_barrios'));
+        return view('canasta_v2disc.paquetes-barrio.index', compact('paquete','distritos','barrios','lugares_entregas','estados','paquetes_barrios'));
     }
 
     public function search($idpaquete, Request $request)
