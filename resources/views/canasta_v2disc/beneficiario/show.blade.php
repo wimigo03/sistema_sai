@@ -11,7 +11,7 @@
     <div class="card-header header">
         <div class="row">
             <div class="col-md-12 pr-1 pl-1 text-center">
-                <b>DETALLES DEL BENEFICIARIO</b>
+                <b>DETALLES DEL BENEFICIARIO DISCAPACIDAD</b>
             </div>
         </div>
     </div>
@@ -191,7 +191,7 @@
 @section('scripts')
     <script type="text/javascript">
         function ir_atras(){
-            window.location.href = "{{ route('beneficiarios.index') }}";
+            window.location.href = "{{ route('beneficiariosdisc.index') }}";
         }
 
         function exportar_pdf(){

@@ -11,7 +11,7 @@ use App\Models\Canasta\Barrio;
 use DB;
 use Carbon\Carbon;
 
-class EntregaDisc extends Model
+class Entrega extends Model
 {
     protected $table = 'entrega';
     protected $fillable = [

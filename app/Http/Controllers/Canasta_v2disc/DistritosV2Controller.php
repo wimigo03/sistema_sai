@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Canasta_v2;
+namespace App\Http\Controllers\Canasta_v2disc;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Log;
-use App\Models\Canasta\Distrito;
-use App\Models\Canasta\Dea;
+use App\Models\CanastaDisc\Distrito;
+use App\Models\CanastaDisc\Dea;
 use App\Http\Requests;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exportar\Canasta\DistritosExcel;

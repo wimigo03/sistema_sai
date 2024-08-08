@@ -4,19 +4,23 @@ namespace App\Models\CanastaDisc;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
-class HistorialBajaDisc extends Model
+class HistorialMod extends Model
 {
-    protected $table = 'historialbaja';
-    protected $primaryKey= 'id';
-    public $timestamps = false;
+    protected $table = 'historialmod';
+    //protected $primaryKey= 'id';
+    //public $timestamps = true;
     protected $fillable = [
         'id',
         'observacion',
         'id_beneficiario',
         'user_id',
         'dea_id',
-        'created_at',
-        'updated_at',
+        'fecha'
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class,'user_id','id');
+    }
 }

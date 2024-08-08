@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Canasta_v2;
+namespace App\Http\Controllers\Canasta_v2disc;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -10,16 +10,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Log;
-use App\Models\Canasta\Barrio;
-use App\Models\Canasta\Distrito;
-use App\Models\Canasta\HistorialMod;
-use App\Models\Canasta\HistorialBaja;
-use App\Models\Canasta\Beneficiario;
-use App\Models\Canasta\Dea;
+use App\Models\CanastaDisc\Barrio;
+use App\Models\CanastaDisc\Distrito;
+use App\Models\CanastaDisc\HistorialMod;
+use App\Models\CanastaDisc\HistorialBaja;
+use App\Models\CanastaDisc\Beneficiario;
+use App\Models\CanastaDisc\Dea;
 use App\Http\Requests;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exportar\Canasta\BarriosExcel;
-use App\Models\Canasta\Ocupaciones;
+use App\Exportar\CanastaDisc\BarriosExcel;
+use App\Models\CanastaDisc\Ocupaciones;
 use App\Models\User;
 use DB;
 use PDF;

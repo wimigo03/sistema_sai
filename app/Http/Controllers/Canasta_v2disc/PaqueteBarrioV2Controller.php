@@ -10,16 +10,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Log;
-use App\Models\Canasta\Barrio;
-use App\Models\Canasta\Entrega;
-use App\Models\Canasta\Distrito;
-use App\Models\Canasta\Beneficiario;
-use App\Models\Canasta\Ocupaciones;
-use App\Models\Canasta\Paquetes;
-use App\Models\Canasta\BarrioEntrega;
-use App\Models\Canasta\Periodos;
-use App\Models\Canasta\PaquetePeriodo;
-use App\Models\Canasta\Dea;
+use App\Models\CanastaDisc\Barrio;
+use App\Models\CanastaDisc\Entrega;
+use App\Models\CanastaDisc\Distrito;
+use App\Models\CanastaDisc\Beneficiario;
+use App\Models\CanastaDisc\Ocupaciones;
+use App\Models\CanastaDisc\Paquetes;
+use App\Models\CanastaDisc\BarrioEntrega;
+use App\Models\CanastaDisc\Periodos;
+use App\Models\CanastaDisc\PaquetePeriodo;
+use App\Models\CanastaDisc\Dea;
 use App\Http\Requests;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exportar\Canasta\PaquetesBarrioExcel;
@@ -214,7 +214,7 @@ class PaqueteBarrioV2Controller extends Controller
                 $cont++;
             }
 
-            return redirect()->route('paquetes.barrio.index',$request->paquete_id)->with('success_message', 'Cronograma procesado correctamente...');
+            return redirect()->route('paquetes.barriodisc.index',$request->paquete_id)->with('success_message', 'Cronograma procesado correctamente...');
 
         } catch (\Throwable $th) {
             return response()->view('errors.500', [

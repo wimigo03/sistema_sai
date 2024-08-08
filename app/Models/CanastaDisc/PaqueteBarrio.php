@@ -11,7 +11,7 @@ use App\Models\Canasta\Distrito;
 use Illuminate\Support\Facades\Auth;
 use DB;
 
-class PaqueteBarrioDisc extends Model
+class PaqueteBarrio extends Model
 {
     protected $table = 'paquete_barrios';
     protected $fillable = [
@@ -86,6 +86,7 @@ class PaqueteBarrioDisc extends Model
                             ->where('distrito_id',$this->distrito_id)
                             ->where('id_barrio',$this->id_barrio)
                             ->where('estado','A')
+                            ->where('id_tipo','=',2)
                             ->get();
 
         $beneficiarios_registrados = DB::table('entrega')

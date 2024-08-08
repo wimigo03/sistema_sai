@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Canasta_v2;
+namespace App\Http\Controllers\Canasta_v2disc;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 //use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Log;
 //use App\Models\Canasta\Barrio;
-use App\Models\Canasta\Entrega;
+use App\Models\CanastaDisc\Entrega;
 //use App\Models\Canasta\Distrito;
 //use App\Models\Canasta\Beneficiario;
 //use App\Models\Canasta\Ocupaciones;

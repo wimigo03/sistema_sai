@@ -3,7 +3,7 @@
     <div class="card-header header">
         <div class="row">
             <div class="col-md-12 pr-1 pl-1 text-center">
-                <b>REGISTRAR BENEFICIARIOS - GESTION {{ $paquete_barrio->paquete->gestion }}</b>
+                <b>REGISTRAR BENEFICIARIOS DISCAPACIDAD - GESTION {{ $paquete_barrio->paquete->gestion }}</b>
             </div>
         </div>
     </div>
@@ -82,7 +82,7 @@
 
         function confirmar(){
             var paquete_barrio_id = $("#paquete_barrio_id").val();
-            var url = "{{ route('entregas.store', ':id') }}";
+            var url = "{{ route('entregasdisc.store', ':id') }}";
             url = url.replace(':id', paquete_barrio_id);
             $("#form").attr('action', url);
             $("#form").submit();
@@ -97,7 +97,7 @@
 
         function cancelar(){
             var paquete_barrio_id = $("#paquete_barrio_id").val();
-            var url = "{{ route('entregas.index', ':id') }}";
+            var url = "{{ route('entregasdisc.index', ':id') }}";
             url = url.replace(':id', paquete_barrio_id);
             window.location.href = url;
         }

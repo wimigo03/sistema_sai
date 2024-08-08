@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class TipoEntregaDisc extends Model
+class TipoEntrega extends Model
 {
     protected $table = 'tipo_entrega';
     protected $fillable = [
