@@ -10,7 +10,7 @@ use App\Models\Canasta\Beneficiario;
 use App\Models\Canasta\BarrioEntrega;
 
 
-class BarrioDisc extends Model
+class Barrio extends Model
 {
     protected $table = 'barrios';
     protected $primaryKey= 'id';

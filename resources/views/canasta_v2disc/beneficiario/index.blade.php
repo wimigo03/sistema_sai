@@ -3,7 +3,7 @@
     <div class="card-header header">
         <div class="row">
             <div class="col-md-12 pr-1 pl-1 text-center">
-                <b>BENEFICIARIOS DISC.</b>
+                <b>BENEFICIARIOS DISCAPACIDAD</b>
             </div>
         </div>
     </div>

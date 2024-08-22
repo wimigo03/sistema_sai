@@ -62,7 +62,7 @@
                                 <div class="d-flex justify-content-center">
                                     @can('canasta.entregas.index')
                                         <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Ir a beneficiarios">
-                                            <a  href="{{ route('entregas.index',$datos->id) }}" class="badge-with-padding badge badge-primary font-roboto-11">
+                                            <a  href="{{ route('entregasdisc.index',$datos->id) }}" class="badge-with-padding badge badge-primary font-roboto-11">
                                                 <i class="fa-solid fa-users fa-fw"></i>
                                             </a>
                                         </span>

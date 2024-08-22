@@ -13,7 +13,7 @@
     <div class="card-header header">
         <div class="row">
             <div class="col-md-12 pr-1 pl-1 text-center">
-                <b>BENEFICIARIOS REGISTRADOS</b>
+                <b>BENEFICIARIOS REGISTRADOS DISCAPACIDAD</b>
             </div>
         </div>
     </div>
@@ -33,9 +33,9 @@
                 </b>
             </div>
         </div>
-        @include('canasta_v2.entregas.partials.search')
-        @include('canasta_v2.entregas.partials.table')
-        @include('canasta_v2.entregas.partials.modal-resagado')
+        @include('canasta_v2disc.entregas.partials.search')
+        @include('canasta_v2disc.entregas.partials.table')
+        @include('canasta_v2disc.entregas.partials.modal-resagado')
     </div>
 @endsection
 @section('scripts')
@@ -111,42 +111,42 @@
 
         function ir_atras() {
             var paquete_id = $("#paquete_id").val();
-            var url = "{{ route('paquetes.barrio.index', ':id') }}";
+            var url = "{{ route('paquetes.barriodisc.index', ':id') }}";
             url = url.replace(':id', paquete_id);
             window.location.href = url;
         }
 
         function limpiar() {
             var paquete_barrio_id = $("#paquete_barrio_id").val();
-            var url = "{{ route('entregas.index', ':id') }}";
+            var url = "{{ route('entregasdisc.index', ':id') }}";
             url = url.replace(':id', paquete_barrio_id);
             window.location.href = url;
         }
 
         function create() {
             var paquete_barrio_id = $("#paquete_barrio_id").val();
-            var url = "{{ route('entregas.create', ':id') }}";
+            var url = "{{ route('entregasdisc.create', ':id') }}";
             url = url.replace(':id', paquete_barrio_id);
             window.location.href = url;
         }
 
         function habilitar_todo() {
             var paquete_barrio_id = $("#paquete_barrio_id").val();
-            var url = "{{ route('entregas.habilitar.todo', ':id') }}";
+            var url = "{{ route('entregasdisc.habilitar.todo', ':id') }}";
             url = url.replace(':id', paquete_barrio_id);
             window.location.href = url;
         }
 
         function deshabilitar_todo() {
             var paquete_barrio_id = $("#paquete_barrio_id").val();
-            var url = "{{ route('entregas.deshabilitar.todo', ':id') }}";
+            var url = "{{ route('entregasdisc.deshabilitar.todo', ':id') }}";
             url = url.replace(':id', paquete_barrio_id);
             window.location.href = url;
         }
 
         function pdf_get_boletas_entrega() {
             var paquete_barrio_id = $("#paquete_barrio_id").val();
-            var url = "{{ route('entregas.get.boletas.entrega', ':id') }}"+"?"+$('#form').serialize();
+            var url = "{{ route('entregasdisc.get.boletas.entrega', ':id') }}"+"?"+$('#form').serialize();
             url = url.replace(':id', paquete_barrio_id);
             window.open(url,"_blank")
         }

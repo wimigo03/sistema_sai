@@ -10,13 +10,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Log;
-use App\Models\Canasta\Barrio;
-use App\Models\Canasta\Distrito;
-use App\Models\CanastaDisc\BeneficiarioDisc;
+use App\Models\CanastaDisc\Barrio;
+use App\Models\CanastaDisc\Distrito;
+use App\Models\CanastaDisc\Beneficiario;
 use App\Models\CanastaDisc\Discgrado;
-use App\Models\Canasta\Ocupaciones;
-use App\Models\Canasta\HistorialMod;
-use App\Models\Canasta\HistorialBaja;
+use App\Models\CanastaDisc\Ocupaciones;
+use App\Models\CanastaDisc\HistorialMod;
+use App\Models\CanastaDisc\HistorialBaja;
 use App\Models\User;
 use App\Models\Empleado;
 use App\Models\Canasta\Dea;
@@ -63,7 +63,7 @@ class BeneficiariosV2Controller extends Controller
                 'id_barrio' => $data->id_barrio,
                 'estado' => $data->estado
             ]);
-            $beneficiario=BeneficiarioDisc::create($datos);
+            $beneficiario=Beneficiario::create($datos);
         }
     }
 
@@ -73,13 +73,13 @@ class BeneficiariosV2Controller extends Controller
                                ->table("beneficiarios")
                                //->join('ocupaciones as o', 'o.id_ocupacion', '=', 'u.id_ocupacion')
                                // ->select('o.ocupacion','u.nombres')
-                               ->where('id','>=',15400)
-                               ->where('id','<=',15499)
+                               ->where('id','>=',14921)
+                               //->where('id','<=',15499)
                                //->where('idUsuario','<',12000)
                                ->get();
 //dd( $beneficiarios);
        foreach ($beneficiarios as $data){
-        $newestUser = BeneficiarioDisc::orderBy('id', 'desc')->first();
+        $newestUser = Beneficiario::orderBy('id', 'desc')->first();
         $maxId = $newestUser->id;
 
            $datos = ([
@@ -113,7 +113,7 @@ class BeneficiariosV2Controller extends Controller
 
                'estado' => $data->estado2
            ]);
-           $beneficiario=BeneficiarioDisc::create($datos);
+           $beneficiario=Beneficiario::create($datos);
        }
    }
 
@@ -122,10 +122,10 @@ class BeneficiariosV2Controller extends Controller
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');
 
-            $beneficiarios = BeneficiarioDisc::where('distrito_id',null)->get();
+            $beneficiarios = Beneficiario::where('distrito_id',null)->get();
             foreach($beneficiarios as $datos){
                 $barrio = Barrio::select('distrito_id')->where('id',$datos->id_barrio)->first();
-                $beneficiario = BeneficiarioDisc::find($datos->id);
+                $beneficiario = Beneficiario::find($datos->id);
                 $beneficiario->update([
                     'distrito_id' => $barrio->distrito_id
                 ]);
@@ -223,7 +223,7 @@ class BeneficiariosV2Controller extends Controller
                             ->rawColumns(['columna_foto','columna_estado','columna_btn'])
                             ->make(true);
         }
-      //$this->copiarbeneficiarios2();
+ //$this->copiarbeneficiarios2();
         $dea_id = Auth::user()->dea->id;
         $tipos = Barrio::TIPOS;
         $distritos = Distrito::where('dea_id',$dea_id)->pluck('nombre','id');
@@ -231,8 +231,8 @@ class BeneficiariosV2Controller extends Controller
                             ->where('dea_id',$dea_id)
                             ->orderBy('id','asc')
                             ->pluck('nombre','id');
-        $sexos = BeneficiarioDisc::SEXOS;
-        $estados = BeneficiarioDisc::ESTADOS;
+        $sexos = Beneficiario::SEXOS;
+        $estados = Beneficiario::ESTADOS;
 
         return view('canasta_v2disc.beneficiario.index', compact('tipos','distritos','barrios','sexos','estados'));
     }
@@ -266,9 +266,9 @@ class BeneficiariosV2Controller extends Controller
                             ->where('dea_id',$dea_id)
                             ->orderBy('id','asc')
                             ->pluck('nombre','id');
-        $sexos = BeneficiarioDisc::SEXOS;
-        $estados = BeneficiarioDisc::ESTADOS;
-        $beneficiarios = BeneficiarioDisc::query()
+        $sexos = Beneficiario::SEXOS;
+        $estados = Beneficiario::ESTADOS;
+        $beneficiarios = Beneficiario::query()
                                         ->byDea($dea_id)
                                         ->byDistrito($request->distrito)
                                         ->byBarrio($request->barrio)
@@ -293,7 +293,7 @@ class BeneficiariosV2Controller extends Controller
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');
                 $dea_id = Auth::user()->dea->id;
-                $beneficiarios = BeneficiarioDisc::query()
+                $beneficiarios = Beneficiario::query()
                                                 ->byDea($dea_id)
                                                 ->byDistrito($request->distrito)
                                                 ->byBarrio($request->barrio)
@@ -336,11 +336,11 @@ class BeneficiariosV2Controller extends Controller
         $personal = User::find(Auth::user()->id);
         $id_usuario = $personal->id;
         $dea_id = $personal->dea_id;
-        $newestUser = BeneficiarioDisc::orderBy('id', 'desc')->first();
+        $newestUser = Beneficiario::orderBy('id', 'desc')->first();
         $maxId = $newestUser->id;
 
         $barrio = Barrio::select('distrito_id')->where('id',$request->barrio)->first();
-        $beneficiario = new BeneficiarioDisc();
+        $beneficiario = new Beneficiario();
         $beneficiario->id = $maxId + 1;
         $beneficiario->nombres = $request->nombres;
         $beneficiario->ap = $request->ap;
@@ -376,7 +376,7 @@ class BeneficiariosV2Controller extends Controller
         //dd('hola editar');
         $barrios = Barrio::where('dea_id',Auth::user()->dea->id)->get();
         $ocupaciones = Ocupaciones::where('estado','=',1)->get();
-        $beneficiario = BeneficiarioDisc::find($idbeneficiario);
+        $beneficiario = Beneficiario::find($idbeneficiario);
         $discgrado = Discgrado::where('estado',1)->get();
 
         return view('canasta_v2disc.beneficiario.editar',compact('barrios','ocupaciones','beneficiario','discgrado'));
@@ -386,7 +386,7 @@ class BeneficiariosV2Controller extends Controller
     {
         $barrios = Barrio::where('dea_id',Auth::user()->dea->id)->get();
         $ocupaciones = Ocupaciones::where('estado',1)->get();
-        $beneficiario = BeneficiarioDisc::find($idbeneficiario);
+        $beneficiario = Beneficiario::find($idbeneficiario);
         $historial = HistorialMod::where('id_beneficiario',$idbeneficiario)->orderBy('fecha','desc')->get();
 
         return view('canasta_v2disc.beneficiario.show',compact('barrios','ocupaciones','beneficiario','historial'));
@@ -397,7 +397,7 @@ class BeneficiariosV2Controller extends Controller
         try{
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');
-                $beneficiario = BeneficiarioDisc::find($beneficiario_id);
+                $beneficiario = Beneficiario::find($beneficiario_id);
                 $historial = HistorialMod::where('id_beneficiario',$beneficiario_id)->orderBy('fecha','desc')->get();
                 $pdf = PDF::loadView('canasta_v2.beneficiario.pdf', compact(['beneficiario','historial']));
                 $pdf->set_paper('letter','portrait');
@@ -419,7 +419,7 @@ class BeneficiariosV2Controller extends Controller
         $newestUser = HistorialMod::orderBy('id', 'desc')->first();
         $maxId = $newestUser->id;
 
-        $beneficiario = BeneficiarioDisc::find($request->idBeneficiario);
+        $beneficiario = Beneficiario::find($request->idBeneficiario);
         $beneficiario->nombres = $request->nombres;
         $beneficiario->ap = $request->ap;
         $beneficiario->am = $request->am;
@@ -477,7 +477,7 @@ class BeneficiariosV2Controller extends Controller
                 }
             }
 
-            $beneficiario = BeneficiarioDisc::find($request->idBeneficiario);
+            $beneficiario = Beneficiario::find($request->idBeneficiario);
             $beneficiario->nombres = $request->nombres;
             $beneficiario->ap = $request->ap;
             $beneficiario->am = $request->am;
@@ -500,7 +500,7 @@ class BeneficiariosV2Controller extends Controller
             $beneficiario->distrito_id = $barrio->distrito_id;
             $beneficiario->update();
         } else {
-            $beneficiario = BeneficiarioDisc::find($request->idBeneficiario);
+            $beneficiario = Beneficiario::find($request->idBeneficiario);
             $beneficiario->nombres = $request->nombres;
             $beneficiario->ap = $request->ap;
             $beneficiario->am = $request->am;

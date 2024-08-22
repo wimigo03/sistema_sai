@@ -3,7 +3,7 @@
     <div class="card-header header">
         <div class="row">
             <div class="col-md-12 pr-1 pl-1 text-center">
-                <b>ACTUALIZAR REGISTRO DE BENEFICIARIO DISC.</b>
+                <b>ACTUALIZAR REGISTRO BENEFICIARIO DISCAPACIDAD</b>
             </div>
         </div>
     </div>

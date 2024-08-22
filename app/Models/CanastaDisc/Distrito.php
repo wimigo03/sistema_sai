@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Canasta\Dea;
 
-class DistritoDisc extends Model
+class Distrito extends Model
 {
     protected $table = 'distritos';
     protected $fillable = [

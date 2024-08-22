@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Canasta\Periodos;
 use DB;
 
-class PaquetesDisc extends Model
+class Paquetes extends Model
 {
 
     protected $table = 'paquete';
@@ -19,6 +19,7 @@ class PaquetesDisc extends Model
         'user_id',
         'dea_id',
         'estado',
+        'id_tipo',
         'numero'
     ];
 

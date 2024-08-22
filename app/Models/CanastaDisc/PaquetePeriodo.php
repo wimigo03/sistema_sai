@@ -5,7 +5,7 @@ namespace App\Models\CanastaDisc;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PaquetePeriodoDisc extends Model
+class PaquetePeriodo extends Model
 {
     protected $table = 'paquete_periodo';
     //protected $primaryKey= 'id';

@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Canasta_v2;
+namespace App\Http\Controllers\Canasta_v2disc;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Log;
-use App\Models\Canasta\Barrio;
-use App\Models\Canasta\Entrega;
-use App\Models\Canasta\Distrito;
-use App\Models\Canasta\Beneficiario;
-use App\Models\Canasta\PaqueteBarrio;
+use App\Models\CanastaDisc\Barrio;
+use App\Models\CanastaDisc\Entrega;
+use App\Models\CanastaDisc\Distrito;
+use App\Models\CanastaDisc\Beneficiario;
+use App\Models\CanastaDisc\PaqueteBarrio;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exportar\Canasta\EntregasExcel;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -19,7 +19,7 @@ use DB;
 use PDF;
 use Carbon\Carbon;
 
-class EntregasV2cController extends Controller
+class EntregasV2Controller extends Controller
 {
     public function index($paquete_barrio_id)
     {
@@ -50,7 +50,7 @@ class EntregasV2cController extends Controller
                             ->paginate(10);
         $cont = 1;
 
-        return view('canasta_v2.entregas.index', compact('paquete_barrio','extensiones','sexos','estados','entregas','cont'));
+        return view('canasta_v2disc.entregas.index', compact('paquete_barrio','extensiones','sexos','estados','entregas','cont'));
     }
 
     public function search($paquete_barrio_id, Request $request)
@@ -103,6 +103,7 @@ class EntregasV2cController extends Controller
                         ->byDistrito($paquete_barrio->distrito_id)
                         ->byBarrio($paquete_barrio->id_barrio)
                         ->byEstado('A')
+                        ->where('id_tipo','=',2)
                         ->whereNotIn('id', function ($query) use ($paquete_barrio_id) {
                             $query->select('id_beneficiario')
                                   ->from('entrega')
@@ -111,7 +112,7 @@ class EntregasV2cController extends Controller
                         ->get();
 
         $cont = 1;
-        return view('canasta_v2.entregas.create', compact('paquete_barrio','beneficiarios','cont'));
+        return view('canasta_v2disc.entregas.create', compact('paquete_barrio','beneficiarios','cont'));
     }
 
     public function store(Request $request)
@@ -133,7 +134,7 @@ class EntregasV2cController extends Controller
                     'id_barrio' => $paquete_barrio->id_barrio,
                     'id_beneficiario' => $request->beneficiario_id[$cont],
                     'id_paquete' => $paquete_barrio->id_paquete,
-                    'tipo_entrega_id' => '1',
+                    'id_tipo' => '1',
                     'id_ocupacion' => $request->ocupacion_id[$cont],
                     'distrito_id' => $paquete_barrio->distrito_id,
                     'dea_id' => $dea_id,
@@ -148,7 +149,7 @@ class EntregasV2cController extends Controller
                 $cont++;
             }
 
-            return redirect()->route('entregas.index',$request->paquete_barrio_id)->with('success_message', 'Beneficiarios registrados exitosamente...');
+            return redirect()->route('entregasdisc.index',$request->paquete_barrio_id)->with('success_message', 'Beneficiarios registrados exitosamente...');
 
         } catch (\Throwable $th) {
             return response()->view('errors.500', [
@@ -197,7 +198,7 @@ class EntregasV2cController extends Controller
                 ]);
             }
 
-            return redirect()->route('entregas.index',$paquete_barrio_id)->with('success_message', '[Canasta entregada a todos los beneficiarios]');
+            return redirect()->route('entregasdisc.index',$paquete_barrio_id)->with('success_message', '[Canasta entregada a todos los beneficiarios]');
 
         } catch (\Throwable $th) {
             return response()->view('errors.500', [

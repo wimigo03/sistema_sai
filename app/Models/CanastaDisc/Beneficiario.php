@@ -10,7 +10,7 @@ use App\Models\Canasta\Distrito;
 use App\Models\Canasta\Barrio;
 use App\Models\Canasta\Ocupaciones;
 use Carbon\Carbon;
-class BeneficiarioDisc extends Model
+class Beneficiario extends Model
 {
     protected $table = 'beneficiarios';
     const CREATED_AT = 'created_att';
