@@ -9,6 +9,7 @@
             <td align="center"><b>SEXO</b></td>
             <td align="center"><b>FECHA DE NAC.</b></td>
             <td align="center"><b>EDAD</b></td>
+            <td align="center"><b>OCUPACION</b></td>
             <td align="center"><b>BARRIO</b></td>
             <td><b>DIRECCION</b></td>
             <td align="center"><b>ESTADO</b></td>
@@ -25,6 +26,7 @@
                 <td align="center">{{ $datos->sexo }}</td>
                 <td align="center">{{ $datos->fecha_nac != null ? \Carbon\Carbon::parse($datos->fecha_nac)->format('d/m/Y') : '' }}</td>
                 <td align="center">{{ $datos->fecha_nac != null ? \Carbon\Carbon::parse($datos->fecha_nac)->age : '' }}</td>
+                <td align="center">{{ $datos->ocupacion->ocupacion }}</td>
                 <td align="center">{{ $datos->barrio->nombre }}</td>
                 <td>{{ $datos->direccion }}</td>
                 <td align="center">{{ $datos->status }}</td>

@@ -4,7 +4,7 @@
             <table class="table display table-striped table-bordered responsive hover-orange" style="width:100%;" id="dataTable">
                 <thead>
                     <tr class="font-roboto-11">
-                        <th>CODIGO</th>
+                        {{--<th>CODIGO</th>--}}
                         <th>DISTRITO</th>
                         <th width="20%">BARRIO</th>
                         <th>NOMBRE (S)</th>
@@ -13,6 +13,7 @@
                         <th>NRO. CARNET</th>
                         <th>SEXO</th>
                         <th>EDAD</th>
+                        <th>OCUPACION</th>
                         <th>ESTADO</th>
                         <th><i class="fa-solid fa-camera-retro fa-fw"></i></th>
                         @canany(['canasta.beneficiarios.editar', 'canasta.beneficiarios.show'])
@@ -26,6 +27,7 @@
                 </tbody>
                 <tfoot>
                     <tr>
+                        {{--<th></th>--}}
                         <th></th>
                         <th></th>
                         <th></th>
@@ -51,7 +53,7 @@
             <table class="table display table-striped table-bordered responsive hover-orange" style="width:100%;" id="#">
                 <thead>
                     <tr class="font-roboto-11">
-                        <td class="text-center p-1"><b>CODIGO</b></td>
+                        {{--<td class="text-center p-1"><b>CODIGO</b></td>--}}
                         <td class="text-center p-1"><b>DISTRITO</b></td>
                         <td class="text-justify p-1" width="20%"><b>BARRIO</b></td>
                         <td class="text-justify p-1"><b>NOMBRE (S)</b></td>
@@ -60,6 +62,7 @@
                         <td class="text-center p-1"><b>NRO. CARNET</b></td>
                         <td class="text-center p-1"><b>SEXO</b></td>
                         <td class="text-center p-1"><b>EDAD</b></td>
+                        <td class="text-center p-1"><b>OCUPACION</b></td>
                         <td class="text-center p-1"><b>ESTADO</b></td>
                         <td class="text-center p-1">
                             <i class="fa-solid fa-camera-retro fa-fw"></i>
@@ -71,8 +74,8 @@
                 </thead>
                 <tbody>
                     @foreach ($beneficiarios as $datos)
-                        <tr class="font-roboto-11">
-                            <td class="text-center p-1">{{ $datos->id }}</td>
+                        <tr class="font-roboto-10">
+                            {{--<td class="text-center p-1">{{ $datos->id }}</td>--}}
                             <td class="text-center p-1">{{ $datos->distrito->nombre }}</td>
                             <td class="text-justify p-1">{{ $datos->barrio->nombre }}</td>
                             <td class="text-justify p-1">{{ $datos->nombres }}</td>
@@ -81,6 +84,7 @@
                             <td class="text-center p-1">{{ $datos->ci . '-' . $datos->expedido }}</td>
                             <td class="text-center p-1">{{ $datos->sexo }}</td>
                             <td class="text-center p-1">{{ $datos->fecha_nac != null ? \Carbon\Carbon::parse($datos->fecha_nac)->age : '' }}</td>
+                            <td class="text-center p-1">{{ $datos->ocupacion->ocupacion }}</td>
                             <td class="text-center p-1">
                                 <span class="{{ $datos->colorStatus }}">
                                     {{ $datos->status }}

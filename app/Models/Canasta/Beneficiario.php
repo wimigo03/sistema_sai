@@ -182,6 +182,12 @@ class Beneficiario extends Model
         }
     }
 
+    public function scopeByOcupacion($query, $ocupacion_id){
+        if($ocupacion_id != null){
+            return $query->where('id_ocupacion', $ocupacion_id);
+        }
+    }
+
     public function scopeByUsuario($query, $usuario){
         if ($usuario != null) {
                 return $query

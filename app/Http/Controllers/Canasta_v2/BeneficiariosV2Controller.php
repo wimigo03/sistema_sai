@@ -152,7 +152,7 @@ class BeneficiariosV2Controller extends Controller
             $data = DB::table('beneficiarios as a')
                     ->join('barrios as b','b.id','a.id_barrio')
                     ->join('distritos as c','c.id','a.distrito_id')
-                   // ->join('distritos as c','c.id','a.distrito_id')
+                    ->join('ocupaciones as d','d.id','a.id_ocupacion')
                     ->where('a.id_tipo',Paquetes::TERCERA_EDAD)
                     ->select(
                         'a.id as beneficiario_id',
@@ -164,6 +164,7 @@ class BeneficiariosV2Controller extends Controller
                         'b.nombre as barrio',
                         'a.sexo',
                         DB::raw("DATE_PART('year',AGE(a.fecha_nac)) as edad"),
+                        'd.ocupacion',
                         'a.dir_foto',
                         'a.estado',
                         'a.photo'
@@ -196,8 +197,9 @@ class BeneficiariosV2Controller extends Controller
                             ->pluck('nombre','id');
         $sexos = Beneficiario::SEXOS;
         $estados = Beneficiario::ESTADOS;
+        $ocupaciones = Ocupaciones::where('estado','1')->pluck('ocupacion','id');
 
-        return view('canasta_v2.beneficiario.index', compact('tipos','distritos','barrios','sexos','estados'));
+        return view('canasta_v2.beneficiario.index', compact('tipos','distritos','barrios','sexos','estados','ocupaciones'));
     }
 
     public function getBarrios(Request $request){
@@ -231,6 +233,7 @@ class BeneficiariosV2Controller extends Controller
                             ->pluck('nombre','id');
         $sexos = Beneficiario::SEXOS;
         $estados = Beneficiario::ESTADOS;
+        $ocupaciones = Ocupaciones::where('estado','1')->pluck('ocupacion','id');
         $beneficiarios = Beneficiario::query()
                                         ->byDea($dea_id)
                                         ->byTipoSistema(Paquetes::TERCERA_EDAD)
@@ -243,12 +246,13 @@ class BeneficiariosV2Controller extends Controller
                                         ->byNumeroCarnet($request->ci)
                                         ->bySexo($request->sexo)
                                         ->byEdad($request->edad_inicial, $request->edad_final)
+                                        ->byOcupacion($request->id_ocupacion)
                                         ->byEstado($request->estado)
                                         ->where('id_tipo','=',1)
                                         ->orderBy('id', 'desc')
                                         ->paginate(10);
 
-        return view('canasta_v2.beneficiario.index', compact('tipos','distritos','barrios','sexos','estados','beneficiarios'));
+        return view('canasta_v2.beneficiario.index', compact('tipos','distritos','barrios','sexos','estados','ocupaciones','beneficiarios'));
     }
 
     public function excel(Request $request)
@@ -269,6 +273,7 @@ class BeneficiariosV2Controller extends Controller
                                         ->byNumeroCarnet($request->ci)
                                         ->bySexo($request->sexo)
                                         ->byEdad($request->edad_inicial, $request->edad_final)
+                                        ->byOcupacion($request->id_ocupacion)
                                         ->byEstado($request->estado)
                                         ->orderBy('id', 'desc')
                                         ->get();
@@ -519,6 +524,7 @@ class BeneficiariosV2Controller extends Controller
                                     ->byNumeroCarnet($request->ci)
                                     ->bySexo($request->sexo)
                                     ->byEdad($request->edad_inicial, $request->edad_final)
+                                    ->byOcupacion($request->id_ocupacion)
                                     ->byEstado($request->estado)
                                     ->orderBy('distrito_id')
                                     ->orderBy('id_barrio')

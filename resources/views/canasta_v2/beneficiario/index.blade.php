@@ -45,6 +45,12 @@
                 width: '100%'
             });
 
+            $('#id_ocupacion').select2({
+                theme: "bootstrap4",
+                placeholder: "--Ocupacion--",
+                width: '100%'
+            });
+
             $('#dataTable').DataTable({
                 bFilter: true,
                 responsive: true,
@@ -52,62 +58,68 @@
                 serverSide: true,
                 autoWidth: false,
                 ajax: "{{ route('beneficiarios.index') }}",
-                columns: [{
+                columns: [
+                    /*{
                         data: 'beneficiario_id',
                         name: 'a.id',
-                        class: 'text-center p-1 font-roboto-11'
-                    },
+                        class: 'text-center p-1 font-roboto-10'
+                    },*/
                     {
                         data: 'distrito',
                         name: 'c.nombre',
-                        class: 'text-center p-1 font-roboto-11'
+                        class: 'text-center p-1 font-roboto-10'
                     },
                     {
                         data: 'barrio',
                         name: 'b.nombre',
-                        class: 'text-justify p-1 font-roboto-11'
+                        class: 'text-justify p-1 font-roboto-10'
                     },
                     {
                         data: 'nombres',
                         name: 'a.nombres',
-                        class: 'text-justify p-1 font-roboto-11'
+                        class: 'text-justify p-1 font-roboto-10'
                     },
                     {
                         data: 'ap',
                         name: 'a.ap',
-                        class: 'text-justify p-1 font-roboto-11'
+                        class: 'text-justify p-1 font-roboto-10'
                     },
                     {
                         data: 'am',
                         name: 'a.am',
-                        class: 'text-justify p-1 font-roboto-11'
+                        class: 'text-justify p-1 font-roboto-10'
                     },
                     {
                         data: 'nro_carnet',
                         name: 'nro_carnet',
-                        class: 'text-center p-1 font-roboto-11'
+                        class: 'text-center p-1 font-roboto-10'
                     },
                     {
                         data: 'sexo',
                         name: 'a.sexo',
-                        class: 'text-center p-1 font-roboto-11'
+                        class: 'text-center p-1 font-roboto-10'
                     },
                     {
                         data: 'edad',
                         name: 'a.ci',
-                        class: 'text-center p-1 font-roboto-11'
+                        class: 'text-center p-1 font-roboto-10'
+                    },
+                    {
+                        data: 'ocupacion',
+                        name: 'd.ocupacion',
+                        class: 'text-center p-1 font-roboto-10'
                     },
                     {
                         data: 'columna_estado',
                         name: 'columna_estado',
-                        class: 'text-center p-1 font-roboto-11',
+                        class: 'text-center p-1 font-roboto-10',
                         orderable: false,
                         searchable: false
                     },
                     {
                         data: 'columna_foto',
                         name: 'columna_foto',
-                        class: 'text-center p-1 font-roboto-11',
+                        class: 'text-center p-1 font-roboto-10',
                         orderable: false,
                         searchable: false
                     },
@@ -115,7 +127,7 @@
                     {
                         data: 'columna_btn',
                         name: 'columna_btn',
-                        class: 'text-center p-1 font-roboto-11',
+                        class: 'text-center p-1 font-roboto-10',
                         orderable: false,
                         searchable: false
                     },
