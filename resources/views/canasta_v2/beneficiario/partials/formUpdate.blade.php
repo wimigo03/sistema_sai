@@ -76,6 +76,7 @@
                 <option value="X" @if ($beneficiario->estado == 'X') selected @endif>PENDIENTE</option>
                 <option value="F" @if ($beneficiario->estado == 'F') selected @endif>FALLECIDO</option>
                 <option value="B" @if ($beneficiario->estado == 'B') selected @endif>BAJA</option>
+                <option value="E" @if ($beneficiario->estado == 'E') selected @endif>ELIMINAR</option>
             </select>
         </div>
         <div class="col-md-8 pr-1 pl-1">

@@ -20,5 +20,10 @@
                 PENDIENTE
             </span>
         @break
+        @case('E')
+            <span class="badge-with-padding badge badge-danger">
+                ELIMINADO
+            </span>
+        @break
     @endswitch
 </td>

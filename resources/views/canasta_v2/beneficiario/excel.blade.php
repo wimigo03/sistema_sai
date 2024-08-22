@@ -21,7 +21,7 @@
                 <td>{{ $datos->nombres }}</td>
                 <td>{{ $datos->ap }}</td>
                 <td>{{ $datos->am }}</td>
-                <td align="center">{{ $datos->ci . '-' . $datos->expedido }}</td>
+                <td align="center">{{ $datos->ci . ' ' . $datos->expedido }}</td>
                 <td align="center">{{ $datos->sexo }}</td>
                 <td align="center">{{ $datos->fecha_nac != null ? \Carbon\Carbon::parse($datos->fecha_nac)->format('d/m/Y') : '' }}</td>
                 <td align="center">{{ $datos->fecha_nac != null ? \Carbon\Carbon::parse($datos->fecha_nac)->age : '' }}</td>

@@ -48,7 +48,8 @@ class Beneficiario extends Model
         'A' => 'HABILITADO',
         'F' => 'FALLECIDO',
         'B' => 'BAJA',
-        'X' => 'PENDIENTE'
+        'X' => 'PENDIENTE',
+        'E' => 'ELIMINADO'
     ];
 
     const SEXOS = [
@@ -78,6 +79,8 @@ class Beneficiario extends Model
                     return "BAJA";
             case 'X':
                     return "PENDIENTE";
+            case 'E':
+                return "ELIMINADO";
         }
     }
 
@@ -91,6 +94,8 @@ class Beneficiario extends Model
                 return "badge-with-padding badge badge-warning";
             case 'X':
                 return "badge-with-padding badge badge-secondary";
+            case 'E':
+                return "badge-with-padding badge badge-danger";
         }
     }
 
