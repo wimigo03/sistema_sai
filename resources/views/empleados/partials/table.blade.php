@@ -48,6 +48,7 @@
                         <td class="text-center p-1">{{ $datos->ultimo_tipo_contrato }}</td>
                         <td class="text-center p-1">{{ $datos->ultimo_contrato_ingreso != null ? \Carbon\Carbon::parse($datos->ultimo_contrato_ingreso)->format('d/m/Y') : '' }}</td>
                         @php
+                            $parpadear = '';
                             if($datos->fecha_conclusion_contrato != null){
                                 $fecha_inicial = strtotime($datos->fecha_conclusion_contrato);
                                 $fecha_final = strtotime(date('Y-m-d'));
@@ -55,8 +56,6 @@
                                 $diferenciaDias = $diferenciaSegundos / (60 * 60 * 24);
                                 if($diferenciaDias < 10){
                                     $parpadear = 'parpadear';
-                                }else{
-                                    $parpadear = '';
                                 }
                             }
                         @endphp
