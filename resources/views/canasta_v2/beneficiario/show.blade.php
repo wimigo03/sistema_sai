@@ -176,7 +176,7 @@
             popupAnchor: [0, -50]
         });
 
-        var marker = L.marker(["{{ $beneficiario->latitud }}", "{{ $beneficiario->longitud }}"], { icon: redIcon }).addTo(map).bindPopup('Ubicacion actual.').openPopup();
+        var marker = L.marker(["{{ $beneficiario->latitud }}", "{{ $beneficiario->longitud }}"], { icon: redIcon }).addTo(map).bindPopup('Ubicacion').openPopup();
 
         function ir_atras(){
             window.location.href = "{{ route('beneficiarios.index') }}";

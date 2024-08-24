@@ -8,8 +8,8 @@
 
     .locate-btn {
         position: absolute;
-        top: 10px;
-        left: 95%;
+        top: 450px;
+        left: 13px;
         z-index: 1000;
         background-color: white;
         border: none;
@@ -47,7 +47,7 @@
             popupAnchor: [0, -50] // Punto desde el cual se abrirá el popup
         });
 
-        var marker = L.marker([-22.02887002864307, -63.67736932020581], { icon: redIcon }).addTo(map).bindPopup('Ubicacion actual.').openPopup();
+        var marker = L.marker([-22.02887002864307, -63.67736932020581], { icon: redIcon }).addTo(map).bindPopup('Ubicacion').openPopup();
 
         function centerMapOnLocation() {
             if (navigator.geolocation) {

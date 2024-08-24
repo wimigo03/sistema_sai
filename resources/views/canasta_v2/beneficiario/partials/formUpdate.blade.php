@@ -116,11 +116,11 @@
         </div>
         <div class="col-md-2 pr-1 pl-1">
             <label for="latitud" class="d-inline"><b>Latitud</b></label>
-            <input type="text" name="latitud" id="latitud"  class="form-control font-roboto-12" disabled>
+            <input type="text" name="latitud" id="latitud" value="{{ $beneficiario->latitud }}" class="form-control font-roboto-12" disabled>
         </div>
         <div class="col-md-2 pr-1 pl-1">
             <label for="longitud" class="d-inline"><b>Longitud</b></label>
-            <input type="text" name="longitud" id="longitud"  class="form-control font-roboto-12" disabled>
+            <input type="text" name="longitud" id="longitud" value="{{ $beneficiario->longitud }}" class="form-control font-roboto-12" disabled>
         </div>
     </div>
     <div class="form-group row font-roboto-12">

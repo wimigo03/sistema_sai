@@ -8,8 +8,8 @@
 
     .locate-btn {
         position: absolute;
-        top: 10px;
-        left: 95%;
+        top: 450px;
+        left: 13px;
         z-index: 1000;
         background-color: white;
         border: none;
@@ -48,10 +48,10 @@
             popupAnchor: [0, -50]
         });
 
-        var marker = L.marker([_latitud, _longitud], { icon: redIcon }).addTo(map).bindPopup('Ubicacion actual.').openPopup();
+        var marker = L.marker([_latitud, _longitud], { icon: redIcon }).addTo(map).bindPopup('Ubicacion').openPopup();
 
         if (_latitud !== null && _longitud !== null && _latitud !== "" && _longitud !== "") {
-            var marker = L.marker([_latitud, _longitud], { icon: redIcon }).addTo(map).bindPopup('Ubicacion actual.').openPopup();
+            var marker = L.marker([_latitud, _longitud], { icon: redIcon }).addTo(map).bindPopup('Ubicacion').openPopup();
         } else {
             centerMapOnLocation();
         }
