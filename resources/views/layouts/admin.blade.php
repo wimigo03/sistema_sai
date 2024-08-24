@@ -8,6 +8,7 @@
     <meta name="robots" content="noindex,nofollow">
     <title>G.A.R.G.CH. | S.A.I.</title>
     <link rel="canonical" href="https://www.wrappixel.com/templates/monster-admin-lite/" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <link rel="icon" type="image/png" sizes="18x18" href="{{ asset('logos/logo2.png') }}">
     <link rel="stylesheet" href="{{ asset('admin_assets/plugins/slim-select/slimselect.min.css') }}">
     <link rel="stylesheet" href="{{ asset('dataTable/css/jquery.dataTables.min.css') }}">
@@ -99,6 +100,7 @@
         crossorigin="anonymous"
         referrerpolicy="no-referrer"
     ></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
     @include('layouts.modal.notificaciones')
 @yield('scripts')

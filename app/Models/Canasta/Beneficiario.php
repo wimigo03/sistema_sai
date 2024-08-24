@@ -41,7 +41,9 @@ class Beneficiario extends Model
         'id_discgrado',
         'tutor',
         'parentesco',
-        'distrito_id'
+        'distrito_id',
+        'latitud',
+        'longitud'
     ];
 
     const ESTADOS = [

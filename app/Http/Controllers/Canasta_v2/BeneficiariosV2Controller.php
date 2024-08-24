@@ -167,12 +167,15 @@ class BeneficiariosV2Controller extends Controller
                         'd.ocupacion',
                         'a.dir_foto',
                         'a.estado',
-                        'a.photo'
+                        'a.photo',
+                        'a.latitud',
+                        'a.longitud'
                     );
 
             return Datatables::of($data)
                             //->orderColumn('beneficiario_id', 'a.id $1')
                             ->addIndexColumn()
+                            ->addColumn('columna_gps', 'canasta_v2.beneficiario.partials.columna-gps')
                             ->addColumn('columna_foto', 'canasta_v2.beneficiario.partials.columna-foto')
                             ->addColumn('columna_estado', 'canasta_v2.beneficiario.partials.columna-estado')
                             ->addColumn('columna_btn', 'canasta_v2.beneficiario.partials.columna-btn')
@@ -184,7 +187,7 @@ class BeneficiariosV2Controller extends Controller
                                 $sql = "DATE_PART('year',AGE(a.fecha_nac))::text like ?";
                                 $query->whereRaw($sql, ["$keyword"]);
                             })
-                            ->rawColumns(['columna_foto','columna_estado','columna_btn'])
+                            ->rawColumns(['columna_gps','columna_foto','columna_estado','columna_btn'])
                             ->make(true);
         }
 
@@ -249,7 +252,7 @@ class BeneficiariosV2Controller extends Controller
                                         ->byOcupacion($request->id_ocupacion)
                                         ->byEstado($request->estado)
                                         ->where('id_tipo','=',1)
-                                        ->orderBy('id', 'desc')
+                                        ->orderBy('nombres', 'asc')
                                         ->paginate(10);
 
         return view('canasta_v2.beneficiario.index', compact('tipos','distritos','barrios','sexos','estados','ocupaciones','beneficiarios'));
@@ -328,6 +331,8 @@ class BeneficiariosV2Controller extends Controller
         $beneficiario->expedido = $request->expedido;
         $beneficiario->id_ocupacion = $request->ocupacion;
         $beneficiario->distrito_id = $barrio->distrito_id;
+        $beneficiario->latitud = $request->latitud;
+        $beneficiario->longitud = $request->longitud;
         $beneficiario->save();
         return redirect()->route('beneficiarios.index')->with('success_message', 'datos registrados correctamente...');
     }
@@ -456,6 +461,8 @@ class BeneficiariosV2Controller extends Controller
             $beneficiario->dea_id = $dea_id;
             $beneficiario->distrito_id = $barrio->distrito_id;
             $beneficiario->photo = $nombre;
+            $beneficiario->latitud = $request->latitud;
+            $beneficiario->longitud = $request->longitud;
             $beneficiario->update();
 
             $img_25 = Image::make(substr($beneficiario->dir_foto,3));
@@ -491,6 +498,8 @@ class BeneficiariosV2Controller extends Controller
             $beneficiario->user_id = $id_usuario;
             $beneficiario->dea_id = $dea_id;
             $beneficiario->distrito_id = $barrio->distrito_id;
+            $beneficiario->latitud = $request->latitud;
+            $beneficiario->longitud = $request->longitud;
             $beneficiario->update();
         }
 

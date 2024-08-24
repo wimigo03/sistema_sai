@@ -15,7 +15,8 @@
                         <th>EDAD</th>
                         <th>OCUPACION</th>
                         <th>ESTADO</th>
-                        <th><i class="fa-solid fa-camera-retro fa-fw"></i></th>
+                        <th><i class="fa-solid fa-location-dot fa-lg"></i></th>
+                        <th><i class="fa-solid fa-camera-retro fa-lg"></i></th>
                         @canany(['canasta.beneficiarios.editar', 'canasta.beneficiarios.show'])
                             <th>
                                 <i class="fa fa-bars" aria-hidden="true"></i>
@@ -28,6 +29,7 @@
                 <tfoot>
                     <tr>
                         {{--<th></th>--}}
+                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -65,7 +67,10 @@
                         <td class="text-center p-1"><b>OCUPACION</b></td>
                         <td class="text-center p-1"><b>ESTADO</b></td>
                         <td class="text-center p-1">
-                            <i class="fa-solid fa-camera-retro fa-fw"></i>
+                            <i class="fa-solid fa-location-dot fa-lg"></i>
+                        </td>
+                        <td class="text-center p-1">
+                            <i class="fa-solid fa-camera-retro fa-lg"></i>
                         </td>
                         @canany(['canasta.beneficiarios.editar', 'canasta.beneficiarios.show'])
                             <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
@@ -89,6 +94,11 @@
                                 <span class="{{ $datos->colorStatus }}">
                                     {{ $datos->status }}
                                 </span>
+                            </td>
+                            <td class="text-center p-1">
+                                @if ($datos->latitud != null && $datos->longitud != null)
+                                    <i class="fa-solid fa-location-dot fa-2x text-danger"></i>
+                                @endif
                             </td>
                             <td class="text-center p-1">
                                 <img src="{{ asset('imagenes/fotos-30px/' . $datos->photo) }}" align="center" height="30" with="30" />

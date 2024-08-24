@@ -53,7 +53,7 @@
 
             $('#dataTable').DataTable({
                 bFilter: true,
-                responsive: true,
+                responsive: false,
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
@@ -117,6 +117,13 @@
                         searchable: false
                     },
                     {
+                        data: 'columna_gps',
+                        name: 'columna_gps',
+                        class: 'text-center p-1 font-roboto-10',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
                         data: 'columna_foto',
                         name: 'columna_foto',
                         class: 'text-center p-1 font-roboto-10',
@@ -138,7 +145,7 @@
                     var columnCount = api.columns().nodes().length;
 
                     api.columns().every(function (index) {
-                        if (index >= columnCount - 2) {
+                        if (index >= columnCount - 3) {
                             return;
                         }
                         var column = this;
@@ -150,7 +157,7 @@
                         });
                     });
                 },
-                order: [[0, 'desc']],
+                order: [[2, 'asc']],
                 language: datatableLanguageConfig
             });
         });
