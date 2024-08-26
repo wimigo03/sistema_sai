@@ -14,6 +14,7 @@
                         <th>EDAD</th>
                         <th>OCUPACION</th>
                         <th width="7%">ESTADO</th>
+                        <th width="7%"><b>CENSO&nbsp;2024</b></th>
                         <th><i class="fa-solid fa-location-dot fa-lg"></i></th>
                         <th><i class="fa-solid fa-camera-retro fa-lg"></i></th>
                         @canany(['canasta.beneficiarios.editar', 'canasta.beneficiarios.show'])
@@ -37,6 +38,7 @@
                         <th>EDAD</th>
                         <th>OCUPACION</th>
                         <th>ESTADO</th>
+                        <th>CENSO2024</th>
                         <th></th>
                         <th></th>
                         @canany(['canasta.beneficiarios.editar', 'canasta.beneficiarios.show'])

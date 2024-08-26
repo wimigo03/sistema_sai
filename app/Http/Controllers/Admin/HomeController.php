@@ -21,7 +21,7 @@ class HomeController extends Controller
         if(count(Auth::user()->roles) == 1){
             foreach(Auth::user()->roles as $role){
                 if($role->id == 29){
-                    return redirect()->route('beneficiarios.index');
+                    return redirect()->route('beneficiarios.brigadista.index');
                 }
             }
         }

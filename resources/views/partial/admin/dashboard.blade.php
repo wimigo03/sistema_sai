@@ -52,7 +52,7 @@
                         </li>
                     @endcanany
                     {{-- CANASTA --}}
-                    @canany(['canasta.paquetes.index','canasta.beneficiarios.index','canasta.entregas.beneficiario.index','canasta.distritos.index','canasta.barrios.index'])
+                    @canany(['canasta.paquetes.index','canasta.beneficiarios.index','canasta.entregas.beneficiario.index','canasta.distritos.index','canasta.barrios.index','canasta.beneficiarios.brigadista.index'])
                         <li class="font-verdana-13 counter">
                             <a href="" data-toggle="collapse" data-target="#dashboard_canasta_v2" class="active collapsed" aria-expanded="false">
                                 <i class="fa-solid fa-gift fa-fw"></i>&nbsp;Canasta 3ra Edad

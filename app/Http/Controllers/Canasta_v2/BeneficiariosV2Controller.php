@@ -209,7 +209,13 @@ class BeneficiariosV2Controller extends Controller
                     "),
                     'a.photo',
                     'a.latitud',
-                    'a.longitud'
+                    'a.longitud',
+                    DB::raw("
+                        CASE
+                            WHEN a.censado = '1' THEN 'CENSADO'
+                            ELSE '-'
+                        END as censo_2024
+                    "),
                 )
                 ->orderBy('a.id','desc');
 
@@ -229,6 +235,14 @@ class BeneficiariosV2Controller extends Controller
                                         WHEN a.estado = 'X' THEN 'PENDIENTE'
                                         WHEN a.estado = 'E' THEN 'ELIMINADO'
                                         ELSE 'DESCONOCIDO'
+                                    END
+                                    like ?", ["$keyword"]);
+                            })
+                            ->filterColumn('censo_2024', function($query, $keyword) {
+                                $query->whereRaw("
+                                    CASE
+                                        WHEN a.censado = '1' THEN 'CENSADO'
+                                        ELSE '-'
                                     END
                                     like ?", ["$keyword"]);
                             })
@@ -370,6 +384,15 @@ class BeneficiariosV2Controller extends Controller
 
     public function editar($idbeneficiario)
     {
+        $censador = false;
+        if(count(Auth::user()->roles) == 1){
+            foreach(Auth::user()->roles as $role){
+                if($role->id == 29){
+                    $censador = true;
+                }
+            }
+        }
+
         $barrios = Barrio::where('dea_id',Auth::user()->dea->id)->get();
         $profesiones = Ocupaciones::where('tipo',Ocupaciones::PROFESIONES)->where('estado','1')->get();
         $ocupaciones = Ocupaciones::where('tipo',Ocupaciones::OCUPACIONES)->where('estado','1')->get();
@@ -377,7 +400,7 @@ class BeneficiariosV2Controller extends Controller
         $_estados = Beneficiario::_ESTADOS;
         $beneficiario = Beneficiario::find($idbeneficiario);
 
-        return view('canasta_v2.beneficiario.editar',compact('barrios','profesiones','ocupaciones','tipos_viviendas','_estados','beneficiario'));
+        return view('canasta_v2.beneficiario.editar',compact('censador','barrios','profesiones','ocupaciones','tipos_viviendas','_estados','beneficiario'));
     }
 
     public function show($idbeneficiario)
@@ -409,7 +432,26 @@ class BeneficiariosV2Controller extends Controller
     }
 
     public function update(Request $request)
-    {//dd($request->all());
+    {
+        $censador = false;
+        if(count(Auth::user()->roles) == 1){
+            foreach(Auth::user()->roles as $role){
+                if($role->id == 29){
+                    $censador = true;
+                }
+            }
+        }
+        if($censador == true){
+            $beneficiario = Beneficiario::find($request->idBeneficiario);
+            if($beneficiario->censado == '1'){
+                return redirect()->route('beneficiarios.brigadista.index')->with('error_message', 'El beneficiario ya fue CENSADO');
+            }else{
+                $beneficiario->update([
+                    'censado' => '1'
+                ]);
+            }
+        }
+
         $fecha_nacimiento = $request->fnac != null ? date('Y-m-d', strtotime(str_replace('/', '-', $request->fnac))) : null;
         $barrio = Barrio::select('distrito_id')->where('id',$request->barrio)->first();
         $beneficiario = Beneficiario::find($request->idBeneficiario);
@@ -501,7 +543,11 @@ class BeneficiariosV2Controller extends Controller
             'fecha' => date('Y-m-d')
         ]);
 
-        return redirect()->route('beneficiarios.index')->with('info_message', 'datos actualizados correctamente...');
+        if(isset($request->censado)){
+            return redirect()->route('beneficiarios.brigadista.index')->with('info_message', 'datos actualizados correctamente...');
+        }else{
+            return redirect()->route('beneficiarios.index')->with('info_message', 'datos actualizados correctamente...');
+        }
     }
 
     public function pdfListar(Request $request)
@@ -579,7 +625,11 @@ class BeneficiariosV2Controller extends Controller
                                         ->where('id_tipo',1)
                                         ->first();
             if($beneficiario != null){
-                return redirect()->route('beneficiarios.editar',$beneficiario->id);
+                if($beneficiario->censado == '1'){
+                    return redirect()->route('beneficiarios.brigadista.index')->with('error_message', 'El beneficiario ya fue CENSADO');
+                }else{
+                    return redirect()->route('beneficiarios.editar',$beneficiario->id);
+                }
             }else{
                 return redirect()->route('beneficiarios.brigadista.index')->with('error_message', 'Beneficiario no encontrado o no habilitado');
             }

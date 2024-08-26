@@ -23,9 +23,11 @@
     <div class="form-group row">
         <div class="col-md-12 pr-1 pl-1 text-center header">
             <b><u>ACTUALIZAR REGISTRO DE BENEFICIARIO</u></b>
-            <span class="font-roboto-12 float-right" onclick="cancelar();">
-                <i class="fa-solid fa-xmark fa-fw"></i>
-            </span>
+            @can('canasta.beneficiarios.brigadista.index')
+                <span class="font-roboto-12 float-right" onclick="brigadista_cancelar();">
+                    <i class="fa-solid fa-xmark fa-fw"></i>
+                </span>
+            @endcan
         </div>
     </div>
     <div class="form-group row">
@@ -169,6 +171,10 @@
             $('#modal-alert').modal({
                 keyboard: false
             });
+        }
+
+        function brigadista_cancelar(){
+            window.location.href = "{{ route('beneficiarios.brigadista.index') }}";
         }
 
         function cancelar(){

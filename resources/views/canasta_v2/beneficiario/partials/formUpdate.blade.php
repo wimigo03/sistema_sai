@@ -1,5 +1,8 @@
 <form action="{{ route('beneficiarios.update') }}" method="post" id="form" enctype="multipart/form-data">
     @csrf
+    @if ($censador == true)
+        <input type="hidden" name="censado" value="censo">
+    @endif
     <input type="hidden" name="idBeneficiario" id="idBeneficiario" value="{{ $beneficiario->id }}">
     <div class="card">
         <div class="card-header font-roboto-14 bg-white">
@@ -20,6 +23,14 @@
                         @endforeach
                     </select>
                 </div>
+                @if ($beneficiario->censado == '1')
+                    <div class="col-md-7 text-right">
+                        <br>
+                        <span class="btn btn-warning font-roboto-12">
+                            <i class="fa-solid fa-user fa-fw"></i>&nbsp;CENSADO POR {{ $beneficiario->user->nombre_completo }}
+                        </span>
+                    </div>
+                @endif
                 {{--<div class="col-md-2 pr-1 pl-1">
                     <label for="estado" class="d-inline"><b>Estado</b></label>
                     <select name="estado" id="estado" class="form-control select2 font-roboto-12">
@@ -267,9 +278,16 @@
             <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
         </div>
         <div class="col-md-6">
-            <span class="btn btn-danger btn-block font-roboto-14" onclick="cancelar();">
-                <i class="fa-solid fa-xmark fa-fw"></i>&nbsp;Cancelar
-            </span>
+            @can('canasta.beneficiarios.brigadista.index')
+                <span class="btn btn-danger btn-block font-roboto-14" onclick="brigadista_cancelar();">
+                    <i class="fa-solid fa-xmark fa-fw"></i>&nbsp;Cancelar
+                </span>
+            @endcan
+            @can('canasta.beneficiarios.index')
+                <span class="btn btn-danger btn-block font-roboto-14" onclick="cancelar();">
+                    <i class="fa-solid fa-xmark fa-fw"></i>&nbsp;Cancelar
+                </span>
+            @endcan
             <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
         </div>
     </div>

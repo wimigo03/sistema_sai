@@ -210,6 +210,18 @@
                         }
                     },
                     {
+                        data: 'censo_2024',
+                        name: 'censo_2024',
+                        class: 'text-center p-1 font-roboto-10',
+                        render: function(data, type, row){
+                            if(row.censo_2024 === 'CENSADO'){
+                                return '<span class="badge-with-padding badge badge-success btn-block">CENSADO</span>';
+                            }else{
+                                return '<span class="badge-with-padding badge badge-secondary btn-block">PENDIENTE</span>';
+                            }
+                        }
+                    },
+                    {
                         class: 'text-center p-1 font-roboto-10',
                         render: function(data, type, row){
                             if(row.latitud == null || row.longitud == null){

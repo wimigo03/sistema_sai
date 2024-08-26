@@ -55,7 +55,8 @@ class Beneficiario extends Model
         'vecino_2',
         'vecino_3',
         'file_ci_anverso',
-        'file_ci_reverso'
+        'file_ci_reverso',
+        'censado'
     ];
 
     const HABILITADO = 'A';
