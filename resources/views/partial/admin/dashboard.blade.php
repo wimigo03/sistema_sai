@@ -73,6 +73,13 @@
                                         </a>
                                     </li>
                                 @endcan
+                                @can('canasta.beneficiarios.brigadista.index')
+                                    <li>
+                                        <a href="{{ route('beneficiarios.brigadista.index') }}">
+                                            &nbsp;&nbsp;<i class="fas fa-user-friends"></i>&nbsp;*Beneficiarios
+                                        </a>
+                                    </li>
+                                @endcan
                                 @can('canasta.entregas.beneficiario.index')
                                     <li>
                                         <a href="{{ route('entrega.beneficiario.index') }}">

@@ -552,4 +552,37 @@ class BeneficiariosV2Controller extends Controller
             ini_restore('max_execution_time');
         }
     }
+
+    public function brigadistaIndex()
+    {
+        return view('canasta_v2.beneficiario.brigadista.index');
+    }
+
+    public function brigadistaSearch(Request $request)
+    {
+        $dea_id = Auth::user()->dea->id;
+        $beneficiarios = Beneficiario::query()
+                                        ->byDea($dea_id)
+                                        ->byTipoSistema(Paquetes::TERCERA_EDAD)
+                                        ->byNumeroCarnetBrigadista($request->ci)
+                                        ->byEstado(Beneficiario::HABILITADO)
+                                        ->where('id_tipo',1)
+                                        ->get();
+        if(count($beneficiarios) > 1){
+            return redirect()->route('beneficiarios.brigadista.index')->with('error_message', 'Beneficiario con doble registro');
+        }else{
+            $beneficiario = Beneficiario::query()
+                                        ->byDea($dea_id)
+                                        ->byTipoSistema(Paquetes::TERCERA_EDAD)
+                                        ->byNumeroCarnetBrigadista($request->ci)
+                                        ->byEstado(Beneficiario::HABILITADO)
+                                        ->where('id_tipo',1)
+                                        ->first();
+            if($beneficiario != null){
+                return redirect()->route('beneficiarios.editar',$beneficiario->id);
+            }else{
+                return redirect()->route('beneficiarios.brigadista.index')->with('error_message', 'Beneficiario no encontrado o no habilitado');
+            }
+        }
+    }
 }

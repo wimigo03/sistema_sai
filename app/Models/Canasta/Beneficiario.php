@@ -198,6 +198,13 @@ class Beneficiario extends Model
         }
     }
 
+    public function scopeByNumeroCarnetBrigadista($query, $ci){
+        if($ci != null){
+            return $query->where('ci',$ci);
+
+        }
+    }
+
     public function scopeBySexo($query, $sexo){
         if($sexo != null){
             return $query->where('sexo',$sexo);

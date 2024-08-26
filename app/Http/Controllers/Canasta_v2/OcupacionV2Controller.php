@@ -26,7 +26,6 @@ class OcupacionV2Controller extends Controller
     {
         $tipos = Ocupaciones::TIPOS;
         $estados = Ocupaciones::ESTADOS;
-        //$ocupaciones = Ocupaciones::orderBy('id', 'desc')->paginate(10);
         return view('canasta_v2.ocupacion.index', compact('tipos','estados'));
     }
 

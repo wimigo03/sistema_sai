@@ -22,8 +22,8 @@
 @section('content')
     <div class="form-group row">
         <div class="col-md-12 pr-1 pl-1 text-center header">
-            <b>ACTUALIZAR REGISTRO DE BENEFICIARIO</b>
-            <span class="btn btn-danger font-roboto-14 float-right" onclick="cancelar();">
+            <b><u>ACTUALIZAR REGISTRO DE BENEFICIARIO</u></b>
+            <span class="font-roboto-12 float-right" onclick="cancelar();">
                 <i class="fa-solid fa-xmark fa-fw"></i>
             </span>
         </div>
