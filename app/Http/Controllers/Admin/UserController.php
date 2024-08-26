@@ -129,7 +129,6 @@ class UserController extends Controller
             'area_id' => 'required',
             'empleado_id' => 'required|unique:users,idemp,null,id,dea_id,' . $request->dea,
             'name' => 'required|unique:users,name,null,id,dea_id,' . $request->dea,
-            'email' => 'required',
             'password' => 'required|min:6|confirmed',
             'roles' => 'required|array|min:1'
         ]);
@@ -141,7 +140,8 @@ class UserController extends Controller
                 'email' => $request->email,
                 'password' => $request->password,
                 'idemp' => $request->empleado_id,
-                'estadouser' => 1
+                'estadouser' => 1,
+                '_email' => $request->_email
             ]);
             $user->roles()->sync($request->roles);
             return redirect()->route('users.index')->with('success_message', 'Se agrego un usuario al registro.');
@@ -169,7 +169,6 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required|unique:users,name,' . $request->user_id,
-            'email' => 'required',
             'password' => 'nullable|min:6|confirmed',
             'roles' => 'required|array|min:1'
         ]);
@@ -178,7 +177,8 @@ class UserController extends Controller
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => $request->password
+                'password' => $request->password,
+                '_email' => $request->_email
             ]);
             $user->roles()->sync($request->roles);
             return redirect()->route('users.index')->with('success_message', 'Se modifico un usuario en el registro.');
@@ -197,7 +197,8 @@ class UserController extends Controller
         try{
             $user = User::find($request->user_id);
             $user->update([
-                'password' => $request->password
+                'password' => $request->password,
+                '_email' => $request->_email
             ]);
 
             Auth::logout();

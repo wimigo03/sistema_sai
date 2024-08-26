@@ -23,7 +23,8 @@ class User extends Authenticatable
         'idemp',
         'estadouser',
         'dea_id',
-        'idarea'
+        'idarea',
+        '_email'
     ];
 
     protected $hidden = [

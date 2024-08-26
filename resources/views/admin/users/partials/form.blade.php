@@ -40,8 +40,8 @@
         <div class="col-md-3 pr-1 pl-1">
             <label for="password-confirm" class="d-inline"><b>Confirmar-Password</b></label>
             <input id="password-confirm" type="password" class="form-control font-roboto-12 intro" name="password_confirmation" required autocomplete="new-password">
+            <input type="hidden" name="_email" id="_email">
         </div>
-
     </div>
     <div class="form-group row font-roboto-12">
         <div class="col-md-12 pr-1 pl-1" id="permissions-select">

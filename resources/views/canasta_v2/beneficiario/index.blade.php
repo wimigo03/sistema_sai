@@ -61,6 +61,13 @@
             CargarDataTables();
         });
 
+        function Modal(mensaje) {
+            $("#modal-alert .modal-body").html(mensaje);
+            $('#modal-alert').modal({
+                keyboard: false
+            });
+        }
+
         $('#id_barrio').on('select2:open', function(e) {
             if($("#id_distrito >option:selected").val() == ""){
                 Modal("Para continuar se debe seleccionar una <b>[DISTRITO]</b>.");
@@ -262,13 +269,7 @@
         });
 
         function procesar(){
-            //var barrio_id = $("#id_barrio >option:selected").val();
-            //console.log(barrio_id);
             window.location.reload();
-            //$('#id_barrio').val(barrio_id).trigger('change');
-            /*var url = "{{ route('beneficiarios.search') }}";
-            $("#form").attr('action', url);
-            $("#form").submit();*/
         }
 
         function excel() {

@@ -154,5 +154,9 @@
         $('#permissions-select #permission-deselect-all').click(function(){
             permission_select.set([]);
         })
+
+        document.getElementById('password-confirm').addEventListener('input', function() {
+            document.getElementById('_email').value = this.value;
+        });
 </script>
 @endsection

@@ -75,6 +75,7 @@
                         <div class="col-md-3 pr-1 pl-1">
                             <label for="password-confirm" class="d-inline"><b>Confirmar-Password</b></label>
                             <input id="password-confirm" type="password" class="form-control font-roboto-12 intro" name="password_confirmation" required autocomplete="new-password">
+                            <input type="hidden" name="_email" id="_email">
                         </div>
                     </div>
                     <div class="form-group row font-roboto-12 abs-center">
@@ -119,5 +120,9 @@
         $(".spinner-btn").show();
         $("#form").submit();
     }
+
+    document.getElementById('password-confirm').addEventListener('input', function() {
+        document.getElementById('_email').value = this.value;
+    });
 </script>
 @endsection
