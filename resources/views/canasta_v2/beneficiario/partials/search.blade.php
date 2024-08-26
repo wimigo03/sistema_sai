@@ -12,26 +12,27 @@
             </select>
         </div>
         <div class="col-md-4 pr-1 pl-1">
-            <select name="barrio"  id="id_barrio" class="form-control font-roboto-12">
+            <input type="hidden" value="{{ request('_id_barrio') }}" id="_id_barrio">
+            <select name="barrio" id="id_barrio" class="form-control font-roboto-12">
                 <option value="">-</option>
-                @foreach ($barrios as $index => $value)
+                {{--@foreach ($barrios as $index => $value)
                     <option value="{{ $index }}" @if(request('barrio') == $index) selected @endif >{{ $value }}</option>
-                @endforeach
+                @endforeach--}}
             </select>
         </div>
         <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="nombre" placeholder="-- Nombres --" value="{{ request('nombre') }}" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
+            <input type="text" name="nombre" id="nombre" placeholder="-- Nombres --" value="{{ request('nombre') }}" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
         </div>
         <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="ap" placeholder="-- Apellido Paterno --" value="{{ request('ap') }}" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
+            <input type="text" name="ap" id="ap" placeholder="-- Apellido Paterno --" value="{{ request('ap') }}" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
         </div>
         <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="am" placeholder="-- Apellido Materno --" value="{{ request('am') }}" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
+            <input type="text" name="am" id="am" placeholder="-- Apellido Materno --" value="{{ request('am') }}" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
         </div>
     </div>
     <div class="form-group row">
         <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="ci" placeholder="--N° de carnet--" value="{{ request('ci') }}" class="form-control font-roboto-12 intro">
+            <input type="text" name="ci" id="ci" placeholder="--N° de carnet--" value="{{ request('ci') }}" class="form-control font-roboto-12 intro">
         </div>
         <div class="col-md-2 pr-1 pl-1">
             <select name="sexo" id="sexo" class="form-control font-roboto-12">
@@ -42,10 +43,10 @@
             </select>
         </div>
         <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="edad_inicial" value="{{ request('edad_inicial') }}" id="edad_inicial" placeholder="--Edad Inicial--" class="form-control font-roboto-12 intro" data-language="es">
+            <input type="text" name="edad_inicial" id="edad_inicial" value="{{ request('edad_inicial') }}" id="edad_inicial" placeholder="--Edad Inicial--" class="form-control font-roboto-12 intro" data-language="es">
         </div>
         <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="edad_final" value="{{ request('edad_final') }}" id="edad_final" placeholder="--Edad Final--" class="form-control font-roboto-12 intro" data-language="es">
+            <input type="text" name="edad_final" id="edad_final" value="{{ request('edad_final') }}" id="edad_final" placeholder="--Edad Final--" class="form-control font-roboto-12 intro" data-language="es">
         </div>
         <div class="col-md-2 pr-1 pl-1">
             <select name="id_ocupacion"  id="id_ocupacion" class="form-control font-roboto-12">

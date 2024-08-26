@@ -2,9 +2,9 @@
 @extends('layouts.admin')
 <style>
     #map {
-            height: 500px;
-            width: 100%;
-        }
+        height: 500px;
+        width: 100%;
+    }
 
     .locate-btn {
         position: absolute;
@@ -20,22 +20,42 @@
     }
 </style>
 @section('content')
-    <div class="card-header header">
-        <div class="row">
-            <div class="col-md-12 pr-1 pl-1 text-center">
-                <b>ACTUALIZAR REGISTRO DE BENEFICIARIO</b>
-            </div>
+    <div class="form-group row">
+        <div class="col-md-12 pr-1 pl-1 text-center header">
+            <b>ACTUALIZAR REGISTRO DE BENEFICIARIO</b>
+            <span class="btn btn-danger font-roboto-14 float-right" onclick="cancelar();">
+                <i class="fa-solid fa-xmark fa-fw"></i>
+            </span>
         </div>
     </div>
-    <div class="card-body body">
-        @include('canasta_v2.beneficiario.partials.formUpdate')
+    <div class="form-group row">
+        <div class="col-md-12 pr-1 pl-1">
+            @include('canasta_v2.beneficiario.partials.formUpdate')
+        </div>
     </div>
 @endsection
 @section('scripts')
     <script>
+        proj4.defs("EPSG:32720", "+proj=utm +zone=20 +south +datum=WGS84 +units=m +no_defs");
+        document.getElementById('nombres').disabled = true;
+        document.getElementById('ap').disabled = true;
+        document.getElementById('am').disabled = true;
+        document.getElementById('ci').disabled = true;
+        document.getElementById('expedido').disabled = true;
+        document.getElementById('fnac').disabled = true;
+        document.getElementById('latitud').value = "";
+        document.getElementById('longitud').value = "";
+        document.getElementById('utmy').value = "";
+        document.getElementById('utmx').value = "";
+        document.getElementById('latitud').disabled = true;
+        document.getElementById('longitud').disabled = true;
+        document.getElementById('utmy').disabled = true;
+        document.getElementById('utmx').disabled = true;
         var _latitud = "{{ $beneficiario->latitud }}";
         var _longitud = "{{ $beneficiario->longitud }}";
-        let map = L.map('map').setView([_latitud, _longitud], 15);
+        var _utmy = "{{ $beneficiario->utmy }}";
+        var _utmx = "{{ $beneficiario->utmx }}";
+        let map = L.map('map').setView([_latitud, _longitud], 25);
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://granchaco.gob.bo/copyright">Ir a sitio Oficial</a>'
@@ -48,12 +68,33 @@
             popupAnchor: [0, -50]
         });
 
-        var marker = L.marker([_latitud, _longitud], { icon: redIcon }).addTo(map).bindPopup('Ubicacion').openPopup();
+        var marker = L.marker([_latitud, _longitud], { icon: redIcon }).addTo(map).openPopup();
 
         if (_latitud !== null && _longitud !== null && _latitud !== "" && _longitud !== "") {
-            var marker = L.marker([_latitud, _longitud], { icon: redIcon }).addTo(map).bindPopup('Ubicacion').openPopup();
+            var marker = L.marker([_latitud, _longitud], { icon: redIcon }).addTo(map).openPopup();
+            document.getElementById('latitud').value = _latitud;
+            document.getElementById('longitud').value = _longitud;
+            document.getElementById('utmy').value = _utmy;
+            document.getElementById('utmx').value = _utmx;
         } else {
-            centerMapOnLocation();
+            InitMapOnLocation();
+        }
+
+        function InitMapOnLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var lat = position.coords.latitude;
+                    var lng = position.coords.longitude;
+                    map.setView([lat, lng], 25);
+                    marker.setLatLng([lat, lng]);
+                    document.getElementById('coordinates').innerText = 'Latitud: ' + lat + ', Longitud: ' + lng;
+                }, function(error) {
+                    console.error('Error al obtener la ubicación: ', error);
+                    alert('No se pudo obtener la ubicación. Asegúrate de que los permisos de ubicación estén habilitados.');
+                });
+            } else {
+                alert('La geolocalización no es soportada por este navegador.');
+            }
         }
 
         function centerMapOnLocation() {
@@ -62,12 +103,15 @@
                     var lat = position.coords.latitude;
                     var lng = position.coords.longitude;
 
-                    map.setView([lat, lng], 15);
+                    var utmCoords = proj4('EPSG:4326', 'EPSG:32720', [lng, lat]);
+
+                    map.setView([lat, lng], 25);
                     marker.setLatLng([lat, lng]);
                     document.getElementById('coordinates').innerText = 'Latitud: ' + lat + ', Longitud: ' + lng;
                     document.getElementById('latitud').value = lat;
                     document.getElementById('longitud').value = lng;
-                    //console.log(lat,lng);
+                    document.getElementById('utmy').value = utmCoords[1];
+                    document.getElementById('utmx').value = utmCoords[0];
                 }, function(error) {
                     console.error('Error al obtener la ubicación: ', error);
                     alert('No se pudo obtener la ubicación. Asegúrate de que los permisos de ubicación estén habilitados.');
@@ -82,10 +126,16 @@
         map.on('click', function(e) {
             var latLng = e.latlng;
             marker.setLatLng(latLng);
+            var _utmCoords = proj4('EPSG:4326', 'EPSG:32720', [latLng.lng, latLng.lat]);
             document.getElementById('coordinates').innerText = 'Latitud: ' + latLng.lat + ', Longitud: ' + latLng.lng;
             document.getElementById('latitud').value = latLng.lat;
             document.getElementById('longitud').value = latLng.lng;
-            //console.log(latLng.lat,latLng.lng);
+            document.getElementById('utmy').value = _utmCoords[1];
+            document.getElementById('utmx').value = _utmCoords[0];
+        });
+
+        $("#toggleButton").click(function() {
+            $("#form-map").slideToggle();
         });
 
         $(document).ready(function() {
@@ -93,6 +143,13 @@
                 theme: "bootstrap4",
                 placeholder: "--Seleccionar--",
                 width: '100%'
+            });
+
+            var cleave = new Cleave('#celular', {
+                numeral: true,
+                numeralDecimalScale: 0,
+                numeralThousandsGroupStyle: 'none',
+                rawValueTrimPrefix: false
             });
 
             var cleave = new Cleave('#fnac', {
@@ -115,92 +172,198 @@
         }
 
         function cancelar(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
             window.location.href = "{{ route('beneficiarios.index') }}";
         }
 
         function save() {
-            if (validar_formulario() == true) {
+            if (validar() == true) {
+                document.getElementById('nombres').disabled = false;
+                document.getElementById('ap').disabled = false;
+                document.getElementById('am').disabled = false;
+                document.getElementById('ci').disabled = false;
+                document.getElementById('expedido').disabled = false;
+                document.getElementById('fnac').disabled = false;
                 document.getElementById('latitud').disabled = false;
                 document.getElementById('longitud').disabled = false;
-                $(".btn").hide();
-                $(".spinner-btn-send").show();
+                document.getElementById('utmy').disabled = false;
+                document.getElementById('utmx').disabled = false;
                 $("#form").submit();
             }
         }
 
-        function validar_formulario() {
+        function validar() {
+            if ($("#barrio >option:selected").val() == "") {
+                Modal("<b>[Por favor seleccionar un Barrio]</b>");
+                return false;
+            }
+            /*if ($("#estado>option:selected").val() == "") {
+                Modal("El campo <b>[Estado]</b> es obligatorio.");
+                return false;
+            }*/
             if ($("#nombres").val() == "") {
                 Modal("El campo <b>[NOMBRES]</b> es obligatorio.");
                 return false;
             }
-
             if ($("#ap").val() == "") {
                 if ($("#am").val() == "") {
                     Modal("El campo <b>[Apellido Paterno o Apellido Materno]</b> es obligatorio.");
                     return false;
                 }
             }
-
             if ($("#am").val() == "") {
                 if ($("#ap").val() == "") {
                     Modal("El campo <b>[Apellido Paterno o Apellido Materno]</b> es un dato obligatorio.");
                     return false;
                 }
             }
-            if ($("#fnac").val() == "") {
-                Modal("El campo <b>[Fecha de Nacimiento]</b> es obligatorio.");
+            if ($("#ci").val() == "") {
+                Modal("El campo <b>[Nro de Carnet]</b> es obligatorio.");
                 return false;
             }
-
-            if ($("#estado_civil>option:selected").val() == "") {
-                Modal("El campo <b>[Estado Civil]</b> es obligatorio.");
+            if ($("#expedido").val() == "") {
+                Modal("El campo <b>[Expedido]</b> es obligatorio.");
+                return false;
+            }
+            if ($("#celular").val() == "") {
+                Modal("El campo <b>[Celular]</b> es obligatorio.");
+                return false;
+            }
+            if ($("#fnac").val() == "") {
+                Modal("El campo <b>[Fecha de Nacimiento]</b> es obligatorio.");
                 return false;
             }
             if ($("#sexo>option:selected").val() == "") {
                 Modal("El campo <b>[Sexo]</b> es obligatorio.");
                 return false;
             }
-
-            if ($("#ci").val() == "") {
-                Modal("El campo <b>[Nro de Carnet]</b> es obligatorio.");
+            if ($("#estado_civil>option:selected").val() == "") {
+                Modal("El campo <b>[Estado Civil]</b> es obligatorio.");
                 return false;
             }
-
-            if ($("#expedido").val() == "") {
-                Modal("El campo <b>[Expedido]</b> es obligatorio.");
+            if ($("#profesion >option:selected").val() == "") {
+                Modal("El campo <b>[Profesion]</b> es obligatorio.");
                 return false;
             }
-
+            if ($("#ocupacion >option:selected").val() == "") {
+                Modal("El campo <b>[Ocupacion]</b> es obligatorio.");
+                return false;
+            }
+            if ($("#_estado >option:selected").val() == "") {
+                Modal("El campo <b>[Estado de ocupacion]</b> es obligatorio.");
+                return false;
+            }
             if ($("#firma").val() == "") {
                 Modal("El campo <b>[Firma]</b> es obligatorio.");
                 return false;
             }
-
-            if ($("#estado>option:selected").val() == "") {
-                Modal("El campo <b>[Estado]</b> es obligatorio.");
-                return false;
-            }
-
             if ($("#direccion").val() == "") {
                 Modal("El campo <b>[Direccion]</b> es obligatorio.");
                 return false;
             }
-
-            if ($("#barrio>option:selected").val() == "") {
-                Modal("El campo <b>[Barrio]</b> es obligatorio.");
-                return false;
-            }
-
-            if ($("#ocupacion>option:selected").val() == "") {
-                Modal("El campo <b>[Ocupacion]</b> es obligatorio.");
-                return false;
-            }
-
             if ($("#observacion").val() == "") {
                 Modal("El campo <b>[Observacion]</b> es obligatorio.");
                 return false;
+            }
+            if ($("#latitud").val() == "") {
+                Modal("<b>[Algo anda mal con la ubicacion en el mapa]</b>");
+                return false;
+            }
+            if ($("#longitud").val() == "") {
+                Modal("<b>[Algo anda mal con la ubicacion en el mapa]</b>");
+                return false;
+            }
+            if ($("#utmx").val() == "") {
+                Modal("<b>[Algo anda mal con la ubicacion en el mapa]</b>");
+                return false;
+            }
+            if ($("#utmy").val() == "") {
+                Modal("<b>[Algo anda mal con la ubicacion en el mapa]</b>");
+                return false;
+            }
+            if ($("#detalle_vivienda").val() == "") {
+                Modal("<b>[Por favor complete la descripcion de la vivienda]</b>");
+                return false;
+            }
+            if ($("#tipo_vivienda >option:selected").val() == "") {
+                Modal("<b>[Por favor seleccione un tipo de vivienda]</b>");
+                return false;
+            }
+            if ($("#vecino_1").val() == "") {
+                if ($("#vecino_2").val() == "") {
+                    if ($("#vecino_3").val() == "") {
+                        Modal("<b>[Por favor complete los datos de los vecinos que identifican al beneficiario]</b>");
+                        return false;
+                    }
+                }
+            }
+            if ($("#_file").val() == "") {
+                if ($("#file").val() == "") {
+                    Modal("<b>[No se encuentra el archivo de imagen del BENEFICIARIO]</b>");
+                    return false;
+                }
+            }
+            if ($("#file").val() != "") {
+                var fileInput = $("#file")[0].files[0];
+                if (fileInput) {
+                    var allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+                    var maxSizeInBytes = 2 * 1024 * 1024;
+
+                    if (!allowedTypes.includes(fileInput.type)) {
+                        Modal('[BENEFICIARIO] . Formato de archivo no permitido. Por favor, seleccione una imagen JPEG, JPG o PNG.');
+                        $("#file").val('');
+                        return false;
+                    } else if (fileInput.size > maxSizeInBytes) {
+                        Modal('[BENEFICIARIO] . El archivo es demasiado grande. El tamaño máximo permitido es de 2MB.');
+                        $("#file").val('');
+                        return false;
+                    }
+                }
+            }
+            if ($("#_file_ci_anverso").val() == "") {
+                if ($("#file_ci_anverso").val() == "") {
+                    Modal("<b>[No se encuentra el archivo de imagen de la FOTO CARNET - ANVERSO]</b>");
+                    return false;
+                }
+            }
+            if ($("#file_ci_anverso").val() != "") {
+                var fileInput = $("#file_ci_anverso")[0].files[0];
+                if (fileInput) {
+                    var allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+                    var maxSizeInBytes = 2 * 1024 * 1024;
+
+                    if (!allowedTypes.includes(fileInput.type)) {
+                        Modal('[FOTO CARNET - ANVERSO] . Formato de archivo no permitido. Por favor, seleccione una imagen JPEG, JPG o PNG.');
+                        $("#file_ci_anverso").val('');
+                        return false;
+                    } else if (fileInput.size > maxSizeInBytes) {
+                        Modal('[FOTO CARNET - ANVERSO] . El archivo es demasiado grande. El tamaño máximo permitido es de 2MB.');
+                        $("#file_ci_anverso").val('');
+                        return false;
+                    }
+                }
+            }
+            if ($("#_file_ci_reverso").val() == "") {
+                if ($("#file_ci_reverso").val() == "") {
+                    Modal("<b>[No se encuentra el archivo de imagen de la FOTO CARNET - REVERSO]</b>");
+                    return false;
+                }
+            }
+            if ($("#file_ci_reverso").val() != "") {
+                var fileInput = $("#file_ci_reverso")[0].files[0];
+                if (fileInput) {
+                    var allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+                    var maxSizeInBytes = 2 * 1024 * 1024;
+
+                    if (!allowedTypes.includes(fileInput.type)) {
+                        Modal('[FOTO CARNET - REVERSO] . Formato de archivo no permitido. Por favor, seleccione una imagen JPEG, JPG o PNG.');
+                        $("#file_ci_reverso").val('');
+                        return false;
+                    } else if (fileInput.size > maxSizeInBytes) {
+                        Modal('[FOTO CARNET - REVERSO] . El archivo es demasiado grande. El tamaño máximo permitido es de 2MB.');
+                        $("#file_ci_reverso").val('');
+                        return false;
+                    }
+                }
             }
 
             return true;

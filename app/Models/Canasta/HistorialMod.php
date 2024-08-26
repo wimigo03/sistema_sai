@@ -9,10 +9,7 @@ use App\Models\User;
 class HistorialMod extends Model
 {
     protected $table = 'historialmod';
-    //protected $primaryKey= 'id';
-    //public $timestamps = true;
     protected $fillable = [
-        'id',
         'observacion',
         'id_beneficiario',
         'user_id',

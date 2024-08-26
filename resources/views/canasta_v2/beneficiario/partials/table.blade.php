@@ -4,7 +4,6 @@
             <table class="table display table-striped table-bordered responsive hover-orange" style="width:100%;" id="dataTable">
                 <thead>
                     <tr class="font-roboto-11">
-                        {{--<th>CODIGO</th>--}}
                         <th>DISTRITO</th>
                         <th width="20%">BARRIO</th>
                         <th>NOMBRE (S)</th>
@@ -14,12 +13,12 @@
                         <th>SEXO</th>
                         <th>EDAD</th>
                         <th>OCUPACION</th>
-                        <th>ESTADO</th>
+                        <th width="7%">ESTADO</th>
                         <th><i class="fa-solid fa-location-dot fa-lg"></i></th>
                         <th><i class="fa-solid fa-camera-retro fa-lg"></i></th>
                         @canany(['canasta.beneficiarios.editar', 'canasta.beneficiarios.show'])
                             <th>
-                                <i class="fa fa-bars" aria-hidden="true"></i>
+                                <i class="fa fa-bars fa-lg" aria-hidden="true"></i>
                             </th>
                         @endcanany
                     </tr>
@@ -28,17 +27,16 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        {{--<th></th>--}}
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <th>DISTRITO</th>
+                        <th>BARRIO</th>
+                        <th>NOMBRE</th>
+                        <th>AP. PATERNO</th>
+                        <th>AP. MATERNO</th>
+                        <th>NRO. CARNET</th>
+                        <th>SEXO</th>
+                        <th>EDAD</th>
+                        <th>OCUPACION</th>
+                        <th>ESTADO</th>
                         <th></th>
                         <th></th>
                         @canany(['canasta.beneficiarios.editar', 'canasta.beneficiarios.show'])
@@ -55,7 +53,6 @@
             <table class="table display table-striped table-bordered responsive hover-orange" style="width:100%;" id="#">
                 <thead>
                     <tr class="font-roboto-11">
-                        {{--<td class="text-center p-1"><b>CODIGO</b></td>--}}
                         <td class="text-center p-1"><b>DISTRITO</b></td>
                         <td class="text-justify p-1" width="20%"><b>BARRIO</b></td>
                         <td class="text-justify p-1"><b>NOMBRE (S)</b></td>
@@ -65,7 +62,7 @@
                         <td class="text-center p-1"><b>SEXO</b></td>
                         <td class="text-center p-1"><b>EDAD</b></td>
                         <td class="text-center p-1"><b>OCUPACION</b></td>
-                        <td class="text-center p-1"><b>ESTADO</b></td>
+                        <td class="text-center p-1" width="7%"><b>ESTADO</b></td>
                         <td class="text-center p-1">
                             <i class="fa-solid fa-location-dot fa-lg"></i>
                         </td>
@@ -73,14 +70,13 @@
                             <i class="fa-solid fa-camera-retro fa-lg"></i>
                         </td>
                         @canany(['canasta.beneficiarios.editar', 'canasta.beneficiarios.show'])
-                            <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
+                            <td class="text-center p-1"><i class="fa fa-bars fa-lg" aria-hidden="true"></i></td>
                         @endcanany
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($beneficiarios as $datos)
                         <tr class="font-roboto-10">
-                            {{--<td class="text-center p-1">{{ $datos->id }}</td>--}}
                             <td class="text-center p-1">{{ $datos->distrito->nombre }}</td>
                             <td class="text-justify p-1">{{ $datos->barrio->nombre }}</td>
                             <td class="text-justify p-1">{{ $datos->nombres }}</td>
@@ -91,7 +87,7 @@
                             <td class="text-center p-1">{{ $datos->fecha_nac != null ? \Carbon\Carbon::parse($datos->fecha_nac)->age : '' }}</td>
                             <td class="text-center p-1">{{ $datos->ocupacion->ocupacion }}</td>
                             <td class="text-center p-1">
-                                <span class="{{ $datos->colorStatus }}">
+                                <span class="{{ $datos->colorStatus }} btn-block">
                                     {{ $datos->status }}
                                 </span>
                             </td>
@@ -112,15 +108,13 @@
                                                     <i class="fa-solid fa-pen-to-square fa-fw"></i>
                                                 </a>
                                             </span>
-                                            &nbsp;
                                         @endcan
                                         @can('canasta.beneficiarios.show')
                                             <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a kardex">
-                                                <a href="{{ route('beneficiarios.show', $datos->id) }}" class="badge-with-padding badge badge-primary" target="_blank">
+                                                <a href="{{ route('beneficiarios.show', $datos->id) }}" class="badge-with-padding badge badge-primary ml-1" target="_blank">
                                                     <i class="fa fa-id-card fa-fw" aria-hidden="true"></i>
                                                 </a>
                                             </span>
-                                            &nbsp;
                                         @endcan
                                     </div>
                                 </td>

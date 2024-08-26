@@ -16,7 +16,6 @@ class Beneficiario extends Model
     const CREATED_AT = 'created_att';
     const UPDATED_AT = 'updated_att';
     protected $fillable = [
-        'id',
         'nombres',
         'ap',
         'am',
@@ -36,15 +35,34 @@ class Beneficiario extends Model
         'ci',
         'expedido',
         'id_ocupacion',
+        'distrito_id',
+        'photo',
         'id_tipo',
         'codigo',
         'id_discgrado',
         'tutor',
         'parentesco',
-        'distrito_id',
+        'celular',
         'latitud',
-        'longitud'
+        'longitud',
+        'utmx',
+        'utmy',
+        'profesion_id',
+        '_estado',
+        'detalle_vivienda',
+        'tipo_vivienda',
+        'vecino_1',
+        'vecino_2',
+        'vecino_3',
+        'file_ci_anverso',
+        'file_ci_reverso'
     ];
+
+    const HABILITADO = 'A';
+    const FALLECIDO = 'F';
+    const BAJA = 'B';
+    const PENDIENTE = 'X';
+    const ELIMINADO = 'E';
 
     const ESTADOS = [
         'A' => 'HABILITADO',
@@ -52,6 +70,19 @@ class Beneficiario extends Model
         'B' => 'BAJA',
         'X' => 'PENDIENTE',
         'E' => 'ELIMINADO'
+    ];
+
+    const _ESTADOS = [
+        '1' => 'ACTIVO',
+        '2' => 'JUBILADO',
+        '3' => 'NINGUNO'
+    ];
+
+    const TIPOS_VIVIENDAS = [
+        '1' => 'PROPIA',
+        '2' => 'ALQUILER',
+        '3' => 'ANTICRETICO',
+        '4' => 'OTRO'
     ];
 
     const SEXOS = [

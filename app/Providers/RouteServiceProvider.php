@@ -57,6 +57,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Admin/roles-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Admin/permissions-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/CanastaV2/barrios-route.php'));
+        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/CanastaV2/ocupacion-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/CanastaV2/distritos-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/CanastaV2/beneficiarios-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/CanastaV2/paquetes-route.php'));

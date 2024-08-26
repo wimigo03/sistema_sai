@@ -83,14 +83,21 @@
                                 @can('canasta.distritos.index')
                                     <li>
                                         <a href="{{ route('distritos.index') }}">
-                                            &nbsp;&nbsp;<i class="fa-solid fa-house"></i>&nbsp;Distritos
+                                            &nbsp;&nbsp;<i class="fa-solid fa-house fa-fw"></i>&nbsp;Distritos
                                         </a>
                                     </li>
                                 @endcan
                                 @can('canasta.barrios.index')
                                     <li>
                                         <a href="{{ route('barrios.index') }}">
-                                            &nbsp;&nbsp;<i class="fa-solid fa-house"></i>&nbsp;Barrios
+                                            &nbsp;&nbsp;<i class="fa-solid fa-house-crack fa-fw"></i>&nbsp;Barrios
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('canasta.barrios.index')
+                                    <li>
+                                        <a href="{{ route('ocupacion.index') }}">
+                                            &nbsp;&nbsp;<i class="fa-solid fa-briefcase fa-fw"></i>&nbsp;Profesion/Ocupacion
                                         </a>
                                     </li>
                                 @endcan
