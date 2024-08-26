@@ -606,6 +606,11 @@ class BeneficiariosV2Controller extends Controller
 
     public function brigadistaSearch(Request $request)
     {
+        $request->validate([
+            'ci' => ['required']
+        ], [
+            'ci' => 'Se requiere un N° de documento para continuar.',
+        ]);
         $dea_id = Auth::user()->dea->id;
         $beneficiarios = Beneficiario::query()
                                         ->byDea($dea_id)
