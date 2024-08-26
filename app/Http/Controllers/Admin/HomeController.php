@@ -18,6 +18,13 @@ class HomeController extends Controller
 
     public function index()
     {
+        if(count(Auth::user()->roles) == 1){
+            foreach(Auth::user()->roles as $role){
+                if($role->id == 29){
+                    return redirect()->route('beneficiarios.index');
+                }
+            }
+        }
         $user = User::find(Auth::user()->id);
         $empleado = Empleado::find($user->idemp);
         return view('admin.home',compact('user','empleado'));

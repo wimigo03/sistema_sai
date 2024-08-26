@@ -131,7 +131,7 @@ class OcupacionV2Controller extends Controller
                 'tipo' => $request->tipo,
                 'ocupacion' => $request->detalle
             ]);
-            return redirect()->route('ocupacion.index')->with('info_message', 'Se agrego una profesion / ocupacion al registro.');
+            return redirect()->route('ocupacion.index')->with('info_message', 'Se modifico una profesion / ocupacion en el registro.');
         } catch (ValidationException $e) {
             return redirect()->route('ocupacion.editar')
                 ->withErrors($e->validator->errors())
