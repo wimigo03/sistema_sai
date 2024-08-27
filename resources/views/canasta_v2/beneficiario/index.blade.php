@@ -17,6 +17,7 @@
     <script type="text/javascript">
         var table = $("#dataTable");
         $(document).ready(function() {
+            CargarDataTables();
             $('#tipo').select2({
                 theme: "bootstrap4",
                 placeholder: "--Tipo--",
@@ -57,8 +58,6 @@
                 var id = $("#id_distrito >option:selected").val();
                 getBarrios(id);
             }
-
-            CargarDataTables();
         });
 
         function Modal(mensaje) {

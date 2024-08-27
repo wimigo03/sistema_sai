@@ -39,12 +39,17 @@
 @section('scripts')
     <script>
         proj4.defs("EPSG:32720", "+proj=utm +zone=20 +south +datum=WGS84 +units=m +no_defs");
+        document.getElementById('barrio').disabled = true;
         document.getElementById('nombres').disabled = true;
         document.getElementById('ap').disabled = true;
         document.getElementById('am').disabled = true;
         document.getElementById('ci').disabled = true;
         document.getElementById('expedido').disabled = true;
         document.getElementById('fnac').disabled = true;
+        document.getElementById('sexo').disabled = true;
+        document.getElementById('check_titular').disabled = true;
+        document.getElementById('seguro_medico').disabled = true;
+        document.getElementById('direccion').disabled = true;
         document.getElementById('latitud').value = "";
         document.getElementById('longitud').value = "";
         document.getElementById('utmy').value = "";
@@ -164,7 +169,42 @@
                 dateFormat: "dd/mm/yyyy",
                 autoClose: true,
             });
+
+            CheckSeguroMedico();
         });
+
+        function CheckSeguroMedico() {
+            var checkbox = document.getElementById('check_seguro_medico');
+            if (checkbox.checked) {
+                document.getElementById('seguro_medico').disabled = false;
+                document.getElementById('check_titular').disabled = false;
+            } else {
+                const checkbox = document.getElementById('check_titular');
+                checkbox.checked = false;
+                $('#seguro_medico').val('').trigger('change');
+                document.getElementById('seguro_medico').disabled = true;
+                document.getElementById('check_titular').disabled = true;
+            }
+        }
+
+        function toggleCheckboxes(clickedCheckbox) {
+            const checkboxes = document.querySelectorAll('input[name="informacion"]');
+
+            if (clickedCheckbox.checked) {
+                // Desmarcar y deshabilitar todos los checkboxes excepto el clickeado
+                checkboxes.forEach((checkbox) => {
+                    if (checkbox !== clickedCheckbox) {
+                        checkbox.checked = false; // Desmarcar
+                        checkbox.disabled = true; // Deshabilitar
+                    }
+                });
+            } else {
+                // Habilitar todos los checkboxes si ninguno está seleccionado
+                checkboxes.forEach((checkbox) => {
+                    checkbox.disabled = false;
+                });
+            }
+        }
 
         function Modal(mensaje) {
             $("#modal-alert .modal-body").html(mensaje);
@@ -181,20 +221,38 @@
             window.location.href = "{{ route('beneficiarios.index') }}";
         }
 
-        function save() {
-            if (validar() == true) {
-                document.getElementById('nombres').disabled = false;
-                document.getElementById('ap').disabled = false;
-                document.getElementById('am').disabled = false;
-                document.getElementById('ci').disabled = false;
-                document.getElementById('expedido').disabled = false;
-                document.getElementById('fnac').disabled = false;
-                document.getElementById('latitud').disabled = false;
-                document.getElementById('longitud').disabled = false;
-                document.getElementById('utmy').disabled = false;
-                document.getElementById('utmx').disabled = false;
-                $("#form").submit();
+        function procesar() {
+            var check_informacion = document.getElementById('informacion');
+            if (!check_informacion.checked) {
+                if(!validar()){
+                    return false;
+                }
+            }else{
+                if(_validar()){
+                    check_informacion.checked = false;
+                }
             }
+
+            $('#modal_confirmacion').modal({
+                keyboard: false
+            })
+        }
+
+        function confirmar(){
+            document.getElementById('barrio').disabled = false;
+            document.getElementById('nombres').disabled = false;
+            document.getElementById('ap').disabled = false;
+            document.getElementById('am').disabled = false;
+            document.getElementById('ci').disabled = false;
+            document.getElementById('expedido').disabled = false;
+            document.getElementById('fnac').disabled = false;
+            document.getElementById('sexo').disabled = false;
+            document.getElementById('direccion').disabled = false;
+            document.getElementById('latitud').disabled = false;
+            document.getElementById('longitud').disabled = false;
+            document.getElementById('utmy').disabled = false;
+            document.getElementById('utmx').disabled = false;
+            $("#form").submit();
         }
 
         function validar() {
@@ -254,9 +312,12 @@
                 Modal("El campo <b>[Ocupacion]</b> es obligatorio.");
                 return false;
             }
-            if ($("#_estado >option:selected").val() == "") {
-                Modal("El campo <b>[Estado de ocupacion]</b> es obligatorio.");
-                return false;
+            var check_seguro_medico = document.getElementById('check_seguro_medico');
+            if (check_seguro_medico.checked) {
+                if ($("#seguro_medico >option:selected").val() == "") {
+                    Modal("El campo <b>[Seguro Medico]</b> es obligatorio.");
+                    return false;
+                }
             }
             if ($("#firma").val() == "") {
                 Modal("El campo <b>[Firma]</b> es obligatorio.");
@@ -291,7 +352,11 @@
                 return false;
             }
             if ($("#tipo_vivienda >option:selected").val() == "") {
-                Modal("<b>[Por favor seleccione un tipo de vivienda]</b>");
+                Modal("<b>[Por favor seleccione un Tipo de Vivienda]</b>");
+                return false;
+            }
+            if ($("#material_vivienda >option:selected").val() == "") {
+                Modal("<b>[Por favor seleccione un Material de Vivienda]</b>");
                 return false;
             }
             if ($("#vecino_1").val() == "") {
@@ -311,15 +376,15 @@
             if ($("#file").val() != "") {
                 var fileInput = $("#file")[0].files[0];
                 if (fileInput) {
-                    var allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-                    var maxSizeInBytes = 2 * 1024 * 1024;
+                    var allowedTypes = ['image/jpeg', 'image/jpg'];
+                    var maxSizeInBytes = 10 * 1024 * 1024;
 
                     if (!allowedTypes.includes(fileInput.type)) {
-                        Modal('[BENEFICIARIO] . Formato de archivo no permitido. Por favor, seleccione una imagen JPEG, JPG o PNG.');
+                        Modal('[BENEFICIARIO] . Formato de archivo no permitido. Por favor, seleccione una imagen JPEG o JPG.');
                         $("#file").val('');
                         return false;
                     } else if (fileInput.size > maxSizeInBytes) {
-                        Modal('[BENEFICIARIO] . El archivo es demasiado grande. El tamaño máximo permitido es de 2MB.');
+                        Modal('[BENEFICIARIO] . El archivo es demasiado grande. El tamaño máximo permitido es de 10MB.');
                         $("#file").val('');
                         return false;
                     }
@@ -334,15 +399,15 @@
             if ($("#file_ci_anverso").val() != "") {
                 var fileInput = $("#file_ci_anverso")[0].files[0];
                 if (fileInput) {
-                    var allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-                    var maxSizeInBytes = 2 * 1024 * 1024;
+                    var allowedTypes = ['image/jpeg', 'image/jpg'];
+                    var maxSizeInBytes = 10 * 1024 * 1024;
 
                     if (!allowedTypes.includes(fileInput.type)) {
-                        Modal('[FOTO CARNET - ANVERSO] . Formato de archivo no permitido. Por favor, seleccione una imagen JPEG, JPG o PNG.');
+                        Modal('[FOTO CARNET - ANVERSO] . Formato de archivo no permitido. Por favor, seleccione una imagen JPEG o JPG.');
                         $("#file_ci_anverso").val('');
                         return false;
                     } else if (fileInput.size > maxSizeInBytes) {
-                        Modal('[FOTO CARNET - ANVERSO] . El archivo es demasiado grande. El tamaño máximo permitido es de 2MB.');
+                        Modal('[FOTO CARNET - ANVERSO] . El archivo es demasiado grande. El tamaño máximo permitido es de 10MB.');
                         $("#file_ci_anverso").val('');
                         return false;
                     }
@@ -357,15 +422,166 @@
             if ($("#file_ci_reverso").val() != "") {
                 var fileInput = $("#file_ci_reverso")[0].files[0];
                 if (fileInput) {
-                    var allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-                    var maxSizeInBytes = 2 * 1024 * 1024;
+                    var allowedTypes = ['image/jpeg', 'image/jpg'];
+                    var maxSizeInBytes = 10 * 1024 * 1024;
 
                     if (!allowedTypes.includes(fileInput.type)) {
-                        Modal('[FOTO CARNET - REVERSO] . Formato de archivo no permitido. Por favor, seleccione una imagen JPEG, JPG o PNG.');
+                        Modal('[FOTO CARNET - REVERSO] . Formato de archivo no permitido. Por favor, seleccione una imagen JPEG o JPG.');
                         $("#file_ci_reverso").val('');
                         return false;
                     } else if (fileInput.size > maxSizeInBytes) {
-                        Modal('[FOTO CARNET - REVERSO] . El archivo es demasiado grande. El tamaño máximo permitido es de 2MB.');
+                        Modal('[FOTO CARNET - REVERSO] . El archivo es demasiado grande. El tamaño máximo permitido es de 10MB.');
+                        $("#file_ci_reverso").val('');
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        function _validar() {
+            if ($("#barrio >option:selected").val() == "") {
+                return false;
+            }
+            /*if ($("#estado>option:selected").val() == "") {
+                return false;
+            }*/
+            if ($("#nombres").val() == "") {
+                return false;
+            }
+            if ($("#ap").val() == "") {
+                if ($("#am").val() == "") {
+                    return false;
+                }
+            }
+            if ($("#am").val() == "") {
+                if ($("#ap").val() == "") {
+                    return false;
+                }
+            }
+            if ($("#ci").val() == "") {
+                return false;
+            }
+            if ($("#expedido").val() == "") {
+                return false;
+            }
+            if ($("#celular").val() == "") {
+                return false;
+            }
+            if ($("#fnac").val() == "") {
+                return false;
+            }
+            if ($("#sexo>option:selected").val() == "") {
+                return false;
+            }
+            if ($("#estado_civil>option:selected").val() == "") {
+                return false;
+            }
+            if ($("#profesion >option:selected").val() == "") {
+                return false;
+            }
+            if ($("#ocupacion >option:selected").val() == "") {
+                return false;
+            }
+            var check_seguro_medico = document.getElementById('check_seguro_medico');
+            if (check_seguro_medico.checked) {
+                if ($("#seguro_medico >option:selected").val() == "") {
+                    return false;
+                }
+            }
+            if ($("#firma").val() == "") {
+                return false;
+            }
+            if ($("#direccion").val() == "") {
+                return false;
+            }
+            if ($("#observacion").val() == "") {
+                return false;
+            }
+            if ($("#latitud").val() == "") {
+                return false;
+            }
+            if ($("#longitud").val() == "") {
+                return false;
+            }
+            if ($("#utmx").val() == "") {
+                return false;
+            }
+            if ($("#utmy").val() == "") {
+                return false;
+            }
+            if ($("#detalle_vivienda").val() == "") {
+                return false;
+            }
+            if ($("#tipo_vivienda >option:selected").val() == "") {
+                return false;
+            }
+            if ($("#material_vivienda >option:selected").val() == "") {
+                return false;
+            }
+            if ($("#vecino_1").val() == "") {
+                if ($("#vecino_2").val() == "") {
+                    if ($("#vecino_3").val() == "") {
+                        return false;
+                    }
+                }
+            }
+            if ($("#_file").val() == "") {
+                if ($("#file").val() == "") {
+                    return false;
+                }
+            }
+            if ($("#file").val() != "") {
+                var fileInput = $("#file")[0].files[0];
+                if (fileInput) {
+                    var allowedTypes = ['image/jpeg', 'image/jpg'];
+                    var maxSizeInBytes = 10 * 1024 * 1024;
+
+                    if (!allowedTypes.includes(fileInput.type)) {
+                        $("#file").val('');
+                        return false;
+                    } else if (fileInput.size > maxSizeInBytes) {
+                        $("#file").val('');
+                        return false;
+                    }
+                }
+            }
+            if ($("#_file_ci_anverso").val() == "") {
+                if ($("#file_ci_anverso").val() == "") {
+                    return false;
+                }
+            }
+            if ($("#file_ci_anverso").val() != "") {
+                var fileInput = $("#file_ci_anverso")[0].files[0];
+                if (fileInput) {
+                    var allowedTypes = ['image/jpeg', 'image/jpg'];
+                    var maxSizeInBytes = 10 * 1024 * 1024;
+
+                    if (!allowedTypes.includes(fileInput.type)) {
+                        $("#file_ci_anverso").val('');
+                        return false;
+                    } else if (fileInput.size > maxSizeInBytes) {
+                        $("#file_ci_anverso").val('');
+                        return false;
+                    }
+                }
+            }
+            if ($("#_file_ci_reverso").val() == "") {
+                if ($("#file_ci_reverso").val() == "") {
+                    return false;
+                }
+            }
+            if ($("#file_ci_reverso").val() != "") {
+                var fileInput = $("#file_ci_reverso")[0].files[0];
+                if (fileInput) {
+                    var allowedTypes = ['image/jpeg', 'image/jpg'];
+                    var maxSizeInBytes = 10 * 1024 * 1024;
+
+                    if (!allowedTypes.includes(fileInput.type)) {
+                        $("#file_ci_reverso").val('');
+                        return false;
+                    } else if (fileInput.size > maxSizeInBytes) {
                         $("#file_ci_reverso").val('');
                         return false;
                     }

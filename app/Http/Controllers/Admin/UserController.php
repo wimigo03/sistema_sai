@@ -92,6 +92,13 @@ class UserController extends Controller
         return view('admin.users.create', compact('deas','roles'));
     }
 
+    public function _create($empleado_id){
+        $dea = Dea::find(Auth::user()->dea->id);
+        $empleado = Empleado::find($empleado_id);
+        $roles = Role::all()->pluck('title','id');
+        return view('admin.users._create', compact('dea','empleado','roles'));
+    }
+
     public function getAreas(Request $request){
         try{
             $input = $request->all();
@@ -144,7 +151,12 @@ class UserController extends Controller
                 '_email' => $request->_email
             ]);
             $user->roles()->sync($request->roles);
-            return redirect()->route('users.index')->with('success_message', 'Se agrego un usuario al registro.');
+
+            if(isset($request->_form)){
+                return redirect()->route('empleado.index')->with('success_message', 'Se agrego un usuario al registro.');
+            }else{
+                return redirect()->route('users.index')->with('success_message', 'Se agrego un usuario al registro.');
+            }
         } catch (ValidationException $e) {
             return redirect()->route('users.create')
                 ->withErrors($e->validator->errors())

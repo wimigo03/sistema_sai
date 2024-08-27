@@ -48,7 +48,7 @@ class Beneficiario extends Model
         'utmx',
         'utmy',
         'profesion_id',
-        '_estado',
+        'seguro_medico',
         'detalle_vivienda',
         'tipo_vivienda',
         'vecino_1',
@@ -56,7 +56,10 @@ class Beneficiario extends Model
         'vecino_3',
         'file_ci_anverso',
         'file_ci_reverso',
-        'censado'
+        'censado',
+        'titular_seguro_medico',
+        'material_vivienda',
+        'informacion'
     ];
 
     const HABILITADO = 'A';
@@ -64,6 +67,16 @@ class Beneficiario extends Model
     const BAJA = 'B';
     const PENDIENTE = 'X';
     const ELIMINADO = 'E';
+
+    const TITULAR_SEGURO_MEDICO = [
+        '1' => 'NO ES TITULAR DEL SEGURO MEDICO',
+        '2' => 'SI ES TITULAR DEL SEGURO MEDICO'
+    ];
+
+    const INFORMACION = [
+        '1' => 'BENEFICIARIO CENSADO',
+        '2' => 'EL BENEFICIARIO SE NEGO A DAR INFORMACION'
+    ];
 
     const ESTADOS = [
         'A' => 'HABILITADO',
@@ -73,10 +86,14 @@ class Beneficiario extends Model
         'E' => 'ELIMINADO'
     ];
 
-    const _ESTADOS = [
-        '1' => 'ACTIVO',
-        '2' => 'JUBILADO',
-        '3' => 'NINGUNO'
+    const _SEGUROS = [
+        '1' => 'CAJA NACIONAL DE SALUD',
+        '2' => 'CAJA BANCA ESTATAL',
+        '3' => 'CAJA CORDES',
+        '4' => 'COORPORACION DEL SEGURO SOCIAL MILITAR',
+        '5' => 'CAJA DE LA BANCA PRIVADA',
+        '6' => 'CAJA PETROLERA',
+        '7' => 'CAJA DE CAMINOS',
     ];
 
     const TIPOS_VIVIENDAS = [
@@ -86,9 +103,26 @@ class Beneficiario extends Model
         '4' => 'OTRO'
     ];
 
+    const MATERIALES_VIVIENDAS = [
+        '1' => 'MADERA',
+        '2' => 'LADRILLO',
+        '3' => 'ADOBE',
+        '4' => 'TEJA',
+        '5' => 'CALAMINA',
+        '6' => 'OTRO'
+    ];
+
     const SEXOS = [
         'H' => 'MASCULINO',
         'M' => 'FEMENINO',
+    ];
+
+    const TERCERA_EDAD = 1;
+    const DISCAPACIDAD = 2;
+
+    const TIPOS = [
+        '1' => '3RA EDAD',
+        '2' => 'DISCAPACIDAD'
     ];
 
     const EXTENSIONES = [
@@ -255,6 +289,12 @@ class Beneficiario extends Model
     public function scopeByEstado($query, $estado){
         if($estado != null){
             return $query->where('estado',$estado);
+        }
+    }
+
+    public function scopeByEstadoBrigadista($query, $estados){
+        if($estados != null){
+            return $query->whereIn('estado',$estados);
         }
     }
 

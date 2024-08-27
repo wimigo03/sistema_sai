@@ -69,7 +69,7 @@
                             @endif
                         </td>
                         <td class="text-center p-1"><i class='{{ $datos->status_check }}'></i></td>
-                        @canany(['empleados.show','empleados.editar'])
+                        @canany(['empleados.show','empleados.editar','users.create'])
                             <td class="text-center p-1">
                                 <div class="d-flex justify-content-center">
                                     @can('empleados.show')
@@ -95,8 +95,23 @@
                                             </span>
                                         @endif
                                     @endcan
-                                    {{--&nbsp;
-                                    @can('empleados.recontratar')
+                                    &nbsp;
+                                    @can('users.create')
+                                        @if ($datos->user_registrado != null)
+                                            <span class="tts:left tts-slideIn tts-custom" aria-label="Actualizar Usuario" style="cursor: pointer;">
+                                                <a href="{{ route('users.edit',$datos->user_registrado->id) }}" class="badge-with-padding badge badge-primary">
+                                                    <i class="fas fa-user fa-fw"></i>
+                                                </a>
+                                            </span>
+                                        @else
+                                            <span class="tts:left tts-slideIn tts-custom" aria-label="Crear Usuario" style="cursor: pointer;">
+                                                <a href="{{ route('users._create',$datos->idemp) }}" class="badge-with-padding badge badge-secondary">
+                                                    <i class="fas fa-user-times fa-fw"></i>
+                                                </a>
+                                            </span>
+                                        @endif
+                                    @endcan
+                                    {{--@can('empleados.recontratar')
                                         @if ($datos->estado == '2')
                                             <span class="tts:left tts-slideIn tts-custom" aria-label="Recontratar" style="cursor: pointer;">
                                                 <a href="{{ route('empleado.recontratar',$datos->idemp) }}" class="badge-with-padding badge badge-primary">

@@ -8,6 +8,7 @@ use App\Models\Area;
 use App\Models\EscalaSalarial;
 use App\Models\EmpleadoContrato;
 use App\Models\File;
+use DB;
 
 class Empleado extends Model
 {
@@ -123,6 +124,13 @@ class Empleado extends Model
                 return "MASCULINO";
             case '2':
                 return "FEMENINO";
+        }
+    }
+
+    public function getUserRegistradoAttribute(){
+        $user = DB::table('users')->where('idemp',$this->idemp)->first();
+        if($user != null){
+            return $user;
         }
     }
 

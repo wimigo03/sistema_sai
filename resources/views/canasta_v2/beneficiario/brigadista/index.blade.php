@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 @extends('layouts.admin')
 @section('content')
+    <br>
+    <br>
+    <br>
     <div class="card-header header">
         <div class="row">
             <div class="col-md-12 pr-1 pl-1 text-center">
@@ -28,8 +31,6 @@
                 </div>
             </div>
         </form>
-
-        
     </div>
 @endsection
 @section('scripts')
@@ -54,6 +55,10 @@
                 search();
                 event.preventDefault();
             }
+        });
+
+        document.getElementById("ci").addEventListener("input", function() {
+            this.value = this.value.replace(/\s+/g, '');
         });
 
         function search(){

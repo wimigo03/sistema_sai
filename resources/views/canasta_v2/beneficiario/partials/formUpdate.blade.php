@@ -4,11 +4,11 @@
         <input type="hidden" name="censado" value="censo">
     @endif
     <input type="hidden" name="idBeneficiario" id="idBeneficiario" value="{{ $beneficiario->id }}">
-    <div class="card">
+    <div class="card bg-dark">
         <div class="card-header font-roboto-14 bg-white">
             <b>I. DATOS PERSONALES</b>
         </div>
-        <div class="card-body">
+        <div class="card-body bg-white">
             <div class="form-group row font-roboto-12">
                 <div class="col-md-5 pr-1 pl-1">
                     <label for="barrio" class="d-inline"><b>Barrio</b></label>
@@ -23,10 +23,16 @@
                         @endforeach
                     </select>
                 </div>
+                <div class="col-md-2 pr-1 pl-1">
+                    <br>
+                    <span class="{{ $beneficiario->status == 'PENDIENTE' ? 'btn btn-block btn-secondary' : 'btn btn-block btn-success' }} font-roboto-12">
+                        {{ $beneficiario->status }}
+                    </span>
+                </div>
                 @if ($beneficiario->censado == '1')
-                    <div class="col-md-7 text-right">
+                    <div class="col-md-5 pr-1 pl-1 text-right">
                         <br>
-                        <span class="btn btn-warning font-roboto-12">
+                        <span class="btn btn-block btn-warning font-roboto-12">
                             <i class="fa-solid fa-user fa-fw"></i>&nbsp;CENSADO POR {{ $beneficiario->user->nombre_completo }}
                         </span>
                     </div>
@@ -83,6 +89,7 @@
                         <option value="Casado(a)" @if ($beneficiario->estado_civil == 'Casado(a)') selected @endif>CASADO(A)</option>
                         <option value="Viudo(a)" @if ($beneficiario->estado_civil == 'Viudo(a)') selected @endif>VIUDO(A)</option>
                         <option value="Divorciado(a)" @if ($beneficiario->estado_civil == 'Divorciado(a)') selected @endif>DIVORCIADO(A)</option>
+                        <option value="Ninguno" @if ($beneficiario->estado_civil == 'Ninguno') selected @endif>NINGUNO</option>
                     </select>
                 </div>
                 <div class="col-md-2 pr-1 pl-1 mb-2">
@@ -101,7 +108,7 @@
                         <option value="M" @if ($beneficiario->sexo == 'M') selected @endif>FEMENINO</option>
                     </select>
                 </div>
-                <div class="col-md-5 pr-1 pl-1 mb-2">
+                <div class="col-md-4 pr-1 pl-1 mb-2">
                     <label for="profesion" class="d-inline"><b>Profesion</b></label>
                     <select name="profesion" id="profesion" class=" form-control select2">
                         @foreach ($profesiones as $profesion)
@@ -114,7 +121,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-5 pr-1 pl-1 mb-2">
+                <div class="col-md-4 pr-1 pl-1 mb-2">
                     <label for="ocupacion" class="d-inline"><b>Ocupacion</b></label>
                     <select name="ocupacion" id="ocupacion" class=" form-control select2">
                         @foreach ($ocupaciones as $ocupacion)
@@ -127,12 +134,17 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-2 pr-1 pl-1 mb-2">
-                    <label for="_estado" class="d-inline"><b>Estado</b></label>
-                    <select name="_estado" id="_estado" class="form-control select2">
+                <div class="col-md-4 pr-1 pl-1 mb-2">
+                    <input type="checkbox" name="check_seguro_medico" id="check_seguro_medico" {{ $beneficiario->seguro_medico != null ? 'checked' : '' }} onclick="CheckSeguroMedico()">
+                    <label for="seguro_medico" class="d-inline"><b>Seguro Medico</b></label>
+
+                    <label for="titular" class="d-inline float-right ml-1"><b>Titular</b></label>
+                    <input type="checkbox" class="float-right" name="check_titular" id="check_titular" {{ $beneficiario->titular_seguro_medico == '2' ? 'checked' : '' }}>
+
+                    <select name="seguro_medico" id="seguro_medico" class="form-control select2">
                         <option value="">-</option>
-                        @foreach ($_estados as $index => $value)
-                            <option value="{{ $index }}" @if($beneficiario->_estado == $index) selected @endif>{{ $value }}</option>
+                        @foreach ($_seguros as $index => $value)
+                            <option value="{{ $index }}" @if($beneficiario->seguro_medico == $index) selected @endif>{{ $value }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -152,11 +164,11 @@
         </div>
     </div>
     <br>
-    <div class="card">
+    <div class="card bg-dark">
         <div class="card-header font-roboto-14 bg-white">
             <b>II. UBICACION Y DETALLE DE SU VIVIENDA</b>
         </div>
-        <div class="card-body">
+        <div class="card-body bg-white">
             <div class="form-group row font-roboto-12">
                 <div class="col-md-2 pr-1 pl-1 mb-2">
                     <label for="latitud" class="d-inline"><b>Latitud</b></label>
@@ -202,6 +214,15 @@
                         @endforeach
                     </select>
                 </div>
+                <div class="col-md-3 pr-1 pl-1 mb-2">
+                    <label for="material_vivienda" class="d-inline"><b>Material de la Vivienda</b></label>
+                    <select name="material_vivienda" id="material_vivienda" class="form-control select2">
+                        <option value="">-</option>
+                        @foreach ($materiales_viviendas as $index => $value)
+                            <option value="{{ $index }}" @if($beneficiario->material_vivienda == $index) selected @endif>{{ $value }}</option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="col-md-12 pr-1 pl-1 mb-2 text-center">
                    <b><u>VECINOS QUE LO IDENTIFICAN COMO VIVIENTE DEL BARRIO</u></b>
                 </div>
@@ -221,11 +242,11 @@
         </div>
     </div>
     <br>
-    <div class="card">
+    <div class="card bg-dark">
         <div class="card-header font-roboto-14 bg-white">
             <b>III. IMAGENES</b>
         </div>
-        <div class="card-body">
+        <div class="card-body bg-white">
             <div class="form-group row font-roboto-12">
                 <div class="col-md-4 pr-1 pl-1 text-center">
                     <img src="{{ asset(substr($beneficiario->dir_foto, 2)) }}" width="150" />
@@ -257,14 +278,22 @@
         </div>
     </div>
     <br>
-    <div class="card">
+    <div class="card bg-dark">
         <div class="card-header font-roboto-14 bg-white">
-            <b>IV. OBSERVACIONES</b>
+            <div class="row">
+                <div class="col-md-6 pr-1 pl-1">
+                    <b>IV. OBSERVACIONES</b>
+                </div>
+                <div class="col-md-6 pr-1 pl-1 text-right font-roboto-12">
+                    <input type="checkbox" name="informacion" id="informacion" onclick="toggleCheckboxes(this)" {{ $beneficiario->informacion == '2' ? 'checked' : '' }}>
+                    <b><u>Seleccionar esta opcion si el Beneficiario se niega a dar Información</u></b>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            <div class="row font-roboto-12">
+        <div class="card-body bg-white">
+            <div class="form-group row font-roboto-12">
                 <div class="col-md-12 pr-1 pl-1">
-                    <textarea name="observacion" id="observacion" class="form-control font-roboto-12" onchange="javascript:this.value=this.value.toUpperCase();">CONTROL DE BENEFICIARIOS</textarea>
+                    <textarea name="observacion" id="observacion" class="form-control font-roboto-12" onchange="javascript:this.value=this.value.toUpperCase();">ACTUALIZACION DE DATOS</textarea>
                 </div>
             </div>
         </div>
@@ -272,7 +301,7 @@
     <br>
     <div class="form-group row">
         <div class="col-md-6">
-            <span class="btn btn-primary btn-block font-roboto-14" onclick="save();">
+            <span class="btn btn-primary btn-block font-roboto-14" onclick="procesar();">
                 <i class="fa-solid fa-paper-plane fa-fw" aria-hidden="true"></i>&nbsp;Procesar
             </span>
             <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
@@ -280,7 +309,7 @@
         <div class="col-md-6">
             @can('canasta.beneficiarios.brigadista.index')
                 <span class="btn btn-danger btn-block font-roboto-14" onclick="brigadista_cancelar();">
-                    <i class="fa-solid fa-xmark fa-fw"></i>&nbsp;Cancelar
+                    <i class="fa-solid fa-xmark fa-fw"></i>&nbsp;*Cancelar
                 </span>
             @endcan
             @can('canasta.beneficiarios.index')
