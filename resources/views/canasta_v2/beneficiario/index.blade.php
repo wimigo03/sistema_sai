@@ -42,6 +42,12 @@
                 width: '100%'
             });
 
+            $('#estado_censo').select2({
+                theme: "bootstrap4",
+                placeholder: "--Censo--",
+                width: '100%'
+            });
+
             $('#sexo').select2({
                 theme: "bootstrap4",
                 placeholder: "--Sexo--",
@@ -140,6 +146,7 @@
                         edad_final: $("#edad_final").val(),
                         id_ocupacion: $("#id_ocupacion").val(),
                         estado: $("#estado").val(),
+                        estado_censo: $("#estado_censo").val(),
                     }
                 },
                 columns: [
@@ -213,10 +220,10 @@
                         name: 'censo_2024',
                         class: 'text-center p-1 font-roboto-10',
                         render: function(data, type, row){
-                            if(row.censo_2024 === 'CENSADO'){
-                                return '<span class="badge-with-padding badge badge-success btn-block">CENSADO</span>';
-                            }else{
+                            if(row.censo_2024 === 'PENDIENTE'){
                                 return '<span class="badge-with-padding badge badge-secondary btn-block">PENDIENTE</span>';
+                            }else{
+                                return '<span class="badge-with-padding badge badge-success btn-block">CENSADO</span>';
                             }
                         }
                     },

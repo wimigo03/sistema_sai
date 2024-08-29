@@ -14,6 +14,8 @@ Route::prefix('beneficiarios')->name('beneficiarios.')->middleware(['auth'])->gr
     Route::get('excel', 'Canasta_v2\BeneficiariosV2Controller@excel')->name('excel')->middleware('can:canasta.beneficiarios.excel');
     Route::get('pdf-listar', 'Canasta_v2\BeneficiariosV2Controller@pdfListar')->name('pdf.listar')->middleware('can:canasta.beneficiarios.pdf.listar');
 
+    Route::post('/subir-imagen', 'Canasta_v2\BeneficiariosV2Controller@subirImagen')->name('subir.imagen')->middleware('can:canasta.beneficiarios.editar');
+
     Route::get('brigadista-index', 'Canasta_v2\BeneficiariosV2Controller@brigadistaIndex')->name('brigadista.index')->middleware('can:canasta.beneficiarios.brigadista.index');
     Route::get('brigadista-search', 'Canasta_v2\BeneficiariosV2Controller@brigadistaSearch')->name('brigadista.search')->middleware('can:canasta.beneficiarios.brigadista.index');
 });

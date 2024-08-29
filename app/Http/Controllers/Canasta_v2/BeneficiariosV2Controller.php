@@ -155,9 +155,10 @@ class BeneficiariosV2Controller extends Controller
         $distritos = Distrito::where('dea_id',$dea_id)->pluck('nombre','id');
         $sexos = Beneficiario::SEXOS;
         $estados = Beneficiario::ESTADOS;
+        $estados_censo = Beneficiario::ESTADOS_CENSO;
         $ocupaciones = Ocupaciones::where('estado','1')->pluck('ocupacion','id');
 
-        return view('canasta_v2.beneficiario.index', compact('tipos','distritos','sexos','estados','ocupaciones'));
+        return view('canasta_v2.beneficiario.index', compact('tipos','distritos','sexos','estados','estados_censo','ocupaciones'));
     }
 
     public function indexAjax(Request $request)
@@ -184,6 +185,7 @@ class BeneficiariosV2Controller extends Controller
         }
         $query = !is_null($request->id_ocupacion) ? $query->where('a.id_ocupacion',$request->id_ocupacion) : $query;
         $query = !is_null($request->estado) ? $query->where('a.estado',$request->estado) : $query;
+        $query = !is_null($request->estado_censo) ? $query->where('a.censado',$request->estado_censo) : $query;
 
         $query->select(
                     'a.id as beneficiario_id',
@@ -212,8 +214,8 @@ class BeneficiariosV2Controller extends Controller
                     'a.longitud',
                     DB::raw("
                         CASE
-                            WHEN a.censado = '1' THEN 'CENSADO'
-                            ELSE '-'
+                            WHEN a.censado = '1' THEN 'PENDIENTE'
+                            ELSE 'CENSADO'
                         END as censo_2024
                     "),
                 )
@@ -432,6 +434,229 @@ class BeneficiariosV2Controller extends Controller
         }
     }
 
+    public function subirImagen(Request $request)
+    {
+        $beneficiario = Beneficiario::find($request->id);
+        if($beneficiario != null){
+            if($beneficiario->id_tipo == Beneficiario::TERCERA_EDAD){
+                if ($request->hasFile('file_ci_anverso')) {
+                    $file_ci_anverso = $request->file("file_ci_anverso");
+                    $size = $file_ci_anverso->getSize() / 1048576;
+                    $round_size = round($size, 2);
+
+                    $file_ci_anverso_name = "a_" . time() . "." . $file_ci_anverso->guessExtension();
+                    $ruta_file_ci_anverso = "/imagenes/fotos/cedulas/" . $file_ci_anverso_name;
+                    $_ruta_file_ci_anverso = public_path($ruta_file_ci_anverso);
+                    if($round_size > 0.5 ){
+                        $img = Image::make($file_ci_anverso);
+                        $img->resize(750, null, function ($constraint) {
+                            $constraint->aspectRatio();
+                            $constraint->upsize();
+                        });
+
+                        $file_ci_anverso = $img;
+                        $file_ci_anverso->save($_ruta_file_ci_anverso);
+                    }else{
+                        copy($file_ci_anverso, $_ruta_file_ci_anverso);
+                    }
+
+                    $beneficiario->update([
+                        'file_ci_anverso' => $ruta_file_ci_anverso
+                    ]);
+
+                    return response()->json([
+                        'success' => 'Anverso Cargado.'
+                    ]);
+                }
+
+                if ($request->hasFile('file_ci_reverso')) {
+                    $file_ci_reverso = $request->file("file_ci_reverso");
+                    $size = $file_ci_reverso->getSize() / 1048576;
+                    $round_size = round($size, 2);
+
+                    $file_ci_reverso_name = "a_" . time() . "." . $file_ci_reverso->guessExtension();
+                    $ruta_file_ci_reverso = "/imagenes/fotos/cedulas/" . $file_ci_reverso_name;
+                    $_ruta_file_ci_reverso = public_path($ruta_file_ci_reverso);
+                    if($round_size > 0.5 ){
+                        $img = Image::make($file_ci_reverso);
+                        $img->resize(750, null, function ($constraint) {
+                            $constraint->aspectRatio();
+                            $constraint->upsize();
+                        });
+
+                        $file_ci_reverso = $img;
+                        $file_ci_reverso->save($_ruta_file_ci_reverso);
+                    }else{
+                        copy($file_ci_reverso, $_ruta_file_ci_reverso);
+                    }
+
+                    $beneficiario->update([
+                        'file_ci_reverso' => $ruta_file_ci_reverso
+                    ]);
+
+                    return response()->json([
+                        'success' => 'Reverso Cargado.'
+                    ]);
+                }
+
+                if($request->hasFile('file_documento')) {
+                    $file_documento = $request->file("file_documento");
+                    $size = $file_documento->getSize() / 1048576;
+                    $round_size = round($size, 2);
+
+                    $file_documento_name = time() . "." . $file_documento->guessExtension();
+                    $ruta_documento = "/imagenes/fotos/" . $file_documento_name;
+                    $_ruta_documento = public_path($ruta_documento);
+                    if($round_size > 0.5 ){
+                        $img = Image::make($file_documento);
+                        $img->resize(750, null, function ($constraint) {
+                            $constraint->aspectRatio();
+                            $constraint->upsize();
+                        });
+
+                        $file_documento = $img;
+                        $file_documento->save($_ruta_documento);
+                    }else{
+                        copy($file_documento, $_ruta_documento);
+                    }
+
+                    $beneficiario->update([
+                        'dir_foto' => '..' . $ruta_documento,
+                        'photo' => $file_documento_name
+                    ]);
+
+                    $img_25 = Image::make(substr($beneficiario->dir_foto,3));
+                    $img_25->resize(25, 25);
+                    $img_25->save(public_path('imagenes/fotos-25px/' . $file_documento_name));
+
+                    $img_30 = Image::make(substr($beneficiario->dir_foto,3));
+                    $img_30->resize(30, 30);
+                    $img_30->save(public_path('imagenes/fotos-30px/' . $file_documento_name));
+
+                    $img_80 = Image::make(substr($beneficiario->dir_foto,3));
+                    $img_80->resize(80, 80);
+                    $img_80->save(public_path('imagenes/fotos-80px/' . $file_documento_name));
+
+                    $img_150 = Image::make(substr($beneficiario->dir_foto,3));
+                    $img_150->resize(150, 150);
+                    $img_150->save(public_path('imagenes/fotos-150px/' . $file_documento_name));
+
+                    return response()->json([
+                        'success' => 'Foto Documento Cargado.'
+                    ]);
+                }
+            }else{
+                if ($request->hasFile('file_ci_anverso')) {
+                    $file_ci_anverso = $request->file("file_ci_anverso");
+                    $size = $file_ci_anverso->getSize() / 1048576;
+                    $round_size = round($size, 2);
+
+                    $file_ci_anverso_name = "a_" . time() . "." . $file_ci_anverso->guessExtension();
+                    $ruta_file_ci_anverso = "/imagenes/fotosdisc/cedulas/" . $file_ci_anverso_name;
+                    $_ruta_file_ci_anverso = public_path($ruta_file_ci_anverso);
+                    if($round_size > 0.5 ){
+                        $img = Image::make($file_ci_anverso);
+                        $img->resize(750, null, function ($constraint) {
+                            $constraint->aspectRatio();
+                            $constraint->upsize();
+                        });
+
+                        $file_ci_anverso = $img;
+                        $file_ci_anverso->save($_ruta_file_ci_anverso);
+                    }else{
+                        copy($file_ci_anverso, $_ruta_file_ci_anverso);
+                    }
+
+                    $beneficiario->update([
+                        'file_ci_anverso' => $ruta_file_ci_anverso
+                    ]);
+
+                    return response()->json([
+                        'success' => 'Anverso Cargado.'
+                    ]);
+                }
+
+                if ($request->hasFile('file_ci_reverso')) {
+                    $file_ci_reverso = $request->file("file_ci_reverso");
+                    $size = $file_ci_reverso->getSize() / 1048576;
+                    $round_size = round($size, 2);
+
+                    $file_ci_reverso_name = "a_" . time() . "." . $file_ci_reverso->guessExtension();
+                    $ruta_file_ci_reverso = "/imagenes/fotosdisc/cedulas/" . $file_ci_reverso_name;
+                    $_ruta_file_ci_reverso = public_path($ruta_file_ci_reverso);
+                    if($round_size > 0.5 ){
+                        $img = Image::make($file_ci_reverso);
+                        $img->resize(750, null, function ($constraint) {
+                            $constraint->aspectRatio();
+                            $constraint->upsize();
+                        });
+
+                        $file_ci_reverso = $img;
+                        $file_ci_reverso->save($_ruta_file_ci_reverso);
+                    }else{
+                        copy($file_ci_reverso, $_ruta_file_ci_reverso);
+                    }
+
+                    $beneficiario->update([
+                        'file_ci_reverso' => $ruta_file_ci_reverso
+                    ]);
+
+                    return response()->json([
+                        'success' => 'Reverso Cargado.'
+                    ]);
+                }
+
+                if($request->hasFile('file_documento')) {
+                    $file_documento = $request->file("file_documento");
+                    $size = $file_documento->getSize() / 1048576;
+                    $round_size = round($size, 2);
+
+                    $file_documento_name = time() . "." . $file_documento->guessExtension();
+                    $ruta_documento = "/imagenes/fotosdisc/" . $file_documento_name;
+                    $_ruta_documento = public_path($ruta_documento);
+                    if($round_size > 0.5 ){
+                        $img = Image::make($file_documento);
+                        $img->resize(750, null, function ($constraint) {
+                            $constraint->aspectRatio();
+                            $constraint->upsize();
+                        });
+
+                        $file_documento = $img;
+                        $file_documento->save($_ruta_documento);
+                    }else{
+                        copy($file_documento, $_ruta_documento);
+                    }
+
+                    $beneficiario->update([
+                        'dir_foto' => '..' . $ruta_documento,
+                        'photo' => $file_documento_name
+                    ]);
+
+                    $img_25 = Image::make(substr($beneficiario->dir_foto,3));
+                    $img_25->resize(25, 25);
+                    $img_25->save(public_path('imagenes/fotos-25px/' . $file_documento_name));
+
+                    $img_30 = Image::make(substr($beneficiario->dir_foto,3));
+                    $img_30->resize(30, 30);
+                    $img_30->save(public_path('imagenes/fotos-30px/' . $file_documento_name));
+
+                    $img_80 = Image::make(substr($beneficiario->dir_foto,3));
+                    $img_80->resize(80, 80);
+                    $img_80->save(public_path('imagenes/fotos-80px/' . $file_documento_name));
+
+                    $img_150 = Image::make(substr($beneficiario->dir_foto,3));
+                    $img_150->resize(150, 150);
+                    $img_150->save(public_path('imagenes/fotos-150px/' . $file_documento_name));
+
+                    return response()->json([
+                        'success' => 'Foto Documento Cargado.'
+                    ]);
+                }
+            }
+        }
+        return response()->json(['error' => 'Archivo no cargado']);
+    }
+
     public function update(Request $request)
     {//dd($request->all());
         $censador = false;
@@ -442,14 +667,11 @@ class BeneficiariosV2Controller extends Controller
                 }
             }
         }
+
         if($censador == true){
             $beneficiario = Beneficiario::find($request->idBeneficiario);
-            if($beneficiario->censado == '1'){
+            if($beneficiario->censado == '2'){
                 return redirect()->route('beneficiarios.brigadista.index')->with('error_message', 'El beneficiario ya fue ACTUALIZADO');
-            }else{
-                $beneficiario->update([
-                    'censado' => '1'
-                ]);
             }
         }
 
@@ -502,7 +724,7 @@ class BeneficiariosV2Controller extends Controller
         ]);
 
         if($beneficiario->id_tipo == Beneficiario::TERCERA_EDAD){
-            if(isset($request->documento)){
+            /*if(isset($request->documento)){
                 $file_documento = $request->file("documento");
                 $size = $file_documento->getSize() / 1048576;
                 $round_size = round($size, 2);
@@ -595,9 +817,9 @@ class BeneficiariosV2Controller extends Controller
                 $beneficiario->update([
                     'file_ci_reverso' => $ruta_file_ci_reverso
                 ]);
-            }
+            }*/
         }else{
-            if(isset($request->documento)){
+            /*if(isset($request->documento)){
                 $file_documento = $request->file("documento");
                 $size = $file_documento->getSize() / 1048576;
                 $round_size = round($size, 2);
@@ -674,8 +896,9 @@ class BeneficiariosV2Controller extends Controller
                 $beneficiario->update([
                     'file_ci_reverso' => $ruta_file_ci_reverso
                 ]);
-            }
+            }*/
         }
+
         $Historial = HistorialMod::create([
             'observacion' => $request->observacion,
             'id_beneficiario' => $request->idBeneficiario,
@@ -683,6 +906,15 @@ class BeneficiariosV2Controller extends Controller
             'dea_id' => Auth::user()->dea->id,
             'fecha' => date('Y-m-d')
         ]);
+
+        if($censador == true){
+            $beneficiario = Beneficiario::find($request->idBeneficiario);
+            if($beneficiario->censado == '1'){
+                $beneficiario->update([
+                    'censado' => '2'
+                ]);
+            }
+        }
 
         if(isset($request->censado)){
             return redirect()->route('beneficiarios.brigadista.index')->with('info_message', 'datos actualizados correctamente...');
@@ -770,7 +1002,7 @@ class BeneficiariosV2Controller extends Controller
                                         ->byEstadoBrigadista($estados)
                                         ->first();
             if($beneficiario != null){
-                if($beneficiario->censado == '1'){
+                if($beneficiario->censado == '2'){
                     return redirect()->route('beneficiarios.brigadista.index')->with('error_message', 'El beneficiario ya fue ACTUALIZADO');
                 }else{
                     return redirect()->route('beneficiarios.editar',$beneficiario->id);

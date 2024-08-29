@@ -1,4 +1,4 @@
-<form action="{{ route('beneficiarios.update') }}" method="post" id="form" enctype="multipart/form-data">
+<form action="{{ route('beneficiarios.update') }}" method="post" id="form" {{--enctype="multipart/form-data"--}}>
     @csrf
     @if ($censador == true)
         <input type="hidden" name="censado" value="censo">
@@ -29,7 +29,7 @@
                         {{ $beneficiario->status }}
                     </span>
                 </div>
-                @if ($beneficiario->censado == '1')
+                @if ($beneficiario->censado == '2')
                     <div class="col-md-5 pr-1 pl-1 text-right">
                         <br>
                         <span class="btn btn-block btn-warning font-roboto-12">
@@ -250,21 +250,21 @@
             <div class="form-group row font-roboto-12">
                 <div class="col-md-4 pr-1 pl-1 text-center">
                     <img src="{{ asset(substr($beneficiario->dir_foto, 2)) }}" width="150" />
-                    <input type="hidden" value="{{ $beneficiario->dir_foto }}" id="_file">
+                    <input type="hidden" name="_file_documento" value="{{ $beneficiario->dir_foto }}" id="_file_documento">
                 </div>
                 <div class="col-md-4 pr-1 pl-1 text-center">
                     <img src="{{ asset($beneficiario->file_ci_anverso) }}" width="150" />
-                    <input type="hidden" value="{{ $beneficiario->file_ci_anverso }}" id="_file_ci_anverso">
+                    <input type="hidden" name="_file_ci_anverso" value="{{ $beneficiario->file_ci_anverso }}" id="_file_ci_anverso">
                 </div>
                 <div class="col-md-4 pr-1 pl-1 text-center">
                     <img src="{{ asset($beneficiario->file_ci_reverso) }}" width="150" />
-                    <input type="hidden" value="{{ $beneficiario->file_ci_reverso }}" id="_file_ci_reverso">
+                    <input type="hidden" name="_file_ci_reverso" value="{{ $beneficiario->file_ci_reverso }}" id="_file_ci_reverso">
                 </div>
             </div>
             <div class="form-group row font-roboto-12">
                 <div class="col-md-4 pr-1 pl-1 text-center">
                     <label for="fregistro" class="d-inline"><b>Foto Beneficiario</b></label>
-                    <input type="file" name="documento" id="file" class="form-control font-roboto-12">
+                    <input type="file" name="file_documento" id="file_documento" class="form-control font-roboto-12">
                 </div>
                 <div class="col-md-4 pr-1 pl-1 text-center">
                     <label for="ci_anverso" class="d-inline"><b>Foto Carnet Anverso</b></label>

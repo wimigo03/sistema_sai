@@ -367,36 +367,36 @@
                     }
                 }
             }
-            if ($("#_file").val() == "") {
+            if ($("#_file_documento").val() == "") {
                 if ($("#file").val() == "") {
                     Modal("<b>[No se encuentra el archivo de imagen del BENEFICIARIO]</b>");
                     return false;
                 }
             }
-            if ($("#file").val() != "") {
-                var fileInput = $("#file")[0].files[0];
+            /*if ($("#_file_documento").val() != "") {
+                var fileInput = $("#_file_documento")[0].files[0];
                 if (fileInput) {
                     var allowedTypes = ['image/jpeg', 'image/jpg'];
                     var maxSizeInBytes = 10 * 1024 * 1024;
 
                     if (!allowedTypes.includes(fileInput.type)) {
                         Modal('[BENEFICIARIO] . Formato de archivo no permitido. Por favor, seleccione una imagen JPEG o JPG.');
-                        $("#file").val('');
+                        $("#_file_documento").val('');
                         return false;
                     } else if (fileInput.size > maxSizeInBytes) {
                         Modal('[BENEFICIARIO] . El archivo es demasiado grande. El tamaño máximo permitido es de 10MB.');
-                        $("#file").val('');
+                        $("#_file_documento").val('');
                         return false;
                     }
                 }
-            }
+            }*/
             if ($("#_file_ci_anverso").val() == "") {
                 if ($("#file_ci_anverso").val() == "") {
                     Modal("<b>[No se encuentra el archivo de imagen de la FOTO CARNET - ANVERSO]</b>");
                     return false;
                 }
             }
-            if ($("#file_ci_anverso").val() != "") {
+            /*if ($("#file_ci_anverso").val() != "") {
                 var fileInput = $("#file_ci_anverso")[0].files[0];
                 if (fileInput) {
                     var allowedTypes = ['image/jpeg', 'image/jpg'];
@@ -412,14 +412,14 @@
                         return false;
                     }
                 }
-            }
+            }*/
             if ($("#_file_ci_reverso").val() == "") {
                 if ($("#file_ci_reverso").val() == "") {
                     Modal("<b>[No se encuentra el archivo de imagen de la FOTO CARNET - REVERSO]</b>");
                     return false;
                 }
             }
-            if ($("#file_ci_reverso").val() != "") {
+            /*if ($("#file_ci_reverso").val() != "") {
                 var fileInput = $("#file_ci_reverso")[0].files[0];
                 if (fileInput) {
                     var allowedTypes = ['image/jpeg', 'image/jpg'];
@@ -435,7 +435,7 @@
                         return false;
                     }
                 }
-            }
+            }*/
 
             return true;
         }
@@ -527,12 +527,12 @@
                     }
                 }
             }
-            if ($("#_file").val() == "") {
+            if ($("#_file_documento").val() == "") {
                 if ($("#file").val() == "") {
                     return false;
                 }
             }
-            if ($("#file").val() != "") {
+            /*if ($("#file_documento").val() != "") {
                 var fileInput = $("#file")[0].files[0];
                 if (fileInput) {
                     var allowedTypes = ['image/jpeg', 'image/jpg'];
@@ -546,13 +546,13 @@
                         return false;
                     }
                 }
-            }
+            }*/
             if ($("#_file_ci_anverso").val() == "") {
                 if ($("#file_ci_anverso").val() == "") {
                     return false;
                 }
             }
-            if ($("#file_ci_anverso").val() != "") {
+            /*if ($("#file_ci_anverso").val() != "") {
                 var fileInput = $("#file_ci_anverso")[0].files[0];
                 if (fileInput) {
                     var allowedTypes = ['image/jpeg', 'image/jpg'];
@@ -566,13 +566,13 @@
                         return false;
                     }
                 }
-            }
+            }*/
             if ($("#_file_ci_reverso").val() == "") {
                 if ($("#file_ci_reverso").val() == "") {
                     return false;
                 }
             }
-            if ($("#file_ci_reverso").val() != "") {
+            /*if ($("#file_ci_reverso").val() != "") {
                 var fileInput = $("#file_ci_reverso")[0].files[0];
                 if (fileInput) {
                     var allowedTypes = ['image/jpeg', 'image/jpg'];
@@ -586,9 +586,157 @@
                         return false;
                     }
                 }
-            }
+            }*/
 
             return true;
         }
+
+        /**/
+        function sendForm(formData) {
+
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+            fetch('/beneficiarios/subir-imagen', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': CSRF_TOKEN,
+                    'Accept': 'application/json',
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Éxito:', data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        const file_documento = document.getElementById('file_documento');
+
+        file_documento.addEventListener('change', function() {
+
+            var id = $("#idBeneficiario").val();
+
+            const formData = new FormData();
+            formData.append('id', id);
+            const fileName = file_documento.files[0].name;
+            document.getElementById('_file_documento').value = fileName;
+
+            changeFileToBase64(file_documento.files[0]).then(data => {
+                let type = data.file.type;
+                downscaleImage(data.base64, 1024, type, 0.6).then(image => {
+                    urltoFile(image, data.file.name, data.file.type)
+                    .then(file => {
+                        formData.append(file_documento.id, file);
+                        sendForm(formData);
+                        //console.log('Archivo agregado al FormData:', file);
+                    });
+                });
+            });
+        });
+
+        const file_ci_anverso = document.getElementById('file_ci_anverso');
+
+        file_ci_anverso.addEventListener('change', function() {
+
+            var id = $("#idBeneficiario").val();
+
+            const formData = new FormData();
+            formData.append('id', id);
+            const fileName = file_ci_anverso.files[0].name;
+            document.getElementById('_file_ci_anverso').value = fileName;
+
+            changeFileToBase64(file_ci_anverso.files[0]).then(data => {
+                let type = data.file.type;
+                downscaleImage(data.base64, 1024, type, 0.6).then(image => {
+                    urltoFile(image, data.file.name, data.file.type)
+                    .then(file => {
+                        formData.append(file_ci_anverso.id, file);
+                        sendForm(formData);
+                        //console.log('Archivo agregado al FormData:', file);
+                    });
+                });
+            });
+        });
+
+        const file_ci_reverso = document.getElementById('file_ci_reverso');
+
+        file_ci_reverso.addEventListener('change', function() {
+
+            var id = $("#idBeneficiario").val();
+
+            const formData = new FormData();
+            formData.append('id', id);
+            const fileName = file_ci_reverso.files[0].name;
+            document.getElementById('_file_ci_reverso').value = fileName;
+
+            changeFileToBase64(file_ci_reverso.files[0]).then(data => {
+                let type = data.file.type;
+                downscaleImage(data.base64, 1024, type, 0.6).then(image => {
+                    urltoFile(image, data.file.name, data.file.type)
+                    .then(file => {
+                        formData.append(file_ci_reverso.id, file);
+                        sendForm(formData);
+                        //console.log('Archivo agregado al FormData:', file);
+                    });
+                });
+            });
+        });
+
+        function urltoFile(url, filename, mimeType) {
+            return fetch(url)
+                .then(function (res) {
+                    return res.arrayBuffer();
+                })
+                .then(function (buf) {
+                    return new File([buf], filename, {type: mimeType});
+                });
+        }
+
+        const toBase64 = file => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+
+        async function changeFileToBase64(file) {
+            return {
+                'base64': await toBase64(file),
+                'file': file,
+            };
+        }
+
+        function downscaleImage(dataUrl, newWidth, imageType, imageArguments) {
+            return new Promise((resolve, reject) => {
+                let image = new Image();
+
+                image.onload = function() {
+                    let oldWidth = image.width;
+                    let oldHeight = image.height;
+                    let newHeight = Math.floor(oldHeight / oldWidth * newWidth);
+
+                    // Crear un canvas para dibujar la nueva imagen.
+                    let canvas = document.createElement("canvas");
+                    canvas.width = newWidth;
+                    canvas.height = newHeight;
+
+                    // Dibujar la nueva imagen comprimida en el canvas
+                    let ctx = canvas.getContext("2d");
+                    ctx.drawImage(image, 0, 0, newWidth, newHeight);
+
+                    // Obtener el dataURL de la nueva imagen comprimida
+                    let newDataUrl = canvas.toDataURL(imageType, imageArguments);
+                    resolve(newDataUrl);
+                };
+
+                image.onerror = reject;
+                image.src = dataUrl;
+            });
+        }
+
+
     </script>
 @endsection

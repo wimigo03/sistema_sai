@@ -86,6 +86,11 @@ class Beneficiario extends Model
         'E' => 'ELIMINADO'
     ];
 
+    const ESTADOS_CENSO = [
+        '1' => 'PENDIENTE',
+        '2' => 'CENSADO'
+    ];
+
     const _SEGUROS = [
         '1' => 'CAJA NACIONAL DE SALUD',
         '2' => 'CAJA BANCA ESTATAL',
