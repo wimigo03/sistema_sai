@@ -118,8 +118,8 @@ class Beneficiario extends Model
     ];
 
     const SEXOS = [
-        'H' => 'MASCULINO',
-        'M' => 'FEMENINO',
+        'H' => 'H',
+        'M' => 'M',
     ];
 
     const TERCERA_EDAD = 1;

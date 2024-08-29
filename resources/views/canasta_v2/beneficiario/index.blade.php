@@ -232,11 +232,13 @@
                     },
                     {
                         class: 'text-center p-1 font-roboto-10',
-                        render: function(data, type, row){
-                            if(row.latitud == null || row.longitud == null){
+                        render: function(data, type, row) {
+                            if (row.latitud == null || row.longitud == null) {
                                 return '';
-                            }else{
-                                return '<i class="fa-solid fa-location-dot fa-lg text-danger"></i>';
+                            } else {
+                                return '<a href="https://www.google.com/maps?q=' + row.latitud + ',' + row.longitud + '" target="_blank">' +
+                                    '<i class="fa-solid fa-location-dot fa-lg text-danger"></i>' +
+                                    '</a>';
                             }
                         },
                         orderable: false,
