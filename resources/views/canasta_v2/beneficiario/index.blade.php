@@ -42,6 +42,12 @@
                 width: '100%'
             });
 
+            $('#usuario').select2({
+                theme: "bootstrap4",
+                placeholder: "--Usuario--",
+                width: '100%'
+            });
+
             $('#estado_censo').select2({
                 theme: "bootstrap4",
                 placeholder: "--Censo--",
@@ -50,7 +56,7 @@
 
             $('#sexo').select2({
                 theme: "bootstrap4",
-                placeholder: "--Sexo--",
+                placeholder: "--H/M--",
                 width: '100%'
             });
 
@@ -137,15 +143,14 @@
                     data: {
                         id_distrito: $("#id_distrito").val(),
                         id_barrio: $("#_id_barrio").val(),
-                        nombre: $("#nombre").val(),
-                        ap: $("#ap").val(),
-                        am: $("#am").val(),
+                        nombre_completo: $("#nombre_completo").val(),
                         ci: $("#ci").val(),
                         sexo: $("#sexo").val(),
                         edad_inicial: $("#edad_inicial").val(),
                         edad_final: $("#edad_final").val(),
                         id_ocupacion: $("#id_ocupacion").val(),
                         estado: $("#estado").val(),
+                        usuario: $("#usuario").val(),
                         estado_censo: $("#estado_censo").val(),
                     }
                 },
@@ -161,18 +166,8 @@
                         class: 'text-justify p-1 font-roboto-10'
                     },
                     {
-                        data: 'nombres',
-                        name: 'a.nombres',
-                        class: 'text-justify p-1 font-roboto-10'
-                    },
-                    {
-                        data: 'ap',
-                        name: 'a.ap',
-                        class: 'text-justify p-1 font-roboto-10'
-                    },
-                    {
-                        data: 'am',
-                        name: 'a.am',
+                        data: 'nombre_completo',
+                        name: 'nombre_completo',
                         class: 'text-justify p-1 font-roboto-10'
                     },
                     {
@@ -209,10 +204,18 @@
                             }if(row.status == 'PENDIENTE'){
                                 return '<span class="badge-with-padding badge badge-secondary btn-block">PENDIENTE</span>';
                             }if(row.status == 'ELIMINADO'){
-                                return '<span class="badge-with-padding badge badge-outline-danger btn-block">ELIMINADO</span>';
+                                return '<span class="badge-with-padding badge badge-danger btn-block">ELIMINADO</span>';
                             }else{
                                 return 'DESCONOCIDO';
                             }
+                        }
+                    },
+                    {
+                        data: 'usuario',
+                        name: 'e.name',
+                        class: 'text-center p-1 font-roboto-10',
+                        render: function(data, type, row) {
+                            return data ? data.toUpperCase() : '';
                         }
                     },
                     {
@@ -288,6 +291,12 @@
 
         function procesar(){
             window.location.reload();
+        }
+
+        function _excel(){
+            var url = "{{ route('beneficiarios.excel') }}";
+            $("#form").attr('action', url);
+            $("#form").submit();
         }
 
         function excel() {

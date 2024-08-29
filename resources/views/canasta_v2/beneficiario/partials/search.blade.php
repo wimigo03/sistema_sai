@@ -20,21 +20,21 @@
                 @endforeach--}}
             </select>
         </div>
-        <div class="col-md-2 pr-1 pl-1 mb-2">
-            <input type="text" name="nombre" id="nombre" placeholder="-- Nombres --" value="{{ request('nombre') }}" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
+        <div class="col-md-3 pr-1 pl-1 mb-2">
+            <input type="text" name="nombre_completo" id="nombre_completo" placeholder="-- Nombre Completo --" value="{{ request('nombre_completo') }}" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
         </div>
-        <div class="col-md-2 pr-1 pl-1 mb-2">
+        {{--<div class="col-md-2 pr-1 pl-1 mb-2">
             <input type="text" name="ap" id="ap" placeholder="-- Apellido Paterno --" value="{{ request('ap') }}" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
         </div>
         <div class="col-md-2 pr-1 pl-1 mb-2">
             <input type="text" name="am" id="am" placeholder="-- Apellido Materno --" value="{{ request('am') }}" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
-        </div>
+        </div>--}}
     {{--</div>
     <div class="form-group row">--}}
         <div class="col-md-2 pr-1 pl-1 mb-2">
             <input type="text" name="ci" id="ci" placeholder="--N° de carnet--" value="{{ request('ci') }}" class="form-control font-roboto-12 intro">
         </div>
-        <div class="col-md-2 pr-1 pl-1 mb-2">
+        <div class="col-md-1 pr-1 pl-1 mb-2">
             <select name="sexo" id="sexo" class="form-control font-roboto-12">
                 <option value="">-</option>
                 @foreach ($sexos as $index => $value)
@@ -42,13 +42,13 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-md-2 pr-1 pl-1 mb-2">
-            <input type="text" name="edad_inicial" id="edad_inicial" value="{{ request('edad_inicial') }}" id="edad_inicial" placeholder="--Edad Inicial--" class="form-control font-roboto-12 intro" data-language="es">
+        <div class="col-md-1 pr-1 pl-1 mb-2">
+            <input type="text" name="edad_inicial" id="edad_inicial" value="{{ request('edad_inicial') }}" id="edad_inicial" placeholder="--Edad (1)--" class="form-control font-roboto-12 intro" data-language="es">
         </div>
-        <div class="col-md-2 pr-1 pl-1 mb-2">
-            <input type="text" name="edad_final" id="edad_final" value="{{ request('edad_final') }}" id="edad_final" placeholder="--Edad Final--" class="form-control font-roboto-12 intro" data-language="es">
+        <div class="col-md-1 pr-1 pl-1 mb-2">
+            <input type="text" name="edad_final" id="edad_final" value="{{ request('edad_final') }}" id="edad_final" placeholder="--Edad (2)--" class="form-control font-roboto-12 intro" data-language="es">
         </div>
-        <div class="col-md-2 pr-1 pl-1 mb-2">
+        <div class="col-md-3 pr-1 pl-1 mb-2">
             <select name="id_ocupacion"  id="id_ocupacion" class="form-control font-roboto-12">
                 <option value="">-</option>
                 @foreach ($ocupaciones as $index => $value)
@@ -61,6 +61,14 @@
                 <option value="">-</option>
                 @foreach ($estados as $index => $value)
                     <option value="{{ $index }}" @if(request('estado') == $index) selected @endif >{{ $value }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-3 pr-1 pl-1 mb-2">
+            <select name="usuario"  id="usuario" class="form-control font-roboto-12">
+                <option value="">-</option>
+                @foreach ($usuarios as $index => $value)
+                    <option value="{{ $index }}" @if(request('usuario') == $index) selected @endif >{{ $value }}</option>
                 @endforeach
             </select>
         </div>

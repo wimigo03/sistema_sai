@@ -210,6 +210,16 @@ class Beneficiario extends Model
         }
     }
 
+    public function scopeByNombreCompleto($query, $nombre_completo){
+        if($nombre_completo != null){
+            //return $query->whereRaw('upper(nombres) like ?', ['%'.strtoupper($nombre_completo).'%']);
+            return $query->whereRaw(
+                "UPPER(CONCAT(nombres, ' ', ap, ' ', am)) LIKE ?",
+                ['%' . strtoupper($nombre_completo) . '%']
+            );
+        }
+    }
+
     public function scopeByNombre($query, $nombre){
         if($nombre != null){
             return $query->whereRaw('upper(nombres) like ?', ['%'.strtoupper($nombre).'%']);
@@ -294,6 +304,12 @@ class Beneficiario extends Model
     public function scopeByEstado($query, $estado){
         if($estado != null){
             return $query->where('estado',$estado);
+        }
+    }
+
+    public function scopeByUsuarioTwo($query, $user_id){
+        if($user_id != null){
+            return $query->where('user_id', $user_id);
         }
     }
 

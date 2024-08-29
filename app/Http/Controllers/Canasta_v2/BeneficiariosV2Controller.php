@@ -152,13 +152,16 @@ class BeneficiariosV2Controller extends Controller
         //$this->copiarbeneficiarios2();
         $dea_id = Auth::user()->dea->id;
         $tipos = Barrio::TIPOS;
-        $distritos = Distrito::where('dea_id',$dea_id)->pluck('nombre','id');
+        $distritos = Distrito::where('dea_id',$dea_id)->orderBy('nombre','asc')->pluck('nombre','id');
         $sexos = Beneficiario::SEXOS;
         $estados = Beneficiario::ESTADOS;
+        $usuarios = User::where('dea_id', $dea_id)->get()->mapWithKeys(function ($user) {
+            return [$user->id => $user->nombreCompleto];
+        });
         $estados_censo = Beneficiario::ESTADOS_CENSO;
         $ocupaciones = Ocupaciones::where('estado','1')->pluck('ocupacion','id');
 
-        return view('canasta_v2.beneficiario.index', compact('tipos','distritos','sexos','estados','estados_censo','ocupaciones'));
+        return view('canasta_v2.beneficiario.index', compact('tipos','distritos','sexos','estados','usuarios','estados_censo','ocupaciones'));
     }
 
     public function indexAjax(Request $request)
@@ -167,14 +170,15 @@ class BeneficiariosV2Controller extends Controller
                     ->join('barrios as b','b.id','a.id_barrio')
                     ->join('distritos as c','c.id','a.distrito_id')
                     ->join('ocupaciones as d','d.id','a.id_ocupacion')
+                    ->join('users as e','e.id','a.user_id')
                     ->where('a.id_tipo',Paquetes::TERCERA_EDAD);
                     //->where('a.estado', Beneficiario::HABILITADO);
 
         $query = !is_null($request->id_distrito) ? $query->where('a.distrito_id',$request->id_distrito) : $query;
         $query = !is_null($request->id_barrio) ? $query->where('a.id_barrio',$request->id_barrio) : $query;
-        $query = !is_null($request->nombre) ? $query->where('a.nombres',$request->nombre) : $query;
-        $query = !is_null($request->ap) ? $query->where('a.ap',$request->ap) : $query;
-        $query = !is_null($request->am) ? $query->where('a.am',$request->am) : $query;
+        $query = !is_null($request->nombre_completo)
+                ? $query->where(DB::raw("CONCAT(a.nombres, ' ', a.ap, ' ', a.am)"), 'LIKE', '%' . $request->nombre_completo . '%')
+                : $query;
         $query = !is_null($request->ci) ? $query->where('a.ci',$request->ci) : $query;
         $query = !is_null($request->sexo) ? $query->where('a.sexo',$request->sexo) : $query;
         if(!is_null($request->edad_inicial) && !is_null($request->edad_final)){
@@ -185,14 +189,13 @@ class BeneficiariosV2Controller extends Controller
         }
         $query = !is_null($request->id_ocupacion) ? $query->where('a.id_ocupacion',$request->id_ocupacion) : $query;
         $query = !is_null($request->estado) ? $query->where('a.estado',$request->estado) : $query;
+        $query = !is_null($request->usuario) ? $query->where('a.user_id',$request->usuario) : $query;
         $query = !is_null($request->estado_censo) ? $query->where('a.censado',$request->estado_censo) : $query;
 
         $query->select(
                     'a.id as beneficiario_id',
                     'c.nombre as distrito',
-                    'a.nombres',
-                    'a.ap',
-                    'a.am',
+                    DB::raw("CONCAT(a.nombres,' ',a.ap,' ',a.am) as nombre_completo"),
                     DB::raw("CONCAT(a.ci,'-',a.expedido) as nro_carnet"),
                     'b.nombre as barrio',
                     'a.sexo',
@@ -209,6 +212,7 @@ class BeneficiariosV2Controller extends Controller
                             ELSE 'DESCONOCIDO'
                         END as status
                     "),
+                    'e.name as usuario',
                     'a.photo',
                     'a.latitud',
                     'a.longitud',
@@ -222,6 +226,9 @@ class BeneficiariosV2Controller extends Controller
                 ->orderBy('a.id','desc');
 
         return datatables()->query($query)
+                            ->filterColumn('nombre_completo', function($query, $keyword) {
+                                $query->whereRaw("CONCAT(a.nombres,' ',a.ap,' ',a.am) like UPPER(?)", ["%{$keyword}%"]);
+                            })
                             ->filterColumn('nro_carnet', function($query, $keyword) {
                                 $query->whereRaw("CONCAT(a.ci, ' - ', a.expedido) like ?", ["%{$keyword}%"]);
                             })
@@ -315,15 +322,17 @@ class BeneficiariosV2Controller extends Controller
                                         ->byTipoSistema(Paquetes::TERCERA_EDAD)
                                         ->byDistrito($request->distrito)
                                         ->byBarrio($request->barrio)
-                                        ->byCodigo($request->codigo)
-                                        ->byNombre($request->nombre)
-                                        ->byApellidoPaterno($request->ap)
-                                        ->byApellidoMaterno($request->am)
+                                        //->byCodigo($request->codigo)
+                                        //->byNombre($request->nombre)
+                                        ->byNombreCompleto($request->nombre_completo)
+                                        //->byApellidoPaterno($request->ap)
+                                        //->byApellidoMaterno($request->am)
                                         ->byNumeroCarnet($request->ci)
                                         ->bySexo($request->sexo)
                                         ->byEdad($request->edad_inicial, $request->edad_final)
                                         ->byOcupacion($request->id_ocupacion)
                                         ->byEstado($request->estado)
+                                        ->byUsuarioTwo($request->usuario)
                                         ->orderBy('id', 'desc')
                                         ->get();
                 /*$contador = $beneficiarios->count();
@@ -936,9 +945,7 @@ class BeneficiariosV2Controller extends Controller
                                     ->byDistrito($request->distrito)
                                     ->byBarrio($request->barrio)
                                     ->byCodigo($request->codigo)
-                                    ->byNombre($request->nombre)
-                                    ->byApellidoPaterno($request->ap)
-                                    ->byApellidoMaterno($request->am)
+                                    ->byNombreCompleto($request->nombre)
                                     ->byNumeroCarnet($request->ci)
                                     ->bySexo($request->sexo)
                                     ->byEdad($request->edad_inicial, $request->edad_final)

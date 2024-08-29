@@ -4,16 +4,15 @@
             <table class="table display table-striped table-bordered responsive hover-orange" style="width:100%;" id="dataTable">
                 <thead>
                     <tr class="font-roboto-11">
-                        <th>DISTRITO</th>
+                        <th>DTTO.</th>
                         <th width="20%">BARRIO</th>
-                        <th>NOMBRE (S)</th>
-                        <th>AP. PATERNO</th>
-                        <th>AP. MATERNO</th>
-                        <th>NRO. CARNET</th>
-                        <th>SEXO</th>
+                        <th>BENEFICIARIO</th>
+                        <th>CARNET-EXP</th>
+                        <th>H/M</th>
                         <th>EDAD</th>
                         <th>OCUPACION</th>
                         <th width="7%">ESTADO</th>
+                        <th>USUARIO</th>
                         <th width="7%"><b>CENSO&nbsp;2024</b></th>
                         <th><i class="fa-solid fa-location-dot fa-lg"></i></th>
                         <th><i class="fa-solid fa-camera-retro fa-lg"></i></th>
@@ -28,16 +27,15 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th>DISTRITO</th>
+                        <th>DTTO.</th>
                         <th>BARRIO</th>
-                        <th>NOMBRE</th>
-                        <th>AP. PATERNO</th>
-                        <th>AP. MATERNO</th>
-                        <th>NRO. CARNET</th>
+                        <th>BENEFICIARIO</th>
+                        <th>CARNET</th>
                         <th>SEXO</th>
                         <th>EDAD</th>
                         <th>OCUPACION</th>
                         <th>ESTADO</th>
+                        <th>USUARIO</th>
                         <th>CENSO2024</th>
                         <th></th>
                         <th></th>
