@@ -3,15 +3,15 @@
     <div class="form-group row font-roboto-12">
         <div class="col-md-4 pr-1 pl-1">
             <label for="nombres" class="d-inline"><b>Nombres</b></label>
-            <input type="text" name="nombres" id="nombres" class="form-control font-roboto-12" onchange="javascript:this.value=this.value.toUpperCase();">
+            <input type="text" name="nombres" value="{{ old('nombres') }}" id="nombres" class="form-control font-roboto-12" onchange="javascript:this.value=this.value.toUpperCase();">
         </div>
         <div class="col-md-3 pr-1 pl-1">
             <label for="ap" class="d-inline"><b>Apellido Paterno</b></label>
-            <input type="text" name="ap" id="ap" class="form-control font-roboto-12" onchange="javascript:this.value=this.value.toUpperCase();">
+            <input type="text" name="ap" value="{{ old('ap') }}" id="ap" class="form-control font-roboto-12" onchange="javascript:this.value=this.value.toUpperCase();">
         </div>
         <div class="col-md-3 pr-1 pl-1">
             <label for="am" class="d-inline"><b>Apellido Materno</b></label>
-            <input type="text" name="am" id="am" class="form-control font-roboto-12" onchange="javascript:this.value=this.value.toUpperCase();">
+            <input type="text" name="am" value="{{ old('am') }}" id="am" class="form-control font-roboto-12" onchange="javascript:this.value=this.value.toUpperCase();">
         </div>
     </div>
     <div class="form-group row font-roboto-12">

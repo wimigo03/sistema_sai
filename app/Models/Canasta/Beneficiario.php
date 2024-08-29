@@ -112,9 +112,8 @@ class Beneficiario extends Model
         '1' => 'MADERA',
         '2' => 'LADRILLO',
         '3' => 'ADOBE',
-        '4' => 'TEJA',
-        '5' => 'CALAMINA',
-        '6' => 'OTRO'
+        '4' => 'CEMENTO',
+        '5' => 'OTRO'
     ];
 
     const SEXOS = [

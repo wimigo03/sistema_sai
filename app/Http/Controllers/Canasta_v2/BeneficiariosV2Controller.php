@@ -359,6 +359,17 @@ class BeneficiariosV2Controller extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'ci' => [
+                'required',
+                Rule::unique('beneficiarios', 'ci')->where(function ($query) use ($request) {
+                    return $query->where('dea_id',Auth::user()->dea->id)
+                                    ->where('id_tipo',Beneficiario::TERCERA_EDAD);
+                }),
+            ]
+        ], [
+            'ci.unique' => 'Numero de Carnet DUPLICADO',
+        ]);
         $personal = User::find(Auth::user()->id);
         $id_usuario = $personal->id;
         $dea_id = $personal->dea_id;
@@ -388,6 +399,7 @@ class BeneficiariosV2Controller extends Controller
         $beneficiario->distrito_id = $barrio->distrito_id;
         $beneficiario->latitud = $request->latitud;
         $beneficiario->longitud = $request->longitud;
+        $beneficiario->censado = '1';
         $beneficiario->save();
         return redirect()->route('beneficiarios.index')->with('success_message', 'datos registrados correctamente...');
     }
@@ -981,7 +993,8 @@ class BeneficiariosV2Controller extends Controller
 
     public function brigadistaIndex()
     {
-        return view('canasta_v2.beneficiario.brigadista.index');
+        $user = User::find(Auth::user()->id);
+        return view('canasta_v2.beneficiario.brigadista.index',compact('user'));
     }
 
     public function brigadistaSearch(Request $request)

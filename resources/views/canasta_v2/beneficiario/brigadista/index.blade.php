@@ -2,7 +2,11 @@
 @extends('layouts.admin')
 @section('content')
     <br>
-    <br>
+    <div class="form-group row abs-center">
+        <div class="col-md-12 pr-1 pl-1 text-center">
+            <b><u>{{ $user->nombre_completo }}</u></b>
+        </div>
+    </div>
     <br>
     <div class="card-header header">
         <div class="row">
