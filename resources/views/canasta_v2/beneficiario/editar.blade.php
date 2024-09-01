@@ -39,17 +39,21 @@
 @section('scripts')
     <script>
         proj4.defs("EPSG:32720", "+proj=utm +zone=20 +south +datum=WGS84 +units=m +no_defs");
-        document.getElementById('barrio').disabled = true;
-        document.getElementById('nombres').disabled = true;
-        document.getElementById('ap').disabled = true;
-        document.getElementById('am').disabled = true;
-        document.getElementById('ci').disabled = true;
-        document.getElementById('expedido').disabled = true;
-        document.getElementById('fnac').disabled = true;
-        document.getElementById('sexo').disabled = true;
-        document.getElementById('check_titular').disabled = true;
-        document.getElementById('seguro_medico').disabled = true;
-        document.getElementById('direccion').disabled = true;
+        var _brigadista = "{{ $brigadista }}";
+        if(_brigadista){
+            document.getElementById('barrio').disabled = true;
+            document.getElementById('estado').disabled = true;
+            document.getElementById('nombres').disabled = true;
+            document.getElementById('ap').disabled = true;
+            document.getElementById('am').disabled = true;
+            document.getElementById('ci').disabled = true;
+            document.getElementById('expedido').disabled = true;
+            document.getElementById('fnac').disabled = true;
+            document.getElementById('sexo').disabled = true;
+            document.getElementById('check_titular').disabled = true;
+            document.getElementById('seguro_medico').disabled = true;
+            document.getElementById('direccion').disabled = true;
+        }
         document.getElementById('latitud').value = "";
         document.getElementById('longitud').value = "";
         document.getElementById('utmy').value = "";
@@ -240,6 +244,7 @@
 
         function confirmar(){
             document.getElementById('barrio').disabled = false;
+            document.getElementById('estado').disabled = false;
             document.getElementById('nombres').disabled = false;
             document.getElementById('ap').disabled = false;
             document.getElementById('am').disabled = false;
@@ -331,21 +336,23 @@
                 Modal("El campo <b>[Observacion]</b> es obligatorio.");
                 return false;
             }
-            if ($("#latitud").val() == "") {
-                Modal("<b>[Algo anda mal con la ubicacion en el mapa]</b>");
-                return false;
-            }
-            if ($("#longitud").val() == "") {
-                Modal("<b>[Algo anda mal con la ubicacion en el mapa]</b>");
-                return false;
-            }
-            if ($("#utmx").val() == "") {
-                Modal("<b>[Algo anda mal con la ubicacion en el mapa]</b>");
-                return false;
-            }
-            if ($("#utmy").val() == "") {
-                Modal("<b>[Algo anda mal con la ubicacion en el mapa]</b>");
-                return false;
+            if(_brigadista){
+                if ($("#latitud").val() == "") {
+                    Modal("<b>[Algo anda mal con la ubicacion en el mapa]</b>");
+                    return false;
+                }
+                if ($("#longitud").val() == "") {
+                    Modal("<b>[Algo anda mal con la ubicacion en el mapa]</b>");
+                    return false;
+                }
+                if ($("#utmx").val() == "") {
+                    Modal("<b>[Algo anda mal con la ubicacion en el mapa]</b>");
+                    return false;
+                }
+                if ($("#utmy").val() == "") {
+                    Modal("<b>[Algo anda mal con la ubicacion en el mapa]</b>");
+                    return false;
+                }
             }
             if ($("#detalle_vivienda").val() == "") {
                 Modal("<b>[Por favor complete la descripcion de la vivienda]</b>");
@@ -367,75 +374,26 @@
                     }
                 }
             }
-            if ($("#_file_documento").val() == "") {
-                if ($("#file").val() == "") {
-                    Modal("<b>[No se encuentra el archivo de imagen del BENEFICIARIO]</b>");
-                    return false;
-                }
-            }
-            /*if ($("#_file_documento").val() != "") {
-                var fileInput = $("#_file_documento")[0].files[0];
-                if (fileInput) {
-                    var allowedTypes = ['image/jpeg', 'image/jpg'];
-                    var maxSizeInBytes = 10 * 1024 * 1024;
-
-                    if (!allowedTypes.includes(fileInput.type)) {
-                        Modal('[BENEFICIARIO] . Formato de archivo no permitido. Por favor, seleccione una imagen JPEG o JPG.');
-                        $("#_file_documento").val('');
-                        return false;
-                    } else if (fileInput.size > maxSizeInBytes) {
-                        Modal('[BENEFICIARIO] . El archivo es demasiado grande. El tamaño máximo permitido es de 10MB.');
-                        $("#_file_documento").val('');
+            if(_brigadista){
+                if ($("#_file_documento").val() == "") {
+                    if ($("#_file_documento").val() == "") {
+                        Modal("<b>[No se encuentra el archivo de imagen del BENEFICIARIO]</b>");
                         return false;
                     }
                 }
-            }*/
-            if ($("#_file_ci_anverso").val() == "") {
-                if ($("#file_ci_anverso").val() == "") {
-                    Modal("<b>[No se encuentra el archivo de imagen de la FOTO CARNET - ANVERSO]</b>");
-                    return false;
-                }
-            }
-            /*if ($("#file_ci_anverso").val() != "") {
-                var fileInput = $("#file_ci_anverso")[0].files[0];
-                if (fileInput) {
-                    var allowedTypes = ['image/jpeg', 'image/jpg'];
-                    var maxSizeInBytes = 10 * 1024 * 1024;
-
-                    if (!allowedTypes.includes(fileInput.type)) {
-                        Modal('[FOTO CARNET - ANVERSO] . Formato de archivo no permitido. Por favor, seleccione una imagen JPEG o JPG.');
-                        $("#file_ci_anverso").val('');
-                        return false;
-                    } else if (fileInput.size > maxSizeInBytes) {
-                        Modal('[FOTO CARNET - ANVERSO] . El archivo es demasiado grande. El tamaño máximo permitido es de 10MB.');
-                        $("#file_ci_anverso").val('');
+                if ($("#_file_ci_anverso").val() == "") {
+                    if ($("#file_ci_anverso").val() == "") {
+                        Modal("<b>[No se encuentra el archivo de imagen de la FOTO CARNET - ANVERSO]</b>");
                         return false;
                     }
                 }
-            }*/
-            if ($("#_file_ci_reverso").val() == "") {
-                if ($("#file_ci_reverso").val() == "") {
-                    Modal("<b>[No se encuentra el archivo de imagen de la FOTO CARNET - REVERSO]</b>");
-                    return false;
-                }
-            }
-            /*if ($("#file_ci_reverso").val() != "") {
-                var fileInput = $("#file_ci_reverso")[0].files[0];
-                if (fileInput) {
-                    var allowedTypes = ['image/jpeg', 'image/jpg'];
-                    var maxSizeInBytes = 10 * 1024 * 1024;
-
-                    if (!allowedTypes.includes(fileInput.type)) {
-                        Modal('[FOTO CARNET - REVERSO] . Formato de archivo no permitido. Por favor, seleccione una imagen JPEG o JPG.');
-                        $("#file_ci_reverso").val('');
-                        return false;
-                    } else if (fileInput.size > maxSizeInBytes) {
-                        Modal('[FOTO CARNET - REVERSO] . El archivo es demasiado grande. El tamaño máximo permitido es de 10MB.');
-                        $("#file_ci_reverso").val('');
+                if ($("#_file_ci_reverso").val() == "") {
+                    if ($("#file_ci_reverso").val() == "") {
+                        Modal("<b>[No se encuentra el archivo de imagen de la FOTO CARNET - REVERSO]</b>");
                         return false;
                     }
                 }
-            }*/
+            }
 
             return true;
         }
@@ -527,67 +485,23 @@
                     }
                 }
             }
-            if ($("#_file_documento").val() == "") {
-                if ($("#file").val() == "") {
-                    return false;
-                }
-            }
-            /*if ($("#file_documento").val() != "") {
-                var fileInput = $("#file")[0].files[0];
-                if (fileInput) {
-                    var allowedTypes = ['image/jpeg', 'image/jpg'];
-                    var maxSizeInBytes = 10 * 1024 * 1024;
-
-                    if (!allowedTypes.includes(fileInput.type)) {
-                        $("#file").val('');
-                        return false;
-                    } else if (fileInput.size > maxSizeInBytes) {
-                        $("#file").val('');
+            if(_brigadista){
+                if ($("#_file_documento").val() == "") {
+                    if ($("#_file_documento").val() == "") {
                         return false;
                     }
                 }
-            }*/
-            if ($("#_file_ci_anverso").val() == "") {
-                if ($("#file_ci_anverso").val() == "") {
-                    return false;
-                }
-            }
-            /*if ($("#file_ci_anverso").val() != "") {
-                var fileInput = $("#file_ci_anverso")[0].files[0];
-                if (fileInput) {
-                    var allowedTypes = ['image/jpeg', 'image/jpg'];
-                    var maxSizeInBytes = 10 * 1024 * 1024;
-
-                    if (!allowedTypes.includes(fileInput.type)) {
-                        $("#file_ci_anverso").val('');
-                        return false;
-                    } else if (fileInput.size > maxSizeInBytes) {
-                        $("#file_ci_anverso").val('');
+                if ($("#_file_ci_anverso").val() == "") {
+                    if ($("#file_ci_anverso").val() == "") {
                         return false;
                     }
                 }
-            }*/
-            if ($("#_file_ci_reverso").val() == "") {
-                if ($("#file_ci_reverso").val() == "") {
-                    return false;
-                }
-            }
-            /*if ($("#file_ci_reverso").val() != "") {
-                var fileInput = $("#file_ci_reverso")[0].files[0];
-                if (fileInput) {
-                    var allowedTypes = ['image/jpeg', 'image/jpg'];
-                    var maxSizeInBytes = 10 * 1024 * 1024;
-
-                    if (!allowedTypes.includes(fileInput.type)) {
-                        $("#file_ci_reverso").val('');
-                        return false;
-                    } else if (fileInput.size > maxSizeInBytes) {
-                        $("#file_ci_reverso").val('');
+                if ($("#_file_ci_reverso").val() == "") {
+                    if ($("#file_ci_reverso").val() == "") {
                         return false;
                     }
                 }
-            }*/
-
+            }
             return true;
         }
 

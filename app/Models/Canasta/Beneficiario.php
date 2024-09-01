@@ -59,7 +59,9 @@ class Beneficiario extends Model
         'censado',
         'titular_seguro_medico',
         'material_vivienda',
-        'informacion'
+        'informacion',
+        'user_censo_id',
+        'fecha_censo'
     ];
 
     const HABILITADO = 'A';
@@ -85,6 +87,9 @@ class Beneficiario extends Model
         'X' => 'PENDIENTE',
         'E' => 'ELIMINADO'
     ];
+
+    const NO_CENSADO = '1';
+    const CENSADO = '2';
 
     const ESTADOS_CENSO = [
         '1' => 'PENDIENTE',
@@ -173,6 +178,10 @@ class Beneficiario extends Model
 
     public function user(){
         return $this->belongsTo(User::class,'user_id','id');
+    }
+
+    public function user_censo(){
+        return $this->belongsTo(User::class,'user_censo_id','id');
     }
 
     public function ocupacion(){
@@ -308,13 +317,19 @@ class Beneficiario extends Model
 
     public function scopeByUsuarioTwo($query, $user_id){
         if($user_id != null){
-            return $query->where('user_id', $user_id);
+            return $query->where('user_censo_id', $user_id);
         }
     }
 
     public function scopeByEstadoBrigadista($query, $estados){
         if($estados != null){
             return $query->whereIn('estado',$estados);
+        }
+    }
+
+    public function scopeByEstadoCenso($query, $estado_censo){
+        if($estado_censo != null){
+            return $query->where('censado',$estado_censo);
         }
     }
 

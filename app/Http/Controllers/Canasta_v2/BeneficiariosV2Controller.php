@@ -170,9 +170,8 @@ class BeneficiariosV2Controller extends Controller
                     ->join('barrios as b','b.id','a.id_barrio')
                     ->join('distritos as c','c.id','a.distrito_id')
                     ->join('ocupaciones as d','d.id','a.id_ocupacion')
-                    ->join('users as e','e.id','a.user_id')
+                    ->leftjoin('users as e','e.id','a.user_censo_id')
                     ->where('a.id_tipo',Paquetes::TERCERA_EDAD);
-                    //->where('a.estado', Beneficiario::HABILITADO);
 
         $query = !is_null($request->id_distrito) ? $query->where('a.distrito_id',$request->id_distrito) : $query;
         $query = !is_null($request->id_barrio) ? $query->where('a.id_barrio',$request->id_barrio) : $query;
@@ -189,7 +188,7 @@ class BeneficiariosV2Controller extends Controller
         }
         $query = !is_null($request->id_ocupacion) ? $query->where('a.id_ocupacion',$request->id_ocupacion) : $query;
         $query = !is_null($request->estado) ? $query->where('a.estado',$request->estado) : $query;
-        $query = !is_null($request->usuario) ? $query->where('a.user_id',$request->usuario) : $query;
+        $query = !is_null($request->usuario) ? $query->where('a.user_censo_id',$request->usuario) : $query;
         $query = !is_null($request->estado_censo) ? $query->where('a.censado',$request->estado_censo) : $query;
 
         $query->select(
@@ -222,8 +221,8 @@ class BeneficiariosV2Controller extends Controller
                             ELSE 'CENSADO'
                         END as censo_2024
                     "),
-                )
-                ->orderBy('a.id','desc');
+        );
+                //->orderBy('a.id','desc');
 
         return datatables()->query($query)
                             ->filterColumn('nombre_completo', function($query, $keyword) {
@@ -333,6 +332,7 @@ class BeneficiariosV2Controller extends Controller
                                         ->byOcupacion($request->id_ocupacion)
                                         ->byEstado($request->estado)
                                         ->byUsuarioTwo($request->usuario)
+                                        ->byEstadoCenso($request->estado_censo)
                                         ->orderBy('id', 'desc')
                                         ->get();
                 /*$contador = $beneficiarios->count();
@@ -351,10 +351,15 @@ class BeneficiariosV2Controller extends Controller
 
     public function create()
     {
+        $brigadista = false;
         $barrios = Barrio::where('dea_id',Auth::user()->dea->id)->get();
-        $ocupaciones = Ocupaciones::where('estado',1)->get();
+        $profesiones = Ocupaciones::where('tipo',Ocupaciones::PROFESIONES)->where('estado','1')->get();
+        $ocupaciones = Ocupaciones::where('tipo',Ocupaciones::OCUPACIONES)->where('estado','1')->get();
+        $tipos_viviendas = Beneficiario::TIPOS_VIVIENDAS;
+        $materiales_viviendas = Beneficiario::MATERIALES_VIVIENDAS;
+        $_seguros = Beneficiario::_SEGUROS;
 
-        return view('canasta_v2.beneficiario.create',compact('barrios','ocupaciones'));
+        return view('canasta_v2.beneficiario.create',compact('barrios','profesiones','ocupaciones','tipos_viviendas','materiales_viviendas','_seguros','brigadista'));
     }
 
     public function store(Request $request)
@@ -370,48 +375,77 @@ class BeneficiariosV2Controller extends Controller
         ], [
             'ci.unique' => 'Numero de Carnet DUPLICADO',
         ]);
-        $personal = User::find(Auth::user()->id);
-        $id_usuario = $personal->id;
-        $dea_id = $personal->dea_id;
-        $newestUser = Beneficiario::orderBy('id', 'desc')->first();
-        $maxId = $newestUser->id;
 
+        $fecha_nacimiento = $request->fnac != null ? date('Y-m-d', strtotime(str_replace('/', '-', $request->fnac))) : null;
         $barrio = Barrio::select('distrito_id')->where('id',$request->barrio)->first();
-        $beneficiario = new Beneficiario();
-        $beneficiario->id = $maxId + 1;
-        $beneficiario->nombres = $request->nombres;
-        $beneficiario->ap = $request->ap;
-        $beneficiario->am = $request->am;
-        $beneficiario->fecha_nac = date('Y-m-d', strtotime(str_replace('/', '-', $request->fnac)));
-        $beneficiario->estado_civil = $request->estado_civil;
-        $beneficiario->sexo = $request->sexo;
-        $beneficiario->direccion = $request->direccion;
-        $beneficiario->firma = $request->firma;
-        $beneficiario->obs = $request->observacion;
-        $beneficiario->estado = $request->estado;
-        $beneficiario->id_barrio = $request->barrio;
-        $beneficiario->user_id = $id_usuario;
-        $beneficiario->dea_id = $dea_id;
-        $beneficiario->ci = $request->ci;
-        $beneficiario->id_tipo = Paquetes::TERCERA_EDAD;
-        $beneficiario->expedido = $request->expedido;
-        $beneficiario->id_ocupacion = $request->ocupacion;
-        $beneficiario->distrito_id = $barrio->distrito_id;
-        $beneficiario->latitud = $request->latitud;
-        $beneficiario->longitud = $request->longitud;
-        $beneficiario->censado = '1';
-        $beneficiario->save();
+        $seguro_medico = null;
+        $informacion = '1';
+        $titular_seguro_medico = '1';
+        if(isset($request->check_seguro_medico)){
+            $seguro_medico = $request->seguro_medico;
+            if(isset($request->check_titular)){
+                $titular_seguro_medico = '2';
+            }
+        }
+        if(isset($request->informacion)){
+            $informacion = '2';
+        }
+        $beneficiario = Beneficiario::create([
+            'nombres' => $request->nombres,
+            'ap' => $request->ap,
+            'am' => $request->am,
+            'fecha_nac' => $fecha_nacimiento,
+            'estado_civil' => $request->estado_civil,
+            'sexo' => $request->sexo,
+            'direccion' => $request->direccion,
+            'firma' => $request->firma,
+            'estado' => $request->estado,
+            'obs' => $request->observacion,
+            'id_barrio' => $request->barrio,
+            'user_id' => Auth::user()->id,
+            'dea_id' => Auth::user()->dea->id,
+            'ci' => $request->ci,
+            'expedido' => $request->expedido,
+            'id_ocupacion' => $request->ocupacion,
+            'distrito_id' => $barrio->distrito_id,
+            'id_tipo' => Beneficiario::TERCERA_EDAD,
+            'celular' => $request->celular,
+            'latitud' => $request->latitud,
+            'longitud' => $request->longitud,
+            'utmy' => $request->utmy,
+            'utmx' => $request->utmx,
+            'profesion_id' => $request->profesion,
+            'seguro_medico' => $seguro_medico,
+            'detalle_vivienda' => $request->detalle_vivienda,
+            'tipo_vivienda' => $request->tipo_vivienda,
+            'vecino_1' => $request->vecino_1,
+            'vecino_2' => $request->vecino_2,
+            'vecino_3' => $request->vecino_3,
+            'censado' => Beneficiario::NO_CENSADO,
+            'titular_seguro_medico' => $titular_seguro_medico,
+            'material_vivienda' => $request->material_vivienda,
+            'informacion' => $informacion
+        ]);
+
+        $Historial = HistorialMod::create([
+            'observacion' => $request->observacion,
+            'id_beneficiario' => $beneficiario->id,
+            'user_id' => Auth::user()->id,
+            'dea_id' => Auth::user()->dea->id,
+            'fecha' => date('Y-m-d')
+        ]);
+
         return redirect()->route('beneficiarios.index')->with('success_message', 'datos registrados correctamente...');
     }
 
 
     public function editar($idbeneficiario)
     {
-        $censador = false;
+        $brigadista = false;
         if(count(Auth::user()->roles) == 1){
             foreach(Auth::user()->roles as $role){
                 if($role->id == 29){
-                    $censador = true;
+                    $brigadista = true;
                 }
             }
         }
@@ -424,7 +458,7 @@ class BeneficiariosV2Controller extends Controller
         $_seguros = Beneficiario::_SEGUROS;
         $beneficiario = Beneficiario::find($idbeneficiario);
 
-        return view('canasta_v2.beneficiario.editar',compact('censador','barrios','profesiones','ocupaciones','tipos_viviendas','materiales_viviendas','_seguros','beneficiario'));
+        return view('canasta_v2.beneficiario.editar',compact('brigadista','barrios','profesiones','ocupaciones','tipos_viviendas','materiales_viviendas','_seguros','beneficiario'));
     }
 
     public function show($idbeneficiario)
@@ -679,17 +713,30 @@ class BeneficiariosV2Controller extends Controller
     }
 
     public function update(Request $request)
-    {//dd($request->all());
-        $censador = false;
+    {
+        $request->validate([
+            'ci' => [
+                'required',
+                Rule::unique('beneficiarios', 'ci')->where(function ($query) use ($request) {
+                    return $query->where('dea_id',Auth::user()->dea->id)
+                                    ->where('id_tipo',Beneficiario::TERCERA_EDAD)
+                                    ->where('id','!=',$request->idBeneficiario);
+                }),
+            ]
+        ], [
+            'ci.unique' => 'Numero de Carnet DUPLICADO',
+        ]);
+
+        $brigadista = false;
         if(count(Auth::user()->roles) == 1){
             foreach(Auth::user()->roles as $role){
                 if($role->id == 29){
-                    $censador = true;
+                    $brigadista = true;
                 }
             }
         }
 
-        if($censador == true){
+        if($brigadista == true){
             $beneficiario = Beneficiario::find($request->idBeneficiario);
             if($beneficiario->censado == '2'){
                 return redirect()->route('beneficiarios.brigadista.index')->with('error_message', 'El beneficiario ya fue ACTUALIZADO');
@@ -744,182 +791,6 @@ class BeneficiariosV2Controller extends Controller
             'informacion' => $informacion
         ]);
 
-        if($beneficiario->id_tipo == Beneficiario::TERCERA_EDAD){
-            /*if(isset($request->documento)){
-                $file_documento = $request->file("documento");
-                $size = $file_documento->getSize() / 1048576;
-                $round_size = round($size, 2);
-
-                $file_documento_name = time() . "." . $file_documento->guessExtension();
-                $ruta_documento = "/imagenes/fotos/" . $file_documento_name;
-                $_ruta_documento = public_path($ruta_documento);
-                if($round_size > 0.5 ){
-                    $img = Image::make($file_documento);
-                    $img->resize(750, null, function ($constraint) {
-                        $constraint->aspectRatio();
-                        $constraint->upsize();
-                    });
-
-                    $file_documento = $img;
-                    $file_documento->save($_ruta_documento);
-                }else{
-                    copy($file_documento, $_ruta_documento);
-                }
-
-                $beneficiario->update([
-                    'dir_foto' => '..' . $ruta_documento,
-                    'photo' => $file_documento_name
-                ]);
-
-                $img_25 = Image::make(substr($beneficiario->dir_foto,3));
-                $img_25->resize(25, 25);
-                $img_25->save(public_path('imagenes/fotos-25px/' . $file_documento_name));
-
-                $img_30 = Image::make(substr($beneficiario->dir_foto,3));
-                $img_30->resize(30, 30);
-                $img_30->save(public_path('imagenes/fotos-30px/' . $file_documento_name));
-
-                $img_80 = Image::make(substr($beneficiario->dir_foto,3));
-                $img_80->resize(80, 80);
-                $img_80->save(public_path('imagenes/fotos-80px/' . $file_documento_name));
-
-                $img_150 = Image::make(substr($beneficiario->dir_foto,3));
-                $img_150->resize(150, 150);
-                $img_150->save(public_path('imagenes/fotos-150px/' . $file_documento_name));
-            }
-
-            if(isset($request->file_ci_anverso)){
-                $file_ci_anverso = $request->file("file_ci_anverso");
-                $size = $file_ci_anverso->getSize() / 1048576;
-                $round_size = round($size, 2);
-
-                $file_ci_anverso_name = "a_" . time() . "." . $file_ci_anverso->guessExtension();
-                $ruta_file_ci_anverso = "/imagenes/fotos/cedulas/" . $file_ci_anverso_name;
-                $_ruta_file_ci_anverso = public_path($ruta_file_ci_anverso);
-                if($round_size > 0.5 ){
-                    $img = Image::make($file_ci_anverso);
-                    $img->resize(750, null, function ($constraint) {
-                        $constraint->aspectRatio();
-                        $constraint->upsize();
-                    });
-
-                    $file_ci_anverso = $img;
-                    $file_ci_anverso->save($_ruta_file_ci_anverso);
-                }else{
-                    copy($file_ci_anverso, $_ruta_file_ci_anverso);
-                }
-
-                $beneficiario->update([
-                    'file_ci_anverso' => $ruta_file_ci_anverso
-                ]);
-            }
-
-            if(isset($request->file_ci_reverso)){
-                $file_ci_reverso = $request->file("file_ci_reverso");
-                $size = $file_ci_reverso->getSize() / 1048576;
-                $round_size = round($size, 2);
-
-                $file_ci_reverso_name = "r_" . time() . "." . $file_ci_reverso->guessExtension();
-                $ruta_file_ci_reverso = "/imagenes/fotos/cedulas/" . $file_ci_reverso_name;
-                $_ruta_file_ci_reverso = public_path($ruta_file_ci_reverso);
-                if($round_size > 0.5 ){
-                    $img = Image::make($file_ci_reverso);
-                    $img->resize(750, null, function ($constraint) {
-                        $constraint->aspectRatio();
-                        $constraint->upsize();
-                    });
-
-                    $file_ci_reverso = $img;
-                    $file_ci_reverso->save($_ruta_file_ci_reverso);
-                }else{
-                    copy($file_ci_reverso, $_ruta_file_ci_reverso);
-                }
-
-                $beneficiario->update([
-                    'file_ci_reverso' => $ruta_file_ci_reverso
-                ]);
-            }*/
-        }else{
-            /*if(isset($request->documento)){
-                $file_documento = $request->file("documento");
-                $size = $file_documento->getSize() / 1048576;
-                $round_size = round($size, 2);
-
-                $file_documento_name = time() . "." . $file_documento->guessExtension();
-                $ruta_documento = "/imagenes/fotosdisc/" . $file_documento_name;
-                $_ruta_documento = public_path($ruta_documento);
-                if($round_size > 0.5 ){
-                    $img = Image::make($file_documento);
-                    $img->resize(750, null, function ($constraint) {
-                        $constraint->aspectRatio();
-                        $constraint->upsize();
-                    });
-
-                    $file_documento = $img;
-                    $file_documento->save($_ruta_documento);
-                }else{
-                    copy($file_documento, $_ruta_documento);
-                }
-
-                $beneficiario->update([
-                    'dir_foto' => '..' . $ruta_documento,
-                    'photo' => $file_documento_name
-                ]);
-            }
-
-            if(isset($request->file_ci_anverso)){
-                $file_ci_anverso = $request->file("file_ci_anverso");
-                $size = $file_ci_anverso->getSize() / 1048576;
-                $round_size = round($size, 2);
-
-                $file_ci_anverso_name = "a_" . time() . "." . $file_ci_anverso->guessExtension();
-                $ruta_file_ci_anverso = "/imagenes/fotosdisc/cedulas/" . $file_ci_anverso_name;
-                $_ruta_file_ci_anverso = public_path($ruta_file_ci_anverso);
-                if($round_size > 0.5 ){
-                    $img = Image::make($file_ci_anverso);
-                    $img->resize(750, null, function ($constraint) {
-                        $constraint->aspectRatio();
-                        $constraint->upsize();
-                    });
-
-                    $file_ci_anverso = $img;
-                    $file_ci_anverso->save($_ruta_file_ci_anverso);
-                }else{
-                    copy($file_ci_anverso, $_ruta_file_ci_anverso);
-                }
-
-                $beneficiario->update([
-                    'file_ci_anverso' => $ruta_file_ci_anverso
-                ]);
-            }
-
-            if(isset($request->file_ci_reverso)){
-                $file_ci_reverso = $request->file("file_ci_reverso");
-                $size = $file_ci_reverso->getSize() / 1048576;
-                $round_size = round($size, 2);
-
-                $file_ci_reverso_name = "r_" . time() . "." . $file_ci_reverso->guessExtension();
-                $ruta_file_ci_reverso = "/imagenes/fotosdisc/cedulas/" . $file_ci_reverso_name;
-                $_ruta_file_ci_reverso = public_path($ruta_file_ci_reverso);
-                if($round_size > 0.5 ){
-                    $img = Image::make($file_ci_reverso);
-                    $img->resize(750, null, function ($constraint) {
-                        $constraint->aspectRatio();
-                        $constraint->upsize();
-                    });
-
-                    $file_ci_reverso = $img;
-                    $file_ci_reverso->save($_ruta_file_ci_reverso);
-                }else{
-                    copy($file_ci_reverso, $_ruta_file_ci_reverso);
-                }
-
-                $beneficiario->update([
-                    'file_ci_reverso' => $ruta_file_ci_reverso
-                ]);
-            }*/
-        }
-
         $Historial = HistorialMod::create([
             'observacion' => $request->observacion,
             'id_beneficiario' => $request->idBeneficiario,
@@ -928,11 +799,13 @@ class BeneficiariosV2Controller extends Controller
             'fecha' => date('Y-m-d')
         ]);
 
-        if($censador == true){
+        if($brigadista == true){
             $beneficiario = Beneficiario::find($request->idBeneficiario);
             if($beneficiario->censado == '1'){
                 $beneficiario->update([
-                    'censado' => '2'
+                    'censado' => '2',
+                    'user_censo_id' => Auth::user()->id,
+                    'fecha_censo' => date('Y-m-d H:i:s')
                 ]);
             }
         }
@@ -956,13 +829,15 @@ class BeneficiariosV2Controller extends Controller
                                     ->byTipoSistema(Paquetes::TERCERA_EDAD)
                                     ->byDistrito($request->distrito)
                                     ->byBarrio($request->barrio)
-                                    ->byCodigo($request->codigo)
-                                    ->byNombreCompleto($request->nombre)
+                                    //->byCodigo($request->codigo)
+                                    ->byNombreCompleto($request->nombre_completo)
                                     ->byNumeroCarnet($request->ci)
                                     ->bySexo($request->sexo)
                                     ->byEdad($request->edad_inicial, $request->edad_final)
                                     ->byOcupacion($request->id_ocupacion)
                                     ->byEstado($request->estado)
+                                    ->byUsuarioTwo($request->usuario)
+                                    ->byEstadoCenso($request->estado_censo)
                                     ->orderBy('distrito_id')
                                     ->orderBy('id_barrio')
                                     ->get();

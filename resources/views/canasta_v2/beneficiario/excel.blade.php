@@ -18,7 +18,8 @@
             <td align="center"><b>CELULAR</b></td>
             <td align="center"><b>ESTADO</b></td>
             <td align="center"><b>USUARIO</b></td>
-            <td align="center"><b>¿CENSADO?</b></td>
+            <td align="center"><b>¿ACTUALIZADO?</b></td>
+            <td align="center"><b>FECHA</b></td>
             <td align="center"><b>Y</b></td>
             <td align="center"><b>X</b></td>
             <td align="center"><b>ANV.</b></td>
@@ -48,13 +49,18 @@
                 <td>{{ $datos->direccion }}</td>
                 <td align="center">{{ $datos->celular }}</td>
                 <td align="center">{{ $datos->status }}</td>
-                <td align="center">{{ strtoupper($datos->user->name) }}</td>
+                <td align="center">{{ $datos->user_censo != null ? strtoupper($datos->user_censo->name) : '-' }}</td>
                 <td align="center">{{ $datos->censado == '1' ? 'NO' : 'SI' }}</td>
+                <td align="center">{{ $datos->fecha_censo != null ? \Carbon\Carbon::parse($datos->fecha_censo)->format('d/m/Y') : '' }}</td>
                 <td align="center">{{ $datos->utmy }}</td>
                 <td align="center">{{ $datos->utmx }}</td>
                 <td align="center">{{ $datos->file_ci_anverso != null ? 'SI' : 'NO' }}</td>
                 <td align="center">{{ $datos->file_ci_reverso != null ? 'SI' : 'NO' }}</td>
-                <td align="center">{{ $datos->informacion == '2' ? 'SI' : 'NO' }}</td>
+                @if ($datos->informacion != null)
+                    <td align="center">{{ $datos->informacion == '2' ? 'SI' : 'NO' }}</td>
+                @else
+                    <td align="center"></td>
+                @endif
             </tr>
         @endforeach
     </tbody>

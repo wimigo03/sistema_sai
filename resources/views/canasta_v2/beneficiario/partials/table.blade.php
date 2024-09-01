@@ -4,6 +4,7 @@
             <table class="table display table-striped table-bordered responsive hover-orange" style="width:100%;" id="dataTable">
                 <thead>
                     <tr class="font-roboto-11">
+                        <th></th>
                         <th>DTTO.</th>
                         <th width="20%">BARRIO</th>
                         <th>BENEFICIARIO</th>
@@ -27,6 +28,7 @@
                 </tbody>
                 <tfoot>
                     <tr>
+                        <th></th>
                         <th>DTTO.</th>
                         <th>BARRIO</th>
                         <th>BENEFICIARIO</th>

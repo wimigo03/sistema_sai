@@ -156,6 +156,12 @@
                 },
                 columns: [
                     {
+                        data: 'beneficiario_id',
+                        name: 'a.id',
+                        visible: false,
+                        searchable: false
+                    },
+                    {
                         data: 'distrito',
                         name: 'c.nombre',
                         class: 'text-center p-1 font-roboto-10'
@@ -280,6 +286,7 @@
                             }
                         });
                 },
+                order: [[0, 'desc']],
                 language: datatableLanguageConfig
             });
         }
