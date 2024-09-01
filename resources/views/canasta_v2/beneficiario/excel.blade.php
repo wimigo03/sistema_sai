@@ -49,7 +49,7 @@
                 <td>{{ $datos->direccion }}</td>
                 <td align="center">{{ $datos->celular }}</td>
                 <td align="center">{{ $datos->status }}</td>
-                <td align="center">{{ $datos->user_censo != null ? strtoupper($datos->user_censo->name) : '-' }}</td>
+                <td align="center">{{ $datos->user_censo != null ? strtoupper($datos->user_censo->nombre_completo) : '-' }}</td>
                 <td align="center">{{ $datos->censado == '1' ? 'NO' : 'SI' }}</td>
                 <td align="center">{{ $datos->fecha_censo != null ? \Carbon\Carbon::parse($datos->fecha_censo)->format('d/m/Y') : '' }}</td>
                 <td align="center">{{ $datos->utmy }}</td>

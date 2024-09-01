@@ -104,6 +104,7 @@ class Beneficiario extends Model
         '5' => 'CAJA DE LA BANCA PRIVADA',
         '6' => 'CAJA PETROLERA',
         '7' => 'CAJA DE CAMINOS',
+        '8' => 'SUS',
     ];
 
     const TIPOS_VIVIENDAS = [

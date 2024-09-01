@@ -320,7 +320,7 @@
         <div class="card-body bg-white">
             <div class="form-group row font-roboto-12">
                 <div class="col-md-12 pr-1 pl-1">
-                    <textarea name="observacion" id="observacion" class="form-control font-roboto-12" onchange="javascript:this.value=this.value.toUpperCase();">{{ isset($beneficiario) ? $beneficiario->obs : old('observacion') }}</textarea>
+                    <textarea name="observacion" id="observacion" class="form-control font-roboto-12" onchange="javascript:this.value=this.value.toUpperCase();">{{ isset($beneficiario) ? 'ACTUALIZACION DE DATOS' : old('observacion') }}</textarea>
                 </div>
             </div>
         </div>

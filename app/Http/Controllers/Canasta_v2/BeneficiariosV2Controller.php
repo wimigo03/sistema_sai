@@ -334,7 +334,7 @@ class BeneficiariosV2Controller extends Controller
                                         ->byUsuarioTwo($request->usuario)
                                         ->byEstadoCenso($request->estado_censo)
                                         ->orderBy('id', 'desc')
-                                        ->get();
+                                        ->get();dd(count($beneficiarios));
                 /*$contador = $beneficiarios->count();
                 if($contador >= 5000){
                     return redirect()->route('beneficiarios.index')->with('info_message', 'Los datos de la consulta exceden el limite permitido. Por favor comunicarse con el area de sistemas para resolver esta situacion');

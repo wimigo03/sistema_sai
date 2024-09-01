@@ -302,13 +302,13 @@
             window.location.reload();
         }
 
-        function _excel(){
+        function excel(){
             var url = "{{ route('beneficiarios.excel') }}";
             $("#form").attr('action', url);
             $("#form").submit();
         }
 
-        function excel() {
+        function _excel() {
             var url = "{{ route('beneficiarios.excel') }}";
             $(".btn").hide();
             $(".spinner-btn-send").show();
