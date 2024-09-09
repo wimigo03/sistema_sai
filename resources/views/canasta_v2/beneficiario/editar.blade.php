@@ -38,6 +38,10 @@
 @endsection
 @section('scripts')
     <script>
+        var _estado = "{{ $beneficiario->estado }}";
+        if(_estado === 'F' || _estado == 'E'){
+            document.getElementById('estado').disabled = true;
+        }
         proj4.defs("EPSG:32720", "+proj=utm +zone=20 +south +datum=WGS84 +units=m +no_defs");
         var _brigadista = "{{ $brigadista }}";
         if(_brigadista){
@@ -265,10 +269,6 @@
                 Modal("<b>[Por favor seleccionar un Barrio]</b>");
                 return false;
             }
-            /*if ($("#estado>option:selected").val() == "") {
-                Modal("El campo <b>[Estado]</b> es obligatorio.");
-                return false;
-            }*/
             if ($("#nombres").val() == "") {
                 Modal("El campo <b>[NOMBRES]</b> es obligatorio.");
                 return false;
@@ -353,28 +353,26 @@
                     Modal("<b>[Algo anda mal con la ubicacion en el mapa]</b>");
                     return false;
                 }
-            }
-            if ($("#detalle_vivienda").val() == "") {
-                Modal("<b>[Por favor complete la descripcion de la vivienda]</b>");
-                return false;
-            }
-            if ($("#tipo_vivienda >option:selected").val() == "") {
-                Modal("<b>[Por favor seleccione un Tipo de Vivienda]</b>");
-                return false;
-            }
-            if ($("#material_vivienda >option:selected").val() == "") {
-                Modal("<b>[Por favor seleccione un Material de Vivienda]</b>");
-                return false;
-            }
-            if ($("#vecino_1").val() == "") {
-                if ($("#vecino_2").val() == "") {
-                    if ($("#vecino_3").val() == "") {
-                        Modal("<b>[Por favor complete los datos de los vecinos que identifican al beneficiario]</b>");
-                        return false;
+                if ($("#detalle_vivienda").val() == "") {
+                    Modal("<b>[Por favor complete la descripcion de la vivienda]</b>");
+                    return false;
+                }
+                if ($("#tipo_vivienda >option:selected").val() == "") {
+                    Modal("<b>[Por favor seleccione un Tipo de Vivienda]</b>");
+                    return false;
+                }
+                if ($("#material_vivienda >option:selected").val() == "") {
+                    Modal("<b>[Por favor seleccione un Material de Vivienda]</b>");
+                    return false;
+                }
+                if ($("#vecino_1").val() == "") {
+                    if ($("#vecino_2").val() == "") {
+                        if ($("#vecino_3").val() == "") {
+                            Modal("<b>[Por favor complete los datos de los vecinos que identifican al beneficiario]</b>");
+                            return false;
+                        }
                     }
                 }
-            }
-            if(_brigadista){
                 if ($("#_file_documento").val() == "") {
                     if ($("#_file_documento").val() == "") {
                         Modal("<b>[No se encuentra el archivo de imagen del BENEFICIARIO]</b>");
@@ -402,9 +400,6 @@
             if ($("#barrio >option:selected").val() == "") {
                 return false;
             }
-            /*if ($("#estado>option:selected").val() == "") {
-                return false;
-            }*/
             if ($("#nombres").val() == "") {
                 return false;
             }
@@ -457,35 +452,35 @@
             if ($("#observacion").val() == "") {
                 return false;
             }
-            if ($("#latitud").val() == "") {
-                return false;
-            }
-            if ($("#longitud").val() == "") {
-                return false;
-            }
-            if ($("#utmx").val() == "") {
-                return false;
-            }
-            if ($("#utmy").val() == "") {
-                return false;
-            }
-            if ($("#detalle_vivienda").val() == "") {
-                return false;
-            }
-            if ($("#tipo_vivienda >option:selected").val() == "") {
-                return false;
-            }
-            if ($("#material_vivienda >option:selected").val() == "") {
-                return false;
-            }
-            if ($("#vecino_1").val() == "") {
-                if ($("#vecino_2").val() == "") {
-                    if ($("#vecino_3").val() == "") {
-                        return false;
+            if(_brigadista){
+                if ($("#latitud").val() == "") {
+                    return false;
+                }
+                if ($("#longitud").val() == "") {
+                    return false;
+                }
+                if ($("#utmx").val() == "") {
+                    return false;
+                }
+                if ($("#utmy").val() == "") {
+                    return false;
+                }
+                if ($("#detalle_vivienda").val() == "") {
+                    return false;
+                }
+                if ($("#tipo_vivienda >option:selected").val() == "") {
+                    return false;
+                }
+                if ($("#material_vivienda >option:selected").val() == "") {
+                    return false;
+                }
+                if ($("#vecino_1").val() == "") {
+                    if ($("#vecino_2").val() == "") {
+                        if ($("#vecino_3").val() == "") {
+                            return false;
+                        }
                     }
                 }
-            }
-            if(_brigadista){
                 if ($("#_file_documento").val() == "") {
                     if ($("#_file_documento").val() == "") {
                         return false;

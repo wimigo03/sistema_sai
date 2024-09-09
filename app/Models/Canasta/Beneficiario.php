@@ -162,6 +162,36 @@ class Beneficiario extends Model
         }
     }
 
+    public function getSegurosMedicosAttribute(){
+        switch ($this->seguro_medico) {
+            case '1':
+                return "CAJA NACIONAL DE SALUD";
+            case '2':
+                return "CAJA BANCA ESTATAL";
+            case '3':
+                    return "CAJA CORDES";
+            case '4':
+                    return "COORPORACION DEL SEGURO SOCIAL MILITAR";
+            case '5':
+                return "CAJA DE LA BANCA PRIVADA";
+            case '6':
+                return "CAJA PETROLERA";
+            case '7':
+                return "CAJA DE CAMINOS";
+            case '8':
+                return "SUS";
+        }
+    }
+
+    public function getTitularSeguroAttribute(){
+        switch ($this->titular_seguro_medico) {
+            case '1':
+                return "NO";
+            case '2':
+                return "SI";
+        }
+    }
+
     public function getcolorStatusAttribute(){
         switch ($this->estado) {
             case 'A':

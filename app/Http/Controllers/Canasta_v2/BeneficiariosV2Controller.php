@@ -444,7 +444,7 @@ class BeneficiariosV2Controller extends Controller
         $brigadista = false;
         if(count(Auth::user()->roles) == 1){
             foreach(Auth::user()->roles as $role){
-                if($role->id == 29){
+                if($role->id == 29 || $role->id == 31){
                     $brigadista = true;
                 }
             }
@@ -730,7 +730,7 @@ class BeneficiariosV2Controller extends Controller
         $brigadista = false;
         if(count(Auth::user()->roles) == 1){
             foreach(Auth::user()->roles as $role){
-                if($role->id == 29){
+                if($role->id == 29 || $role->id == 31){
                     $brigadista = true;
                 }
             }
@@ -768,6 +768,7 @@ class BeneficiariosV2Controller extends Controller
             'direccion' => $request->direccion,
             'firma' => $request->firma,
             'obs' => $request->observacion,
+            'estado' => $request->estado,
             'id_barrio' => $request->barrio,
             'user_id' => Auth::user()->id,
             'ci' => $request->ci,

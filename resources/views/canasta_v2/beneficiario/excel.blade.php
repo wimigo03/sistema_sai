@@ -25,6 +25,8 @@
             <td align="center"><b>ANV.</b></td>
             <td align="center"><b>REV.</b></td>
             <td align="center"><b>¿SE NEGO A DAR INFORMACION?</b></td>
+            <td align="center"><b>SEGURO MEDICO</b></td>
+             <td align="center"><b>¿ES TITULAR?</b></td>
         </tr>
     </thead>
     <tbody>
@@ -61,6 +63,8 @@
                 @else
                     <td align="center"></td>
                 @endif
+                <td align="center">{{ $datos->seguros_medicos }}</td>
+                <td align="center">{{ $datos->seguro_medico != null ? $datos->titular_seguro : '' }}</td>
             </tr>
         @endforeach
     </tbody>
