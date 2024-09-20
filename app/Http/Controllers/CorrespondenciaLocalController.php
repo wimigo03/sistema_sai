@@ -3,6 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use DB;
+use PDF;
+use Carbon\Carbon;
+use DataTables;
+
 use App\Models\User;
 use App\Models\Empleado;
 use App\Models\RecepcionModel;
@@ -15,13 +25,7 @@ use App\Models\ArchivoCorrespModel;
 use App\Models\DerivCorrespModel;
 use App\Models\InstruccionvModel;
 use App\Models\AnioModel;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Requests;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use DB;
-use Carbon\Carbon;
-use DataTables;
+use App\Exportar\RecepcionVentanillaExcel;
 
 class CorrespondenciaLocalController extends Controller
 {
@@ -45,33 +49,116 @@ class CorrespondenciaLocalController extends Controller
         dd("Generar Qr Finalizado...");
     }
 
-    public function index(Request $request)
+    public function index()
     {
         //if(Auth::user()->id == 102){
             //$this->generar_qr_general();
         //}
-        if ($request->ajax()) {
-            $data = DB::table('recepcion as r')
-                        ->join('remitente as re', 're.id_remitente', 'r.id_remitente')
-                        ->join('unidad as u', 'u.id_unidad', 're.id_unidad')
-                        ->select('r.estado_corresp',
-                                    'r.id_recepcion',
-                                    'r.asunto',
-                                    'r.fecha_recepcion',
-                                    'r.n_oficio',
-                                    'r.observaciones',
-                                    're.nombres_remitente',
-                                    're.apellidos_remitente',
-                                    'u.nombre_unidad')
-                        ->orderBy('r.id_recepcion', 'desc');
 
-            return Datatables::of($data)->addIndexColumn()
-                                        ->addColumn('btn', 'correspondencia-local.btn')
-                                        ->rawColumns(['btn'])
-                                        ->make(true);
-        }
 
         return view('correspondencia-local.index');
+    }
+
+    public function indexAjax(Request $request)
+    {
+        $query = DB::table('recepcion as r')
+                    ->join('remitente as re', 're.id_remitente', 'r.id_remitente')
+                    ->join('unidad as u', 'u.id_unidad', 're.id_unidad');
+
+        $query = !is_null($request->nombre_completo) ? $query->whereRaw("CONCAT(re.nombres_remitente, ' ', re.apellidos_remitente) LIKE ?", ["%{$request->nombre_completo}%"]) : $query;
+        $query = !is_null($request->unidad) ? $query->where('u.nombre_unidad', 'like','%' . $request->unidad . '%') : $query;
+        $query = !is_null($request->asunto) ? $query->where('r.asunto', 'like','%' . $request->asunto . '%') : $query;
+        if(!is_null($request->fecha_i)){
+            $formattedKeyword =  Carbon::createFromFormat('d/m/Y', $request->fecha_i)->format('Y-m-d');
+            $query = $query->whereDate('r.fecha_recepcion', '>=', $formattedKeyword);
+        }
+        if(!is_null($request->fecha_f)){
+            $formattedKeyword =  Carbon::createFromFormat('d/m/Y', $request->fecha_f)->format('Y-m-d');
+            $query = $query->whereDate('r.fecha_recepcion', '<=', $formattedKeyword);
+        }
+        $query = !is_null($request->codigo) ? $query->where('r.n_oficio','like',$request->codigo . '%') : $query;
+
+        $query->select(
+            'r.estado_corresp',
+            'r.id_recepcion',
+            'r.asunto',
+            'r.fecha_recepcion',
+            DB::raw("TO_CHAR(r.fecha_recepcion, 'dd/mm/yyyy') as _fecha_recepcion"),
+            'r.n_oficio',
+            'r.observaciones',
+            DB::raw("CONCAT(re.nombres_remitente, ' ', re.apellidos_remitente) AS remitente_completo"),
+            'u.nombre_unidad'
+        );
+
+        return datatables()
+            ->query($query)
+            ->filterColumn('r.fecha_recepcion', function($query, $keyword) {
+                $sql = "TO_CHAR(r.fecha_recepcion, 'dd/mm/yyyy') like ?";
+                $query->whereRaw($sql, ["%{$keyword}%"]);
+            })
+            ->filterColumn('remitente_completo', function($query, $keyword) {
+                $sql = "UPPER(CONCAT(re.nombres_remitente, ' ', re.apellidos_remitente)) like UPPER(?)";
+                $query->whereRaw($sql, ["%{$keyword}%"]);
+            })
+            ->addColumn('btn','correspondencia-local.btn')
+            ->rawColumns(['btn'])
+            ->toJson();
+    }
+
+    public function excel(Request $request)
+    {
+        try {
+            ini_set('memory_limit','-1');
+            ini_set('max_execution_time','-1');
+
+                $recepciones = Recepcion2Model::query()
+                                //->byDea(Auth::user()->dea->id)
+                                ->byNombreCompleto($request->nombre_completo)
+                                ->byUnidad($request->unidad)
+                                ->byAsunto($request->asunto)
+                                ->byEntreFechas($request->fecha_i, $request->fecha_f)
+                                ->byCodigo($request->codigo)
+                                ->orderBy('fecha_recepcion','desc')
+                                ->orderBy('n_oficio','asc')
+                                ->get();
+
+                return Excel::download(new RecepcionVentanillaExcel($recepciones),'RecepcionVentanilla.xlsx');
+        } catch (\Throwable $th) {
+            return view('errors.500');
+        }finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
+    }
+
+    public function pdf(Request $request)
+    {
+        try {
+            ini_set('memory_limit','-1');
+            ini_set('max_execution_time','-1');
+
+                $recepciones = Recepcion2Model::query()
+                                //->byDea(Auth::user()->dea->id)
+                                ->byNombreCompleto($request->nombre_completo)
+                                ->byUnidad($request->unidad)
+                                ->byAsunto($request->asunto)
+                                ->byEntreFechas($request->fecha_i, $request->fecha_f)
+                                ->byCodigo($request->codigo)
+                                ->orderBy('fecha_recepcion','desc')
+                                ->orderBy('n_oficio','asc')
+                                ->get();
+                $cont = 1;
+                $username = User::find(Auth::user()->id);
+                $username = $username != null ? $username->nombre_completo : $username->name;
+                $pdf = PDF::loadView('correspondencia-local.pdf',compact('recepciones','cont','username'));
+                $pdf->setPaper('LETTER', 'portrait');
+                return $pdf->stream();
+        } catch (\Throwable $th) {
+            return view('errors.500');
+        }finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
     }
 
     public function create()

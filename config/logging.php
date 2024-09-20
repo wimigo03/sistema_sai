@@ -159,6 +159,12 @@ return [
             'path' => storage_path('logs/recursos_humanos.log'),
             'level' => 'debug',
         ],
+
+        'mantenimientos' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/mantenimientos.log'),
+            'level' => 'debug',
+        ],
     ],
 
 ];

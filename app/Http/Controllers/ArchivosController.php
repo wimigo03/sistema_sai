@@ -45,7 +45,7 @@ class ArchivosController extends Controller
         dd("Generar Qr Finalizado...");
     }
 
-    public function index(Request $request)
+    public function index()
     {
         //if(Auth::user()->id == 102){
             //$this->generar_qr_general();
@@ -61,35 +61,57 @@ class ArchivosController extends Controller
                     ->where('a.dea_id',Auth::user()->dea->id)
                     ->pluck('tipo','id');
 
-        if ($request->ajax()) {
-            $data = DB::table('archivos as a')
-                            ->join('areas as ar', 'ar.idarea', 'a.idarea')
-                            ->join('tipoarchivo as t', 'a.idtipo', 't.idtipo')
-                            ->select(
-                                'a.idarchivo',
-                                'a.referencia',
-                                'a.fecha',
-                                'a.gestion',
-                                'a.nombrearchivo',
-                                'a.documento',
-                                'ar.idarea',
-                                't.nombretipo'
-                            )
-                            ->where('ar.idarea', $contratos->idarea_asignada)
-                            ->where('a.dea_id',$dea_id)
-                            ->orderBy('a.fecha', 'desc');
-
-            return Datatables::of($data)
-                                ->addIndexColumn()
-                                ->addColumn('btn', 'archivos.btn')
-                                ->rawColumns(['btn'])
-                                ->make(true);
-        }
-
         return view('archivos.index', compact('personal','tipos'));
     }
 
-    public function search(Request $request)
+    public function indexAjax(Request $request)
+    {
+        $contratos = EmpleadoContrato::select('idarea_asignada')
+                    ->where('idemp',Auth::user()->idemp)
+                    ->orderBy('id','desc')
+                    ->take(1)
+                    ->first();
+
+        $query = DB::table('archivos as a')
+                    ->join('areas as ar', 'ar.idarea', 'a.idarea')
+                    ->join('tipoarchivo as t', 'a.idtipo', 't.idtipo')
+                    ->where('ar.idarea', $contratos->idarea_asignada)
+                    ->where('a.dea_id',Auth::user()->dea->id);
+
+        $query = !is_null($request->gestion) ? $query->where('a.gestion',$request->gestion) : $query;
+        if(!is_null($request->fecha)){
+            $formattedKeyword =  Carbon::createFromFormat('d/m/Y', $request->fecha)->format('Y-m-d');
+            $query = $query->whereDate('a.fecha',$formattedKeyword);
+        }
+        $query = !is_null($request->nro_documento) ? $query->where('a.nombrearchivo',$request->nro_documento) : $query;
+        $query = !is_null($request->referencia) ? $query->where('a.referencia', 'like','%' . $request->referencia . '%') : $query;
+        $query = !is_null($request->tipo_id) ? $query->where('a.idtipo',$request->tipo_id) : $query;
+
+
+        $query->select(
+                        'a.idarchivo',
+                        'a.referencia',
+                        'a.fecha',
+                        DB::raw("TO_CHAR(a.fecha, 'dd/mm/yyyy') as fecha_c"),
+                        'a.gestion',
+                        'a.nombrearchivo',
+                        'a.documento',
+                        'ar.idarea',
+                        't.nombretipo'
+        );
+
+        return datatables()
+            ->query($query)
+            ->filterColumn('a.fecha', function($query, $keyword) {
+                $sql = "TO_CHAR(a.fecha, 'dd/mm/yyyy') like ?";
+                $query->whereRaw($sql, ["%{$keyword}%"]);
+            })
+            ->addColumn('btn','archivos.btn')
+            ->rawColumns(['btn'])
+            ->toJson();
+    }
+
+    /* public function search(Request $request)
     {
         $dea_id = Auth::user()->dea->id;
         $contratos = EmpleadoContrato::select('idarea_asignada')->where('idemp',Auth::user()->idemp)->orderBy('id','desc')->take(1)->first();
@@ -117,7 +139,7 @@ class ArchivosController extends Controller
         $cont = 1;
 
         return view('archivos.index', compact('archivos','personal','tipos','cont'));
-    }
+    } */
 
     public function excel(Request $request)
     {
@@ -139,7 +161,7 @@ class ArchivosController extends Controller
 
                 $cont = 1;
 
-                return Excel::download(new ArchivosExcel($archivos, $cont),'archivos.xlsx');
+                return Excel::download(new ArchivosExcel($archivos, $cont),'archivos_locales.xlsx');
         } catch (\Throwable $th) {
             return view('errors.500');
         }finally{
@@ -155,38 +177,6 @@ class ArchivosController extends Controller
         $userdate = User::find($id)->usuariosempleados;
         $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
         return view('archivos.index-full', ['idd' => $personalArea]);
-    }
-
-    public function index_ajax(Request $request)
-    {
-        $dea_id = Auth::user()->dea->id;
-        $personal = User::find(Auth::user()->id);
-        $id = $personal->id;
-        $userdate = User::find($id)->usuariosempleados;
-        $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
-        $data = DB::table('archivos as a')
-                    ->join('areas as ar', 'ar.idarea', 'a.idarea')
-                    ->join('tipoarchivo as t', 'a.idtipo', 't.idtipo')
-                    ->select(
-                        'a.idarchivo',
-                        'a.referencia',
-                        'a.fecha',
-                        'a.gestion',
-                        'a.created_at',
-                        'a.nombrearchivo',
-                        'a.documento',
-                        'ar.nombrearea',
-                        'ar.idarea',
-                        't.nombretipo'
-                    )
-                    ->where('a.dea_id',$dea_id)
-                    ->orderBy('a.gestion', 'desc');
-
-        return DataTables::of($data)
-                        ->addIndexColumn()
-                        ->addColumn('btn', 'archivos.btn')
-                        ->rawColumns(['btn'])
-                        ->make(true);
     }
 
     public function create()

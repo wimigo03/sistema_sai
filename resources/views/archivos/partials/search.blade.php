@@ -1,27 +1,25 @@
 <form action="#" method="get" id="form">
     <div class="form-group row">
-        <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="gestion" placeholder="-- gestion --" value="{{ request('gestion') }}" class="form-control font-roboto-12 intro" onkeypress="return valideNumberSinDecimal(event);">
+        <div class="col-md-2 mb-2 pr-1 pl-1">
+            <input type="text" name="gestion" id="gestion" placeholder="-- gestion --" value="{{ request('gestion') }}" class="form-control font-roboto-12 intro" onkeypress="return valideNumberSinDecimal(event);">
         </div>
-        <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="fecha" placeholder="-- Fecha --" id="fecha" value="{{ request('fecha') }}" class="form-control font-verdana-12 intro" data-language="es">
+        <div class="col-md-2 mb-2 pr-1 pl-1">
+            <input type="text" name="fecha" id="fecha" placeholder="-- Fecha --" value="{{ request('fecha') }}" class="form-control font-roboto-12 intro" data-language="es">
         </div>
-        <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="nro_documento" placeholder="-- Nro_documento --" value="{{ request('nro_documento') }}" class="form-control font-roboto-12 intro" onkeypress="return valideNumberSinDecimal(event);">
+        <div class="col-md-2 mb-2 pr-1 pl-1">
+            <input type="text" name="nro_documento" id="nro_documento" placeholder="-- Nro_documento --" value="{{ request('nro_documento') }}" class="form-control font-roboto-12 intro uppercase">
         </div>
-        <div class="col-md-3 pr-1 pl-1">
-            <input type="text" name="referencia" placeholder="-- Referencia --" value="{{ request('referencia') }}" class="form-control font-roboto-12 intro" onkeypress="return valideNumberSinDecimal(event);">
+        <div class="col-md-6 mb-2 pr-1 pl-1">
+            <input type="text" name="referencia" id="referencia" placeholder="-- Referencia --" value="{{ request('referencia') }}" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase()">
         </div>
-        <div class="col-md-3 pr-1 pl-1">
-            <select name="tipo_id"  id="tipo_id" class="form-control font-roboto-12">
+        <div class="col-md-5 mb-2 pr-1 pl-1">
+            <select name="tipo_id" id="tipo_id" class="form-control font-roboto-12">
                 <option value="">-</option>
                 @foreach ($tipos as $index => $value)
                     <option value="{{ $index }}" @if(request('tipo_id') == $index) selected @endif >{{ $value }}</option>
                 @endforeach
             </select>
         </div>
-    </div>
-    <div class="form-group row">
         <div class="col-md-12 pr-1 pl-1">
             @can('archivos.create')
                 <span class="tts:right tts-slideIn tts-custom root mr-1" aria-label="Registrar" style="cursor: pointer;">

@@ -78,7 +78,7 @@
     <script src="{{ asset('dataTable/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('dataTable/js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('dataTable/js/datatable-language.js') }}"></script>
-    <script src="{{ asset('dashboard/js/select2.min.js') }}"></script>
+    <script src="{{ asset('dashboard/js/select2.min.js') }}"></script>{{--X--}}
     <script src="{{ asset('dashboard/js/popper.min.js') }}"></script>
     <script src="{{ asset('dashboard/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('dashboard/js/main.js') }}"></script>

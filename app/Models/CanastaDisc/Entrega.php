@@ -18,7 +18,7 @@ class Entrega extends Model
         'id_barrio',
         'id_beneficiario',
         'id_paquete',
-        'tipo_entrega_id',
+        'id_tipo',
         'id_ocupacion',
         'distrito_id',
         'dea_id',

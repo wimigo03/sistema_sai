@@ -2,6 +2,9 @@
 
 Route::prefix('correspondencia-local')->name('correspondencia.local.')->middleware(['auth'])->group(function () {
     Route::get('/', 'CorrespondenciaLocalController@index')->name('index')->middleware('can:correspondencia_local.index');
+    Route::get('/indexAjax', 'CorrespondenciaLocalController@indexAjax')->name('index.ajax')->middleware('can:correspondencia_local.index');
+    Route::get('/excel','CorrespondenciaLocalController@excel')->name('excel')->middleware('can:correspondencia_local.index');
+    Route::get('/pdf','CorrespondenciaLocalController@pdf')->name('pdf')->middleware('can:correspondencia_local.index');
     Route::get('createRecepcion', 'CorrespondenciaLocalController@createRecepcion')->name('crear')->middleware('can:correspondencia_local.crear');
     Route::get('buscarRemitentes', 'CorrespondenciaLocalController@buscarRemitentes')->name('remitente.buscar.crear')->middleware('can:correspondencia_local.crear');
     Route::post('storeRecepcion', 'CorrespondenciaLocalController@storeRecepcion')->name('guardar')->middleware('can:correspondencia_local.crear');

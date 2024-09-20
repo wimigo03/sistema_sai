@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class UnidadModel extends Model
 {
     protected $table = 'unidad';
-    protected $primaryKey= 'id_unidad';
+    protected $primaryKey = 'id_unidad';
     public $timestamps = false;
 
     protected $fillable = [
