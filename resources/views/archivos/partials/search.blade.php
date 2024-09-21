@@ -22,7 +22,7 @@
         </div>
         <div class="col-md-12 pr-1 pl-1">
             @can('archivos.create')
-                <span class="tts:right tts-slideIn tts-custom root mr-1" aria-label="Registrar" style="cursor: pointer;">
+                <span class="tts:right tts-slideIn tts-custom root" aria-label="Registrar" style="cursor: pointer;">
                     <span class="btn btn-outline-success font-roboto-12" onclick="create();">
                         <i class="fa fa-plus fa-fw"></i>
                     </span>
@@ -30,6 +30,11 @@
                 <span class="tts:right tts-slideIn tts-custom root" aria-label="Exportar a Excel" style="cursor: pointer;">
                     <span class="btn btn-outline-success font-roboto-12" onclick="excel();">
                         <i class="fa fa-file-excel fa-fw"></i>
+                    </span>
+                </span>
+                <span class="tts:right tts-slideIn tts-custom root" aria-label="Exportar a Pdf" style="cursor: pointer;">
+                    <span class="btn btn-outline-danger font-roboto-12" onclick="pdf();">
+                        <i class="fa fa-file-pdf fa-fw"></i>
                     </span>
                 </span>
             @endcan

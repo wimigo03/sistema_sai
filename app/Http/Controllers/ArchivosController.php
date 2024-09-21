@@ -6,9 +6,12 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests;
 use DB;
+use PDF;
 use Carbon\Carbon;
 use DataTables;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Maatwebsite\Excel\Facades\Excel;
+
 use App\Models\User;
 use App\Models\Empleado;
 use Illuminate\Http\Request;
@@ -20,7 +23,6 @@ use App\Models\Archivo;
 use App\Models\TipoArchivo;
 use App\Models\AnioModel;
 use App\Models\Area;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Exportar\ArchivosExcel;
 
 
@@ -162,6 +164,41 @@ class ArchivosController extends Controller
                 $cont = 1;
 
                 return Excel::download(new ArchivosExcel($archivos, $cont),'archivos_locales.xlsx');
+        } catch (\Throwable $th) {
+            return view('errors.500');
+        }finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
+    }
+
+    public function pdf(Request $request)
+    {
+        try {
+            ini_set('memory_limit','-1');
+            ini_set('max_execution_time','-1');
+
+                $archivos = Archivo::query()
+                                ->byDea(Auth::user()->dea->id)
+                                ->byArea(Auth::user()->area_asignada_id)
+                                ->byGestion($request->gestion)
+                                ->byFecha($request->fecha)
+                                ->byNumero($request->nro_documento)
+                                ->byReferencia($request->referencia)
+                                ->byTipo($request->tipo_id)
+                                ->orderBy('fecha','desc')
+                                ->orderBy('nombrearchivo','asc')
+                                ->orderBy('idtipo','asc')
+                                ->get();
+
+                $cont = 1;
+                $username = User::find(Auth::user()->id);
+                $area = Area::find($username->area_asignada_id);
+                $username = $username != null ? $username->nombre_completo : $username->name;
+                $pdf = PDF::loadView('archivos.pdf',compact('archivos','cont','username','area'));
+                $pdf->setPaper('LETTER', 'portrait');
+                return $pdf->stream();
+
         } catch (\Throwable $th) {
             return view('errors.500');
         }finally{

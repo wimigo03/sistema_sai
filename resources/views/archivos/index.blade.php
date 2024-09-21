@@ -132,6 +132,13 @@
             $("#form").submit();
         }
 
+        function pdf(){
+            var url = "{{ route('archivos.pdf') }}";
+            $("#form").attr('action', url);
+            $("#form").attr('target', '_blank');
+            $("#form").submit();
+        }
+
         function limpiar(){
             window.location.href = "{{ route('archivos.index') }}";
         }

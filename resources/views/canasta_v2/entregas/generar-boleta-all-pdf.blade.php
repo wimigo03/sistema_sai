@@ -85,15 +85,18 @@
                         </td>
                         <td rowspan="3" width="25%" class="align-center align-middle linea-derecha linea-inferior" style="padding: 2px;">
                             @php
-                                //$imagePath = substr($array_entrega[$cont]->beneficiario->dir_foto, 3);
-                                $imagePath = 'imagenes/fotos-150px/' . $array_entrega[$cont]->beneficiario->photo;
-                                $imageData = '';
-                                if (file_exists($imagePath)) {
-                                    $imageData = $imagePath;
-                                } else {
-                                    $defaultImagePath = 'logos/d3.jpg';
-                                    if (file_exists($defaultImagePath)) {
-                                        $imageData = $defaultImagePath;
+                                $imageData = 'logos/d3.jpg';
+                                if($array_entrega[$cont]->beneficiario->photo != null){
+                                    //$imagePath = substr($array_entrega[$cont]->beneficiario->dir_foto, 3);
+                                    $imagePath = 'imagenes/fotos-150px/' . $array_entrega[$cont]->beneficiario->photo;
+                                    $imageData = '';
+                                    if (file_exists($imagePath)) {
+                                        $imageData = $imagePath;
+                                    } else {
+                                        $defaultImagePath = 'logos/d3.jpg';
+                                        if (file_exists($defaultImagePath)) {
+                                            $imageData = $defaultImagePath;
+                                        }
                                     }
                                 }
                             @endphp
