@@ -166,7 +166,6 @@ class BeneficiariosV2Controller extends Controller
 
     public function indexAjax(Request $request)
     {
-        Log::info($request->all());
         $query = DB::table('beneficiarios as a')
                     ->join('barrios as b','b.id','a.id_barrio')
                     ->join('distritos as c','c.id','a.distrito_id')
