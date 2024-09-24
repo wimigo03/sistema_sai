@@ -1,5 +1,14 @@
 <!DOCTYPE html>
 @extends('layouts.admin')
+{{-- <style>
+    tfoot {
+        display: table-row-group;
+    }
+
+    thead {
+        display: table-header-group ;
+    }
+</style> --}}
 @section('content')
     <div class="card-header header">
         <div class="row">
@@ -127,6 +136,20 @@
         }
 
         function CargarDataTables(){
+            console.log({
+                id_distrito: $("#id_distrito").val(),
+                id_barrio: $("#_id_barrio").val(),
+                nombre_completo: $("#nombre_completo").val(),
+                ci: $("#ci").val(),
+                sexo: $("#sexo").val(),
+                edad_inicial: $("#edad_inicial").val(),
+                edad_final: $("#edad_final").val(),
+                id_ocupacion: $("#id_ocupacion").val(),
+                estado: $("#estado").val(),
+                usuario: $("#usuario").val(),
+                estado_censo: $("#estado_censo").val(),
+            });
+
             if ( $.fn.DataTable.isDataTable( table ) ) {
                 table.DataTable().destroy();
             }

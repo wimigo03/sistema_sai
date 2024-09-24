@@ -45,9 +45,33 @@ class EmpleadoController extends Controller
         dd("completar_contratos finalizado...");
     }
 
+    public function retirar_contratos_terminados()
+    {
+        $empleados = Empleado::get();
+        foreach($empleados as $empleado){
+            $contratos = EmpleadoContrato::where('idemp',$empleado->idemp)->get();
+            foreach($contratos as $contrato){
+                if($contrato->fecha_conclusion_contrato != null){
+                    if($contrato->fecha_conclusion_contrato > date('Y-m-d')){
+                        $contrato = EmpleadoContrato::find($contrato->id);
+                        $contrato->update([
+                            'estado' => '2'
+                        ]);
+                    }
+                }
+            }
+        }
+
+        dd("retirar_contratos_terminados Finalizado...");
+    }
+
     public function index()
     {
-        //$this->completar_contratos();
+        //if(Auth::user()->id == 102){
+            //$this->completar_contratos();
+            //$this->retirar_contratos_terminados();
+        //}
+
         $dea_id = Auth::user()->dea->id;
         $areas = Area::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
         $cargos = File::where('dea_id',$dea_id)->pluck('nombrecargo','idfile');
@@ -57,8 +81,8 @@ class EmpleadoController extends Controller
         $tipos = EmpleadoContrato::TIPOS;
         $empleados = Empleado::query()
                                 ->leftJoin('empleados_contratos', function($join) {
-                                    $join->on('empleados.idemp', '=', 'empleados_contratos.idemp')
-                                        ->where('empleados_contratos.id', '=', function($query) {
+                                    $join->on('empleados.idemp','empleados_contratos.idemp')
+                                        ->where('empleados_contratos.id', function($query) {
                                             $query->select('id')
                                                 ->from('empleados_contratos')
                                                 ->whereColumn('empleados_contratos.idemp', 'empleados.idemp')
