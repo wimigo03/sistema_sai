@@ -3,6 +3,10 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
+
+use App\Models\Empleado;
+use App\Models\EmpleadoContrato;
 
 class RetirarPersonalContrato extends Command
 {
@@ -14,11 +18,50 @@ class RetirarPersonalContrato extends Command
         parent::__construct();
     }
 
-    // Lógica del comando
     public function handle()
     {
-        // Aquí va la tarea que deseas ejecutar
-        \Log::info('El comando cron personalizado ha sido ejecutado.');
-        $this->info('Comando ejecutado correctamente.');
+        try{
+            ini_set('memory_limit','-1');
+            ini_set('max_execution_time','-1');
+
+            $contratos = EmpleadoContrato::where('tipo','2')
+                                            ->where('estado','1')
+                                            ->where('fecha_conclusion_contrato','!=',null)
+                                            ->get();
+            foreach($contratos as $contrato){
+                if(date('Y-m-d') > $contrato->fecha_conclusion_contrato){
+                    $contrato = EmpleadoContrato::find($contrato->id);
+                    $contrato->update([
+                        'fecha_retiro' => date('Y-m-d'),
+                        'estado' => '2',
+                        'user_id' => 102,
+                        'obs_retiro' => 'PROCESO DE RETIRO AUTOMATICO'
+                    ]);
+                }
+
+                $_contratos = EmpleadoContrato::where('idemp',$contrato->idemp)
+                                                ->where('tipo','2')
+                                                ->where('estado','1')
+                                                ->get()
+                                                ->count();
+                if($_contratos == 0){
+                    $_empleado = Empleado::find($contrato->idemp);
+                    $_empleado->update([
+                        'estado' => '2'
+                    ]);
+                }
+            }
+
+            \Log::info('El comando RETIRAR PERSONAL CONTRATO se ejecuto correctamente.');
+            $this->info('Comando ejecutado correctamente.');
+        } catch (\Exception $e) {
+            \Log::error('Error al ejecutar el comando RETIRAR PERSONAL CONTRATO: ' . $e->getMessage(), [
+                'exception' => $e
+            ]);
+            $this->error('Hubo un error al ejecutar el comando.');
+        }finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
     }
 }

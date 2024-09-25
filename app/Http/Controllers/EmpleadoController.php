@@ -47,30 +47,71 @@ class EmpleadoController extends Controller
 
     public function retirar_contratos_terminados()
     {
-        $empleados = Empleado::get();
-        foreach($empleados as $empleado){
-            $contratos = EmpleadoContrato::where('idemp',$empleado->idemp)->get();
+        try{
+            ini_set('memory_limit','-1');
+            ini_set('max_execution_time','-1');
+
+            $contratos = EmpleadoContrato::where('tipo','2')
+                                            ->where('estado','1')
+                                            ->where('fecha_conclusion_contrato','!=',null)
+                                            ->get();
             foreach($contratos as $contrato){
-                if($contrato->fecha_conclusion_contrato != null){
-                    if($contrato->fecha_conclusion_contrato > date('Y-m-d')){
-                        $contrato = EmpleadoContrato::find($contrato->id);
-                        $contrato->update([
-                            'estado' => '2'
-                        ]);
-                    }
+                if(date('Y-m-d') > $contrato->fecha_conclusion_contrato){
+                    $contrato = EmpleadoContrato::find($contrato->id);
+                    $contrato->update([
+                        'fecha_retiro' => date('Y-m-d'),
+                        'estado' => '2',
+                        'user_id' => 102,
+                        'obs_retiro' => 'PROCESO DE RETIRO AUTOMATICO'
+                    ]);
+                }
+
+                $_contratos = EmpleadoContrato::where('idemp',$contrato->idemp)
+                                                ->where('tipo','2')
+                                                ->where('estado','1')
+                                                ->get()
+                                                ->count();
+                if($_contratos == 0){
+                    $_empleado = Empleado::find($contrato->idemp);
+                    $_empleado->update([
+                        'estado' => '2'
+                    ]);
                 }
             }
+
+        } catch (\Exception $e) {
+            \Log::error('Error al ejecutar el comando RETIRAR PERSONAL CONTRATO: ' . $e->getMessage(), [
+                'exception' => $e
+            ]);
+        }finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
         }
 
         dd("retirar_contratos_terminados Finalizado...");
     }
 
+    public function arreglar_moco()
+    {
+        $contratos = EmpleadoContrato::where('estado','2')->get();
+        foreach($contratos as $contrato){
+            $contrato = EmpleadoContrato::find($contrato->id);
+            $contrato->update([
+                'fecha_retiro' => null,
+                'user_id' => null,
+                'obs_retiro' => null
+            ]);
+        }
+        dd("final");
+    }
+
     public function index()
     {
-        //if(Auth::user()->id == 102){
+        if(Auth::user()->id == 102){
             //$this->completar_contratos();
             //$this->retirar_contratos_terminados();
-        //}
+            //$this->arreglar_moco();
+        }
 
         $dea_id = Auth::user()->dea->id;
         $areas = Area::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
@@ -90,10 +131,11 @@ class EmpleadoController extends Controller
                                                 ->limit(1);
                                         });
                                 })
-                                ->ByDea($dea_id)
-                                ->where('empleados.estado','1')
+                                ->where('empleados_contratos.estado','1')
                                 ->orderBy('empleados_contratos.tipo','desc')
                                 ->orderBy('empleados_contratos.fecha_conclusion_contrato', 'asc')
+                                ->ByDea($dea_id)
+                                ->ByEstado(1)
                                 ->paginate(10);
         return view('empleados.index', compact('dea_id','areas','cargos','escalas_salariales','estados','sexos','tipos','empleados'));
     }
@@ -108,6 +150,17 @@ class EmpleadoController extends Controller
         $sexos = Empleado::SEXOS;
         $tipos = EmpleadoContrato::TIPOS;
         $empleados = Empleado::query()
+                                ->leftJoin('empleados_contratos', function($join) {
+                                    $join->on('empleados.idemp','empleados_contratos.idemp')
+                                        ->where('empleados_contratos.id', function($query) {
+                                            $query->select('id')
+                                                ->from('empleados_contratos')
+                                                ->whereColumn('empleados_contratos.idemp', 'empleados.idemp')
+                                                ->orderBy('id', 'desc')
+                                                ->limit(1);
+                                        });
+                                })
+                                ->where('empleados_contratos.estado','1')
                                 ->ByDea($dea_id)
                                 ->ByArea($request->area_id)
                                 ->ByAreaAsignada($request->area_asignada_id)
@@ -123,8 +176,10 @@ class EmpleadoController extends Controller
                                 ->ByEntreFechaConclusion($request->fecha_conclusion_inicio, $request->fecha_conclusion_final)
                                 ->ByEstado($request->estado)
                                 ->BySexo($request->sexo)
-                                ->orderBy('idemp','desc')
-                                ->paginate(10);
+                                ->orderBy('empleados_contratos.tipo','desc')
+                                ->orderBy('empleados_contratos.fecha_conclusion_contrato', 'asc')
+                                ->paginate(50);
+
         return view('empleados.index', compact('dea_id','areas','cargos','escalas_salariales','estados','sexos','tipos','empleados'));
     }
 

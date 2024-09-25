@@ -49,6 +49,12 @@ class EmpleadoContrato extends Model
         'escala_salarial_id'
     ];
 
+    const PLANTA = 1;
+    const CONTRATO = 2;
+
+    const HABILITADO = 1;
+    const RETIRADO = 2;
+
     const TIPOS = [
         '1' => 'PLANTA',
         '2' => 'CONTRATO'
@@ -90,6 +96,46 @@ class EmpleadoContrato extends Model
         }
     }
 
+    public function getAreaAsignadaAttribute(){
+        $area = Area::where('idarea',$this->idarea_asignada)->first();
+        if($area != null){
+            return $area->nombrearea;
+        }
+    }
+
+    public function getAreaAsignadaCortaAttribute(){
+        $area = Area::where('idarea',$this->idarea_asignada)->first();
+        if($area != null){
+            $longitud = strlen($area->nombrearea);
+            if($longitud > 20){
+                $area_abreviada = mb_substr($area->nombrearea, 0, 20, 'UTF-8') . '...';
+            }else{
+                $area_abreviada = $area->nombrearea;
+            }
+            return $area_abreviada;
+        }
+    }
+
+    public function getFileCargoAttribute(){
+        $cargo = File::where('idfile',$this->idfile)->first();
+        if($cargo){
+            return $cargo->nombrecargo;
+        }
+    }
+
+    public function getFileCargoCortoAttribute(){
+        $cargo = File::where('idfile',$this->idfile)->first();
+        if($cargo != null){
+            $longitud = strlen($cargo->nombrecargo);
+            if($longitud > 20){
+                $cargo_abreviado = mb_substr($cargo->nombrecargo, 0, 20, 'UTF-8') . '...';
+            }else{
+                $cargo_abreviado = $cargo->nombrecargo;
+            }
+            return $cargo_abreviado;
+        }
+    }
+
     public function file()
     {
         return $this->belongsTo(File::class, 'idfile','idfile');
@@ -121,8 +167,20 @@ class EmpleadoContrato extends Model
     }
 
     public function scopeByDea($query, $dea_id){
-        if($dea_id){
+        if($dea_id != null){
             return $query->where('dea_id', $dea_id);
+        }
+    }
+
+    public function scopeByEstado($query, $estado){
+        if($estado != null){
+            return $query->where('estado', $estado);
+        }
+    }
+
+    public function scopeByTipo($query, $tipo){
+        if($tipo != null){
+            return $query->where('tipo', $tipo);
         }
     }
 }

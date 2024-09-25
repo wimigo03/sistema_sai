@@ -32,7 +32,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('tarea:retirar-personal-contrato')->everyMinute();
+        $schedule->command('tarea:retirar-personal-contrato')->dailyAt('01:00');
     }
 
     /**

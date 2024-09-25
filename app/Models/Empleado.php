@@ -379,7 +379,7 @@ class Empleado extends Model
     public function scopeByTipo($query, $tipo){
         if ($tipo) {
                 return $query
-                    ->whereIn('idemp', function ($subquery) use($tipo) {
+                    ->whereIn('empleados.idemp', function ($subquery) use($tipo) {
                         $subquery->select('idemp')
                             ->from('empleados_contratos')
                             ->where('tipo', $tipo);
@@ -439,7 +439,7 @@ class Empleado extends Model
 
     public function scopeByEstado($query, $estado){
         if($estado){
-            return $query->where('estado', $estado);
+            return $query->where('empleados.estado', $estado);
         }
     }
 
