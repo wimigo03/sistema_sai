@@ -7,20 +7,17 @@
                         <th class="text-left p-1">_ID_</th>
                     @endif
                     <th class="text-left p-1">AREA - UNIDAD</th> --}}
-                    <th class="text-left p-1">AREA ASIGNADA</th>
-                    <th class="text-left p-1">CARGO</th>
-                    {{-- <th class="text-left p-1">ESCALA</th> --}}
-                    <th class="text-left p-1">NOMBRE COMPLETO</th>
-                    {{-- <th class="text-left p-1">AP. PAT.</th>
-                    <th class="text-left p-1">AP. MAT.</th> --}}
-                    <th class="text-center p-1">N°&nbsp;CARNET</th>
-                    <th class="text-center p-1">M/F</th>
-                    <th class="text-center p-1">P/C</th>
-                    <th class="text-center p-1">INGRESO</th>
-                    <th class="text-center p-1">RETIRO&nbsp;/&nbsp;C.C.</th>
-                    <th class="text-center p-1">HAB.</th>
+                    <th class="text-left p-1" style="width:10%; word-wrap: break-word;">AREA ASIGNADA</th>
+                    <th class="text-left p-1" style="width:10%; word-wrap: break-word;">CARGO</th>
+                    <th class="text-left p-1" style="width:25%; word-wrap: break-word;">NOMBRE COMPLETO</th>
+                    <th class="text-center p-1" style="width:10%; word-wrap: break-word;">N°&nbsp;CARNET</th>
+                    <th class="text-center p-1" style="width:5%; word-wrap: break-word;">M/F</th>
+                    <th class="text-center p-1" style="width:5%; word-wrap: break-word;">P/C</th>
+                    <th class="text-center p-1" style="width:8%; word-wrap: break-word;">INGRESO</th>
+                    <th class="text-center p-1" style="width:10%; word-wrap: break-word;">RETIRO&nbsp;/&nbsp;C.C.</th>
+                    <th class="text-center p-1" style="width:5%; word-wrap: break-word;">ESTADO</th>
                     @canany(['empleados.show','empleados.editar'])
-                        <th class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></th>
+                        <th class="text-center p-1" style="width:12%; word-wrap: break-word;"><i class="fa fa-bars" aria-hidden="true"></i></th>
                     @endcanany
                 </tr>
             </thead>
@@ -47,7 +44,6 @@
                                 {{ $datos->file_cargo_corto }}
                             </span>
                         </td>
-                        {{-- <td class="text-left p-1">{{ $datos->escala_salarial_file }}</td> --}}
                         <td class="text-left p-1">{{ $datos->nombres . ' ' . $datos->ap_pat . ' ' . $datos->ap_mat }}</td>
                         <td class="text-center p-1">{{ $datos->ci .' ' . $datos->extension }}</td>
                         <td class="text-center p-1">{{ $datos->sexos }}</td>
@@ -55,13 +51,15 @@
                         <td class="text-center p-1">{{ $datos->ultimo_contrato_ingreso != null ? \Carbon\Carbon::parse($datos->ultimo_contrato_ingreso)->format('d/m/Y') : '' }}</td>
                         @php
                             $parpadear = '';
-                            if($datos->fecha_conclusion_contrato != null){
-                                $fecha_inicial = strtotime($datos->fecha_conclusion_contrato);
-                                $fecha_final = strtotime(date('Y-m-d'));
-                                $diferenciaSegundos = $fecha_inicial - $fecha_final;
-                                $diferenciaDias = $diferenciaSegundos / (60 * 60 * 24);
-                                if($diferenciaDias < 10){
-                                    $parpadear = 'parpadear';
+                            if($datos->estado == '1'){
+                                if($datos->fecha_conclusion_contrato != null){
+                                    $fecha_inicial = strtotime($datos->fecha_conclusion_contrato);
+                                    $fecha_final = strtotime(date('Y-m-d'));
+                                    $diferenciaSegundos = $fecha_inicial - $fecha_final;
+                                    $diferenciaDias = $diferenciaSegundos / (60 * 60 * 24);
+                                    if($diferenciaDias < 10){
+                                        $parpadear = 'parpadear';
+                                    }
                                 }
                             }
                         @endphp
@@ -74,11 +72,47 @@
                                 C.-&nbsp;{{ \Carbon\Carbon::parse($datos->fecha_conclusion_contrato)->format('d/m/Y') }}
                             @endif
                         </td>
-                        <td class="text-center p-1"><i class='{{ $datos->status_check }}'></i></td>
+                        <td class="text-center p-1">
+                            {{-- <i class='{{ $datos->status_check }}'></i> --}}
+                            <span class="{{ $datos->colorStatus }}">
+                                {{ $datos->status }}
+                            </span>
+                        </td>
                         @canany(['empleados.show','empleados.editar','users.create'])
                             <td class="text-center p-1">
                                 <div class="d-flex justify-content-center">
-                                    @can('empleados.show')
+                                    <select id="{{ $datos->idemp }}" onchange="redireccionar(this.id);" class="form-control form-control-sm font-roboto-12 select2 options">
+                                        <option value="">-</option>
+                                        @can('empleados.show')
+                                            <option value="show">Ir a detalle</option>
+                                        @endcan
+                                        @if ($datos->estado == '1')
+                                            @can('empleados.editar')
+                                                <option value="editar">Modificar</option>
+                                            @endcan
+                                        @endif
+                                        @if ($datos->estado == '1')
+                                            @can('empleados.retirar')
+                                                <option value="retirar">Retirar</option>
+                                            @endcan
+                                        @else
+                                            @can('empleados.recontratar')
+                                                <option value="recontratar">Recontratar</option>
+                                            @endcan
+                                        @endif
+                                        @can('empleados.show')
+                                            <option value="kardex">Kardex</option>
+                                        @endcan
+                                        @if(Auth::user()->hasRole('administrator'))
+                                            @if ($datos->user_registrado == null)
+                                                <option value="usuario">Crear Usuario</option>
+                                            @endif
+                                        @endif
+                                    </select>
+
+
+
+                                    {{-- @can('empleados.show')
                                         <span class="tts:left tts-slideIn tts-custom" aria-label="Informacion de personal" style="cursor: pointer;">
                                             <a href="{{ route('empleado.show',$datos->idemp) }}" class="badge-with-padding badge badge-info">
                                                 <i class="fas fa-list fa-fw"></i>
@@ -101,8 +135,8 @@
                                             </span>
                                         @endif
                                     @endcan
-                                    &nbsp;
-                                    @can('users.create')
+                                    &nbsp; --}}
+                                    {{-- @can('users.create')
                                         @if ($datos->user_registrado != null)
                                             <span class="tts:left tts-slideIn tts-custom" aria-label="Actualizar Usuario" style="cursor: pointer;">
                                                 <a href="{{ route('users.edit',$datos->user_registrado->id) }}" class="badge-with-padding badge badge-primary">
@@ -116,7 +150,7 @@
                                                 </a>
                                             </span>
                                         @endif
-                                    @endcan
+                                    @endcan --}}
                                     {{--@can('empleados.recontratar')
                                         @if ($datos->estado == '2')
                                             <span class="tts:left tts-slideIn tts-custom" aria-label="Recontratar" style="cursor: pointer;">

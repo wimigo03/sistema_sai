@@ -11,7 +11,7 @@
             </select>
         </div>
     </div>
-    <div class="col-md-4 pr-1 pl-1">
+    <div class="col-md-5 pr-1 pl-1">
         <label for="area_id" class="d-inline"><b>Area-Item</b></label>
         <div class="select2-container-rojo">
             <select name="area_id" id="area_id" class="form-control font-roboto-12 select2">
@@ -27,7 +27,7 @@
             </select>
         </div>
     </div>
-    <div class="col-md-4 pr-1 pl-1">
+    <div class="col-md-5 pr-1 pl-1">
         <label for="area_id" class="d-inline"><b>Area-Asignada</b></label>
         <div class="select2-container-rojo">
             <select name="area_asignada" id="area_asignada" class="form-control font-roboto-12 select2">
@@ -45,8 +45,7 @@
     </div>
 </div>
 <div class="form-group row font-roboto-12">
-
-    <div class="col-md-4 ">
+    <div class="col-md-4 pr-1">
         <label for="cargo_id" class="d-inline"><b>Cargo</b></label>
         <div class="select2-container-rojo">
             <select name="cargo_id" id="cargo_id" class="form-control font-roboto-12 select2">
@@ -64,7 +63,7 @@
             </select>
         </div>
     </div>
-    <div class="col-md-2 pr-1">
+    <div class="col-md-2 pr-1 pl-1">
         <label for="fecha_ingreso" class="d-inline"><b>Fecha de ingreso</b></label>
         <input type="text" name="fecha_ingreso" value="{{ $empleado_contrato->fecha_ingreso != null ? \Carbon\Carbon::parse($empleado_contrato->fecha_ingreso)->format('d/m/Y') : '' }}" id="fecha_ingreso" placeholder="dd/mm/aaaa" class="form-control font-roboto-12 input-rojo" data-language="es">
     </div>

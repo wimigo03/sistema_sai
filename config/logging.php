@@ -165,6 +165,12 @@ return [
             'path' => storage_path('logs/mantenimientos.log'),
             'level' => 'debug',
         ],
+
+        'comandos' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/laravel.log'),
+            'level' => 'debug',
+        ],
     ],
 
 ];

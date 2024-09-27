@@ -28,6 +28,7 @@ class RetirarPersonalContrato extends Command
                                             ->where('estado','1')
                                             ->where('fecha_conclusion_contrato','!=',null)
                                             ->get();
+            $cont = 0;
             foreach($contratos as $contrato){
                 if(date('Y-m-d') > $contrato->fecha_conclusion_contrato){
                     $contrato = EmpleadoContrato::find($contrato->id);
@@ -45,6 +46,7 @@ class RetirarPersonalContrato extends Command
                                                 ->get()
                                                 ->count();
                 if($_contratos == 0){
+                    $cont = $cont++;
                     $_empleado = Empleado::find($contrato->idemp);
                     $_empleado->update([
                         'estado' => '2'
@@ -52,7 +54,7 @@ class RetirarPersonalContrato extends Command
                 }
             }
 
-            \Log::info('El comando RETIRAR PERSONAL CONTRATO se ejecuto correctamente.');
+            \Log::info($cont . ' Empleados dados de baja. El comando RETIRAR PERSONAL CONTRATO se ejecuto correctamente.');
             $this->info('Comando ejecutado correctamente.');
         } catch (\Exception $e) {
             \Log::error('Error al ejecutar el comando RETIRAR PERSONAL CONTRATO: ' . $e->getMessage(), [

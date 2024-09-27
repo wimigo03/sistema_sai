@@ -91,27 +91,12 @@ class EmpleadoController extends Controller
         dd("retirar_contratos_terminados Finalizado...");
     }
 
-    public function arreglar_moco()
-    {
-        $contratos = EmpleadoContrato::where('estado','2')->get();
-        foreach($contratos as $contrato){
-            $contrato = EmpleadoContrato::find($contrato->id);
-            $contrato->update([
-                'fecha_retiro' => null,
-                'user_id' => null,
-                'obs_retiro' => null
-            ]);
-        }
-        dd("final");
-    }
-
     public function index()
     {
-        if(Auth::user()->id == 102){
+        //if(Auth::user()->id == 102){
             //$this->completar_contratos();
             //$this->retirar_contratos_terminados();
-            //$this->arreglar_moco();
-        }
+        //}
 
         $dea_id = Auth::user()->dea->id;
         $areas = Area::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
@@ -131,7 +116,7 @@ class EmpleadoController extends Controller
                                                 ->limit(1);
                                         });
                                 })
-                                ->where('empleados_contratos.estado','1')
+                                /* ->where('empleados_contratos.estado','1') */
                                 ->orderBy('empleados_contratos.tipo','desc')
                                 ->orderBy('empleados_contratos.fecha_conclusion_contrato', 'asc')
                                 ->ByDea($dea_id)
@@ -160,7 +145,7 @@ class EmpleadoController extends Controller
                                                 ->limit(1);
                                         });
                                 })
-                                ->where('empleados_contratos.estado','1')
+                                /* ->where('empleados_contratos.estado','1') */
                                 ->ByDea($dea_id)
                                 ->ByArea($request->area_id)
                                 ->ByAreaAsignada($request->area_asignada_id)
@@ -178,7 +163,7 @@ class EmpleadoController extends Controller
                                 ->BySexo($request->sexo)
                                 ->orderBy('empleados_contratos.tipo','desc')
                                 ->orderBy('empleados_contratos.fecha_conclusion_contrato', 'asc')
-                                ->paginate(50);
+                                ->paginate(10);
 
         return view('empleados.index', compact('dea_id','areas','cargos','escalas_salariales','estados','sexos','tipos','empleados'));
     }
@@ -642,8 +627,10 @@ class EmpleadoController extends Controller
     {
         $empleado = Empleado::find($empleado_id);
         $dea_id = $empleado->dea_id;
+        $username = User::find(Auth::user()->id);
+        $username = $username != null ? $username->nombre_completo : $username->name;
         $empleados_contratos = EmpleadoContrato::where('idemp',$empleado_id)->orderBy('id','desc')->get();
-        $pdf = PDF::loadView('empleados.pdf-show', compact(['empleado','dea_id','empleados_contratos']));
+        $pdf = PDF::loadView('empleados.pdf-show', compact(['empleado','dea_id','empleados_contratos','username']));
         $pdf->setPaper('LETTER', 'portrait');
         return $pdf->stream('informacion_personal.pdf');
     }

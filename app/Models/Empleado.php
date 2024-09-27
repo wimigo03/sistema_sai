@@ -87,7 +87,7 @@ class Empleado extends Model
             case '1':
                 return "H";
             case '2':
-                return "N H";
+                return "R";
         }
     }
 
@@ -96,11 +96,20 @@ class Empleado extends Model
             case '1':
                 return "HABILITADO";
             case '2':
-                return "NO HABILITADO";
+                return "RETIRADO";
         }
     }
 
     public function getcolorStatusAttribute(){
+        switch ($this->estado) {
+            case '1':
+                return "badge-with-padding badge badge-success btn-block";
+            case '2':
+                return "badge-with-padding badge badge-danger btn-block";
+        }
+    }
+
+    public function getcolorStatusSinBlockAttribute(){
         switch ($this->estado) {
             case '1':
                 return "badge-with-padding badge badge-success";
