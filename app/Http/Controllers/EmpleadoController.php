@@ -76,6 +76,16 @@ class EmpleadoController extends Controller
                     $_empleado->update([
                         'estado' => '2'
                     ]);
+
+                    $users = User::where('idemp',$contrato->idemp)->get();
+                    if($users != null){
+                        foreach($users as $user){
+                            $_user = User::find($user->id);
+                            $user->update([
+                                'estadouser' => 0
+                            ]);
+                        }
+                    }
                 }
             }
 

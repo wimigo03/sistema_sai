@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 use App\Models\Empleado;
 use App\Models\EmpleadoContrato;
+use App\Models\User;
 
 class RetirarPersonalContrato extends Command
 {
@@ -51,6 +52,16 @@ class RetirarPersonalContrato extends Command
                     $_empleado->update([
                         'estado' => '2'
                     ]);
+
+                    $users = User::where('idemp',$contrato->idemp)->get();
+                    if($users != null){
+                        foreach($users as $user){
+                            $_user = User::find($user->id);
+                            $user->update([
+                                'estadouser' => 0
+                            ]);
+                        }
+                    }
                 }
             }
 
