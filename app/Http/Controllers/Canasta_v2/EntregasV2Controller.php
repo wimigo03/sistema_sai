@@ -49,10 +49,10 @@ class EntregasV2Controller extends Controller
                             //->where('entrega.estado','!=','3')
                             ->orderBy('b.nombres','asc')
                             ->orderBy('b.ap','asc')
+                            ->orderBy('b.am','asc')
                             ->paginate(10);
-        $cont = 1;
 
-        return view('canasta_v2.entregas.index', compact('paquete_barrio','extensiones','sexos','estados','entregas','cont'));
+        return view('canasta_v2.entregas.index', compact('paquete_barrio','extensiones','sexos','estados','entregas'));
     }
 
     public function search($paquete_barrio_id, Request $request)
@@ -91,6 +91,7 @@ class EntregasV2Controller extends Controller
                             //->where('entrega.estado','!=','3')
                             ->orderBy('b.nombres','asc')
                             ->orderBy('b.ap','asc')
+                            ->orderBy('b.am','asc')
                             ->paginate(10);
         $cont = 1;
 

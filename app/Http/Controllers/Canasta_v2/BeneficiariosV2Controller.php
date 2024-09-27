@@ -186,6 +186,15 @@ class BeneficiariosV2Controller extends Controller
             $fecha_nacimiento_inicial = $fecha_actual->copy()->subYears($request->edad_inicial)->addDay()->startOfDay();
             $query->whereBetween('a.fecha_nac', [$fecha_nacimiento_final, $fecha_nacimiento_inicial]);
         }
+        if(!is_null($request->finicial)){
+            $formattedKeyword = Carbon::createFromFormat('d/m/Y', $request->finicial)->format('Y-m-d');
+            $query = $query->whereDate('a.created_att','>=',$formattedKeyword);
+        }
+
+        if(!is_null($request->ffinal)){
+            $formattedKeyword = Carbon::createFromFormat('d/m/Y', $request->ffinal)->format('Y-m-d');
+            $query = $query->whereDate('a.created_att','<=',$formattedKeyword);
+        }
         $query = !is_null($request->id_ocupacion) ? $query->where('a.id_ocupacion',$request->id_ocupacion) : $query;
         $query = !is_null($request->estado) ? $query->where('a.estado',$request->estado) : $query;
         $query = !is_null($request->usuario) ? $query->where('a.user_censo_id',$request->usuario) : $query;
@@ -199,6 +208,7 @@ class BeneficiariosV2Controller extends Controller
                     'b.nombre as barrio',
                     'a.sexo',
                     DB::raw("DATE_PART('year',AGE(a.fecha_nac)) as edad"),
+                    DB::raw("TO_CHAR(a.created_att, 'dd/mm/yyyy') as fecha_inscripcion"),
                     'd.ocupacion',
                     'a.dir_foto',
                     DB::raw("
@@ -233,6 +243,10 @@ class BeneficiariosV2Controller extends Controller
                             })
                             ->filterColumn('edad', function($query, $keyword) {
                                 $query->whereRaw("DATE_PART('year',AGE(a.fecha_nac))::text like ?", ["$keyword"]);
+                            })
+                            ->filterColumn('a.created_att', function($query, $keyword) {
+                                $sql = "TO_CHAR(a.created_att, 'dd/mm/yyyy') like ?";
+                                $query->whereRaw($sql, ["%{$keyword}%"]);
                             })
                             ->filterColumn('status', function($query, $keyword) {
                                 $query->whereRaw("
@@ -321,20 +335,17 @@ class BeneficiariosV2Controller extends Controller
                                         ->byTipoSistema(Paquetes::TERCERA_EDAD)
                                         ->byDistrito($request->distrito)
                                         ->byBarrio($request->barrio)
-                                        //->byCodigo($request->codigo)
-                                        //->byNombre($request->nombre)
                                         ->byNombreCompleto($request->nombre_completo)
-                                        //->byApellidoPaterno($request->ap)
-                                        //->byApellidoMaterno($request->am)
                                         ->byNumeroCarnet($request->ci)
                                         ->bySexo($request->sexo)
                                         ->byEdad($request->edad_inicial, $request->edad_final)
+                                        ->byInscripcion($request->finicial, $request->ffinal)
                                         ->byOcupacion($request->id_ocupacion)
                                         ->byEstado($request->estado)
                                         ->byUsuarioTwo($request->usuario)
                                         ->byEstadoCenso($request->estado_censo)
                                         ->orderBy('id', 'desc')
-                                        ->get();dd(count($beneficiarios));
+                                        ->get();
                 /*$contador = $beneficiarios->count();
                 if($contador >= 5000){
                     return redirect()->route('beneficiarios.index')->with('info_message', 'Los datos de la consulta exceden el limite permitido. Por favor comunicarse con el area de sistemas para resolver esta situacion');

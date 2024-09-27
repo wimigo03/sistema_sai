@@ -10,12 +10,13 @@
                     <th class="text-center p-1">FECHA</th>
                     <th class="text-center p-1">HORA DE INICIO</th>
                     <th class="text-center p-1">HORA FINAL</th>
-                    <th class="text-center p-1">HAB.</th>
-                    <th class="text-center p-1">NO REG.</th>
+                    {{-- <th class="text-center p-1">HAB.</th>
+                    <th class="text-center p-1">NO REG.</th> --}}
                     <th class="text-center p-1">REG.</th>
                     <th class="text-center p-1">ENT.</th>
                     <th class="text-center p-1">NO ENT.</th>
-                    <th class="text-center p-1">R.</th>
+                    <th class="text-center p-1">RES.</th>
+                    <th class="text-center p-1">TOT.</th>
                     <th class="text-center p-1">ESTADO</th>
                     @canany(['canasta.entregas.index','canasta.paquetes.barrio.editar'])
                         <th class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></th>
@@ -32,7 +33,7 @@
                         <td class="text-center p-1">{{ $datos->fecha_entrega != null ? \Carbon\Carbon::parse($datos->fecha_entrega)->format('d/m/Y') : '' }}</td>
                         <td class="text-center p-1">{{ $datos->hora_inicio }}</td>
                         <td class="text-center p-1">{{ $datos->hora_final }}</td>
-                        <td class="text-center p-1">{{ $datos->total_habilitados }}</td>
+                        {{-- <td class="text-center p-1">{{ $datos->total_habilitados }}</td>
                         <td class="text-center p-1">
                             @if ($datos->total_no_registrados < 0)
                                 <span class="badge badge-danger font-roboto-11">
@@ -47,11 +48,22 @@
                                     </span>
                                 @endif
                             @endif
-                        </td>
+                        </td> --}}
                         <td class="text-center p-1">{{ $datos->total_registrados }}</td>
                         <td class="text-center p-1">{{ $datos->total_entregados }}</td>
                         <td class="text-center p-1">{{ $datos->total_no_entregados }}</td>
                         <td class="text-center p-1">{{ $datos->total_resagados }}</td>
+                        <td class="text-center p-1">
+                            @if ($datos->total_registrados == $datos->total_canastas)
+                                <span class="badge badge-success font-roboto-11">
+                                    {{ $datos->total_canastas }}
+                                </span>
+                            @else
+                                <span class="badge badge-danger font-roboto-11">
+                                    {{ $datos->total_canastas }}
+                                </span>
+                            @endif
+                        </td>
                         <td class="text-center p-1">
                             <span class="{{ $datos->colorStatus }}">
                                 {{ $datos->status }}

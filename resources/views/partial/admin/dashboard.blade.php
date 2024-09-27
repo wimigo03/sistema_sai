@@ -81,13 +81,13 @@
                                         </a>
                                     </li>
                                 @endcan
-                                @can('archivos.index.general')
+                                {{-- @can('archivos.index.general')
                                     <li>
                                         <a href="{{ route('archivos.index.full') }}">
                                             &nbsp;&nbsp;&nbsp;<i class="fa-solid fa-file fa-fw"></i>&nbsp;Archivos Digitales
                                         </a>
                                     </li>
-                                @endcan
+                                @endcan --}}
                                 @can('facebook.index')
                                     <li>
                                         <a href="{{ route('facebook.index') }}">

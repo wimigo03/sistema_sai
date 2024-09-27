@@ -64,7 +64,7 @@ class Paquetes extends Model
     }
 
     public function getRegistradosAttribute(){
-        $registrados = DB::table('entrega')->select('id')->where('id_paquete',$this->id)->get();
+        $registrados = DB::table('entrega')->select('id')->where('id_paquete',$this->id)->where('estado','!=','3')->get();
         if($registrados != null){
             return count($registrados);
         }
@@ -89,6 +89,11 @@ class Paquetes extends Model
         if($resagados != null){
             return count($resagados);
         }
+    }
+
+    public function getTotalCanastasAttribute(){
+        $total = $this->entregados + $this->no_entregados + $this->resagados;
+        return $total;
     }
 
     public function user(){

@@ -11,6 +11,7 @@
                         <th>CARNET-EXP</th>
                         <th>H/M</th>
                         <th>EDAD</th>
+                        <th>INSCRIPCION</th>
                         <th>OCUPACION</th>
                         <th width="7%">ESTADO</th>
                         <th>USUARIO</th>
@@ -33,6 +34,7 @@
                         <th>CARNET</th>
                         <th>SEXO</th>
                         <th>EDAD</th>
+                        <th>INSCRIPCION</th>
                         <th>OCUPACION</th>
                         <th>ESTADO</th>
                         <th>USUARIO</th>

@@ -35,6 +35,17 @@
                 <b class="font-roboto-12">No entregados =&nbsp;</b> <span class="font-roboto-12">{{ $paquete->no_entregados }}</span>
                 &nbsp;|&nbsp;
                 <b class="font-roboto-12">Resagados =&nbsp;</b> <span class="font-roboto-12">{{ $paquete->resagados }}</span>
+                &nbsp;|&nbsp;
+                <b class="font-roboto-12">Total =&nbsp;</b>
+                @if ($paquete->registrados == $paquete->total_canastas)
+                    <span class="badge badge-success font-roboto-12">
+                        {{ $paquete->total_canastas }}
+                    </span>
+                @else
+                    <span class="badge badge-danger font-roboto-12">
+                        {{ $paquete->total_canastas }}
+                    </span>
+                @endif
             </div>
         </div>
         @include('canasta_v2.paquetes-barrio.partials.search')

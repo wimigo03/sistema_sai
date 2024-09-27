@@ -1,5 +1,15 @@
 <form action="#" method="get" id="form">
     <div class="form-group row">
+        @if(Auth::user()->hasRole('administrator'))
+            <div class="col-md-6 mb-2 pr-1 pl-1">
+                <select name="area_id" id="area_id" class="form-control font-roboto-12">
+                    <option value="">-</option>
+                    @foreach ($areas as $index => $value)
+                        <option value="{{ $index }}" @if(request('area_id') == $index) selected @endif >{{ $value }}</option>
+                    @endforeach
+                </select>
+            </div>
+        @endif
         <div class="col-md-2 mb-2 pr-1 pl-1">
             <input type="text" name="gestion" id="gestion" placeholder="-- gestion --" value="{{ request('gestion') }}" class="form-control font-roboto-12 intro" onkeypress="return valideNumberSinDecimal(event);">
         </div>

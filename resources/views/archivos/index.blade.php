@@ -27,6 +27,12 @@
         var table = $("#dataTable");
         $(document).ready(function() {
             cargarDatos();
+            $('#area_id').select2({
+                theme: "bootstrap4",
+                placeholder: "-- Area --",
+                width: '100%'
+            });
+
             $('#tipo_id').select2({
                 theme: "bootstrap4",
                 placeholder: "-- Tipo --",
@@ -60,6 +66,7 @@
                     type: "get",
                     dataType: 'json',
                     data: {
+                        area_id: $("#area_id").val(),
                         gestion: $("#gestion").val(),
                         fecha: $("#fecha").val(),
                         nro_documento: $("#nro_documento").val(),
@@ -68,6 +75,11 @@
                     }
                 },
                 "columns": [
+                    {
+                        data: 'nombrearea',
+                        name: 'ar.nombrearea',
+                        class: 'text-justify p-1 font-roboto-11'
+                    },
                     {
                         data: 'gestion',
                         name: 'a.gestion',

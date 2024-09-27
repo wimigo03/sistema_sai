@@ -149,6 +149,11 @@ class PaqueteBarrio extends Model
         }
     }
 
+    public function getTotalCanastasAttribute(){
+        $total = $this->total_entregados + $this->total_no_entregados + $this->total_resagados;
+        return $total;
+    }
+
     public function paquete(){
         return $this->belongsTo(Paquetes::class,'id_paquete','id');
     }

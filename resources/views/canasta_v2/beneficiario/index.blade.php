@@ -75,6 +75,28 @@
                 width: '100%'
             });
 
+            var cleave = new Cleave('#finicial', {
+                date: true,
+                datePattern: ['d', 'm', 'Y']
+            });
+
+            $("#finicial").datepicker({
+                inline: false,
+                dateFormat: "dd/mm/yyyy",
+                autoClose: true,
+            });
+
+            var cleave = new Cleave('#ffinal', {
+                date: true,
+                datePattern: ['d', 'm', 'Y']
+            });
+
+            $("#ffinal").datepicker({
+                inline: false,
+                dateFormat: "dd/mm/yyyy",
+                autoClose: true,
+            });
+
             if($("#id_distrito >option:selected").val() != ''){
                 var id = $("#id_distrito >option:selected").val();
                 getBarrios(id);
@@ -161,6 +183,8 @@
                         estado: $("#estado").val(),
                         usuario: $("#usuario").val(),
                         estado_censo: $("#estado_censo").val(),
+                        finicial: $("#finicial").val(),
+                        ffinal: $("#ffinal").val(),
                     }
                 },
                 columns: [
@@ -199,6 +223,11 @@
                         data: 'edad',
                         name: 'a.ci',
                         class: 'text-center p-1 font-roboto-10'
+                    },
+                    {
+                        data: 'fecha_inscripcion',
+                        name: 'a.created_att',
+                        class: 'text-center p-1 font-roboto-10',
                     },
                     {
                         data: 'ocupacion',
@@ -311,13 +340,13 @@
             window.location.reload();
         }
 
-        function excel(){
+        /* function _excel(){
             var url = "{{ route('beneficiarios.excel') }}";
             $("#form").attr('action', url);
             $("#form").submit();
-        }
+        } */
 
-        function _excel() {
+        function excel() {
             var url = "{{ route('beneficiarios.excel') }}";
             $(".btn").hide();
             $(".spinner-btn-send").show();

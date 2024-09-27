@@ -56,6 +56,10 @@ class ArchivosController extends Controller
         $contratos = EmpleadoContrato::select('idarea_asignada')->where('idemp',Auth::user()->idemp)->orderBy('id','desc')->take(1)->first();
         $personal = Area::find($contratos->idarea_asignada);
 
+        $areas = Area::query()
+                        ->byDea($dea_id)
+                        ->pluck('nombrearea','idarea');
+
         $tipos = DB::table('tipoarea as a')
                     ->join('tipoarchivo as b','b.idtipo','a.idtipo')
                     ->select('b.nombretipo as tipo','b.idtipo as id')
@@ -63,7 +67,7 @@ class ArchivosController extends Controller
                     ->where('a.dea_id',Auth::user()->dea->id)
                     ->pluck('tipo','id');
 
-        return view('archivos.index', compact('personal','tipos'));
+        return view('archivos.index', compact('personal','areas','tipos'));
     }
 
     public function indexAjax(Request $request)
@@ -77,9 +81,12 @@ class ArchivosController extends Controller
         $query = DB::table('archivos as a')
                     ->join('areas as ar', 'ar.idarea', 'a.idarea')
                     ->join('tipoarchivo as t', 'a.idtipo', 't.idtipo')
-                    ->where('ar.idarea', $contratos->idarea_asignada)
                     ->where('a.dea_id',Auth::user()->dea->id);
+                    /* ->where('ar.idarea', $contratos->idarea_asignada) */
 
+        $query = Auth::user()->hasRole('administrator') ? $query : $query->where('ar.idarea',$contratos->idarea_asignada);
+
+        $query = !is_null($request->area_id) ? $query->where('a.idarea',$request->area_id) : $query;
         $query = !is_null($request->gestion) ? $query->where('a.gestion',$request->gestion) : $query;
         if(!is_null($request->fecha)){
             $formattedKeyword =  Carbon::createFromFormat('d/m/Y', $request->fecha)->format('Y-m-d');
@@ -99,6 +106,7 @@ class ArchivosController extends Controller
                         'a.nombrearchivo',
                         'a.documento',
                         'ar.idarea',
+                        'ar.nombrearea',
                         't.nombretipo'
         );
 
@@ -149,15 +157,20 @@ class ArchivosController extends Controller
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');
 
-                $archivos = Archivo::query()
-                                ->byDea(Auth::user()->dea->id)
-                                ->byArea(Auth::user()->area_asignada_id)
-                                ->byGestion($request->gestion)
+            $archivos = Archivo::query()->byDea(Auth::user()->dea->id);
+
+            if (Auth::user()->hasRole('administrator')) {
+                $archivos->byArea($request->area_id);
+            } else {
+                $archivos->byArea(Auth::user()->area_asignada_id);
+            }
+
+            $archivos = $archivos->byGestion($request->gestion)
                                 ->byFecha($request->fecha)
                                 ->byNumero($request->nro_documento)
                                 ->byReferencia($request->referencia)
                                 ->byTipo($request->tipo_id)
-                                ->orderBy('fecha','desc')
+                                ->orderBy('fecha', 'desc')
                                 ->orderBy('nombrearchivo')
                                 ->get();
 
@@ -178,22 +191,31 @@ class ArchivosController extends Controller
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');
 
-                $archivos = Archivo::query()
-                                ->byDea(Auth::user()->dea->id)
-                                ->byArea(Auth::user()->area_asignada_id)
-                                ->byGestion($request->gestion)
-                                ->byFecha($request->fecha)
-                                ->byNumero($request->nro_documento)
-                                ->byReferencia($request->referencia)
-                                ->byTipo($request->tipo_id)
-                                ->orderBy('fecha','desc')
-                                ->orderBy('nombrearchivo','asc')
-                                ->orderBy('idtipo','asc')
-                                ->get();
+                $archivos = Archivo::query()->byDea(Auth::user()->dea->id);
+
+                if (Auth::user()->hasRole('administrator')) {
+                    $archivos->byArea($request->area_id);
+                } else {
+                    $archivos->byArea(Auth::user()->area_asignada_id);
+                }
+
+                $archivos = $archivos->byGestion($request->gestion)
+                                    ->byFecha($request->fecha)
+                                    ->byNumero($request->nro_documento)
+                                    ->byReferencia($request->referencia)
+                                    ->byTipo($request->tipo_id)
+                                    ->orderBy('fecha','desc')
+                                    ->orderBy('nombrearchivo','asc')
+                                    ->orderBy('idtipo','asc')
+                                    ->get();
 
                 $cont = 1;
                 $username = User::find(Auth::user()->id);
-                $area = Area::find($username->area_asignada_id);
+                if (Auth::user()->hasRole('administrator')) {
+                    $area = Area::find($request->area_id);
+                } else {
+                    $area = Area::find($username->area_asignada_id);
+                }
                 $username = $username != null ? $username->nombre_completo : $username->name;
                 $pdf = PDF::loadView('archivos.pdf',compact('archivos','cont','username','area'));
                 $pdf->setPaper('LETTER', 'portrait');

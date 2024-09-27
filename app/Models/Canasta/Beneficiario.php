@@ -306,8 +306,15 @@ class Beneficiario extends Model
             $fecha_actual = Carbon::now();
             $fecha_nacimiento_final = $fecha_actual->copy()->subYears($edad_final + 1)->startOfDay();
             $fecha_nacimiento_inicial = $fecha_actual->copy()->subYears($edad_inicial)->addDay()->startOfDay();
-
             return $query->whereBetween('fecha_nac', [$fecha_nacimiento_final, $fecha_nacimiento_inicial]);
+        }
+    }
+
+    public function scopeByInscripcion($query, $finicial, $ffinal){
+        if(!is_null($finicial) && !is_null($ffinal)){
+            $finicial = Carbon::createFromFormat('d/m/Y', $finicial)->format('Y-m-d 00:00:00');
+            $ffinal = Carbon::createFromFormat('d/m/Y', $ffinal)->format('Y-m-d 23:59:59');
+            return $query->whereBetween('created_att',[$finicial,$ffinal]);
         }
     }
 
