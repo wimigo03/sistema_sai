@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Empleado;
 use App\Models\Area;
+use App\Models\Mantenimiento;
+use App\Models\User;
 
 class MantenimientoDetalle extends Model
 {
@@ -16,20 +18,22 @@ class MantenimientoDetalle extends Model
         'idarea',
         'idemp',
         'user_id',
+        'user_asignado_id',
         'codigo_serie',
         'clasificacion',
         'fecha_r',
         'fecha_d',
         'problema_equipo',
+        'diagnostico',
         'solucion_equipo',
         'estado',
     ];
 
     const ESTADOS = [
         '1' => 'RECEPCIONADO',
-        '2' => 'ASIGNADO',
-        '3' => 'REALIZADO',
-        '4' => 'RESTITUIDO'
+        '2' => 'REALIZADO',
+        '3' => 'RESTITUIDO',
+        '4' => 'ELIMINADO',
     ];
 
     const CLASIFICACIONES = [
@@ -49,11 +53,11 @@ class MantenimientoDetalle extends Model
             case '1':
                 return "RECEPCIONADO";
             case '2':
-                return "ASIGNADO";
-            case '3':
                 return "REALIZADO";
-            case '4':
+            case '3':
                 return "RESTITUIDO";
+            case '4':
+                return "ELIMINADO";
         }
     }
 
@@ -99,6 +103,14 @@ class MantenimientoDetalle extends Model
 
     public function funcionario(){
         return $this->belongsTo(Empleado::class,'idemp','idemp');
+    }
+
+    public function user_asignado(){
+        return $this->belongsTo(User::class,'user_asignado_id','id');
+    }
+
+    public function mantenimiento(){
+        return $this->belongsTo(Mantenimiento::class,'idemp','idemp');
     }
 
     public function getAreaCortaAttribute(){

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Empleado;
 use App\Models\Area;
+use App\Models\User;
 
 class Mantenimiento extends Model
 {
@@ -17,6 +18,7 @@ class Mantenimiento extends Model
         'user_id',
         'codigo',
         'nro_comunicacion_interna',
+        'f_h_registro',
         'observaciones',
         'estado',
     ];
@@ -38,14 +40,18 @@ class Mantenimiento extends Model
     public function getcolorStatusAttribute(){
         switch ($this->estado) {
             case '1':
-                return "badge-with-padding badge badge-secondary";
+                return "btn btn-secondary";
             case '2':
-                return "badge-with-padding badge badge-success";
+                return "btn btn-success";
         }
     }
 
     public function area(){
         return $this->belongsTo(Area::class,'idarea','idarea');
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class,'user_id','id');
     }
 
     public function funcionario(){

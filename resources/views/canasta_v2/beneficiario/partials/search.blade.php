@@ -1,5 +1,5 @@
 <form action="#" method="get" id="form">
-    <div class="form-group row">
+    <div class="row">
         {{--<div class="col-md-2 pr-1 pl-1">
             <input type="text" name="codigo" placeholder="-- Codigo --" value="{{ request('codigo') }}" class="form-control font-roboto-12 intro" onkeypress="return valideNumberInteger(event);">
         </div>--}}
@@ -72,15 +72,15 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-md-2 pr-1 pl-1">
+        <div class="col-md-2 pr-1 pl-1 mb-2">
             <input type="text" name="finicial" value="{{ request('finicial') }}" id="finicial" placeholder="(Inscritos) desde" class="form-control font-roboto-12" data-language="es">
         </div>
-        <div class="col-md-2 pr-1 pl-1">
+        <div class="col-md-2 pr-1 pl-1 mb-2">
             <input type="text" name="ffinal" value="{{ request('ffinal') }}" id="ffinal" placeholder="(Inscritos) hasta" class="form-control font-roboto-12" data-language="es">
         </div>
     </div>
-    <div class="form-group row">
-        <div class="col-md-6 pr-1 pl-1">
+    <div class="row">
+        <div class="col-md-12 pr-1 pl-1 mb-2">
             @can('canasta.beneficiarios.create')
                 <span class="tts:right tts-slideIn tts-custom root" aria-label="Registrar" style="cursor: pointer;">
                     <span class="btn btn-outline-success font-roboto-12" onclick="create();">
@@ -103,13 +103,11 @@
                 </span>
             @endcan
             <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn-send" style="display: none;"></i>
-        </div>
-        <div class="col-md-6 pr-1 pl-1 text-right">
-            <span class="btn btn-outline-primary font-roboto-12" onclick="procesar();">
-                <i class="fa fa-search fa-fw" aria-hidden="true"></i>&nbsp;Buscar
-            </span>
-            <span class="btn btn-outline-danger font-roboto-12" onclick="limpiar();">
+            <span class="btn btn-outline-danger font-roboto-12 float-right" onclick="limpiar();">
                 <i class="fa fa-eraser fa-fw"></i>&nbsp;Limpiar
+            </span>
+            <span class="btn btn-outline-primary font-roboto-12 float-right mr-1" onclick="procesar();">
+                <i class="fa fa-search fa-fw" aria-hidden="true"></i>&nbsp;Buscar
             </span>
         </div>
     </div>
