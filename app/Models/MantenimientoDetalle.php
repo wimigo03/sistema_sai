@@ -30,10 +30,9 @@ class MantenimientoDetalle extends Model
     ];
 
     const ESTADOS = [
-        '1' => 'RECEPCIONADO',
+        '1' => 'PENDIENTE',
         '2' => 'REALIZADO',
-        '3' => 'RESTITUIDO',
-        '4' => 'ELIMINADO',
+        '3' => 'ELIMINADO',
     ];
 
     const CLASIFICACIONES = [
@@ -45,18 +44,25 @@ class MantenimientoDetalle extends Model
         '6' => 'UPS',
         '7' => 'SWITCH',
         '8' => 'ROUTER',
-        '9' => 'OTRO',
+        '9' => 'TECLADO',
+        '10' => 'MONITOR',
+        '11' => 'DATA-SHOW',
+        '12' => 'ESTABILIZADOR',
+        '13' => 'MOUSE',
+        '14' => 'CAMARA WEB',
+        '15' => 'CAMARA',
+        '16' => 'CARGADOR',
+        '17' => 'ANTENA WIFI',
+        '18' => 'OTRO',
     ];
 
     public function getStatusAttribute(){
         switch ($this->estado) {
             case '1':
-                return "RECEPCIONADO";
+                return "PENDIENTE";
             case '2':
                 return "REALIZADO";
             case '3':
-                return "RESTITUIDO";
-            case '4':
                 return "ELIMINADO";
         }
     }
@@ -117,8 +123,8 @@ class MantenimientoDetalle extends Model
         $area = Area::where('idarea',$this->idarea)->first();
         if($area != null){
             $longitud = strlen($area->nombrearea);
-            if($longitud > 15){
-                $area_abreviada = mb_substr($area->nombrearea, 0, 20, 'UTF-8') . '...';
+            if($longitud > 10){
+                $area_abreviada = mb_substr($area->nombrearea, 0, 10, 'UTF-8') . '...';
             }else{
                 $area_abreviada = $area->nombrearea;
             }
@@ -132,73 +138,74 @@ class MantenimientoDetalle extends Model
         }
     }
 
-    public function scopeByArea($query, $area_id){
+    public function scopeByCodigo($query, $codigo){
+        if ($codigo != null) {
+                return $query
+                    ->whereIn('mantenimiento_id', function ($subquery) use($codigo) {
+                        $subquery->select('id')
+                            ->from('mantenimientos')
+                            ->where('codigo', 'like' , '%' . $codigo . '%');
+                    });
+        }
+    }
+
+    public function scopeByCodigoSerie($query, $codigo_serie){
+        if($codigo_serie != null){
+            return $query->where('codigo_serie', 'like', '%' . $codigo_serie . '%');
+        }
+    }
+
+    public function scopeByProcedencia($query, $area_id){
         if($area_id != null){
             return $query->where('idarea', $area_id);
         }
     }
 
-    public function scopeByNumero($query, $numero){
-        if($numero != null){
-            return $query->where('nro', $numero);
+    public function scopeByEncargado($query, $idemp){
+        if($idemp != null){
+            return $query->where('idemp', $idemp);
         }
     }
 
-    public function scopeByTipo($query, $tipo_id){
-        if($tipo_id != null){
-            return $query->where('idtipo', $tipo_id);
+    public function scopeByClasificacion($query, $clasificacion){
+        if($clasificacion != null){
+            return $query->where('clasificacion', $clasificacion);
         }
     }
 
-    public function scopeBySolicitante($query, $solicitante){
-        if ($solicitante != null) {
-                return $query
-                    ->whereIn('empleado_solicitante_id', function ($subquery) use($solicitante) {
-                        $subquery->select('idemp')
-                            ->from('empleados')
-                            ->whereRaw("CONCAT(nombres, ' ', ap_pat, ' ', ap_mat) LIKE ?", ["%{$solicitante}%"]);
-                    });
-        }
-    }
-
-    public function scopeByAreaDestino($query, $area_id){
-        if($area_id != null){
-            return $query->where('destinatario_idarea', $area_id);
-        }
-    }
-
-    public function scopeByDirigido($query, $dirigido){
-        if ($dirigido != null) {
-                return $query
-                    ->whereIn('empleado_destinatario_id', function ($subquery) use($dirigido) {
-                        $subquery->select('idemp')
-                            ->from('empleados')
-                            ->whereRaw("CONCAT(nombres, ' ', ap_pat, ' ', ap_mat) LIKE ?", ["%{$dirigido}%"]);
-                    });
-        }
-    }
-
-    public function scopeByReferencia($query, $referencia){
-        if($referencia != null){
-            return $query->where('referencia', 'like', '%' . $referencia . '%');
-        }
-    }
-
-    public function scopeByFecha($query, $fecha){
+    public function scopeByFechaRecepcion($query, $fecha){
         if($fecha != null){
             $fecha_i = date('Y-m-d 00:00:00', strtotime(str_replace('/', '-', $fecha)));
             $fecha_f = date('Y-m-d 23:59:59', strtotime(str_replace('/', '-', $fecha)));
-            return $query->whereBetween('fecha', [$fecha_i, $fecha_f]);
+            return $query->whereBetween('fecha_r', [$fecha_i, $fecha_f]);
         }
     }
 
     public function scopeByEstado($query, $estado){
-        if($estado != null){
-            if($estado == '3'){
-                return $query->whereIn('estado', ['1','2']);
-            }else{
-                return $query->where('estado', $estado);
-            }
+        if ($estado != null) {
+                return $query
+                    ->whereIn('mantenimiento_id', function ($subquery) use($estado) {
+                        $subquery->select('id')
+                            ->from('mantenimientos')
+                            ->where('estado',$estado);
+                    });
+        }
+    }
+
+    public function scopeByEstadoDetalle($query, $estado_detalle){
+        if($estado_detalle != null){
+            return $query->where('estado', $estado_detalle);
+        }
+    }
+
+    public function scopeByAsignado($query, $usuario){
+        if ($usuario != null) {
+                return $query
+                    ->whereIn('user_asignado_id', function ($subquery) use($usuario) {
+                        $subquery->select('id')
+                            ->from('users')
+                            ->where('name', 'like' , '%' . $usuario . '%');
+                    });
         }
     }
 }

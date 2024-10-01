@@ -15,15 +15,21 @@
 @section('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
-            /*$('#tipo_id').select2({
+            $('#clasificacion').select2({
                 theme: "bootstrap4",
-                placeholder: "-- Tipo --",
+                placeholder: "-- Clasficacion --",
                 width: '100%'
             });
 
             $('#area_id').select2({
                 theme: "bootstrap4",
-                placeholder: "-- Area --",
+                placeholder: "-- Procedencia --",
+                width: '100%'
+            });
+
+            $('#empleado_id').select2({
+                theme: "bootstrap4",
+                placeholder: "-- Encargado --",
                 width: '100%'
             });
 
@@ -31,7 +37,13 @@
                 theme: "bootstrap4",
                 placeholder: "-- Estado --",
                 width: '100%'
-            });*/
+            });
+
+            $('#estado_detalle').select2({
+                theme: "bootstrap4",
+                placeholder: "-- Estado Detalle--",
+                width: '100%'
+            });
 
             var cleave = new Cleave('#fecha', {
                 date: true,

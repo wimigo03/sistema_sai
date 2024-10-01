@@ -28,6 +28,24 @@ class Mantenimiento extends Model
         '2' => 'FINALIZADO',
     ];
 
+    public function getStatusAliasAttribute(){
+        switch ($this->estado) {
+            case '1':
+                return "P";
+            case '2':
+                return "F";
+        }
+    }
+
+    public function getcolorStatusAliasAttribute(){
+        switch ($this->estado) {
+            case '1':
+                return "badge-with-padding badge badge-secondary";
+            case '2':
+                return "badge-with-padding badge badge-success";
+        }
+    }
+
     public function getStatusAttribute(){
         switch ($this->estado) {
             case '1':

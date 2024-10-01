@@ -28,54 +28,59 @@ class MantenimientoController extends Controller
     public function index()
     {
         $dea_id = Auth::user()->dea->id;
+        $clasificaciones = MantenimientoDetalle::CLASIFICACIONES;
+        $areas = Area::query()->byDea($dea_id)->pluck('nombrearea','idarea');
+
+        $empleados = DB::TABLE('empleados_contratos as a')
+                        ->join('empleados as b','b.idemp','a.idemp')
+                        ->where('a.dea_id',$dea_id)
+                        ->where('a.estado','1')
+                        ->select(DB::raw("concat(b.ap_pat, ' ', b.ap_mat, ' ', b.nombres) as empleado"),'a.idemp as id')
+                        ->pluck('empleado','id');
+
+        $estados = Mantenimiento::ESTADOS;
+        $estados_detalles = MantenimientoDetalle::ESTADOS;
+
         $mantenimiento_detalles = MantenimientoDetalle::query()
                                     ->byDea($dea_id)
                                     ->orderBy('mantenimiento_id','desc')
                                     ->paginate(10);
 
-        /*$areas = Area::query()->byDea(Auth::user()->dea->id)->pluck('nombrearea','idarea');
-        $estados = ControlInterno::ESTADOS;
-
-        $controles_internos = ControlInterno::query()
-                                ->byDea(Auth::user()->dea->id)
-                                ->byArea(Auth::user()->area_asignada_id)
-                                ->orderBy('fecha','desc')
-                                ->orderBy('nro','desc')
-                                ->paginate(10);*/
-
-        return view('mantenimiento.index',compact('mantenimiento_detalles'));
+        return view('mantenimiento.index',compact('clasificaciones','areas','empleados','estados','estados_detalles','mantenimiento_detalles'));
     }
 
-    /*public function search(Request $request)
+    public function search(Request $request)
     {
-        $tipos = DB::TABLE('tipoarea as a')
-                    ->join('tipoarchivo as b','b.idtipo','a.idtipo')
-                    ->select('b.nombretipo as tipo','b.idtipo as id')
-                    ->where('a.idarea',Auth::user()->area_asignada_id)
-                    ->where('a.dea_id',Auth::user()->dea->id)
-                    ->where('b.subtipo','1')
-                    ->pluck('tipo','id');
+        $dea_id = Auth::user()->dea->id;
+        $clasificaciones = MantenimientoDetalle::CLASIFICACIONES;
+        $areas = Area::query()->byDea($dea_id)->pluck('nombrearea','idarea');
 
-        $areas = Area::query()->byDea(Auth::user()->dea->id)->pluck('nombrearea','idarea');
-        $estados = ControlInterno::ESTADOS;
+        $empleados = DB::TABLE('empleados_contratos as a')
+                        ->join('empleados as b','b.idemp','a.idemp')
+                        ->where('a.dea_id',$dea_id)
+                        ->where('a.estado','1')
+                        ->select(DB::raw("concat(b.ap_pat, ' ', b.ap_mat, ' ', b.nombres) as empleado"),'a.idemp as id')
+                        ->pluck('empleado','id');
 
-        $controles_internos = ControlInterno::query()
-                                ->byDea(Auth::user()->dea->id)
-                                ->byArea(Auth::user()->area_asignada_id)
-                                ->byNumero($request->numero)
-                                ->byTipo($request->tipo_id)
-                                ->bySolicitante($request->solicitante)
-                                ->byAreaDestino($request->area_id)
-                                ->byDirigido($request->dirigido)
-                                ->byReferencia($request->referencia)
-                                ->byFecha($request->fecha)
-                                ->byEstado($request->estado)
-                                ->orderBy('fecha','desc')
-                                ->orderBy('nro','desc')
-                                ->paginate(10);
+        $estados = Mantenimiento::ESTADOS;
+        $estados_detalles = MantenimientoDetalle::ESTADOS;
 
-        return view('control-interno.index', compact('tipos','areas','estados','controles_internos'));
-    }*/
+        $mantenimiento_detalles = MantenimientoDetalle::query()
+                                    ->byDea($dea_id)
+                                    ->byCodigo($request->codigo)
+                                    ->byCodigoSerie($request->codigo_serie)
+                                    ->byProcedencia($request->area_id)
+                                    ->byEncargado($request->empleado_id)
+                                    ->byClasificacion($request->clasificacion)
+                                    ->byFechaRecepcion($request->fecha)
+                                    ->byEstado($request->estado)
+                                    ->byEstadoDetalle($request->estado_detalle)
+                                    ->byAsignado($request->usuario)
+                                    ->orderBy('mantenimiento_id','desc')
+                                    ->paginate(10);
+
+        return view('mantenimiento.index',compact('clasificaciones','areas','empleados','estados','estados_detalles','mantenimiento_detalles'));
+    }
 
     public function create()
     {
@@ -164,7 +169,7 @@ class MantenimientoController extends Controller
     public function editar($id)
     {
         $mantenimiento = Mantenimiento::find($id);
-        $mantenimiento_detalles = MantenimientoDetalle::where('mantenimiento_id',$id)->where('estado','!=','4')->get();
+        $mantenimiento_detalles = MantenimientoDetalle::where('mantenimiento_id',$id)->where('estado','!=','3')->get();
 
         $dea_id = Auth::user()->dea->id;
         $areas = Area::byDea($dea_id)->pluck('nombrearea','idarea');
@@ -184,7 +189,7 @@ class MantenimientoController extends Controller
     {
         $edicion = MantenimientoDetalle::find($id);
         $mantenimiento = Mantenimiento::find($edicion->mantenimiento_id);
-        $mantenimiento_detalles = MantenimientoDetalle::where('mantenimiento_id',$edicion->mantenimiento_id)->where('estado','!=','4')->get();
+        $mantenimiento_detalles = MantenimientoDetalle::where('mantenimiento_id',$edicion->mantenimiento_id)->where('estado','!=','3')->get();
 
         $dea_id = Auth::user()->dea->id;
         $areas = Area::byDea($dea_id)->pluck('nombrearea','idarea');
@@ -217,7 +222,7 @@ class MantenimientoController extends Controller
         $mantenimiento_detalle = MantenimientoDetalle::find($id);
         if($mantenimiento_detalle != null){
             $mantenimiento_detalle->update([
-                'estado' => '4' //ELIMINADO
+                'estado' => '3' //ELIMINADO
             ]);
             return response()->json([
                 'Eliminado' => 'Eliminado'
@@ -293,7 +298,7 @@ class MantenimientoController extends Controller
     public function pdf($id)
     {
         $mantenimiento = Mantenimiento::find($id);
-        $mantenimiento_detalles = MantenimientoDetalle::where('mantenimiento_id',$id)->where('estado','!=','4')->get();
+        $mantenimiento_detalles = MantenimientoDetalle::where('mantenimiento_id',$id)->where('estado','!=','3')->get();
         $cont = 1;
         $username = User::find(Auth::user()->id);
         $username = $username != null ? $username->nombre_completo : $username->name;
@@ -305,7 +310,7 @@ class MantenimientoController extends Controller
     public function show($id)
     {
         $mantenimiento = Mantenimiento::find($id);
-        $mantenimiento_detalles = MantenimientoDetalle::where('mantenimiento_id',$id)->where('estado','!=','4')->get();
+        $mantenimiento_detalles = MantenimientoDetalle::where('mantenimiento_id',$id)->where('estado','!=','3')->get();
 
         return view('mantenimiento.show',compact('mantenimiento','mantenimiento_detalles'));
     }
@@ -336,6 +341,16 @@ class MantenimientoController extends Controller
 
             $cont++;
         }
+
+        return redirect()->route('mantenimientos.index')->with('success_message', 'Procesado.');
+    }
+
+    public function finalizar($id)
+    {
+        $mantenimiento = Mantenimiento::find($id);
+        $mantenimiento->update([
+            'estado' => '2',
+        ]);
 
         return redirect()->route('mantenimientos.index')->with('success_message', 'Procesado.');
     }

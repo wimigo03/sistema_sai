@@ -115,6 +115,9 @@
             <td width="40%" align="center" style="font-size: 12px; vertical-align: bottom;">
                 <b>
                     FORMULARIO DE CONFORMIDAD DE REVISION Y ENTREGA DE EQUIPOS
+                    <br>
+                    <br>
+                    <u>UNIDAD DE SISTEMAS</u>
                 </b>
             </td>
             <td width="30%" align="right">
@@ -126,10 +129,10 @@
     <table class="table-encabezado">
         <tr>
             <td>
-                <b>CODIGO: </b>{{ $mantenimiento->codigo }}
+                <b>CODIGO: </b><u>{{ $mantenimiento->codigo }}</u>
             </td>
             <td>
-                <b>FECHA DE RECEPCION: </b>{{ $mantenimiento->f_h_registro }}
+                <b>FECHA DE RECEPCION: </b>{{ \Carbon\Carbon::parse($mantenimiento->f_h_registro)->format('d/m/Y H:i:s') }}
             </td>
         </tr>
         <tr>
@@ -158,13 +161,11 @@
                 <td align="left" style="width:2%; word-wrap: break-word;"><b>N<b></td>
                 <td align="left" style="width:9%; word-wrap: break-word;"><b>CODIGO/SERIE<b></td>
                 <td align="left" style="width:8%; word-wrap: break-word;"><b>CLASIFICACION<b></td>
-                <td align="left" style="width:18%; word-wrap: break-word;"><b>DETALLE DE LAS FALLAS<b></td>
-                <td align="left" style="width:7%; word-wrap: break-word;"><b>E/ENTRADA<b></td>
-                <td align="left" style="width:7%; word-wrap: break-word;"><b>E/SALIDA<b></td>
-                <td align="left" style="width:18%; word-wrap: break-word;"><b>DIAGNOSTICO<b></td>
+                <td align="left" style="width:25%; word-wrap: break-word;"><b>DETALLE DE LAS FALLAS<b></td>
+                <td align="left" style="width:25%; word-wrap: break-word;"><b>DIAGNOSTICO<b></td>
                 <td align="left" style="width:18%; word-wrap: break-word;"><b>TRABAJO REALIZADO<b></td>
-                <td align="left" style="width:8%; word-wrap: break-word;"><b>ESTADO<b></td>
-                <td align="left" style="width:5%; word-wrap: break-word;"><b>TECNICO<b></td>
+                <td align="center" style="width:8%; word-wrap: break-word;"><b>ESTADO<b></td>
+                <td align="center" style="width:5%; word-wrap: break-word;"><b>TECNICO<b></td>
             </tr>
         </thead>
         <tbody>
@@ -174,12 +175,10 @@
                     <td>{{ $datos->codigo_serie }}</td>
                     <td>{{ $datos->clasificacion_equipo }}</td>
                     <td>{{ $datos->problema_equipo }}</td>
-                    <td>{{ $datos->status_general_entrada }}</td>
-                    <td>{{ $datos->status_general_salida }}</td>
                     <td>{{ $datos->diagnostico }}</td>
                     <td>{{ $datos->solucion_equipo }}</td>
-                    <td>{{ $datos->status }}</td>
-                    <td>{{ $datos->user_asignado != null ? strtoupper($datos->user_asignado->name) : '' }}</td>
+                    <td align="center">{{ $datos->status }}</td>
+                    <td align="center">{{ $datos->user_asignado != null ? strtoupper($datos->user_asignado->name) : '' }}</td>
                 </tr>
             @endforeach
         </tbody>
@@ -188,16 +187,7 @@
         <tr>
             <td>
                 <p>
-                    Nota. El diagnostico final detalla el estado actual del equipo y solicita respuestos si es necesario para su posterior reparacion.
-                </p>
-            </td>
-        </tr>
-    </table>
-    <table class="table-subencabezado">
-        <tr>
-            <td>
-                <p>
-                    El presente documento detalla el trabajo realizado por la Unidad de Sistemas, tras la revisión exhaustiva de los componentes del equipo descritos en el reporte de falla al ser ingresado bajo custodia de nuestra unidad. Al firmar el Funcionario acepta la conformidad del estado en el cual se esta restituyendo el equipo.
+                    El presente documento detalla el trabajo realizado por la Unidad de Sistemas, tras la revisión exhaustiva de los componentes del equipo descritos en el reporte de falla al ser ingresado bajo custodia de nuestra unidad. Al firmar el Funcionario acepta la conformidad del estado en el cual se esta restituyendo el(los) equipo(s).
                 </p>
             </td>
         </tr>
@@ -217,14 +207,26 @@
         </tr>
         <tr>
             <td align="center" style="vertical-align: top;">
-                Recibi Conforme
+                <b>Recibi Conforme</b>
             </td>
-            <td align="center">
-                Entregue Conforme
-                <br>
-                Ing. Wilson Martinez Oropeza
-                <br>
-                Responsable de Sistemas
+            <td align="center" style="vertical-align: top;">
+                <b>Entregue Conforme</b>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+            <td align="center" colspan="2">
+                ________________________________________
+            </td>
+        </tr>
+        <tr>
+            <td align="center" colspan="2">
+                <b>V° B°</b>
             </td>
         </tr>
     </table>

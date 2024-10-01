@@ -11,15 +11,19 @@
             <div class="card-body">
                 <div class="form-group row">
                     <div class="col-md-12 pr-1 pl-1">
-                        {{-- <span class="{{ $mantenimiento->color_status }} font-roboto-12">
-                            {{ $mantenimiento->status }}
-                        </span> --}}
+                        @if ($mantenimiento->estado == '1')
+                            <span class="btn btn-success font-roboto-12" onclick="finalizar();">
+                                <i class="fa-solid fa-bolt fa-fw"></i> Finalizar
+                            </span>
+                        @endif
                         <span class="btn btn-danger font-roboto-12 float-right" onclick="pdf();">
                             <i class="fas fa-file-pdf fa-fw"></i>
                         </span>
-                        <span class="btn btn-warning font-roboto-12 float-right mr-1" onclick="editar();">
-                            <i class="fas fa-edit fa-fw"></i>
-                        </span>
+                        @if ($mantenimiento->estado == '1')
+                            <span class="btn btn-warning font-roboto-12 float-right mr-1" onclick="editar();">
+                                <i class="fas fa-edit fa-fw"></i>
+                            </span>
+                        @endif
                     </div>
                 </div>
                 <div class="row font-roboto-12">
@@ -57,7 +61,7 @@
                     <div class="col-md-12 pr-1 pl-1">
                         <table id="tabla_detalle" class="table table-striped table-bordered hover-orange" style="width:100%;">
                             <thead>
-                                <tr class="font-roboto-11">
+                                <tr class="font-roboto-10">
                                     <td class="text-justify p-1"><b>N°</b></td>
                                     <td class="text-justify p-1"><b>CODIGO/SERIE</b></td>
                                     <td class="text-justify p-1"><b>CLASIFICION</b></td>
@@ -71,21 +75,25 @@
                                 @if (isset($mantenimiento_detalles))
                                     @php
                                         $cont = 1;
+                                        $disabled = '';
+                                        if($mantenimiento->estado == '2'){
+                                            $disabled = 'disabled';
+                                        }
                                     @endphp
                                     @foreach($mantenimiento_detalles as $datos)
-                                        <tr data-codigo-serie="{{ $datos->codigo_serie }}" class="detalle-{{ $datos->id }} font-roboto-11">
+                                        <tr data-codigo-serie="{{ $datos->codigo_serie }}" class="detalle-{{ $datos->id }} font-roboto-10">
                                             <td class="text-justify p-1" style="vertical-align: middle;">
-                                                <input type="hidden" name="id[]" value="{{ $datos->id }}" {{-- @if($datos->estado != '1') disabled @endif --}}>
+                                                <input type="hidden" name="id[]" value="{{ $datos->id }}" {{ $disabled }}>
                                                 {{ $cont++ }}
                                             </td>
                                             <td class="text-justify p-1" style="vertical-align: middle;">{{ $datos->codigo_serie }}</td>
                                             <td class="text-justify p-1" style="vertical-align: middle;">{{ $datos->clasificacion_equipo }}</td>
                                             <td class="text-justify p-1" style="vertical-align: middle;">{{ $datos->problema_equipo }}</td>
                                             <td class="text-center p-1">
-                                                <textarea name="diagnostico[]" class="form-control font-roboto-11 diagnostico" oninput="this.value = this.value.toUpperCase()" {{-- @if($datos->estado != '1') disabled @endif --}}>{{ $datos->solucion_equipo }}</textarea>
+                                                <textarea name="diagnostico[]" class="form-control font-roboto-10 diagnostico" oninput="this.value = this.value.toUpperCase()" {{ $disabled }}>{{ $datos->solucion_equipo }}</textarea>
                                             </td>
                                             <td class="text-center p-1">
-                                                <textarea name="solucion_equipo[]" class="form-control font-roboto-11 solucion_equipo" oninput="this.value = this.value.toUpperCase()" {{-- @if($datos->estado != '1') disabled @endif --}}>{{ $datos->solucion_equipo }}</textarea>
+                                                <textarea name="solucion_equipo[]" class="form-control font-roboto-10 solucion_equipo" oninput="this.value = this.value.toUpperCase()" {{ $disabled }}>{{ $datos->solucion_equipo }}</textarea>
                                             </td>
                                             <td class="text-center p-1" style="vertical-align: middle;">
                                                 <span class="{{ $datos->color_status }}">
@@ -101,9 +109,11 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12 pr-1 pl-1 text-center">
-                        <span class="btn btn-lg btn-primary font-roboto-12" onclick="procesar();" id="btn-proceso">
-                            <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>&nbsp;Procesar
-                        </span>
+                        @if ($mantenimiento->estado == '1')
+                            <span class="btn btn-lg btn-primary font-roboto-12" onclick="procesar();" id="btn-proceso">
+                                <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>&nbsp;Procesar
+                            </span>
+                        @endif
                         <span class="btn btn-lg btn-danger font-roboto-12" onclick="cancelar();">
                             <i class="fa-solid fa-xmark fa-fw"></i>&nbsp;Cancelar
                         </span>
@@ -159,7 +169,14 @@
 
         function pdf(){
             var id = "{{ $mantenimiento->id }}";
-            var url = "{{ route('mantenimientos.pdf',':id') }}";
+            var url = "{{ route('mantenimientos.pdf', ':id') }}";
+            url = url.replace(':id', id);
+            window.open(url, '_blank');
+        }
+
+        function finalizar(){
+            var id = "{{ $mantenimiento->id }}";
+            var url = "{{ route('mantenimientos.finalizar', ':id') }}";
             url = url.replace(':id',id);
             window.location.href = url;
         }

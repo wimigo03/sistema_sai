@@ -5,11 +5,12 @@
                 <tr class="font-roboto-10">
                     <td class="text-center p-1"><b>CODIGO</b></td>
                     <td class="text-center p-1"><b>CODIGO/SERIE</b></td>
-                    <td class="text-left p-1"><b>PROCEDENCIA</b></td>
-                    <td class="text-left p-1"><b>FUNCIONARIO</b></td>
-                    <td class="text-left p-1"><b>CLASIFICACION</b></td>
-                    <td class="text-center p-1"><b>RECEPCION</b></td>
+                    <td class="text-center p-1"><b>PROCEDENCIA</b></td>
+                    <td class="text-center p-1"><b>ENCARGADO</b></td>
+                    <td class="text-center p-1"><b>CLASIFICACION</b></td>
+                    <td class="text-center p-1"><b>F/REC.</b></td>
                     <td class="text-center p-1"><b>ESTADO</b></td>
+                    <td class="text-center p-1"><b>USUARIO</b></td>
                     @canany(['mantenimiento.index'])
                         <td class="text-center p-1"><i class="fa fa-bars fa-fw"></i></td>
                     @endcanany
@@ -20,19 +21,23 @@
                     <tr class="font-roboto-10">
                         <td class="text-center p-1">{{ $datos->mantenimiento->codigo }}</td>
                         <td class="text-center p-1">{{ $datos->codigo_serie }}</td>
-                        <td class="text-justify p-1">
+                        <td class="text-center p-1">
                             <span class="tts:right tts-slideIn tts-custom" aria-label="{{ $datos->area->nombrearea }}" style="cursor: pointer;">
                                 {{ $datos->area_corta }}
                             </span>
                         </td>
-                        <td class="text-justify p-1">{{ $datos->funcionario->nombres }}</td>
-                        <td class="text-left p-1">{{ $datos->clasificacion_equipo }}</td>
-                        <td class="text-center p-1">{{ \Carbon\Carbon::parse($datos->mantenimiento->fecha_recepcion)->format('d/m/Y H:i') }}</td>
+                        <td class="text-center p-1">{{ $datos->funcionario->nombres }}</td>
+                        <td class="text-center p-1">{{ $datos->clasificacion_equipo }}</td>
+                        <td class="text-center p-1">{{ \Carbon\Carbon::parse($datos->fecha_r)->format('d/m/Y') }}</td>
                         <td class="text-center p-1">
+                            <span class="{{ $datos->mantenimiento->color_status_alias }}">
+                                {{ $datos->mantenimiento->status_alias }}
+                            </span>
                             <span class="{{ $datos->color_status }}">
                                 {{ $datos->status }}
                             </span>
                         </td>
+                        <td class="text-center p-1">{{ $datos->user_asignado != null ? strtoupper($datos->user_asignado->name) : '' }}</td>
                         @canany(['mantenimientos.index'])
                             <td class="text-center p-1">
                                 <div class="d-flex justify-content-center">
@@ -41,16 +46,6 @@
                                             <i class="fas fa-external-link-alt fa-fw"></i>
                                         </a>
                                     </span>
-                                    {{-- <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Modificar">
-                                        <a href="{{ route('mantenimientos.editar', $datos->mantenimiento_id) }}" class="badge-with-padding badge badge-warning">
-                                            <i class="fa fa-edit fa-fw"></i>
-                                        </a>
-                                    </span>
-                                    <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Exportar">
-                                        <a href="{{ route('mantenimientos.pdf', $datos->mantenimiento_id) }}" class="badge-with-padding badge badge-danger">
-                                            <i class="fa fa-file-pdf fa-fw"></i>
-                                        </a>
-                                    </span> --}}
                                 </div>
                             </td>
                         @endcanany

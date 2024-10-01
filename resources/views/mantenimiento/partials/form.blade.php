@@ -15,7 +15,7 @@
                 </div>
                 <div class="col-md-2 pr-1 pl-1 mb-2">
                     <label for="clasificacion" class="d-inline"><b>Clasificacion</b></label>
-                    <select {{-- name="clasificacion" --}} id="clasificacion" class="form-control form-control-sm select2">
+                    <select id="clasificacion" class="form-control form-control-sm select2">
                         <option value="">-</option>
                         @foreach ($clasificaciones as $index => $value)
                             <option value="{{ $index }}">{{ $value }}</option>
