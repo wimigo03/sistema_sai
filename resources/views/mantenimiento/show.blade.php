@@ -15,6 +15,12 @@
                             <span class="btn btn-success font-roboto-12" onclick="finalizar();">
                                 <i class="fa-solid fa-bolt fa-fw"></i> Finalizar
                             </span>
+                        @else
+                            @if( Auth::user()->id == 102)
+                                <span class="btn btn-warning font-roboto-12" onclick="habilitar();">
+                                    <i class="fa-solid fa-bolt fa-fw"></i> Habilitar
+                                </span>
+                            @endif
                         @endif
                         <span class="btn btn-danger font-roboto-12 float-right" onclick="pdf();">
                             <i class="fas fa-file-pdf fa-fw"></i>
@@ -90,7 +96,7 @@
                                             <td class="text-justify p-1" style="vertical-align: middle;">{{ $datos->clasificacion_equipo }}</td>
                                             <td class="text-justify p-1" style="vertical-align: middle;">{{ $datos->problema_equipo }}</td>
                                             <td class="text-center p-1">
-                                                <textarea name="diagnostico[]" class="form-control font-roboto-10 diagnostico" oninput="this.value = this.value.toUpperCase()" {{ $disabled }}>{{ $datos->solucion_equipo }}</textarea>
+                                                <textarea name="diagnostico[]" class="form-control font-roboto-10 diagnostico" oninput="this.value = this.value.toUpperCase()" {{ $disabled }}>{{ $datos->diagnostico }}</textarea>
                                             </td>
                                             <td class="text-center p-1">
                                                 <textarea name="solucion_equipo[]" class="form-control font-roboto-10 solucion_equipo" oninput="this.value = this.value.toUpperCase()" {{ $disabled }}>{{ $datos->solucion_equipo }}</textarea>
@@ -177,6 +183,13 @@
         function finalizar(){
             var id = "{{ $mantenimiento->id }}";
             var url = "{{ route('mantenimientos.finalizar', ':id') }}";
+            url = url.replace(':id',id);
+            window.location.href = url;
+        }
+
+        function habilitar(){
+            var id = "{{ $mantenimiento->id }}";
+            var url = "{{ route('mantenimientos.habilitar', ':id') }}";
             url = url.replace(':id',id);
             window.location.href = url;
         }

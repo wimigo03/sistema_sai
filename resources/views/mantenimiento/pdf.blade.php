@@ -208,12 +208,14 @@
         <tr>
             <td align="center" style="vertical-align: top;">
                 <b>Recibi Conforme</b>
+                <br>
+                {{ $mantenimiento->funcionario->full_name }}
             </td>
             <td align="center" style="vertical-align: top;">
-                <b>Entregue Conforme</b>
+                <b>Tecnico</b>
             </td>
         </tr>
-        <tr>
+        {{-- <tr>
             <td colspan="2">&nbsp;</td>
         </tr>
         <tr>
@@ -228,7 +230,7 @@
             <td align="center" colspan="2">
                 <b>V° B°</b>
             </td>
-        </tr>
+        </tr> --}}
     </table>
 </body>
 <script type="text/php">

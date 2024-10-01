@@ -354,4 +354,14 @@ class MantenimientoController extends Controller
 
         return redirect()->route('mantenimientos.index')->with('success_message', 'Procesado.');
     }
+
+    public function habilitar($id)
+    {
+        $mantenimiento = Mantenimiento::find($id);
+        $mantenimiento->update([
+            'estado' => '1',
+        ]);
+
+        return back()->with('success_message', 'Procesado.');
+    }
 }

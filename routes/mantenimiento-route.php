@@ -7,6 +7,7 @@ Route::prefix('mantenimientos')->name('mantenimientos.')->middleware(['auth'])->
     Route::post('/store','MantenimientoController@store')->name('store')->middleware('can:mantenimientos.index');
     Route::get('/show/{mantenimiento_id}','MantenimientoController@show')->name('show')->middleware('can:mantenimientos.index');
     Route::get('/finalizar/{mantenimiento_id}','MantenimientoController@finalizar')->name('finalizar')->middleware('can:mantenimientos.index');
+    Route::get('/habilitar/{mantenimiento_id}','MantenimientoController@habilitar')->name('habilitar')->middleware('can:mantenimientos.index');
     Route::post('/store-detalle','MantenimientoController@storeDetalle')->name('store.detalle')->middleware('can:mantenimientos.index');
     Route::get('/editar/{mantenimiento_id}','MantenimientoController@editar')->name('editar')->middleware('can:mantenimientos.index');
     Route::post('/update','MantenimientoController@update')->name('update')->middleware('can:mantenimientos.index');
