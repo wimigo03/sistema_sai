@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
     <div class="card-body">
-        <div class="form-group row abs-center font-roboto-20">
+        <div class="form-group row abs-center font-roboto-18">
             <div class="col-md-12 text-center linea-completa">
                 <strong>CATEGORIAS PROGRAMATICAS</strong>
             </div>

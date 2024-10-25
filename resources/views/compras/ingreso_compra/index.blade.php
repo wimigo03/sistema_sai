@@ -1,13 +1,17 @@
 @extends('layouts.admin')
 @section('content')
     <div class="card-body">
-        <div class="form-group row font-roboto-20">
-            <div class="col-md-12 text-center linea-completa">
-                <strong>INGRESO DE MATERIALES</strong>
+        <div class="row abs-center">
+            <div class="col-md-10">
+                <div class="form-group row font-roboto-18">
+                    <div class="col-md-12 text-center linea-completa">
+                        <strong>INGRESOS</strong>
+                    </div>
+                </div>
+                @include('compras.ingreso_compra.partials.search')
+                @include('compras.ingreso_compra.partials.table')
             </div>
         </div>
-        @include('compras.ingreso_compra.partials.search')
-        @include('compras.ingreso_compra.partials.table')
     </div>
 @endsection
 @section('scripts')

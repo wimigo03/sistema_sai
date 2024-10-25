@@ -63,6 +63,7 @@
 
         function confirmar(){
             document.getElementById('dependiente_id').disabled = false;
+            document.getElementById('habilitar').disabled = false;
             var url = "{{ route('partida.presupuestaria.update') }}";
             $("#form").attr('action', url);
             $("#form").submit();

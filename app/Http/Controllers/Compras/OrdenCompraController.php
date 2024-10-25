@@ -61,13 +61,10 @@ class OrdenCompraController extends Controller
         return view('compras.orden_compra.index',compact('dea_id','areas','proveedores','users','orden_compras','tipos','estados'));
     }
 
-    /*public function create($dea_id)
+    public function create()
     {
-        $empleado = Empleado::find(Auth::user()->idemp);
-        $user = User::find(Auth::user()->id);
-        $tipos = SolicitudCompra::TIPOS;
-        return view('compras.solicitud_compra.create',compact('dea_id','empleado','user','tipos'));
-    }*/
+        dd("ok");
+    }
 
     /*public function getItems(Request $request)
     {
@@ -163,7 +160,8 @@ class OrdenCompraController extends Controller
     {
         $orden_compra = OrdenCompra::find($orden_compra_id);
         $orden_compra_detalles = OrdenCompraDetalle::where('orden_compra_id',$orden_compra_id)->where('estado','1')->get();
-        return view('compras.orden_compra.show',compact('orden_compra','orden_compra_detalles'));
+        $total = 0;
+        return view('compras.orden_compra.show',compact('orden_compra','orden_compra_detalles','total'));
     }
 
     public function aprobar($orden_compra_id)
@@ -184,13 +182,16 @@ class OrdenCompraController extends Controller
                 $numero = $ingresosCompras + 1;
                 $codigo = $codigo_dea . $gestion . '-' . (str_pad($numero,3,"0",STR_PAD_LEFT));
 
+                //EL ALMACEN_ID SE CONVIERTE A ALMACEN_ORIGEN_ID PARA INGRESAR AL PRIMER ALMACEN(CENTRAL)
                 $ingreso_compra = IngresoCompra::create([
-                    'almacen_id' => $orden_compra->almacen_id,
+                    'almacen_id' => OrdenCompra::ALMACEN_CENTRAL,
                     'dea_id' => $orden_compra->dea_id,
                     'proveedor_id' => $orden_compra->proveedor_id,
-                    'idarea' => $orden_compra->idarea,
                     'orden_compra_id' => $orden_compra->id,
                     'solicitud_compra_id' => $orden_compra->solicitud_compra_id,
+                    'categoria_programatica_id' => $orden_compra->categoria_programatica_id,
+                    'idarea' => $orden_compra->idarea,
+                    'almacen_origen_id' => $orden_compra->almacen_id,
                     'codigo' => $codigo,
                     'estado' => '1'
                 ]);
@@ -199,18 +200,19 @@ class OrdenCompraController extends Controller
                 foreach($orden_compra_detalles as $datos){
                     $ingreso_compra_detalle = IngresoCompraDetalle::create([
                         'ingreso_compra_id' => $ingreso_compra->id,
-                        'almacen_id' => $datos->almacen_id,
+                        'almacen_id' => OrdenCompra::ALMACEN_CENTRAL,
                         'dea_id' => $datos->dea_id,
                         'proveedor_id' => $datos->proveedor_id,
-                        'idarea' => $datos->idarea,
                         'orden_compra_id' => $datos->orden_compra_id,
                         'solicitud_compra_id' => $datos->solicitud_compra_id,
                         'orden_compra_detalle_id' => $datos->id,
                         'item_id' => $datos->item_id,
                         'partida_presupuestaria_id' => $datos->partida_presupuestaria_id,
                         'unidad_id' => $datos->unidad_id,
-                        'categoria_programatica_id' => $datos->categoria_programatica_id,
                         'solicitud_compra_detalle_id' => $datos->solicitud_compra_detalle_id,
+                        'categoria_programatica_id' => $datos->categoria_programatica_id,
+                        'idarea' => $datos->idarea,
+                        'almacen_origen_id' => $datos->almacen_id,
                         'cantidad' => $datos->cantidad,
                         'saldo' => $datos->saldo,
                         'estado' => '1'
@@ -277,7 +279,8 @@ class OrdenCompraController extends Controller
         $orden_compra = OrdenCompra::find($orden_compra_id);
         $orden_compra_detalles = OrdenCompraDetalle::where('orden_compra_id',$orden_compra_id)->where('estado','1')->get();
         $proveedores = Proveedor::where('dea_id',$orden_compra->dea_id)->where('estado','1')->get();
-        return view('compras.orden_compra.editar',compact('orden_compra','orden_compra_detalles','proveedores'));
+        $total = 0;
+        return view('compras.orden_compra.editar',compact('orden_compra','orden_compra_detalles','proveedores','total'));
     }
 
     public function update(Request $request)
@@ -293,12 +296,18 @@ class OrdenCompraController extends Controller
                     'c_interno' => $request->c_interno
                 ]);
 
-                $orden_compras_detalles = OrdenCompraDetalle::where('orden_compra_id',$request->orden_compra_id)->where('estado','1')->get();
-                foreach($orden_compras_detalles as $datos){
-                    $orden_compra_detalle = OrdenCompraDetalle::find($datos->id);
-                    $orden_compra_detalle->update([
-                        'proveedor_id' => $request->proveedor_id
-                    ]);
+                $cont = 0;
+                if(isset($request->precio)){
+                    while($cont < count($request->precio)){
+                        $orden_compra_detalle = OrdenCompraDetalle::find($request->orden_compra_detalle_id[$cont]);
+                        $orden_compra_detalle->update([
+                            'cantidad' => $request->cantidad[$cont],
+                            'precio' => floatval(str_replace(",", "", $request->precio[$cont])),
+                            'proveedor_id' => $request->proveedor_id
+                        ]);
+
+                        $cont++;
+                    }
                 }
 
                 return $orden_compra;
@@ -308,7 +317,7 @@ class OrdenCompraController extends Controller
                 "Orden de compra actualizada con exito." . "\n" .
                 "Por el usuario " . Auth::user()->id . "\n"
             );
-            return redirect()->route('orden.compra.index')->with('success_message', '[La orden de compra fue actualizada correctamente.]');
+            return redirect()->route('orden.compra.show',$function->id)->with('success_message', '[La orden de compra fue actualizada correctamente.]');
         } catch (\Exception $e) {
             Log::channel('orden_compras')->info(
                 "\n" .

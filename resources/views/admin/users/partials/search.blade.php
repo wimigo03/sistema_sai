@@ -18,10 +18,15 @@
     </div>
     <div class="form-group row">
         <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="role" value="{{request('role')}}" placeholder="--Role--" class="form-control font-roboto-12 intro">
+            <select name="role" id="role" class="form-control font-roboto-12 select2">
+                <option value="">-</option>
+                @foreach ($roles as $index => $value)
+                    <option value="{{ $index }}">{{ $value }}</option>
+                @endforeach
+            </select>
         </div>
         <div class="col-md-2 pr-1 pl-1">
-            <select name="estado" id="estado" class="form-control font-roboto-12">
+            <select name="estado" id="estado" class="form-control font-roboto-12 select2">
                 <option value="">-</option>
                 <option value="1" @if(request('estado') == '1') selected @endif >HABILITADOS</option>
                 <option value="0" @if(request('estado') == '0') selected @endif >NO HABILITADOS</option>

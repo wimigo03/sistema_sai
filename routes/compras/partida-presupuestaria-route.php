@@ -1,7 +1,7 @@
 <?php
 
 Route::prefix('partida-presupuestaria')->name('partida.presupuestaria.')->middleware(['auth'])->group(function () {
-    Route::get('index', 'Compras\PartidaPresupuestariaController@index')->name('index')->middleware('can:partida.presupuestaria.index');
+    Route::get('/', 'Compras\PartidaPresupuestariaController@index')->name('index')->middleware('can:partida.presupuestaria.index');
     Route::get('/get_datos', 'Compras\PartidaPresupuestariaController@getDatos')->name('get.datos')->middleware('can:partida.presupuestaria.index');
     Route::get('search', 'Compras\PartidaPresupuestariaController@search')->name('search')->middleware('can:partida.presupuestaria.index');
     Route::get('create', 'Compras\PartidaPresupuestariaController@create')->name('create')->middleware('can:partida.presupuestaria.create');

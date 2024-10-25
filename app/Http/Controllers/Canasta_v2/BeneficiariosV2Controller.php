@@ -808,7 +808,7 @@ class BeneficiariosV2Controller extends Controller
             'id_beneficiario' => $request->idBeneficiario,
             'user_id' => Auth::user()->id,
             'dea_id' => Auth::user()->dea->id,
-            'fecha' => date('Y-m-d')
+            'fecha' => date('Y-m-d H:i:s')
         ]);
 
         if($brigadista == true){

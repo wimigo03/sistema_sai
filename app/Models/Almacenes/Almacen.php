@@ -13,8 +13,8 @@ class Almacen extends Model
 
     protected $table = 'almacenes';
     protected $fillable = [
-        'user_id',
         'dea_id',
+        'user_id',
         'nombre',
         'direccion',
         'estado'

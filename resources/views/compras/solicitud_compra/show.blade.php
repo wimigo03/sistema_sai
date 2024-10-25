@@ -3,7 +3,7 @@
     <div class="card-header header">
         <div class="row">
             <div class="col-md-12 pr-1 pl-1 text-center">
-                SOLICITUD DE COMPRA - {{ $solicitud_compra->dea->descripcion }}
+                SOLICITUD DE COMPRA
             </div>
         </div>
     </div>
@@ -14,6 +14,13 @@
                 <span class="btn btn-outline-primary font-roboto-12" onclick="cancelar();">
                     <i class="fas fa-arrow-left fa-fw"></i>
                 </span>
+                @can('solicitud.compra.editar')
+                    @if ($solicitud_compra->estado == '1')
+                        <span class="btn btn-secondary font-roboto-12" onclick="editar();">
+                            <i class="fas fa-edit fa-fw"></i> Modificar
+                        </span>
+                    @endif
+                @endcan
                 @can('solicitud.compra.pdf')
                     <span class="btn btn-warning font-roboto-12 float-right" onclick="imprimir();">
                         <i class="fas fa-print fa-fw"></i>
@@ -107,7 +114,7 @@
                                         @foreach ($solicitud_compra_detalles as $datos)
                                             <tr class="font-roboto-11">
                                                 <td class="text-left p-1">{{ $datos->partidaPresupuestaria->numeracion . ' - ' . $datos->partidaPresupuestaria->nombre }}</td>
-                                                <td class="text-left p-1">{{ $datos->item->nombre }}</td>
+                                                <td class="text-left p-1">{{ $datos->item->codigo . ' - ' . $datos->item->nombre }}</td>
                                                 <td class="text-left p-1">{{ $datos->item->detalle }}</td>
                                                 <td class="text-left p-1">{{ $datos->unidad_medida->nombre }}</td>
                                                 <td class="text-right p-1">{{ number_format($datos->cantidad,2,'.',',') }}</td>
@@ -201,6 +208,13 @@
         function imprimir(){
             var id = $("#solicitud_compra_id").val();
             var url = "{{ route('solicitud.compra.pdf',':id') }}";
+            url = url.replace(':id',id);
+            window.location.href = url;
+        }
+
+        function editar(){
+            var id = $("#solicitud_compra_id").val();
+            var url = "{{ route('solicitud.compra.editar',':id') }}";
             url = url.replace(':id',id);
             window.location.href = url;
         }

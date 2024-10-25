@@ -3,7 +3,7 @@
     <div class="card-body">
         <div class="form-group row font-roboto-20">
             <div class="col-md-12 text-center linea-completa">
-                <strong>REGISTRAR MATERIAL</strong>
+                <strong>REGISTRAR ITEM</strong>
             </div>
         </div>
         @include('compras.item.partials.form-create')
@@ -25,55 +25,11 @@
                     numeralThousandsGroupStyle: 'thousand'
                 });
             });
-
-            $('#partida_presupuestaria_id').on('select2:open', function(e) {
-                if($("#categoria_programatica_id >option:selected").val() == ""){
-                    Modal("Para continuar se debe seleccionar una <b>[CATEGORIA PROGRAMATICA]</b>.");
-                }
-            });
-
-            if($("#categoria_programatica_id >option:selected").val() != ''){
-                var id = $("#categoria_programatica_id >option:selected").val();
-                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                getPartidasPresupuestarias(id,CSRF_TOKEN);
-            }
         });
 
         var Modal = function(mensaje){
             $("#modal-alert .modal-body").html(mensaje);
             $('#modal-alert').modal({keyboard: false});
-        }
-
-        $('#categoria_programatica_id').change(function() {
-            var id = $(this).val();
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            getPartidasPresupuestarias(id,CSRF_TOKEN);
-        });
-
-        function getPartidasPresupuestarias(id,CSRF_TOKEN){
-            $.ajax({
-                type: 'GET',
-                url: '/materiales/get_partidas_presupuestarias',
-                data: {
-                    _token: CSRF_TOKEN,
-                    id: id
-                },
-                success: function(data){
-                    if(data.partidas_presupuestarias){
-                        var arr = Object.values($.parseJSON(data.partidas_presupuestarias));
-                        $("#partida_presupuestaria_id").empty();
-                        var select = $("#partida_presupuestaria_id");
-                        select.append($("<option></option>").attr("value", '').text('--Partida Presupuestaria--'));
-                        $.each(arr, function(index, json) {
-                            var opcion = $("<option></option>").attr("value", json.id).text(json.partida_presupuestaria);
-                            select.append(opcion);
-                        });
-                    }
-                },
-                error: function(xhr){
-                    console.log(xhr.responseText);
-                }
-            });
         }
 
         function procesar() {
@@ -86,10 +42,6 @@
         }
 
         function validar() {
-            if($("#categoria_programatica_id >option:selected").val() == ""){
-                Modal("<b>[ERROR] . </b> La Categoria Programatica es un dato obligatorio.");
-                return false;
-            }
             if($("#partida_presupuestaria_id >option:selected").val() == ""){
                 Modal("<b>[ERROR] . </b> La Partida Presupuestaria es un dato obligatorio.");
                 return false;

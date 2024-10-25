@@ -32,13 +32,6 @@
                     </span>
                 </span>
             @endcan
-            @can('inventario.index')
-                <span class="tts:right tts-slideIn tts-custom" aria-label="Inventario General" style="cursor: pointer;">
-                    <span class="btn btn-outline-dark font-roboto-12" onclick="inventarioGeneral();">
-                        <i class="fas fa-warehouse fa-fw"></i>
-                    </span>
-                </span>
-            @endcan
             <span class="btn btn-outline-danger font-roboto-12 float-right" onclick="limpiar();">
                 <i class="fas fa-eraser fa-fw"></i> Limpiar
             </span>

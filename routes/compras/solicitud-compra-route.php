@@ -1,11 +1,11 @@
 <?php
 
 Route::prefix('solicitud-compra')->name('solicitud.compra.')->middleware(['auth'])->group(function () {
-    Route::get('index', 'Compras\SolicitudCompraController@index')->name('index')->middleware('can:solicitud.compra.index');
+    Route::get('/', 'Compras\SolicitudCompraController@index')->name('index')->middleware('can:solicitud.compra.index');
     Route::get('search', 'Compras\SolicitudCompraController@search')->name('search')->middleware('can:solicitud.compra.index');
     Route::get('create', 'Compras\SolicitudCompraController@create')->name('create')->middleware('can:solicitud.compra.create');
     Route::get('/insertar-producto', 'Compras\SolicitudCompraController@insertarProducto')->name('insertar.producto')->middleware('can:solicitud.compra.create');
-    Route::get('/get_partidas_presupuestarias', 'Compras\SolicitudCompraController@getPartidasPresupuestarias')->name('get.partidas.presupuestarias')->middleware('can:solicitud.compra.create');
+    /* Route::get('/get_partidas_presupuestarias', 'Compras\SolicitudCompraController@getPartidasPresupuestarias')->name('get.partidas.presupuestarias')->middleware('can:solicitud.compra.create'); */
     Route::get('/get_items', 'Compras\SolicitudCompraController@getItems')->name('get.items')->middleware('can:solicitud.compra.create');
     Route::post('store', 'Compras\SolicitudCompraController@store')->name('store')->middleware('can:solicitud.compra.create');
     Route::get('show/{solicitud_compra_id}', 'Compras\SolicitudCompraController@show')->name('show')->middleware('can:solicitud.compra.show');

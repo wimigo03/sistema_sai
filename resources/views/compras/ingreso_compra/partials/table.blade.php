@@ -3,7 +3,7 @@
         <table class="table display table-striped table-bordered responsive hover-orange" style="width:100%;">
             <thead>
                 <tr class="font-roboto-11">
-                    <td class="text-left p-1"><b>CODIGO</b></td>
+                    <td class="text-left p-1"><b>COD. ING.</b></td>
                     <td class="text-left p-1"><b>AREA SOLICITANTE</b></td>
                     <td class="text-left p-1"><b>ALMACEN</b></td>
                     <td class="text-left p-1"><b>PROVEEDOR</b></td>
@@ -16,7 +16,7 @@
             </thead>
             <tbody>
                 @foreach ($ingresos_compras as $datos)
-                    <tr class="font-roboto-11">
+                    <tr class="font-roboto-10">
                         <td class="text-left p-1">{{ $datos->codigo }}</td>
                         <td class="text-left p-1">{{ $datos->area->nombrearea }}</td>
                         <td class="text-left p-1">{{ $datos->almacen->nombre }}</td>

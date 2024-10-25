@@ -237,6 +237,16 @@ class Empleado extends Model
         }
     }
 
+    public function getAreaAsignadaAlmacenAttribute(){
+        $contrato = EmpleadoContrato::select('idarea_asignada')->where('idemp',$this->idemp)->orderBy('id','desc')->take(1)->first();
+        if($contrato != null){
+            $area = Area::where('idarea',$contrato->idarea_asignada)->first();
+            if($area != null){
+                return $area->almacen->nombre;
+            }
+        }
+    }
+
     public function getAreaAsignadaCortaAttribute(){
         $contrato = EmpleadoContrato::select('idarea_asignada')->where('idemp',$this->idemp)->orderBy('id','desc')->take(1)->first();
         if($contrato != null){
@@ -341,7 +351,7 @@ class Empleado extends Model
     public function scopeByAreaAsignada($query, $area_asignada_id){
         if ($area_asignada_id != null) {
                 return $query
-                    ->whereIn('idemp', function ($subquery) use($area_asignada_id) {
+                    ->whereIn('empleados.idemp', function ($subquery) use($area_asignada_id) {
                         $subquery->select('idemp')
                             ->from('empleados_contratos')
                             ->where('idarea_asignada', $area_asignada_id);
@@ -352,7 +362,7 @@ class Empleado extends Model
     public function scopeByCargo($query, $file_id){
         if ($file_id) {
                 return $query
-                    ->whereIn('idemp', function ($subquery) use($file_id) {
+                    ->whereIn('empleados.idemp', function ($subquery) use($file_id) {
                         $subquery->select('idemp')
                             ->from('empleados_contratos')
                             ->where('estado','1')
@@ -426,7 +436,7 @@ class Empleado extends Model
             $fecha_i = date('Y-m-d', strtotime(str_replace('/', '-', $fecha_i)));
             $fecha_f = date('Y-m-d', strtotime(str_replace('/', '-', $fecha_f)));
                 return $query
-                    ->whereIn('idemp', function ($subquery) use($fecha_i, $fecha_f) {
+                    ->whereIn('empleados.idemp', function ($subquery) use($fecha_i, $fecha_f) {
                         $subquery->select('idemp')
                             ->from('empleados_contratos')
                             ->where('fecha_conclusion_contrato','!=',null)

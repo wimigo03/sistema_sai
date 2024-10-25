@@ -24,7 +24,7 @@
             <input type="text" name="fecha_registro" value="{{ request('fecha_registro') }}" id="fecha_registro" placeholder="--Fecha Registro--" class="form-control font-roboto-12" data-language="es">
         </div>
         <div class="col-md-2 pr-1 pl-1">
-            <select name="estado" id="estado" class="form-control">
+            <select name="estado" id="estado" class="form-control select2">
                 <option value="">-</option>
                 @foreach ($estados as $index => $value)
                     <option value="{{ $index }}" @if(request('estado') == $index) selected @endif >{{ $value }}</option>

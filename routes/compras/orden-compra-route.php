@@ -3,7 +3,7 @@
 Route::prefix('orden-compra')->name('orden.compra.')->middleware(['auth'])->group(function () {
     Route::get('index', 'Compras\OrdenCompraController@index')->name('index')->middleware('can:orden.compra.index');
     Route::get('search', 'Compras\OrdenCompraController@search')->name('search')->middleware('can:orden.compra.index');
-    //Route::get('create/{dea_id}', 'Compras\OrdenCompraController@create')->name('create')->middleware('can:orden.compra.create');/*** */
+    Route::get('create', 'Compras\OrdenCompraController@create')->name('create')->middleware('can:orden.compra.create');/*** */
     Route::get('show/{orden_compra_id}', 'Compras\OrdenCompraController@show')->name('show')->middleware('can:orden.compra.show');
     Route::get('editar/{orden_compra_id}', 'Compras\OrdenCompraController@editar')->name('editar')->middleware('can:orden.compra.editar');
     Route::post('update', 'Compras\OrdenCompraController@update')->name('update')->middleware('can:orden.compra.editar');

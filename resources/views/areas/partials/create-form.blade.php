@@ -48,6 +48,14 @@
             <input type="text" name="nombre_area" value="{{ old('nombre_area') }}" id="nombre_area" class="form-control font-roboto-12" data-language="es" oninput="this.value = this.value.toUpperCase();">
         </div>
     </div>
+    <div class="form-group row font-roboto-12  align-items-center">
+        <div class="col-md-4 pr-1 text-right">
+            <label for="area_alias" class="d-inline"><b>Alias</b></label>
+        </div>
+        <div class="col-md-5 pr-1 pl-1">
+            <input type="text" name="alias" id="alias" value="{{ old('alias') }}" class="form-control font-roboto-12" data-language="es" oninput="this.value = this.value.toUpperCase();">
+        </div>
+    </div>
 </form>
 <div class="form-group row">
     <div class="col-md-6 pr-1 pl-1">

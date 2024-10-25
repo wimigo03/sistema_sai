@@ -10,6 +10,8 @@ use App\Models\Canasta\Distrito;
 use App\Models\Canasta\Barrio;
 use App\Models\Canasta\Ocupaciones;
 use Carbon\Carbon;
+use DB;
+
 class Beneficiario extends Model
 {
     protected $table = 'beneficiarios';
@@ -318,6 +320,51 @@ class Beneficiario extends Model
         }
     }
 
+    /* public function scopeByEntreFechas($query, $finicial, $ffinal)
+    {
+        if (!is_null($finicial) && !is_null($ffinal)) {
+            $finicial = Carbon::createFromFormat('d/m/Y', $finicial)->startOfDay()->format('Y-m-d H:i:s');
+            $ffinal = Carbon::createFromFormat('d/m/Y', $ffinal)->endOfDay()->format('Y-m-d H:i:s');
+
+            return $query->leftJoin(DB::raw("(
+                    SELECT id_beneficiario, observacion, fecha
+                    FROM historialmod
+                    WHERE (id_beneficiario, fecha) IN (
+                        SELECT id_beneficiario, MAX(fecha)
+                        FROM historialmod
+                        GROUP BY id_beneficiario
+                    )
+                ) as b"), 'beneficiarios.id', 'b.id_beneficiario')
+                ->whereBetween('b.fecha', [$finicial, $ffinal]);
+        }
+
+        return $query;
+    } */
+
+    public function scopeByEntreFechas($query, $finicial, $ffinal)
+    {
+        if (!is_null($finicial) && !is_null($ffinal)) {
+            $finicial = Carbon::createFromFormat('d/m/Y', $finicial)->startOfDay()->format('Y-m-d H:i:s');
+            $ffinal = Carbon::createFromFormat('d/m/Y', $ffinal)->endOfDay()->format('Y-m-d H:i:s');
+
+            return $query->leftJoin(DB::raw("(
+                        SELECT id_beneficiario, observacion, fecha
+                        FROM historialmod
+                        WHERE (id_beneficiario, fecha) IN (
+                            SELECT id_beneficiario, MAX(fecha)
+                            FROM historialmod
+                            GROUP BY id_beneficiario
+                        )
+                    ) as b"), 'beneficiarios.id', '=', 'b.id_beneficiario')
+                    ->where(function ($query) use ($finicial, $ffinal) {
+                        $query->whereBetween('b.fecha', [$finicial, $ffinal])
+                              ->orWhereNull('b.fecha'); // Incluir beneficiarios sin relación con historialmod
+                    });
+        }
+
+        return $query;
+    }
+
     public function scopeByOcupacion($query, $ocupacion_id){
         if($ocupacion_id != null){
             return $query->where('id_ocupacion', $ocupacion_id);
@@ -337,7 +384,7 @@ class Beneficiario extends Model
 
     public function scopeByDea($query, $dea_id){
         if($dea_id != null){
-            return $query->where('dea_id',$dea_id);
+            return $query->where('beneficiarios.dea_id',$dea_id);
         }
     }
 
@@ -349,7 +396,7 @@ class Beneficiario extends Model
 
     public function scopeByEstado($query, $estado){
         if($estado != null){
-            return $query->where('estado',$estado);
+            return $query->where('beneficiarios.estado',$estado);
         }
     }
 

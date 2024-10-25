@@ -26,12 +26,6 @@
                 width: '100%'
             });
 
-            $('#categoria_programatica_id').select2({
-                theme: "bootstrap4",
-                placeholder: "--Categoria Programatica--",
-                width: '100%'
-            });
-
             $('#partida_presupuestaria_id').select2({
                 theme: "bootstrap4",
                 placeholder: "--Partida Presupuestaria--",

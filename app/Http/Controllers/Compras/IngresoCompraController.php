@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use NumeroALetras;
+use PDF;
+use DB;
+
 use App\Models\Compra\OrdenCompra;
 use App\Models\Compra\IngresoCompra;
 use App\Models\Compra\IngresoCompraDetalle;
@@ -15,7 +19,6 @@ use App\Models\Compra\Proveedor;
 use App\Models\Compra\CategoriaProgramatica;
 use App\Models\Area;
 use App\Models\Canasta\Dea;
-use DB;
 
 class IngresoCompraController extends Controller
 {
@@ -60,15 +63,67 @@ class IngresoCompraController extends Controller
         return view('compras.ingreso_compra.show',compact('ingreso_compra','ingreso_compra_detalles'));
     }
 
+    public function pdf($ingreso_compra_id)
+    {
+        $ingreso_compra = IngresoCompra::find($ingreso_compra_id);
+        $categorias_programaticas = IngresoCompraDetalle::where('ingreso_compra_id',$ingreso_compra_id)
+                                    ->join('orden_compra_detalles as ocd','ingresos_compras_detalles.orden_compra_detalle_id','ocd.id')
+                                    ->join('categorias_programaticas as cp','ingresos_compras_detalles.categoria_programatica_id','cp.id')
+                                    ->select(
+                                        'ingresos_compras_detalles.categoria_programatica_id',
+                                        'cp.codigo',
+                                        'cp.nombre',
+                                        DB::raw('SUM(ingresos_compras_detalles.cantidad * ocd.precio) as total_categorias_programaticas')
+                                        )
+                                    ->groupby(
+                                        'ingresos_compras_detalles.categoria_programatica_id',
+                                        'cp.codigo',
+                                        'cp.nombre')
+                                    ->orderBy('ingresos_compras_detalles.categoria_programatica_id')
+                                    ->get();
+
+        $partidas_presupuestarias = IngresoCompraDetalle::where('ingreso_compra_id',$ingreso_compra_id)
+                                    ->join('orden_compra_detalles as ocd','ingresos_compras_detalles.orden_compra_detalle_id','ocd.id')
+                                    ->join('partidas_presupuestarias as pp','ingresos_compras_detalles.partida_presupuestaria_id','pp.id')
+                                    ->select(
+                                        'ingresos_compras_detalles.categoria_programatica_id',
+                                        'ingresos_compras_detalles.partida_presupuestaria_id',
+                                        'pp.codigo',
+                                        'pp.nombre',
+                                        DB::raw('SUM(ingresos_compras_detalles.cantidad * ocd.precio) as total_partidas_presupuestarias')
+                                        )
+                                    ->groupby(
+                                        'ingresos_compras_detalles.categoria_programatica_id',
+                                        'ingresos_compras_detalles.partida_presupuestaria_id',
+                                        'pp.codigo',
+                                        'pp.nombre')
+                                    ->orderBy('ingresos_compras_detalles.partida_presupuestaria_id')
+                                    ->get();
+
+        $ingresos_compras_detalles = IngresoCompraDetalle::where('ingreso_compra_id', $ingreso_compra_id)
+                                    ->orderBy('partida_presupuestaria_id')
+                                    ->get();
+
+        $total = $categorias_programaticas->sum('total_categorias_programaticas');
+        $username = User::find(Auth::user()->id);
+        $cont = 1;
+        $numero_letras = new NumeroALetras();
+        $total_en_letras = $numero_letras->toInvoice($total, 2, 'Bolivianos');
+        $username = $username != null ? $username->nombre_completo : $username->name;
+        $pdf = PDF::loadView('compras.ingreso_compra.pdf',compact('ingreso_compra','categorias_programaticas','partidas_presupuestarias','ingresos_compras_detalles','cont','total','total_en_letras','username'));
+        $pdf->setPaper('LETTER', 'portrait');
+        return $pdf->stream($ingreso_compra->codigo);
+    }
+
     public function ingresar(Request $request)
     {
         try{
             $function = DB::transaction(function () use ($request) {
                 $ingreso_compra = IngresoCompra::find($request->ingreso_compra_id);
-                $orden_compra = OrdenCompra::find($ingreso_compra->orden_compra_id);
+                /* $orden_compra = OrdenCompra::find($ingreso_compra->orden_compra_id);
                 $orden_compra->update([
                     'estado' => '4'
-                ]);
+                ]); */
 
                 $ingreso_compra->update([
                     'user_id' => Auth::user()->id,

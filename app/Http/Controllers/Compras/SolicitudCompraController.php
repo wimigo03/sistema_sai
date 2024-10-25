@@ -15,6 +15,7 @@ use App\Models\Compra\Item;
 use App\Models\Canasta\Dea;
 use App\Models\Compra\CategoriaProgramatica;
 use App\Models\Compra\PartidaPresupuestaria;
+use App\Models\Compra\CategoriaPresupuestaria;
 use App\Models\Compra\OrdenCompra;
 use App\Models\Compra\OrdenCompraDetalle;
 use DB;
@@ -63,13 +64,23 @@ class SolicitudCompraController extends Controller
         $user = User::find(Auth::user()->id);
         $tipos = SolicitudCompra::TIPOS;
 
-        $categorias_programaticas = CategoriaProgramatica::query()
-                                    ->byDea(Auth::user()->dea->id)
-                                    ->select(DB::raw("concat(codigo,' - ',nombre) as categoria_programatica"),'id')
-                                    ->orderBy('codigo','asc')
-                                    ->pluck('categoria_programatica','id');
+        $categoria_programatica_id = Area::find(Auth::user()->area_asignada_id)->categoria_programatica_id;
+        if($categoria_programatica_id == null){
+            return redirect()->back()->with('error_message','<b>[ERROR]</b>. SIN CATEGORIA PROGRAMATICA')->withInput();
+        }
 
-        return view('compras.solicitud_compra.create',compact('empleado','user','tipos','categorias_programaticas'));
+        $partidas_presupuestarias = CategoriaPresupuestaria::
+                                        join('partidas_presupuestarias as pp','categorias_presupuestarias.partida_presupuestaria_id','pp.id')
+                                        ->where('categorias_presupuestarias.estado','1')
+                                        ->where('pp.detalle','1')
+                                        ->where('pp.estado','1')
+                                        ->where('pp.dea_id',Auth::user()->dea->id)
+                                        ->where('categorias_presupuestarias.categoria_programatica_id',$categoria_programatica_id)
+                                        ->select(
+                                            DB::raw("concat(pp.numeracion,' (',pp.codigo,') ',pp.nombre) as partida_presupuestaria"),'pp.id')
+                                        ->pluck('partida_presupuestaria','id');
+
+        return view('compras.solicitud_compra.create',compact('empleado','user','tipos','partidas_presupuestarias','categoria_programatica_id'));
     }
 
     public function getPartidasPresupuestarias(Request $request)
@@ -117,8 +128,16 @@ class SolicitudCompraController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'area_id' => 'required',
+        ]);
+
+        $area = Area::find($request->area_id);
+        if($area == null){
+            return redirect()->back()->with('error_message','[EL AREA SELECCIONADA NO TIENE ASIGNADO UN ALMACEN]')->withInput();
+        }
         try{
-            $function = DB::transaction(function () use ($request) {
+            $function = DB::transaction(function () use ($request, $area) {
                 $dea_id = Auth::user()->dea->id;
                 $date = date('Y-m-d');
                 $solicitudesCompras = SolicitudCompra::where('dea_id',$dea_id)
@@ -132,10 +151,12 @@ class SolicitudCompraController extends Controller
                 $codigo = $codigo_dea . $gestion . '-' . (str_pad($numero,3,"0",STR_PAD_LEFT));
 
                 $solicitud_compra = SolicitudCompra::create([
-                    'idarea' => Auth::user()->idarea,
                     'user_id' => Auth::user()->id,
                     'dea_id' => $dea_id,
                     'idemp' => Auth::user()->idemp,
+                    'categoria_programatica_id' => $request->categoria_programatica_id,
+                    'almacen_id' => $area->almacen_id,
+                    'idarea' => $area->idarea,
                     'codigo' => $codigo,
                     'detalle' => $request->detalle,
                     'tipo' => '1',
@@ -149,14 +170,15 @@ class SolicitudCompraController extends Controller
                     $item = Item::find($request->item_id[$cont]);
                     $solicitud_compra_detalle = SolicitudCompraDetalle::create($datos_detalle = [
                         'solicitud_compra_id' => $solicitud_compra->id,
-                        'idarea' => Auth::user()->idarea,
                         'user_id' => Auth::user()->id,
                         'dea_id' => $dea_id,
                         'item_id' => $item->id,
                         'partida_presupuestaria_id' => $request->partida_presupuestaria_id[$cont],
-                        'categoria_programatica_id' => $request->categoria_programatica_id[$cont],
                         'unidad_id' => $item->unidad_id,
                         'idemp' => Auth::user()->idemp,
+                        'categoria_programatica_id' => $request->categoria_programatica_id,
+                        'almacen_id' => $area->almacen_id,
+                        'idarea' => $area->idarea,
                         'cantidad' => floatval(str_replace(",", "", $request->cantidad[$cont])),
                         'saldo' => floatval(str_replace(",", "", $request->cantidad[$cont])),
                         'estado' => '1'
@@ -226,9 +248,10 @@ class SolicitudCompraController extends Controller
                     'dea_id' => $solicitud_compra->dea_id,
                     'idarea' => $solicitud_compra->idarea,
                     'user_id' => $solicitud_compra->user_id,
-                    'almacen_id' => 1,
+                    'almacen_id' => $solicitud_compra->almacen_id,
                     'solicitud_compra_id' => $solicitud_compra->id,
                     'idemp' => Auth::user()->idemp,
+                    'categoria_programatica_id' => $solicitud_compra->categoria_programatica_id,
                     'codigo' => $codigo,
                     'justificacion' => $solicitud_compra->detalle,
                     'tipo' => $solicitud_compra->tipo,
@@ -245,12 +268,12 @@ class SolicitudCompraController extends Controller
                         'user_id' => $solicitud_compra_detalle->user_id,
                         'partida_presupuestaria_id' => $solicitud_compra_detalle->partida_presupuestaria_id,
                         'unidad_id' => $solicitud_compra_detalle->unidad_id,
-                        'idarea' => $solicitud_compra_detalle->idarea,
                         'almacen_id' => $orden_compra->almacen_id,
-                        'categoria_programatica_id' => $solicitud_compra_detalle->categoria_programatica_id,
                         'solicitud_compra_id' => $solicitud_compra->id,
                         'solicitud_compra_detalle_id' => $solicitud_compra_detalle->id,
-                        'idemp' => Auth::user()->idemp,
+                        'idemp' => $solicitud_compra_detalle->idemp,
+                        'categoria_programatica_id' => $solicitud_compra->categoria_programatica_id,
+                        'idarea' => $solicitud_compra_detalle->idarea,
                         'cantidad' => $solicitud_compra_detalle->cantidad,
                         'precio' => $item->precio != null ? $item->precio : 0,
                         'saldo' => $solicitud_compra_detalle->cantidad,
@@ -314,7 +337,7 @@ class SolicitudCompraController extends Controller
                     'estado' => '1',
                     'user_aprob_id' => null,
                     'fecha_aprob' => null,
-                    'obs' => null
+                    'detalle' => null
                 ];
 
                 $solicitud_compra = SolicitudCompra::find($solicitud_compra_id);
@@ -351,16 +374,25 @@ class SolicitudCompraController extends Controller
         $user = User::find(Auth::user()->id);
         $tipos = SolicitudCompra::TIPOS;
 
-        $categorias_programaticas = CategoriaProgramatica::query()
-                                    ->byDea(Auth::user()->dea->id)
-                                    ->select(DB::raw("concat(codigo,' - ',nombre) as categoria_programatica"),'id')
-                                    ->orderBy('codigo','asc')
-                                    ->get();
+        $categoria_programatica_id = Area::find(Auth::user()->area_asignada_id)->categoria_programatica_id;
+        if($categoria_programatica_id == null){
+            return redirect()->back()->with('error_message','<b>[ERROR]</b>. SIN CATEGORIA PROGRAMATICA')->withInput();
+        }
+
+        $partidas_presupuestarias = CategoriaPresupuestaria::
+                                        join('partidas_presupuestarias as pp','categorias_presupuestarias.partida_presupuestaria_id','pp.id')
+                                        ->where('categorias_presupuestarias.estado','1')
+                                        ->where('pp.detalle','1')
+                                        ->where('pp.estado','1')
+                                        ->where('pp.dea_id',Auth::user()->dea->id)
+                                        ->where('categorias_presupuestarias.categoria_programatica_id',$categoria_programatica_id)
+                                        ->select(
+                                            DB::raw("concat(pp.numeracion,' (',pp.codigo,') ',pp.nombre) as partida_presupuestaria"),'pp.id')
+                                        ->pluck('partida_presupuestaria','id');
 
         $solicitud_compra_detalles = SolicitudCompraDetalle::where('solicitud_compra_id',$solicitud_compra_id)->where('estado','1')->get();
-        $old_categoria_programatica_id = SolicitudCompraDetalle::where('solicitud_compra_id',$solicitud_compra_id)->first()->categoria_programatica_id;
 
-        return view('compras.solicitud_compra.editar',compact('solicitud_compra','empleado','user','tipos','categorias_programaticas','solicitud_compra_detalles','old_categoria_programatica_id'));
+        return view('compras.solicitud_compra.editar',compact('solicitud_compra','empleado','user','tipos','categoria_programatica_id','partidas_presupuestarias','solicitud_compra_detalles'));
     }
 
     public function eliminarRegistro($id)
@@ -423,9 +455,9 @@ class SolicitudCompraController extends Controller
                             'user_id' => Auth::user()->id,
                             'dea_id' => Auth::user()->dea->id,
                             'idemp' => Auth::user()->idemp,
+                            'categoria_programatica_id' => $request->categoria_programatica_id,
                             'item_id' => $item->id,
                             'partida_presupuestaria_id' => $request->partida_presupuestaria_id[$cont],
-                            'categoria_programatica_id' => $request->categoria_programatica_id[$cont],
                             'unidad_id' => $item->unidad_id,
                             'cantidad' => floatval(str_replace(",", "", $request->cantidad[$cont])),
                             'saldo' => floatval(str_replace(",", "", $request->cantidad[$cont])),
@@ -443,7 +475,7 @@ class SolicitudCompraController extends Controller
                 "Solicitud de Compra actualizada con éxito" . "\n" .
                 "Usuario: " . Auth::user()->id . "\n"
             );
-            return redirect()->route('solicitud.compra.index')->with('success_message', '[La solicitud de compra fue actualizada correctamente.]');
+            return redirect()->route('solicitud.compra.show',$function->id)->with('success_message', '[La solicitud de compra fue actualizada correctamente.]');
         } catch (\Exception $e) {
             Log::channel('solicitudes_compras')->info(
                 "\n" .

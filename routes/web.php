@@ -632,7 +632,7 @@ Route::post('compras/pedidoparcial/responsableUpdate', [CompraController2::class
 
 /////////////////////////--ALMACEN--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('almacen/index', [AlmacenController::class,'index'])->name('almacen.index');
+//Route::get('almacen/index', [AlmacenController::class,'index'])->name('almacen.index');
 //Route::get('compras/pedido/index2', 'CompraController@index2')->name('compras.pedido.index2');
 //oute::get('compras/pedido/create', 'CompraController@create')->name('compras.pedido.create');
 //Route::post('compras/pedido/store', 'CompraController@store')->name('compras.pedido.store');
@@ -671,7 +671,7 @@ Route::POST('Evento2/updatepdf', [ControllerEvent2::class,'updatepdf'])->name('e
 Route::get('Evento2/urlfile/{id}', [ControllerEvent2::class,'urlfile'])->name('evento2.urlfile');
 
 /////////////////////////--CANASTA--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-Route::get('almacen/detalle/{id}','AlmacenController@detalle')->name('almacen.detalle');
+//Route::get('almacen/detalle/{id}','AlmacenController@detalle')->name('almacen.detalle');
 
 //Route::get('canasta/beneficiarios/index', 'Canasta\BeneficiariosController@index')->name('canasta.beneficiarios.index');
 //Route::get('canasta/beneficiarios/search', 'Canasta\BeneficiariosController@search')->name('canasta.beneficiarios.search');

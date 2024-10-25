@@ -13,5 +13,5 @@ Route::prefix('users')->name('users.')->middleware(['auth'])->group(function () 
     Route::post('/update', 'Admin\UserController@update')->name('update')->middleware('can:users.editar');
     Route::get('/baja/{id}', 'Admin\UserController@baja')->name('baja')->middleware('can:users.habilitar');
     Route::get('/alta/{id}', 'Admin\UserController@alta')->name('alta')->middleware('can:users.habilitar');
-    Route::post('/update-password-mi-perfil', 'Admin\UserController@update_password_mi_perfil')->name('update.password.mi.perfil')->middleware('can:empleados.mi.perfil');
+    Route::post('/update-password-mi-perfil', 'Admin\UserController@update_password_mi_perfil')->name('update.password.mi.perfil')/* ->middleware('can:empleados.mi.perfil') */;
 });

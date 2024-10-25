@@ -6,37 +6,32 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-/*use App\Models\Compra\SolicitudCompra;
-use App\Models\Compra\SolicitudCompraDetalle;
-use App\Models\Area;
-use App\Models\User;
-use App\Models\Empleado;
-use App\Models\Compra\Item;
-use App\Models\Canasta\Dea;
-use App\Models\Compra\CategoriaProgramatica;
-use App\Models\Compra\PartidaPresupuestaria;
-use App\Models\Compra\OrdenCompra;
-use App\Models\Compra\OrdenCompraDetalle;*/
 use DB;
 
-class SalidaMaterialController extends Controller
+use App\Models\Empleado;
+use App\Models\User;
+use App\Models\Compra\CategoriaProgramatica;
+use App\Models\Almacenes\SalidaAlmacen;
+use App\Models\Almacenes\SalidaAlmacenDetalle;
+use App\Models\Compra\Item;
+
+class SalidaAlmacenController extends Controller
 {
     public function index()
-    {dd("ok");
+    {
         $dea_id = Auth::user()->dea->id;
-        $areas = Area::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
-        $users = User::where('dea_id',$dea_id)->pluck('name','id');
-        $solicitudes_compras = SolicitudCompra::query()
-                                                ->ByDea($dea_id)
-                                                ->orderBy('id','desc')
-                                                ->paginate(10);
-        $tipos = SolicitudCompra::TIPOS;
-        $estados = SolicitudCompra::ESTADOS;
-        return view('compras.solicitud_compra.index',compact('areas','users','solicitudes_compras','tipos','estados'));
+        $salidas = SalidaAlmacen::query()
+                                ->ByDea($dea_id)
+                                ->ByArea(Auth::user()->idarea)
+                                ->ByFechas($fecha_inicial,$fecha_final)
+                                ->get()
+                                ->count();
+
+        return view('almacenes.salidas.index',compact('salidas'));
     }
 
     public function search(Request $request)
-    {
+    {dd($request->all());
         $dea_id = Auth::user()->dea->id;
         $areas = Area::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
         $users = User::where('dea_id',$dea_id)->pluck('name','id');
@@ -59,64 +54,33 @@ class SalidaMaterialController extends Controller
 
     public function create()
     {
+        $dea_id = Auth::user()->dea->id;
         $empleado = Empleado::find(Auth::user()->idemp);
         $user = User::find(Auth::user()->id);
-        $tipos = SolicitudCompra::TIPOS;
+        $fecha_inicial = '01/01/' . date('Y');
+        $fecha_final = '31/12/' . date('Y');
+        $solicitudes = SalidaAlmacen::query()
+                                ->ByDea($dea_id)
+                                ->ByArea(Auth::user()->idarea)
+                                ->ByFechas($fecha_inicial,$fecha_final)
+                                ->get()
+                                ->count();
 
-        $categorias_programaticas = CategoriaProgramatica::query()
-                                    ->byDea(Auth::user()->dea->id)
-                                    ->select(DB::raw("concat(codigo,' - ',nombre) as categoria_programatica"),'id')
-                                    ->orderBy('codigo','asc')
-                                    ->pluck('categoria_programatica','id');
+        $codigo_solicitud = substr(date('Y'), -2) . '-' . (str_pad($solicitudes + 1,3,"0",STR_PAD_LEFT));
 
-        return view('compras.solicitud_compra.create',compact('empleado','user','tipos','categorias_programaticas'));
-    }
+        $materiales = DB::table('items as a')
+                        ->join('unidades as b','b.id','a.unidad_id')
+                        ->where('a.dea_id',$dea_id)
+                        ->where('a.tipo', '1')
+                        ->where('a.estado','1')
+                        ->select(DB::raw("concat(a.codigo,'-',a.nombre,'_(',b.nombre,')') as material"),'a.id as item_id')
+                        ->pluck('material','item_id');
 
-    public function getPartidasPresupuestarias(Request $request)
-    {
-        try{
-            $partidas_presupuestarias = PartidaPresupuestaria::query()
-                                        ->byDea(Auth::user()->dea->id)
-                                        ->where('detalle','1')
-                                        ->where('estado','1')
-                                        ->where('categoria_programatica_id',$request->id)
-                                        ->select(DB::raw("concat(numeracion,' (',codigo,') ',nombre) as partida_presupuestaria"),'id')
-                                        ->get()
-                                        ->toJson();
-            if($partidas_presupuestarias){
-                return response()->json([
-                    'partidas_presupuestarias' => $partidas_presupuestarias
-                ]);
-            }
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-    }
-
-    public function getItems(Request $request)
-    {
-        try{
-            $items = DB::table('items as a')
-                            ->join('unidades as b','b.id','a.unidad_id')
-                            ->where('a.dea_id',Auth::user()->dea->id)
-                            ->where('a.tipo', '1')
-                            ->where('a.estado','1')
-                            ->where('a.partida_presupuestaria_id',$request->id)
-                            ->select(DB::raw("concat(a.nombre,'_(',b.nombre,')') as producto"),'a.id as item_id')
-                            ->get()
-                            ->toJson();
-            if($items){
-                return response()->json([
-                    'items' => $items
-                ]);
-            }
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
+        return view('almacenes.salidas.create',compact('empleado','user','codigo_solicitud','materiales'));
     }
 
     public function store(Request $request)
-    {
+    {dd($request->all());
         try{
             $function = DB::transaction(function () use ($request) {
                 $dea_id = Auth::user()->dea->id;

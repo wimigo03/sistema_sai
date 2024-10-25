@@ -62,7 +62,7 @@ class Role extends Model
     }
 
     public function scopeByDea($query, $dea_id){
-        if($dea_id){
+        if($dea_id != null){
             return $query->where('dea_id',$dea_id);
         }
     }

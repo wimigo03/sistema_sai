@@ -102,6 +102,18 @@
     ></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.js"></script>
+    <script>
+        /* function obtenerMontoCleave(montoString) {
+            if(montoString == ""){
+                return 0;
+            }else{
+                var re = /,/g;
+                var resultado = montoString.replace(re, '');
+                monto = parseFloat(resultado);
+            }
+            return monto;
+        } */
+    </script>
 
     @include('layouts.modal.notificaciones')
 @yield('scripts')

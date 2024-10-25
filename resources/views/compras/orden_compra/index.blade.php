@@ -27,13 +27,13 @@
 
             $('#area_id').select2({
                 theme: "bootstrap4",
-                placeholder: "--Area--",
+                placeholder: "--Unidad Solicitante--",
                 width: '100%'
             });
 
             $('#proveedor_id').select2({
                 theme: "bootstrap4",
-                placeholder: "--Proveedores--",
+                placeholder: "--Proveedor--",
                 width: '100%'
             });
 
@@ -64,6 +64,11 @@
                 event.preventDefault();
             }
         });
+
+        function create(){
+            var url = "{{ route('orden.compra.create') }}";
+            window.location.href = url;
+        }
 
         function search(){
             var url = "{{ route('orden.compra.search') }}";

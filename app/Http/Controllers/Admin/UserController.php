@@ -45,11 +45,20 @@ class UserController extends Controller
     public function index()
     {
         //$this->completar_areas();
+        $roles = Role::query()
+                        ->byDea(Auth::user()->dea->id)
+                        ->orderBy('title')
+                        ->pluck('title','id');
         $users = User::orderBy('id', 'desc')->paginate(10);
-        return view('admin.users.index', compact('users'));
+        return view('admin.users.index', compact('roles','users'));
     }
 
     public function search(Request $request){
+        $roles = Role::query()
+                        ->byDea(Auth::user()->dea->id)
+                        ->orderBy('title')
+                        ->pluck('title','id');
+
         $users = User::query()
                         ->byNombre(strtoupper($request->nombre))
                         ->byApPaterno(strtoupper($request->ap_pat))
@@ -60,7 +69,7 @@ class UserController extends Controller
                         ->byEstado($request->estado)
                         ->orderBy('id', 'desc')
                         ->paginate(10);
-        return view('admin.users.index', compact('users'));
+        return view('admin.users.index', compact('roles','users'));
     }
 
     public function excel(Request $request){
@@ -210,6 +219,9 @@ class UserController extends Controller
         $request->validate([
             'password' => 'nullable|min:6|confirmed'
         ]);
+        if($request->_email == null){
+            return redirect()->back()->with('error_message','[ERROR]. DATOS INSUFICIENTES')->withInput();
+        }
         try{
             $user = User::find($request->user_id);
             $user->update([

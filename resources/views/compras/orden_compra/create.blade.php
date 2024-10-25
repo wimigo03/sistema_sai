@@ -2,129 +2,133 @@
 @section('content')
     <div class="card-header header">
         <div class="row">
-            <div class="col-md-12 pr-1">
-                <b>REGISTRAR SOLICITUD DE COMPRA</b>
+            <div class="col-md-12 pr-1 pl-1 text-center">
+                <b>FORMULARIO ORDEN DE COMPRA</b>
             </div>
         </div>
     </div>
-    @include('compras.solicitud_compra.partials.form-create')
+    @include('compras.orden_compra.partials.form-editar')
 @section('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
-            localStorage.clear();
-            $("#btn-registro").hide();
             $('.select2').select2({
                 theme: "bootstrap4",
                 placeholder: "--Seleccionar--",
                 width: '100%'
             });
 
-            if($("#tipo >option:selected").val() != ''){
-                var id = $("#tipo >option:selected").val();
-                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                getItems(id,CSRF_TOKEN);
-            }
-
-            var cleave = new Cleave('#cantidad', {
-                numeral: true,
-                numeralDecimalScale: 2,
-                numeralThousandsGroupStyle: 'thousand'
+            $('.input-precio').each(function() {
+                new Cleave(this, {
+                    numeral: true,
+                    numeralThousandsGroupStyle: 'thousand',
+                    numeralDecimalScale: 2,
+                });
             });
         });
 
-        $('#tipo').change(function() {
-            var id = $(this).val();
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            getItems(id,CSRF_TOKEN);
-        });
+        var Modal = function(mensaje){
+            $("#modal-alert .modal-body").html(mensaje);
+            $('#modal-alert').modal({keyboard: false});
+        }
 
-        function getItems(id,CSRF_TOKEN){
-            $.ajax({
-                type: 'GET',
-                url: '/solicitud-compra/get_items',
-                data: {
-                    _token: CSRF_TOKEN,
-                    id: id
-                },
-                success: function(data){
-                    if(data.items){
-                        var arr = Object.values($.parseJSON(data.items));
-                        $("#item_id").empty();
-                        var select = $("#item_id");
-                        select.append($("<option></option>").attr("value", '').text('--Item--'));
-                        var itemIdSeleccionado = localStorage.getItem('itemIdSeleccionado');
-                        $.each(arr, function(index, json) {
-                            var opcion = $("<option></option>").attr("value", json.item_id).text(json.producto);
-                            if (json.item_id == itemIdSeleccionado) {
-                                opcion.attr('selected', 'selected');
-                            }
-                            select.append(opcion);
-                        });
-                        select.on('change', function() {
-                            localStorage.setItem('itemIdSeleccionado', $(this).val());
-                        });
-                    }
-                },
-                error: function(xhr){
-                    console.log(xhr.responseText);
-                }
+        function Calcular(id) {
+            var cantidad = $('.detalle-'+id+' .input-cantidad').val();
+            /* cantidad = cantidad.replace(/,/g, ''); */
+            cantidad = (isNaN(parseFloat(cantidad)))? 0 : parseFloat(cantidad);
+            var precio_actual = $('.detalle-'+id+' .input-precio').val();
+            precio_actual = (isNaN(parseFloat(precio_actual)))? 0 : parseFloat(precio_actual);
+            try{
+                var total_precio = cantidad * precio_actual;
+                $('.detalle-'+id+' .input-total').each(function() {
+                    new Cleave(this, {
+                        numeral: true,
+                        numeralThousandsGroupStyle: 'thousand'
+                    }).setRawValue(total_precio);
+                });
+                totalSuma();
+            }catch(e){
+                console.log('ERROR')
+            }
+        }
+
+        function totalSuma() {
+            var total = 0;
+
+            $("#detalle_tabla tbody tr").each(function() {
+                var input_total = $(this).find(".input-total").val();
+                input_total = isNaN(parseFloat(input_total)) ? 0 : parseFloat(input_total);
+                total += input_total;
+            });
+
+            $('.input-total-final').each(function() {
+                var cleaveInstance = new Cleave(this, {
+                    numeral: true,
+                    numeralThousandsGroupStyle: 'thousand'
+                });
+                cleaveInstance.setRawValue(total);
             });
         }
 
-        function agregarMaterial(){
-            if(!validarHeader()){
+        function validar(){
+            if($("#area_solicitante").val() == ""){
+                Modal("<center>[ERROR AL VALIDAR EL AREA SOLICITANTE]</center>");
                 return false;
             }
-            if(!validarProductos()){
+            if($("#user").val() == ""){
+                Modal("<center>[ERROR AL VALIDAR EL SOLICITANTE]</center>");
                 return false;
             }
-            if(!validarRepetidos()){
+            if($("#fecha_registro").val() == ""){
+                Modal("<center>[ERROR AL VALIDAR LA FECHA DE REGISTRO]</center>");
                 return false;
             }
-            cargarProductos();
-        }
-
-        function validarHeader(){
-            if($("#tipo >option:selected").val() == ""){
-                Modal("Se debe seleccionar el [TIPO] de producto para continuar");
+            if($("#nro_oc").val() == ""){
+                Modal("<center>[ERROR AL VALIDAR EL NUMERO DE LA ORDEN DE COMPRA]</center>");
+                return false;
+            }
+            if($("#nro_solicitud").val() == ""){
+                Modal("<center>[ERROR AL VALIDAR EL NUMERO DE LA SOLICITUD DE COMPRA]</center>");
+                return false;
+            }
+            if($("#almacen").val() == ""){
+                Modal("<center>[ERROR AL VALIDAR EL ALMACEN]</center>");
+                return false;
+            }
+            if($("#tipo").val() == ""){
+                Modal("<center>[ERROR AL VALIDAR EL TIPO DE ORDEN DE COMPRA]</center>");
                 return false;
             }
             if($("#c_interno").val() == ""){
-                Modal("Se debe agregar un numero de [CONTRO INTERNO] para continuar.");
+                Modal("<center>[ERROR AL VALIDAR EL NUMERO DE CONTROL INTERNO]</center>");
                 return false;
             }
-            if($("#detalle").val() == ""){
-                Modal("Se debe agregar un [DETALLE] para continuar.");
+            if($("#nro_preventivo").val() == ""){
+                Modal("<center>[ERROR AL VALIDAR EL NUMERO DE PREVENTIVO]</center>");
                 return false;
             }
-            return true;
-        }
-
-        function validarProductos(){
-            if($("#item_id >option:selected").val() == ""){
-                Modal("Se debe seleccionar un [ITEM PRODUCTO / SERVICIO] para continuar.");
+            if($("#proveedor_id").val() == ""){
+                Modal("<center>[ERROR AL VALIDAR EL PROVEEDOR]</center>");
                 return false;
             }
-            if($("#cantidad").val() == ""){
-                Modal("Se debe agregar una [CANTIDAD] para continuar.");
+            if($("#objeto").val() == ""){
+                Modal("<center>[ERROR AL VALIDAR EL OBJETO DE LA ORDEN DE COMPRA]</center>");
                 return false;
             }
-            if($("#cantidad").val() === '0'){
-                Modal("La [CANTIDAD] debe ser mayor a 0.");
+            if($("#justificacion").val() == ""){
+                Modal("<center>[ERROR AL VALIDAR LA JUSTIFICACION DE LA ORDEN DE COMPRA]</center>");
                 return false;
             }
             return true;
         }
 
-        function validarRepetidos(){
+        function validarTabla(){
             var productos = $("#detalle_tabla tbody tr");
             if(productos.length>0){
-                var producto = $("#item_id >option:selected").val();
                 for(var i=0;i<productos.length;i++){
                     var tr = productos[i];
-                    var producto_id = $(tr).find(".item_id").val();
-                    if(producto == producto_id){
-                        Modal("El registro ya se encuentra en la tabla actual.");
+                    var producto_id = $(tr).find(".input-precio").val();
+                    if(producto_id === '' || producto_id === '0'){
+                        Modal("<b>[ERROR. ]</b> EXISTE UN PRECION VACIO U IGUAL A 0");
                         return false;
                     }
                 }
@@ -132,58 +136,20 @@
             return true;
         }
 
-        function cargarProductos(){
-            var producto_id = $("#item_id >option:selected").val();
-            var producto_texto = $("#item_id option:selected").text();
-            var quitar = /[()]/g;
-            var string_texto = producto_texto.replace(quitar, '');
-            string_texto = string_texto.split('_');
-            var producto = string_texto[0];
-            var medida = string_texto[1];
-            var cantidad = $("#cantidad").val();
-            var fila = "<tr class='font-roboto-11'>"+
-                            "<td class='text-justify p-1'>"+
-                                "<input type='hidden' class='item_id' name='item_id[]' value='" + producto_id + "'>" + producto +
-                            "</td>"+
-                            "<td class='text-justify p-1'>"+
-                                medida +
-                            "</td>"+
-                            "<td class='text-right p-1'>"+
-                                "<input type='hidden' name='cantidad[]' value='" + cantidad + "'>" + cantidad +
-                            "</td>"+
-                            "<td class='text-center p-1'>"+
-                                "<button type='button' class='btn btn-xs btn-danger' onclick='eliminarItem(this);'>" +
-                                      "<i class='fa-solid fa-trash'></i>" +
-                                 "</button>" +
-                            "</td>"
-                        "</tr>";
-
-            $("#detalle_tabla").append(fila);
-            $('#item_id').val('').trigger('change');
-            document.getElementById('cantidad').value = '';
-            $("#btn-registro").show();
-            document.getElementById("tipo").disabled = true;
-        }
-
-        function eliminarItem(thiss){
-            var tr = $(thiss).parents("tr:eq(0)");
-            tr.remove();
-        }
-
-        var Modal = function(mensaje){
-            $("#modal-alert .modal-body").html(mensaje);
-            $('#modal-alert').modal({keyboard: false});
-        }
-
         function procesar() {
+            if(!validar()){
+                return false;
+            }
+            if(!validarTabla()){
+                return false;
+            }
             $('#modal_confirmacion').modal({
                 keyboard: false
             })
         }
 
         function confirmar(){
-            document.getElementById("tipo").disabled = false;
-            var url = "{{ route('solicitud.compra.store') }}";
+            var url = "{{ route('orden.compra.update') }}";
             $("#form").attr('action', url);
             $(".btn").hide();
             $(".spinner-btn").show();
@@ -191,7 +157,9 @@
         }
 
         function cancelar(){
-            var url = "{{ route('solicitud.compra.index') }}";
+            $(".btn").hide();
+            $(".spinner-btn").show();
+            var url = "{{ route('orden.compra.index') }}";
             window.location.href = url;
         }
     </script>

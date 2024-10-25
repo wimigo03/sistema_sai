@@ -16,14 +16,15 @@ class SolicitudCompraDetalle extends Model
     protected $table = 'solicitud_compra_detalles';
     protected $fillable = [
         'solicitud_compra_id',
-        'idarea',
         'user_id',
         'dea_id',
         'item_id',
         'partida_presupuestaria_id',
-        'categoria_programatica_id',
         'unidad_id',
         'idemp',
+        'categoria_programatica_id',
+        'almacen_id',
+        'idarea',
         'user_aprob_id',
         'cantidad',
         'saldo',
@@ -32,10 +33,6 @@ class SolicitudCompraDetalle extends Model
 
     public function partidaPresupuestaria(){
         return $this->belongsTo(PartidaPresupuestaria::class,'partida_presupuestaria_id','id');
-    }
-
-    public function categoriaProgramatica(){
-        return $this->belongsTo(CategoriaProgramatica::class,'categoria_programatica_id','id');
     }
 
     public function item(){

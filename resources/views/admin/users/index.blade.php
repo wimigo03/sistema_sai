@@ -15,6 +15,12 @@
 @section('scripts')
     <script>
         $(document).ready( function () {
+            $('#role').select2({
+                theme: "bootstrap4",
+                placeholder: "--Role--",
+                width: '100%'
+            });
+
             $('#estado').select2({
                 theme: "bootstrap4",
                 placeholder: "--Estado--",
