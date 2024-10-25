@@ -356,6 +356,7 @@ class Beneficiario extends Model
                             GROUP BY id_beneficiario
                         )
                     ) as b"), 'beneficiarios.id', '=', 'b.id_beneficiario')
+                    /* ->where('b.id_beneficiario',NULL) */
                     ->where(function ($query) use ($finicial, $ffinal) {
                         $query->whereBetween('b.fecha', [$finicial, $ffinal])
                               ->orWhereNull('b.fecha'); // Incluir beneficiarios sin relación con historialmod

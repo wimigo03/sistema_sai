@@ -137,7 +137,7 @@
                                 @can('canasta.entregas.beneficiario.index')
                                     <li>
                                         <a href="{{ route('entrega.beneficiario.index') }}">
-                                            &nbsp;&nbsp;<i class="fa-solid fa-search fa-fw"></i>&nbsp;Buscar
+                                            &nbsp;&nbsp;<i class="fa-solid fa-search fa-fw"></i>&nbsp;Buscar Entrega
                                         </a>
                                     </li>
                                 @endcan
