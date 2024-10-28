@@ -10,6 +10,7 @@ use App\Models\Canasta\Dea;
 use App\Models\Compra\Proveedor;
 use App\Models\Compra\SolicitudCompra;
 use App\Models\Almacenes\Almacen;
+use DB;
 
 class OrdenCompra extends Model
 {
@@ -19,11 +20,12 @@ class OrdenCompra extends Model
     protected $fillable = [
         'dea_id',
         'proveedor_id',
-        'idarea',
         'user_id',
         'almacen_id',
         'solicitud_compra_id',
         'idemp',
+        'categoria_programatica_id',
+        'idarea',
         'user_aprob_id',
         'codigo',
         'objeto',
@@ -36,11 +38,11 @@ class OrdenCompra extends Model
         'estado'
     ];
 
+    const ALMACEN_CENTRAL = 1;
     const ESTADOS = [
         '1' => 'PENDIENTE',
         '2' => 'APROBADO',
         '3' => 'RECHAZADO',
-        '4' => 'INGRESADO',
     ];
 
     const TIPOS = [
@@ -56,8 +58,6 @@ class OrdenCompra extends Model
                 return "APROBADO";
             case '3':
                 return "RECHAZADO";
-            case '4':
-                return "INGRESADO";
         }
     }
 

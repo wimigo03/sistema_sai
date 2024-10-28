@@ -3,7 +3,7 @@
         <div class="col-md-2 pr-1 pl-1">
             <input type="text" name="codigo" value="{{ request('codigo') }}" placeholder="--Codigo--" class="form-control font-roboto-12 intro">
         </div>
-        <div class="col-md-5 pr-1 pl-1">
+        <div class="col-md-8 pr-1 pl-1">
             <input type="text" name="nombre" value="{{ request('nombre') }}" placeholder="--Categoria Programatica--" class="form-control font-roboto-12 intro">
         </div>
         <div class="col-md-2 pr-1 pl-1">
@@ -16,9 +16,9 @@
         </div>
     </div>
     <div class="form-group row abs-center">
-        <div class="col-md-9 pr-1 pl-1">
-            @can('programa.create')
-                <span class="tts:right tts-slideIn tts-custom" aria-label="Registrar Proveedor" style="cursor: pointer;">
+        <div class="col-md-12 pr-1 pl-1">
+            @can('categoria.programatica.create')
+                <span class="tts:right tts-slideIn tts-custom" aria-label="Registrar" style="cursor: pointer;">
                     <span class="btn btn-outline-success font-roboto-12" onclick="create();">
                         <i class="fas fa-plus fa-fw"></i>
                     </span>

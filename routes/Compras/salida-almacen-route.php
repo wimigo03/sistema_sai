@@ -1,13 +1,14 @@
 <?php
 
-Route::prefix('salida-material')->name('salida.material.')->middleware(['auth'])->group(function () {
-    Route::get('index', 'Compras\SalidaMaterialController@index')->name('index')->middleware('can:salida.material.index');
-    /*Route::get('search', 'Compras\SolicitudCompraController@search')->name('search')->middleware('can:solicitud.compra.index');
-    Route::get('create', 'Compras\SolicitudCompraController@create')->name('create')->middleware('can:solicitud.compra.create');
-    Route::get('/insertar-producto', 'Compras\SolicitudCompraController@insertarProducto')->name('insertar.producto')->middleware('can:solicitud.compra.create');
+Route::prefix('salida-almacen')->name('salida.almacen.')->middleware(['auth'])->group(function () {
+    Route::get('index', 'Compras\SalidaAlmacenController@index')->name('index')->middleware('can:salida.almacen.index');
+    Route::get('search', 'Compras\SalidaAlmacenController@search')->name('search')->middleware('can:salida.almacen.index');
+    Route::get('create', 'Compras\SalidaAlmacenController@create')->name('create')->middleware('can:salida.almacen.index');
+    Route::post('store', 'Compras\SalidaAlmacenController@store')->name('store')->middleware('can:salida.almacen.index');
+
+    /*Route::get('/insertar-producto', 'Compras\SolicitudCompraController@insertarProducto')->name('insertar.producto')->middleware('can:solicitud.compra.create');
     Route::get('/get_partidas_presupuestarias', 'Compras\SolicitudCompraController@getPartidasPresupuestarias')->name('get.partidas.presupuestarias')->middleware('can:solicitud.compra.create');
     Route::get('/get_items', 'Compras\SolicitudCompraController@getItems')->name('get.items')->middleware('can:solicitud.compra.create');
-    Route::post('store', 'Compras\SolicitudCompraController@store')->name('store')->middleware('can:solicitud.compra.create');
     Route::get('show/{solicitud_compra_id}', 'Compras\SolicitudCompraController@show')->name('show')->middleware('can:solicitud.compra.show');
     Route::get('editar/{solicitud_compra_id}', 'Compras\SolicitudCompraController@editar')->name('editar')->middleware('can:solicitud.compra.editar');
     Route::get('/eliminar_registro/{solicitud_compra_detalle_id}', 'Compras\SolicitudCompraController@eliminarRegistro')->name('eliminar_registro')->middleware('can:solicitud.compra.editar');

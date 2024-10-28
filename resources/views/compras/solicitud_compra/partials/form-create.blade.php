@@ -1,25 +1,26 @@
 <form action="#" method="post" id="form">
     @csrf
-    {{--<input type="hidden" name="area_id" id="area_id" value="{{ $empleado->idarea }}">
-    <input type="hidden" name="user_id" value="{{ $user->id }}">--}}
-
-    <div class="form-group row font-roboto-12">
-        <div class="col-md-5 pr-1 pl-1">
+    <input type="hidden" name="area_id" id="area_id" value="{{ $empleado->ultima_area_asignada_id }}">
+    {{--<input type="hidden" name="user_id" value="{{ $user->id }}">--}}
+    <div class="row font-roboto-12">
+        <div class="col-md-3 pr-1 pl-1 mb-2">
+            <label for="area_solicitante" class="d-inline"><b>ALMACEN</b></label>
+            <input type="text" value="{{ $empleado->area_asignada_almacen }}" class="form-control font-roboto-12" disabled>
+        </div>
+        <div class="col-md-4 pr-1 pl-1 mb-2">
             <label for="area_solicitante" class="d-inline"><b>Unidad Solicitante</b></label>
             <input type="text" value="{{ $empleado->area_asignada }}" class="form-control font-roboto-12" disabled>
         </div>
-        <div class="col-md-3 pr-1 pl-1">
+        <div class="col-md-3 pr-1 pl-1 mb-2">
             <label for="user" class="d-inline"><b>Solicitante</b></label>
-            <input type="text" value="{{ $user->name }}" class="form-control font-roboto-12" disabled>
+            <input type="text" value="{{ strtoupper($user->name) }}" class="form-control font-roboto-12" disabled>
             </select>
         </div>
-        <div class="col-md-2 pr-1 pl-1">
+        <div class="col-md-2 pr-1 pl-1 mb-2">
             <label for="c_interno" class="d-inline"><b>N° Control Interno</b></label>
             <input type="text" name="c_interno" value="{{ old('c_interno') }}" id="c_interno" class="form-control font-roboto-12" oninput="this.value = this.value.toUpperCase();">
         </div>
-    </div>
-    <div class="form-group row font-roboto-12">
-        <div class="col-md-9 pr-1 pl-1">
+        <div class="col-md-12 pr-1 pl-1 mb-2">
             <label for="detalle" class="d-inline"><b>Detalle</b></label>
             <textarea name="detalle" class="form-control font-roboto-12" id="detalle" oninput="this.value = this.value.toUpperCase();">{{ old('detalle') }}</textarea>
         </div>
@@ -28,33 +29,27 @@
         <div class="col-md-12 pr-1 pl-1">
             <div class="card card-body bg-light">
                 <div class="form-group row font-roboto-12">
-                    <div class="col-md-5 pr-1 pl-1">
-                        <label for="categoria_programatica" class="d-inline"><b>Categoria Programatica :</b></label>
-                        <select name="categoria_programatica_id" id="categoria_programatica_id" class="form-control select2">
+                    <input type="hidden" name="categoria_programatica_id" value="{{ $categoria_programatica_id }}">
+                    <div class="col-md-12 pr-1 pl-1 mb-2">
+                        <label for="partida_presupuestaria" class="d-inline"><b>Partida Presupuestaria :</b></label>
+                        <select name="partida_presupuestaria_id" id="partida_presupuestaria_id" class="form-control select2">
                             <option value="">-</option>
-                            @foreach ($categorias_programaticas as $index => $value)
-                                <option value="{{ $index }}" @if(request('categoria_programatica_id') == $index) selected @endif >{{ $value }}</option>
+                            @foreach ($partidas_presupuestarias as $index => $value)
+                                <option value="{{ $index }}" @if(old('partida_presupuestaria_id') == $index) selected @endif >{{ $value }}</option>
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-6 pr-1 pl-1">
-                        <label for="partida_presupuestaria" class="d-inline"><b>Partida Presupuestaria :</b></label>
-                        <select name="partida_presupuestaria_id" id="partida_presupuestaria_id" class="form-control select2">
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group row font-roboto-12">
-                    <div class="col-md-9 pr-1 pl-1">
+                    <div class="col-md-9 pr-1 pl-1 mb-2">
                         <label for="item" class="d-inline"><b>Material</b></label>
                         <select id="item_id" name="item_id" class="form-control select2">
                             <option value="">--Seleccionar--</option>
                         </select>
                     </div>
-                    <div class="col-md-2 pr-1 pl-1">
+                    <div class="col-md-2 pr-1 pl-1 mb-2">
                         <label for="cantidad" class="d-inline"><b>Cantidad</b></label>
                         <input type="text" id="cantidad" class="form-control font-roboto-12 text-right">
                     </div>
-                    <div class="col-md-1 pr-1 pl-1 text-right">
+                    <div class="col-md-1 pr-1 pl-1 text-right mb-2">
                         <br>
                         <span class="tts:left tts-slideIn tts-custom" aria-label="Agregar detalle">
                             <span class="btn btn-outline-success font-roboto-12" onclick="agregarMaterial();">
@@ -68,7 +63,6 @@
                         <table id="detalle_tabla" class="table display table-striped responsive hover-orange" style="width:100%;">
                             <thead>
                                 <tr class="font-roboto-11">
-                                    <td class="text-left p-1"><b>CATEGORIA PROGRAMATICA</b></td>
                                     <td class="text-left p-1"><b>PARTIDA PRESUPUESTARIA</b></td>
                                     <td class="text-left p-1"><b>MATERIAL</b></td>
                                     <td class="text-left p-1"><b>MEDIDA</b></td>

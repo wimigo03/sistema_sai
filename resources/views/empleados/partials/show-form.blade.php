@@ -1,5 +1,17 @@
 <input type="hidden" name="dea_id" value="{{ $dea_id }}">
 <input type="hidden" name="empleado_id" value="{{ $empleado->idemp }}" id="empleado_id">
+<div class="form-group row font-roboto-12 abs-center">
+    <div class="col-md-12 pr-1 pl-1">
+        <span class="btn btn-outline-primary font-roboto-12" onclick="cancelar();">
+            <i class="fas fa-angle-double-left fa-fw"></i> Ir atras
+        </span>
+        @can('empleados.show')
+            <span class="btn btn-danger font-roboto-12 float-right" onclick="exportar();">
+                <i class="fas fa-file-pdf fa-fw"></i> Kardex
+            </span>
+        @endcan
+    </div>
+</div>
 <div class="form-group row font-roboto-13">
     <div class="col-md-12 pr-1 pl-1">
         <ul class="nav nav-tabs" id="myTabs" role="tablist">

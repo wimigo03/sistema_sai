@@ -31,7 +31,7 @@ class PartidaPresupuestariaController extends Controller
     }
 
     public function index()
-    {;
+    {
         /*if(Auth::user()->id == 102){
             //$this->copiar();
         }*/
@@ -41,8 +41,8 @@ class PartidaPresupuestariaController extends Controller
                                     ->orderBy('numeracion')
                                     ->get();
         $tree = $partidas_presupuestarias != null ? $this->buildTree($partidas_presupuestarias) : null;
-        $estados = PartidaPresupuestaria::ESTADOS;
-        return view('compras.partidas_prespuestarias.index',compact('partidas_presupuestarias','tree','estados'));
+
+        return view('compras.partidas_prespuestarias.index',compact('partidas_presupuestarias','tree'));
     }
 
     protected function buildTree($nodes)
@@ -86,45 +86,22 @@ class PartidaPresupuestariaController extends Controller
     {
         try{
             $partida_presupuestaria = PartidaPresupuestaria::find($request->partida_presupuestaria_id);
-            $categoria_programatica = CategoriaProgramatica::find($partida_presupuestaria->categoria_programatica_id);
             return response()->json([
                 'partida_presupuestaria' => $partida_presupuestaria,
-                'categoria_programatica' => $categoria_programatica
             ]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
-    public function search(Request $request)
-    {
-        $partidas = PartidaPresupuestaria::query()
-                                ->ByDea(Auth::user()->dea->id)
-                                ->ByCodigo($request->codigo)
-                                ->ByNombre($request->nombre)
-                                ->ByDetalle($request->detalle)
-                                ->ByFechaRegistro($request->fecha_registro)
-                                ->ByEstado($request->estado)
-                                ->orderBy('id','desc')
-                                ->paginate(10);
-        $estados = PartidaPresupuestaria::ESTADOS;
-        return view('compras.partidas_prespuestarias.index',compact('partidas','estados'));
-    }
-
     public function create(Request $request)
     {
-        $categorias_programaticas = CategoriaProgramatica::query()
-                                    ->byDea(Auth::user()->dea->id)
-                                    ->select(DB::raw("concat(codigo,' - ',nombre) as categoria_programatica"),'id')
-                                    ->orderBy('codigo','asc')
-                                    ->pluck('categoria_programatica','id');
-
         $partida_presupuestaria = null;
         if(isset($request->partida_presupuestaria_id)){
             $partida_presupuestaria = PartidaPresupuestaria::find($request->partida_presupuestaria_id);
         }
 
-        return view('compras.partidas_prespuestarias.create',compact('categorias_programaticas','partida_presupuestaria'));
+        return view('compras.partidas_prespuestarias.create',compact('partida_presupuestaria'));
     }
 
     public function store(Request $request)
@@ -147,7 +124,6 @@ class PartidaPresupuestariaController extends Controller
 
                 $datos = [
                     'dea_id' => Auth::user()->dea->id,
-                    'categoria_programatica_id' => $request->categoria_programatica_id,
                     'numeracion' => $request->numeracion,
                     'codigo' => $codigo,
                     'parent_id' => isset($request->partida_dependiente_id) ? $request->partida_dependiente_id : null,
@@ -181,15 +157,8 @@ class PartidaPresupuestariaController extends Controller
     public function editar(Request $request)
     {
         $partida_presupuestaria = PartidaPresupuestaria::find($request->partida_presupuestaria_id);
-        $categorias_programaticas = CategoriaProgramatica::query()
-                                    ->byDea(Auth::user()->dea->id)
-                                    ->select(DB::raw("concat(codigo,' - ',nombre) as categoria_programatica"),'id')
-                                    ->orderBy('codigo','asc')
-                                    ->get();
-
         $parent_presupuestaria = null;
         $partidas_presupuestarias = null;
-        $hijos = null;
         if($partida_presupuestaria->parent_id != null){
             $parent_presupuestaria = PartidaPresupuestaria::find($partida_presupuestaria->parent_id);
             $partidas_presupuestarias = PartidaPresupuestaria::query()
@@ -197,13 +166,15 @@ class PartidaPresupuestariaController extends Controller
                                             ->select(DB::raw("concat(numeracion,' (',codigo,') ',nombre) as partida_presupuestaria"),'id')
                                             ->get();
 
-            $hijos = PartidaPresupuestaria::query()
+
+        }
+
+        $hijos = PartidaPresupuestaria::query()
                     ->byDea(Auth::user()->dea->id)
                     ->byHijos($partida_presupuestaria->id)
                     ->get()->count();
-        }
 
-        return view('compras.partidas_prespuestarias.editar',compact('categorias_programaticas','partida_presupuestaria','parent_presupuestaria','partidas_presupuestarias','hijos'));
+        return view('compras.partidas_prespuestarias.editar',compact('partida_presupuestaria','parent_presupuestaria','partidas_presupuestarias','hijos'));
     }
 
     public function update(Request $request)
@@ -227,14 +198,13 @@ class PartidaPresupuestariaController extends Controller
 
                 $partida_presupuestaria = PartidaPresupuestaria::find($request->partida_presupuestaria_id);
                 $partida_presupuestaria->update([
-                    'categoria_programatica_id' => isset($request->categoria_programatica_id) ? $request->categoria_programatica_id : $dependiente->categoria_programatica_id,
                     'numeracion' => isset($request->numeracion) ? $request->numeracion : $partida_presupuestaria->numeracion,
                     'codigo' => isset($codigo) ? $codigo : $partida_presupuestaria->codigo,
                     'parent_id' => isset($request->dependiente_id) ? $request->dependiente_id : $partida_presupuestaria->parent_id,
                     'nombre' => $request->nombre,
                     'descripcion' => $request->descripcion,
                     'detalle' => isset($request->detalle) ? '1' : '0',
-                    'estado' => isset($request->estado) ? '1' : '2'
+                    'estado' => $request->estado
                 ]);
 
                 return $partida_presupuestaria;

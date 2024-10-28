@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\NivelModel;
 use App\Models\Canasta\Dea;
 use App\Models\Area;
+use App\Models\Compra\CategoriaProgramatica;
+use App\Models\Almacenes\Almacen;
 
 class Area extends Model
 {
@@ -19,9 +21,12 @@ class Area extends Model
         'estadoarea',
         'idnivel',
         'dea_id',
+        'almacen_id',
         'parent_id',
         'tipo',
-        'nivel'
+        'nivel',
+        'categoria_programatica_id',
+        'alias'
     ];
 
     const ESTADOS = [
@@ -84,6 +89,14 @@ class Area extends Model
         return $this->belongsTo(NivelModel::class,'idnivel','idnivel');
     }
 
+    public function almacen(){
+        return $this->belongsTo(Almacen::class,'almacen_id','id');
+    }
+
+    public function cprogramatica(){
+        return $this->belongsTo(CategoriaProgramatica::class,'categoria_programatica_id','id');
+    }
+
     public function dea(){
         return $this->belongsTo(Dea::class,'dea_id','id');
     }
@@ -123,6 +136,18 @@ class Area extends Model
     public function scopeByDea($query, $dea_id){
         if($dea_id){
             return $query->where('dea_id', $dea_id);
+        }
+    }
+
+    public function scopeByAlmacen($query, $almacen){
+        if($almacen){
+            return $query->where('almacen_id', $almacen);
+        }
+    }
+
+    public function scopeByCategoriaProgramatica($query, $categoria_programatica_id){
+        if($categoria_programatica_id){
+            return $query->where('categoria_programatica_id', $categoria_programatica_id);
         }
     }
 }

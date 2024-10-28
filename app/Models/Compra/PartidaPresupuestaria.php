@@ -12,7 +12,6 @@ class PartidaPresupuestaria extends Model
     protected $table = 'partidas_presupuestarias';
     protected $fillable = [
         'dea_id',
-        'categoria_programatica_id',
         'numeracion',
         'codigo',
         'parent_id',
@@ -47,10 +46,6 @@ class PartidaPresupuestaria extends Model
 
     public function dea(){
         return $this->belongsTo(Dea::class,'dea_id','id');
-    }
-
-    public function categoria_programatica(){
-        return $this->belongsTo(CategoriaProgramatica::class,'categoria_programatica_id','id');
     }
 
     public function scopeByDea($query, $dea_id){

@@ -312,8 +312,8 @@ main .post-content .post-meta {
     /*background-color: #fafafa;*/
     background-color: #ffffff;
     font-weight: 900;
-    padding: 0em 0em 0em 1em !important;
-    font-size: 20px;
+    padding: 0em 0em 0em 0em !important;
+    font-size: 15px;
     font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 

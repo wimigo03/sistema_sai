@@ -44,11 +44,15 @@
 
         function validar() {
             if($("#tipo >option:selected").val() == ""){
-                Modal("El campo de seleccion <b>[Tipo]</b> es un dato obligatorio...");
+                Modal("El campo de seleccion <b>[TIPO]</b> es un dato obligatorio...");
                 return false;
             }
             if ($("#nombre_area").val() == "") {
-                Modal('El campo <b>[Nueva area]</b> es un dato obligaorio.');
+                Modal('El campo <b>[NOMBRE]</b> es un dato obligaorio.');
+                return false;
+            }
+            if ($("#alias").val() == "") {
+                Modal('El campo <b>[ALIAS]</b> es un dato obligaorio.');
                 return false;
             }
 

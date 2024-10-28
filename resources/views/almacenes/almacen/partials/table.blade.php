@@ -7,7 +7,7 @@
                     <td class="text-left p-1"><b>DIRECCION</b></td>
                     <td class="text-left p-1"><b>ENCARGADO</b></td>
                     <td class="text-center p-1"><b>ESTADO</b></td>
-                    @canany(['almacen.show','almacen.editar'])
+                    @canany(['almacen.editar'])
                         <td class="text-center p-1"><b><i class="fa-solid fa-bars"></i></b></td>
                     @endcanany
                 </tr>
@@ -23,21 +23,21 @@
                                 {{ $datos->status }}
                             </span>
                         </td>
-                        @canany(['almacen.show','almacen.editar'])
+                        @canany(['almacen.editar'])
                             <td class="text-center p-1">
                                 <div class="d-flex justify-content-center">
-                                    @can('almacen.show')
-                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle" style="cursor: pointer;">
-                                            <a href="{{ route('almacen.show',$datos->id) }}" class="badge-with-padding badge badge-primary">
-                                                <i class="fas fa-list fa-fw"></i>
-                                            </a>
-                                        </span>
-                                    @endcan
-                                    &nbsp;
                                     @can('almacen.editar')
                                         <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar" style="cursor: pointer;">
                                             <a href="{{ route('almacen.editar',$datos->id) }}" class="badge-with-padding badge badge-warning">
                                                 <i class="fas fa-edit fa-fw"></i>
+                                            </a>
+                                        </span>
+                                    @endcan
+                                    &nbsp;
+                                    @can('almacen.asignar')
+                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Asignacion de Areas" style="cursor: pointer;">
+                                            <a href="{{ route('almacen.asignar',$datos->id) }}" class="badge-with-padding badge badge-dark">
+                                                <i class="fas fa-warehouse fa-fw"></i>
                                             </a>
                                         </span>
                                     @endcan

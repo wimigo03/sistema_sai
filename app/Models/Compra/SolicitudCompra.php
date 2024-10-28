@@ -14,18 +14,19 @@ class SolicitudCompra extends Model
 
     protected $table = 'solicitud_compras';
     protected $fillable = [
-        'idarea',
         'user_id',
         'dea_id',
-        'user_aprob_id',
         'idemp',
+        'categoria_programatica_id',
+        'almacen_id',
+        'idarea',
+        'user_aprob_id',
         'codigo',
         'detalle',
         'tipo',
         'c_interno',
         'fecha_registro',
         'fecha_aprob',
-        'obs',
         'estado'
     ];
 

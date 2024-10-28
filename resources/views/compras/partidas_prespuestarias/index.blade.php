@@ -13,15 +13,16 @@
     }
     .bordered-group {
         position: relative;
-        padding: 10px; /* Espacio interno */
-        margin: 10px; /* Ajustar el margen si es necesario */
-        border-radius: 5px; /* Esquinas redondeadas */
+        padding: 10px;
+        margin: 10px;
+        border-radius: 5px;
+        /* background-color: red !important; */
     }
     .bordered-group::before {
         content: '';
         display: block;
         border: 1px solid #ccc;
-        border-radius: 10px; /* Esquinas redondeadas */
+        border-radius: 10px;
         position: absolute;
         top: 0;
         left: 5px;
@@ -37,24 +38,21 @@
                 <strong>PARTIDAS PRESUPUESTARIAS</strong>
             </div>
         </div>
-        @if (isset($partidas_presupuestarias))
-            <div class="row bordered-group" id="view-detalle">
-                <div class="col-md-12">
-                    <div class="form-group row font-roboto-12">
-                        <div class="col-md-8">
-                            <label for="categoria_programatica" class="d-inline"><b>Categoria Programatica</b></label>
-                            <input type="hidden" name="partida_presupuestaria_id" id="partida_presupuestaria_id">
-                            <input type="text" id="categoria_programatica" placeholder="--Partida Presupuestaria Seleccionada--" class="form-control font-roboto-11" disabled>
-                        </div>
-                    </div>
-                    <div class="row font-roboto-12">
-                        <div class="col-md-12">
-                            <label for="partida_presupuetaria_detalle" class="d-inline"><b>Partida Presupuestaria Detalle</b></label>
-                            <textarea id="partida_presupuestaria_detalle" placeholder="--Partida Presupuestaria Seleccionada--" class="form-control font-roboto-11" disabled></textarea>
-                        </div>
-                    </div>
-                </div>
+        <div class="row bordered-group" id="view-detalle">
+            <div class="col-md-1 mb-1">
+                <span class="tts:right tts-slideIn tts-custom mb-1" id="btn-create-principal" aria-label="Registrar Partida Presupuestaria Principal" style="cursor: pointer;">
+                    <span class="btn btn-outline-primary font-roboto-12" onclick="createPartidaPresupuestariaPrincipal();">
+                        <i class="fa-solid fa-plus fa-fw"></i>
+                    </span>
+                </span>
             </div>
+            <div class="col-md-11 mb-1 text-center">
+                <input type="hidden" name="partida_presupuestaria_id" id="partida_presupuestaria_id">
+                {{-- <textarea id="partida_presupuestaria_detalle" placeholder="--Partida Presupuestaria Seleccionada--" class="form-control font-roboto-11" disabled></textarea> --}}
+                <span class="font-roboto-11" id="partida_presupuestaria_detalle"></span>
+            </div>
+        </div>
+        @if (isset($partidas_presupuestarias))
             <div class="row bordered-group">
                 <div class="col-md-12">
                     <div class="form-group row font-roboto-12">
@@ -62,14 +60,9 @@
                             <div id="treeview"></div>
                         </div>
                         <div class="col-md-1 text-right">
-                            <span class="tts:left tts-slideIn tts-custom mb-1" id="btn-create-principal" aria-label="Registrar Partida Presupuestaria Principal" style="cursor: pointer;">
-                                <span class="btn btn-sm btn-primary font-roboto-12" onclick="createPartidaPresupuestariaPrincipal();">
-                                    <i class="fa-solid fa-plus fa-fw"></i>
-                                </span>
-                            </span>
                             <span class="tts:left tts-slideIn tts-custom mb-1" id="btn-create-dependiente" aria-label="Registrar Partida Presupuestaria Dependiente" style="cursor: pointer;">
                                 <span class="btn btn-sm btn-success font-roboto-12" onclick="createPartidaPresupuestariaDependiente();">
-                                    <i class="fa-solid fa-stream fa-fw"></i>
+                                    <i class="fa-solid fa-plus fa-fw"></i>
                                 </span>
                             </span>
                             <span class="tts:left tts-slideIn tts-custom" id="btn-modificar" aria-label="Modificar" style="cursor: pointer;">
@@ -90,9 +83,9 @@
         $("#btn-create-dependiente").hide();
         $("#btn-modificar").hide();
         $(document).ready(function() {
-            $('#estado').select2({
+            $('.select2').select2({
                 theme: "bootstrap4",
-                placeholder: "--Estado--",
+                placeholder: "--Seleccionar--",
                 width: '100%'
             });
 
@@ -102,13 +95,6 @@
                 numeralThousandsGroupStyle: 'none',
                 rawValueTrimPrefix: true
             });*/
-        });
-
-        $('.intro').on('keypress', function(event) {
-            if (event.which === 13) {
-                search();
-                event.preventDefault();
-            }
         });
 
         $(function () {
@@ -154,22 +140,22 @@
                     partida_presupuestaria_id: partida_presupuestaria_id
                 },
                 success: function(data){
-                    if(data.partida_presupuestaria.detalle == '1'){
-                        $("#btn-create-dependiente").hide();
-                    }else{
-                        $("#btn-create-dependiente").show();
-                    }
-
-                    $("#btn-modificar").show();
-
-                    if(data.categoria_programatica){
-                        document.getElementById("categoria_programatica").value = data.categoria_programatica.codigo + ' - ' + data.categoria_programatica.nombre;
-                    }
                     if(data.partida_presupuestaria){
+                        if(data.partida_presupuestaria.detalle == '1'){
+                            $("#btn-create-dependiente").hide();
+                        }else{
+                            $("#btn-create-dependiente").show();
+                        }
+
+                        $("#btn-modificar").show();
+
                         document.getElementById("partida_presupuestaria_id").value = data.partida_presupuestaria.id;
-                        var textarea = document.getElementById("partida_presupuestaria_detalle");
+                        var div = document.getElementById("partida_presupuestaria_detalle");
+                        div.textContent = data.partida_presupuestaria.descripcion.toUpperCase();
+
+                        /* var textarea = document.getElementById("partida_presupuestaria_detalle");
                         textarea.value = data.partida_presupuestaria.descripcion.toUpperCase();
-                        adjustTextareaHeight(textarea);
+                        adjustTextareaHeight(textarea); */
                     }
                 },
                 error: function(xhr){
@@ -207,11 +193,11 @@
             window.location.href = url;
         }
 
-        function search(){
+        $('#categoria_programatica_id').change(function() {
             var url = "{{ route('partida.presupuestaria.search') }}";
             $("#form").attr('action', url);
             $("#form").submit();
-        }
+        });
 
         function limpiar(){
             var url = "{{ route('partida.presupuestaria.index') }}";

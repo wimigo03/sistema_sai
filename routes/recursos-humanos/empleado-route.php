@@ -18,5 +18,5 @@ Route::prefix('empleado')->name('empleado.')->middleware(['auth'])->group(functi
     Route::get('imprimir-credenciales/{dea_id}', 'EmpleadoController@imprimir_credenciales')->name('imprimir.credenciales')->middleware('can:empleados.show');
     Route::get('procesar-credenciales', 'EmpleadoController@procesar_credenciales')->name('procesar.credenciales')->middleware('can:empleados.show');
     Route::get('excel', 'EmpleadoController@excel')->name('excel')->middleware('can:empleados.index');
-    Route::get('/mi-perfil', 'EmpleadoController@mi_perfil')->name('mi.perfil')->middleware('can:empleados.mi.perfil');
+    Route::get('/mi-perfil', 'EmpleadoController@mi_perfil')->name('mi.perfil')/* ->middleware('can:empleados.mi.perfil') */;
 });

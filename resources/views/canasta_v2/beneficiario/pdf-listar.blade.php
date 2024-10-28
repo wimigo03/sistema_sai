@@ -89,6 +89,7 @@
                             <th class="linea-derecha-gris" align="center">APELLIDO PATERNO</th>
                             <th class="linea-derecha-gris" align="center">APELLIDO MATERNO</th>
                             <th class="linea-derecha-gris" align="center">EDAD</th>
+                            <th class="linea-derecha-gris" align="center">OCUPACION</th>
                             <th class="linea-derecha-gris" align="center">REGISTRO</th>
                             <th class="linea-derecha-gris" align="center">-</th>
                         </tr>
@@ -104,6 +105,7 @@
                                 <td class="linea-derecha-gris" align="center" style="vertical-align: middle;">{{ $datos->ap }}</td>
                                 <td class="linea-derecha-gris" align="center" style="vertical-align: middle;">{{ $datos->am }}</td>
                                 <td class="linea-derecha-gris" align="center" style="vertical-align: middle;">{{ $datos->fecha_nac != null ? \Carbon\Carbon::parse($datos->fecha_nac)->age : '' }}</td>
+                                <td class="linea-derecha-gris" align="center" style="vertical-align: middle;">{{ $datos->ocupacion != null ? $datos->ocupacion->ocupacion : '-' }}</td>
                                 <td class="linea-derecha-gris" align="center" style="vertical-align: middle;">{{ $datos->created_att != null ? \Carbon\Carbon::parse($datos->created_att)->format('d/m/Y') : '' }}</td>
                                 <td class="linea-derecha-gris" align="center" style="vertical-align: middle;">
                                     @php

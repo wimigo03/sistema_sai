@@ -1,17 +1,20 @@
 @extends('layouts.admin')
 @section('content')
     <div class="card-body">
-        <div class="form-group row font-roboto-20">
-            <div class="col-md-12 text-center linea-completa">
-                <strong>REGISTRAR SOLICITUD DE COMPRA DE MATERIAL</strong>
+        <div class="row abs-center">
+            <div class="col-md-10">
+                <div class="form-group row font-roboto-20">
+                    <div class="col-md-12 text-center linea-completa">
+                        <strong>REGISTRAR SOLICITUD DE COMPRA DE MATERIAL</strong>
+                    </div>
+                </div>
+                @include('compras.solicitud_compra.partials.form-create')
             </div>
         </div>
-        @include('compras.solicitud_compra.partials.form-create')
     </div>
 @section('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
-            //localStorage.clear();
             $("#btn-registro").hide();
             $('.select2').select2({
                 theme: "bootstrap4",
@@ -19,26 +22,11 @@
                 width: '100%'
             });
 
-            $('#partida_presupuestaria_id').on('select2:open', function(e) {
-                if($("#categoria_programatica_id >option:selected").val() == ""){
-                    Modal("Para continuar se debe seleccionar una <b>[CATEGORIA PROGRAMATICA]</b>.");
-                }
-            });
-
             $('#item_id').on('select2:open', function(e) {
                 if($("#partida_presupuestaria_id >option:selected").val() == ""){
                     Modal("Para continuar se debe seleccionar una <b>[PARTIDA PRESUPUESTARIA]</b>.");
                 }
-                if($("#categoria_programatica_id >option:selected").val() == ""){
-                    Modal("Para continuar se debe seleccionar un <b>[CATEGORIA PROGRAMATICA]</b>.");
-                }
             });
-
-            if($("#categoria_programatica_id >option:selected").val() != ''){
-                var id = $("#categoria_programatica_id >option:selected").val();
-                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                getPartidasPresupuestarias(id,CSRF_TOKEN);
-            }
 
             if($("#partida_presupuestaria_id >option:selected").val() != ''){
                 var id = $("#partida_presupuestaria_id >option:selected").val();
@@ -52,38 +40,6 @@
                 numeralThousandsGroupStyle: 'thousand'
             });
         });
-
-        $('#categoria_programatica_id').change(function() {
-            var id = $(this).val();
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            getPartidasPresupuestarias(id,CSRF_TOKEN);
-        });
-
-        function getPartidasPresupuestarias(id,CSRF_TOKEN){
-            $.ajax({
-                type: 'GET',
-                url: '/solicitud-compra/get_partidas_presupuestarias',
-                data: {
-                    _token: CSRF_TOKEN,
-                    id: id
-                },
-                success: function(data){
-                    if(data.partidas_presupuestarias){
-                        var arr = Object.values($.parseJSON(data.partidas_presupuestarias));
-                        $("#partida_presupuestaria_id").empty();
-                        var select = $("#partida_presupuestaria_id");
-                        select.append($("<option></option>").attr("value", '').text('--Partida Presupuestaria--'));
-                        $.each(arr, function(index, json) {
-                            var opcion = $("<option></option>").attr("value", json.id).text(json.partida_presupuestaria);
-                            select.append(opcion);
-                        });
-                    }
-                },
-                error: function(xhr){
-                    console.log(xhr.responseText);
-                }
-            });
-        }
 
         $('#partida_presupuestaria_id').change(function() {
             var id = $(this).val();
@@ -175,10 +131,13 @@
         }
 
         function cargarProductos(){
-            var categoria_programatica_id = $("#categoria_programatica_id >option:selected").val();
-            var categoria_programatica = $("#categoria_programatica_id option:selected").text();
             var partida_presupuestaria_id = $("#partida_presupuestaria_id >option:selected").val();
-            var partida_presupuestaria = $("#partida_presupuestaria_id option:selected").text();
+            var partida_presupuestaria_texto = $("#partida_presupuestaria_id option:selected").text();
+            var texto_partida_presupuestaria = partida_presupuestaria_texto.replace(/[()]/g, '');
+            texto_partida_presupuestaria = texto_partida_presupuestaria.split(' ');
+            var partida_presupuestaria = texto_partida_presupuestaria[0];
+            var _partida_presupuestaria = texto_partida_presupuestaria[2];
+
             var producto_id = $("#item_id >option:selected").val();
             var producto_texto = $("#item_id option:selected").text();
             var quitar = /[()]/g;
@@ -189,10 +148,9 @@
             var cantidad = $("#cantidad").val();
             var fila = "<tr class='font-roboto-11'>"+
                             "<td class='text-justify p-1' style='vertical-align: middle;'>"+
-                                "<input type='hidden' name='categoria_programatica_id[]' value='" + categoria_programatica_id + "'>" + categoria_programatica +
-                            "</td>" +
-                            "<td class='text-justify p-1' style='vertical-align: middle;'>"+
-                                "<input type='hidden' name='partida_presupuestaria_id[]' value='" + partida_presupuestaria_id + "'>" + partida_presupuestaria +
+                                "<span class='tts:right tts-slideIn tts-custom' aria-label='" + _partida_presupuestaria + "' style='cursor: pointer;'>" +
+                                    "<input type='hidden' name='partida_presupuestaria_id[]' value='" + partida_presupuestaria_id + "'>" + partida_presupuestaria +
+                                "</span>" +
                             "</td>" +
                             "<td class='text-justify p-1' style='vertical-align: middle;'>"+
                                 "<input type='hidden' class='item_id' name='item_id[]' value='" + producto_id + "'>" + producto +
@@ -227,9 +185,7 @@
             var registros = table.rows.length - 1;
             if(registros === 0){
                 $("#btn-registro").hide();
-                document.getElementById('categoria_programatica_id').disabled = false;
             }else{
-                document.getElementById('categoria_programatica_id').disabled = true;
                 $("#btn-registro").show();
             }
         }

@@ -10,13 +10,14 @@ use App\Models\Canasta\Distrito;
 use App\Models\Canasta\Barrio;
 use App\Models\Canasta\Ocupaciones;
 use Carbon\Carbon;
+use DB;
+
 class Beneficiario extends Model
 {
     protected $table = 'beneficiarios';
     const CREATED_AT = 'created_att';
     const UPDATED_AT = 'updated_att';
     protected $fillable = [
-        'id',
         'nombres',
         'ap',
         'am',
@@ -36,24 +37,104 @@ class Beneficiario extends Model
         'ci',
         'expedido',
         'id_ocupacion',
+        'distrito_id',
+        'photo',
         'id_tipo',
         'codigo',
         'id_discgrado',
         'tutor',
         'parentesco',
-        'distrito_id'
+        'celular',
+        'latitud',
+        'longitud',
+        'utmx',
+        'utmy',
+        'profesion_id',
+        'seguro_medico',
+        'detalle_vivienda',
+        'tipo_vivienda',
+        'vecino_1',
+        'vecino_2',
+        'vecino_3',
+        'file_ci_anverso',
+        'file_ci_reverso',
+        'censado',
+        'titular_seguro_medico',
+        'material_vivienda',
+        'informacion',
+        'user_censo_id',
+        'fecha_censo'
+    ];
+
+    const HABILITADO = 'A';
+    const FALLECIDO = 'F';
+    const BAJA = 'B';
+    const PENDIENTE = 'X';
+    const ELIMINADO = 'E';
+
+    const TITULAR_SEGURO_MEDICO = [
+        '1' => 'NO ES TITULAR DEL SEGURO MEDICO',
+        '2' => 'SI ES TITULAR DEL SEGURO MEDICO'
+    ];
+
+    const INFORMACION = [
+        '1' => 'BENEFICIARIO CENSADO',
+        '2' => 'EL BENEFICIARIO SE NEGO A DAR INFORMACION'
     ];
 
     const ESTADOS = [
         'A' => 'HABILITADO',
         'F' => 'FALLECIDO',
         'B' => 'BAJA',
-        'X' => 'PENDIENTE'
+        'X' => 'PENDIENTE',
+        'E' => 'ELIMINADO'
+    ];
+
+    const NO_CENSADO = '1';
+    const CENSADO = '2';
+
+    const ESTADOS_CENSO = [
+        '1' => 'PENDIENTE',
+        '2' => 'CENSADO'
+    ];
+
+    const _SEGUROS = [
+        '1' => 'CAJA NACIONAL DE SALUD',
+        '2' => 'CAJA BANCA ESTATAL',
+        '3' => 'CAJA CORDES',
+        '4' => 'COORPORACION DEL SEGURO SOCIAL MILITAR',
+        '5' => 'CAJA DE LA BANCA PRIVADA',
+        '6' => 'CAJA PETROLERA',
+        '7' => 'CAJA DE CAMINOS',
+        '8' => 'SUS',
+    ];
+
+    const TIPOS_VIVIENDAS = [
+        '1' => 'PROPIA',
+        '2' => 'ALQUILER',
+        '3' => 'ANTICRETICO',
+        '4' => 'OTRO'
+    ];
+
+    const MATERIALES_VIVIENDAS = [
+        '1' => 'MADERA',
+        '2' => 'LADRILLO',
+        '3' => 'ADOBE',
+        '4' => 'CEMENTO',
+        '5' => 'OTRO'
     ];
 
     const SEXOS = [
-        'H' => 'MASCULINO',
-        'M' => 'FEMENINO',
+        'H' => 'H',
+        'M' => 'M',
+    ];
+
+    const TERCERA_EDAD = 1;
+    const DISCAPACIDAD = 2;
+
+    const TIPOS = [
+        '1' => '3RA EDAD',
+        '2' => 'DISCAPACIDAD'
     ];
 
     const EXTENSIONES = [
@@ -78,6 +159,38 @@ class Beneficiario extends Model
                     return "BAJA";
             case 'X':
                     return "PENDIENTE";
+            case 'E':
+                return "ELIMINADO";
+        }
+    }
+
+    public function getSegurosMedicosAttribute(){
+        switch ($this->seguro_medico) {
+            case '1':
+                return "CAJA NACIONAL DE SALUD";
+            case '2':
+                return "CAJA BANCA ESTATAL";
+            case '3':
+                    return "CAJA CORDES";
+            case '4':
+                    return "COORPORACION DEL SEGURO SOCIAL MILITAR";
+            case '5':
+                return "CAJA DE LA BANCA PRIVADA";
+            case '6':
+                return "CAJA PETROLERA";
+            case '7':
+                return "CAJA DE CAMINOS";
+            case '8':
+                return "SUS";
+        }
+    }
+
+    public function getTitularSeguroAttribute(){
+        switch ($this->titular_seguro_medico) {
+            case '1':
+                return "NO";
+            case '2':
+                return "SI";
         }
     }
 
@@ -91,11 +204,17 @@ class Beneficiario extends Model
                 return "badge-with-padding badge badge-warning";
             case 'X':
                 return "badge-with-padding badge badge-secondary";
+            case 'E':
+                return "badge-with-padding badge badge-danger";
         }
     }
 
     public function user(){
         return $this->belongsTo(User::class,'user_id','id');
+    }
+
+    public function user_censo(){
+        return $this->belongsTo(User::class,'user_censo_id','id');
     }
 
     public function ocupacion(){
@@ -132,6 +251,16 @@ class Beneficiario extends Model
         }
     }
 
+    public function scopeByNombreCompleto($query, $nombre_completo){
+        if($nombre_completo != null){
+            //return $query->whereRaw('upper(nombres) like ?', ['%'.strtoupper($nombre_completo).'%']);
+            return $query->whereRaw(
+                "UPPER(CONCAT(nombres, ' ', ap, ' ', am)) LIKE ?",
+                ['%' . strtoupper($nombre_completo) . '%']
+            );
+        }
+    }
+
     public function scopeByNombre($query, $nombre){
         if($nombre != null){
             return $query->whereRaw('upper(nombres) like ?', ['%'.strtoupper($nombre).'%']);
@@ -160,6 +289,13 @@ class Beneficiario extends Model
         }
     }
 
+    public function scopeByNumeroCarnetBrigadista($query, $ci){
+        if($ci != null){
+            return $query->where('ci',$ci);
+
+        }
+    }
+
     public function scopeBySexo($query, $sexo){
         if($sexo != null){
             return $query->where('sexo',$sexo);
@@ -172,8 +308,67 @@ class Beneficiario extends Model
             $fecha_actual = Carbon::now();
             $fecha_nacimiento_final = $fecha_actual->copy()->subYears($edad_final + 1)->startOfDay();
             $fecha_nacimiento_inicial = $fecha_actual->copy()->subYears($edad_inicial)->addDay()->startOfDay();
-
             return $query->whereBetween('fecha_nac', [$fecha_nacimiento_final, $fecha_nacimiento_inicial]);
+        }
+    }
+
+    public function scopeByInscripcion($query, $finicial, $ffinal){
+        if(!is_null($finicial) && !is_null($ffinal)){
+            $finicial = Carbon::createFromFormat('d/m/Y', $finicial)->format('Y-m-d 00:00:00');
+            $ffinal = Carbon::createFromFormat('d/m/Y', $ffinal)->format('Y-m-d 23:59:59');
+            return $query->whereBetween('created_att',[$finicial,$ffinal]);
+        }
+    }
+
+    /* public function scopeByEntreFechas($query, $finicial, $ffinal)
+    {
+        if (!is_null($finicial) && !is_null($ffinal)) {
+            $finicial = Carbon::createFromFormat('d/m/Y', $finicial)->startOfDay()->format('Y-m-d H:i:s');
+            $ffinal = Carbon::createFromFormat('d/m/Y', $ffinal)->endOfDay()->format('Y-m-d H:i:s');
+
+            return $query->leftJoin(DB::raw("(
+                    SELECT id_beneficiario, observacion, fecha
+                    FROM historialmod
+                    WHERE (id_beneficiario, fecha) IN (
+                        SELECT id_beneficiario, MAX(fecha)
+                        FROM historialmod
+                        GROUP BY id_beneficiario
+                    )
+                ) as b"), 'beneficiarios.id', 'b.id_beneficiario')
+                ->whereBetween('b.fecha', [$finicial, $ffinal]);
+        }
+
+        return $query;
+    } */
+
+    public function scopeByEntreFechas($query, $finicial, $ffinal)
+    {
+        if (!is_null($finicial) && !is_null($ffinal)) {
+            $finicial = Carbon::createFromFormat('d/m/Y', $finicial)->startOfDay()->format('Y-m-d H:i:s');
+            $ffinal = Carbon::createFromFormat('d/m/Y', $ffinal)->endOfDay()->format('Y-m-d H:i:s');
+
+            return $query->leftJoin(DB::raw("(
+                        SELECT id_beneficiario, observacion, fecha
+                        FROM historialmod
+                        WHERE (id_beneficiario, fecha) IN (
+                            SELECT id_beneficiario, MAX(fecha)
+                            FROM historialmod
+                            GROUP BY id_beneficiario
+                        )
+                    ) as b"), 'beneficiarios.id', '=', 'b.id_beneficiario')
+                    /* ->where('b.id_beneficiario',NULL) */
+                    ->where(function ($query) use ($finicial, $ffinal) {
+                        $query->whereBetween('b.fecha', [$finicial, $ffinal])
+                              ->orWhereNull('b.fecha'); // Incluir beneficiarios sin relación con historialmod
+                    });
+        }
+
+        return $query;
+    }
+
+    public function scopeByOcupacion($query, $ocupacion_id){
+        if($ocupacion_id != null){
+            return $query->where('id_ocupacion', $ocupacion_id);
         }
     }
 
@@ -190,7 +385,7 @@ class Beneficiario extends Model
 
     public function scopeByDea($query, $dea_id){
         if($dea_id != null){
-            return $query->where('dea_id',$dea_id);
+            return $query->where('beneficiarios.dea_id',$dea_id);
         }
     }
 
@@ -202,7 +397,25 @@ class Beneficiario extends Model
 
     public function scopeByEstado($query, $estado){
         if($estado != null){
-            return $query->where('estado',$estado);
+            return $query->where('beneficiarios.estado',$estado);
+        }
+    }
+
+    public function scopeByUsuarioTwo($query, $user_id){
+        if($user_id != null){
+            return $query->where('user_censo_id', $user_id);
+        }
+    }
+
+    public function scopeByEstadoBrigadista($query, $estados){
+        if($estados != null){
+            return $query->whereIn('estado',$estados);
+        }
+    }
+
+    public function scopeByEstadoCenso($query, $estado_censo){
+        if($estado_censo != null){
+            return $query->where('censado',$estado_censo);
         }
     }
 

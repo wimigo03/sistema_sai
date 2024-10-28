@@ -1,20 +1,18 @@
 <div class="form-group row font-roboto-11   ">
     <div class="col-md-12 pr-1 pl-1 table-responsive">
-        <table class="table display table-striped table-bordered responsive hover-orange" style="width:100%;" id="users-table">
+        <table class="table display table-striped table-bordered responsive hover-orange" style="width:100%;" id="dataTable">
             <thead>
                 <tr class="font-roboto-11">
-                    <th class="text-center p-1">NOMBRES</th>
-                    <th class="text-center p-1">APELLIDOS</th>
-                    <th class="text-center p-1">UNIDAD</th>
-                    <th class="text-center p-1">ASUNTO</th>
-                    <th class="text-center p-1">FECHA</th>
-                    <th class="text-center p-1">CODIGO</th>
-                    <th class="text-center p-1">H.RUTA</th>
-                    <th class="text-center p-1">
+                    <td class="text-left p-1" width="20%"><b>NOMBRE COMPLETO</b></td>
+                    <td class="text-left p-1" width="26%"><b>UNIDAD</b></td>
+                    <td class="text-left p-1" width="30%"><b>ASUNTO</b></td>
+                    <td class="text-center p-1" width="8%"><b>FECHA</b></td>
+                    <td class="text-center p-1" width="6%"><b>CODIGO</b></td>
+                    <td class="text-center p-1" width="10%">
                         @canany(['correspondencia_local.gestionar', 'correspondencia_local.urlfile'])
                             <i class="fa fa-bars" aria-hidden="true"></i>
                         @endcanany
-                    </th>
+                    </td>
                 </tr>
             </thead>
             <tbody>

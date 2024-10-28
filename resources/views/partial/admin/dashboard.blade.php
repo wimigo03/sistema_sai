@@ -12,10 +12,18 @@
         <div class="nav-menu">
             <div class="sidebar left">
                 <ul class="list-sidebar bg-defoult">
-                    @can('empleados.mi.perfil')
+                    {{-- @can('empleados.mi.perfil') --}}
                         <li class="font-verdana-13">
                             <a href="{{ route('empleado.mi.perfil') }}">
                                 <i class="fa fa-user fa-fw"></i>&nbsp;Mi perfil
+                            </a>
+                        </li>
+                    {{-- @endcan --}}
+                    {{--DESPACHO--}}
+                    @can('agenda.ejecutiva.index')
+                        <li class="font-verdana-13 counter">
+                            <a href="{{ route('agenda.ejecutiva.index') }}">
+                                <i class="fa-sharp fa-solid fa-calendar fa-fw"></i>&nbsp;Agenda ejecutiva
                             </a>
                         </li>
                     @endcan
@@ -51,14 +59,60 @@
                             </ul>
                         </li>
                     @endcanany
+                    {{-- SISTEMAS --}}
+                    @canany(['control.interno.index','mantenimientos.index','facebook.index','archivos.index.general'])
+                        <li class="font-verdana-13 counter">
+                            <a href="" data-toggle="collapse" data-target="#dashboard_sistemas" class="active collapsed" aria-expanded="false">
+                                <i class="fa-solid fa-gears fa-fw"></i>&nbsp;Unidad de Sistemas
+                                <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
+                            </a>
+                            <ul class="sub-menu collapse" id="dashboard_sistemas">
+                                @can('control.interno.index')
+                                    <li>
+                                        <a href="{{ route('control.interno.index') }}">
+                                            &nbsp;&nbsp;&nbsp;<i class="fa fa-envelope fa-fw"></i>&nbsp;Control Interno
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('mantenimientos.index')
+                                    <li>
+                                        <a href="{{ route('mantenimientos.index') }}">
+                                            &nbsp;&nbsp;&nbsp;<i class="fa-solid fa-tools fa-fw"></i>&nbsp;Mantenimientos
+                                        </a>
+                                    </li>
+                                @endcan
+                                {{-- @can('archivos.index.general')
+                                    <li>
+                                        <a href="{{ route('archivos.index.full') }}">
+                                            &nbsp;&nbsp;&nbsp;<i class="fa-solid fa-file fa-fw"></i>&nbsp;Archivos Digitales
+                                        </a>
+                                    </li>
+                                @endcan --}}
+                                @can('facebook.index')
+                                    <li>
+                                        <a href="{{ route('facebook.index') }}">
+                                            &nbsp;&nbsp;&nbsp;<i class="fa-brands fa-twitter fa-fw"></i>&nbsp;Redes Sociales
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </li>
+                    @endcanany
                     {{-- CANASTA --}}
-                    @canany(['canasta.paquetes.index','canasta.beneficiarios.index','canasta.entregas.beneficiario.index','canasta.distritos.index','canasta.barrios.index'])
+                    @canany(['canasta.paquetes.index','canasta.beneficiarios.index','canasta.entregas.beneficiario.index','canasta.distritos.index','canasta.barrios.index','canasta.beneficiarios.brigadista.index'])
                         <li class="font-verdana-13 counter">
                             <a href="" data-toggle="collapse" data-target="#dashboard_canasta_v2" class="active collapsed" aria-expanded="false">
                                 <i class="fa-solid fa-gift fa-fw"></i>&nbsp;Canasta 3ra Edad
                                 <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_canasta_v2">
+                                @can('reportes.canasta.index')
+                                    <li>
+                                        <a href="{{ route('reportes.canasta.index') }}">
+                                            &nbsp;&nbsp;<i class="fa-solid fa-list fa-fw"></i>&nbsp;Reportes
+                                        </a>
+                                    </li>
+                                @endcan
                                 @can('canasta.paquetes.index')
                                     <li>
                                         <a href="{{ route('paquetes.index') }}">
@@ -73,24 +127,38 @@
                                         </a>
                                     </li>
                                 @endcan
+                                @can('canasta.beneficiarios.brigadista.index')
+                                    <li>
+                                        <a href="{{ route('beneficiarios.brigadista.index') }}">
+                                            &nbsp;&nbsp;<i class="fas fa-user-friends"></i>&nbsp;*Beneficiarios
+                                        </a>
+                                    </li>
+                                @endcan
                                 @can('canasta.entregas.beneficiario.index')
                                     <li>
                                         <a href="{{ route('entrega.beneficiario.index') }}">
-                                            &nbsp;&nbsp;<i class="fa-solid fa-search fa-fw"></i>&nbsp;Buscar
+                                            &nbsp;&nbsp;<i class="fa-solid fa-search fa-fw"></i>&nbsp;Buscar Entrega
                                         </a>
                                     </li>
                                 @endcan
                                 @can('canasta.distritos.index')
                                     <li>
                                         <a href="{{ route('distritos.index') }}">
-                                            &nbsp;&nbsp;<i class="fa-solid fa-house"></i>&nbsp;Distritos
+                                            &nbsp;&nbsp;<i class="fa-solid fa-house fa-fw"></i>&nbsp;Distritos
                                         </a>
                                     </li>
                                 @endcan
                                 @can('canasta.barrios.index')
                                     <li>
                                         <a href="{{ route('barrios.index') }}">
-                                            &nbsp;&nbsp;<i class="fa-solid fa-house"></i>&nbsp;Barrios
+                                            &nbsp;&nbsp;<i class="fa-solid fa-house-crack fa-fw"></i>&nbsp;Barrios
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('canasta.barrios.index')
+                                    <li>
+                                        <a href="{{ route('ocupacion.index') }}">
+                                            &nbsp;&nbsp;<i class="fa-solid fa-briefcase fa-fw"></i>&nbsp;Profesion/Ocupacion
                                         </a>
                                     </li>
                                 @endcan
@@ -101,7 +169,7 @@
                     @canany(['canastadisc.beneficiarios.index'])
                         <li class="font-verdana-13 counter">
                             <a href="" data-toggle="collapse" data-target="#dashboard_canasta_didsc_v2" class="active collapsed" aria-expanded="false">
-                                <i class="fa fa-wheelchair"></i>&nbsp;Discapacidad
+                                <i class="fa fa-wheelchair"></i>&nbsp;Canasta Discapacidad
                                 <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_canasta_didsc_v2">
@@ -130,30 +198,60 @@
                             </ul>
                         </li>
                     @endcanany
-
-                    {{-- COMPRAS MODIFICADO--}}
-                    @can('solicitud.compra.index')
-                    <li class="font-verdana-13 counter">
-                        <a href="{{ route('solicitud.compra.index') }}">
-                            <i class="fas fa-shopping-basket fa-fw"></i>&nbsp;Solicitudes de compra
-                        </a>
-                    </li>
-                    @endcan
-                    @can('orden.compra.index')
-                    <li class="font-verdana-13">
-                        <a href="{{ route('orden.compra.index') }}">
-                            <i class="fas fa-shopping-cart fa-fw"></i>&nbsp;Ordenes de compra
-                        </a>
-                    </li>
-                    @endcan
                     {{-- COMPRAS --}}
-                    @canany(['proveedor.index','categoria.programatica.index','item.index','unidad.medida.index','partida.presupuestaria.index'])
+                    @canany(['solicitud.compra.index','orden.compra.index'])
                         <li class="font-verdana-13 counter">
                             <a href="" data-toggle="collapse" data-target="#dashboard_compras" class="active collapsed" aria-expanded="false">
-                                <i class="fa fa-list-alt fa-fw"></i>&nbsp;Configuracion Compras
+                                <i class="fa-solid fa-cart-shopping fa-fw"></i>&nbsp;Compras Menores
                                 <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_compras">
+                                @can('solicitud.compra.index')
+                                    <li class="font-verdana-13 counter">
+                                        <a href="{{ route('solicitud.compra.index') }}">
+                                            &nbsp;&nbsp;<i class="fas fa-shopping-basket fa-fw"></i>&nbsp;Solicitudes de compra
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('orden.compra.index')
+                                    <li class="font-verdana-13">
+                                        <a href="{{ route('orden.compra.index') }}">
+                                            &nbsp;&nbsp;<i class="fas fa-shopping-cart fa-fw"></i>&nbsp;Ordenes de compra
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('proveedor.index')
+                                    <li>
+                                        <a href="{{ route('proveedor.index') }}">
+                                            &nbsp;&nbsp;<i class="fa-solid fa-users fa-fw"></i>&nbsp;Proveedores
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </li>
+                    @endcanany
+                    {{-- MATERIALES --}}
+                    @canany(['solicitud.material.index','categoria.programatica.index','partida.presupuestaria.index','item.index','unidad.medida.index'])
+                        <li class="font-verdana-13 counter">
+                            <a href="" data-toggle="collapse" data-target="#dashboard_materiales" class="active collapsed" aria-expanded="false">
+                                <i class="fa fa-tags fa-fw"></i>&nbsp;Materiales
+                                <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
+                            </a>
+                            <ul class="sub-menu collapse" id="dashboard_materiales">
+                                @can('solicitud.material.index')
+                                    <li class="font-verdana-13">
+                                        <a href="{{ route('solicitud.material.index') }}">
+                                            &nbsp;&nbsp;<i class="fa-solid fa-marker fa-fw"></i>&nbsp;Solicitudes
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('item.index')
+                                    <li>
+                                        <a href="{{ route('item.index') }}">
+                                            &nbsp;&nbsp;<i class="fas fa-rectangle-list fa-fw"></i>&nbsp;Listar
+                                        </a>
+                                    </li>
+                                @endcan
                                 @can('categoria.programatica.index')
                                     <li>
                                         <a href="{{ route('categoria.programatica.index') }}">
@@ -168,13 +266,6 @@
                                         </a>
                                     </li>
                                 @endcan
-                                @can('item.index')
-                                    <li>
-                                        <a href="{{ route('item.index') }}">
-                                            &nbsp;&nbsp;<i class="fas fa-tags fa-fw"></i>&nbsp;Materiales
-                                        </a>
-                                    </li>
-                                @endcan
                                 @can('unidad.medida.index')
                                     <li>
                                         <a href="{{ route('unidad.medida.index') }}">
@@ -182,40 +273,48 @@
                                         </a>
                                     </li>
                                 @endcan
-                                @can('proveedor.index')
-                                    <li>
-                                        <a href="{{ route('proveedor.index') }}">
-                                            &nbsp;&nbsp;<i class="fa-solid fa-users fa-fw"></i>&nbsp;Proveedores
+                            </ul>
+                        </li>
+                    @endcanany
+                    {{-- ALMACENES --}}
+                    @canany(['almacen.index','ingreso.compra.index','salida.material.index'])
+                        <li class="font-verdana-13 counter">
+                            <a href="" data-toggle="collapse" data-target="#dashboard_almacenes" class="active collapsed" aria-expanded="false">
+                                <i class="fa fa-shop fa-fw"></i>&nbsp;Almacenes
+                                <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
+                            </a>
+                            <ul class="sub-menu collapse" id="dashboard_almacenes">
+                                @can('almacen.index')
+                                    <li class="font-verdana-13 counter">
+                                        <a href="{{ route('almacen.index') }}">
+                                            &nbsp;&nbsp;<i class="fa-solid fa-list-alt fa-fw"></i>&nbsp;Listar
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('ingreso.compra.index')
+                                    <li class="font-verdana-13 counter">
+                                        <a href="{{ route('ingreso.compra.index') }}">
+                                            &nbsp;&nbsp;<i class="fa-solid fa-file-lines fa-fw"></i>&nbsp;Ingresos
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('salida.almacen.index')
+                                    <li class="font-verdana-13 counter">
+                                        <a href="{{ route('salida.almacen.index') }}">
+                                            &nbsp;&nbsp;<i class="fa-solid fa-hdd fa-fw"></i>&nbsp;Salidas
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('inventario.index')
+                                    <li class="font-verdana-13 counter">
+                                        <a href="{{ route('inventario.index') }}">
+                                            &nbsp;&nbsp;<i class="fas fa-warehouse fa-fw"></i>&nbsp;Inventario
                                         </a>
                                     </li>
                                 @endcan
                             </ul>
                         </li>
                     @endcanany
-                    {{-- INGRESOS --}}
-                    @can('ingreso.compra.index')
-                        <li class="font-verdana-13 counter">
-                            <a href="{{ route('ingreso.compra.index') }}">
-                                <i class="fa-solid fa-file-lines fa-fw"></i>&nbsp;Ingreso de Materiales
-                            </a>
-                        </li>
-                    @endcan
-                    {{-- SALIDAS --}}
-                    @can('salida.material.index')
-                        <li class="font-verdana-13 counter">
-                            <a href="{{ route('salida.material.index') }}">
-                                <i class="fa-solid fa-hdd fa-fw"></i>&nbsp;Salida de Materiales
-                            </a>
-                        </li>
-                    @endcan
-                    {{--ALMACENES--}}
-                    @can('almacen.index')
-                        <li class="font-verdana-13 counter">
-                            <a href="{{ route('almacen.index') }}">
-                                <i class="fa-solid fa-shop fa-fw"></i>&nbsp;Almacenes
-                            </a>
-                        </li>
-                    @endcan
                     {{-- PERSONALIDADES JURIDICAS --}}
                     @can('personerias.index')
                         <li class="font-verdana-13">
@@ -279,20 +378,6 @@
                             </ul>
                         </li>
                         <hr style="margin-top:0; margin-bottom:0;">
-                    @endcan
-                    @can('agenda.ejecutiva.index')
-                        <li class="font-verdana-13 counter">
-                            <a href="{{ route('agenda.ejecutiva.index') }}">
-                                <i class="fa-sharp fa-solid fa-calendar fa-fw"></i>&nbsp;Agenda ejecutiva
-                            </a>
-                        </li>
-                    @endcan
-                    @can('facebook.index')
-                        <li class="font-verdana-13 counter">
-                            <a href="{{ route('facebook.index') }}">
-                                <i class="fa-brands fa-twitter fa-fw"></i>&nbsp;Redes Sociales
-                            </a>
-                        </li>
                     @endcan
                     @can('agenda.ej.index')
                         <li class="font-verdana-13">
@@ -528,6 +613,45 @@
                                        </li>
                                    @endcanany
 
+                    {{-- CORRESPONDENCIA --}}
+                    @canany(['correspondencia_local.index','correspondencia_local.remitente.index','correspondencia_local.unidad.index','correspondencia.index'])
+                        <li class="font-verdana-13 counter">
+                            <a href="" data-toggle="collapse" data-target="#dashboard_correspondencia" class="active collapsed" aria-expanded="false">
+                                <i class="fa-solid fa-gift fa-fw"></i>&nbsp;Correspondencia
+                                <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
+                            </a>
+                            <ul class="sub-menu collapse" id="dashboard_correspondencia">
+                                @can('correspondencia_local.index')
+                                    <li>
+                                        <a href="{{ route('correspondencia.local.index') }}">
+                                            &nbsp;&nbsp;<i class="fa-solid fa-shopping-bag fa-fw"></i>&nbsp;Ventanilla
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('correspondencia_local.remitente.index')
+                                    <li>
+                                        <a href="{{ route('correspondencia.local.remitente.index') }}">
+                                            &nbsp;&nbsp;<i class="fa-solid fa-users fa-fw"></i>&nbsp;Remitentes
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('correspondencia_local.unidad.index')
+                                    <li>
+                                        <a href="{{ route('correspondencia.local.unidadIndex') }}">
+                                            &nbsp;&nbsp;<i class="fas fa-house-damage fa-fw"></i>&nbsp;Areas
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('correspondencia.index')
+                                    <li>
+                                        <a href="{{ route('correspondencia.index') }}">
+                                            &nbsp;&nbsp;<i class="fa fa-folder fa-fw"></i>&nbsp;Correspondencia Anterior
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </li>
+                    @endcanany
                     {{-- CORRESPONDENCIA LOCAL 2 --}}
                     @can('derivacion.index')
                         <li class="font-verdana-13">
@@ -548,19 +672,11 @@
                         </li>
                         <hr style="margin-top:0; margin-bottom:0;">
                     @endcan
-                    {{-- DOCUMENTACION INTERNA DE SALIDA --}}
-                    @can('control.interno.index')
-                        <li class="font-verdana-13">
-                            <a href="{{ route('control.interno.index') }}">
-                                <i class="fa fa-envelope fa-fw"></i>&nbsp;Control Interno
-                            </a>
-                        </li>
-                    @endcan
                     {{-- ARCHIVOS --}}
                     @canany(['archivos.index','tipos.archivos.index','archivos.index.general'])
                         <li class="font-verdana-13 counter">
                             <a href="" data-toggle="collapse" data-target="#dashboard_archivos" class="active collapsed" aria-expanded="false">
-                                <i class="fas fa-file fa-fw"></i>&nbsp;Registros Locales
+                                <i class="fas fa-file fa-fw"></i>&nbsp;Archivos Digitales
                                 <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_archivos">
@@ -575,13 +691,6 @@
                                     <li>
                                         <a href="{{ route('tipos.archivos.index') }}">
                                             &nbsp;&nbsp;&nbsp;<i class="fas fa-file fa-fw"></i>&nbsp;Tipos
-                                        </a>
-                                    </li>
-                                @endcan
-                                @can('archivos.index.general')
-                                    <li>
-                                        <a href="{{ route('archivos.index.full') }}">
-                                            &nbsp;&nbsp;&nbsp;<i class="fas fa-file fa-fw"></i>&nbsp;General
                                         </a>
                                     </li>
                                 @endcan

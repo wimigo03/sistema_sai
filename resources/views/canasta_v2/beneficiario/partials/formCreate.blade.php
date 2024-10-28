@@ -3,22 +3,21 @@
     <div class="form-group row font-roboto-12">
         <div class="col-md-4 pr-1 pl-1">
             <label for="nombres" class="d-inline"><b>Nombres</b></label>
-            <input type="text" name="nombres" id="nombres" class="form-control font-roboto-12" onchange="javascript:this.value=this.value.toUpperCase();">
+            <input type="text" name="nombres" value="{{ old('nombres') }}" id="nombres" class="form-control font-roboto-12" onchange="javascript:this.value=this.value.toUpperCase();">
         </div>
         <div class="col-md-3 pr-1 pl-1">
             <label for="ap" class="d-inline"><b>Apellido Paterno</b></label>
-            <input type="text" name="ap" id="ap" class="form-control font-roboto-12" onchange="javascript:this.value=this.value.toUpperCase();">
+            <input type="text" name="ap" value="{{ old('ap') }}" id="ap" class="form-control font-roboto-12" onchange="javascript:this.value=this.value.toUpperCase();">
         </div>
         <div class="col-md-3 pr-1 pl-1">
             <label for="am" class="d-inline"><b>Apellido Materno</b></label>
-            <input type="text" name="am" id="am" class="form-control font-roboto-12" onchange="javascript:this.value=this.value.toUpperCase();">
+            <input type="text" name="am" value="{{ old('am') }}" id="am" class="form-control font-roboto-12" onchange="javascript:this.value=this.value.toUpperCase();">
         </div>
     </div>
     <div class="form-group row font-roboto-12">
         <div class="col-md-2 pr-1 pl-1">
             <label for="fnac" class="d-inline"><b>Fecha de Nacimiento</b></label>
             <input type="text" name="fnac" value="{{ old('fnac') }}" id="fnac" placeholder="dd/mm/aaaa" class="form-control font-roboto-12" data-language="es">
-            {{--<input type="date" name="fnac" id="fnac" class="form-control font-roboto-12">--}}
         </div>
         <div class="col-md-2 pr-1 pl-1">
             <label for="estado_civil" class="d-inline"><b>Estado Civil</b></label>
@@ -99,11 +98,26 @@
                 @endforeach
             </select>
         </div>
+        <div class="col-md-2 pr-1 pl-1">
+            <label for="latitud" class="d-inline"><b>Latitud</b></label>
+            <input type="text" name="latitud" id="latitud"  class="form-control font-roboto-12" disabled>
+        </div>
+        <div class="col-md-2 pr-1 pl-1">
+            <label for="longitud" class="d-inline"><b>Longitud</b></label>
+            <input type="text" name="longitud" id="longitud"  class="form-control font-roboto-12" disabled>
+        </div>
     </div>
     <div class="form-group row font-roboto-12">
         <div class="col-md-12 pr-1 pl-1">
             <label for="observacion" class="d-inline"><b>Observacion</b></label>
             <textarea name="observacion" id="observacion" class="form-control font-roboto-12" onchange="javascript:this.value=this.value.toUpperCase();"></textarea>
+        </div>
+    </div>
+    <div class="form-group row font-roboto-12">
+        <div class="col-md-12 pr-1 pl-1">
+            <div id="map"></div>
+            <p id="coordinates"></p>
+            <span class="locate-btn"><i class="fa-solid fa-location-crosshairs fa-2x"></i></span>
         </div>
     </div>
     <div class="form-group row">

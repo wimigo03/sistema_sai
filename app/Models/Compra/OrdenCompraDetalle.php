@@ -4,6 +4,8 @@ namespace App\Models\Compra;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use DB;
+
 use App\Models\Area;
 use App\Models\User;
 use App\Models\Canasta\Dea;
@@ -29,12 +31,12 @@ class OrdenCompraDetalle extends Model
         'partida_presupuestaria_id',
         'unidad_id',
         'proveedor_id',
-        'idarea',
         'almacen_id',
-        'categoria_programatica_id',
         'solicitud_compra_id',
         'solicitud_compra_detalle_id',
         'idemp',
+        'categoria_programatica_id',
+        'idarea',
         'cantidad',
         'precio',
         'saldo',
@@ -76,7 +78,7 @@ class OrdenCompraDetalle extends Model
         return $this->belongsTo(User::class,'user_id','id');
     }
 
-    public function categoriaProgramatica(){
+    public function programatica(){
         return $this->belongsTo(CategoriaProgramatica::class,'categoria_programatica_id','id');
     }
 

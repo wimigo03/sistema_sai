@@ -21,6 +21,11 @@
                 </tr>
             </thead>
             <tbody>
+                @php
+                    $a = request('page') ? (int)request('page') : 1;
+                    $e = $entregas->perPage();
+                    $cont = (($a - 1) * $e) + 1;
+                @endphp
                 @foreach ($entregas as $datos)
                     <tr class="font-roboto-11">
                         <td class="text-justify p-1" style="vertical-align: middle;">{{ $cont++ }}</td>

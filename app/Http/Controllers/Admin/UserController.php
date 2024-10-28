@@ -45,11 +45,20 @@ class UserController extends Controller
     public function index()
     {
         //$this->completar_areas();
+        $roles = Role::query()
+                        ->byDea(Auth::user()->dea->id)
+                        ->orderBy('title')
+                        ->pluck('title','id');
         $users = User::orderBy('id', 'desc')->paginate(10);
-        return view('admin.users.index', compact('users'));
+        return view('admin.users.index', compact('roles','users'));
     }
 
     public function search(Request $request){
+        $roles = Role::query()
+                        ->byDea(Auth::user()->dea->id)
+                        ->orderBy('title')
+                        ->pluck('title','id');
+
         $users = User::query()
                         ->byNombre(strtoupper($request->nombre))
                         ->byApPaterno(strtoupper($request->ap_pat))
@@ -60,7 +69,7 @@ class UserController extends Controller
                         ->byEstado($request->estado)
                         ->orderBy('id', 'desc')
                         ->paginate(10);
-        return view('admin.users.index', compact('users'));
+        return view('admin.users.index', compact('roles','users'));
     }
 
     public function excel(Request $request){
@@ -90,6 +99,13 @@ class UserController extends Controller
         $deas = Dea::pluck('descripcion','id');
         $roles = Role::all()->pluck('title','id');
         return view('admin.users.create', compact('deas','roles'));
+    }
+
+    public function _create($empleado_id){
+        $dea = Dea::find(Auth::user()->dea->id);
+        $empleado = Empleado::find($empleado_id);
+        $roles = Role::all()->pluck('title','id');
+        return view('admin.users._create', compact('dea','empleado','roles'));
     }
 
     public function getAreas(Request $request){
@@ -129,7 +145,6 @@ class UserController extends Controller
             'area_id' => 'required',
             'empleado_id' => 'required|unique:users,idemp,null,id,dea_id,' . $request->dea,
             'name' => 'required|unique:users,name,null,id,dea_id,' . $request->dea,
-            'email' => 'required',
             'password' => 'required|min:6|confirmed',
             'roles' => 'required|array|min:1'
         ]);
@@ -141,10 +156,16 @@ class UserController extends Controller
                 'email' => $request->email,
                 'password' => $request->password,
                 'idemp' => $request->empleado_id,
-                'estadouser' => 1
+                'estadouser' => 1,
+                '_email' => $request->_email
             ]);
             $user->roles()->sync($request->roles);
-            return redirect()->route('users.index')->with('success_message', 'Se agrego un usuario al registro.');
+
+            if(isset($request->_form)){
+                return redirect()->route('empleado.index')->with('success_message', 'Se agrego un usuario al registro.');
+            }else{
+                return redirect()->route('users.index')->with('success_message', 'Se agrego un usuario al registro.');
+            }
         } catch (ValidationException $e) {
             return redirect()->route('users.create')
                 ->withErrors($e->validator->errors())
@@ -169,17 +190,21 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required|unique:users,name,' . $request->user_id,
-            'email' => 'required',
             'password' => 'nullable|min:6|confirmed',
             'roles' => 'required|array|min:1'
         ]);
         try{
             $user = User::find($request->user_id);
-            $user->update([
+            $datos = [
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => $request->password
-            ]);
+            ];
+
+            if ($request->password != null) {
+                $datos['password'] = $request->password;
+                $datos['_email'] = $request->_email;
+            }
+            $user->update($datos);
             $user->roles()->sync($request->roles);
             return redirect()->route('users.index')->with('success_message', 'Se modifico un usuario en el registro.');
         } catch (ValidationException $e) {
@@ -194,10 +219,14 @@ class UserController extends Controller
         $request->validate([
             'password' => 'nullable|min:6|confirmed'
         ]);
+        if($request->_email == null){
+            return redirect()->back()->with('error_message','[ERROR]. DATOS INSUFICIENTES')->withInput();
+        }
         try{
             $user = User::find($request->user_id);
             $user->update([
-                'password' => $request->password
+                'password' => $request->password,
+                '_email' => $request->_email
             ]);
 
             Auth::logout();

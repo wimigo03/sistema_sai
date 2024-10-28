@@ -1,6 +1,6 @@
 <?php
 
-Route::prefix('expochaco')->name('expochaco.')->middleware(['auth'])->group(function () {
+/* Route::prefix('expochaco')->name('expochaco.')->middleware(['auth'])->group(function () {
     Route::get('/index', 'Fexpo\SolicitudController@index')->name('index');
     Route::get('/rubro', 'ExpoController@rubro')->name('rubro');
     Route::get('/createrubro', 'ExpoController@createrubro')->name('createrubro');
@@ -15,4 +15,4 @@ Route::prefix('expochaco')->name('expochaco.')->middleware(['auth'])->group(func
     Route::get('expochaco/createcredencial/{id}', [SolicitudController::class,'createcredencial'])->name('credencial.create');
     Route::POST('expochaco/insertarcredencial', [SolicitudController::class,'insertarcredencial'])->name('credencial.insertarcredencial');
     Route::get('expochaco/generarqr/{id}', [SolicitudController::class,'codigoqr'])->name('expochaco.generarqr');
-});
+}); */

@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Canasta\Dea;
 use App\Models\Compra\UnidadMedida;
-use App\Models\Compra\CategoriaProgramatica;
 use App\Models\Compra\PartidaPresupuestaria;
 use App\Models\Compra\IngresoCompraDetalle;
 use DB;
@@ -16,10 +15,11 @@ class Item extends Model
     protected $table = 'items';
     protected $fillable = [
         'partida_presupuestaria_id',
-        'categoria_programatica_id',
         'dea_id',
         'user_id',
         'unidad_id',
+        'codigo',
+        'codigo_ant',
         'nombre',
         'detalle',
         'precio',
@@ -31,6 +31,7 @@ class Item extends Model
     const ESTADOS = [
         '1' => 'HABILITADO',
         '2' => 'NO HABILITADO',
+        '3' => 'ELIMINADO',
     ];
 
     const TIPOS = [
@@ -44,6 +45,8 @@ class Item extends Model
                 return "HABILITADO";
             case '2':
                 return "NO HABILITADO";
+            case '3':
+                return "ELIMINADO";
         }
     }
 
@@ -62,6 +65,8 @@ class Item extends Model
                 return "badge-with-padding badge badge-success";
             case '2':
                 return "badge-with-padding badge badge-danger";
+            case '3':
+                return "badge-with-padding badge badge-danger";
         }
     }
 
@@ -76,10 +81,6 @@ class Item extends Model
 
     public function unidad_medida(){
         return $this->belongsTo(UnidadMedida::class,'unidad_id','id');
-    }
-
-    public function categoriaProgramatica(){
-        return $this->belongsTo(CategoriaProgramatica::class,'categoria_programatica_id','id');
     }
 
     public function partidaPresupuestaria(){
@@ -103,15 +104,15 @@ class Item extends Model
         }
     }
 
-    public function scopeByCategoriaProgramatica($query, $categoria_programatica_id){
-        if ($categoria_programatica_id != null) {
-            return $query->where('categoria_programatica_id', $categoria_programatica_id);
-        }
-    }
-
     public function scopeByPartidaPresupuestaria($query, $partida_presupuestaria_id){
         if ($partida_presupuestaria_id != null) {
             return $query->where('partida_presupuestaria_id', $partida_presupuestaria_id);
+        }
+    }
+
+    public function scopeByCodigo($query, $codigo){
+        if($codigo != null){
+            return $query->where('codigo','like', '%' . $codigo . '%');
         }
     }
 

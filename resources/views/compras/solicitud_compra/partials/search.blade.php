@@ -1,7 +1,7 @@
 <form action="#" method="get" id="form">
     <div class="form-group row">
         <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="codigo" value="{{ request('codigo') }}" id="codigo" placeholder="--Codigo--" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
+            <input type="text" name="codigo" value="{{ request('codigo') }}" id="codigo" placeholder="--N° Solicitud--" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
         </div>
         <div class="col-md-5 pr-1 pl-1">
             <select name="area_id" id="area_id" class="form-control select2">

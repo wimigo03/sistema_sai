@@ -15,6 +15,13 @@
                     <span class="btn btn-outline-primary font-roboto-12" onclick="cancelar();">
                         <i class="fas fa-arrow-left fa-fw"></i>
                     </span>
+                    @if ($orden_compra->estado == '1')
+                        @can('orden.compra.editar')
+                            <span class="btn btn-secondary font-roboto-12" onclick="editar();">
+                                <i class="fas fa-edit fa-fw"></i> Modificar
+                            </span>
+                        @endcan
+                    @endif
                     @can('orden.compra.pdf')
                         <span class="btn btn-warning font-roboto-12 float-right" onclick="imprimir();">
                             <i class="fas fa-print fa-fw"></i>
@@ -34,71 +41,68 @@
                 </div>
             </div>
         @endcanany
-        <div class="form-group row font-roboto-12">
-            <div class="col-md-4 pr-1 pl-1">
+        <div class="row font-roboto-12">
+            <div class="col-md-7 pr-1 pl-1 mb-2">
                 <label for="area_solicitante" class="d-inline"><b>Unidad Solicitante</b></label>
                 <input type="text" value="{{ $orden_compra->area->nombrearea }}" id="area_solicitante" class="form-control font-roboto-11" disabled>
             </div>
-            <div class="col-md-3 pr-1 pl-1">
+            <div class="col-md-3 pr-1 pl-1 mb-2">
                 <label for="user" class="d-inline"><b>Solicitante</b></label>
                 <input type="text" value="{{ strtoupper($orden_compra->solicitante->name) }}" id="user" class="form-control font-roboto-11" disabled>
             </div>
-            <div class="col-md-2 pr-1 pl-1">
-                <label for="fecha_registro" class="d-inline"><b>Registro</b></label>
+            <div class="col-md-2 pr-1 pl-1 mb-2">
+                <label for="fecha_registro" class="d-inline"><b>Fecha de Registro</b></label>
                 <input type="text" value="{{ \Carbon\Carbon::parse($orden_compra->fecha_registro)->format('d/m/Y') }}" id="fecha_registro" class="form-control font-roboto-11" disabled>
             </div>
-        </div>
-        <div class="form-group row font-roboto-12">
-            <div class="col-md-2 pr-1 pl-1">
+            <div class="col-md-2 pr-1 pl-1 mb-2">
                 <label for="nro_oc" class="d-inline"><b>Nro. O.C</b></label>
                 <input type="text" value="{{ $orden_compra->codigo }}" id="nro_oc" class="form-control font-roboto-11" disabled>
             </div>
-            <div class="col-md-2 pr-1 pl-1">
+            <div class="col-md-2 pr-1 pl-1 mb-2">
                 <label for="nro_solicitud" class="d-inline"><b>Nro. Solicitud</b></label>
                 <input type="text" value="{{ $orden_compra->solicitud_compra->codigo }}" id="nro_solicitud" class="form-control font-roboto-11" disabled>
             </div>
-            <div class="col-md-4 pr-1 pl-1">
+            <div class="col-md-4 pr-1 pl-1 mb-2">
                 <label for="almacen" class="d-inline"><b>Almacen</b></label>
                 <input type="text" value="{{ $orden_compra->almacen != null ? $orden_compra->almacen->nombre : '' }}" id="almacen" class="form-control font-roboto-11" disabled>
             </div>
-            <div class="col-md-2 pr-1 pl-1">
+            <div class="col-md-2 pr-1 pl-1 mb-2">
                 <label for="tipo" class="d-inline"><b>Tipo</b></label>
                 <input type="text" value="{{ $orden_compra->tipos }}" id="tipo" class="form-control font-roboto-11" disabled>
             </div>
-            <div class="col-md-2 pr-1 pl-1">
+            <div class="col-md-2 pr-1 pl-1 mb-2">
                 <label for="estado" class="d-inline"><b>Estado</b></label>
                 <input type="text" value="{{ $orden_compra->status }}" id="estado" class="form-control font-roboto-11 {{ $orden_compra->colorInputStatus}}" disabled>
             </div>
-        </div>
-        <div class="form-group row font-roboto-12">
-            <div class="col-md-2 pr-1 pl-1">
+            <div class="col-md-2 pr-1 pl-1 mb-2">
                 <label for="c_interno" class="d-inline"><b>N° C. Interno</b></label>
                 <input type="text" value="{{ $orden_compra->c_interno }}" id="c_interno" class="form-control font-roboto-11" disabled>
             </div>
-            <div class="col-md-2 pr-1 pl-1">
+            <div class="col-md-2 pr-1 pl-1 mb-2">
                 <label for="nro_preventivo" class="d-inline"><b>N° Preventivo</b></label>
                 <input type="text" value="{{ $orden_compra->nro_preventivo }}" id="nro_preventivo" class="form-control font-roboto-11" disabled>
             </div>
-            <div class="col-md-4 pr-1 pl-1">
+            <div class="col-md-4 pr-1 pl-1 mb-2">
                 <label for="proveedor" class="d-inline"><b>Proveedor</b></label>
                 <input type="text" value="{{ isset($orden_compra->proveedor) ? $orden_compra->proveedor->nombre : '' }}" id="proveedor" class="form-control font-roboto-11" disabled>
             </div>
-            <div class="col-md-2 pr-1 pl-1">
-                <label for="fecha_aprob" class="d-inline"><b>Aprobado el</b></label>
-                {{$orden_compra->fecha_aprob}}
-                <input type="text" value="{{ isset($orden_compra->fecha_aprob) ? \Carbon\Carbon::parse($orden_compra->fecha_aprob)->format('d/m/Y') : '' }}" id="fecha_aprob" class="form-control font-roboto-11" disabled>
-            </div>
-            <div class="col-md-2 pr-1 pl-1">
-                <label for="aprobado_por" class="d-inline"><b>Aprobado por</b></label>
-                <input type="text" value="{{ isset($orden_compra->aprobante) ? $orden_compra->aprobante->name : '' }}" id="aprobado_por" class="form-control font-roboto-11" disabled>
-            </div>
-        </div>
-        <div class="form-group row font-roboto-12">
-            <div class="col-md-6 pr-1 pl-1">
+            @if ($orden_compra->fecha_aprob != null)
+                <div class="col-md-2 pr-1 pl-1 mb-2">
+                    <label for="fecha_aprob" class="d-inline"><b>Aprobado el</b></label>
+                    <input type="text" value="{{ \Carbon\Carbon::parse($orden_compra->fecha_aprob)->format('d/m/Y') }}" id="fecha_aprob" class="form-control font-roboto-11" disabled>
+                </div>
+            @endif
+            @if ($orden_compra->aprobante != null)
+                <div class="col-md-2 pr-1 pl-1 mb-2">
+                    <label for="aprobado_por" class="d-inline"><b>Aprobado por</b></label>
+                    <input type="text" value="{{ strtoupper($orden_compra->aprobante->name) }}" id="aprobado_por" class="form-control font-roboto-11" disabled>
+                </div>
+            @endif
+            <div class="col-md-12 pr-1 pl-1 mb-2">
                 <label for="objeto" class="d-inline"><b>Objeto</b></label>
                 <textarea id="objeto" rows="2" class="form-control font-roboto-11" disabled>{{ $orden_compra->objeto }}</textarea>
             </div>
-            <div class="col-md-6 pr-1 pl-1">
+            <div class="col-md-12 pr-1 pl-1 mb-2">
                 <label for="justificacion" class="d-inline"><b>Justificacion</b></label>
                 <textarea id="justificacion" rows="2" class="form-control font-roboto-11" disabled>{{ $orden_compra->justificacion }}</textarea>
             </div>
@@ -115,25 +119,38 @@
                                 <table id="detalle_tabla" class="table display table-bordered responsive hover-orange" style="width:100%;">
                                     <thead>
                                         <tr class="font-roboto-11">
-                                            <th class="text-left p-1">CATEGORIA PROGRAMATICA</th>
-                                            <th class="text-left p-1">PARTIDA PRESUPUESTARIA</th>
-                                            <th class="text-left p-1">ITEM</th>
+                                            <th class="text-center p-1">PROGRAMA</th>
+                                            <th class="text-center p-1">PARTIDA PRESUPUESTARIA</th>
+                                            <th class="text-center p-1">ITEM</th>
                                             <th class="text-center p-1">MEDIDA</th>
                                             <th class="text-right p-1">CANTIDAD</th>
                                             <th class="text-right p-1">PRECIO</th>
+                                            <th class="text-right p-1">TOTAL</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($orden_compra_detalles as $datos)
                                             <tr class="font-roboto-11">
-                                                <td class="text-left p-1">{{ $datos->categoriaProgramatica->codigo . ' - ' . $datos->categoriaProgramatica->nombre }}</td>
-                                                <td class="text-left p-1">{{ $datos->partidaPresupuestaria->numeracion . ' - ' . $datos->partidaPresupuestaria->nombre }}</td>
-                                                <td class="text-left p-1">{{ $datos->item->nombre }}</td>
+                                                <td class="text-center p-1">{{ $datos->programatica->codigo }}</td>
+                                                <td class="text-center p-1">{{ $datos->partidaPresupuestaria->numeracion . ' - ' . $datos->partidaPresupuestaria->nombre }}</td>
+                                                <td class="text-center p-1">{{ $datos->item->nombre }}</td>
                                                 <td class="text-center p-1">{{ $datos->unidad_medida->nombre }}</td>
                                                 <td class="text-right p-1">{{ number_format($datos->cantidad,2,'.',',') }}</td>
                                                 <td class="text-right p-1">{{ number_format($datos->precio,2,'.',',') }}</td>
+                                                <td class="text-right p-1">{{ number_format($datos->cantidad * $datos->precio,2,'.',',') }}</td>
                                             </tr>
+                                            @php
+                                                $total = $total + ($datos->cantidad * $datos->precio);
+                                            @endphp
                                         @endforeach
+                                        <tr class="font-roboto-11">
+                                            <td colspan="6" class="text-right p-1">
+                                                <b>TOTAL</b>
+                                            </td>
+                                            <td class="text-right p-1">
+                                                {{ number_format($total,2,'.',',') }}
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -240,6 +257,13 @@
         function imprimir(){
             var id = $("#orden_compra_id").val();
             var url = "{{ route('orden.compra.pdf',':id') }}";
+            url = url.replace(':id',id);
+            window.location.href = url;
+        }
+
+        function editar(){
+            var id = $("#orden_compra_id").val();
+            var url = "{{ route('orden.compra.editar',':id') }}";
             url = url.replace(':id',id);
             window.location.href = url;
         }

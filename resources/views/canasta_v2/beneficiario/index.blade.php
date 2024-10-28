@@ -1,4 +1,14 @@
+<!DOCTYPE html>
 @extends('layouts.admin')
+{{-- <style>
+    tfoot {
+        display: table-row-group;
+    }
+
+    thead {
+        display: table-header-group ;
+    }
+</style> --}}
 @section('content')
     <div class="card-header header">
         <div class="row">
@@ -14,7 +24,9 @@
 @endsection
 @section('scripts')
     <script type="text/javascript">
+        var table = $("#dataTable");
         $(document).ready(function() {
+            CargarDataTables();
             $('#tipo').select2({
                 theme: "bootstrap4",
                 placeholder: "--Tipo--",
@@ -39,75 +51,247 @@
                 width: '100%'
             });
 
-            $('#sexo').select2({
+            $('#usuario').select2({
                 theme: "bootstrap4",
-                placeholder: "--Sexo--",
+                placeholder: "--Usuario--",
                 width: '100%'
             });
 
-            $('#dataTable').DataTable({
+            $('#estado_censo').select2({
+                theme: "bootstrap4",
+                placeholder: "--Censo--",
+                width: '100%'
+            });
+
+            $('#sexo').select2({
+                theme: "bootstrap4",
+                placeholder: "--H/M--",
+                width: '100%'
+            });
+
+            $('#id_ocupacion').select2({
+                theme: "bootstrap4",
+                placeholder: "--Ocupacion--",
+                width: '100%'
+            });
+
+            var cleave = new Cleave('#finicial', {
+                date: true,
+                datePattern: ['d', 'm', 'Y']
+            });
+
+            $("#finicial").datepicker({
+                inline: false,
+                dateFormat: "dd/mm/yyyy",
+                autoClose: true,
+            });
+
+            var cleave = new Cleave('#ffinal', {
+                date: true,
+                datePattern: ['d', 'm', 'Y']
+            });
+
+            $("#ffinal").datepicker({
+                inline: false,
+                dateFormat: "dd/mm/yyyy",
+                autoClose: true,
+            });
+
+            if($("#id_distrito >option:selected").val() != ''){
+                var id = $("#id_distrito >option:selected").val();
+                getBarrios(id);
+            }
+        });
+
+        function Modal(mensaje) {
+            $("#modal-alert .modal-body").html(mensaje);
+            $('#modal-alert').modal({
+                keyboard: false
+            });
+        }
+
+        $('#id_barrio').on('select2:open', function(e) {
+            if($("#id_distrito >option:selected").val() == ""){
+                Modal("Para continuar se debe seleccionar una <b>[DISTRITO]</b>.");
+            }
+        });
+
+        $('#id_distrito').change(function() {
+            document.getElementById('_id_barrio').value = '';
+            var id = $(this).val();
+            getBarrios(id);
+        });
+
+        $('#id_barrio').change(function() {
+            document.getElementById('_id_barrio').value = $(this).val();
+        });
+
+        function getBarrios(id){
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                type: 'GET',
+                url: '/beneficiarios/get_barrios',
+                data: {
+                    _token: CSRF_TOKEN,
+                    id: id
+                },
+                success: function(data){
+                    if(data.barrios){
+                        var arr = Object.values($.parseJSON(data.barrios));
+                        $("#id_barrio").empty();
+                        var select = $("#id_barrio");
+                        select.append($("<option></option>").attr("value", '').text('--Seleccionar--'));
+                        var barrioIdSeleccionado = $("#_id_barrio").val();
+                        $.each(arr, function(index, json) {
+                            var opcion = $("<option></option>").attr("value", json.id).text(json.nombre);
+                            if (json.id == barrioIdSeleccionado) {
+                                opcion.attr('selected', 'selected');
+                            }
+                            select.append(opcion);
+                        });
+                    }
+                },
+                error: function(xhr){
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+
+        function CargarDataTables(){
+            if ( $.fn.DataTable.isDataTable( table ) ) {
+                table.DataTable().destroy();
+            }
+            table.DataTable({
                 bFilter: true,
-                responsive: true,
+                responsive: false,
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ajax: "{{ route('beneficiarios.index') }}",
-                columns: [{
+                ajax: {
+                    url: "{{ route('beneficiarios.indexAjax') }}",
+                    type: "GET",
+                    dataType: "json",
+                    data: {
+                        id_distrito: $("#id_distrito").val(),
+                        id_barrio: $("#_id_barrio").val(),
+                        nombre_completo: $("#nombre_completo").val(),
+                        ci: $("#ci").val(),
+                        sexo: $("#sexo").val(),
+                        edad_inicial: $("#edad_inicial").val(),
+                        edad_final: $("#edad_final").val(),
+                        id_ocupacion: $("#id_ocupacion").val(),
+                        estado: $("#estado").val(),
+                        usuario: $("#usuario").val(),
+                        estado_censo: $("#estado_censo").val(),
+                        finicial: $("#finicial").val(),
+                        ffinal: $("#ffinal").val(),
+                    }
+                },
+                columns: [
+                    {
                         data: 'beneficiario_id',
                         name: 'a.id',
-                        class: 'text-center p-1 font-roboto-11'
+                        visible: false,
+                        searchable: false
                     },
                     {
                         data: 'distrito',
                         name: 'c.nombre',
-                        class: 'text-center p-1 font-roboto-11'
+                        class: 'text-center p-1 font-roboto-10'
                     },
                     {
                         data: 'barrio',
                         name: 'b.nombre',
-                        class: 'text-justify p-1 font-roboto-11'
+                        class: 'text-justify p-1 font-roboto-10'
                     },
                     {
-                        data: 'nombres',
-                        name: 'a.nombres',
-                        class: 'text-justify p-1 font-roboto-11'
-                    },
-                    {
-                        data: 'ap',
-                        name: 'a.ap',
-                        class: 'text-justify p-1 font-roboto-11'
-                    },
-                    {
-                        data: 'am',
-                        name: 'a.am',
-                        class: 'text-justify p-1 font-roboto-11'
+                        data: 'nombre_completo',
+                        name: 'nombre_completo',
+                        class: 'text-justify p-1 font-roboto-10'
                     },
                     {
                         data: 'nro_carnet',
                         name: 'nro_carnet',
-                        class: 'text-center p-1 font-roboto-11'
+                        class: 'text-center p-1 font-roboto-10'
                     },
                     {
                         data: 'sexo',
                         name: 'a.sexo',
-                        class: 'text-center p-1 font-roboto-11'
+                        class: 'text-center p-1 font-roboto-10'
                     },
                     {
                         data: 'edad',
                         name: 'a.ci',
-                        class: 'text-center p-1 font-roboto-11'
+                        class: 'text-center p-1 font-roboto-10'
                     },
                     {
-                        data: 'columna_estado',
-                        name: 'columna_estado',
-                        class: 'text-center p-1 font-roboto-11',
+                        data: 'fecha_inscripcion',
+                        name: 'a.created_att',
+                        class: 'text-center p-1 font-roboto-10',
+                    },
+                    {
+                        data: 'ocupacion',
+                        name: 'd.ocupacion',
+                        class: 'text-center p-1 font-roboto-10'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status',
+                        class: 'text-center p-1 font-roboto-10',
+                        render: function(data, type, row){
+                            if(row.status === 'HABILITADO'){
+                                return '<span class="badge-with-padding badge badge-success btn-block">HABILITADO</span>';
+                            }else if(row.status == 'FALLECIDO'){
+                                return '<span class="badge-with-padding badge badge-danger btn-block">FALLECIDO</span>';
+                            }else if(row.status == 'BAJA'){
+                                return '<span class="badge-with-padding badge badge-warning btn-block">BAJA</span>';
+                            }if(row.status == 'PENDIENTE'){
+                                return '<span class="badge-with-padding badge badge-secondary btn-block">PENDIENTE</span>';
+                            }if(row.status == 'ELIMINADO'){
+                                return '<span class="badge-with-padding badge badge-danger btn-block">ELIMINADO</span>';
+                            }else{
+                                return 'DESCONOCIDO';
+                            }
+                        }
+                    },
+                    {
+                        data: 'usuario',
+                        name: 'e.name',
+                        class: 'text-center p-1 font-roboto-10',
+                        render: function(data, type, row) {
+                            return data ? data.toUpperCase() : '';
+                        }
+                    },
+                    {
+                        data: 'censo_2024',
+                        name: 'censo_2024',
+                        class: 'text-center p-1 font-roboto-10',
+                        render: function(data, type, row){
+                            if(row.censo_2024 === 'PENDIENTE'){
+                                return '<span class="badge-with-padding badge badge-secondary btn-block">PENDIENTE</span>';
+                            }else{
+                                return '<span class="badge-with-padding badge badge-success btn-block">CENSADO</span>';
+                            }
+                        }
+                    },
+                    {
+                        class: 'text-center p-1 font-roboto-10',
+                        render: function(data, type, row) {
+                            if (row.latitud == null && row.longitud == null) {
+                                return 'x';
+                            } else {
+                                return '<a href="https://www.google.com/maps?q=' + row.latitud + ',' + row.longitud + '" target="_blank">' +
+                                    '<i class="fa-solid fa-location-dot fa-lg text-danger"></i>' +
+                                    '</a>';
+                            }
+                        },
                         orderable: false,
                         searchable: false
                     },
                     {
                         data: 'columna_foto',
                         name: 'columna_foto',
-                        class: 'text-center p-1 font-roboto-11',
+                        class: 'text-center p-1 font-roboto-10',
                         orderable: false,
                         searchable: false
                     },
@@ -115,33 +299,35 @@
                     {
                         data: 'columna_btn',
                         name: 'columna_btn',
-                        class: 'text-center p-1 font-roboto-11',
+                        class: 'text-center p-1 font-roboto-10',
                         orderable: false,
                         searchable: false
                     },
                     @endcanany
                 ],
                 initComplete: function () {
-                    var api = this.api();
-                    var columnCount = api.columns().nodes().length;
-
-                    api.columns().every(function (index) {
-                        if (index >= columnCount - 2) {
-                            return;
-                        }
-                        var column = this;
-                        var input = document.createElement("input");
-                        input.style.width = "100%";
-                        $(input).addClass('form-control font-roboto-12').appendTo($(column.footer()).empty()).on('change', function () {
-                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                            column.search(val ? val : '', true, false).draw();
+                    this.api()
+                        .columns()
+                        .every(function () {
+                            let column = this;
+                            let title = column.footer().textContent;
+                            if(title != ''){
+                                let input = document.createElement('input');
+                                input.placeholder = '';
+                                input.className = 'form-control text-center font-roboto-12 UPPERCASE';
+                                column.footer().replaceChildren(input);
+                                input.addEventListener('keyup', () => {
+                                    if (column.search() !== this.value) {
+                                        column.search(input.value).draw();
+                                    }
+                                });
+                            }
                         });
-                    });
                 },
                 order: [[0, 'desc']],
                 language: datatableLanguageConfig
             });
-        });
+        }
 
         $('.intro').on('keypress', function(event) {
             if (event.which === 13) {
@@ -151,10 +337,14 @@
         });
 
         function procesar(){
-            var url = "{{ route('beneficiarios.search') }}";
+            window.location.reload();
+        }
+
+        /* function _excel(){
+            var url = "{{ route('beneficiarios.excel') }}";
             $("#form").attr('action', url);
             $("#form").submit();
-        }
+        } */
 
         function excel() {
             var url = "{{ route('beneficiarios.excel') }}";
@@ -194,14 +384,10 @@
         }
 
         function limpiar(){
-            $(".btn").hide();
-            $(".spinner-btn-send").show();
             window.location.href = "{{ route('beneficiarios.index') }}";
         }
 
         function create(){
-            $(".btn").hide();
-            $(".spinner-btn-send").show();
             window.location.href = "{{ route('beneficiarios.create') }}";
         }
     </script>

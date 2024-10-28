@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 @extends('layouts.admin')
 <style>
     tfoot {
@@ -23,89 +24,99 @@
 @endsection
 @section('scripts')
     <script type="text/javascript">
-        $('#tipo_id').select2({
-            theme: "bootstrap4",
-            placeholder: "-- Tipo --",
-            width: '100%'
+        var table = $("#dataTable");
+        $(document).ready(function() {
+            cargarDatos();
+            $('#area_id').select2({
+                theme: "bootstrap4",
+                placeholder: "-- Area --",
+                width: '100%'
+            });
+
+            $('#tipo_id').select2({
+                theme: "bootstrap4",
+                placeholder: "-- Tipo --",
+                width: '100%'
+            });
+
+            var cleave = new Cleave('#fecha', {
+                date: true,
+                datePattern: ['d', 'm', 'Y']
+            });
+
+            $("#fecha").datepicker({
+                inline: false,
+                dateFormat: "dd/mm/yyyy",
+                autoClose: true,
+            });
         });
 
-        var cleave = new Cleave('#fecha', {
-            date: true,
-            datePattern: ['d', 'm', 'Y']
-        });
-
-        $("#fecha").datepicker({
-            inline: false,
-            dateFormat: "dd/mm/yyyy",
-            autoClose: true,
-        });
-
-        $('#dataTable').DataTable({
-            responsive: true,
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            ajax: "{{ route('archivos.index') }}",
-            columns: [{
-                    data: 'DT_RowIndex',
-                    orderable: false,
-                    searchable: false,
-                    class: 'text-center p-1 font-roboto-10'
+        function cargarDatos(){
+            if ( $.fn.DataTable.isDataTable( table ) ) {
+                table.DataTable().destroy();
+            }
+            table.DataTable({
+                "bFilter":true,
+                "responsive":true,
+                "processing":true,
+                "serverSide":true,
+                "autoWidth":false,
+                'ajax': {
+                    url: "{{ route('archivos.index.ajax') }}",
+                    type: "get",
+                    dataType: 'json',
+                    data: {
+                        area_id: $("#area_id").val(),
+                        gestion: $("#gestion").val(),
+                        fecha: $("#fecha").val(),
+                        nro_documento: $("#nro_documento").val(),
+                        referencia: $("#referencia").val(),
+                        tipo_id: $("#tipo_id").val(),
+                    }
                 },
-                {
-                    data: 'gestion',
-                    name: 'a.gestion',
-                    class: 'text-center p-1 font-roboto-10'
-                },
-                {
-                    data: 'fecha',
-                    name: 'a.fecha',
-                    class: 'text-center p-1 font-roboto-10'
-                },
-                {
-                    data: 'nombrearchivo',
-                    name: 'a.nombrearchivo',
-                    class: 'text-center p-1 font-roboto-10'
-                },
-                {
-                    data: 'referencia',
-                    name: 'a.referencia',
-                    class: 'text-justify p-1 font-roboto-10'
-                },
-                {
-                    data: 'nombretipo',
-                    name: 't.nombretipo',
-                    class: 'text-justify p-1 font-roboto-10'
-                },
-                {
-                    data: 'btn',
-                    name: 'btn',
-                    class: 'text-center p-1 font-roboto-10',
-                    orderable: false,
-                    searchable: false
-                }
-            ],
-            initComplete: function () {
-                    this.api()
-                        .columns()
-                        .every(function () {
-                            let column = this;
-                            let title = column.footer().textContent;
-                            if(title != ''){
-                                let input = document.createElement('input');
-                                input.placeholder = title;
-                                input.className = 'form-control form-control-sm font-roboto-12';
-                                column.footer().replaceChildren(input);
-                                $(input).appendTo($(column.footer()).empty()).on('change', function () {
-                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                                    column.search(val ? val : '', true, false).draw();
-                                });
-                            }
-                        });
-                },
-                order: [[2, 'desc'],[3, 'asc']],
+                "columns": [
+                    {
+                        data: 'nombrearea',
+                        name: 'ar.nombrearea',
+                        class: 'text-justify p-1 font-roboto-11'
+                    },
+                    {
+                        data: 'gestion',
+                        name: 'a.gestion',
+                        class: 'text-center p-1 font-roboto-11'
+                    },
+                    {
+                        data: 'fecha_c',
+                        name: 'a.fecha',
+                        class: 'text-center p-1 font-roboto-11',
+                    },
+                    {
+                        data: 'nombrearchivo',
+                        name: 'a.nombrearchivo',
+                        class: 'text-justify p-1 font-roboto-11'
+                    },
+                    {
+                        data: 'referencia',
+                        name: 'a.referencia',
+                        class: 'text-justify p-1 font-roboto-11'
+                    },
+                    {
+                        data: 'nombretipo',
+                        name: 't.nombretipo',
+                        class: 'text-left p-1 font-roboto-11'
+                    },
+                    {
+                        data: 'btn',
+                        name: 'btn',
+                        class: 'text-center p-1 font-roboto-11',
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                order: [[1, 'desc'],[2, 'asc']],
                 language: datatableLanguageConfig
-        });
+            });
+        }
 
         $('.intro').on('keypress', function(event) {
             if (event.which === 13) {
@@ -124,14 +135,19 @@
         }
 
         function procesar(){
-            var url = "{{ route('archivos.search') }}";
-            $("#form").attr('action', url);
-            $("#form").submit();
+            window.location.reload();
         }
 
         function excel(){
             var url = "{{ route('archivos.excel') }}";
             $("#form").attr('action', url);
+            $("#form").submit();
+        }
+
+        function pdf(){
+            var url = "{{ route('archivos.pdf') }}";
+            $("#form").attr('action', url);
+            $("#form").attr('target', '_blank');
             $("#form").submit();
         }
 

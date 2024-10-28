@@ -236,6 +236,7 @@ return [
         //'Html' => Collective\Html\HtmlFacade::class,
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        'NumeroALetras' => Luecano\NumeroALetras\NumeroALetras::class,
     ],
 
 ];

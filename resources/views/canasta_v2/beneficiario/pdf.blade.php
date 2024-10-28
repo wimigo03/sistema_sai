@@ -36,7 +36,19 @@
                     <b>:</b> {{ $beneficiario->ci . ' ' . $beneficiario->expedido }}
                 </td>
                 <td rowspan="9" style="vertical-align: top; text-align: center;">
-                    <img src="{{ (substr($beneficiario->dir_foto, 2)) }}" id="img-beneficiario" alt="img"/>
+                    @php
+                        $imagePath = substr($beneficiario->dir_foto, 3);
+                        $imageData = '';
+                        if (file_exists($imagePath)) {
+                            $imageData = $imagePath;
+                        } else {
+                            $defaultImagePath = 'logos/d3.jpg';
+                            if (file_exists($defaultImagePath)) {
+                                $imageData = $defaultImagePath;
+                            }
+                        }
+                    @endphp
+                    <img src="{{ $imageData }}" id="img-beneficiario" alt="img"/>
                 </td>
             </tr>
             <tr>
@@ -179,9 +191,8 @@
 <script type="text/php">
     if ( isset($pdf) ) {
         $pdf->page_script('
-            $font = $fontMetrics->get_font("verdana");
-            $pdf->text(30, 770, "{{ date('d-m-Y H:i') }} / {{ Auth()->user()->name }}", $font, 7);
-            $pdf->text(530, 770, "Pagina $PAGE_NUM de $PAGE_COUNT", $font, 7);
+            $pdf->text(30, 770, "{{ strtoupper(Auth()->user()->name) }} | {{ date('d/m/Y | H:i') }}", "sans-serif", 6);
+            $pdf->text(530, 770, "$PAGE_NUM de $PAGE_COUNT", "sans-serif", 6);
         ');
     }
 </script>

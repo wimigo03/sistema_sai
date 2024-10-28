@@ -159,6 +159,24 @@ return [
             'path' => storage_path('logs/recursos_humanos.log'),
             'level' => 'debug',
         ],
+
+        'mantenimientos' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/mantenimientos.log'),
+            'level' => 'debug',
+        ],
+
+        'comandos' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/laravel.log'),
+            'level' => 'debug',
+        ],
+
+        'solicitud_materiales' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/solicitud_materiales.log'),
+            'level' => 'debug',
+        ],
     ],
 
 ];

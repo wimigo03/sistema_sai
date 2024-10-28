@@ -20,26 +20,6 @@
             </b>
         </td>
     </tr>
-    <tr>
-        <td>
-            <b>Registrados</b>
-        </td>
-        <td>
-            {{ $paquete->registrados }}
-        </td>
-        <td>
-            <b>Entregados</b>
-        </td>
-        <td>
-            {{ $paquete->entregados }}
-        </td>
-        <td>
-            <b>No entregados</b>
-        </td>
-        <td>
-            {{ $paquete->no_entregados }}
-        </td>
-    </tr>
 </table>
 <table>
     <thead>
@@ -51,12 +31,11 @@
             <td align="center"><b>FECHA</b></td>
             <td align="center"><b>HORA DE INICIO</b></td>
             <td align="center"><b>HORA FINAL</b></td>
-            <td align="center"><b>REG.</b></td>
-            <td align="center"><b>NO REG.</b></td>
-            <td align="center"><b>HAB.</b></td>
-            <td align="center"><b>ENT.</b></td>
-            <td align="center"><b>NO ENT.</b></td>
-            <td align="center"><b>RESAGADOS</b></td>
+            <td align="right"><b>REG.</b></td>
+            <td align="right"><b>ENT.</b></td>
+            <td align="right"><b>NO ENT.</b></td>
+            <td align="right"><b>RESAGADOS</b></td>
+            <td align="right"><b>TOTAL</b></td>
             <td align="center"><b>ESTADO</b></td>
         </tr>
     </thead>
@@ -70,14 +49,33 @@
                 <td align="center">{{ $datos->fecha_entrega != null ? \Carbon\Carbon::parse($datos->fecha_entrega)->format('d/m/Y') : '' }}</td>
                 <td align="center">{{ $datos->hora_inicio }}</td>
                 <td align="center">{{ $datos->hora_final }}</td>
-                <td align="center">{{ $datos->total_registrados }}</td>
-                <td align="center">{{ $datos->total_no_registrados }}</td>
-                <td align="center">{{ $datos->total_habilitados }}</td>
-                <td align="center">{{ $datos->total_entregados }}</td>
-                <td align="center">{{ $datos->total_no_entregados }}</td>
-                <td align="center">{{ $datos->total_resagados }}</td>
+                <td align="right">{{ $datos->total_registrados }}</td>
+                <td align="right">{{ $datos->total_entregados }}</td>
+                <td align="right">{{ $datos->total_no_entregados }}</td>
+                <td align="right">{{ $datos->total_resagados }}</td>
+                <td align="right">{{ $datos->total_canastas }}</td>
                 <td align="center">{{ $datos->status }}</td>
             </tr>
         @endforeach
+        {{-- <tr>
+            <td align="center" colspan="7">
+                <b>TOTAL</b>
+            </td>
+            <td align="right">
+                <b>{{ $paquete->registrados }}</b>
+            </td>
+            <td align="right">
+                <b>{{ $paquete->entregados }}</b>
+            </td>
+            <td align="right">
+                <b>{{ $paquete->no_entregados }}</b>
+            </td>
+            <td align="right">
+               <b>{{ $paquete->resagados }}</b>
+            </td>
+            <td align="right">
+                <b>{{ $paquete->total_canastas }}</b>
+            </td>
+        </tr> --}}
     </tbody>
 </table>

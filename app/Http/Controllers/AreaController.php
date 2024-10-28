@@ -87,6 +87,7 @@ class AreaController extends Controller
                 $area_anterior = Area::find($request->area_id);
                 $area = Area::create([
                     'nombrearea' => $request->nombre_area,
+                    'alias' => $request->alias,
                     'estadoarea' => '1',
                     'idnivel' => 1,
                     'dea_id' => $area_anterior->dea_id,
@@ -133,6 +134,7 @@ class AreaController extends Controller
                 $parent = Area::find($request->parent_id);
                 $area->update([
                     'nombrearea' => $request->nombre_area,
+                    'alias' => $request->alias,
                     'parent_id' => $request->parent_id,
                     'tipo' => $request->tipo,
                     'nivel' => $parent->nivel + 1,

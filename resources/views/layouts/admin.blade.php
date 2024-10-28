@@ -7,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="robots" content="noindex,nofollow">
     <title>G.A.R.G.CH. | S.A.I.</title>
-    <link rel="canonical" href="https://www.wrappixel.com/templates/monster-admin-lite/" />
+    {{--<link rel="canonical" href="https://www.wrappixel.com/templates/monster-admin-lite/" />--}}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <link rel="icon" type="image/png" sizes="18x18" href="{{ asset('logos/logo2.png') }}">
     <link rel="stylesheet" href="{{ asset('admin_assets/plugins/slim-select/slimselect.min.css') }}">
     <link rel="stylesheet" href="{{ asset('dataTable/css/jquery.dataTables.min.css') }}">
@@ -71,13 +72,13 @@
             </form>
         </div>
     </main>
-    <script src="{{ asset('admin_assets/plugins/slim-select/slimselect.min.js') }}"></script>
-    <script src="{{ asset('admin_assets/js/handlebars.js') }}"></script>
     <script src="{{ asset('dataTable/js/jquery-3.5.1.js') }}"></script>
     <script src="{{ asset('dataTable/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('dataTable/js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('dataTable/js/datatable-language.js') }}"></script>
     <script src="{{ asset('dashboard/js/select2.min.js') }}"></script>
+    <script src="{{ asset('admin_assets/plugins/slim-select/slimselect.min.js') }}"></script>
+    <script src="{{ asset('admin_assets/js/handlebars.js') }}"></script>
     <script src="{{ asset('dashboard/js/popper.min.js') }}"></script>
     <script src="{{ asset('dashboard/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('dashboard/js/main.js') }}"></script>
@@ -99,6 +100,20 @@
         crossorigin="anonymous"
         referrerpolicy="no-referrer"
     ></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.js"></script>
+    <script>
+        /* function obtenerMontoCleave(montoString) {
+            if(montoString == ""){
+                return 0;
+            }else{
+                var re = /,/g;
+                var resultado = montoString.replace(re, '');
+                monto = parseFloat(resultado);
+            }
+            return monto;
+        } */
+    </script>
 
     @include('layouts.modal.notificaciones')
 

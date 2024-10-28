@@ -26,6 +26,8 @@
 @section('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
+            $('.options').val('').trigger('change');
+
             $('.select2').select2({
                 theme: "bootstrap4",
                 placeholder: "--Seleccionar--",
@@ -155,6 +157,59 @@
             var url = "{{ route('empleado.imprimir.credenciales',':dea_id') }}";
             url = url.replace(':dea_id',dea_id);
             window.location.href = url;
+        }
+
+        function redireccionar(idemp) {
+            var input = document.getElementById(idemp);
+            var url;
+
+            switch (input.value) {
+                case "show":
+                    url = '{{ route("empleado.show", ":idemp") }}';
+                    url = url.replace(':idemp', idemp);
+                    $('.options').val('').trigger('change');
+                    window.location.href = url;
+                    break;
+
+                case "editar":
+                    url = '{{ route("empleado.editar", ":idemp") }}';
+                    url = url.replace(':idemp', idemp);
+                    $('.options').val('').trigger('change');
+                    window.location.href = url;
+                    break;
+
+                case "retirar":
+                    url = '{{ route("empleado.retirar", ":idemp") }}';
+                    url = url.replace(':idemp', idemp);
+                    $('.options').val('').trigger('change');
+                    window.location.href = url;
+                    break;
+
+                case "recontratar":
+                    url = '{{ route("empleado.recontratar", ":idemp") }}';
+                    url = url.replace(':idemp', idemp);
+                    $('.options').val('').trigger('change');
+                    window.location.href = url;
+                    break;
+
+                case "kardex":
+                    url = '{{ route("empleado.pdf.show", ":idemp") }}';
+                    url = url.replace(':idemp', idemp);
+                    $('.options').val('').trigger('change');
+                    window.open(url, '_blank');
+                    break;
+
+                case "usuario":
+                    url = '{{ route("users._create", ":idemp") }}';
+                    url = url.replace(':idemp', idemp);
+                    $('.options').val('').trigger('change');
+                    window.location.href = url;
+                    break;
+
+                default:
+                    console.warn("Opción no válida: " + input.value);
+                    break;
+            }
         }
     </script>
 @endsection

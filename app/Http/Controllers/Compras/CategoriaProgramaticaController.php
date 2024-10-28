@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Models\Compra\CategoriaProgramatica;
+use App\Models\Compra\CategoriaPresupuestaria;
 use DB;
 
 class CategoriaProgramaticaController extends Controller

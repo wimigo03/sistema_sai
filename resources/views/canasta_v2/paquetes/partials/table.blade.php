@@ -6,11 +6,10 @@
                     <td class="text-center p-1"><b>GESTION</b></td>
                     <td class="text-center p-1"><b>PERIODO</b></td>
                     <td class="text-center p-1"><b>ENTREGA</b></td>
-                    <td class="text-center p-1"><b>DISPONIBLES</b></td>
-                    <td class="text-center p-1"><b>REGISTRADOS</b></td>
-                    <td class="text-center p-1"><b>ENTREGADOS</b></td>
-                    <td class="text-center p-1"><b>NO ENTREGADOS</b></td>
-                    <td class="text-center p-1"><b>RESAGADOS</b></td>
+                    <td class="text-right p-1"><b>REGISTRADOS</b></td>
+                    <td class="text-right p-1"><b>ENTREGADOS</b></td>
+                    <td class="text-right p-1"><b>NO ENTREGADOS</b></td>
+                    <td class="text-right p-1"><b>RESAGADOS</b></td>
                     @canany(['canasta.paquetes.editar','canasta.paquetes.barrio.index'])
                         <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
                     @endcanany
@@ -33,11 +32,10 @@
                         @endforeach
                     </td>
                     <td class="text-center p-1">{{ $datos->numero }}</td>
-                    <td class="text-center p-1">#{{-- $datos->registrados --}}</td>
-                    <td class="text-center p-1">{{ $datos->registrados }}</td>
-                    <td class="text-center p-1">{{ $datos->entregados }}</td>
-                    <td class="text-center p-1">{{ $datos->no_entregados }}</td>
-                    <td class="text-center p-1">{{ $datos->resagados }}</td>
+                    <td class="text-right p-1">{{ $datos->registrados }}</td>
+                    <td class="text-right p-1">{{ $datos->entregados }}</td>
+                    <td class="text-right p-1">{{ $datos->no_entregados }}</td>
+                    <td class="text-right p-1">{{ $datos->resagados }}</td>
                     @canany(['canasta.paquetes.editar','canasta.paquetes.barrio.index'])
                         <td class="text-center p-1">
                             <div class="d-flex justify-content-center">

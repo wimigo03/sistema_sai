@@ -7,6 +7,7 @@
                     <th class="text-center p-1">NOMBRE</th>
                     <th class="text-center p-1">USUARIO</th>
                     <th class="text-center p-1">AREA</th>
+                    <th class="text-center p-1">ROLES</th>
                     <th class="text-center p-1">ESTADO</th>
                     <th class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></th>
                 </tr>
@@ -14,10 +15,19 @@
             <tbody>
                 @foreach ($users as $user)
                     <tr class="font-roboto-11">
-                        <td class="text-center p-1">{{ $user->dea->descripcion }}</td>
+                        <td class="text-center p-1">{{ $user->dea->nombre }}</td>
                         <td class="text-left p-1">{{ $user->nombre_completo }}</td>
-                        <td class="text-left p-1">{{ $user->name }}</td>
+                        <td class="text-left p-1">
+                            <span class="tts:right tts-slideIn tts-custom" aria-label="{{ $user->_email != null ? $user->_email : '*' }}" style="cursor: pointer;">
+                                {{ $user->name }}
+                            </span>
+                        </td>
                         <td class="text-left p-1">{{ $user->area->nombrearea }}</td>
+                        <td class="text-left p-1">
+                            @foreach($user->roles as $role)
+                                {{ $role->title }}@if(!$loop->last), @endif
+                            @endforeach
+                        </td>
                         <td class="text-center p-1">
                             <span class="{{ $user->icono_estado }}">
                                 {{ $user->status }}

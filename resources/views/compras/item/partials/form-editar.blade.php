@@ -1,38 +1,16 @@
 <form action="#" method="post" id="form">
     @csrf
     <input type="hidden" name="item_id" id="item_id" value="{{ $item->id }}">
-    <input type="hidden" id="old_partida_presupuestaria_id" value="{{ $item->partida_presupuestaria_id }}">
-    <div class="form-group row font-roboto-12 align-items-center">
-        <div class="col-md-3 pr-1 pl-1 text-right">
-            <label for="categoria_programatica_id" class="d-inline"><b>Partida Presupuestaria: </b></label>
-        </div>
-        <div class="col-md-7 pr-1 pl-1">
-            <select name="categoria_programatica_id" id="categoria_programatica_id" class="form-control select2">
-                @foreach ($categorias_programaticas as $old_categoria_programatica)
-                    <option value="{{ $old_categoria_programatica->id }}"
-                        @if($old_categoria_programatica->id == old('categoria_programatica_id') || (isset($item) && $item->categoria_programatica_id == $old_categoria_programatica->id))
-                            selected
-                        @endif>
-                        {{ $old_categoria_programatica->categoria_programatica }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-    </div>
     <div class="form-group row font-roboto-12 align-items-center">
         <div class="col-md-3 pr-1 pl-1 text-right">
             <label for="partida_presupuestaria_id" class="d-inline"><b>Partida Presupuestaria: </b></label>
         </div>
         <div class="col-md-7 pr-1 pl-1">
             <select name="partida_presupuestaria_id" id="partida_presupuestaria_id" class="form-control select2">
-                {{--@foreach ($partidas_presupuestarias as $old_partida_presupuestaria)
-                    <option value="{{ $old_partida_presupuestaria->id }}"
-                        @if($old_partida_presupuestaria->id == old('partida_presupuestaria_id') || (isset($item) && $item->partida_id == $old_partida_presupuestaria->id))
-                            selected
-                        @endif>
-                        {{ $old_partida_presupuestaria->partida_presupuestaria }}
-                    </option>
-                @endforeach--}}
+                <option value="">-</option>
+                @foreach ($partidas_presupuestarias as $index => $value)
+                    <option value="{{ $index }}" @if($item->partida_presupuestaria_id == $index) selected @endif >{{ $value }}</option>
+                @endforeach
             </select>
         </div>
     </div>
@@ -42,6 +20,14 @@
         </div>
         <div class="col-md-4 pr-1 pl-1">
             <input type="text" name="nombre" value="{{ $item->nombre }}" class="form-control font-roboto-12" oninput="this.value = this.value.toUpperCase();">
+        </div>
+    </div>
+    <div class="form-group row font-roboto-12 align-items-center">
+        <div class="col-md-3 pr-1 pl-1 text-right">
+            <label for="codigo" class="d-inline"><b>Codigo: </b></label>
+        </div>
+        <div class="col-md-2 pr-1 pl-1">
+            <input type="text" name="codigo" id="codigo" value="{{ $item->codigo }}" class="form-control font-roboto-12" oninput="this.value = this.value.toUpperCase();" disabled>
         </div>
     </div>
     <div class="form-group row font-roboto-12 align-items-center">

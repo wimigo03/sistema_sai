@@ -45,9 +45,69 @@ class EmpleadoController extends Controller
         dd("completar_contratos finalizado...");
     }
 
+    public function retirar_contratos_terminados()
+    {
+        try{
+            ini_set('memory_limit','-1');
+            ini_set('max_execution_time','-1');
+
+            $contratos = EmpleadoContrato::where('tipo','2')
+                                            ->where('estado','1')
+                                            ->where('fecha_conclusion_contrato','!=',null)
+                                            ->get();
+            foreach($contratos as $contrato){
+                if(date('Y-m-d') > $contrato->fecha_conclusion_contrato){
+                    $contrato = EmpleadoContrato::find($contrato->id);
+                    $contrato->update([
+                        'fecha_retiro' => date('Y-m-d'),
+                        'estado' => '2',
+                        'user_id' => 102,
+                        'obs_retiro' => 'PROCESO DE RETIRO AUTOMATICO'
+                    ]);
+                }
+
+                $_contratos = EmpleadoContrato::where('idemp',$contrato->idemp)
+                                                ->where('tipo','2')
+                                                ->where('estado','1')
+                                                ->get()
+                                                ->count();
+                if($_contratos == 0){
+                    $_empleado = Empleado::find($contrato->idemp);
+                    $_empleado->update([
+                        'estado' => '2'
+                    ]);
+
+                    $users = User::where('idemp',$contrato->idemp)->get();
+                    if($users != null){
+                        foreach($users as $user){
+                            $_user = User::find($user->id);
+                            $user->update([
+                                'estadouser' => 0
+                            ]);
+                        }
+                    }
+                }
+            }
+
+        } catch (\Exception $e) {
+            \Log::error('Error al ejecutar el comando RETIRAR PERSONAL CONTRATO: ' . $e->getMessage(), [
+                'exception' => $e
+            ]);
+        }finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
+        }
+
+        dd("retirar_contratos_terminados Finalizado...");
+    }
+
     public function index()
     {
-        //$this->completar_contratos();
+        //if(Auth::user()->id == 102){
+            //$this->completar_contratos();
+            //$this->retirar_contratos_terminados();
+        //}
+
         $dea_id = Auth::user()->dea->id;
         $areas = Area::where('dea_id',$dea_id)->pluck('nombrearea','idarea');
         $cargos = File::where('dea_id',$dea_id)->pluck('nombrecargo','idfile');
@@ -57,8 +117,8 @@ class EmpleadoController extends Controller
         $tipos = EmpleadoContrato::TIPOS;
         $empleados = Empleado::query()
                                 ->leftJoin('empleados_contratos', function($join) {
-                                    $join->on('empleados.idemp', '=', 'empleados_contratos.idemp')
-                                        ->where('empleados_contratos.id', '=', function($query) {
+                                    $join->on('empleados.idemp','empleados_contratos.idemp')
+                                        ->where('empleados_contratos.id', function($query) {
                                             $query->select('id')
                                                 ->from('empleados_contratos')
                                                 ->whereColumn('empleados_contratos.idemp', 'empleados.idemp')
@@ -66,10 +126,11 @@ class EmpleadoController extends Controller
                                                 ->limit(1);
                                         });
                                 })
-                                ->ByDea($dea_id)
-                                ->where('empleados.estado','1')
+                                /* ->where('empleados_contratos.estado','1') */
                                 ->orderBy('empleados_contratos.tipo','desc')
                                 ->orderBy('empleados_contratos.fecha_conclusion_contrato', 'asc')
+                                ->ByDea($dea_id)
+                                ->ByEstado(1)
                                 ->paginate(10);
         return view('empleados.index', compact('dea_id','areas','cargos','escalas_salariales','estados','sexos','tipos','empleados'));
     }
@@ -84,6 +145,17 @@ class EmpleadoController extends Controller
         $sexos = Empleado::SEXOS;
         $tipos = EmpleadoContrato::TIPOS;
         $empleados = Empleado::query()
+                                ->leftJoin('empleados_contratos', function($join) {
+                                    $join->on('empleados.idemp','empleados_contratos.idemp')
+                                        ->where('empleados_contratos.id', function($query) {
+                                            $query->select('id')
+                                                ->from('empleados_contratos')
+                                                ->whereColumn('empleados_contratos.idemp', 'empleados.idemp')
+                                                ->orderBy('id', 'desc')
+                                                ->limit(1);
+                                        });
+                                })
+                                /* ->where('empleados_contratos.estado','1') */
                                 ->ByDea($dea_id)
                                 ->ByArea($request->area_id)
                                 ->ByAreaAsignada($request->area_asignada_id)
@@ -99,8 +171,10 @@ class EmpleadoController extends Controller
                                 ->ByEntreFechaConclusion($request->fecha_conclusion_inicio, $request->fecha_conclusion_final)
                                 ->ByEstado($request->estado)
                                 ->BySexo($request->sexo)
-                                ->orderBy('idemp','desc')
+                                ->orderBy('empleados_contratos.tipo','desc')
+                                ->orderBy('empleados_contratos.fecha_conclusion_contrato', 'asc')
                                 ->paginate(10);
+
         return view('empleados.index', compact('dea_id','areas','cargos','escalas_salariales','estados','sexos','tipos','empleados'));
     }
 
@@ -563,8 +637,10 @@ class EmpleadoController extends Controller
     {
         $empleado = Empleado::find($empleado_id);
         $dea_id = $empleado->dea_id;
+        $username = User::find(Auth::user()->id);
+        $username = $username != null ? $username->nombre_completo : $username->name;
         $empleados_contratos = EmpleadoContrato::where('idemp',$empleado_id)->orderBy('id','desc')->get();
-        $pdf = PDF::loadView('empleados.pdf-show', compact(['empleado','dea_id','empleados_contratos']));
+        $pdf = PDF::loadView('empleados.pdf-show', compact(['empleado','dea_id','empleados_contratos','username']));
         $pdf->setPaper('LETTER', 'portrait');
         return $pdf->stream('informacion_personal.pdf');
     }

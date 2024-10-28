@@ -23,7 +23,9 @@ class User extends Authenticatable
         'idemp',
         'estadouser',
         'dea_id',
-        'idarea'
+        'idarea',
+        'almacen_id',
+        '_email'
     ];
 
     protected $hidden = [
@@ -146,10 +148,10 @@ class User extends Authenticatable
     public function scopeByRole($query, $role){
         if ($role) {
                 return $query
-                    ->whereIn('role_id', function ($subquery) use($role) {
-                        $subquery->select('id')
-                            ->from('roles')
-                            ->where('title',$role);
+                    ->whereIn('id', function ($subquery) use($role) {
+                        $subquery->select('id_user')
+                            ->from('user_roles')
+                            ->where('id_role',$role);
                     });
         }
     }

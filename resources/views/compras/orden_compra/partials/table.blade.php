@@ -3,11 +3,11 @@
         <table class="table display table-striped table-bordered responsive hover-orange" style="width:100%;">
             <thead>
                 <tr class="font-roboto-11">
-                    <td class="text-center p-1"><b>CODIGO</b></td>
-                    <td class="text-center p-1"><b>N° SOLICITUD</b></td>
-                    <td class="text-center p-1"><b>N° PREV.</b></td>
+                    <td class="text-center p-1"><b>N° O.C.</b></td>
+                    <td class="text-center p-1"><b>N° SOL.</b></td>
+                    <td class="text-center p-1"><b>PREV.</b></td>
                     {{--<td class="text-center p-1"><b>TIPO</b></td>--}}
-                    <td class="text-center p-1"><b>AREA</b></td>
+                    <td class="text-center p-1"><b>UNIDAD SOLICITANTE</b></td>
                     <td class="text-center p-1"><b>PROVEEDOR</b></td>
                     <td class="text-center p-1"><b>SOLICITANTE</b></td>
                     <td class="text-center p-1"><b>REGISTRO</b></td>
@@ -19,7 +19,7 @@
             </thead>
             <tbody>
                 @foreach ($orden_compras as $datos)
-                    <tr class="font-roboto-11">
+                    <tr class="font-roboto-10">
                         <td class="text-center p-1">{{ $datos->codigo }}</td>
                         <td class="text-center p-1">{{ $datos->solicitud_compra->codigo }}</td>
                         <td class="text-center p-1">{{ $datos->nro_preventivo }}</td>
@@ -39,25 +39,9 @@
                                     @can('orden.compra.show')
                                         <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle" style="cursor: pointer;">
                                             <a href="{{ route('orden.compra.show',$datos->id) }}" class="badge-with-padding badge badge-primary">
-                                                <i class="fas fa-list fa-fw"></i>
+                                                <i class="fas fa-paper-plane fa-fw"></i>
                                             </a>
                                         </span>
-                                    @endcan
-                                    &nbsp;
-                                    @can('orden.compra.editar')
-                                        @if ($datos->estado == '1')
-                                            <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar" style="cursor: pointer;">
-                                                <a href="{{ route('orden.compra.editar',$datos->id) }}" class="badge-with-padding badge badge-warning">
-                                                    <i class="fas fa-edit fa-fw"></i>
-                                                </a>
-                                            </span>
-                                        @else
-                                            <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar no permitido" style="cursor: pointer;">
-                                                <a href="#" class="badge-with-padding badge badge-secondary text-white">
-                                                    <i class="fas fa-edit fa-fw"></i>
-                                                </a>
-                                            </span>
-                                        @endif
                                     @endcan
                                 </div>
                             </td>

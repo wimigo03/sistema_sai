@@ -8,6 +8,7 @@ use App\Models\Area;
 use App\Models\EscalaSalarial;
 use App\Models\EmpleadoContrato;
 use App\Models\File;
+use DB;
 
 class Empleado extends Model
 {
@@ -86,7 +87,7 @@ class Empleado extends Model
             case '1':
                 return "H";
             case '2':
-                return "N H";
+                return "R";
         }
     }
 
@@ -95,11 +96,20 @@ class Empleado extends Model
             case '1':
                 return "HABILITADO";
             case '2':
-                return "NO HABILITADO";
+                return "RETIRADO";
         }
     }
 
     public function getcolorStatusAttribute(){
+        switch ($this->estado) {
+            case '1':
+                return "badge-with-padding badge badge-success btn-block";
+            case '2':
+                return "badge-with-padding badge badge-danger btn-block";
+        }
+    }
+
+    public function getcolorStatusSinBlockAttribute(){
         switch ($this->estado) {
             case '1':
                 return "badge-with-padding badge badge-success";
@@ -123,6 +133,13 @@ class Empleado extends Model
                 return "MASCULINO";
             case '2':
                 return "FEMENINO";
+        }
+    }
+
+    public function getUserRegistradoAttribute(){
+        $user = DB::table('users')->where('idemp',$this->idemp)->first();
+        if($user != null){
+            return $user;
         }
     }
 
@@ -216,6 +233,16 @@ class Empleado extends Model
             $area = Area::where('idarea',$contrato->idarea_asignada)->first();
             if($area != null){
                 return $area->nombrearea;
+            }
+        }
+    }
+
+    public function getAreaAsignadaAlmacenAttribute(){
+        $contrato = EmpleadoContrato::select('idarea_asignada')->where('idemp',$this->idemp)->orderBy('id','desc')->take(1)->first();
+        if($contrato != null){
+            $area = Area::where('idarea',$contrato->idarea_asignada)->first();
+            if($area != null){
+                return $area->almacen->nombre;
             }
         }
     }
@@ -324,7 +351,7 @@ class Empleado extends Model
     public function scopeByAreaAsignada($query, $area_asignada_id){
         if ($area_asignada_id != null) {
                 return $query
-                    ->whereIn('idemp', function ($subquery) use($area_asignada_id) {
+                    ->whereIn('empleados.idemp', function ($subquery) use($area_asignada_id) {
                         $subquery->select('idemp')
                             ->from('empleados_contratos')
                             ->where('idarea_asignada', $area_asignada_id);
@@ -335,7 +362,7 @@ class Empleado extends Model
     public function scopeByCargo($query, $file_id){
         if ($file_id) {
                 return $query
-                    ->whereIn('idemp', function ($subquery) use($file_id) {
+                    ->whereIn('empleados.idemp', function ($subquery) use($file_id) {
                         $subquery->select('idemp')
                             ->from('empleados_contratos')
                             ->where('estado','1')
@@ -371,7 +398,7 @@ class Empleado extends Model
     public function scopeByTipo($query, $tipo){
         if ($tipo) {
                 return $query
-                    ->whereIn('idemp', function ($subquery) use($tipo) {
+                    ->whereIn('empleados.idemp', function ($subquery) use($tipo) {
                         $subquery->select('idemp')
                             ->from('empleados_contratos')
                             ->where('tipo', $tipo);
@@ -409,7 +436,7 @@ class Empleado extends Model
             $fecha_i = date('Y-m-d', strtotime(str_replace('/', '-', $fecha_i)));
             $fecha_f = date('Y-m-d', strtotime(str_replace('/', '-', $fecha_f)));
                 return $query
-                    ->whereIn('idemp', function ($subquery) use($fecha_i, $fecha_f) {
+                    ->whereIn('empleados.idemp', function ($subquery) use($fecha_i, $fecha_f) {
                         $subquery->select('idemp')
                             ->from('empleados_contratos')
                             ->where('fecha_conclusion_contrato','!=',null)
@@ -431,7 +458,7 @@ class Empleado extends Model
 
     public function scopeByEstado($query, $estado){
         if($estado){
-            return $query->where('estado', $estado);
+            return $query->where('empleados.estado', $estado);
         }
     }
 

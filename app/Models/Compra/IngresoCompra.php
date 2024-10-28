@@ -11,6 +11,7 @@ use App\Models\Compra\Proveedor;
 use App\Models\Compra\SolicitudCompra;
 use App\Models\Almacenes\Almacen;
 use App\Models\Compra\OrdenCompra;
+use App\Models\Compra\CategoriaProgramatica;
 
 class IngresoCompra extends Model
 {
@@ -22,10 +23,12 @@ class IngresoCompra extends Model
         'user_id',
         'dea_id',
         'proveedor_id',
-        'idarea',
         'orden_compra_id',
         'solicitud_compra_id',
         'idemp',
+        'categoria_programatica_id',
+        'idarea',
+        'almacen_origen_id',
         'codigo',
         'fecha_ingreso',
         'obs',
@@ -112,7 +115,7 @@ class IngresoCompra extends Model
 
     public function scopeByCodigo($query, $codigo){
         if($codigo != null){
-            return $query->where('codigo', $codigo);
+            return $query->where('codigo', 'like', '%' . $codigo . '%');
         }
     }
 
