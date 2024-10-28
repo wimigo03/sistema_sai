@@ -8,6 +8,7 @@ use App\Models\Canasta\Beneficiario;
 use App\Models\Canasta\PaqueteBarrio;
 use App\Models\Canasta\Distrito;
 use App\Models\Canasta\Barrio;
+use App\Models\CanastaDisc\Discgrado;
 use DB;
 use Carbon\Carbon;
 
@@ -18,7 +19,7 @@ class Entrega extends Model
         'id_barrio',
         'id_beneficiario',
         'id_paquete',
-        'tipo_entrega_id',
+        'id_tipo',
         'id_ocupacion',
         'distrito_id',
         'dea_id',
@@ -325,4 +326,21 @@ class Entrega extends Model
     public function paquete(){
         return $this->belongsTo(Paquetes::class,'id_paquete','id');
     }
+
+    public function discapacidad(){
+        return $this->belongsTo(Discgrado::class,'id_discgrado','id');
+    }
+
+    public function getDiscgradoAttribute(){
+        $discapadidad = DB::table('discgrado as d')
+                    ->join('beneficiarios as b','b.id_discgrado','d.id')
+                    ->select('d.discapacidad')
+                    ->where('b.id',$this->id_beneficiario)
+                    ->first();
+
+                    return $discapadidad->discapacidad;
+    }
+
+
+
 }

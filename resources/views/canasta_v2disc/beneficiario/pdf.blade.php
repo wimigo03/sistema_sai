@@ -36,7 +36,7 @@
                     <b>:</b> {{ $beneficiario->ci . ' ' . $beneficiario->expedido }}
                 </td>
                 <td rowspan="9" style="vertical-align: top; text-align: center;">
-                    <img src="{{ (substr($beneficiario->dir_foto, 2)) }}" id="img-beneficiario" alt="img"/>
+                    <img src="{{ (substr($beneficiario->dir_foto, 3)) }}" id="img-beneficiario" alt="img"/>
                 </td>
             </tr>
             <tr>

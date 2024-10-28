@@ -39,6 +39,12 @@
                 width: '100%'
             });
 
+            $('#discgrado').select2({
+                theme: "bootstrap4",
+                placeholder: "--Discapacidad--",
+                width: '100%'
+            });
+
             $('#sexo').select2({
                 theme: "bootstrap4",
                 placeholder: "--Sexo--",
@@ -111,7 +117,7 @@
                         orderable: false,
                         searchable: false
                     },
-                    @canany(['canasta.beneficiarios.editar', 'canasta.beneficiarios.show'])
+                    @canany(['canastadisc.beneficiarios.editar'])
                     {
                         data: 'columna_btn',
                         name: 'columna_btn',

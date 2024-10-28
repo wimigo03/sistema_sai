@@ -9,7 +9,6 @@
     </style>
     <body>
         <div class="container">
-            <img src="{{ ('logos/canastaalimentaria.jpeg') }}" class="watermark" alt="#"/>
             <table class="font-verdana-11" cellspacing="0" cellpadding="0" width="100%" style="width: 100%; padding: 0px; margin: 0;">
                 <tr>
                     <td width="20%" class="align-center">
@@ -21,7 +20,7 @@
                                 AFILIADOS "{{ $paquete_barrio->barrio->nombre }}"
                             </span>
                             <br>
-                            {{ $paquete_barrio->paquete->numero }} ENTREGA - GESTION {{ $paquete_barrio->paquete->gestion }}
+                            {{ $paquete_barrio->paquete->numero }} ENTREGA - GESTIONsss {{ $paquete_barrio->paquete->gestion }}
                             <br>
                             <span class="font-verdana-10">
                                 ({{ $paquete_barrio->periodos }})
@@ -34,9 +33,9 @@
                 </tr>
             </table>
             <br>
-            <table align="center" cellspacing="0" cellpadding="0" style="width: 80%; padding: 0px;">
+            <table align="center" cellspacing="0" cellpadding="0" style="width: 95%; padding: 0px;">
                 <thead>
-                    <tr class="font-verdana-9 linea-superior-gris linea-inferior-gris linea-izquierda-gris linea-derecha-gris">
+                    <tr class="font-verdana-12 linea-superior-gris linea-inferior-gris linea-izquierda-gris linea-derecha-gris">
                         <th class="linea-derecha-gris" align="center">N°</th>
                         <th class="linea-derecha-gris" align="center">FOTO</th>
                         <th class="linea-derecha-gris" align="center">N° CARNET</th>
@@ -50,7 +49,7 @@
                 </thead>
                 <tbody>
                     @foreach ($entregas as $datos)
-                        <tr class="font-verdana-9 linea-inferior-gris linea-izquierda-gris linea-derecha-gris">
+                        <tr class="font-verdana-12 linea-inferior-gris linea-izquierda-gris linea-derecha-gris">
                             <td class="linea-derecha-gris" align="center" style="vertical-align: middle;">{{ $cont++ }}</td>
                             <td class="linea-derecha-gris" align="center" style="vertical-align: middle;">
                                 @php

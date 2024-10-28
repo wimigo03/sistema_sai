@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class InstruccionvModel extends Model
 {
          //
-         protected $table = 'instruccionv';
+         protected $table = 'instruccion';
 
-         protected $primaryKey= 'idinstruccionv';
+         protected $primaryKey= 'idinstruccion';
 
          public $timestamps = false;
 
          protected $fillable = [
-             'nombreinstruccionv'
+             'nombreinstruccion'
 
          ];
 

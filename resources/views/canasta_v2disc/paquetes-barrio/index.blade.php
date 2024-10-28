@@ -107,7 +107,7 @@
 
         function search() {
             var paquete_id = $("#paquete_id").val();
-            var url = "{{ route('paquetes.barrio.search', ':id') }}";
+            var url = "{{ route('paquetes.barriodisc.search', ':id') }}";
             url = url.replace(':id', paquete_id);
             $("#form").attr('action', url);
             $("#form").submit();
@@ -115,14 +115,14 @@
 
         function pdf() {
             var paquete_barrio_id = $("#paquete_id").val();
-            var url = "{{ route('paquetes.barrio.pdf', ':id') }}"+"?"+$('#form').serialize();
+            var url = "{{ route('paquetes.barriodisc.pdf', ':id') }}"+"?"+$('#form').serialize();
             url = url.replace(':id', paquete_barrio_id);
             window.open(url,"_blank")
         }
 
         function excel() {
             var paquete_id = $("#paquete_id").val();
-            var url = "{{ route('paquetes.barrio.excel', ':id') }}";
+            var url = "{{ route('paquetes.barriodisc.excel', ':id') }}";
             url = url.replace(':id', paquete_id);
             $(".btn").hide();
             $(".spinner-btn-send").show();
@@ -155,13 +155,13 @@
         }
 
         function ir_atras() {
-            var url = "{{ route('paquetes.index') }}";
+            var url = "{{ route('paquetesdisc.index') }}";
             window.location.href = url;
         }
 
         function limpiar() {
             var paquete_id = $("#paquete_id").val();
-            var url = "{{ route('paquetes.barrio.index', ':id') }}";
+            var url = "{{ route('paquetes.barriodisc.index', ':id') }}";
             url = url.replace(':id', paquete_id);
             window.location.href = url;
         }

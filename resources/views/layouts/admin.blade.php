@@ -101,6 +101,69 @@
     ></script>
 
     @include('layouts.modal.notificaciones')
+
+    <script>
+        var id = 2;
+
+
+
+        function fetchdata() {
+
+            $.ajax({
+                url: "{{ route('correspondencia.derivada.pregunta') }}",
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+
+                dataType: 'JSON',
+                success: function(data) {
+                   // console.log(data); //Try to log the data and check the response
+                    if (data.success == true) {
+                        //alert('success :  user logged in');
+                        notifyMe();
+                    } else {
+                        //alert('Erreur login');
+                    }
+                }
+
+
+
+            });
+
+        }
+
+        $(document).ready(function() {
+            setInterval(fetchdata, 8000);
+        });
+
+        function notifyMe2() {
+            if (!("Notification" in window)) {
+                alert("Este navegador no soporta notificaciones de escritorio");
+            } else if (Notification.permission === "granted") {
+                var options = {
+                    body: "Usted Tiene Una Correspondencia sin responder",
+                    icon: href="{{ asset('logos/logo2.png') }}",
+                    dir: "ltr"
+                };
+                var notification = new Notification("!! ATENCION !!", options);
+            } else if (Notification.permission !== 'denied') {
+                Notification.requestPermission(function(permission) {
+                    if (!('permission' in Notification)) {
+                        Notification.permission = permission;
+                    }
+                    if (permission === "granted") {
+                        var options = {
+                            body: "Usted Tiene Una Correspondencia sin responder",
+                            icon: href="{{ asset('logos/logo2.png') }}",
+                            dir: "ltr"
+                        };
+                        var notification = new Notification("Hola :)", options);
+                    }
+                });
+            }
+        }
+    </script>
 @yield('scripts')
 </body>
 {{--<footer class="text-center">

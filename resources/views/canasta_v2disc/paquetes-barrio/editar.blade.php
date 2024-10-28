@@ -8,7 +8,7 @@
         </div>
     </div>
     <div class="card-body body">
-        @include('canasta_v2.paquetes-barrio.partials.editar')
+        @include('canasta_v2disc.paquetes-barrio.partials.editar')
     </div>
 @endsection
 @section('scripts')
@@ -65,7 +65,7 @@
         }
 
         function confirmar(){
-            var url = "{{ route('paquetes.barrio.update') }}";
+            var url = "{{ route('paquetes.barriodisc.update') }}";
             $("#form").attr('action', url);
             $("#form").submit();
         }
@@ -79,7 +79,7 @@
 
         function cancelar(){
             var paquete_id = $("#paquete_id").val();
-            var url = "{{ route('paquetes.barrio.index', ':id') }}";
+            var url = "{{ route('paquetes.barriodisc.index', ':id') }}";
             url = url.replace(':id', paquete_id);
             window.location.href = url;
         }

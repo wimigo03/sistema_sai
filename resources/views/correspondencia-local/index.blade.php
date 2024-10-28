@@ -52,6 +52,11 @@
                     class: 'text-center p-1 font-roboto-10'
                 },
                 {
+                    data: 'observaciones',
+                    name: 'r.observaciones',
+                    class: 'text-center p-1 font-roboto-10'
+                },
+                {
                     data: 'btn',
                     name: 'btn',
                     class: 'text-center p-1 font-roboto-10',

@@ -63,7 +63,7 @@ class CorrespondenciaLocalController extends Controller
                                     're.nombres_remitente',
                                     're.apellidos_remitente',
                                     'u.nombre_unidad')
-                        ->orderBy('r.id_recepcion', 'desc');
+                        ->orderBy('r.n_oficio', 'desc');
 
             return Datatables::of($data)->addIndexColumn()
                                         ->addColumn('btn', 'correspondencia-local.btn')
@@ -429,10 +429,13 @@ class CorrespondenciaLocalController extends Controller
                     ->orderBy('a.idarea', 'desc')
                     ->get();
 
-        $derivacionCorresp = DB::table('derivCorresp  as d')
+
+
+        $derivacionCorresp = DB::table('deriv_corresp  as d')
                                 ->join('areas as ar', 'ar.idarea', 'd.idarea')
+                                ->join('instruccion as i', 'i.idinstruccion', 'd.idinstruccion')
                                 ->join('recepcion as r', 'r.id_recepcion', 'd.id_recepcion')
-                                ->select('r.id_recepcion', 'd.idderivacion', 'ar.nombrearea')
+                                ->select('r.id_recepcion', 'd.idderivacion', 'd.created_at', 'd.fechaderivacion', 'ar.nombrearea','i.nombreinstruccion')
                                 ->where('d.id_recepcion', '=', $idrecepcion)
                                 ->get();
 
@@ -453,11 +456,12 @@ class CorrespondenciaLocalController extends Controller
         $deriv = new DerivCorrespModel();
         $deriv->fechaderivacion = $fechaActual;
         $deriv->idarea = $request->input('tipo');
+        $deriv->idinstruccion = $request->input('tipo2');
         $deriv->id_recepcion = $request->input('idrecepcion');
         $deriv->estadoderiv1 = 1;
         $deriv->estadoderiv2 = 1;
 
-        $detallito = DB::table('derivCorresp  as d')
+        $detallito = DB::table('deriv_corresp  as d')
             ->join('areas as ar', 'ar.idarea', '=', 'd.idarea')
             ->join('recepcion as r', 'r.id_recepcion', '=', 'd.id_recepcion')
             ->select('r.id_recepcion', 'd.idderivacion', 'ar.nombrearea')
@@ -644,7 +648,7 @@ class CorrespondenciaLocalController extends Controller
                 $userdate = User::find($id)->usuariosempleados;
                 $personalArea = Empleado::find($userdate->idemp)->empleadosareas;
 
-                $dataderivacion = DB::table('derivCorresp as d')
+                $dataderivacion = DB::table('deriv_corresp as d')
                 //->join('remitente as re', 're.id_remitente', '=', 'r.id_remitente')
                 ->join('areas as a', 'a.idarea', '=', 'd.idarea')
                 ->select('d.idarea','d.idderivacion','d.estadoderiv1')

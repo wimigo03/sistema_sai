@@ -33,9 +33,9 @@
             <br>
             <input type="hidden" value="{{ $idrecepcion }}" name="idrecepcion">
             <div class="form-group row">
-                <div class="col-md-8">
-                    <label for="producto" class="d-inline font-verdana-12">
-                        <b>Seleccione la Unidad a derivar</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                <div class="col-md-6">
+                    <label for="tipo" class="d-inline font-verdana-12">
+                        <b>Unidad/Area:</b>&nbsp;<span style="font-size:10px; color: red;"></span>
                     </label>
                     <select name="tipo" id="tipo" placeholder="--Seleccionar--"
                         class="form-control form-control-sm select2">
@@ -49,29 +49,29 @@
                     </select>
                 </div>
 
-                <div class="col-md-8">
-                    <label for="producto" class="d-inline font-verdana-12">
-                        <b>Seleccione la Instruccion</b>&nbsp;<span style="font-size:10px; color: red;">*</span>
+                <div class="col-md-5">
+                    <label for="tipo2" class="d-inline font-verdana-12">
+                        <b>Instruccion</b>&nbsp;<span style="font-size:10px; color: red;"></span>
                     </label>
-                    <select name="tipo" id="tipo" placeholder="--Seleccionar--"
-                        class="form-control form-control-sm select3">
+                    <select name="tipo2" id="tipo2" placeholder="--Seleccionar--"
+                        class="form-control form-control-sm select2">
                         <option value="">-</option>
 
-                        @foreach ($area as $areas)
+                        @foreach ($instruccion as $instrucciones)
 
-                            <option value="{{ $areas->idarea }}">{{ $areas->nombrearea }}</option>
+                            <option value="{{ $instrucciones->idinstruccion }}">{{ $instrucciones->nombreinstruccion }}</option>
 
                         @endforeach
                     </select>
                 </div>
 
-                <div class="col-md-2 text-right">
+                <div class="col-md-1 text-right">
                     <br>
 
 
                     <button class="btn btn-info font-verdana-12" type="button" onclick="save();">
                         <i class="fa-solid fa-plus"></i>
-                        &nbsp;Adicionar
+
                     </button>
 
                 </div>
@@ -81,11 +81,14 @@
     <div class="row">
         <div class="col-md-12 table-responsive">
             <center>
+                <font size="2">
                 <table id="dataTable" class="table display table-bordered responsive font-verdana" style="width:100%">
                     <thead>
                         <tr>
-                            <td class="text-justify p-1"><b>Nro</b></td>
+                            <td class="text-justify p-1"><b>FECHA DERIVACION</b></td>
+                            <td class="text-justify p-1"><b>HORA</b></td>
                             <td class="text-justify p-1"><b>UNIDAD AREA</b></td>
+                            <td class="text-justify p-1"><b>INSTRUCCION</b></td>
                             <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
                         </tr>
                     </thead>
@@ -95,8 +98,10 @@
                         @endphp
                         @forelse ($derivacionCorresp as $key => $derivacionCorresps)
                             <tr>
-                                <td class="text-justify p-1">{{ $key + 1 }}</td>
+                                <td class="text-justify p-1">{{ $derivacionCorresps->fechaderivacion }}</td>
+                                <td class="text-justify p-1">{{ $derivacionCorresps->created_at }}</td>
                                 <td class="text-justify p-1">{{ $derivacionCorresps->nombrearea }}</td>
+                                <td class="text-justify p-1">{{ $derivacionCorresps->nombreinstruccion }}</td>
 
                                 <td class="text-center p-1">
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Eliminar">
@@ -115,6 +120,7 @@
 
                     </tfoot>
                 </table>
+            </font>
             </center>
         </div>
     </div>
@@ -122,6 +128,17 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
+            $('#tipo').select2({
+                theme: "bootstrap4",
+                placeholder: "-- Area --",
+                width: '100%'
+            });
+            $('#tipo2').select2({
+                theme: "bootstrap4",
+                placeholder: "-- Instruccion --",
+                width: '100%'
+            });
+
             $('#dataTable').DataTable({
                 language: {
                     "decimal": "",
@@ -175,9 +192,15 @@
 
         function validar_formulario() {
             if ($("#tipo >option:selected").val() == "") {
-                message_alert("El campo de seleccion <b>[tipo de archivo]</b> es un dato obligatorio...");
+                message_alert("El campo de seleccion <b>[Unidad/Area]</b> es un dato obligatorio...");
                 return false;
             }
+
+            if ($("#tipo2 >option:selected").val() == "") {
+                message_alert("El campo de seleccion <b>[Instruccion]</b> es un dato obligatorio...");
+                return false;
+            }
+
 
             return true;
         }

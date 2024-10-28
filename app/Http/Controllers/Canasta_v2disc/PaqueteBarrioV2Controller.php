@@ -22,11 +22,11 @@ use App\Models\CanastaDisc\PaquetePeriodo;
 use App\Models\CanastaDisc\Dea;
 use App\Http\Requests;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exportar\Canasta\PaquetesBarrioExcel;
+use App\Exportar\CanastaDisc\PaquetesBarrioExcel;
 use DB;
 use PDF;
 use Carbon\Carbon;
-use App\Models\Canasta\PaqueteBarrio;
+use App\Models\CanastaDisc\PaqueteBarrio;
 use App\Models\User;
 use App\Models\Empleado;
 
@@ -94,7 +94,7 @@ class PaqueteBarrioV2Controller extends Controller
                             ->orderBy('id','desc')
                             ->paginate(10);
 
-        return view('canasta_v2.paquetes-barrio.index', compact('paquete','distritos','barrios','lugares_entregas','estados','paquetes_barrios'));
+        return view('canasta_v2disc.paquetes-barrio.index', compact('paquete','distritos','barrios','lugares_entregas','estados','paquetes_barrios'));
     }
 
     public function pdf($idpaquete, Request $request)
@@ -115,7 +115,7 @@ class PaqueteBarrioV2Controller extends Controller
                                     ->orderBy('distrito_id','asc')
                                     ->get();
 
-                $pdf = PDF::loadView('canasta_v2.paquetes-barrio.pdf', compact(['paquete','paquetes_barrios']));
+                $pdf = PDF::loadView('canasta_v2disc.paquetes-barrio.pdf', compact(['paquete','paquetes_barrios']));
                 $pdf->setPaper('LETTER', 'portrait');
                 $pdf->render();
                 return $pdf->stream('cronograma_' . $paquete->numero .  '.pdf');
@@ -231,7 +231,7 @@ class PaqueteBarrioV2Controller extends Controller
     {
         $paquete_barrio = PaqueteBarrio::find($paquete_barrio_id);
 
-        return view('canasta_v2.paquetes-barrio.editar', compact('paquete_barrio'));
+        return view('canasta_v2disc.paquetes-barrio.editar', compact('paquete_barrio'));
     }
 
     public function update(Request $request)
@@ -244,6 +244,6 @@ class PaqueteBarrioV2Controller extends Controller
             'hora_final' => $request->hora_final
         ]);
 
-        return redirect()->route('paquetes.barrio.index',$paquete_barrio->id_paquete)->with('success_message', 'Cronograma actualizado correctamente...');
+        return redirect()->route('paquetes.barriodisc.index',$paquete_barrio->id_paquete)->with('success_message', 'Cronograma actualizado correctamente...');
     }
 }

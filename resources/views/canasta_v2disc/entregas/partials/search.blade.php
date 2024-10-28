@@ -60,28 +60,28 @@
                 </span>
             </span>
             @if ($paquete_barrio->estado == '1')
-                @can('canasta.entregas.create')
+                @can('canastadisc.entregas.create')
                     <span class="tts:right tts-slideIn tts-custom root float-left mr-1" aria-label="Registrar Beneficiarios" style="cursor: pointer;">
                         <span class="btn btn-outline-success font-roboto-12" onclick="create();">
                             <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
                         </span>
                     </span>
                 @endcan
-                @can('canasta.entregas.get.boletas')
+                @can('canastadisc.entregas.get.boletas')
                     <span class="tts:right tts-slideIn tts-custom root float-left mr-1" aria-label="Generar boletas de entrega" style="cursor: pointer;">
                         <span class="btn btn-outline-danger font-roboto-12" onclick="pdf_get_boletas_entrega();">
                             <i class="fas fa-address-card fa-fw"></i>
                         </span>
                     </span>
                 @endcan
-                @can('canasta.entregas.pdf.habilitados.sin')
+                @can('canastadisc.entregas.pdf.habilitados.sin')
                     <span class="tts:right tts-slideIn tts-custom root float-left mr-1" aria-label="Generar listado de beneficiarios registrados (1)" style="cursor: pointer;">
                         <span class="btn btn-outline-warning font-roboto-12" onclick="pdf_habilitados_sin_registro();">
                             <i class="fas fa-users-slash fa-fw"></i>
                         </span>
                     </span>
                 @endcan
-                @can('canasta.entregas.pdf.habilitados.con')
+                @can('canastadisc.entregas.pdf.habilitados.con')
                     <span class="tts:right tts-slideIn tts-custom root float-left mr-1" aria-label="Generar listado de beneficiarios registrados (2)" style="cursor: pointer;">
                         <span class="btn btn-outline-warning font-roboto-12" onclick="pdf_habilitados_con_registro();">
                             <i class="fas fa-users fa-fw"></i>
@@ -89,7 +89,7 @@
                     </span>
                 @endcan
             @endif
-            @can('canasta.entregas.excel')
+            @can('canastadisc.entregas.excel')
                 <span class="tts:right tts-slideIn tts-custom root float-left mr-1" aria-label="Exportar a Excel" style="cursor: pointer;">
                     <span class="btn btn-outline-success font-roboto-12" onclick="excel();">
                         <i class="fas fa-file-excel fa-fw"></i>
@@ -99,7 +99,7 @@
             <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn-send" style="display: none;"></i>
 
             @if ($paquete_barrio->estado == '1')
-                @can('canasta.entregas.habilitar.todo')
+                @can('canastadisc.entregas.habilitar.todo')
                     {{--<span class="btn btn-danger font-roboto-12" onclick="deshabilitar_todo();">
                         <i class="fas fa-arrow-left fa-fw"></i> Restablecer Todo
                     </span>--}}
@@ -107,7 +107,7 @@
                         <i class="fas fa-arrow-right fa-fw"></i> Procesar Entrega
                     </span>
                 @endcan
-                @can('canasta.entregas.finalizar')
+                @can('canastadisc.entregas.finalizar')
                     @if ($paquete_barrio->total_no_registrados >= 0)
                         <span class="btn btn-primary font-roboto-12" onclick="procesar();">
                             <i class="fas fa-paper-plane fa-fw"></i> Finalizar Entrega
@@ -121,7 +121,7 @@
                     @endif
                 @endcan
             @else
-                @can('canasta.entregas.restablecer')
+                @can('canastadisc.entregas.restablecer')
                     <span class="btn btn-primary font-roboto-12 float-left" onclick="restablecer();">
                         <i class="far fa-folder-open fa-fw"></i> Habilitar Entrega
                     </span>

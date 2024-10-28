@@ -30,7 +30,7 @@
                 </b>
             </div>
         </div>
-        @include('canasta_v2.entregas.partials.editar')
+        @include('canasta_v2disc.entregas.partials.editar')
     </div>
 @endsection
 @section('scripts')
@@ -61,7 +61,7 @@
         }
 
         function confirmar(){
-            var url = "{{ route('entregas.update') }}";
+            var url = "{{ route('entregasdisc.update') }}";
             $("#form").attr('action', url);
             $("#form").submit();
         }
@@ -75,7 +75,7 @@
 
         function cancelar(){
             var paquete_barrio_id = $("#paquete_barrio_id").val();
-            var url = "{{ route('entregas.index', ':id') }}";
+            var url = "{{ route('entregasdisc.index', ':id') }}";
             url = url.replace(':id', paquete_barrio_id);
             window.location.href = url;
         }

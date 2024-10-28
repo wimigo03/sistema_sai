@@ -24,7 +24,7 @@
     </div>
     <div class="form-group row abs-center">
         <div class="col-md-8 pr-1 pl-1">
-            @can('canasta.paquetes.create')
+            @can('canastadisc.paquetes.create')
                 <span class="tts:right tts-slideIn tts-custom root" aria-label="Registrar Paquete" style="cursor: pointer;">
                     <span class="btn btn-outline-success font-roboto-12" onclick="create();">
                         <i class="fa fa-plus fa-fw" aria-hidden="true"></i>

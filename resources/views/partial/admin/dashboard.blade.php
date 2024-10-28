@@ -98,21 +98,21 @@
                         </li>
                     @endcanany
                     {{-- CANASTA DISCAPACIDAD --}}
-                    @canany(['canasta.paquetes.index','canasta.beneficiarios.index','canasta.entregas.beneficiario.index','canasta.distritos.index','canasta.barrios.index'])
+                    @canany(['canastadisc.beneficiarios.index'])
                         <li class="font-verdana-13 counter">
                             <a href="" data-toggle="collapse" data-target="#dashboard_canasta_didsc_v2" class="active collapsed" aria-expanded="false">
                                 <i class="fa fa-wheelchair"></i>&nbsp;Discapacidad
                                 <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_canasta_didsc_v2">
-                                @can('canasta.paquetes.index')
+                                @can('canastadisc.paquetes.index')
                                     <li>
                                         <a href="{{ route('paquetesdisc.index') }}">
                                             &nbsp;&nbsp;<i class="fa-solid fa-shopping-bag fa-fw"></i>&nbsp;Paquetes
                                         </a>
                                     </li>
                                 @endcan
-                                @can('canasta.beneficiarios.index')
+                                @can('canastadisc.beneficiarios.index')
                                     <li>
                                         <a href="{{ route('beneficiariosdisc.index') }}">
                                             &nbsp;&nbsp;<i class="fas fa-user-friends"></i>&nbsp;Beneficiarios
@@ -481,14 +481,53 @@
                         </li>
                         <hr style="margin-top:0; margin-bottom:0;">
                     @endcan
-                    {{-- CORRESPONDENCIA --}}
-                    @can('correspondencia_local.index')
-                        <li class="font-verdana-13 counter">
-                            <a href="{{ route('correspondencia.local.index') }}">
-                                <i class="fa fa-envelope fa-fw"></i>&nbsp;Correspondencia
-                            </a>
-                        </li>
-                    @endcan
+                                       {{-- CORRESPONDENCIA --}}
+                                       @canany(['correspondencia_local.index','correspondencia_local.remitente.index','correspondencia_local.unidad.index','correspondencia.index'])
+                                       <li class="font-verdana-13 counter">
+                                           <a href="" data-toggle="collapse" data-target="#dashboard_correspondencia" class="active collapsed" aria-expanded="false">
+                                               <i class="fa-solid fa-gift fa-fw"></i>&nbsp;Correspondencia
+                                               <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
+                                           </a>
+                                           <ul class="sub-menu collapse" id="dashboard_correspondencia">
+                                               @can('correspondencia_local.index')
+                                                   <li>
+                                                       <a href="{{ route('correspondencia.local.index') }}">
+                                                           &nbsp;&nbsp;<i class="fa-solid fa-shopping-bag fa-fw"></i>&nbsp;Ventanilla
+                                                       </a>
+                                                   </li>
+                                               @endcan
+                                               @can('correspondencia_local.index')
+                                               <li>
+                                                   <a href="{{ route('correspondencia.derivada.index') }}">
+                                                       &nbsp;&nbsp;<i class="fa-solid fa-shopping-bag fa-fw"></i>&nbsp;Corresp. Derivada
+                                                   </a>
+                                               </li>
+                                           @endcan
+                                               @can('correspondencia_local.remitente.index')
+                                                   <li>
+                                                       <a href="{{ route('correspondencia.local.remitente.index') }}">
+                                                           &nbsp;&nbsp;<i class="fa-solid fa-users fa-fw"></i>&nbsp;Remitentes
+                                                       </a>
+                                                   </li>
+                                               @endcan
+                                               @can('correspondencia_local.unidad.index')
+                                                   <li>
+                                                       <a href="{{ route('correspondencia.local.unidadIndex') }}">
+                                                           &nbsp;&nbsp;<i class="fas fa-house-damage fa-fw"></i>&nbsp;Areas
+                                                       </a>
+                                                   </li>
+                                               @endcan
+                                               @can('correspondencia.index')
+                                                   <li>
+                                                       <a href="{{ route('correspondencia.index') }}">
+                                                           &nbsp;&nbsp;<i class="fa fa-folder fa-fw"></i>&nbsp;Correspondencia Anterior
+                                                       </a>
+                                                   </li>
+                                               @endcan
+                                           </ul>
+                                       </li>
+                                   @endcanany
+
                     {{-- CORRESPONDENCIA LOCAL 2 --}}
                     @can('derivacion.index')
                         <li class="font-verdana-13">

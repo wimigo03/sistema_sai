@@ -23,6 +23,7 @@ class PaqueteBarrio extends Model
         'fecha_entrega',
         'hora_inicio',
         'hora_final',
+        'id_tipo',
         'estado'
     ];
     const ESTADOS = [
@@ -109,6 +110,7 @@ class PaqueteBarrio extends Model
                             ->where('distrito_id',$this->distrito_id)
                             ->where('id_barrio',$this->id_barrio)
                             ->where('estado','A')
+                            ->where('id_tipo',2)
                             ->get();
 
         if($beneficiarios != null){

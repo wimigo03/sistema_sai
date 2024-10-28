@@ -107,6 +107,8 @@ class Beneficiario extends Model
         return $this->belongsTo(Distrito::class,'distrito_id','id');
     }
 
+
+
     public function barrio(){
         return $this->belongsTo(Barrio::class,'id_barrio','id');
     }
@@ -117,13 +119,19 @@ class Beneficiario extends Model
 
     public function scopeByCodigo($query, $codigo){
         if($codigo){
-            return $query->where('id', $codigo);
+            return $query->where('codigo', $codigo);
         }
     }
 
     public function scopeByDistrito($query, $distrito){
         if($distrito != null){
             return $query->where('distrito_id', $distrito);
+        }
+    }
+
+     public function scopeByDiscgrado($query, $discgrado){
+        if($discgrado != null){
+            return $query->where('id_discgrado', $discgrado);
         }
     }
 

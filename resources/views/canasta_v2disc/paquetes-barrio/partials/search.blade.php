@@ -50,21 +50,23 @@
                     <i class="fas fa-angle-double-left fa-fw"></i>
                 </span>
             </span>
-            @can('canasta.paquetes.barrio.create')
+
+            @can('canastadisc.paquetes.barrio.create')
                 <span class="tts:right tts-slideIn tts-custom root float-left mr-1" aria-label="Registrar Barrio" style="cursor: pointer;">
                     <span class="btn btn-outline-success font-roboto-12" onclick="create();">
                         <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
                     </span>
                 </span>
             @endcan
-            @can('canasta.paquetes.barrio.pdf')
+
+            @can('canastadisc.paquetes.barrio.pdf')
                 <span class="tts:right tts-slideIn tts-custom root float-left mr-1" aria-label="Exportar a Pdf" style="cursor: pointer;">
                     <span class="btn btn-outline-danger font-roboto-12" onclick="pdf();">
                         <i class="fa fa-file-pdf fa-fw" aria-hidden="true"></i>
                     </span>
                 </span>
             @endcan
-            @can('canasta.paquetes.barrio.excel')
+            @can('canastadisc.paquetes.barrio.excel')
                 <span class="tts:right tts-slideIn tts-custom root float-left mr-1" aria-label="Exportar a Excel" style="cursor: pointer;">
                     <span class="btn btn-outline-success font-roboto-12" onclick="excel();">
                         <i class="fa fa-file-excel fa-fw" aria-hidden="true"></i>

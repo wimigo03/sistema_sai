@@ -48,13 +48,13 @@
         });
 
         function procesar(){
-            var url = "{{ route('paquetes.search') }}";
+            var url = "{{ route('paquetesdisc.search') }}";
             $("#form").attr('action', url);
             $("#form").submit();
         }
 
         function limpiar(){
-            window.location.href = "{{ route('paquetes.index') }}";
+            window.location.href = "{{ route('paquetesdisc.index') }}";
         }
 
         function create(){

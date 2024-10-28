@@ -4,7 +4,7 @@
             <table class="table display table-striped table-bordered responsive hover-orange" style="width:100%;" id="dataTable">
                 <thead>
                     <tr class="font-roboto-11">
-                        <th>CODIGO</th>
+                        <th>ID</th>
                         <th>DISTRITO</th>
                         <th width="20%">BARRIO</th>
                         <th>NOMBRE (S)</th>
@@ -15,7 +15,7 @@
                         <th>EDAD</th>
                         <th>ESTADO</th>
                         <th><i class="fa-solid fa-camera-retro fa-fw"></i></th>
-                        @canany(['canasta.beneficiarios.editar', 'canasta.beneficiarios.show'])
+                        @canany(['canastadisc.beneficiarios.editar', 'canastadisc.beneficiarios.show'])
                             <th>
                                 <i class="fa fa-bars" aria-hidden="true"></i>
                             </th>
@@ -37,7 +37,7 @@
                         <th></th>
                         <th></th>
                         <th></th>
-                        @canany(['canasta.beneficiarios.editar', 'canastadisc.beneficiarios.show'])
+                        @canany(['canastadisc.beneficiarios.editar', 'canastadisc.beneficiarios.show'])
                             <th></th>
                         @endcanany
                     </tr>
@@ -51,7 +51,7 @@
             <table class="table display table-striped table-bordered responsive hover-orange" style="width:100%;" id="#">
                 <thead>
                     <tr class="font-roboto-11">
-                        <td class="text-center p-1"><b>CODIGO</b></td>
+                        <td class="text-center p-1"><b>ID</b></td>
                         <td class="text-center p-1"><b>DISTRITO</b></td>
                         <td class="text-justify p-1" width="20%"><b>BARRIO</b></td>
                         <td class="text-justify p-1"><b>NOMBRE (S)</b></td>

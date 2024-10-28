@@ -21,7 +21,7 @@
                 <span class="btn btn-outline-primary font-roboto-12" onclick="ir_atras();">
                     <i class="fas fa-arrow-left fa-fw"></i>&nbsp;Ir atras
                 </span>
-                @can('canasta.beneficiarios.pdf')
+                @can('canastadisc.beneficiarios.pdf')
                     <span class="tts:left tts-slideIn tts-custom float-right" aria-label="Exportar">
                         <span class="btn btn-outline-danger font-roboto-12" onclick="exportar_pdf();">
                             <i class="fas fa-file-pdf fa-fw"></i>&nbsp;Pdf
@@ -196,7 +196,7 @@
 
         function exportar_pdf(){
             var beneficiario_id = $("#beneficiario_id").val();
-            var url = "{{ route('beneficiarios.pdf',':beneficiario_id') }}";
+            var url = "{{ route('beneficiariosdisc.pdf',':beneficiario_id') }}";
             url = url.replace(':beneficiario_id',beneficiario_id);
             window.location.href = url;
         }

@@ -17,7 +17,7 @@
                     <th class="text-center p-1">NO ENT.</th>
                     <th class="text-center p-1">R.</th>
                     <th class="text-center p-1">ESTADO</th>
-                    @canany(['canasta.entregas.index','canasta.paquetes.barrio.editar'])
+                    @canany(['canastadisc.entregas.index','canastadisc.paquetes.barrio.editar'])
                         <th class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></th>
                     @endcan
                 </tr>
@@ -57,20 +57,20 @@
                                 {{ $datos->status }}
                             </span>
                         </td>
-                        @canany(['canasta.entregas.index','canasta.paquetes.barrio.editar'])
+                        @canany(['canastadisc.entregas.index','canastadisc.paquetes.barrio.editar'])
                             <td class="text-center p-1">
                                 <div class="d-flex justify-content-center">
-                                    @can('canasta.entregas.index')
+                                    @can('canastadisc.entregas.index')
                                         <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Ir a beneficiarios">
                                             <a  href="{{ route('entregasdisc.index',$datos->id) }}" class="badge-with-padding badge badge-primary font-roboto-11">
                                                 <i class="fa-solid fa-users fa-fw"></i>
                                             </a>
                                         </span>
                                     @endcan
-                                    @can('canasta.paquetes.barrio.editar')
+                                    @can('canastadisc.paquetes.barrio.editar')
                                         @if ($datos->estado == '1')
                                             <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar">
-                                                <a  href="{{ route('paquetes.barrio.editar',$datos->id) }}" class="badge-with-padding badge badge-warning font-roboto-11">
+                                                <a  href="{{ route('paquetes.barriodisc.editar',$datos->id) }}" class="badge-with-padding badge badge-warning font-roboto-11">
                                                     <i class="fa-solid fa-edit fa-fw"></i>
                                                 </a>
                                             </span>

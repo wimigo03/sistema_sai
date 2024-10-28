@@ -11,7 +11,7 @@
                     <td class="text-center p-1"><b>ENTREGADOS</b></td>
                     <td class="text-center p-1"><b>NO ENTREGADOS</b></td>
                     <td class="text-center p-1"><b>RESAGADOS</b></td>
-                    @canany(['canasta.paquetes.editar','canasta.paquetes.barrio.index'])
+                    @canany(['canastadisc.paquetes.editar','canastadisc.paquetes.barrio.index'])
                         <td class="text-center p-1"><i class="fa fa-bars" aria-hidden="true"></i></td>
                     @endcanany
                 </tr>
@@ -38,24 +38,24 @@
                     <td class="text-center p-1">{{ $datos->entregados }}</td>
                     <td class="text-center p-1">{{ $datos->no_entregados }}</td>
                     <td class="text-center p-1">{{ $datos->resagados }}</td>
-                    @canany(['canasta.paquetes.editar','canasta.paquetes.barrio.index'])
+                    @canany(['canastadisc.paquetes.editar','canastadisc.paquetes.barrio.index'])
                         <td class="text-center p-1">
                             <div class="d-flex justify-content-center">
-                                @can('canasta.paquetes.editar')
+                                @can('canastadisc.paquetes.editar')
                                     <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Modificar">
                                         <a href="{{-- route('paquetes.editar', $datos->id) --}}" class="badge-with-padding badge badge-secondary font-roboto-11">
                                             <i class="fa-regular fa-pen-to-square fa-fw"></i>
                                         </a>
                                     </span>
                                 @endcan
-                                @can('canasta.paquetes.barrio.index')
+                                @can('canastadisc.paquetes.barrio.index')
                                     <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Ir a cronograma de entrega">
                                         <a  href="{{ route('paquetes.barriodisc.index',$datos->id) }}" class="badge-with-padding badge badge-warning font-roboto-11">
                                             <i class="fas fa-box fa-fw"></i>
                                         </a>
                                     </span>
                                 @endcan
-                                @can('canasta.paquetes.beneficiarios')
+                                @can('canastadisc.paquetes.beneficiarios')
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a beneficiarios">
                                         <a  href="{{ route('paquetesdisc.beneficiarios',$datos->id) }}" class="badge-with-padding badge badge-primary font-roboto-11">
                                             <i class="fas fa-users fa-fw"></i>

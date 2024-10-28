@@ -103,7 +103,7 @@
 
         function search() {
             var paquete_barrio_id = $("#paquete_barrio_id").val();
-            var url = "{{ route('entregas.search', ':id') }}";
+            var url = "{{ route('entregasdisc.search', ':id') }}";
             url = url.replace(':id', paquete_barrio_id);
             $("#form").attr('action', url);
             $("#form").submit();
@@ -153,14 +153,14 @@
 
         function pdf_habilitados_sin_registro() {
             var paquete_barrio_id = $("#paquete_barrio_id").val();
-            var url = "{{ route('entregas.pdf.habilitados.sin.registro', ':id') }}"+"?"+$('#form').serialize();
+            var url = "{{ route('entregasdisc.pdf.habilitados.sin.registro', ':id') }}"+"?"+$('#form').serialize();
             url = url.replace(':id', paquete_barrio_id);
             window.open(url,"_blank")
         }
 
         function pdf_habilitados_con_registro() {
             var paquete_barrio_id = $("#paquete_barrio_id").val();
-            var url = "{{ route('entregas.pdf.habilitados.con.registro', ':id') }}"+"?"+$('#form').serialize();
+            var url = "{{ route('entregasdisc.pdf.habilitados.con.registro', ':id') }}"+"?"+$('#form').serialize();
             url = url.replace(':id', paquete_barrio_id);
             window.open(url,"_blank")
         }
@@ -213,7 +213,7 @@
         }
 
         function confirmar_entrega(){
-            var url = "{{ route('entregas.habilitar') }}";
+            var url = "{{ route('entregasdisc.habilitar') }}";
             $("#form-resagado").attr('action', url);
             $("#form-resagado").submit();
         }
@@ -228,14 +228,14 @@
 
         function confirmar(){
             var paquete_barrio_id = $("#paquete_barrio_id").val();
-            var url = "{{ route('entregas.finalizar', ':id') }}";
+            var url = "{{ route('entregasdisc.finalizar', ':id') }}";
             url = url.replace(':id', paquete_barrio_id);
             window.location.href = url;
         }
 
         function restablecer(){
             var paquete_barrio_id = $("#paquete_barrio_id").val();
-            var url = "{{ route('entregas.restablecer', ':id') }}";
+            var url = "{{ route('entregasdisc.restablecer', ':id') }}";
             url = url.replace(':id', paquete_barrio_id);
             window.location.href = url;
         }

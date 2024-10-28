@@ -8,7 +8,7 @@
         </div>
     </div>
     <div class="card-body body">
-        @include('canasta_v2.entregas.partials.create')
+        @include('canasta_v2disc.entregas.partials.create')
     </div>
 @endsection
 @section('scripts')

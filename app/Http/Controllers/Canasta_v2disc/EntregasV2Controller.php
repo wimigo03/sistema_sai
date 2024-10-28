@@ -91,7 +91,7 @@ class EntregasV2Controller extends Controller
                             ->paginate(10);
         $cont = 1;
 
-        return view('canasta_v2.entregas.index', compact('paquete_barrio','extensiones','sexos','estados','entregas','cont'));
+        return view('canasta_v2disc.entregas.index', compact('paquete_barrio','extensiones','sexos','estados','entregas','cont'));
     }
 
     public function create($paquete_barrio_id)
@@ -134,7 +134,7 @@ class EntregasV2Controller extends Controller
                     'id_barrio' => $paquete_barrio->id_barrio,
                     'id_beneficiario' => $request->beneficiario_id[$cont],
                     'id_paquete' => $paquete_barrio->id_paquete,
-                    'id_tipo' => '1',
+                    'id_tipo' => '2',
                     'id_ocupacion' => $request->ocupacion_id[$cont],
                     'distrito_id' => $paquete_barrio->distrito_id,
                     'dea_id' => $dea_id,
@@ -225,7 +225,7 @@ class EntregasV2Controller extends Controller
                 ]);
             }
 
-            return redirect()->route('entregas.index',$paquete_barrio_id)->with('info_message', '[Devolucion de canasta beneficiarios procesada]');
+            return redirect()->route('entregasdisc.index',$paquete_barrio_id)->with('info_message', '[Devolucion de canasta beneficiarios procesada]');
 
         } catch (\Throwable $th) {
             return response()->view('errors.500', [
@@ -252,8 +252,8 @@ class EntregasV2Controller extends Controller
                             "\nNRO. DE CARNET : " . $entrega->beneficiario->ci . " " . $entrega->beneficiario->expedido;
             $contenido_qr = mb_convert_encoding($contenido_qr, "UTF-8", "auto");
             $qrCode = base64_encode(QrCode::format('png')->margin(0)->size(200)->generate($contenido_qr));
-            $pdf = PDF::loadView('canasta_v2.entregas.generar-boleta-pdf', compact(['entrega','qrCode']));
-            $pdf->setPaper(array(0,0,612,311.81));
+            $pdf = PDF::loadView('canasta_v2disc.entregas.generar-boleta-pdf', compact(['entrega','qrCode']));
+            $pdf->setPaper(array(0,0,612,396.81));
             $pdf->render();
             return $pdf->stream('Bolenta_de_entrega.pdf');
 
@@ -310,9 +310,9 @@ class EntregasV2Controller extends Controller
 
             }
 
-            $pdf = PDF::loadView('canasta_v2.entregas.generar-boleta-all-pdf', compact(['array_entrega']));
+            $pdf = PDF::loadView('canasta_v2disc.entregas.generar-boleta-all-pdf', compact(['array_entrega']));
             //$pdf->setPaper(array(0,0,612,935.43));
-            $pdf->setPaper(array(0,0,612,311.81));
+            $pdf->setPaper(array(0,0,612,396.81));
             $pdf->render();
             return $pdf->stream('Boletas_de_entrega.pdf');
 
@@ -364,7 +364,7 @@ class EntregasV2Controller extends Controller
                             ->get();
                 $cont = 1;
 
-                $pdf = PDF::loadView('canasta_v2.entregas.pdf-habilitados-sin-registro', compact(['paquete_barrio','entregas','cont']));
+                $pdf = PDF::loadView('canasta_v2disc.entregas.pdf-habilitados-sin-registro', compact(['paquete_barrio','entregas','cont']));
                 $pdf->setPaper(array(0,0,612,935.43));
                 $pdf->render();
                 return $pdf->stream('Habilitados_1.pdf');
@@ -417,8 +417,8 @@ class EntregasV2Controller extends Controller
                             ->orderBy('b.ap','asc')
                             ->get();
                 $cont = 1;
-
-                $pdf = PDF::loadView('canasta_v2.entregas.pdf-habilitados-con-registro', compact(['paquete_barrio','entregas','cont']));
+//dd($entregas);
+                $pdf = PDF::loadView('canasta_v2disc.entregas.pdf-habilitados-con-registro', compact(['paquete_barrio','entregas','cont']));
                 $pdf->setPaper(array(0,0,612,935.43));
                 $pdf->render();
                 return $pdf->stream('Habilitados_2.pdf');
@@ -491,7 +491,7 @@ class EntregasV2Controller extends Controller
             'estado' => '2'
         ]);
 
-        return redirect()->route('entregas.index',$paquete_barrio_id)->with('info_message', '[ENTREGA FINALIZADA]');
+        return redirect()->route('entregasdisc.index',$paquete_barrio_id)->with('info_message', '[ENTREGA FINALIZADA]');
     }
 
     public function restablecer($paquete_barrio_id)
@@ -501,7 +501,7 @@ class EntregasV2Controller extends Controller
             'estado' => '1'
         ]);
 
-        return redirect()->route('entregas.index',$paquete_barrio_id)->with('success_message', '[ENTREGA RESTABLECIDA]');
+        return redirect()->route('entregasdisc.index',$paquete_barrio_id)->with('success_message', '[ENTREGA RESTABLECIDA]');
     }
 
     public function editar($entrega_id)
@@ -509,7 +509,7 @@ class EntregasV2Controller extends Controller
         $entrega = Entrega::find($entrega_id);
         $barrios = Barrio::select('id','nombre')->where('dea_id',Auth::user()->dea->id)->where('id','!=',$entrega->id_barrio)->pluck('nombre','id');
 
-        return view('canasta_v2.entregas.editar', compact('entrega','barrios'));
+        return view('canasta_v2disc.entregas.editar', compact('entrega','barrios'));
     }
 
     public function update(Request $request)
@@ -531,7 +531,7 @@ class EntregasV2Controller extends Controller
                     'paquete_barrio_id' => $paquete_barrio->id
                 ]);
 
-                return redirect()->route('entregas.index',$request->paquete_barrio_id)->with('success_message', 'Solicitud procesada.');
+                return redirect()->route('entregasdisc.index',$request->paquete_barrio_id)->with('success_message', 'Solicitud procesada.');
             }else{
                 return back()->with('info_message', '[Error al cambiar de barrio. por favor contactarse con el area de sistemas.]');
             }

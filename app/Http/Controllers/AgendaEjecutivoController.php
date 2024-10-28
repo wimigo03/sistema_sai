@@ -211,8 +211,8 @@ class AgendaEjecutivoController extends Controller
             $mes = "Septiembre";
         } elseif ($month == "Oct") {
             $mes = "Octubre";
-        } elseif ($month == "Oct") {
-            $mes = "December";
+        } elseif ($month == "Nov") {
+            $mes = "Noviembre";
         } elseif ($month == "Dec") {
             $mes = "Diciembre";
         } else {

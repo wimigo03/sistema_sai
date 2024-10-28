@@ -40,10 +40,10 @@
                             </span>
                         </td>
                         @if ($paquete_barrio->estado == '1')
-                            @canany(['canasta.entregas.habilitar','canasta.entregas.get.boleta'])
+                            @canany(['canastadisc.entregas.habilitar','canastadisc.entregas.get.boleta'])
                                 <td class="text-center p-1">
                                     <div class="d-flex justify-content-center">
-                                        @can('canasta.entregas.habilitar')
+                                        @can('canastadisc.entregas.habilitar')
                                             @if ($datos->estado == '1')
                                                 {{--<span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Realizar entrega" style="cursor: pointer;">
                                                     <a href="{{ route('entregas.habilitar',$datos->entrega_id) }}" class="badge-with-padding badge badge-success font-roboto-10">
@@ -66,7 +66,7 @@
                                             @else
                                                 @if ($datos->resagado == null)
                                                     <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Restablecer" style="cursor: pointer;">
-                                                        <a href="{{ route('entregas.deshabilitar',$datos->entrega_id) }}" class="badge-with-padding badge badge-danger font-roboto-10">
+                                                        <a href="{{ route('entregasdisc.deshabilitar',$datos->entrega_id) }}" class="badge-with-padding badge badge-danger font-roboto-10">
                                                             <i class="fas fa-arrow-left fa-fw"></i>
                                                         </a>
                                                     </span>
@@ -79,16 +79,16 @@
                                                 @endif
                                             @endif
                                         @endcan
-                                        @can('canasta.entregas.get.boleta')
+                                        @can('canastadisc.entregas.get.boleta')
                                             <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Generar boleta de entrega" style="cursor: pointer;">
-                                                <a href="{{ route('entregas.get.boleta.entrega',$datos->entrega_id) }}" class="badge-with-padding badge badge-danger font-roboto-10" target="_blank">
+                                                <a href="{{ route('entregasdisc.get.boleta.entrega',$datos->entrega_id) }}" class="badge-with-padding badge badge-danger font-roboto-10" target="_blank">
                                                     <i class="fas fa-file-pdf fa-fw"></i>
                                                 </a>
                                             </span>
                                         @endcan
-                                        @can('canasta.entregas.editar')
+                                        @can('canastadisc.entregas.editar')
                                             <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Cambiar de barrio" style="cursor: pointer;">
-                                                <a href="{{ route('entregas.editar',$datos->entrega_id) }}" class="badge-with-padding badge badge-warning font-roboto-10">
+                                                <a href="{{ route('entregasdisc.editar',$datos->entrega_id) }}" class="badge-with-padding badge badge-warning font-roboto-10">
                                                     <i class="fas fa-edit fa-fw"></i>
                                                 </a>
                                             </span>

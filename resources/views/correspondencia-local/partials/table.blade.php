@@ -9,6 +9,7 @@
                     <th class="text-center p-1">ASUNTO</th>
                     <th class="text-center p-1">FECHA</th>
                     <th class="text-center p-1">CODIGO</th>
+                    <th class="text-center p-1">H.RUTA</th>
                     <th class="text-center p-1">
                         @canany(['correspondencia_local.gestionar', 'correspondencia_local.urlfile'])
                             <i class="fa fa-bars" aria-hidden="true"></i>

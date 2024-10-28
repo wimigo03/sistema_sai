@@ -59,7 +59,7 @@
         function getBarrios(distrito_id,paquete_id,CSRF_TOKEN){
             $.ajax({
                 type: 'GET',
-                url: '/paquetes-barrio/get_barrios/' + paquete_id,
+                url: '/paquetes-barriodisc/get_barrios/' + paquete_id,
                 data: {
                     _token: CSRF_TOKEN,
                     distrito_id: distrito_id
@@ -241,7 +241,7 @@
 
         function cancelar(){
             var paquete_id = $("#paquete_id").val();
-            var url = "{{ route('paquetes.barrio.index', ':id') }}";
+            var url = "{{ route('paquetes.barriodisc.index', ':id') }}";
             url = url.replace(':id', paquete_id);
             window.location.href = url;
         }

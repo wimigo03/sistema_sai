@@ -7,15 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class DerivCorrespModel extends Model
 {
-    protected $table = 'derivCorresp';
+    protected $table = 'deriv_corresp';
 
     protected $primaryKey= 'idderivacion';
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'fechaderivacion',
         'idarea',
+        'idinstruccion',
+        'estadoderiv1',
+        'estadoderiv2',
         'id_recepcion'
     ];
 

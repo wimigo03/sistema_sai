@@ -233,8 +233,11 @@ class BeneficiariosV2Controller extends Controller
                             ->pluck('nombre','id');
         $sexos = Beneficiario::SEXOS;
         $estados = Beneficiario::ESTADOS;
+        $discapacidad = Discgrado::All()->pluck('discapacidad','id');
+        //$discapacidad = Discgrado::All();
 
-        return view('canasta_v2disc.beneficiario.index', compact('tipos','distritos','barrios','sexos','estados'));
+
+        return view('canasta_v2disc.beneficiario.index', compact('discapacidad','tipos','distritos','barrios','sexos','estados'));
     }
 
     public function getBarrios(Request $request){
@@ -259,6 +262,7 @@ class BeneficiariosV2Controller extends Controller
 
     public function search(Request $request)
     {
+       // dd($request->discgrado);
         $dea_id = Auth::user()->dea->id;
         $tipos = Barrio::TIPOS;
         $distritos = Distrito::where('dea_id',$dea_id)->pluck('nombre','id');
@@ -268,11 +272,13 @@ class BeneficiariosV2Controller extends Controller
                             ->pluck('nombre','id');
         $sexos = Beneficiario::SEXOS;
         $estados = Beneficiario::ESTADOS;
+        $discapacidad = Discgrado::All()->pluck('discapacidad','id');
         $beneficiarios = Beneficiario::query()
                                         ->byDea($dea_id)
                                         ->byDistrito($request->distrito)
                                         ->byBarrio($request->barrio)
                                         ->byCodigo($request->codigo)
+                                        ->byDiscgrado($request->discgrado)
                                         ->byNombre($request->nombre)
                                         ->byApellidoPaterno($request->ap)
                                         ->byApellidoMaterno($request->am)
@@ -284,7 +290,7 @@ class BeneficiariosV2Controller extends Controller
                                         ->orderBy('id', 'desc')
                                         ->paginate(10);
 
-        return view('canasta_v2disc.beneficiario.index', compact('tipos','distritos','barrios','sexos','estados','beneficiarios'));
+        return view('canasta_v2disc.beneficiario.index', compact('discapacidad','tipos','distritos','barrios','sexos','estados','beneficiarios'));
     }
 
     public function excel(Request $request)
@@ -399,7 +405,7 @@ class BeneficiariosV2Controller extends Controller
             ini_set('max_execution_time','-1');
                 $beneficiario = Beneficiario::find($beneficiario_id);
                 $historial = HistorialMod::where('id_beneficiario',$beneficiario_id)->orderBy('fecha','desc')->get();
-                $pdf = PDF::loadView('canasta_v2.beneficiario.pdf', compact(['beneficiario','historial']));
+                $pdf = PDF::loadView('canasta_v2disc.beneficiario.pdf', compact(['beneficiario','historial']));
                 $pdf->set_paper('letter','portrait');
                 //$pdf->set_paper(array(0,0,612,396));
                 $pdf->render();
