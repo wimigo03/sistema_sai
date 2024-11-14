@@ -55,7 +55,7 @@
     <div class="form-group row">
         <div class="col-md-12 pr-1 pl-1">
             @can('solicitud.compra.create')
-                <span class="tts:right tts-slideIn tts-custom" aria-label="Registrar Proveedor" style="cursor: pointer;">
+                <span class="tts:right tts-slideIn tts-custom" aria-label="Registrar Solicitud" style="cursor: pointer;">
                     <span class="btn btn-outline-success font-roboto-12" onclick="create();">
                         <i class="fas fa-plus fa-fw"></i>
                     </span>
