@@ -36,7 +36,7 @@
     </div>
     <div class="form-group row">
         <div class="col-md-12 pr-1 pl-1">
-            @can('partida.presupuestaria.create')
+            @can('item.create')
                 <span class="tts:right tts-slideIn tts-custom" aria-label="Registrar Material" style="cursor: pointer;">
                     <span class="btn btn-outline-success font-roboto-12" onclick="create();">
                         <i class="fas fa-plus fa-fw"></i>
