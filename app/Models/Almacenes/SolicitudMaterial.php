@@ -118,13 +118,13 @@ class SolicitudMaterial extends Model
         }
     }
 
-    /* public function scopeByFechas($query, $finicial, $ffinal){
+    public function scopeByFechas($query, $finicial, $ffinal){
         if(!is_null($finicial) && !is_null($ffinal)){
             $finicial = Carbon::createFromFormat('d/m/Y', $finicial)->format('Y-m-d 00:00:00');
             $ffinal = Carbon::createFromFormat('d/m/Y', $ffinal)->format('Y-m-d 23:59:59');
             return $query->whereBetween('created_at',[$finicial,$ffinal]);
         }
-    } */
+    }
 
     public function scopeByFecha($query, $fecha){
         if(!is_null($fecha)){
@@ -136,8 +136,8 @@ class SolicitudMaterial extends Model
 
     public function scopeByArea($query, $area_id){
         if($area_id != null){
-            return $query->where('solicitud_idarea', $area_id);
         }
+            return $query->where('solicitud_idarea', $area_id);
     }
 
     public function scopeBySolicitante($query, $user_id){

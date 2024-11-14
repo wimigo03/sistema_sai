@@ -99,10 +99,17 @@
                         </li>
                     @endcanany
                     {{-- CANASTA --}}
-                    @canany(['canasta.paquetes.index','canasta.beneficiarios.index','canasta.entregas.beneficiario.index','canasta.distritos.index','canasta.barrios.index','canasta.beneficiarios.brigadista.index'])
+                    @canany([
+                        'canasta.paquetes.index',
+                        'canasta.beneficiarios.index',
+                        'canasta.entregas.beneficiario.index',
+                        'canasta.distritos.index',
+                        'canasta.barrios.index',
+                        'canasta.beneficiarios.brigadista.index'
+                        ])
                         <li class="font-verdana-13 counter">
                             <a href="" data-toggle="collapse" data-target="#dashboard_canasta_v2" class="active collapsed" aria-expanded="false">
-                                <i class="fa-solid fa-gift fa-fw"></i>&nbsp;Canasta 3ra Edad
+                                <i class="fa-solid fa-gift fa-fw"></i>&nbsp;Tercera Edad
                                 <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_canasta_v2">
@@ -169,7 +176,7 @@
                     @canany(['canasta.paquetes.index','canasta.beneficiarios.index','canasta.entregas.beneficiario.index','canasta.distritos.index','canasta.barrios.index'])
                         <li class="font-verdana-13 counter">
                             <a href="" data-toggle="collapse" data-target="#dashboard_canasta_didsc_v2" class="active collapsed" aria-expanded="false">
-                                <i class="fa fa-wheelchair"></i>&nbsp;Canasta Discapacidad
+                                <i class="fa fa-wheelchair"></i>&nbsp;Discapacidad
                                 <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_canasta_didsc_v2">
@@ -198,8 +205,24 @@
                             </ul>
                         </li>
                     @endcanany
+                    {{-- SOLICITUD DE MATERIALES --}}
+                    @can('solicitud.material.index')
+                        <li class="font-verdana-13 counter">
+                            <a href="{{ route('solicitud.material.index') }}">
+                                <i class="fa-solid fa-marker fa-fw"></i>&nbsp;Solicitud de Materiales
+                            </a>
+                        </li>
+                    @endcan
                     {{-- COMPRAS --}}
-                    @canany(['solicitud.compra.index','orden.compra.index'])
+                    @canany([
+                        'solicitud.compra.index',
+                        'orden.compra.index',
+                        'proveedor.index',
+                        'categoria.programatica.index',
+                        'partida.presupuestaria.index',
+                        'item.index',
+                        'unidad.medida.index'
+                        ])
                         <li class="font-verdana-13 counter">
                             <a href="" data-toggle="collapse" data-target="#dashboard_compras" class="active collapsed" aria-expanded="false">
                                 <i class="fa-solid fa-cart-shopping fa-fw"></i>&nbsp;Compras Menores
@@ -227,31 +250,6 @@
                                         </a>
                                     </li>
                                 @endcan
-                            </ul>
-                        </li>
-                    @endcanany
-                    {{-- MATERIALES --}}
-                    @canany(['solicitud.material.index','categoria.programatica.index','partida.presupuestaria.index','item.index','unidad.medida.index'])
-                        <li class="font-verdana-13 counter">
-                            <a href="" data-toggle="collapse" data-target="#dashboard_materiales" class="active collapsed" aria-expanded="false">
-                                <i class="fa fa-tags fa-fw"></i>&nbsp;Materiales
-                                <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
-                            </a>
-                            <ul class="sub-menu collapse" id="dashboard_materiales">
-                                @can('solicitud.material.index')
-                                    <li class="font-verdana-13">
-                                        <a href="{{ route('solicitud.material.index') }}">
-                                            &nbsp;&nbsp;<i class="fa-solid fa-marker fa-fw"></i>&nbsp;Solicitudes
-                                        </a>
-                                    </li>
-                                @endcan
-                                @can('item.index')
-                                    <li>
-                                        <a href="{{ route('item.index') }}">
-                                            &nbsp;&nbsp;<i class="fas fa-rectangle-list fa-fw"></i>&nbsp;Listar
-                                        </a>
-                                    </li>
-                                @endcan
                                 @can('categoria.programatica.index')
                                     <li>
                                         <a href="{{ route('categoria.programatica.index') }}">
@@ -263,6 +261,13 @@
                                     <li>
                                         <a href="{{ route('partida.presupuestaria.index') }}">
                                             &nbsp;&nbsp;<i class="fa-solid fa-poll-h fa-fw"></i>&nbsp;Partidas Presupuestarias
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('item.index')
+                                    <li>
+                                        <a href="{{ route('item.index') }}">
+                                            &nbsp;&nbsp;<i class="fas fa-rectangle-list fa-fw"></i>&nbsp;Materiales
                                         </a>
                                     </li>
                                 @endcan
