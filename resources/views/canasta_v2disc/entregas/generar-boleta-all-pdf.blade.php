@@ -160,7 +160,7 @@
                         <td class="align-center align-middle linea-superior linea-inferior">
                             <b>
                                 BOLETA DE ENTREGA Y CONFORMIDAD DEL PAQUETE ALIMENTARIO DEL<br>
-                                PROGRAMA DE ASISTENCIA INTEGRAL A PERSONAS CON DISCAPACIDAD
+                                PROGRAMA DE ASISTENCIA INTEGRAL A LAS PERSONAS CON DISCAPACIDAD
                                 YACUIBA - GRAN CHACO
                             </b>
                         </td>
@@ -210,7 +210,7 @@
                     </tr>
                     <tr>
                         <td rowspan="4" class="align-center linea-izquierda linea-derecha linea-superior linea-inferior">
-                            <b><u>PRODUCTOS POR CANASTA ALIMENTARIA</u></b>
+                            <b><u>PRODUCTOS POR PAQUETE ALIMENTARIO</u></b>
                             <p class="text-justify" style="font-size: 10">
                                 {{ $array_entrega[$cont]->paquete->items }}
                             </p>

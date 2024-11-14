@@ -7,6 +7,7 @@
             <td align="left"><b>ASUNTO</b></td>
             <td align="center"><b>FECHA</b></td>
             <td align="center"><b>CODIGO</b></td>
+            <td align="center"><b>H.RUTA</b></td>
         </tr>
     </thead>
     <tbody>
@@ -18,6 +19,7 @@
                 <td align="left">{{ $datos->asunto }}</td>
                 <td align="center">{{ $datos->fecha_recepcion }}</td>
                 <td align="center">{{ $datos->n_oficio }}</td>
+                <td align="center">{{ $datos->observaciones }}</td>
             </tr>
         @endforeach
     </tbody>
