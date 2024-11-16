@@ -38,40 +38,50 @@
                 <strong>PARTIDAS PRESUPUESTARIAS</strong>
             </div>
         </div>
-        <div class="row bordered-group" id="view-detalle">
-            <div class="col-md-1 mb-1">
-                <span class="tts:right tts-slideIn tts-custom mb-1" id="btn-create-principal" aria-label="Registrar Partida Presupuestaria Principal" style="cursor: pointer;">
-                    <span class="btn btn-outline-primary font-roboto-12" onclick="createPartidaPresupuestariaPrincipal();">
-                        <i class="fa-solid fa-plus fa-fw"></i>
-                    </span>
-                </span>
+        @can('partida.presupuestaria.create')
+            <div class="row bordered-group" id="view-detalle">
+                <div class="col-md-12 mb-1 text-justify">
+                    <input type="hidden" name="partida_presupuestaria_id" id="partida_presupuestaria_id">
+                    <span class="font-roboto-11" id="partida_presupuestaria_detalle"></span>
+                </div>
             </div>
-            <div class="col-md-11 mb-1 text-center">
-                <input type="hidden" name="partida_presupuestaria_id" id="partida_presupuestaria_id">
-                {{-- <textarea id="partida_presupuestaria_detalle" placeholder="--Partida Presupuestaria Seleccionada--" class="form-control font-roboto-11" disabled></textarea> --}}
-                <span class="font-roboto-11" id="partida_presupuestaria_detalle"></span>
-            </div>
-        </div>
+        @endcan
         @if (isset($partidas_presupuestarias))
+            <div class="row">
+                <div class="col-md-5">
+                    <span class="tts:right tts-slideIn tts-custom" id="btn-create-principal" aria-label="Registrar Partida Presupuestaria Principal" style="cursor: pointer;">
+                        <span class="btn btn-sm btn-primary font-roboto-12" onclick="createPartidaPresupuestariaPrincipal();">
+                            <i class="fa-solid fa-plus fa-fw"></i>
+                        </span>
+                    </span>
+                    <span class="tts:right tts-slideIn tts-custom" id="btn-exportar-excel" aria-label="Exportar a Excel" style="cursor: pointer;">
+                        <span class="btn btn-sm btn-success font-roboto-12" onclick="excel();">
+                            <i class="fa-solid fa-file-excel fa-fw"></i>
+                        </span>
+                    </span>
+                    <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn-send" style="display: none;"></i>
+                </div>
+                <div class="col-md-2">
+                    <form action="#" method="get" id="form">
+                        <input type="text" name="numeracion" value="{{ request('numeracion') }}" id="numeracion" placeholder="Buscar Codigo" class="form-control font-roboto-12 text-center numero-entero" style="font-weight: bold;">
+                    </form>
+                </div>
+                <div class="col-md-5">
+                    <span class="tts:left tts-slideIn tts-custom float-right" id="btn-modificar" aria-label="Modificar" style="cursor: pointer;">
+                        <span class="btn btn-sm btn-warning font-roboto-12" onclick="editar();">
+                            <i class="fa-solid fa-edit fa-fw"></i>
+                        </span>
+                    </span>
+                    <span class="tts:left tts-slideIn tts-custom float-right mr-1" id="btn-create-dependiente" aria-label="Registrar Partida Presupuestaria Dependiente" style="cursor: pointer;">
+                        <span class="btn btn-sm btn-success font-roboto-12" onclick="createPartidaPresupuestariaDependiente();">
+                            <i class="fa-solid fa-plus fa-fw"></i>
+                        </span>
+                    </span>
+                </div>
+            </div>
             <div class="row bordered-group">
-                <div class="col-md-12">
-                    <div class="form-group row font-roboto-12">
-                        <div class="col-md-11 pr-1 pl-1">
-                            <div id="treeview"></div>
-                        </div>
-                        <div class="col-md-1 text-right">
-                            <span class="tts:left tts-slideIn tts-custom mb-1" id="btn-create-dependiente" aria-label="Registrar Partida Presupuestaria Dependiente" style="cursor: pointer;">
-                                <span class="btn btn-sm btn-success font-roboto-12" onclick="createPartidaPresupuestariaDependiente();">
-                                    <i class="fa-solid fa-plus fa-fw"></i>
-                                </span>
-                            </span>
-                            <span class="tts:left tts-slideIn tts-custom" id="btn-modificar" aria-label="Modificar" style="cursor: pointer;">
-                                <span class="btn btn-sm btn-warning font-roboto-12" onclick="editar();">
-                                    <i class="fa-solid fa-edit fa-fw"></i>
-                                </span>
-                            </span>
-                        </div>
-                    </div>
+                <div class="col-md-12" style="height:400px;overflow-y: scroll;">
+                    <div id="treeview"></div>
                 </div>
             </div>
         @endif
@@ -82,6 +92,8 @@
         $('#btn-partida-prespuestaria').removeClass("btn-outline-dark").addClass("btn-dark");
         $("#btn-create-dependiente").hide();
         $("#btn-modificar").hide();
+        $("#view-detalle").hide();
+
         $(document).ready(function() {
             $('.select2').select2({
                 theme: "bootstrap4",
@@ -89,16 +101,24 @@
                 width: '100%'
             });
 
-            /*var cleave = new Cleave('#codigo', {
-                numeral: true,
-                numeralDecimalMark: '',
-                numeralThousandsGroupStyle: 'none',
-                rawValueTrimPrefix: true
-            });*/
+            $('.numero-entero').each(function() {
+                new Cleave(this, {
+                    numeral: true,
+                    numeralThousandsGroupStyle: 'none',
+                    numeralDecimalScale: 0,
+                });
+            });
+
+            $('#numeracion').on('input', function() {
+                let valor = $(this).val().replace(/\D/g, '');
+                if (valor.length > 5) {
+                    $(this).val(valor.substring(0, 5));
+                }
+            });
         });
 
         $(function () {
-            var nodo_id = {{ request('nodeId', 0) }};
+            var nodo_id = {{ request('nodeId', $search_nodeId) }};
 
             $('#treeview').jstree({
                 'core': {
@@ -148,14 +168,15 @@
                         }
 
                         $("#btn-modificar").show();
+                        $("#view-detalle").show();
 
                         document.getElementById("partida_presupuestaria_id").value = data.partida_presupuestaria.id;
                         var div = document.getElementById("partida_presupuestaria_detalle");
-                        div.textContent = data.partida_presupuestaria.descripcion.toUpperCase();
-
-                        /* var textarea = document.getElementById("partida_presupuestaria_detalle");
-                        textarea.value = data.partida_presupuestaria.descripcion.toUpperCase();
-                        adjustTextareaHeight(textarea); */
+                        if(data.partida_presupuestaria.descripcion != null){
+                            div.textContent = data.partida_presupuestaria.descripcion.toUpperCase();
+                        }else{
+                            div.textContent = '';
+                        }
                     }
                 },
                 error: function(xhr){
@@ -167,6 +188,40 @@
         function createPartidaPresupuestariaPrincipal(){
             var url = "{{ route('partida.presupuestaria.create') }}";
             window.location.href = url;
+        }
+
+        /* function excel(){
+            var url = "{{ route('partida.presupuestaria.excel') }}";
+            window.location.href = url;
+        } */
+
+        function excel() {
+            var url = "{{ route('partida.presupuestaria.excel') }}";
+            $(".btn").hide();
+            $(".spinner-btn-send").show();
+            $.ajax({
+                url: url,
+                type: 'GET',
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function(response) {
+                    var a = document.createElement('a');
+                    var url = window.URL.createObjectURL(response);
+                    a.href = url;
+                    a.download = 'clasificadores.xlsx';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    $(".spinner-btn-send").hide();
+                    $(".btn").show();
+                },
+                error: function(xhr, status, error) {
+                    alert('Hubo un error al exportar el archivo: ' + xhr.responseText);
+                    $(".spinner-btn-send").hide();
+                    $(".btn").show();
+                }
+            });
         }
 
         function createPartidaPresupuestariaDependiente(){
@@ -202,6 +257,19 @@
         function limpiar(){
             var url = "{{ route('partida.presupuestaria.index') }}";
             window.location.href = url;
+        }
+
+        $('.intro').on('keypress', function(event) {
+            if (event.which === 13) {
+                search();
+                event.preventDefault();
+            }
+        });
+
+        function search(){
+            var url = "{{ route('partida.presupuestaria.index') }}";
+            $("#form").attr('action', url);
+            $("#form").submit();
         }
     </script>
 @endsection

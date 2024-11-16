@@ -19,17 +19,6 @@ use Image;
 use App\Models\Canasta\Dea;
 use App\Models\Canasta\Beneficiario;
 use App\Models\Canasta\HistorialMod;
-
-/* use App\Models\Canasta\Barrio;
-use App\Models\Canasta\Distrito;
-use App\Models\Canasta\Ocupaciones;
-use App\Models\Canasta\HistorialMod;
-use App\Models\Canasta\HistorialBaja;
-use App\Models\Canasta\Paquetes;
-use App\Models\User;
-use App\Models\Empleado; */
-
-
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exportar\Canasta\BeneficiariosPorFechasExcel;
 

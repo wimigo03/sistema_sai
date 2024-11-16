@@ -55,7 +55,7 @@
                                             </a>
                                         </span>
                                     @endcan
-                                    &nbsp;
+                                    {{-- &nbsp; --}}
                                     @can('categoria.presupuestaria.index')
                                         <span class="tts:left tts-slideIn tts-custom" aria-label="Partidas por Categoria" style="cursor: pointer;">
                                             <a href="{{ route('categoria.presupuestaria.index',$datos->id) }}" class="badge-with-padding badge badge-dark">

@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Models\Compra\CategoriaProgramatica;
 use App\Models\Compra\PartidaPresupuestaria;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exportar\PartidaPresupuestariaExcel;
 use DB;
 
 
@@ -30,11 +32,17 @@ class PartidaPresupuestariaController extends Controller
         dd("copiar finalizado...");
     }
 
-    public function index()
+    public function index(Request $request)
     {
         /*if(Auth::user()->id == 102){
             //$this->copiar();
         }*/
+
+        $search_nodeId = 0;
+        if(($request->numeracion)){
+            $partidas_presupuestaria = PartidaPresupuestaria::where('numeracion',$request->numeracion)->first();
+            $search_nodeId = $partidas_presupuestaria != null ? $partidas_presupuestaria->id : 0;
+        }
 
         $partidas_presupuestarias = PartidaPresupuestaria::query()
                                     ->ByDea(Auth::user()->dea->id)
@@ -42,7 +50,7 @@ class PartidaPresupuestariaController extends Controller
                                     ->get();
         $tree = $partidas_presupuestarias != null ? $this->buildTree($partidas_presupuestarias) : null;
 
-        return view('compras.partidas_prespuestarias.index',compact('partidas_presupuestarias','tree'));
+        return view('compras.partidas_prespuestarias.index',compact('partidas_presupuestarias','tree','search_nodeId'));
     }
 
     protected function buildTree($nodes)
@@ -221,6 +229,26 @@ class PartidaPresupuestariaController extends Controller
                 "Error: " . $e->getMessage() . "\n"
             );
             return redirect()->back()->with('error_message','[Ocurrio un Error al modificar la partida presupuestaria.]')->withInput();
+        }
+    }
+
+    public function excel()
+    {
+        try {
+            ini_set('memory_limit','-1');
+            ini_set('max_execution_time','-1');
+
+                $partidas_presupuestarias = PartidaPresupuestaria::query()
+                                            ->ByDea(Auth::user()->dea->id)
+                                            ->orderBy('numeracion')
+                                            ->get();
+
+            return Excel::download(new PartidaPresupuestariaExcel($partidas_presupuestarias),'clasificadores.xlsx');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error_message','[Ocurrio un Error]')->withInput();
+        }finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
         }
     }
 }

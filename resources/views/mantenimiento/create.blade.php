@@ -56,9 +56,9 @@
             if(!validar_detalle()){
                 return false;
             }
-            if(!validar_repetidos()){
+            /* if(!validar_repetidos()){
                 return false;
-            }
+            } */
             insertar_detalle();
         }
 

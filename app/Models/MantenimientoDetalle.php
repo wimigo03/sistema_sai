@@ -86,6 +86,24 @@ class MantenimientoDetalle extends Model
             case '8':
                 return "ROUTER";
             case '9':
+                return "TECLADO";
+            case '10':
+                return "MONITOR";
+            case '11':
+                return "DATA-SHOW";
+            case '12':
+                return "ESTABILIZADOR";
+            case '13':
+                return "MOUSE";
+            case '14':
+                return "CAMARA WEB";
+            case '15':
+                return "CAMARA";
+            case '16':
+                return "CARGADOR";
+            case '17':
+                return "ANTENA WIFI";
+            case '18':
                 return "OTRO";
         }
     }
