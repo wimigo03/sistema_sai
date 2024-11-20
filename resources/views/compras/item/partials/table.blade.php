@@ -6,7 +6,7 @@
                     <td class="text-left p-1"><b>PARTIDA PRESUPUESTARIA</b></td>
                     <td class="text-center p-1"><b>CODIGO</b></td>
                     <td class="text-left p-1"><b>NOMBRE</b></td>
-                    <td class="text-left p-1"><b>DETALLE</b></td>
+                    {{-- <td class="text-left p-1"><b>DETALLE</b></td> --}}
                     <td class="text-center p-1"><b>UNIDAD</b></td>
                     <td class="text-right p-1"><b>PRECIO REF.</b></td>
                     <td class="text-center p-1"><b>ESTADO</b></td>
@@ -23,7 +23,7 @@
                         </td>
                         <td class="text-center p-1">{{ $datos->codigo }}</td>
                         <td class="text-left p-1">{{ $datos->nombre }}</td>
-                        <td class="text-left p-1">{{ $datos->detalle }}</td>
+                        {{-- <td class="text-left p-1">{{ $datos->detalle }}</td> --}}
                         <td class="text-center p-1">{{ $datos->unidad_medida->nombre }}</td>
                         <td class="text-right p-1">{{ number_format($datos->precio,2,'.',',') }}</td>
                         <td class="text-center p-1">

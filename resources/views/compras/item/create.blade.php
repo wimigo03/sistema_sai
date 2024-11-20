@@ -25,6 +25,14 @@
                     numeralThousandsGroupStyle: 'thousand'
                 });
             });
+
+            $('.numero-entero').each(function() {
+                new Cleave(this, {
+                    numeral: true,
+                    numeralThousandsGroupStyle: 'none',
+                    numeralDecimalScale: 0,
+                });
+            });
         });
 
         var Modal = function(mensaje){
@@ -48,6 +56,10 @@
             }
             if($("#nombre").val() == ""){
                 Modal("<b>[ERROR] . </b> El Nombre del material es un dato obligatorio.");
+                return false;
+            }
+            if($("#numeracion").val() == ""){
+                Modal("<b>[ERROR] . </b> La numeracion es un dato obligatorio.");
                 return false;
             }
             if($("#unidad_id >option:selected").val() == ""){

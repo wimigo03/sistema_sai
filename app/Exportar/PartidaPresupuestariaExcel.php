@@ -56,9 +56,10 @@ class PartidaPresupuestariaExcel implements FromCollection, WithMapping, ShouldA
     public function map($row): array
     {
         $status = $row['estado'] == '1' ? 'HABILITADO' : 'NO HABILITADO';
+
         return [
             $row['numeracion'],
-            $row['codigo'],
+            " " . $row['codigo'],
             $row['nombre'],
             $row['descripcion'],
             $status,

@@ -6,7 +6,7 @@
             <label for="partida_presupuestaria_id" class="d-inline"><b>Partida Presupuestaria: </b></label>
         </div>
         <div class="col-md-7 pr-1 pl-1">
-            <select name="partida_presupuestaria_id" id="partida_presupuestaria_id" class="form-control select2">
+            <select name="partida_presupuestaria_id" id="partida_presupuestaria_id" class="form-control select2" disabled>
                 <option value="">-</option>
                 @foreach ($partidas_presupuestarias as $index => $value)
                     <option value="{{ $index }}" @if($item->partida_presupuestaria_id == $index) selected @endif >{{ $value }}</option>

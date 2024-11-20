@@ -54,10 +54,10 @@
                 Modal("<b>[ERROR] . </b> El nombre de la Partida Presupuestaria es un dato obligatorio.");
                 return false;
             }
-            if($("#descripcion").val() == ""){
+            /* if($("#descripcion").val() == ""){
                 Modal("<b>[ERROR] . </b> La Descripcion es un dato obligatorio.");
                 return false;
-            }
+            } */
             return true;
         }
 

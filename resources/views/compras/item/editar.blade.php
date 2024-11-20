@@ -44,6 +44,7 @@
             if(!validar()){
                 return false;
             }
+            document.getElementById("partida_presupuestaria_id").removeAttribute("disabled");
             document.getElementById("codigo").removeAttribute("disabled");
             var url = "{{ route('item.update') }}";
             $("#form").attr('action', url);

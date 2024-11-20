@@ -25,7 +25,7 @@
             $('#indexAjax').DataTable({
                 "processing":true,
                 "iDisplayLength": 10,
-                "order": [[ 0, "asc" ]],
+                "order": [[ 0, "desc" ]],
                 language: datatableLanguageConfig
             });
         });

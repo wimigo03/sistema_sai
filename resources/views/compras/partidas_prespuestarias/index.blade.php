@@ -38,14 +38,6 @@
                 <strong>PARTIDAS PRESUPUESTARIAS</strong>
             </div>
         </div>
-        @can('partida.presupuestaria.create')
-            <div class="row bordered-group" id="view-detalle">
-                <div class="col-md-12 mb-1 text-justify">
-                    <input type="hidden" name="partida_presupuestaria_id" id="partida_presupuestaria_id">
-                    <span class="font-roboto-11" id="partida_presupuestaria_detalle"></span>
-                </div>
-            </div>
-        @endcan
         @if (isset($partidas_presupuestarias))
             <div class="row">
                 <div class="col-md-5">
@@ -63,7 +55,7 @@
                 </div>
                 <div class="col-md-2">
                     <form action="#" method="get" id="form">
-                        <input type="text" name="numeracion" value="{{ request('numeracion') }}" id="numeracion" placeholder="Buscar Codigo" class="form-control font-roboto-12 text-center numero-entero" style="font-weight: bold;">
+                        <input type="text" name="numeracion" value="{{ request('numeracion') }}" id="numeracion" placeholder="Buscar Codigo" class="form-control font-roboto-12 text-center numero-entero">
                     </form>
                 </div>
                 <div class="col-md-5">
@@ -79,6 +71,16 @@
                     </span>
                 </div>
             </div>
+        @endif
+        @can('partida.presupuestaria.create')
+            <div class="row bordered-group" id="view-detalle">
+                <div class="col-md-12 mb-1 text-center">
+                    <input type="hidden" name="partida_presupuestaria_id" id="partida_presupuestaria_id">
+                    <span class="font-roboto-11" id="partida_presupuestaria_detalle"></span>
+                </div>
+            </div>
+        @endcan
+        @if (isset($partidas_presupuestarias))
             <div class="row bordered-group">
                 <div class="col-md-12" style="height:400px;overflow-y: scroll;">
                     <div id="treeview"></div>

@@ -1,6 +1,6 @@
 <form action="#" method="get" id="form">
     <div class="form-group row">
-        <div class="col-md-4 pr-1 pl-1 mb-2">
+        <div class="col-md-5 pr-1 pl-1 mb-2">
             <select name="partida_presupuestaria_id" id="partida_presupuestaria_id" class="form-control select2">
                 <option value="">-</option>
                 @foreach ($partidas_presupuestarias as $index => $value)
@@ -14,9 +14,9 @@
         <div class="col-md-3 pr-1 pl-1 mb-2">
             <input type="text" name="nombre" value="{{ request('nombre') }}" placeholder="--Nombre.--" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
         </div>
-        <div class="col-md-3 pr-1 pl-1 mb-2">
+        {{-- <div class="col-md-3 pr-1 pl-1 mb-2">
             <input type="text" name="detalle" value="{{ request('detalle') }}" placeholder="--Detalle--" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
-        </div>
+        </div> --}}
         <div class="col-md-2 pr-1 pl-1 mb-2">
             <select name="unidad_id" id="unidad_id" class="form-control select2">
                 <option value="">-</option>

@@ -1,14 +1,18 @@
 @extends('layouts.admin')
 @section('content')
-    <div class="card-body">
-        <div class="form-group row abs-center font-roboto-18">
-            <div class="col-md-12 text-center linea-completa">
-                <strong>CATEGORIAS PROGRAMATICAS</strong>
+<div class="row abs-center">
+    <div class="col-md-8 text-center">
+        <div class="card-body">
+            <div class="form-group row abs-center font-roboto-18">
+                <div class="col-md-12 text-center linea-completa">
+                    <strong>CATEGORIAS PROGRAMATICAS</strong>
+                </div>
             </div>
+            @include('compras.categoria_programatica.partials.search')
+            @include('compras.categoria_programatica.partials.table')
         </div>
-        @include('compras.categoria_programatica.partials.search')
-        @include('compras.categoria_programatica.partials.table')
     </div>
+</div>
 @section('scripts')
     <script type="text/javascript">
         $(document).ready(function() {

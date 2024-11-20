@@ -3,8 +3,8 @@
         <table class="table display table-bordered responsive hover-orange" style="width:100%;">
             <thead>
                 <tr class="font-roboto-11">
-                    <td class="text-left p-1"><b>CODIGO</b></td>
-                    <td class="text-left p-1"><b>CATEGORIA PROGRAMATICA</b></td>
+                    <td class="text-center p-1"><b>CODIGO</b></td>
+                    <td class="text-center p-1"><b>CATEGORIA PROGRAMATICA</b></td>
                     <td class="text-center p-1"><b>ESTADO</b></td>
                     @canany(['categoria.programatica.habilitar','categoria.programatica.editar','area.categoria.index'])
                         <td class="text-center p-1"><b><i class="fa-solid fa-bars"></i></b></td>
@@ -14,8 +14,8 @@
             <tbody>
                 @foreach ($categorias_programaticas as $datos)
                     <tr class="font-roboto-11">
-                        <td class="text-left p-1">{{ $datos->codigo }}</td>
-                        <td class="text-left p-1">{{ $datos->nombre }}</td>
+                        <td class="text-center p-1">{{ $datos->codigo }}</td>
+                        <td class="text-justify p-1">{{ $datos->nombre }}</td>
                         <td class="text-center p-1">
                             <span class="{{ $datos->colorStatus }}">
                                 {{ $datos->status }}

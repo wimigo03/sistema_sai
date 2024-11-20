@@ -135,13 +135,23 @@ class ItemController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => 'required|unique:items,nombre,null,null,dea_id,'. Auth::user()->dea->id
+            'nombre' => 'required|unique:items,nombre,null,null,dea_id,'. Auth::user()->dea->id,
         ]);
+
+        $partida_presupuestaria = PartidaPresupuestaria::find($request->partida_presupuestaria_id);
+        $codigo = $partida_presupuestaria->numeracion . '-' . (str_pad($request->numeracion,5,"0",STR_PAD_LEFT));
+
+        $search_codigo = Item::where('codigo',$codigo)->first();
+
+        if($search_codigo != null){
+            return redirect()->back()->with('error_message','[EL CODIGO QUE DESEA REGISTRAR YA EXISTE...]')->withInput();
+        }
+
         try{
-            $function = DB::transaction(function () use ($request) {
-                $partida_presupuestaria = PartidaPresupuestaria::find($request->partida_presupuestaria_id);
+            $function = DB::transaction(function () use ($request, $codigo) {
+                /* $partida_presupuestaria = PartidaPresupuestaria::find($request->partida_presupuestaria_id);
                 $cont = Item::where('partida_presupuestaria_id',$request->partida_presupuestaria_id)->get()->count() + 1;
-                $codigo = $partida_presupuestaria->numeracion . '-' . (str_pad($cont,5,"0",STR_PAD_LEFT));
+                $codigo = $partida_presupuestaria->numeracion . '-' . (str_pad($cont,5,"0",STR_PAD_LEFT)); */
 
                 $datos = [
                     'partida_presupuestaria_id' => $request->partida_presupuestaria_id,
@@ -270,15 +280,15 @@ class ItemController extends Controller
                             'detalle' => 'ELIMINADO POR ACTUALIZACION',
                         ]);
 
-                        $partida_presupuestaria = PartidaPresupuestaria::find($request->partida_presupuestaria_id);
+                        /* $partida_presupuestaria = PartidaPresupuestaria::find($request->partida_presupuestaria_id);
                         $cont = Item::where('partida_presupuestaria_id',$request->partida_presupuestaria_id)->get()->count() + 1;
-                        $codigo = $partida_presupuestaria->numeracion . '-' . (str_pad($cont,5,"0",STR_PAD_LEFT));
+                        $codigo = $partida_presupuestaria->numeracion . '-' . (str_pad($cont,5,"0",STR_PAD_LEFT)); */
 
                         $_item = Item::create([
                             'partida_presupuestaria_id' => $request->partida_presupuestaria_id,
                             'dea_id' => Auth::user()->dea->id,
                             'user_id' => Auth::user()->id,
-                            'codigo' => $codigo,
+                            'codigo' => $request->codigo,
                             'unidad_id' => $request->unidad_id,
                             'nombre' => $request->nombre,
                             'detalle' => $request->detalle,
