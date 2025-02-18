@@ -26,7 +26,7 @@
                                 {{ $datos->area_corta }}
                             </span>
                         </td>
-                        <td class="text-center p-1">{{ $datos->funcionario->nombres }}</td>
+                        <td class="text-center p-1">{{ $datos->funcionario != null ? $datos->funcionario->nombres : 'NO REGISTRADO' }}</td>
                         <td class="text-center p-1">{{ $datos->clasificacion_equipo }}</td>
                         <td class="text-center p-1">{{ \Carbon\Carbon::parse($datos->fecha_r)->format('d/m/Y') }}</td>
                         <td class="text-center p-1">

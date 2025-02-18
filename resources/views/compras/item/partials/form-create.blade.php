@@ -47,7 +47,7 @@
             <label for="precio" class="d-inline"><b>Precio Referencial :</b></label>
         </div>
         <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="precio" value="{{ old('precio') }}" id="precio" class="form-control font-roboto-12 input-numero-cleave">
+            <input type="text" name="precio" value="0{{-- old('precio') --}}" id="precio" class="form-control font-roboto-12 input-numero-cleave">
         </div>
     </div>
     {{--<div class="form-group row font-roboto-12 align-items-center">

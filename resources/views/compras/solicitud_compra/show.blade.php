@@ -104,7 +104,7 @@
                                         <tr class="font-roboto-11">
                                             <td class="text-left p-1"><b>P. PRESUPUESTARIA</b></td>
                                             <td class="text-left p-1"><b>MATERIAL</b></td>
-                                            <td class="text-left p-1"><b>DETALLE DEL MATERIAL</b></td>
+                                            {{-- <td class="text-left p-1"><b>DETALLE DEL MATERIAL</b></td> --}}
                                             <td class="text-left p-1"><b>MEDIDA</b></td>
                                             <td class="text-right p-1"><b>CANTIDAD</b></td>
                                             {{--<td class="text-right p-1"><b>SALDO</b></td>--}}
@@ -115,7 +115,7 @@
                                             <tr class="font-roboto-11">
                                                 <td class="text-left p-1">{{ $datos->partidaPresupuestaria->numeracion . ' - ' . $datos->partidaPresupuestaria->nombre }}</td>
                                                 <td class="text-left p-1">{{ $datos->item->codigo . ' - ' . $datos->item->nombre }}</td>
-                                                <td class="text-left p-1">{{ $datos->item->detalle }}</td>
+                                                {{-- <td class="text-left p-1">{{ $datos->item->detalle }}</td> --}}
                                                 <td class="text-left p-1">{{ $datos->unidad_medida->nombre }}</td>
                                                 <td class="text-right p-1">{{ number_format($datos->cantidad,2,'.',',') }}</td>
                                                 {{--<td class="text-right p-1">{{ number_format($datos->saldo,2,'.',',') }}</td>--}}

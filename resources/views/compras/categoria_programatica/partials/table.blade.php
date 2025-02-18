@@ -26,38 +26,35 @@
                                 <div class="d-flex justify-content-center">
                                     @can('categoria.programatica.habilitar')
                                         @if($datos->status == "HABILITADO")
-                                            <span class="tts:left tts-slideIn tts-custom" aria-label="Deshabilitar" style="cursor: pointer;">
+                                            <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Deshabilitar" style="cursor: pointer;">
                                                 <a href="{{ route('categoria.programatica.deshabilitar',$datos->id) }}" class="badge-with-padding badge badge-danger">
                                                     <i class="fas fa-arrow-alt-circle-down fa-fw"></i>
                                                 </a>
                                             </span>
                                         @else
-                                            <span class="tts:left tts-slideIn tts-custom" aria-label="Habilitar" style="cursor: pointer;">
+                                            <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Habilitar" style="cursor: pointer;">
                                                 <a href="{{ route('categoria.programatica.habilitar',$datos->id) }}" class="badge-with-padding badge badge-success">
                                                     <i class="fas fa-arrow-alt-circle-up fa-fw"></i>
                                                 </a>
                                             </span>
                                         @endif
                                     @endcan
-                                    &nbsp;
                                     @can('categoria.programatica.editar')
-                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar" style="cursor: pointer;">
+                                        <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Modificar" style="cursor: pointer;">
                                             <a href="{{ route('categoria.programatica.editar',$datos->id) }}" class="badge-with-padding badge badge-warning">
                                                 <i class="fas fa-edit fa-fw"></i>
                                             </a>
                                         </span>
                                     @endcan
-                                    &nbsp;
                                     @can('area.categoria.index')
-                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Areas por Categoria" style="cursor: pointer;">
+                                        <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Areas por Categoria" style="cursor: pointer;">
                                             <a href="{{ route('area.categoria.index',$datos->id) }}" class="badge-with-padding badge badge-primary">
                                                 <i class="fa-solid fa-layer-group fa-fw"></i>
                                             </a>
                                         </span>
                                     @endcan
-                                    {{-- &nbsp; --}}
                                     @can('categoria.presupuestaria.index')
-                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Partidas por Categoria" style="cursor: pointer;">
+                                        <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Partidas por Categoria" style="cursor: pointer;">
                                             <a href="{{ route('categoria.presupuestaria.index',$datos->id) }}" class="badge-with-padding badge badge-dark">
                                                 <i class="fa-solid fa-square-poll-horizontal fa-fw"></i>
                                             </a>

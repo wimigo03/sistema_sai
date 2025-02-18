@@ -39,7 +39,7 @@
                     </div>
                     <div class="col-md-3 pr-1 pl-1 mb-2">
                         <label for="empleado" class="d-inline"><b>Funcionario Encargado</b></label>
-                        <input type="text" value="{{ $mantenimiento->funcionario->full_name }}" class="form-control font-roboto-11" disabled>
+                        <input type="text" value="{{ $mantenimiento->funcionario != null ? $mantenimiento->funcionario->full_name : 'NO REGISTRADO' }}" class="form-control font-roboto-11" disabled>
                     </div>
                     <div class="col-md-1 pr-1 pl-1 mb-2">
                         <label for="nro_comunicacion_interna" class="d-inline"><b>N° C. I.</b></label>

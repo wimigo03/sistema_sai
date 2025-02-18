@@ -43,7 +43,7 @@ class MantenimientoController extends Controller
 
         $mantenimiento_detalles = MantenimientoDetalle::query()
                                     ->byDea($dea_id)
-                                    ->orderBy('mantenimiento_id','desc')
+                                    ->orderBy('id','desc')
                                     ->paginate(10);
 
         return view('mantenimiento.index',compact('clasificaciones','areas','empleados','estados','estados_detalles','mantenimiento_detalles'));
@@ -76,7 +76,7 @@ class MantenimientoController extends Controller
                                     ->byEstado($request->estado)
                                     ->byEstadoDetalle($request->estado_detalle)
                                     ->byAsignado($request->usuario)
-                                    ->orderBy('mantenimiento_id','desc')
+                                    ->orderBy('id','desc')
                                     ->paginate(10);
 
         return view('mantenimiento.index',compact('clasificaciones','areas','empleados','estados','estados_detalles','mantenimiento_detalles'));

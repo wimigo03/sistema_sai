@@ -206,6 +206,13 @@
                         </li>
                     @endcanany
                     {{-- SOLICITUD DE MATERIALES --}}
+                    @can('solicitud.compra.index')
+                        <li class="font-verdana-13 counter">
+                            <a href="{{ route('solicitud.compra.index') }}">
+                                <i class="fas fa-shopping-basket fa-fw"></i>&nbsp;Solicitud de Compra
+                            </a>
+                        </li>
+                    @endcan
                     @can('solicitud.material.index')
                         <li class="font-verdana-13 counter">
                             <a href="{{ route('solicitud.material.index') }}">
@@ -215,7 +222,6 @@
                     @endcan
                     {{-- COMPRAS --}}
                     @canany([
-                        'solicitud.compra.index',
                         'orden.compra.index',
                         'proveedor.index',
                         'categoria.programatica.index',
@@ -229,13 +235,6 @@
                                 <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_compras">
-                                @can('solicitud.compra.index')
-                                    <li class="font-verdana-13 counter">
-                                        <a href="{{ route('solicitud.compra.index') }}">
-                                            &nbsp;&nbsp;<i class="fas fa-shopping-basket fa-fw"></i>&nbsp;Solicitudes de compra
-                                        </a>
-                                    </li>
-                                @endcan
                                 @can('orden.compra.index')
                                     <li class="font-verdana-13">
                                         <a href="{{ route('orden.compra.index') }}">

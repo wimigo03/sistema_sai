@@ -134,7 +134,7 @@ class MantenimientoDetalle extends Model
     }
 
     public function mantenimiento(){
-        return $this->belongsTo(Mantenimiento::class,'idemp','idemp');
+        return $this->belongsTo(Mantenimiento::class,'mantenimiento_id','id');
     }
 
     public function getAreaCortaAttribute(){

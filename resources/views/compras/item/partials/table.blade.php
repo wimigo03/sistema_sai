@@ -3,7 +3,7 @@
         <table class="table display table-striped table-bordered responsive hover-orange" style="width:100%;">
             <thead>
                 <tr class="font-roboto-10">
-                    <td class="text-left p-1"><b>PARTIDA PRESUPUESTARIA</b></td>
+                    {{-- <td class="text-left p-1"><b>PARTIDA PRESUPUESTARIA</b></td> --}}
                     <td class="text-center p-1"><b>CODIGO</b></td>
                     <td class="text-left p-1"><b>NOMBRE</b></td>
                     {{-- <td class="text-left p-1"><b>DETALLE</b></td> --}}
@@ -18,10 +18,14 @@
             <tbody>
                 @foreach ($items as $datos)
                     <tr class="font-roboto-10">
-                        <td class="text-left p-1">
+                        {{-- <td class="text-left p-1">
                             {{ $datos->partidaPresupuestaria != null ? $datos->partidaPresupuestaria->numeracion . ' - ' . $datos->partidaPresupuestaria->nombre : '' }}
+                        </td> --}}
+                        <td class="text-center p-1">
+                            <span class="tts:right tts-slideIn tts-custom" aria-label="{{ $datos->partidaPresupuestaria->nombre }}" style="cursor: pointer;">
+                                {{ $datos->codigo }}
+                            </span>
                         </td>
-                        <td class="text-center p-1">{{ $datos->codigo }}</td>
                         <td class="text-left p-1">{{ $datos->nombre }}</td>
                         {{-- <td class="text-left p-1">{{ $datos->detalle }}</td> --}}
                         <td class="text-center p-1">{{ $datos->unidad_medida->nombre }}</td>

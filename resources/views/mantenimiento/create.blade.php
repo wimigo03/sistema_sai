@@ -197,10 +197,10 @@
                 Modal("<b>[ERROR. LA PROCEDENCIA ES UN CAMPO OBLIGATORIO]</b>");
                 return false;
             }
-            if ($("#empleado_id >option:selected").val() == "") {
+            /* if ($("#empleado_id >option:selected").val() == "") {
                 Modal("<b>[ERROR. EL CAMPO FUNCIONARIO ES OBLIGATORIO]</b>");
                 return false;
-            }
+            } */
             /* if ($("#nro_comunicacion_interna").val() == "") {
                 Modal("<b>[ERROR. LA COMUNICACION INTERNA ES CAMPO OBLIGATORIO]</b>");
                 return false;
