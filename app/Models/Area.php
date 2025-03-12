@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\NivelModel;
 use App\Models\Canasta\Dea;
-use App\Models\Area;
 use App\Models\Compra\CategoriaProgramatica;
 use App\Models\Almacenes\Almacen;
 
@@ -75,10 +74,10 @@ class Area extends Model
         return $this->hasMany('App\Models\File', 'idarea', 'idarea');
     }
 
-    public function actuals()
+    /* public function actuals()
     {
         return $this->hasMany(ActualModel::class, 'idarea');
-    }
+    } */
 
     public function empleados()
     {

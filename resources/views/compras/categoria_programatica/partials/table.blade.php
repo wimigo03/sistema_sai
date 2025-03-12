@@ -47,16 +47,16 @@
                                         </span>
                                     @endcan
                                     @can('area.categoria.index')
-                                        <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Areas por Categoria" style="cursor: pointer;">
+                                        <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Habilitar Areas Por Categoria" style="cursor: pointer;">
                                             <a href="{{ route('area.categoria.index',$datos->id) }}" class="badge-with-padding badge badge-primary">
                                                 <i class="fa-solid fa-layer-group fa-fw"></i>
                                             </a>
                                         </span>
                                     @endcan
                                     @can('categoria.presupuestaria.index')
-                                        <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Partidas por Categoria" style="cursor: pointer;">
+                                        <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Habilitar Partidas Por Categoria" style="cursor: pointer;">
                                             <a href="{{ route('categoria.presupuestaria.index',$datos->id) }}" class="badge-with-padding badge badge-dark">
-                                                <i class="fa-solid fa-square-poll-horizontal fa-fw"></i>
+                                                <i class="fa-solid fa-list-ul fa-fw"></i>
                                             </a>
                                         </span>
                                     @endcan

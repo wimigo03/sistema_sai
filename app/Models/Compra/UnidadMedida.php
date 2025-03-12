@@ -5,7 +5,6 @@ namespace App\Models\Compra;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Canasta\Dea;
-use App\Models\Compra\UnidadMedida;
 
 class UnidadMedida extends Model
 {

@@ -392,8 +392,13 @@ main .post-content .post-meta {
 	opacity: 1.0;
 }
 
+.d-inline{
+	font-weight: 500;
+}
+
 .badge-with-padding {
-	padding: 7px;
+	padding: 6px;
+	font-size: 10px;
 	font-weight: normal;
 }
 

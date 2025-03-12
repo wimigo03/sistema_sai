@@ -4,9 +4,9 @@
         <div class="form-group row abs-center font-roboto-14">
             <div class="col-md-12 text-center linea-completa">
                 <strong>
-                    {{ $categoria_programatica->codigo }}
+                    CATEGORIA PROGRAMATICA
                     <br>
-                    {{ $categoria_programatica->nombre }}
+                    {{ $categoria_programatica->codigo }} - {{ $categoria_programatica->nombre }}
                 </strong>
             </div>
         </div>
@@ -18,7 +18,7 @@
         $(document).ready(function() {
             $('#area_id').select2({
                 theme: "bootstrap4",
-                placeholder: "--Area o Programa--",
+                placeholder: "--Seleccionar--",
                 width: '100%'
             });
 

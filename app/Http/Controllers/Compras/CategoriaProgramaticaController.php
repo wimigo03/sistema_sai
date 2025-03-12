@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Models\Compra\CategoriaProgramatica;
 use App\Models\Compra\CategoriaPresupuestaria;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class CategoriaProgramaticaController extends Controller
 {

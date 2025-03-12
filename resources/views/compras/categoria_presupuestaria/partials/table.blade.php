@@ -1,5 +1,5 @@
-<div class="form-group row abs-center font-roboto-12">
-    <div class="col-md-9 pr-1 pl-1 table-responsive">
+<div class="form-group row font-roboto-13">
+    <div class="col-md-12 pr-1 pl-1 table-responsive">
         <table id="indexAjax" class="table display table-bordered hover-orange" style="width:100%;">
             <thead>
                 <tr class="font-roboto-11">

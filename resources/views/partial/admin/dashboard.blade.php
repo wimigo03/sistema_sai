@@ -213,6 +213,13 @@
                             </a>
                         </li>
                     @endcan
+                    @can('orden.compra.index')
+                        <li class="font-verdana-13 counter">
+                            <a href="{{ route('orden.compra.index') }}">
+                                <i class="fas fa-shopping-cart fa-fw"></i>&nbsp;Ordenes de compra
+                            </a>
+                        </li>
+                    @endcan
                     @can('solicitud.material.index')
                         <li class="font-verdana-13 counter">
                             <a href="{{ route('solicitud.material.index') }}">
@@ -222,7 +229,6 @@
                     @endcan
                     {{-- COMPRAS --}}
                     @canany([
-                        'orden.compra.index',
                         'proveedor.index',
                         'categoria.programatica.index',
                         'partida.presupuestaria.index',
@@ -235,10 +241,31 @@
                                 <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_compras">
-                                @can('orden.compra.index')
-                                    <li class="font-verdana-13">
-                                        <a href="{{ route('orden.compra.index') }}">
-                                            &nbsp;&nbsp;<i class="fas fa-shopping-cart fa-fw"></i>&nbsp;Ordenes de compra
+                                @can('categoria.programatica.index')
+                                    <li>
+                                        <a href="{{ route('categoria.programatica.index') }}">
+                                            &nbsp;&nbsp;<i class="fa-solid fa-bars-staggered fa-fw"></i>&nbsp;Programaticas
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('partida.presupuestaria.index')
+                                    <li>
+                                        <a href="{{ route('partida.presupuestaria.index') }}">
+                                            &nbsp;&nbsp;<i class="fa-solid fa-list-ul fa-fw"></i>&nbsp;Presupuestarias
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('item.index')
+                                    <li>
+                                        <a href="{{ route('item.index') }}">
+                                            &nbsp;&nbsp;<i class="fa-solid fa-list-check fa-fw"></i>&nbsp;Items
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('unidad.medida.index')
+                                    <li>
+                                        <a href="{{ route('unidad.medida.index') }}">
+                                            &nbsp;&nbsp;<i class="fas fa-balance-scale fa-fw"></i>&nbsp;Unidades de Medida
                                         </a>
                                     </li>
                                 @endcan
@@ -246,34 +273,6 @@
                                     <li>
                                         <a href="{{ route('proveedor.index') }}">
                                             &nbsp;&nbsp;<i class="fa-solid fa-users fa-fw"></i>&nbsp;Proveedores
-                                        </a>
-                                    </li>
-                                @endcan
-                                @can('categoria.programatica.index')
-                                    <li>
-                                        <a href="{{ route('categoria.programatica.index') }}">
-                                            &nbsp;&nbsp;<i class="fa-solid fa-bars-staggered fa-fw"></i>&nbsp;Categorias Programaticas
-                                        </a>
-                                    </li>
-                                @endcan
-                                @can('partida.presupuestaria.index')
-                                    <li>
-                                        <a href="{{ route('partida.presupuestaria.index') }}">
-                                            &nbsp;&nbsp;<i class="fa-solid fa-poll-h fa-fw"></i>&nbsp;Partidas Presupuestarias
-                                        </a>
-                                    </li>
-                                @endcan
-                                @can('item.index')
-                                    <li>
-                                        <a href="{{ route('item.index') }}">
-                                            &nbsp;&nbsp;<i class="fas fa-rectangle-list fa-fw"></i>&nbsp;Materiales
-                                        </a>
-                                    </li>
-                                @endcan
-                                @can('unidad.medida.index')
-                                    <li>
-                                        <a href="{{ route('unidad.medida.index') }}">
-                                            &nbsp;&nbsp;<i class="fas fa-balance-scale fa-fw"></i>&nbsp;Unidades
                                         </a>
                                     </li>
                                 @endcan
@@ -291,21 +290,21 @@
                                 @can('almacen.index')
                                     <li class="font-verdana-13 counter">
                                         <a href="{{ route('almacen.index') }}">
-                                            &nbsp;&nbsp;<i class="fa-solid fa-list-alt fa-fw"></i>&nbsp;Listar
+                                            &nbsp;&nbsp;<i class="fa-solid fa-list-alt fa-fw"></i>&nbsp;Configuracion
                                         </a>
                                     </li>
                                 @endcan
                                 @can('ingreso.compra.index')
                                     <li class="font-verdana-13 counter">
                                         <a href="{{ route('ingreso.compra.index') }}">
-                                            &nbsp;&nbsp;<i class="fa-solid fa-file-lines fa-fw"></i>&nbsp;Ingresos
+                                            &nbsp;&nbsp;<i class="fa-solid fa-file-lines fa-fw"></i>&nbsp;Ingreso de Materiales
                                         </a>
                                     </li>
                                 @endcan
                                 @can('salida.almacen.index')
                                     <li class="font-verdana-13 counter">
                                         <a href="{{ route('salida.almacen.index') }}">
-                                            &nbsp;&nbsp;<i class="fa-solid fa-hdd fa-fw"></i>&nbsp;Salidas
+                                            &nbsp;&nbsp;<i class="fa-solid fa-hdd fa-fw"></i>&nbsp;Salida de Materiales
                                         </a>
                                     </li>
                                 @endcan

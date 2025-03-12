@@ -18,7 +18,7 @@
         $(document).ready(function() {
             $('#partida_presupuestaria_id').select2({
                 theme: "bootstrap4",
-                placeholder: "--Partida Presupuestaria--",
+                placeholder: "--seleccionar--",
                 width: '100%'
             });
 

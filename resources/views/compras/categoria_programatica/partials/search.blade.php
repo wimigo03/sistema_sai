@@ -1,12 +1,12 @@
 <form action="#" method="get" id="form">
-    <div class="form-group row abs-center">
-        <div class="col-md-2 pr-1 pl-1">
+    <div class="row">
+        <div class="col-md-2 pr-1 pl-1 mb-2">
             <input type="text" name="codigo" value="{{ request('codigo') }}" placeholder="--Codigo--" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase()">
         </div>
-        <div class="col-md-8 pr-1 pl-1">
+        <div class="col-md-8 pr-1 pl-1 mb-2">
             <input type="text" name="nombre" value="{{ request('nombre') }}" placeholder="--Categoria Programatica--" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase()">
         </div>
-        <div class="col-md-2 pr-1 pl-1">
+        <div class="col-md-2 pr-1 pl-1 mb-2">
             <select name="estado" id="estado" class="form-control">
                 <option value="">-</option>
                 @foreach ($estados as $index => $value)
@@ -15,7 +15,7 @@
             </select>
         </div>
     </div>
-    <div class="form-group row abs-center">
+    <div class="form-group row">
         <div class="col-md-12 pr-1 pl-1">
             @can('categoria.programatica.create')
                 <span class="tts:right tts-slideIn tts-custom float-left" aria-label="Registrar" style="cursor: pointer;">

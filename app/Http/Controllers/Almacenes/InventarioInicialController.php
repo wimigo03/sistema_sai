@@ -8,19 +8,19 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
-use App\Models\User;
+/* use App\Models\User;
 use App\Models\Almacenes\Almacen;
 use App\Models\Canasta\Dea;
 use App\Models\Compra\Item;
 use App\Models\Compra\IngresoCompraDetalle;
 use App\Models\Compra\CategoriaProgramatica;
 use App\Models\Compra\PartidaPresupuestaria;
-use App\Models\Compra\UnidadMedida;
+use App\Models\Compra\UnidadMedida; */
 
-class InventarioController extends Controller
+class InventarioInicialController extends Controller
 {
-    public function index()
-    {
+    public function index(Request $request)
+    {dd($request->all());
         $dea_id = Auth::user()->dea->id;
 
         $almacenes = Almacen::query()

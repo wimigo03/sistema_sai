@@ -1,9 +1,9 @@
 <?php
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('inventario')->name('inventario.')->middleware(['auth'])->group(function () {
-    Route::get('index', 'Almacenes\InventarioController@index')->name('index')->middleware('can:inventario.index');
-    Route::get('search', 'Almacenes\InventarioController@search')->name('search')->middleware('can:inventario.index');
+Route::prefix('inventario-inicial')->name('inventario.inicial.')->middleware(['auth'])->group(function () {
+    Route::get('index', 'Almacenes\InventarioInicialController@index')->name('index')->middleware('can:inventario.inicial.index');
+    /* Route::get('search', 'Almacenes\InventarioController@search')->name('search')->middleware('can:inventario.index'); */
     /*Route::get('create', 'Almacenes\AlmacenController@create')->name('create')->middleware('can:almacen.create');
     Route::post('store', 'Almacenes\AlmacenController@store')->name('store')->middleware('can:almacen.create');
     Route::get('show/{almacen_id}', 'Almacenes\AlmacenController@show')->name('show')->middleware('can:almacen.show');

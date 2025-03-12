@@ -15,29 +15,37 @@
             <tbody>
                 @foreach ($almacenes as $datos)
                     <tr class="font-roboto-11">
-                        <td class="text-left p-1">{{ $datos->nombre }}</td>
-                        <td class="text-left p-1">{{ $datos->direccion }}</td>
-                        <td class="text-left p-1">{{ $datos->user != null ? strtoupper($datos->user->nombre_completo) : '' }}</td>
-                        <td class="text-center p-1">
+                        <td class="text-left p-2">{{ $datos->nombre }}</td>
+                        <td class="text-left p-2">{{ $datos->direccion }}</td>
+                        <td class="text-left p-2">{{ $datos->user != null ? strtoupper($datos->user->nombre_completo) : '' }}</td>
+                        <td class="text-center p-2">
                             <span class="{{ $datos->colorBadgeStatus }}">
                                 {{ $datos->status }}
                             </span>
                         </td>
                         @canany(['almacen.editar'])
-                            <td class="text-center p-1">
+                            <td class="text-center p-2">
                                 <div class="d-flex justify-content-center">
                                     @can('almacen.editar')
                                         <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar" style="cursor: pointer;">
-                                            <a href="{{ route('almacen.editar',$datos->id) }}" class="badge-with-padding badge badge-warning">
-                                                <i class="fas fa-edit fa-fw"></i>
+                                            <a href="{{ route('almacen.editar',$datos->id) }}" class="btn btn-xs btn-secondary p-1">
+                                                <i class="fas fa-edit fa-fw fa-lg"></i>
                                             </a>
                                         </span>
                                     @endcan
                                     &nbsp;
                                     @can('almacen.asignar')
-                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Asignacion de Areas" style="cursor: pointer;">
-                                            <a href="{{ route('almacen.asignar',$datos->id) }}" class="badge-with-padding badge badge-dark">
-                                                <i class="fas fa-warehouse fa-fw"></i>
+                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Areas Permitidas" style="cursor: pointer;">
+                                            <a href="{{ route('almacen.asignar',$datos->id) }}" class="btn btn-xs btn-primary p-1">
+                                                <i class="fa-solid fa-house-laptop fa-fw fa-lg"></i>
+                                            </a>
+                                        </span>
+                                    @endcan
+                                    &nbsp;
+                                    @can('inventario.inicial.index')
+                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Inventario Inicial" style="cursor: pointer;">
+                                            <a href="{{ route('inventario.inicial.index',['almacen_id' => $datos->id]) }}" class="btn btn-xs btn-dark p-1">
+                                                <i class="fa-solid fa-list-alt fa-fw fa-lg"></i>
                                             </a>
                                         </span>
                                     @endcan

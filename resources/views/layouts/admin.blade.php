@@ -119,9 +119,7 @@
 
     <script>
         var id = 2;
-
-
-
+        
         function fetchdata() {
 
             $.ajax({
