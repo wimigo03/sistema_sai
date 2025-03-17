@@ -8,15 +8,21 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Carbon\Carbon;
 
-class BeneficiariosExcel implements FromView,ShouldAutoSize{
+class BeneficiariosExcel implements FromView, ShouldAutoSize
+{
     use Exportable;
 
-    public function __construct($beneficiarios){
+    protected $beneficiarios;
+
+    public function __construct($beneficiarios)
+    {
         $this->beneficiarios = $beneficiarios;
     }
 
-    public function view(): view{
+    public function view(): View
+    {
         $beneficiarios = $this->beneficiarios;
-        return view('canasta_v2.beneficiario.excel',compact('beneficiarios'));
+
+        return view('canasta_v2.beneficiario.excel', compact('beneficiarios'));
     }
 }

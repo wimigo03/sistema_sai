@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use DataTables;
-use DB;
-use PDF;
-use Image;
+use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\PDF;
+use Intervention\Image\Facades\Image;
 
 use App\Models\Canasta\Barrio;
 use App\Models\Canasta\Distrito;
@@ -218,6 +218,7 @@ class BeneficiariosV2Controller extends Controller
                             WHEN a.estado = 'B' THEN 'BAJA'
                             WHEN a.estado = 'X' THEN 'PENDIENTE'
                             WHEN a.estado = 'E' THEN 'ELIMINADO'
+                            WHEN a.estado = 'O' THEN 'OBSERVADO'
                             ELSE 'DESCONOCIDO'
                         END as status
                     "),
@@ -353,7 +354,7 @@ class BeneficiariosV2Controller extends Controller
 
                 return Excel::download(new BeneficiariosExcel($beneficiarios),'beneficiarios.xlsx');
         } catch (\Throwable $th) {
-            return view('errors.500');
+            return 'ERROR[500]';
         }finally{
             ini_restore('memory_limit');
             ini_restore('max_execution_time');
@@ -407,6 +408,7 @@ class BeneficiariosV2Controller extends Controller
             'am' => $request->am,
             'fecha_nac' => $fecha_nacimiento,
             'estado_civil' => $request->estado_civil,
+            'ci_pareja' => $request->ci_pareja != null ? $request->ci_pareja : null,
             'sexo' => $request->sexo,
             'direccion' => $request->direccion,
             'firma' => $request->firma,
@@ -418,6 +420,7 @@ class BeneficiariosV2Controller extends Controller
             'ci' => $request->ci,
             'expedido' => $request->expedido,
             'id_ocupacion' => $request->ocupacion,
+            'categoria' => $request->categoria,
             'distrito_id' => $barrio->distrito_id,
             'id_tipo' => Beneficiario::TERCERA_EDAD,
             'celular' => $request->celular,
@@ -775,6 +778,7 @@ class BeneficiariosV2Controller extends Controller
             'am' => $request->am,
             'fecha_nac' => $fecha_nacimiento,
             'estado_civil' => $request->estado_civil,
+            'ci_pareja' => $request->ci_pareja != null ? $request->ci_pareja : null,
             'sexo' => $request->sexo,
             'direccion' => $request->direccion,
             'firma' => $request->firma,
@@ -785,6 +789,7 @@ class BeneficiariosV2Controller extends Controller
             'ci' => $request->ci,
             'expedido' => $request->expedido,
             'id_ocupacion' => $request->ocupacion,
+            'categoria' => $request->categoria,
             'distrito_id' => $barrio->distrito_id,
             'celular' => $request->celular,
             'latitud' => $request->latitud,

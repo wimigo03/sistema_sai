@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('beneficiarios')->name('beneficiarios.')->middleware(['auth'])->group(function () {
     Route::get('index', 'Canasta_v2\BeneficiariosV2Controller@index')->name('index')->middleware('can:canasta.beneficiarios.index');

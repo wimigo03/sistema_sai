@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('periodos')->name('periodos.')->middleware(['auth'])->group(function () {
     Route::get('/{id}', 'Canasta_v2\PeriodosV2Controller@index')->name('index')->middleware('can:canasta.paquete.periodo');

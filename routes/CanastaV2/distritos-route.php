@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('distritos')->name('distritos.')->middleware(['auth'])->group(function () {
     Route::get('/', 'Canasta_v2\DistritosV2Controller@index')->name('index')->middleware('can:canasta.distritos.index');

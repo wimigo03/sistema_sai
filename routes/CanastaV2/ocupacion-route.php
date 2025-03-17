@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('ocupacion')->name('ocupacion.')->middleware(['auth'])->group(function () {
     Route::get('/', 'Canasta_v2\OcupacionV2Controller@index')->name('index')->middleware('can:canasta.ocupacion.index');

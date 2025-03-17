@@ -39,9 +39,9 @@
 @section('scripts')
     <script>
         var _estado = "{{ $beneficiario->estado }}";
-        if(_estado === 'F' || _estado == 'E'){
+        /* if(_estado === 'F' || _estado == 'E'){
             document.getElementById('estado').disabled = true;
-        }
+        } */
         proj4.defs("EPSG:32720", "+proj=utm +zone=20 +south +datum=WGS84 +units=m +no_defs");
         var _brigadista = "{{ $brigadista }}";
         if(_brigadista){
@@ -179,6 +179,17 @@
             });
 
             CheckSeguroMedico();
+
+            $('#estado_civil').change(function() {
+                var estadoCivil = $(this).val();
+                if (estadoCivil === "Casado(a)" || estadoCivil === "Concubino(a)") {
+                    $('#form_ci_pareja').show();
+                } else {
+                    $('#form_ci_pareja').hide();
+                }
+            });
+
+            $('#estado_civil').trigger('change');
         });
 
         function CheckSeguroMedico() {
@@ -309,12 +320,22 @@
                 Modal("El campo <b>[Estado Civil]</b> es obligatorio.");
                 return false;
             }
+            if ($("#estado_civil>option:selected").val() == "Casado(a)" || $("#estado_civil>option:selected").val() == "Concubino(a)") {
+                if ($("#ci_pareja").val() == "") {
+                    Modal("El campo <b>[Nro de Carnet Pareja]</b> es obligatorio.");
+                    return false;
+                }
+            }
             if ($("#profesion >option:selected").val() == "") {
                 Modal("El campo <b>[Profesion]</b> es obligatorio.");
                 return false;
             }
             if ($("#ocupacion >option:selected").val() == "") {
                 Modal("El campo <b>[Ocupacion]</b> es obligatorio.");
+                return false;
+            }
+            if ($("#categoria >option:selected").val() == "") {
+                Modal("El campo <b>[Categoria]</b> es obligatorio.");
                 return false;
             }
             var check_seguro_medico = document.getElementById('check_seguro_medico');

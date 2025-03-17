@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('paquetes')->name('paquetes.')->middleware(['auth'])->group(function () {
     Route::get('/', 'Canasta_v2\PaquetesV2Controller@index')->name('index')->middleware('can:canasta.paquetes.index');

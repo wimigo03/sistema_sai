@@ -10,7 +10,7 @@ use App\Models\Canasta\Distrito;
 use App\Models\Canasta\Barrio;
 use App\Models\Canasta\Ocupaciones;
 use Carbon\Carbon;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class Beneficiario extends Model
 {
@@ -63,7 +63,9 @@ class Beneficiario extends Model
         'material_vivienda',
         'informacion',
         'user_censo_id',
-        'fecha_censo'
+        'fecha_censo',
+        'ci_pareja',
+        'categoria'
     ];
 
     const HABILITADO = 'A';
@@ -71,6 +73,7 @@ class Beneficiario extends Model
     const BAJA = 'B';
     const PENDIENTE = 'X';
     const ELIMINADO = 'E';
+    const OBSERVADO = 'O';
 
     const TITULAR_SEGURO_MEDICO = [
         '1' => 'NO ES TITULAR DEL SEGURO MEDICO',
@@ -87,7 +90,8 @@ class Beneficiario extends Model
         'F' => 'FALLECIDO',
         'B' => 'BAJA',
         'X' => 'PENDIENTE',
-        'E' => 'ELIMINADO'
+        'E' => 'ELIMINADO',
+        'O' => 'OBSERVADO'
     ];
 
     const NO_CENSADO = '1';
@@ -161,6 +165,8 @@ class Beneficiario extends Model
                     return "PENDIENTE";
             case 'E':
                 return "ELIMINADO";
+            case 'O':
+                return "OBSERVADO";
         }
     }
 
@@ -206,6 +212,8 @@ class Beneficiario extends Model
                 return "badge-with-padding badge badge-secondary";
             case 'E':
                 return "badge-with-padding badge badge-danger";
+            case 'O':
+                return "badge-with-padding badge badge-danger";
         }
     }
 
@@ -215,6 +223,10 @@ class Beneficiario extends Model
 
     public function user_censo(){
         return $this->belongsTo(User::class,'user_censo_id','id');
+    }
+
+    public function profesion(){
+        return $this->belongsTo(Ocupaciones::class,'profesion_id','id');
     }
 
     public function ocupacion(){
@@ -359,7 +371,7 @@ class Beneficiario extends Model
                     /* ->where('b.id_beneficiario',NULL) */
                     ->where(function ($query) use ($finicial, $ffinal) {
                         $query->whereBetween('b.fecha', [$finicial, $ffinal])
-                              ->orWhereNull('b.fecha'); // Incluir beneficiarios sin relación con historialmod
+                              ->orWhereNull('b.fecha');
                     });
         }
 

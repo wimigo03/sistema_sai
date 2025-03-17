@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('reportes-canasta')->name('reportes.canasta.')->middleware(['auth'])->group(function () {
     Route::get('index', 'Canasta_v2\ReportesController@index')->name('index')->middleware('can:reportes.canasta.index');

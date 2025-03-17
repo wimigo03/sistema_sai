@@ -245,10 +245,12 @@
                                 return '<span class="badge-with-padding badge badge-danger btn-block">FALLECIDO</span>';
                             }else if(row.status == 'BAJA'){
                                 return '<span class="badge-with-padding badge badge-warning btn-block">BAJA</span>';
-                            }if(row.status == 'PENDIENTE'){
+                            }else if(row.status == 'PENDIENTE'){
                                 return '<span class="badge-with-padding badge badge-secondary btn-block">PENDIENTE</span>';
-                            }if(row.status == 'ELIMINADO'){
+                            }else if(row.status == 'ELIMINADO'){
                                 return '<span class="badge-with-padding badge badge-danger btn-block">ELIMINADO</span>';
+                            }else if(row.status == 'OBSERVADO'){
+                                return '<span class="badge-with-padding badge badge-dark btn-block">OBSERVADO</span>';
                             }else{
                                 return 'DESCONOCIDO';
                             }

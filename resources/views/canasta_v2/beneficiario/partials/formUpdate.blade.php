@@ -32,6 +32,7 @@
                         <option value="F" @if (isset($beneficiario) ? $beneficiario->estado == 'F' : old('estado')) selected @endif>FALLECIDO</option>
                         <option value="B" @if (isset($beneficiario) ? $beneficiario->estado == 'B' : old('estado')) selected @endif>BAJA</option>
                         <option value="E" @if (isset($beneficiario) ? $beneficiario->estado == 'E' : old('estado')) selected @endif>ELIMINAR</option>
+                        <option value="O" @if (isset($beneficiario) ? $beneficiario->estado == 'O' : old('estado')) selected @endif>OBSERVADO</option>
                     </select>
                 </div>
                 @isset($beneficiario)
@@ -93,8 +94,13 @@
                         <option value="Casado(a)" @if (isset($beneficiario) ? $beneficiario->estado_civil == 'Casado(a)' : old('estado_civil')) selected @endif>CASADO(A)</option>
                         <option value="Viudo(a)" @if (isset($beneficiario) ? $beneficiario->estado_civil == 'Viudo(a)' : old('estado_civil')) selected @endif>VIUDO(A)</option>
                         <option value="Divorciado(a)" @if (isset($beneficiario) ? $beneficiario->estado_civil == 'Divorciado(a)' : old('estado_civil')) selected @endif>DIVORCIADO(A)</option>
+                        <option value="Concubino(a)" @if (isset($beneficiario) ? $beneficiario->estado_civil == 'Concubino(a)' : old('estado_civil')) selected @endif>CONCUBINO(A)</option>
                         <option value="Ninguno" @if (isset($beneficiario) ? $beneficiario->estado_civil == 'Ninguno' : old('estado_civil')) selected @endif>NINGUNO</option>
                     </select>
+                </div>
+                <div class="col-md-2 pr-1 pl-1 mb-2" id="form_ci_pareja" style="display: none;">
+                    <label for="ci" class="d-inline"><b>Nro. de Carnet (Pareja)</b></label>
+                    <input type="text" name="ci_pareja" id="ci_pareja" value="{{ isset($beneficiario) ? $beneficiario->ci_pareja : old('ci_pareja') }}" class="form-control font-roboto-12">
                 </div>
                 <div class="col-md-2 pr-1 pl-1 mb-2">
                     <label for="celular" class="d-inline"><b>Nro. de Celular</b></label>
@@ -140,6 +146,15 @@
                                 {{ $ocupacion->ocupacion }}
                             </option>
                         @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2 pr-1 pl-1 mb-2">
+                    <label for="categoria" class="d-inline"><b>Categoria</b></label>
+                    <select name="categoria" id="categoria" class="form-control select2 font-roboto-12">
+                        <option value="">-</option>
+                        <option value="1" @if (isset($beneficiario) ? $beneficiario->categoria == '1' : old('categoria')) selected @endif>A</option>
+                        <option value="2" @if (isset($beneficiario) ? $beneficiario->categoria == '2' : old('categoria')) selected @endif>B</option>
+                        <option value="3" @if (isset($beneficiario) ? $beneficiario->categoria == '3' : old('categoria')) selected @endif>C</option>
                     </select>
                 </div>
                 <div class="col-md-4 pr-1 pl-1 mb-2">

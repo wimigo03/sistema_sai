@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('paquetes-barrio')->name('paquetes.barrio.')->middleware(['auth'])->group(function () {
     Route::get('/{paquete_id}', 'Canasta_v2\PaqueteBarrioV2Controller@index')->name('index')->middleware('can:canasta.paquetes.barrio.index');

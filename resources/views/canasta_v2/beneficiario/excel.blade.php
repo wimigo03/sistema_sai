@@ -14,6 +14,7 @@
             <td align="center"><b>FECHA DE NAC.</b></td>
             <td align="center"><b>EDAD</b></td>
             <td align="center"><b>INSCRIPCION</b></td>
+            <td align="center"><b>PROFESION</b></td>
             <td align="center"><b>OCUPACION</b></td>
             <td><b>DIRECCION</b></td>
             <td align="center"><b>CELULAR</b></td>
@@ -49,6 +50,7 @@
                 <td align="center">{{ $datos->fecha_nac != null ? \Carbon\Carbon::parse($datos->fecha_nac)->format('d/m/Y') : '' }}</td>
                 <td align="center">{{ $datos->fecha_nac != null ? \Carbon\Carbon::parse($datos->fecha_nac)->age : '' }}</td>
                 <td align="center">{{ $datos->created_att != null ? \Carbon\Carbon::parse($datos->created_att) : '' }}</td>
+                <td align="center">{{ $datos->profesion != null ? $datos->profesion->ocupacion : '-' }}</td>
                 <td align="center">{{ $datos->ocupacion != null ? $datos->ocupacion->ocupacion : '-' }}</td>
                 <td>{{ $datos->direccion }}</td>
                 <td align="center">{{ $datos->celular }}</td>
