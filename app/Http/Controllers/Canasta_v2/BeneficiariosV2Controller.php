@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use DataTables;
-use Illuminate\Support\Facades\DB;
+/* use Illuminate\Support\Facades\DB; */
+use DB;
 use Barryvdh\DomPDF\Facade\PDF;
 use Intervention\Image\Facades\Image;
 
