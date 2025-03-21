@@ -13,7 +13,7 @@ use App\Models\TipoArea;
 use App\Models\Archivo;
 use App\Models\TipoArchivo;
 use App\Models\ControlInterno;
-use DB;
+use Illuminate\Support\Facades\DB;
 use DataTables;
 use Carbon\Carbon;
 
@@ -127,9 +127,28 @@ class ControlInternoController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        /* $request->validate([
             'numero' => 'required|unique:control_interno,nro,null,null,idtipo,' . $request->tipo_id . ',idarea,'. Auth::user()->idarea
+        ]); */
+        $request->validate([
+            'numero' => [
+                'required',
+                Rule::unique('control_interno', 'nro')->where(function ($query) use ($request) {
+                    $date = Carbon::createFromFormat('d/m/Y', $request->fecha);
+                    $year = $date->year;
+
+                    return $query->where('idtipo', $request->tipo_id)
+                                 ->where('idarea', Auth::user()->idarea)
+                                 ->whereYear('fecha', $year);
+                }),
+            ],
+            'fecha' => 'required|date_format:d/m/Y',
+        ], [
+            'numero.unique' => 'El número ya existe en el mismo año.',
+            'fecha.required' => 'La fecha es obligatoria.',
+            'fecha.date_format' => 'El formato de la fecha debe ser dd/mm/yyyy.',
         ]);
+
         try{
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');
