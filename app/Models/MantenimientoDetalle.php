@@ -36,7 +36,7 @@ class MantenimientoDetalle extends Model
     ];
 
     const CLASIFICACIONES = [
-        '1' => 'EQUIPO ESTACIONADO',
+        '1' => 'EQUIPO ESTACIONARIO',
         '2' => 'EQUIPO PORTATIL',
         '3' => 'IMPRESORA',
         '4' => 'ESCANER',
@@ -70,7 +70,7 @@ class MantenimientoDetalle extends Model
     public function getClasificacionEquipoAttribute(){
         switch ($this->clasificacion) {
             case '1':
-                return "EQUIPO ESTACIONADO";
+                return "EQUIPO ESTACIONARIO";
             case '2':
                 return "EQUIPO PORTATIL";
             case '3':
