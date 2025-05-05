@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-@extends('layouts.admin')
+@extends('layouts.dashboard')
 <style>
     .jstree li > a > .jstree-icon {
         display:none !important;

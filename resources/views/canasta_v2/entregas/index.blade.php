@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-@extends('layouts.admin')
+@extends('layouts.dashboard')
 <style>
     #modal-alert {
         z-index: 1080;

@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.dashboard')
 <style>
      #progressBar {
             width: 100%;
@@ -30,7 +30,9 @@
     <script>
         $(document).ready(function() {
             $('.select2').select2({
-                placeholder: "--Seleccionar--"
+                theme: "bootstrap4",
+                placeholder: "--Seleccionar--",
+                width: '100%'
             });
 
             var cleave = new Cleave('#fecha', {

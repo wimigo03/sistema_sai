@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.dashboard')
 @section('content')
 @include('layouts.message_alert')
 @if(Session::has('message'))

@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.dashboard')
 @section('content')
 <link rel="stylesheet" href="/css/font-verdana.css" rel="stylesheet">
 <div class="card card-custom">

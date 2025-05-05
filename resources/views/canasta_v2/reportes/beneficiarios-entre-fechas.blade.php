@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-@extends('layouts.admin')
+@extends('layouts.dashboard')
 @section('content')
     <div class="card-header header">
         <div class="row">

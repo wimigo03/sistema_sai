@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.dashboard')
 @section('content')
     <div class="row font-verdana-bg">
         <div class="col-md-8 titulo">

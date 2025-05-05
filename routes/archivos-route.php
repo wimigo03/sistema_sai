@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('archivos')->name('archivos.')->middleware(['auth'])->group(function () {
     Route::get('/index','ArchivosController@index')->name('index')->middleware('can:archivos.index');

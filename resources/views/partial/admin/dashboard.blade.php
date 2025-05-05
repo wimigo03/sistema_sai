@@ -109,7 +109,7 @@
                         ])
                         <li class="font-verdana-13 counter">
                             <a href="" data-toggle="collapse" data-target="#dashboard_canasta_v2" class="active collapsed" aria-expanded="false">
-                                <i class="fa-solid fa-gift fa-fw"></i>&nbsp;Tercera Edad
+                                <i class="fa-solid fa-gift fa-fw"></i>&nbsp;Programa Tercera Edad
                                 <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_canasta_v2">
@@ -176,7 +176,7 @@
                     @canany(['canastadisc.beneficiarios.index'])
                         <li class="font-verdana-13 counter">
                             <a href="" data-toggle="collapse" data-target="#dashboard_canasta_didsc_v2" class="active collapsed" aria-expanded="false">
-                                <i class="fa fa-wheelchair"></i>&nbsp;Discapacidad
+                                <i class="fa fa-wheelchair"></i>&nbsp;Programa Discapacidad
                                 <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_canasta_didsc_v2">
@@ -206,52 +206,74 @@
                         </li>
                     @endcanany
                     {{-- SOLICITUD DE MATERIALES --}}
-                    @can('solicitud.compra.index')
+                    {{--@can('solicitud.compra.index')
                         <li class="font-verdana-13 counter">
                             <a href="{{ route('solicitud.compra.index') }}">
                                 <i class="fas fa-shopping-basket fa-fw"></i>&nbsp;Solicitud de Compra
                             </a>
                         </li>
-                    @endcan
-                    @can('orden.compra.index')
+                    @endcan--}}
+                    {{--@can('orden.compra.index')
                         <li class="font-verdana-13 counter">
                             <a href="{{ route('orden.compra.index') }}">
                                 <i class="fas fa-shopping-cart fa-fw"></i>&nbsp;Ordenes de compra
                             </a>
                         </li>
-                    @endcan
-                    @can('solicitud.material.index')
+                    @endcan--}}
+                    {{--@can('solicitud.material.index')
                         <li class="font-verdana-13 counter">
                             <a href="{{ route('solicitud.material.index') }}">
                                 <i class="fa-solid fa-marker fa-fw"></i>&nbsp;Solicitud de Materiales
                             </a>
                         </li>
-                    @endcan
-                    {{-- COMPRAS --}}
-                    @canany([
-                        'proveedor.index',
-                        'categoria.programatica.index',
-                        'partida.presupuestaria.index',
-                        'item.index',
-                        'unidad.medida.index'
-                        ])
+                    @endcan--}}
+                    {{-- ALMACENES --}}
+                    @canany(['almacen.index','ingreso.compra.index','salida.almacen.index','inventario.index','categoria.programatica.index','partida.presupuestaria.index','item.index','unidad.medida.index','proveedor.index'])
                         <li class="font-verdana-13 counter">
-                            <a href="" data-toggle="collapse" data-target="#dashboard_compras" class="active collapsed" aria-expanded="false">
-                                <i class="fa-solid fa-cart-shopping fa-fw"></i>&nbsp;Compras Menores
+                            <a href="" data-toggle="collapse" data-target="#dashboard_almacenes" class="active collapsed" aria-expanded="false">
+                                <i class="fa fa-shop fa-fw"></i>&nbsp;Unidad de Almacenes
                                 <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
                             </a>
-                            <ul class="sub-menu collapse" id="dashboard_compras">
+                            <ul class="sub-menu collapse" id="dashboard_almacenes">
+                                @can('ingreso.compra.index')
+                                    <li class="font-verdana-13 counter">
+                                        <a href="{{ route('ingreso.compra.index') }}">
+                                            &nbsp;&nbsp;<i class="fa-solid fa-file-lines fa-fw"></i>&nbsp;Ingreso de Materiales
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('salida.almacen.index')
+                                    <li class="font-verdana-13 counter">
+                                        <a href="{{ route('salida.almacen.index') }}">
+                                            &nbsp;&nbsp;<i class="fa-solid fa-hdd fa-fw"></i>&nbsp;Salida de Materiales
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('inventario.index')
+                                    <li class="font-verdana-13 counter">
+                                        <a href="{{ route('inventario.index') }}">
+                                            &nbsp;&nbsp;<i class="fas fa-warehouse fa-fw"></i>&nbsp;Inventario
+                                        </a>
+                                    </li>
+                                @endcan
                                 @can('categoria.programatica.index')
                                     <li>
                                         <a href="{{ route('categoria.programatica.index') }}">
-                                            &nbsp;&nbsp;<i class="fa-solid fa-bars-staggered fa-fw"></i>&nbsp;Programaticas
+                                            &nbsp;&nbsp;<i class="fa-solid fa-bars-staggered fa-fw"></i>&nbsp;Categorias Programaticas
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('almacen.index')
+                                    <li class="font-verdana-13 counter">
+                                        <a href="{{ route('almacen.index') }}">
+                                            &nbsp;&nbsp;<i class="fa-solid fa-list-alt fa-fw"></i>&nbsp;Gestionar Almacen
                                         </a>
                                     </li>
                                 @endcan
                                 @can('partida.presupuestaria.index')
                                     <li>
                                         <a href="{{ route('partida.presupuestaria.index') }}">
-                                            &nbsp;&nbsp;<i class="fa-solid fa-list-ul fa-fw"></i>&nbsp;Presupuestarias
+                                            &nbsp;&nbsp;<i class="fa-solid fa-list-ul fa-fw"></i>&nbsp;Partidas Presupuestarias
                                         </a>
                                     </li>
                                 @endcan
@@ -273,45 +295,6 @@
                                     <li>
                                         <a href="{{ route('proveedor.index') }}">
                                             &nbsp;&nbsp;<i class="fa-solid fa-users fa-fw"></i>&nbsp;Proveedores
-                                        </a>
-                                    </li>
-                                @endcan
-                            </ul>
-                        </li>
-                    @endcanany
-                    {{-- ALMACENES --}}
-                    @canany(['almacen.index','ingreso.compra.index','salida.material.index'])
-                        <li class="font-verdana-13 counter">
-                            <a href="" data-toggle="collapse" data-target="#dashboard_almacenes" class="active collapsed" aria-expanded="false">
-                                <i class="fa fa-shop fa-fw"></i>&nbsp;Almacenes
-                                <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
-                            </a>
-                            <ul class="sub-menu collapse" id="dashboard_almacenes">
-                                @can('almacen.index')
-                                    <li class="font-verdana-13 counter">
-                                        <a href="{{ route('almacen.index') }}">
-                                            &nbsp;&nbsp;<i class="fa-solid fa-list-alt fa-fw"></i>&nbsp;Configuracion
-                                        </a>
-                                    </li>
-                                @endcan
-                                @can('ingreso.compra.index')
-                                    <li class="font-verdana-13 counter">
-                                        <a href="{{ route('ingreso.compra.index') }}">
-                                            &nbsp;&nbsp;<i class="fa-solid fa-file-lines fa-fw"></i>&nbsp;Ingreso de Materiales
-                                        </a>
-                                    </li>
-                                @endcan
-                                @can('salida.almacen.index')
-                                    <li class="font-verdana-13 counter">
-                                        <a href="{{ route('salida.almacen.index') }}">
-                                            &nbsp;&nbsp;<i class="fa-solid fa-hdd fa-fw"></i>&nbsp;Salida de Materiales
-                                        </a>
-                                    </li>
-                                @endcan
-                                @can('inventario.index')
-                                    <li class="font-verdana-13 counter">
-                                        <a href="{{ route('inventario.index') }}">
-                                            &nbsp;&nbsp;<i class="fas fa-warehouse fa-fw"></i>&nbsp;Inventario
                                         </a>
                                     </li>
                                 @endcan
@@ -573,7 +556,7 @@
                     @canany(['correspondencia_local.index','correspondencia_local.remitente.index','correspondencia_local.unidad.index','correspondencia.index'])
                         <li class="font-verdana-13 counter">
                             <a href="" data-toggle="collapse" data-target="#dashboard_correspondencia" class="active collapsed" aria-expanded="false">
-                                <i class="fa-solid fa-gift fa-fw"></i>&nbsp;Correspondencia
+                                <i class="fa-solid fa-gift fa-fw"></i>&nbsp;Modulo Correspondencia
                                 <span class="fa-solid fa-chevron-left float-right fa-fw"></span>
                             </a>
                             <ul class="sub-menu collapse" id="dashboard_correspondencia">

@@ -1,13 +1,17 @@
-@extends('layouts.admin')
+@extends('layouts.dashboard')
 @section('content')
-    <div class="card-header header">
-        <div class="row">
-            <div class="col-md-12 pr-1 pl-1 text-center">
-                <b>REGISTRAR PROVEEDOR</b>
+    <div class="card-body">
+        <div class="row abs-center">
+            <div class="col-md-10">
+                <div class="form-group row font-roboto-18">
+                    <div class="col-md-12 text-center linea-completa">
+                        <strong>REGISTRAR PROVEEDOR</strong>
+                    </div>
+                </div>
+                @include('compras.proveedor.partials.form-create')
             </div>
         </div>
     </div>
-    @include('compras.proveedor.partials.form-create')
 @section('scripts')
     <script type="text/javascript">
         $(document).ready(function() {

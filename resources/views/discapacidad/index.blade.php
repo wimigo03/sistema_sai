@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.dashboard')
 @section('content')
 <style>
     table tbody tr:hover{background:orange!important;}

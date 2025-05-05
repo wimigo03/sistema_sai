@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-@extends('layouts.admin')
+@extends('layouts.dashboard')
 {{-- <style>
     tfoot {
         display: table-row-group;

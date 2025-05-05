@@ -62,6 +62,14 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Models\Permission', 'role_permissions',  'role_id', 'permission_id');
     }*/
 
+    public function getNameFullAttribute(){
+        if($this->id == 1){
+            return 'Administrador';
+        }else{
+            return $this->name;
+        }
+    }
+    
     public function usuariosEmpleados(){
        return $this->belongsTo(Empleado::class, 'idemp', 'idemp');
     }

@@ -44,7 +44,7 @@
     </div>
     <div class="form-group row font-roboto-12 align-items-center">
         <div class="col-md-5 pr-1 pl-1 text-right">
-            <label for="referencia" class="d-inline text-danger"><b>Peso limite de archivo 200 MB (Solo .pdf) :</b></label>
+            <label for="referencia" class="d-inline text-danger"><b>Peso limite de archivo 30 MB (Solo .pdf) :</b></label>
         </div>
         <div class="col-md-5 pr-1 pl-1">
             <input type="file" name="documento" id="file" class="form-control font-roboto-12" required>

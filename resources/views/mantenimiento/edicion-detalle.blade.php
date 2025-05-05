@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.dashboard')
 @section('content')
     <div class="form-group row font-roboto-16">
         <div class="col-md-12 text-center">

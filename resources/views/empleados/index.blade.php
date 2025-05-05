@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.dashboard')
 <style>
     @keyframes parpadeo {
         0% { background-color: #FFC107; }

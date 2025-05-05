@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-@extends('layouts.admin')
+@extends('layouts.dashboard')
 @section('content')
     <br>
     <div class="form-group row abs-center">

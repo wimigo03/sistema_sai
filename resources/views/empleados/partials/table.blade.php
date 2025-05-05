@@ -34,21 +34,21 @@
                                 {{ $datos->area_unidad }}
                             </span>
                         </td> --}}
-                        <td class="text-left p-1">
+                        <td class="text-left p-1" style="vertical-align: middle;">
                             <span class="tts:right tts-slideIn tts-custom" aria-label="{{ $datos->area_asignada }}" style="cursor: pointer;">
                                 {{ $datos->area_asignada_corta }}
                             </span>
                         </td>
-                        <td class="text-left p-1">
+                        <td class="text-left p-1" style="vertical-align: middle;">
                             <span class="tts:right tts-slideIn tts-custom" aria-label="{{ $datos->file_cargo }}" style="cursor: pointer;">
                                 {{ $datos->file_cargo_corto }}
                             </span>
                         </td>
-                        <td class="text-left p-1">{{ $datos->nombres . ' ' . $datos->ap_pat . ' ' . $datos->ap_mat }}</td>
-                        <td class="text-center p-1">{{ $datos->ci .' ' . $datos->extension }}</td>
-                        <td class="text-center p-1">{{ $datos->sexos }}</td>
-                        <td class="text-center p-1">{{ $datos->ultimo_tipo_contrato }}</td>
-                        <td class="text-center p-1">{{ $datos->ultimo_contrato_ingreso != null ? \Carbon\Carbon::parse($datos->ultimo_contrato_ingreso)->format('d/m/Y') : '' }}</td>
+                        <td class="text-left p-1" style="vertical-align: middle;">{{ $datos->nombres . ' ' . $datos->ap_pat . ' ' . $datos->ap_mat }}</td>
+                        <td class="text-center p-1" style="vertical-align: middle;">{{ $datos->ci .' ' . $datos->extension }}</td>
+                        <td class="text-center p-1" style="vertical-align: middle;">{{ $datos->sexos }}</td>
+                        <td class="text-center p-1" style="vertical-align: middle;">{{ $datos->ultimo_tipo_contrato }}</td>
+                        <td class="text-center p-1" style="vertical-align: middle;">{{ $datos->ultimo_contrato_ingreso != null ? \Carbon\Carbon::parse($datos->ultimo_contrato_ingreso)->format('d/m/Y') : '' }}</td>
                         @php
                             $parpadear = '';
                             if($datos->estado == '1'){
@@ -63,7 +63,7 @@
                                 }
                             }
                         @endphp
-                        <td class="text-center p-1 {{ $parpadear }}">
+                        <td class="text-center p-1 {{ $parpadear }}" style="vertical-align: middle;">
                             @if ($datos->ultimo_contrato_retiro != null)
                                 R.-&nbsp;{{ \Carbon\Carbon::parse($datos->ultimo_contrato_retiro)->format('d/m/Y') }}
                                 <br>
@@ -72,16 +72,16 @@
                                 C.-&nbsp;{{ \Carbon\Carbon::parse($datos->fecha_conclusion_contrato)->format('d/m/Y') }}
                             @endif
                         </td>
-                        <td class="text-center p-1">
+                        <td class="text-center p-1" style="vertical-align: middle;">
                             {{-- <i class='{{ $datos->status_check }}'></i> --}}
                             <span class="{{ $datos->colorStatus }}">
                                 {{ $datos->status }}
                             </span>
                         </td>
                         @canany(['empleados.show','empleados.editar','users.create'])
-                            <td class="text-center p-1">
+                            <td class="text-center p-1" style="vertical-align: middle;">
                                 <div class="d-flex justify-content-center">
-                                    <select id="{{ $datos->idemp }}" onchange="redireccionar(this.id);" class="form-control form-control-sm font-roboto-12 select2 options">
+                                    <select id="{{ $datos->idemp }}" onchange="redireccionar(this.id);" class="form-control form-control-sm select2 options">
                                         <option value="">-</option>
                                         @can('empleados.show')
                                             <option value="show">Ir a detalle</option>

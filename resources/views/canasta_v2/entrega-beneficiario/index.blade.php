@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.dashboard')
 <style>
     #img-beneficiario {
         width: 200px;

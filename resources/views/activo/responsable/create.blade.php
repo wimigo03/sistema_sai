@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.dashboard')
 
 @section('content')
     <h2>Crear Responsable para la Oficina: {{ $oficina->nombrearea }}</h2>

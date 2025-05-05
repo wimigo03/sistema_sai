@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-@extends('layouts.admin')
+@extends('layouts.dashboard')
 @section('content')
     @if (isset($areas))
         <div class="card-header header">

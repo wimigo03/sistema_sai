@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.dashboard')
 @section('content')
 <div class="card card-custom">
     <div class="card-header font-verdana-13 bg-secondary text-white">
