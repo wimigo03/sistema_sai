@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use DB;
+use Illuminate\Support\Facades\DB;
 use PDF;
 use Carbon\Carbon;
 use DataTables;

@@ -1,12 +1,12 @@
 <form action="#" method="get" id="form">
-    <div class="row">
-        <div class="col-md-2 pr-1 pl-1 mb-2">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-2">
+        <div class="col mb-2">
             <input type="text" name="codigo" value="{{ request('codigo') }}" placeholder="--Codigo--" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase()">
         </div>
-        <div class="col-md-8 pr-1 pl-1 mb-2">
+        <div class="col mb-2">
             <input type="text" name="nombre" value="{{ request('nombre') }}" placeholder="--Categoria Programatica--" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase()">
         </div>
-        <div class="col-md-2 pr-1 pl-1 mb-2">
+        <div class="col mb-2">
             <select name="estado" id="estado" class="form-control">
                 <option value="">-</option>
                 @foreach ($estados as $index => $value)
@@ -15,19 +15,17 @@
             </select>
         </div>
     </div>
-    <div class="form-group row">
-        <div class="col-md-12 pr-1 pl-1">
+    <div class="row">
+        <div class="col-12 d-flex flex-column flex-md-row gap-2 justify-content-center justify-content-md-end">
             @can('categoria.programatica.create')
-                <span class="tts:right tts-slideIn tts-custom float-left" aria-label="Registrar" style="cursor: pointer;">
-                    <span class="btn btn-outline-success font-roboto-12" onclick="create();">
-                        <i class="fas fa-plus fa-fw"></i>
-                    </span>
+                <span class="btn btn-outline-success w-100 w-md-auto btn-size mr-2 mb-2" onclick="create();">
+                    <i class="fas fa-plus fa-fw"></i> Registrar
                 </span>
             @endcan
-            <span class="btn btn-outline-danger font-roboto-12 float-right" onclick="limpiar();">
+            <span class="btn btn-outline-danger w-100 w-md-auto btn-size mr-2 mb-2" onclick="limpiar();">
                 <i class="fas fa-eraser fa-fw"></i> Limpiar
             </span>
-            <span class="btn btn-outline-primary font-roboto-12 float-right mr-1" onclick="search();">
+            <span class="btn btn-outline-primary w-100 w-md-auto btn-size mb-2" onclick="search();">
                 <i class="fas fa-search fa-fw"></i> Buscar
             </span>
             <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>

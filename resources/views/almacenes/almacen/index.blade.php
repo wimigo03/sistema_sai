@@ -1,13 +1,21 @@
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}"><i class="fa fa-home"></i> Inicio</a></li>
+    <li class="breadcrumb-item active">Almacenes</li>
+@endsection
 @section('content')
-    <div class="card-body">
-        <div class="form-group row font-roboto-20">
-            <div class="col-md-12 text-center linea-completa">
-                <strong>ALMACENES</strong>
+    <div class="card">
+        <div class="card-header">
+            <div class="row d-flex align-items-center">
+                <b class="title-size">ALMACENES</b>
             </div>
         </div>
-        @include('almacenes.almacen.partials.search')
-        @include('almacenes.almacen.partials.table')
+
+        <div class="card-body">
+            @include('almacenes.almacen.partials.search')
+            @include('almacenes.almacen.partials.table')
+        </div>
     </div>
 @endsection
 @section('scripts')
@@ -54,4 +62,4 @@
             window.location.href = url;
         }
     </script>
-@endsection
+@stop

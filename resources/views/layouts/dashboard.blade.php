@@ -22,6 +22,7 @@
         <link rel="stylesheet" href="{{ asset('css/tooltips/tooltips.min.css') }}">
         <link rel="stylesheet" href="{{ asset('js/datepicker/themes/jquery-ui.css') }}">
         <link rel="stylesheet" href="{{ asset('css/toastr.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('js/jquery-ui-1.13.2/jquery-ui.min.css') }}" rel="stylesheet">
         <style>
             body, .form-control, .form-label, textarea, button {
                 font-family: 'Poppins', sans-serif;
@@ -33,7 +34,11 @@
             }
 
             .title-size {
-                font-size: 12px;
+                font-size: 16px;
+            }
+
+            .title-adm-size {
+                font-size: 11px;
             }
 
             .form-label{
@@ -89,7 +94,7 @@
                     <span style="opacity: .8">
                         &nbsp;&nbsp;&nbsp;<i class="fa fa-user fa-fw"></i>
                     <span>
-                    <span class="brand-text font-weight-light title-size">{{ Auth()->user()->nombre_completo }}</span>
+                    <span class="brand-text font-weight-light title-adm-size">{{ Auth()->user()->nombre_completo }}</span>
                 </a>
                 <div class="sidebar">
                     <div class="user-panel mt-2 pb-2 mb-2 d-flex justify-content-center align-items-center">
@@ -943,6 +948,7 @@
         <script src="{{ asset('js/chart.js') }}"></script>
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.js"></script>
+        <script src="{{ asset('js/jquery-ui-1.13.2/jquery-ui.min.js') }}"></script>
 
         @yield('scripts')
 
