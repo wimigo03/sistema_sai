@@ -1,5 +1,11 @@
 /node_modules
-/public
+/public/documentos/
+/public/documentos_correspondencia/*
+/public/file-control-interno/*
+/public/personal_fotos/*
+/public/personerias/*
+/public/sereges/*
+!/public
 /storage/*.key
 /vendor
 .env
