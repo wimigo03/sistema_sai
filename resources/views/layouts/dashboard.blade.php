@@ -928,7 +928,7 @@
                     cc
                 </div>
                 <!-- Default to the left -->
-                <strong>Copyright &copy; {{ date('Y') }} <a href="https://vacapurpura.com" target="_blank">vacapurpura.com</a>.</strong> Todos los derechos reservados.
+                <strong>Copyright &copy; {{ date('Y') }} <a href="https://granchaco.gob.bo" target="_blank">Gobierno Autonomo Regional del Gran Chaco</a>.</strong> Todos los derechos reservados.
             </footer>
         </div>
 
