@@ -195,6 +195,19 @@ class Beneficiario extends Model
         'PND' => 'PANDO',
     ];
 
+    public function getCategoriaUsuarioAttribute(){
+        switch ($this->categoria) {
+            case '1':
+                return "A";
+            case '2':
+                return "B";
+            case '3':
+                return "C";
+            default:
+                return "";
+        }
+    }
+
     public function getStatusAttribute(){
         switch ($this->estado) {
             case 'A':

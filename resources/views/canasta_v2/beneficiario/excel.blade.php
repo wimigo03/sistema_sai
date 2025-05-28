@@ -30,6 +30,7 @@
             <td align="center"><b>SEGURO MEDICO</b></td>
             <td align="center"><b>ESTADO SALUD</b></td>
              <td align="center"><b>¿ES TITULAR?</b></td>
+             <td align="center"><b>CATEGORIA</b></td>
         </tr>
     </thead>
     <tbody>
@@ -71,6 +72,7 @@
                 <td align="center">{{ $datos->seguros_medicos }}</td>
                 <td align="center">{{ $datos->estado_salud }}</td>
                 <td align="center">{{ $datos->seguro_medico != null ? $datos->titular_seguro : '' }}</td>
+                <td align="center">{{ $datos->categoria_usuario }}</td>
             </tr>
         @endforeach
     </tbody>
