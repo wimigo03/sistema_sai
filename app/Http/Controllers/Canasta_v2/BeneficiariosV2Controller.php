@@ -13,7 +13,7 @@ use Carbon\Carbon;
 use DataTables;
 use Illuminate\Support\Facades\DB;
 //use DB;
-use Barryvdh\DomPDF\Facade\PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Intervention\Image\Facades\Image;
 
 use App\Models\Canasta\Barrio;
@@ -370,9 +370,10 @@ class BeneficiariosV2Controller extends Controller
         $ocupaciones = Ocupaciones::where('tipo',Ocupaciones::OCUPACIONES)->where('estado','1')->get();
         $tipos_viviendas = Beneficiario::TIPOS_VIVIENDAS;
         $materiales_viviendas = Beneficiario::MATERIALES_VIVIENDAS;
+        $estados_salud = Beneficiario::ESTADOS_SALUD;
         $_seguros = Beneficiario::_SEGUROS;
 
-        return view('canasta_v2.beneficiario.create',compact('barrios','profesiones','ocupaciones','tipos_viviendas','materiales_viviendas','_seguros','brigadista'));
+        return view('canasta_v2.beneficiario.create',compact('barrios','profesiones','ocupaciones','tipos_viviendas','materiales_viviendas','estados_salud','_seguros','brigadista'));
     }
 
     public function store(Request $request)
@@ -439,7 +440,8 @@ class BeneficiariosV2Controller extends Controller
             'censado' => Beneficiario::NO_CENSADO,
             'titular_seguro_medico' => $titular_seguro_medico,
             'material_vivienda' => $request->material_vivienda,
-            'informacion' => $informacion
+            'informacion' => $informacion,
+            'estado_salud' => $request->estado_salud
         ]);
 
         $Historial = HistorialMod::create([
@@ -470,10 +472,11 @@ class BeneficiariosV2Controller extends Controller
         $ocupaciones = Ocupaciones::where('tipo',Ocupaciones::OCUPACIONES)->where('estado','1')->get();
         $tipos_viviendas = Beneficiario::TIPOS_VIVIENDAS;
         $materiales_viviendas = Beneficiario::MATERIALES_VIVIENDAS;
+        $estados_salud = Beneficiario::ESTADOS_SALUD;
         $_seguros = Beneficiario::_SEGUROS;
         $beneficiario = Beneficiario::find($idbeneficiario);
 
-        return view('canasta_v2.beneficiario.editar',compact('brigadista','barrios','profesiones','ocupaciones','tipos_viviendas','materiales_viviendas','_seguros','beneficiario'));
+        return view('canasta_v2.beneficiario.editar',compact('brigadista','barrios','profesiones','ocupaciones','tipos_viviendas','materiales_viviendas','estados_salud','_seguros','beneficiario'));
     }
 
     public function show($idbeneficiario)
@@ -806,7 +809,8 @@ class BeneficiariosV2Controller extends Controller
             'vecino_3' => $request->vecino_3,
             'titular_seguro_medico' => $titular_seguro_medico,
             'material_vivienda' => $request->material_vivienda,
-            'informacion' => $informacion
+            'informacion' => $informacion,
+            'estado_salud' => $request->estado_salud
         ]);
 
         $Historial = HistorialMod::create([

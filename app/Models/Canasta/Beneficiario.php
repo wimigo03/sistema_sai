@@ -65,7 +65,8 @@ class Beneficiario extends Model
         'user_censo_id',
         'fecha_censo',
         'ci_pareja',
-        'categoria'
+        'categoria',
+        'estado_salud'
     ];
 
     const HABILITADO = 'A';
@@ -92,6 +93,47 @@ class Beneficiario extends Model
         'X' => 'PENDIENTE',
         'E' => 'ELIMINADO',
         'O' => 'OBSERVADO'
+    ];
+
+    const ESTADOS_SALUD = [
+        'DIABETES' => 'DIABETES',
+        'PRESION ALTA' => 'PRESION ALTA',
+        'HIPERTENSION' => 'HIPERTENSION',
+        'ARTRITIS' => 'ARTRITIS',
+        'ARTROSIS' => 'ARTROSIS',
+        'CHAGAS' => 'CHAGAS',
+        'CANCER' => 'CANCER',
+        'INSUFICIENCIA RENAL' => 'INSUFICIENCIA RENAL',
+        'PROBLEMAS DE CORAZON' => 'PROBLEMAS DE CORAZON',
+        'CON MARCAPASO' => 'CON MARCAPASO',
+        'PROBLEMAS DE RODILLAS' => 'PROBLEMAS DE RODILLAS',
+        'GASTRITIS' => 'GASTRITIS',
+        'ING. PERDIDA DE AUDICIÓN' => 'ING. PERDIDA DE AUDICIÓN',
+        'PERDIDA DE VISIÓN' => 'PERDIDA DE VISIÓN',
+        'SORDERA' => 'SORDERA',
+        'CEGUERA' => 'CEGUERA',
+        'PERSONA CON DISCAPACIDAD' => 'PERSONA CON DISCAPACIDAD',
+        'HERNIA' => 'HERNIA',
+        'PRÓSTATA' => 'PRÓSTATA',
+        'FRACTURA' => 'FRACTURA',
+        'ÚLCERAS' => 'ÚLCERAS',
+        'VARICES' => 'VARICES',
+        'NERVIOS' => 'NERVIOS',
+        'REUMATISMO' => 'REUMATISMO',
+        'ASMA' => 'ASMA',
+        'PROBLEMAS DE COLUMNA' => 'PROBLEMAS DE COLUMNA',
+        'CANSANCIO POR VEJEZ' => 'CANSANCIO POR VEJEZ',
+        'ACV' => 'ACV',
+        'DESGARRE CONGÉNITO' => 'DESGARRE CONGÉNITO',
+        'ARRITMIA CARDÍACA' => 'ARRITMIA CARDÍACA',
+        'BESICULA' => 'BESICULA',
+        'EMBOLIA' => 'EMBOLIA',
+        'PARÁLISIS' => 'PARÁLISIS',
+        'PULMONÍA' => 'PULMONÍA',
+        'TUMOR' => 'TUMOR',
+        'SIATICA' => 'SIATICA',
+        'PARAPLEJICO' => 'PARAPLEJICO',
+        'NINGUNO' => 'NINGUNO'
     ];
 
     const NO_CENSADO = '1';

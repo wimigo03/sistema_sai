@@ -8,8 +8,8 @@
     }
 
     #map {
-            height: 500px;
-            width: 100%;
+        height: 500px;
+        width: 100%;
     }
 </style>
 @section('content')
@@ -162,6 +162,9 @@
 @endsection
 @section('scripts')
     <script type="text/javascript">
+        $(window).on('load', function(){
+            map.invalidateSize();
+        });
 
         let map = L.map('map').setView(["{{ $beneficiario->latitud }}", "{{ $beneficiario->longitud }}"], 15);
 
@@ -176,7 +179,7 @@
             popupAnchor: [0, -50]
         });
 
-        var marker = L.marker(["{{ $beneficiario->latitud }}", "{{ $beneficiario->longitud }}"], { icon: redIcon }).addTo(map).bindPopup('Ubicacion').openPopup();
+        var marker = L.marker(["{{ $beneficiario->latitud }}", "{{ $beneficiario->longitud }}"], { icon: redIcon }).addTo(map)/*.bindPopup('Ubicacion')*/.openPopup();
 
         function ir_atras(){
             window.location.href = "{{ route('beneficiarios.index') }}";

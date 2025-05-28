@@ -95,6 +95,7 @@
                         <option value="Viudo(a)" @if (isset($beneficiario) ? $beneficiario->estado_civil == 'Viudo(a)' : old('estado_civil')) selected @endif>VIUDO(A)</option>
                         <option value="Divorciado(a)" @if (isset($beneficiario) ? $beneficiario->estado_civil == 'Divorciado(a)' : old('estado_civil')) selected @endif>DIVORCIADO(A)</option>
                         <option value="Concubino(a)" @if (isset($beneficiario) ? $beneficiario->estado_civil == 'Concubino(a)' : old('estado_civil')) selected @endif>CONCUBINO(A)</option>
+                        <option value="Observado(a)" @if (isset($beneficiario) ? $beneficiario->estado_civil == 'Observado(a)' : old('estado_civil')) selected @endif>OBSERVADO(A)</option>
                         <option value="Ninguno" @if (isset($beneficiario) ? $beneficiario->estado_civil == 'Ninguno' : old('estado_civil')) selected @endif>NINGUNO</option>
                     </select>
                 </div>
@@ -155,6 +156,19 @@
                         <option value="1" @if (isset($beneficiario) ? $beneficiario->categoria == '1' : old('categoria')) selected @endif>A</option>
                         <option value="2" @if (isset($beneficiario) ? $beneficiario->categoria == '2' : old('categoria')) selected @endif>B</option>
                         <option value="3" @if (isset($beneficiario) ? $beneficiario->categoria == '3' : old('categoria')) selected @endif>C</option>
+                    </select>
+                </div>
+                <div class="col-md-4 pr-1 pl-1 mb-2">
+                    <label for="estado_salud" class="d-inline"><b>Estado de Salud</b></label>
+                    <select name="estado_salud" id="estado_salud" class="form-control select2">
+                        <option value="">-</option>
+                        @foreach ($estados_salud as $index => $value)
+                            <option value="{{ $index }}"
+                                @if( (isset($beneficiario) && $beneficiario->estado_salud == $index) || (old('estado_salud') == $index) ) selected @endif>
+                                {{ $value }}
+                            </option>
+
+                        @endforeach
                     </select>
                 </div>
                 <div class="col-md-4 pr-1 pl-1 mb-2">
