@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Str;
 use App\Models\Empleado;
 use App\Models\User;
 use App\Models\Area;
@@ -160,8 +161,8 @@ class ControlInternoController extends Controller
                     'empleado_solicitante_id' => $request->solicitante_id,
                     'solicitante_idarea' => $_empleado->ultima_area_asignada_id,
                     'empleado_destinatario_id' => $request->destinatario_id,
-                    'idarea' => Auth::user()->idarea,
                     'destinatario_idarea' => $empleado->ultima_area_asignada_id,
+                    'idarea' => Auth::user()->idarea,
                     'dea_id' => Auth::user()->dea->id,
                     'idtipo' => $tipo_area->idtipo,
                     'idtipoarea' => $tipo_area->idarea,
@@ -209,9 +210,17 @@ class ControlInternoController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'word_file' => 'nullable|mimes:doc,docx|max:5120',
-            'pdf_file' => 'nullable|mimes:pdf,jpg,jpeg|max:5120'
+            'word_file' => 'nullable|file|max:5120',
+            'pdf_file' => 'nullable|file|mimes:pdf,jpg,jpeg|max:5120',
         ]);
+
+        if ($request->hasFile('word_file')) {
+            $ext = Str::lower($request->file('word_file')->getClientOriginalExtension());
+            if (!in_array($ext, ['doc', 'docx'])) {
+                return back()->withErrors(['word_file' => 'El archivo debe ser .doc o .docx']);
+            }
+        }
+
         try{
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');

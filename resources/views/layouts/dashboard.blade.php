@@ -72,8 +72,7 @@
                     <!-- Notifications Dropdown Menu -->
                     <li class="nav-item dropdown">
                         <a class="nav-link" data-toggle="dropdown" href="#">
-                            {{-- ucwords(strtolower(Auth::user()->username)) }} - {{ ucwords(strtolower(Auth::user()->name)) --}} &nbsp;&nbsp;<i class="fa fa-cog fa-fw mr-2"></i>
-                            dilson
+                            {{ ucwords(strtolower(Auth::user()->name)) }} - {{ ucwords(strtolower(Auth()->user()->nombre_completo)) }} &nbsp;&nbsp;<i class="fa fa-cog fa-fw mr-2"></i>
                         </a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
@@ -950,6 +949,8 @@
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.js"></script>
         <script src="{{ asset('js/jquery-ui-1.13.2/jquery-ui.min.js') }}"></script>
+
+        @include('layouts.modal.notificaciones')
 
         @yield('scripts')
 
