@@ -8,6 +8,7 @@
         <title>G.A.R.G.CH. | Home</title>
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
         <link rel="icon" type="image/png" sizes="18x18" href="{{ asset('logos/logo2.png') }}">
+        <link rel="stylesheet" href="{{ asset('admin_assets/plugins/slim-select/slimselect.min.css') }}">
         <link rel="stylesheet" href="{{ asset('fonts/poppins.css') }}">
         <link rel="stylesheet" href="{{ asset('dataTable/css/jquery.dataTables.min.css') }}">
         <link rel="stylesheet" href="{{ asset('dataTable/css/responsive.dataTables.min.css') }}">
@@ -19,23 +20,18 @@
         <link rel="stylesheet" href="{{ asset('css/select2/select2-bootstrap4.css') }}">
         <link rel="stylesheet" href="{{ asset('css/treeview/style.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/lobibox/lobibox.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('js/jquery-ui-1.13.2/jquery-ui.min.css') }}" rel="stylesheet">
         <link rel="stylesheet" href="{{ asset('css/datepicker/datepicker.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/tooltips/tooltips.min.css') }}">
         <link rel="stylesheet" href="{{ asset('js/datepicker/themes/jquery-ui.css') }}">
         <link rel="stylesheet" href="{{ asset('css/toastr.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('js/jquery-ui-1.13.2/jquery-ui.min.css') }}" rel="stylesheet">
         <style>
             body, .form-control, .form-label, textarea, button {
                 font-family: 'Poppins', sans-serif;
-                font-size: 14px;
-            }
-
-            .btn-size {
-                font-size: 14px;
             }
 
             .title-size {
-                font-size: 16px;
+                font-size: 18px;
             }
 
             .title-adm-size {
@@ -48,6 +44,10 @@
 
             .row-btn-verification, .form-verification {
                 display: none;
+            }
+
+            .nav-icon-font {
+                font-size: 16px !important;
             }
         </style>
         @yield('styles')
@@ -106,18 +106,18 @@
                             </a>
                         </div>
                     </div>
-                    <nav class="mt-2">
+                    <nav class="mt-2" style="font-size: 13px;">
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                             <li class="nav-item has-treeview">
                                 <a href="{{ route('empleado.mi.perfil') }}" class="nav-link">
-                                    <i class="nav-icon fas fa-users-cog fa-fw"></i>&nbsp;<p>Mi Perfil</p>
+                                    <i class="nav-icon fas fa-users-cog fa-fw nav-icon-font"></i>&nbsp;<p>Mi Perfil</p>
                                 </a>
                             </li>
 
                             @can('agenda.ejecutiva.index')
                                 <li class="nav-item has-treeview">
                                     <a href="{{ route('agenda.ejecutiva.index') }}" class="nav-link">
-                                        <i class="nav-icon fa-sharp fa-solid fa-calendar fa-fw"></i>&nbsp;<p>Agenda ejecutiva</p>
+                                        <i class="nav-icon fa-sharp fa-solid fa-calendar fa-fw nav-icon-font"></i><p>Agenda ejecutiva</p>
                                     </a>
                                 </li>
                             @endcan
@@ -125,7 +125,7 @@
                             @canany(['users.index','roles.index','permissions.index'])
                                 <li class="nav-item has-treeview">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fa-solid fa-gear fa-fw"></i><p>Configuracion<i class="right fa fa-angle-left"></i></p>
+                                        <i class="nav-icon fa-solid fa-gear fa-fw nav-icon-font"></i><p>Configuracion<i class="right fa fa-angle-left nav-icon-font"></i></p>
                                     </a>
                                     <ul class="nav nav-treeview">
                                         @can('users.index')
@@ -156,7 +156,7 @@
                             @canany(['control.interno.index','mantenimientos.index','facebook.index','archivos.index.general'])
                                 <li class="nav-item has-treeview">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fa-solid fa-gear fa-fw"></i><p>Unidad de Sistemas<i class="right fa fa-angle-left"></i></p>
+                                        <i class="nav-icon fa-solid fa-gear fa-fw nav-icon-font"></i><p>Unidad de Sistemas<i class="right fa fa-angle-left nav-icon-font"></i></p>
                                     </a>
                                     <ul class="nav nav-treeview">
                                         @can('control.interno.index')
@@ -194,7 +194,8 @@
                             @canany(['canasta.paquetes.index','canasta.beneficiarios.index','canasta.entregas.beneficiario.index','canasta.distritos.index','canasta.barrios.index','canasta.beneficiarios.brigadista.index'])
                                 <li class="nav-item has-treeview">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fa-solid fa-gift fa-fw"></i><p>Tercera Edad<i class="right fa fa-angle-left"></i></p>
+                                        <i class="nav-icon fa-solid fa-gift fa-fw nav-icon-font"></i>
+                                        <p>Modulo Tercera Edad<i class="right fa fa-angle-left nav-icon-font"></i></p>
                                     </a>
                                     <ul class="nav nav-treeview">
                                         @can('reportes.canasta.index')
@@ -260,7 +261,8 @@
                             @canany(['canastadisc.paquetes.index','salida.almacen.index','canasta.entregas.beneficiario.index'])
                                 <li class="nav-item has-treeview">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fa fa-wheelchair fa-fw"></i><p>Discapacidad<i class="right fa fa-angle-left"></i></p>
+                                        <i class="nav-icon fa fa-wheelchair fa-fw nav-icon-font"></i>
+                                        <p>Modulo Discapacidad<i class="right fa fa-angle-left nav-icon-font"></i></p>
                                     </a>
                                     <ul class="nav nav-treeview">
                                         @can('canastadisc.paquetes.index')
@@ -311,72 +313,31 @@
                                 </li>
                             @endcan--}}
 
-                            @canany(['almacen.index','ingreso.compra.index','salida.almacen.index','inventario.index','categoria.programatica.index','partida.presupuestaria.index','item.index','unidad.medida.index','proveedor.index'])
+                            @canany(['sucursal.configuracion','ingreso.sucursal.index'])
                                 <li class="nav-item has-treeview">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fa fa-shop fa-fw"></i><p>Almacenes<i class="right fa fa-angle-left"></i></p>
+                                        <i class="nav-icon fa fa-shop fa-fw nav-icon-font"></i>
+                                        <p>Unidad de Almacenes<i class="right fa fa-angle-left nav-icon-font"></i></p>
                                     </a>
                                     <ul class="nav nav-treeview">
-                                        @can('ingreso.compra.index')
+                                        @can('ingreso.sucursal.index')
                                             <li class="nav-item">
-                                                <a href="{{ route('ingreso.compra.index') }}" class="nav-link pl-4">&nbsp;
+                                                <a href="{{ route('ingreso.sucursal.index') }}" class="nav-link pl-4">&nbsp;
                                                     <i class="fa-solid fa-file-lines fa-fw"></i> <p>Ingreso de Materiales</p>
                                                 </a>
                                             </li>
                                         @endcan
-                                        @can('salida.almacen.index')
+                                        {{--@can('salida.almacen.index')
                                             <li class="nav-item">
                                                 <a href="{{ route('salida.almacen.index') }}" class="nav-link pl-4">&nbsp;
                                                     <i class="fa-solid fa-hdd fa-fw"></i> <p>Salida de Materiales</p>
                                                 </a>
                                             </li>
-                                        @endcan
-                                        @can('inventario.index')
+                                        @endcan--}}
+                                        @can('sucursal.configuracion')
                                             <li class="nav-item">
-                                                <a href="{{ route('inventario.index') }}" class="nav-link pl-4">&nbsp;
-                                                    <i class="fas fa-warehouse fa-fw"></i> <p>Inventario</p>
-                                                </a>
-                                            </li>
-                                        @endcan
-                                        @can('categoria.programatica.index')
-                                            <li class="nav-item">
-                                                <a href="{{ route('categoria.programatica.index') }}" class="nav-link pl-4">&nbsp;
-                                                    <i class="fa-solid fa-bars-staggered fa-fw"></i> <p>Categorias Programaticas</p>
-                                                </a>
-                                            </li>
-                                        @endcan
-                                        @can('almacen.index')
-                                            <li class="nav-item">
-                                                <a href="{{ route('almacen.index') }}" class="nav-link pl-4">&nbsp;
-                                                    <i class="fa-solid fa-list-alt fa-fw"></i> <p>Gestionar</p>
-                                                </a>
-                                            </li>
-                                        @endcan
-                                        @can('partida.presupuestaria.index')
-                                            <li class="nav-item">
-                                                <a href="{{ route('partida.presupuestaria.index') }}" class="nav-link pl-4">&nbsp;
-                                                    <i class="fa-solid fa-list-ul fa-fw"></i> <p>Partidas Presupuestarias</p>
-                                                </a>
-                                            </li>
-                                        @endcan
-                                        @can('item.index')
-                                            <li class="nav-item">
-                                                <a href="{{ route('item.index') }}" class="nav-link pl-4">&nbsp;
-                                                    <i class="fa-solid fa-list-check fa-fw"></i> <p>Items</p>
-                                                </a>
-                                            </li>
-                                        @endcan
-                                        @can('unidad.medida.index')
-                                            <li class="nav-item">
-                                                <a href="{{ route('unidad.medida.index') }}" class="nav-link pl-4">&nbsp;
-                                                    <i class="fas fa-balance-scale fa-fw"></i> <p>Unidades de Medida</p>
-                                                </a>
-                                            </li>
-                                        @endcan
-                                        @can('proveedor.index')
-                                            <li class="nav-item">
-                                                <a href="{{ route('proveedor.index') }}" class="nav-link pl-4">&nbsp;
-                                                    <i class="fa-solid fa-users fa-fw"></i> <p>Proveedores</p>
+                                                <a href="{{ route('sucursal.configuracion') }}" class="nav-link pl-4">&nbsp;
+                                                    <i class="fa-solid fa-gear fa-fw"></i> <p>Configuraciones</p>
                                                 </a>
                                             </li>
                                         @endcan
@@ -616,7 +577,8 @@
                             @canany(['correspondencia_local.index','correspondencia_local.remitente.index','correspondencia_local.unidad.index','correspondencia.index'])
                                 <li class="nav-item has-treeview">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fa-solid fa-gift fa-fw"></i><p>Correspondencia<i class="right fa fa-angle-left"></i></p>
+                                        <i class="nav-icon fa-solid fa-gift fa-fw nav-icon-font"></i>
+                                        <p>Correspondencia<i class="right fa fa-angle-left nav-icon-font"></i></p>
                                     </a>
                                     <ul class="nav nav-treeview">
                                         @can('correspondencia_local.index')
@@ -708,7 +670,8 @@
                             @canany(['archivos.index','tipos.archivos.index','archivos.index.general'])
                                 <li class="nav-item has-treeview">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-file fa-fw"></i><p>Archivos Digitales<i class="right fa fa-angle-left"></i></p>
+                                        <i class="nav-icon fas fa-file fa-fw nav-icon-font"></i>
+                                        <p>Archivos Digitales<i class="right fa fa-angle-left nav-icon-font"></i></p>
                                     </a>
                                     <ul class="nav nav-treeview">
                                         @can('archivos.index')
@@ -732,7 +695,8 @@
                             @canany(['empleados.index','areas.index'])
                                 <li class="nav-item has-treeview">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-users fa-fw"></i><p>Recursos Humanos<i class="right fa fa-angle-left"></i></p>
+                                        <i class="nav-icon fas fa-users fa-fw nav-icon-font"></i>
+                                        <p>Recursos Humanos<i class="right fa fa-angle-left nav-icon-font"></i></p>
                                     </a>
                                     <ul class="nav nav-treeview">
                                         @can('empleados.index')
@@ -922,7 +886,7 @@
             <!-- /.control-sidebar -->
 
             <!-- Main Footer -->
-            <footer class="main-footer ">
+            <footer class="main-footer font-roboto-14">
                 <!-- To the right -->
                 <div class="float-right d-none d-sm-inline">
                     cc
@@ -937,6 +901,7 @@
         <script src="{{ asset('dataTable/js/dataTables.responsive.min.js') }}"></script>
         <script src="{{ asset('dataTable/js/datatable-language.js') }}"></script>
         <script src="{{ asset('js/toastr.min.js') }}"></script>
+        <script src="{{ asset('admin_assets/plugins/slim-select/slimselect.min.js') }}"></script>
         <script src="{{ asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
         <script src="{{ asset('adminlte/js/adminlte.min.js') }}"></script>
         <script src="{{ asset('js/lobibox/lobibox.js') }}"></script>

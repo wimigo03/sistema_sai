@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\NivelModel;
 use App\Models\Canasta\Dea;
-use App\Models\Compra\CategoriaProgramatica;
+use App\Models\Almacenes\CategoriaProgramatica;
 use App\Models\Almacenes\Almacen;
 
 class Area extends Model
@@ -27,6 +27,9 @@ class Area extends Model
         'categoria_programatica_id',
         'alias'
     ];
+
+    const HABILITADO = '1';
+    const NO_HABILITADO = '2';
 
     const ESTADOS = [
         '1' => 'HABILITADO',
@@ -135,6 +138,12 @@ class Area extends Model
     public function scopeByDea($query, $dea_id){
         if($dea_id){
             return $query->where('dea_id', $dea_id);
+        }
+    }
+
+    public function scopeByEstado($query, $estado){
+        if($estado){
+            return $query->where('estadoarea', $estado);
         }
     }
 

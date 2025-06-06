@@ -1,17 +1,23 @@
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <li class="breadcrumb-item font-roboto-14"><a href="{{ route('home.index') }}"><i class="fa fa-home"></i> Inicio</a></li>
+    <li class="breadcrumb-item font-roboto-14 active">Gestionar areas</li>
+@endsection
 @section('content')
-    <div class="card-body">
-        <div class="form-group row abs-center font-roboto-14">
-            <div class="col-md-12 text-center linea-completa">
-                <strong>
-                    CATEGORIA PROGRAMATICA
-                    <br>
-                    {{ $categoria_programatica->codigo }} - {{ $categoria_programatica->nombre }}
-                </strong>
+    <div class="card">
+        <div class="card-header">
+            <div class="row d-flex align-items-center">
+                <i class="fa fa-shop fa-fw"></i>&nbsp;<b class="title-size">
+                    GESTIONAR AREAS / {{ $categoria_programatica->codigo }} - {{ $categoria_programatica->nombre }}
+                </b>
             </div>
         </div>
-        @include('compras.area_categoria.partials.search')
-        @include('compras.area_categoria.partials.table')
+
+        <div class="card-body">
+            @include('compras.area_categoria.partials.search')
+            @include('compras.area_categoria.partials.table')
+        </div>
     </div>
 @section('scripts')
     <script type="text/javascript">

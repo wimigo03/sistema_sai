@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('mantenimientos')->name('mantenimientos.')->middleware(['auth'])->group(function () {
     Route::get('/','MantenimientoController@index')->name('index')->middleware('can:mantenimientos.index');

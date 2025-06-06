@@ -1,13 +1,21 @@
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <li class="breadcrumb-item font-roboto-14"><a href="{{ route('home.index') }}"><i class="fa fa-home"></i> Inicio</a></li>
+    <li class="breadcrumb-item font-roboto-14 active">Inventario</li>
+@endsection
 @section('content')
-    <div class="card-body">
-        <div class="form-group row font-roboto-20">
-            <div class="col-md-12 text-center linea-completa">
-                <strong>INVENTARIO</strong>
+    <div class="card">
+        <div class="card-header">
+            <div class="row d-flex align-items-center">
+                <i class="fas fa-warehouse fa-fw"></i>&nbsp;<b class="title-size">INVENTARIO</b>
             </div>
         </div>
-        @include('almacenes.inventario.partials.search')
-        @include('almacenes.inventario.partials.table')
+
+        <div class="card-body">
+            @include('almacenes.inventario.partials.search')
+            @include('almacenes.inventario.partials.table')
+        </div>
     </div>
 @endsection
 @section('scripts')
@@ -15,7 +23,7 @@
         $(document).ready(function() {
             $('#almacen_id').select2({
                 theme: "bootstrap4",
-                placeholder: "--Almacen--",
+                placeholder: "--Sucursal--",
                 width: '100%'
             });
 
@@ -78,6 +86,11 @@
 
         function limpiar(){
             var url = "{{ route('inventario.index') }}";
+            window.location.href = url;
+        }
+
+        function sucursales(){
+            var url = "{{ route('sucursal.index') }}";
             window.location.href = url;
         }
     </script>

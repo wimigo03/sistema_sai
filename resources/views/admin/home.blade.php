@@ -20,4 +20,8 @@
     </div>
 @endsection
 @section('scripts')
+<script>
+    //console.log(window.innerWidth); // Ancho de la ventana
+    //console.log(window.innerHeight); // Altura de la ventana
+</script>
 @endsection

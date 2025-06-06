@@ -1,10 +1,10 @@
 <form action="#" method="post" id="form">
     @csrf
     <input type="hidden" name="categoria_programatica_id" value="{{ $categoria_programatica->id }}">
-    <div class="form-group row font-roboto-13">
+    <div class="form-group row">
         <div class="col-md-6 pr-1 pl-1">
-            <label for="area_id" class="d-inline">Habilitar areas que tienen acceso a esta Categoria Programatica</label>
-            <select name="idarea" id="area_id" class="form-control select2">
+            <br>
+            <select name="idarea" id="area_id" class="form-control">
                 <option value="">-</option>
                 @foreach ($areas as $index => $value)
                     <option value="{{ $index }}" @if(request('idarea') == $index) selected @endif >{{ $value }}</option>

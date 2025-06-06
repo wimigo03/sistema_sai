@@ -1,25 +1,25 @@
-<div class="row abs-center">
-    <div class="col-md-12 pr-1 pl-1 table-responsive mb-2">
-        <table class="table display table-bordered table-striped responsive hover-orange" style="width:100%;">
-            <thead>
-                <tr class="font-roboto-11">
-                    <td class="text-center p-1"><b>ALMACEN</b></td>
-                    <td class="text-center p-1"><b>CAT. PROG.</b></td>
-                    <td class="text-center p-1"><b>PARTIDA PRESUPUESTARIA</b></td>
-                    <td class="text-center p-1"><b>MATERIAL</b></td>
-                    <td class="text-center p-1"><b>MEDIDA</b></td>
-                    <td class="text-right p-1"><b>EN STOCK</b></td>
+<div class="row mb-3">
+    <div class="col-12 table-responsive">
+        <table class="table table-striped table-hover display responsive hover-orange">
+            <thead class="bg-dark text-white">
+                <tr>
+                    <td class="text-center p-2 text-nowrap"><b>ALMACEN</b></td>
+                    <td class="text-center p-2 text-nowrap"><b>CAT. PROG.</b></td>
+                    <td class="text-center p-2 text-nowrap"><b>PARTIDA PRESUPUESTARIA</b></td>
+                    <td class="text-center p-2 text-nowrap"><b>MATERIAL</b></td>
+                    <td class="text-center p-2 text-nowrap"><b>MEDIDA</b></td>
+                    <td class="text-right p-2 text-nowrap"><b>EN STOCK</b></td>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($ingreso_compra_detalles as $datos)
-                    <tr class="font-roboto-10">
-                        <td class="text-center p-1">{{ $datos->almacen->nombre }}</td>
-                        <td class="text-left p-1">{{ $datos->programatica->codigo }}</td>
-                        <td class="text-left p-1">{{ $datos->partidaPresupuestaria->codigo . ' - ' . $datos->partidaPresupuestaria->nombre }}</td>
-                        <td class="text-left p-1">{{ $datos->item->codigo . '-' . $datos->item->nombre }}</td>
-                        <td class="text-center p-1">{{ $datos->unidad_medida->nombre }}</td>
-                        <td class="text-right p-1">{{ number_format($datos->saldo_total,2,'.',',') }}</td>
+                    <tr>
+                        <td class="text-center p-2 text-nowrap">{{ $datos->almacen->nombre }}</td>
+                        <td class="text-left p-2 text-nowrap">{{ $datos->programatica->codigo }}</td>
+                        <td class="text-left p-2 text-nowrap">{{ $datos->partidaPresupuestaria->codigo . ' - ' . $datos->partidaPresupuestaria->nombre }}</td>
+                        <td class="text-left p-2 text-nowrap">{{ $datos->item->codigo . '-' . $datos->item->nombre }}</td>
+                        <td class="text-center p-2 text-nowrap">{{ $datos->unidad_medida->nombre }}</td>
+                        <td class="text-right p-2 text-nowrap">{{ number_format($datos->saldo_total,2,'.',',') }}</td>
                     </tr>
                 @endforeach
             </tbody>

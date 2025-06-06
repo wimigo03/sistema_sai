@@ -148,9 +148,9 @@ return [
             'level' => 'debug',
         ],
 
-        'ingresos_compras' => [
+        'ingresos_almacen' => [
             'driver' => 'single',
-            'path' => storage_path('logs/ingresos_compras.log'),
+            'path' => storage_path('logs/ingresos_almacen.log'),
             'level' => 'debug',
         ],
 
