@@ -5,18 +5,10 @@ namespace App\Models\Almacenes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\Canasta\Dea;
-use App\Models\User;
-use App\Models\Area;
-use App\Models\Empleado;
-use App\Models\Almacenes\SolicitudMaterial;
-use App\Models\Almacenes\SolicitudMaterialDetalle;
-use App\Models\Almacenes\Almacen;
 use App\Models\Almacenes\SalidaAlmacen;
-use App\Models\Compra\Item;
-use App\Models\Compra\PartidaPresupuestaria;
-use App\Models\Compra\CategoriaProgramatica;
-use App\Models\Compra\UnidadMedida;
+use App\Models\Almacenes\CategoriaProgramatica;
+use App\Models\Almacenes\PartidaPresupuestaria;
+use App\Models\Almacenes\Producto;
 
 class SalidaAlmacenDetalle extends Model
 {
@@ -24,80 +16,37 @@ class SalidaAlmacenDetalle extends Model
 
     protected $table = 'salidas_almacen_detalles';
     protected $fillable = [
-        'dea_id',
         'salida_almacen_id',
-        'solicitud_material_id',
-        'solicitud_material_detalle_id',
-        'user_solicitud_id',
-        'solicitud_idemp',
-        'solicitud_idarea',
-        'user_aprobado_id',
-        'aprobado_idemp',
-        'aprobado_idarea',
         'categoria_programatica_id',
-        'user_salida_id',
-        'salida_idemp',
-        'salida_idarea',
         'partida_presupuestaria_id',
-        'item_id',
-        'unidad_id',
-        'almacen_id',
-        'cant_salida',
-        'estado',
+        'producto_id',
+        'cantidad',
+        'precio_unitario',
+        'estado'
     ];
 
-    const ESTADOS = [
-        '1' => 'HABILITADO',
-        '2' => 'ELIMINADO',
-    ];
+    const HABILITADO = '1';
+    const NO_HABILITADO = '2';
 
-    public function getStatusAttribute(){
-        switch ($this->estado) {
-            case '1':
-                return "HABILITADO";
-            case '2':
-                return "ELIMINADO";
-        }
+    public function salida_almacen(){
+        return $this->belongsTo(SalidaAlmacen::class,'salida_almacen_id','id');
     }
 
-    public function getcolorStatusAttribute(){
-        switch ($this->estado) {
-            case '1':
-                return "badge-with-padding badge badge-success";
-            case '2':
-                return "badge-with-padding badge badge-danger";
-        }
+    public function categoria_programatica(){
+        return $this->belongsTo(CategoriaProgramatica::class,'categoria_programatica_id','id');
     }
 
-    public function dea(){
-        return $this->belongsTo(Dea::class,'dea_id','id');
+    public function partida_presupuestaria(){
+        return $this->belongsTo(PartidaPresupuestaria::class,'partida_presupuestaria_id','id');
     }
 
-    public function user(){
-        return $this->belongsTo(User::class,'user_id','id');
+    public function producto(){
+        return $this->belongsTo(Producto::class,'producto_id','id');
     }
 
-    public function scopeByDea($query, $dea_id){
-        if($dea_id != null){
-            return $query->where('almacenes.dea_id', $dea_id);
-        }
-    }
-
-    /* public function scopeByNombre($query, $nombre){
-        if($nombre != null){
-            return $query->where('nombre', 'like', '%'.$nombre.'%');
-        }
-    }
-
-    public function scopeByDireccion($query, $direccion){
-        if($direccion != null){
-            return $query->where('direccion', 'like', '%'.$direccion.'%');
-        }
-    }
-
-    public function scopeByEncargado($query, $user_id){
-        if($user_id != null){
-            return $query->where('user_id', $user_id);
+    public function scopeByProducto($query, $producto_id){
+        if($producto_id != null){
+            return $query->where('producto_id', $producto_id);
         }
     }
 
@@ -105,5 +54,5 @@ class SalidaAlmacenDetalle extends Model
         if($estado != null){
             return $query->where('estado', $estado);
         }
-    } */
+    }
 }

@@ -122,7 +122,7 @@
                 <table class="table-titulo-datos">
                     <tr>
                         <td>
-                            <b><span style="font-size: 22px;">N° {{ $ingreso_almacen->codigo }}</span></b>
+                            <b><span style="font-size: 22px;">N° {{ $salida_almacen->codigo }}</span></b>
                         </td>
                     </tr>
                 </table>
@@ -139,9 +139,9 @@
         <tr>
             <td width="100%" align="center">
                 <b>
-                    <span style="font-size: 18px;">NOTA DE INGRESO</span>
+                    <span style="font-size: 18px;">NOTA DE SALIDA</span>
                     <br>
-                    <span style="font-size: 12px;"><u>{{ $ingreso_almacen == '2' ? '' : $ingreso_almacen->status }}</u></span>
+                    <span style="font-size: 12px;"><u>{{ $salida_almacen == '2' ? '' : $salida_almacen->status }}</u></span>
                 </b>
             </td>
         </tr>
@@ -149,36 +149,36 @@
     <table class="table-encabezado">
         <tr>
             <td style="width:30%; word-wrap: break-word; border: 0px;">
-                <b>N° PREVENTIVO:</b> <span style="font-size: 11px;">{{ $ingreso_almacen->n_preventivo }}</span>
+                &nbsp;
             </td>
             <td style="width:40%; word-wrap: break-word; border: 0px;" align="center">
-                <b>SUCURSAL:</b> <span style="font-size: 11px;">{{ $ingreso_almacen->almacen->nombre }}</span>
+                <b>SUCURSAL:</b> <span style="font-size: 11px;">{{ $salida_almacen->almacen->nombre }}</span>
             </td>
             <td style="width:30%; word-wrap: break-word; border: 0px;" align="right">
-                <b>FECHA:</b> <span style="font-size: 11px;">{{ \Carbon\Carbon::parse($ingreso_almacen->fecha_ingreso)->format('d-m-Y') }}</span>
+                <b>FECHA:</b> <span style="font-size: 11px;">{{ \Carbon\Carbon::parse($salida_almacen->fecha_salida)->format('d-m-Y') }}</span>
             </td>
         </tr>
     </table>
     <table class="table-encabezado">
         <tr>
             <td style="width:25%; word-wrap: break-word;">
-                <b>NIT:</b> <span style="font-size: 11px;">{{ $ingreso_almacen->proveedor->nit }}</span>
+                <b>NIT:</b> <span style="font-size: 11px;">{{ $salida_almacen->proveedor->nit }}</span>
             </td>
             <td style="width:75%; word-wrap: break-word;">
-                <b>PROVEEDOR:</b> <span style="font-size: 11px;">{{ strtoupper($ingreso_almacen->proveedor->nombre) }}</span>
+                <b>PROVEEDOR:</b> <span style="font-size: 11px;">{{ strtoupper($salida_almacen->proveedor->nombre) }}</span>
             </td>
         </tr>
     </table>
     <table class="table-encabezado">
         <tr>
             <td style="width:20%; word-wrap: break-word;">
-                <b>N° O.C.:</b> <span style="font-size: 11px;">{{ $ingreso_almacen->n_orden_compra }}</span>
+                &nbsp;
             </td>
             <td style="width:20%; word-wrap: break-word;">
-                <b>N° SOLICITUD:</b> <span style="font-size: 11px;">{{ $ingreso_almacen->n_solicitud }}</span>
+                <b>N° SOLICITUD:</b> <span style="font-size: 11px;">{{ $salida_almacen->n_solicitud }}</span>
             </td>
             <td style="width:60%; word-wrap: break-word;">
-                <b>SOLICITANTE:</b> <span style="font-size: 11px;">{{ strtoupper($ingreso_almacen->area->nombrearea) }}</span>
+                <b>SOLICITANTE:</b> <span style="font-size: 11px;">{{ strtoupper($salida_almacen->area->nombrearea) }}</span>
             </td>
         </tr>
     </table>
@@ -187,7 +187,7 @@
         @php
             $formato = fn($n) => number_format($n, 2, ',', '.');
         @endphp
-        @foreach ($ingreso_almacen_detalles as $categoriaNombre => $partidas)
+        @foreach ($salida_almacen_detalles as $categoriaNombre => $partidas)
             @php
                 $categoriaTotal = $partidas->flatten()->sum(fn($d) => $d->cantidad * $d->precio_unitario);
             @endphp
@@ -252,7 +252,7 @@
         </tr>
         <tr>
             <td>
-                <p><b>GLOSA:</b> {{ strtoupper($ingreso_almacen->obs) }}</p>
+                <p><b>GLOSA:</b> {{ strtoupper($salida_almacen->obs) }}</p>
             </td>
         </tr>
     </table>

@@ -97,6 +97,7 @@
             });
 
             $('#categoria_programatica_id').change(function() {
+                $('#producto_id').val('').trigger('change');
                 var id = $(this).val();
                 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
                 getPartidasPresupuestarias(id,CSRF_TOKEN);
@@ -280,20 +281,24 @@
 
                 $("#detalle_tabla").append(fila);
 
-                new Cleave('.input-cantidad', {
-                    numeral: true,
-                    numeralDecimalMark: '.',
-                    delimiter: ',',
-                    numeralDecimalScale: 1,
-                    numeralThousandsGroupStyle: 'thousand',
+                $(".input-cantidad").each(function() {
+                    new Cleave(this, {
+                        numeral: true,
+                        numeralDecimalMark: '.',
+                        delimiter: ',',
+                        numeralDecimalScale: 1,
+                        numeralThousandsGroupStyle: 'thousand',
+                    });
                 });
 
-                new Cleave('.input-precio-unitario', {
-                    numeral: true,
-                    numeralDecimalMark: '.',
-                    delimiter: ',',
-                    numeralDecimalScale: 2,
-                    numeralThousandsGroupStyle: 'thousand',
+                $(".input-precio-unitario").each(function() {
+                    new Cleave(this, {
+                        numeral: true,
+                        numeralDecimalMark: '.',
+                        delimiter: ',',
+                        numeralDecimalScale: 2,
+                        numeralThousandsGroupStyle: 'thousand',
+                    });
                 });
 
                 $("#detalle_tabla td:nth-child(4)").css({
@@ -314,6 +319,8 @@
                     tr.find('.input-subtotal').val(subtotal.toFixed(2));
                     actualizarTotal();
                 });
+
+                contarRegistrosValidos();
             }
 
             function actualizarTotal() {
@@ -325,14 +332,7 @@
                 });
 
                 var totalFila = $("#total_fila");
-                if (totalFila.length === 0) {
-                    var totalFilaHTML = "<tr id='total_fila' class='ignore-row'>" +
-                                            "<td colspan='7' class='text-right p-2 text-nowrap'><b>TOTAL</b></td>" +
-                                            "<td class='text-right p-2 text-nowrap'><input type='text' class='form-control form-control-sm font-roboto-14 text-right' value='" + total.toFixed(2) + "' disabled></td>" +
-                                            "<td></td>" +
-                                        "</tr>";
-                    $("#detalle_tabla").append(totalFilaHTML);
-                } else {
+                if (totalFila.length > 0) {
                     totalFila.find("input").val(total.toFixed(2));
                 }
             }
@@ -340,6 +340,8 @@
             function eliminarItem(thiss){
                 var tr = $(thiss).parents("tr:eq(0)");
                 tr.remove();
+                actualizarTotal();
+                contarRegistrosValidos();
             }
 
             async function procesar() {
@@ -477,6 +479,20 @@
                 if(registros === 0){
                     var esValido = false;
                     Modal("[SE DEBE TENER AL MENOS UN REGISTRO PARA CONTINUAR]");
+                }
+
+                return esValido;
+            }
+
+            function contarRegistrosValidos(){
+                var esValido = true;
+                var table = document.querySelectorAll("#detalle_tabla tr:not(.ignore-row)");
+                var registros = table.length;
+
+                if(registros === 0){
+                    $("#total_fila").hide();
+                }else{
+                    $("#total_fila").show();
                 }
 
                 return esValido;

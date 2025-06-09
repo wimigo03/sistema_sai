@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
 <style>
-    .section-title {
-        font-size: 1.25rem;
-        font-weight: bold;
-        margin-bottom: 10px;
-        color: #333;
-    }
-
     .div_detalle, .div_cabecera {
         padding: 15px;
         border-radius: 8px;
@@ -39,25 +32,27 @@
 @section('breadcrumb')
     @parent
     <li class="breadcrumb-item font-roboto-14"><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a></li>
-    <li class="breadcrumb-item font-roboto-14"><a href="{{ route('ingreso.sucursal.index') }}"> Ingresos de materiales</a></li>
-    <li class="breadcrumb-item font-roboto-14 active">Modificar</li>
+    <li class="breadcrumb-item font-roboto-14"><a href="{{ route('salida.sucursal.index') }}"> Salida de materiales</a></li>
+    <li class="breadcrumb-item font-roboto-14 active">Registrar</li>
 @endsection
 @section('content')
     <div class="card">
         <div class="card-header">
             <div class="row d-flex align-items-center">
-                <i class="fa-solid fa-file-lines fa-fw"></i>&nbsp;<b class="title-size">MODIFICAR REGISTRO INGRESO DE MATERIAL</b>
+                <i class="fa-solid fa-file-lines fa-fw"></i>&nbsp;<b class="title-size">REGISTRAR SALIDA DE MATERIAL</b>
             </div>
         </div>
 
         <div class="card-body">
-            @include('almacenes.ingreso_sucursal.partials.form')
+            @include('almacenes.salida_sucursal.partials.form')
         </div>
     </div>
     @section('scripts')
         <script type="text/javascript">
             $(document).ready(function() {
                 $("#categoria_programatica_id").val('').trigger('change');
+                $('#stock_disponible').val('');
+                $('#stock_precio_unitario').val('');
 
                 $('.select2').select2({
                     theme: "bootstrap4",
@@ -65,13 +60,13 @@
                     width: '100%'
                 });
 
-                var cleave = new Cleave('#fecha_ingreso', {
+                var cleave = new Cleave('#fecha_salida', {
                     date: true,
                     datePattern: ['d', 'm', 'Y'],
                     delimiter: '-'
                 });
 
-                $("#fecha_ingreso").datepicker({
+                $("#fecha_salida").datepicker({
                     inline: false,
                     language: "es",
                     dateFormat: "dd-mm-yy",
@@ -97,7 +92,10 @@
             });
 
             $('#categoria_programatica_id').change(function() {
+                $('#partida_presupuestaria_id').val('').trigger('change');
                 $('#producto_id').val('').trigger('change');
+                $('#stock_disponible').val('');
+                $('#stock_precio_unitario').val('');
                 var id = $(this).val();
                 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
                 getPartidasPresupuestarias(id,CSRF_TOKEN);
@@ -106,7 +104,7 @@
             function getPartidasPresupuestarias(id,CSRF_TOKEN){
                 $.ajax({
                     type: 'GET',
-                    url: '/ingreso-sucursal/get_partidas_presupuestarias',
+                    url: '/salida-sucursal/get_partidas_presupuestarias',
                     data: {
                         _token: CSRF_TOKEN,
                         id: id
@@ -135,6 +133,9 @@
             }
 
             $('#partida_presupuestaria_id').change(function() {
+                $('#producto_id').val('').trigger('change');
+                $('#stock_disponible').val('');
+                $('#stock_precio_unitario').val('');
                 var id = $(this).val();
                 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
                 getProductos(id,CSRF_TOKEN);
@@ -143,7 +144,7 @@
             function getProductos(id,CSRF_TOKEN){
                 $.ajax({
                     type: 'GET',
-                    url: '/ingreso-sucursal/get_productos',
+                    url: '/salida-sucursal/get_productos',
                     data: {
                         _token: CSRF_TOKEN,
                         id: id
@@ -164,6 +165,36 @@
                                 select.append(opcion);
                             });
                         }
+                    },
+                    error: function(xhr){
+                        console.log(xhr.responseText);
+                    }
+                });
+            }
+
+            $('#producto_id').change(function() {
+                var almacen_id = $("#almacen_id >option:selected").val();
+                var categoria_programatica_id = $("#categoria_programatica_id >option:selected").val();
+                var partida_presupuestaria_id = $("#partida_presupuestaria_id >option:selected").val();
+                var producto_id = $(this).val();
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                getStockDisponible(almacen_id,categoria_programatica_id,partida_presupuestaria_id,producto_id,CSRF_TOKEN);
+            });
+
+            function getStockDisponible(almacen_id,categoria_programatica_id,partida_presupuestaria_id,producto_id,CSRF_TOKEN){
+                $.ajax({
+                    type: 'GET',
+                    url: '/salida-sucursal/get_stock_disponible',
+                    data: {
+                        _token: CSRF_TOKEN,
+                        almacen_id: almacen_id,
+                        categoria_programatica_id: categoria_programatica_id,
+                        partida_presupuestaria_id: partida_presupuestaria_id,
+                        producto_id: producto_id
+                    },
+                    success: function(data){
+                        $('#stock_disponible').val(data.stock_disponible);
+                        $('#stock_precio_unitario').val(data.ultimo_precio_unitario);
                     },
                     error: function(xhr){
                         console.log(xhr.responseText);
@@ -194,6 +225,10 @@
                     Modal("Se debe seleccionar un <b>[MATERIAL]</b> para continuar.");
                     return false;
                 }
+                if($("#stock_disponible").val() === '0'){
+                    Modal("<b>[0]</b> El material seleccionado no tiene existencia en almacen.");
+                    return false;
+                }
                 return true;
             }
 
@@ -219,7 +254,7 @@
                 return new Promise((resolve, reject) => {
                     $.ajax({
                         type: 'GET',
-                        url: '/ingreso-sucursal/get_producto_data',
+                        url: '/salida-sucursal/get_producto_data',
                         data: {
                             _token: CSRF_TOKEN,
                             id: id
@@ -243,7 +278,8 @@
                 var partida_presupuestaria_nombre = $("#partida_presupuestaria_id option:selected").text().split(' - ')[1];
                 var producto_id = $("#producto_id >option:selected").val();
                 var producto = await getProductoData(producto_id);
-                var fila = "<tr class='font-roboto-14'>"+
+                var precio_unitario = $("#stock_precio_unitario").val();
+                var fila = "<tr class='font-roboto-13'>"+
                                 "<td class='text-center p-2 text-nowrap' style='vertical-align: middle;'>" +
                                     "<span class='tts:right tts-slideIn tts-custom' aria-label='" + categoria_programatica_nombre + "' style='cursor: pointer;'>" +
                                         "<input type='hidden' name='categoria_programatica_id[]' value='" + categoria_programatica_id + "'>" + categoria_programatica_codigo +
@@ -267,7 +303,7 @@
                                     "<input type='text' placeholder='0' name='cantidad[]' class='form-control font-roboto-14 text-right input-cantidad'>" +
                                 "</td>" +
                                 "<td class='text-right p-2 text-nowrap' width='100px'>"+
-                                    "<input type='text' placeholder='0' name='precio_unitario[]' class='form-control font-roboto-14 text-right input-precio-unitario'>" +
+                                    "<input type='text' placeholder='0' name='precio_unitario[]' value='" + precio_unitario + "' class='form-control font-roboto-14 text-right input-precio-unitario'>" +
                                 "</td>" +
                                 "<td class='text-right p-2 text-nowrap' width='100px'>"+
                                     "<input type='text' placeholder='0' class='form-control font-roboto-14 text-right input-subtotal' disabled>" +
@@ -310,6 +346,8 @@
                 $('#categoria_programatica_id').val('').trigger('change');
                 $('#partida_presupuestaria_id').val('').trigger('change');
                 $('#producto_id').val('').trigger('change');
+                $('#stock_disponible').val('');
+                $('#stock_precio_unitario').val('');
 
                 $(".input-cantidad, .input-precio-unitario").on("input", function() {
                     var tr = $(this).closest('tr');
@@ -337,31 +375,11 @@
                 }
             }
 
-            function eliminarItem(thiss,id){
+            function eliminarItem(thiss){
                 var tr = $(thiss).parents("tr:eq(0)");
                 tr.remove();
-                if (typeof id !== "undefined") {
-                    eliminar_registro(id);
-                }
                 actualizarTotal();
                 contarRegistrosValidos();
-            }
-
-            function eliminar_registro(id){
-                $.ajax({
-                    type: 'GET',
-                    url: '/ingreso-sucursal/eliminar_registro/'+id,
-                    dataType: 'json',
-                    data: {
-                        id: id
-                    },
-                    /*success: function(json){
-                        console.log('Eliminado');
-                    },*/
-                    error: function(xhr){
-                        console.log(xhr.responseText);
-                    }
-                });
             }
 
             async function procesar() {
@@ -377,24 +395,20 @@
                     return false;
                 }
 
-                const nroPreventivoValido = await getNroPreventivo();
-
-                if (!nroPreventivoValido) {
-                    Modal("[N° DE PREVENTIVO DUPLICADO]");
-                    return false;
-                }
-
-                const nroOrdenCompraValido = await getNroOrdenCompra();
-
-                if (!nroOrdenCompraValido) {
-                    Modal("[N° DE ORDEN DE COMPRA DUPLICADO]");
-                    return false;
-                }
-
                 const codigoValido = await getCodigo();
 
                 if (!codigoValido) {
-                    Modal("[N° DE INGRESO DUPLICADO]");
+                    Modal("[N° DE SALIDA DUPLICADO]");
+                    return false;
+                }
+
+                const data = await getStockDisponibleValido();
+                var stockDisponibleValido = data.stock_disponible_valido;
+                var cantidad_egreso = data.cantidad_egreso;
+                var stock_disponible = data.stock_disponible;
+
+                if (!stockDisponibleValido) {
+                    Modal("Cantidad de egreso [" + cantidad_egreso + "] <br> Producto en existencia [" + stock_disponible + "]<br> Imposible realizar proceso solicitado");
                     return false;
                 }
 
@@ -403,46 +417,57 @@
                 })
             }
 
-            function getNroPreventivo() {
-                var nro_preventivo = $("#n_preventivo").val();
-                var ingreso_almacen_id = $("#ingreso_almacen_id").val();
-                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            function getStockDisponibleValido() {
+                var almacen_id = $("#almacen_id >option:selected").val();
+                var categoria_programatica_ids = [];
+                var partida_presupuestaria_ids = [];
+                var producto_ids = [];
+                var cantidads = [];
 
-                return new Promise((resolve, reject) => {
-                    $.ajax({
-                        type: 'GET',
-                        url: '/ingreso-sucursal/get_nro_preventivo_editar',
-                        data: {
-                            _token: CSRF_TOKEN,
-                            nro_preventivo: nro_preventivo,
-                            ingreso_almacen_id: ingreso_almacen_id
-                        },
-                        success: function(data) {
-                            resolve(data.n_preventivo);
-                        },
-                        error: function(xhr) {
-                            reject(xhr.responseText);
-                        }
-                    });
+                $("#detalle_tabla input[name='categoria_programatica_id[]']").each(function() {
+                    var categoria_programatica_id = $(this).val();
+                    if (categoria_programatica_id) {
+                        categoria_programatica_ids.push(categoria_programatica_id);
+                    }
                 });
-            }
 
-            function getNroOrdenCompra() {
-                var nro_orden_compra = $("#n_orden_compra").val();
-                var ingreso_almacen_id = $("#ingreso_almacen_id").val();
+                $("#detalle_tabla input[name='partida_presupuestaria_id[]']").each(function() {
+                    var partida_presupuestaria_id = $(this).val();
+                    if (partida_presupuestaria_id) {
+                        partida_presupuestaria_ids.push(partida_presupuestaria_id);
+                    }
+                });
+
+                $("#detalle_tabla input[name='producto_id[]']").each(function() {
+                    var producto_id = $(this).val();
+                    if (producto_id) {
+                        producto_ids.push(producto_id);
+                    }
+                });
+
+                $("#detalle_tabla input[name='cantidad[]']").each(function() {
+                    var cantidad = $(this).val();
+                    if (cantidad) {
+                        cantidads.push(cantidad);
+                    }
+                });
+
                 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
                 return new Promise((resolve, reject) => {
                     $.ajax({
                         type: 'GET',
-                        url: '/ingreso-sucursal/get_nro_orden_compra_editar',
+                        url: '/salida-sucursal/get_stock_disponible_valido',
                         data: {
                             _token: CSRF_TOKEN,
-                            nro_orden_compra: nro_orden_compra,
-                            ingreso_almacen_id: ingreso_almacen_id
+                            almacen_id: almacen_id,
+                            categoria_programatica_ids: categoria_programatica_ids,
+                            partida_presupuestaria_ids: partida_presupuestaria_ids,
+                            producto_ids: producto_ids,
+                            cantidads: cantidads
                         },
                         success: function(data) {
-                            resolve(data.n_orden_compra);
+                            resolve(data);
                         },
                         error: function(xhr) {
                             reject(xhr.responseText);
@@ -453,17 +478,15 @@
 
             function getCodigo() {
                 var codigo = $("#codigo").val();
-                var ingreso_almacen_id = $("#ingreso_almacen_id").val();
                 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
                 return new Promise((resolve, reject) => {
                     $.ajax({
                         type: 'GET',
-                        url: '/ingreso-sucursal/get_codigo_editar',
+                        url: '/salida-sucursal/get_codigo',
                         data: {
                             _token: CSRF_TOKEN,
-                            codigo: codigo,
-                            ingreso_almacen_id: ingreso_almacen_id
+                            codigo: codigo
                         },
                         success: function(data) {
                             resolve(data.codigo);
@@ -488,7 +511,7 @@
                     if (isNaN(cantidad) || cantidad <= 0 || isNaN(precioUnitario) || precioUnitario <= 0) {
                         esValido = false;
                         $(this).find('.input-cantidad, .input-precio-unitario').addClass('is-invalid');
-                        Modal("Unos de los campos de  <b>[INGRESO O PRECIO UNITARIO]</b> no son validos");
+                        Modal("Unos de los campos de  <b>[SALIDA O PRECIO UNITARIO]</b> no son validos");
                     } else {
                         $(this).find('.input-cantidad, .input-precio-unitario').removeClass('is-invalid');
                     }
@@ -525,7 +548,7 @@
             }
 
             function confirmar(){
-                var url = "{{ route('ingreso.sucursal.update') }}";
+                var url = "{{ route('salida.sucursal.store') }}";
                 $("#form").attr('action', url);
                 $(".btn").hide();
                 $(".spinner-btn").show();
@@ -533,7 +556,7 @@
             }
 
             function cancelar(){
-                var url = "{{ route('ingreso.sucursal.index') }}";
+                var url = "{{ route('salida.sucursal.index') }}";
                 window.location.href = url;
             }
 
@@ -546,14 +569,6 @@
                     Modal("Se debe seleccionar al <b>[SOLICITANTE]</b> para continuar");
                     return false;
                 }
-                if($("#n_preventivo").val() == ""){
-                    Modal("Se debe agregar un <b>[N° PREVENTIVO]</b> para continuar.");
-                    return false;
-                }
-                if($("#n_orden_compra").val() == ""){
-                    Modal("Se debe agregar un <b>[N° DE ORDEN DE COMPRA]</b> para continuar.");
-                    return false;
-                }
                 if($("#n_solicitud").val() == ""){
                     Modal("Se debe agregar un <b>[N° DE SOLICITUD]</b> para continuar.");
                     return false;
@@ -563,17 +578,17 @@
                     return false;
                 }
                 if($("#codigo").val() == ""){
-                    Modal("Se debe agregar un <b>[N° DE INGRESO]</b> para continuar.");
+                    Modal("Se debe agregar un <b>[N° DE SALIDA]</b> para continuar.");
                     return false;
                 }
-                if ($("#fecha_ingreso").val() == "") {
-                    Modal("[El campo <b>[FECHA DE INGRESO]</b> no puede estar vacio.]");
+                if ($("#fecha_salida").val() == "") {
+                    Modal("[El campo <b>[FECHA DE SALIDA]</b> no puede estar vacio.]");
                     return false;
                 }
 
                 var regex = /^(\d{2})-(\d{2})-(\d{4})$/;
-                if (!regex.test($("#fecha_ingreso").val())) {
-                    Modal("[El campo <b>[FECHA DE INGRESO]</b> debe tener el formato dd-mm-yyyy.]");
+                if (!regex.test($("#fecha_salida").val())) {
+                    Modal("[El campo <b>[FECHA DE SALIDA]</b> debe tener el formato dd-mm-yyyy.]");
                     return false;
                 }
                 if($("#glosa").val() == ""){

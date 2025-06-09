@@ -39,7 +39,7 @@
             <div class="col-12 col-md-6 col-lg-4 mb-2">
                 <br>
                 <div class="d-flex flex-column flex-md-row gap-3 justify-content-center justify-content-md-end">
-                    <button class="btn btn-primary w-100 w-md-auto btn-size mr-2 mb-2 mb-md-0 font-roboto-14" type="button" onclick="procesar();">
+                    <button class="btn btn-primary w-100 w-md-auto btn-size mr-1 mb-2 mb-md-0 font-roboto-14" type="button" onclick="procesar();">
                         <i class="fas fa-paper-plane fa-fw"></i> {{ isset($ingreso_almacen) ? 'Modificar Cambios' : 'Procesar' }}
                     </button>
                     <button class="btn btn-danger w-100 w-md-auto btn-size font-roboto-14" type="button" onclick="cancelar();">
@@ -49,14 +49,6 @@
                 <div class="text-center mt-3">
                     <i class="fa fa-spinner fa-spin fa-lg spinner-btn" style="display: none;"></i>
                 </div>
-            </div>
-            <div class="col-12 col-md-6 col-lg-2 mb-2">
-                <label for="n_preventivo" class="form-label d-inline font-roboto-14">N° Preventivo</label>
-                <input type="text" name="n_preventivo" id="n_preventivo" value="{{ isset($ingreso_almacen) ? $ingreso_almacen->n_preventivo : old('n_preventivo') }}" class="form-control font-roboto-14">
-            </div>
-            <div class="col-12 col-md-6 col-lg-2 mb-2">
-                <label for="n_orden_compra" class="form-label d-inline font-roboto-14">N° de O.C.</label>
-                <input type="text" name="n_orden_compra" id="n_orden_compra" value="{{ isset($ingreso_almacen) ? $ingreso_almacen-> n_orden_compra : old('n_orden_compra') }}" class="form-control font-roboto-14">
             </div>
             <div class="col-12 col-md-6 col-lg-2 mb-2">
                 <label for="n_solicitud" class="form-label d-inline font-roboto-14">N° de Solicitud</label>
@@ -79,12 +71,12 @@
                 </select>
             </div>
             <div class="col-12 col-md-6 col-lg-3 mb-2">
-                <label for="codigo" class="form-label d-inline font-roboto-14">N° de Ingreso</label>
+                <label for="codigo" class="form-label d-inline font-roboto-14">N° de Salida</label>
                 <input type="text" name="codigo" id="codigo" value="{{ isset($ingreso_almacen) ? $ingreso_almacen->codigo : old('codigo') }}" class="form-control font-roboto-14">
             </div>
             <div class="col-12 col-md-6 col-lg-2 mb-2">
-                <label for="fecha_ingreso" class="form-label d-inline font-roboto-14">Fecha de Ingreso</label>
-                <input type="text" name="fecha_ingreso" placeholder="dd-mm-yyyy" id="fecha_ingreso" value="{{ isset($ingreso_almacen) ? \Carbon\Carbon::parse($ingreso_almacen->fecha_ingreso)->format('d-m-Y') : old('fecha_ingreso') }}" class="form-control font-roboto-14">
+                <label for="fecha_salida" class="form-label d-inline font-roboto-14">Fecha de Salida</label>
+                <input type="text" name="fecha_salida" placeholder="dd-mm-yyyy" id="fecha_salida" value="{{ isset($ingreso_almacen) ? \Carbon\Carbon::parse($ingreso_almacen->fecha_salida)->format('d-m-Y') : old('fecha_salida') }}" class="form-control font-roboto-14">
             </div>
             <div class="col-12 col-md-6 col-lg-12 mb-2">
                 <label for="glosa" class="form-label d-inline font-roboto-14">Glosa</label>
@@ -95,7 +87,7 @@
 
     <div class="div_detalle mb-4">
         <div class="row mb-2">
-            <div class="col-12 col-md-6 col-lg-12 mb-2">
+            <div class="col-12 col-md-6 col-lg-11 mb-2">
                 <label for="categoria_programatica_id" class="form-label d-inline font-roboto-14">Categoria Programatica</label>
                 <select name="categoria_programatica_id" id="categoria_programatica_id" class="form-control select2">
                     <option value="">-</option>
@@ -104,25 +96,33 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-12 col-md-6 col-lg-5 mb-2">
-                <label for="partida_presupuestaria_id" class="form-label d-inline font-roboto-14">Partida Presupuestaria</label>
-                <select id="partida_presupuestaria_id" name="partida_presupuestaria_id" class="form-control select2">
-                    <option value="">--Seleccionar--</option>
-                </select>
-            </div>
-            <div class="col-12 col-md-6 col-lg-5 mb-2">
-                <label for="producto_id" class="form-label d-inline font-roboto-14">Material</label>
-                <select id="producto_id" name="producto_id" class="form-control select2">
-                    <option value="">--Seleccionar--</option>
-                </select>
-            </div>
-            <div class="col-12 col-md-6 col-lg-2 mb-2">
+            <div class="col-12 col-md-6 col-lg-1 mb-2">
                 <br>
                 <div class="d-flex flex-column flex-md-row gap-3 justify-content-center justify-content-md-end">
                     <button class="btn btn-success w-100 w-md-auto btn-size mb-2 mb-md-0" type="button" onclick="agregarMaterial();">
                         <i class="fas fa-plus-square fa-lg"></i>
                     </button>
                 </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-2">
+                <label for="partida_presupuestaria_id" class="form-label d-inline font-roboto-14">Partida Presupuestaria</label>
+                <select id="partida_presupuestaria_id" name="partida_presupuestaria_id" class="form-control select2">
+                    <option value="">--Seleccionar--</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-2">
+                <label for="producto_id" class="form-label d-inline font-roboto-14">Material</label>
+                <select id="producto_id" name="producto_id" class="form-control select2">
+                    <option value="">--Seleccionar--</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-6 col-lg-2 mb-2">
+                <label for="stock_disponible" class="form-label d-inline font-roboto-14">Stock</label>
+                <input type="text" id="stock_disponible" class="form-control font-roboto-14" readonly>
+            </div>
+            <div class="col-12 col-md-6 col-lg-2 mb-2">
+                <label for="stock_precio_unitario" class="form-label d-inline font-roboto-14">P. U.</label>
+                <input type="text" id="stock_precio_unitario" class="form-control font-roboto-14" readonly>
             </div>
         </div>
 
@@ -136,7 +136,7 @@
                             <td class="text-center p-2 text-nowrap"><b>CODIGO</b></td>
                             <td class="text-justify p-2 text-nowrap"><b>DETALLE</b></td>
                             <td class="text-center p-2 text-nowrap"><b>UNIDAD</b></td>
-                            <td class="text-center p-2 text-nowrap"><b>INGRESO</b></td>
+                            <td class="text-center p-2 text-nowrap"><b>EGRESO</b></td>
                             <td class="text-center p-2 text-nowrap"><b>P. U.</b></td>
                             <td class="text-center p-2 text-nowrap"><b>TOTAL</b></td>
                             <td class="text-center p-2 text-nowrap">
@@ -164,7 +164,6 @@
                                         </span>
                                     </td>
                                     <td class="text-center p-2 text-nowrap" style='vertical-align: middle;'>
-                                        <input type="hidden" class="producto_id" value={{ $datos->producto_id }}>
                                         {{ $datos->producto->codigo }}
                                     </td>
                                     <td class="text-justify p-2 text-nowrap" style="vertical-align: middle; max-width: 200px; overflow: hidden; text-overflow: ellipsis;">
@@ -192,6 +191,14 @@
                                     </td>
                                 </tr>
                             @endforeach
+                            {{--<tr class="font-roboto-14">
+                                <td class="text-right p-2 text-nowrap" colspan="7">
+                                    <b>TOTAL</b>
+                                </td>
+                                <td class="text-right p-2 text-nowrap">
+                                    <b>{{ number_format($total, 2, '.', ',') }}</b>
+                                </td>
+                            </tr>--}}
                         @endisset
                     </tbody>
                     <tr id='total_fila' class='ignore-row' style="display: none">

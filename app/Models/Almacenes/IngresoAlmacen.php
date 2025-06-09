@@ -35,12 +35,12 @@ class IngresoAlmacen extends Model
         'estado'
     ];
 
-    const EN_ESPERA = '1';
+    const PENDIENTE = '1';
     const INGRESADO = '2';
     const ANULADO = '3';
 
     const ESTADOS = [
-        '1' => 'EN ESPERA',
+        '1' => 'PENDIENTE',
         '2' => 'INGRESADO',
         '3' => 'ANULADO'
     ];
@@ -48,7 +48,7 @@ class IngresoAlmacen extends Model
     public function getStatusAttribute(){
         switch ($this->estado) {
             case '1':
-                return "EN ESPERA";
+                return "PENDIENTE";
             case '2':
                 return "INGRESADO";
             case '3':
@@ -195,7 +195,7 @@ class IngresoAlmacen extends Model
         if(!is_null($fecha_ingreso)){
             $finicial = Carbon::createFromFormat('d-m-Y', $fecha_ingreso)->format('Y-m-d 00:00:00');
             $ffinal = Carbon::createFromFormat('d-m-Y', $fecha_ingreso)->format('Y-m-d 23:59:59');
-            return $query->whereBetween('created_at',[$finicial,$ffinal]);
+            return $query->whereBetween('fecha_ingreso',[$finicial,$ffinal]);
         }
     }
 

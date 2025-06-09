@@ -313,7 +313,7 @@
                                 </li>
                             @endcan--}}
 
-                            @canany(['sucursal.configuracion','ingreso.sucursal.index'])
+                            @canany(['sucursal.configuracion','ingreso.sucursal.index','salida.sucursal.index'])
                                 <li class="nav-item has-treeview">
                                     <a href="#" class="nav-link">
                                         <i class="nav-icon fa fa-shop fa-fw nav-icon-font"></i>
@@ -327,13 +327,13 @@
                                                 </a>
                                             </li>
                                         @endcan
-                                        {{--@can('salida.almacen.index')
+                                        @can('salida.sucursal.index')
                                             <li class="nav-item">
-                                                <a href="{{ route('salida.almacen.index') }}" class="nav-link pl-4">&nbsp;
+                                                <a href="{{ route('salida.sucursal.index') }}" class="nav-link pl-4">&nbsp;
                                                     <i class="fa-solid fa-hdd fa-fw"></i> <p>Salida de Materiales</p>
                                                 </a>
                                             </li>
-                                        @endcan--}}
+                                        @endcan
                                         @can('sucursal.configuracion')
                                             <li class="nav-item">
                                                 <a href="{{ route('sucursal.configuracion') }}" class="nav-link pl-4">&nbsp;

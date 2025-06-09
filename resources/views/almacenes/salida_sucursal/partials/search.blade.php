@@ -25,7 +25,7 @@
             <input type="text" name="fecha_registro" value="{{ request('fecha_registro') }}" id="fecha_registro" placeholder="--Registro--" class="form-control font-roboto-14 intro">
         </div>
         <div class="col mb-2">
-            <input type="text" name="fecha_ingreso" value="{{ request('fecha_ingreso') }}" id="fecha_ingreso" placeholder="--Ingreso--" class="form-control font-roboto-14 intro">
+            <input type="text" name="fecha_salida" value="{{ request('fecha_salida') }}" id="fecha_ingreso" placeholder="--Salida--" class="form-control font-roboto-14 intro">
         </div>
         <div class="col mb-2">
             <select name="estado" id="estado" class="form-control">
@@ -39,9 +39,9 @@
 </form>
 <div class="row">
     <div class="col-12 d-flex flex-column flex-md-row gap-2 justify-content-center justify-content-md-end">
-        @can('ingreso.sucursal.create')
+        @can('salida.sucursal.create')
             <button class="btn btn-success w-100 w-md-auto btn-size mr-2 font-roboto-14" type="button" onclick="create();">
-                <i class="fas fa-plus fa-fw"></i> Nuevo Ingreso
+                <i class="fas fa-plus fa-fw"></i> Nuevo Salida
             </button>
         @endcan
 

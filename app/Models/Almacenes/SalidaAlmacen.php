@@ -4,13 +4,13 @@ namespace App\Models\Almacenes;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
-use App\Models\Canasta\Dea;
-use App\Models\User;
 use App\Models\Area;
-use App\Models\Empleado;
-use App\Models\Almacenes\SolicitudMaterial;
+use App\Models\User;
+use App\Models\Canasta\Dea;
+use App\Models\Almacenes\Proveedor;
 use App\Models\Almacenes\Almacen;
 
 class SalidaAlmacen extends Model
@@ -20,29 +20,26 @@ class SalidaAlmacen extends Model
     protected $table = 'salidas_almacen';
     protected $fillable = [
         'dea_id',
-        'solicitud_material_id',
-        'user_solicitud_id',
-        'solicitud_idemp',
-        'solicitud_idarea',
-        'user_aprobado_id',
-        'aprobado_idemp',
-        'aprobado_idarea',
-        'categoria_programatica_id',
-        'user_salida_id',
-        'salida_idemp',
-        'salida_idarea',
         'almacen_id',
-        'cod_salida',
-        'fcreate',
-        'fsalida',
+        'user_id',
+        'proveedor_id',
+        'area_id',
+        'codigo',
+        'n_factura',
+        'n_solicitud',
+        'fecha_salida',
         'obs',
-        'estado',
+        'estado'
     ];
+
+    const PENDIENTE = '1';
+    const EGRESADO = '2';
+    const ANULADO = '3';
 
     const ESTADOS = [
         '1' => 'PENDIENTE',
-        '2' => 'ENTREGADO',
-        '3' => 'ANULADO',
+        '2' => 'EGRESADO',
+        '3' => 'ANULADO'
     ];
 
     public function getStatusAttribute(){
@@ -50,29 +47,63 @@ class SalidaAlmacen extends Model
             case '1':
                 return "PENDIENTE";
             case '2':
-                return "ENTREGADO";
+                return "EGRESADO";
             case '3':
                 return "ANULADO";
+        }
+    }
+
+    public function getcolorBadgeStatusAttribute(){
+        switch ($this->estado) {
+            case '1':
+                return "badge-with-padding badge badge-secondary";
+            case '2':
+                return "badge-with-padding badge badge-success";
+            case '2':
+                return "badge-with-padding badge badge-danger";
+        }
+    }
+
+    public function getcolorInputStatusAttribute(){
+        switch ($this->estado) {
+            case '1':
+                return "text-white bg-secondary";
+            case '2':
+                return "text-white bg-success";
+            case '3':
+                return "text-white bg-danger";
         }
     }
 
     public function getcolorStatusAttribute(){
         switch ($this->estado) {
             case '1':
-                return "badge-with-padding badge badge-secondary";
+                return "text-secondary";
             case '2':
-                return "badge-with-padding badge badge-success";
+                return "text-success";
             case '3':
-                return "badge-with-padding badge badge-danger";
+                return "text-danger";
         }
+    }
+
+    public function almacen(){
+        return $this->belongsTo(Almacen::class,'almacen_id','id');
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class,'user_id','id');
     }
 
     public function dea(){
         return $this->belongsTo(Dea::class,'dea_id','id');
     }
 
-    public function user(){
-        return $this->belongsTo(User::class,'user_id','id');
+    public function proveedor(){
+        return $this->belongsTo(Proveedor::class,'proveedor_id','id');
+    }
+
+    public function area(){
+        return $this->belongsTo(Area::class,'area_id','idarea');
     }
 
     public function scopeByDea($query, $dea_id){
@@ -81,37 +112,81 @@ class SalidaAlmacen extends Model
         }
     }
 
-    public function scopeByArea($query, $area_id){
-        if($area_id != null){
-            return $query->where('idarea', $area_id);
+    public function scopeByCodigo($query, $codigo){
+        if($codigo != null){
+            return $query->where('codigo', 'like', '%' . $codigo . '%');
         }
     }
 
-    public function scopeByFechas($query, $finicial, $ffinal){
-        if(!is_null($finicial) && !is_null($ffinal)){
-            $finicial = Carbon::createFromFormat('d/m/Y', $finicial)->format('Y-m-d 00:00:00');
-            $ffinal = Carbon::createFromFormat('d/m/Y', $ffinal)->format('Y-m-d 23:59:59');
+    public function scopeByAlmacenes($query, $almacenes)
+    {
+        if ($almacenes != null && $almacenes->isNotEmpty()) {
+            $almacenIds = $almacenes->pluck('id');
+
+            return $query->whereIn('almacen_id', $almacenIds);
+        }
+
+        return $query;
+    }
+
+    public function scopeBySucursal($query, $sucursal){
+        if (!is_null($sucursal)) {
+            return $query
+                ->whereIn('almacen_id', function ($subquery) use($sucursal) {
+                    $subquery->select('id')
+                        ->from('almacenes')
+                        ->where(DB::raw('UPPER(nombre)'), 'LIKE', '%' . strtoupper($sucursal) . '%');
+                });
+        }
+    }
+
+    public function scopeByProveedor($query, $proveedor){
+        if (!is_null($proveedor)) {
+            return $query
+                ->whereIn('proveedor_id', function ($subquery) use($proveedor) {
+                    $subquery->select('id')
+                        ->from('proveedor')
+                        ->where(DB::raw('UPPER(nombre)'), 'LIKE', '%' . strtoupper($proveedor) . '%');
+                });
+        }
+    }
+
+    public function scopeBySolicitante($query, $solicitante){
+        if (!is_null($solicitante)) {
+            return $query
+                ->whereIn('area_id', function ($subquery) use($solicitante) {
+                    $subquery->select('idarea')
+                        ->from('areas')
+                        ->where(DB::raw('UPPER(nombrearea)'), 'LIKE', '%' . strtoupper($solicitante) . '%');
+                });
+        }
+    }
+
+    public function scopeByNroSolicitud($query, $nro_solicitud){
+        if (!is_null($nro_solicitud)) {
+            return $query->where('n_solicitud', $nro_solicitud);
+        }
+    }
+
+    public function scopeByFechaRegistro($query, $fecha_registro){
+        if(!is_null($fecha_registro)){
+            $finicial = Carbon::createFromFormat('d-m-Y', $fecha_registro)->format('Y-m-d 00:00:00');
+            $ffinal = Carbon::createFromFormat('d-m-Y', $fecha_registro)->format('Y-m-d 23:59:59');
             return $query->whereBetween('created_at',[$finicial,$ffinal]);
         }
     }
 
-    /*
-
-    public function scopeByDireccion($query, $direccion){
-        if($direccion != null){
-            return $query->where('direccion', 'like', '%'.$direccion.'%');
-        }
-    }
-
-    public function scopeByEncargado($query, $user_id){
-        if($user_id != null){
-            return $query->where('user_id', $user_id);
+    public function scopeByFechaSalida($query, $fecha_ingreso){
+        if(!is_null($fecha_ingreso)){
+            $finicial = Carbon::createFromFormat('d-m-Y', $fecha_ingreso)->format('Y-m-d 00:00:00');
+            $ffinal = Carbon::createFromFormat('d-m-Y', $fecha_ingreso)->format('Y-m-d 23:59:59');
+            return $query->whereBetween('fecha_salida',[$finicial,$ffinal]);
         }
     }
 
     public function scopeByEstado($query, $estado){
-        if($estado != null){
+        if(!is_null($estado)){
             return $query->where('estado', $estado);
         }
-    } */
+    }
 }
