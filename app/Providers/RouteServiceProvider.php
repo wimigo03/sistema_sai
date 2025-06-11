@@ -75,8 +75,8 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Almacenes/producto-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Almacenes/unidad-medida-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Almacenes/inventario-route.php'));
-        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Almacenes/inventario-inicial-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Compras/orden-compra-route.php'));
+        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Almacenes/inventario-inicial-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Almacenes/ingreso-sucursal-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Almacenes/salida-sucursal-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Compras/solicitud-material-route.php'));

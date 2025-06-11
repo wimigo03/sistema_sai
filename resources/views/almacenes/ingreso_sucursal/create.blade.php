@@ -74,7 +74,7 @@
                 $("#fecha_ingreso").datepicker({
                     inline: false,
                     language: "es",
-                    dateFormat: "dd-mm-yy",
+                    dateFormat: "dd-mm-yyyy",
                     autoClose: true
                 });
             });
@@ -83,6 +83,13 @@
                 $("#modal-alert .modal-body").html(mensaje);
                 $('#modal-alert').modal({keyboard: false});
             }
+
+            $('.intro').on('keypress', function(event) {
+                if (event.which === 13) {
+                    procesar();
+                    event.preventDefault();
+                }
+            });
 
             $('#partida_presupuestaria_id').on('select2:open', function(e) {
                 if($("#categoria_programatica_id >option:selected").val() == ""){

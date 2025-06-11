@@ -16,10 +16,14 @@
     <script>
         $(document).ready( function () {
             $('#dea_id').select2({
-                placeholder: "--Unidad Administrativa--"
+                theme: "bootstrap4",
+                placeholder: "--Unidad Administrativa--",
+                width: '100%'
             });
             $('#estado').select2({
-                placeholder: "--Estado--"
+                theme: "bootstrap4",
+                placeholder: "--Estado--",
+                width: '100%'
             });
         });
 

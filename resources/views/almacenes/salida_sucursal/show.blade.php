@@ -69,6 +69,16 @@
                                         <i class="fas fa-paper-plane fa-fw"></i> Confirmar Egreso
                                     </button>
                                 @endif
+                                @if ($salida_almacen->estado == '2')
+                                    <button class="btn btn-outline-danger w-100 w-md-auto btn-size mr-2 mb-2 mb-md-0 font-roboto-14" type="button" onclick="anular();">
+                                        <i class="fas fa-paper-plane fa-fw"></i> Anular Egreso
+                                    </button>
+                                @endif
+                                @if ($salida_almacen->estado == '3')
+                                    <button class="btn btn-outline-secondary w-100 w-md-auto btn-size mr-2 mb-2 mb-md-0 font-roboto-14" type="button" onclick="pendiente();">
+                                        <i class="fas fa-paper-plane fa-fw"></i> Volver a Pendiente
+                                    </button>
+                                @endif
                             @endcan
                             <button class="btn btn-danger w-100 w-md-auto btn-size  mr-2 mb-2 mb-md-0 font-roboto-14" type="button" onclick="cancelar();">
                                 <i class="fas fa-times fa-fw"></i> Cancelar
@@ -201,8 +211,20 @@
             $("#form").submit();
         }
 
+        function anular(){
+            var url = "{{ route('salida.sucursal.anular') }}";
+            $("#form").attr('action', url);
+            $("#form").submit();
+        }
+
+        function pendiente(){
+            var url = "{{ route('salida.sucursal.pendiente') }}";
+            $("#form").attr('action', url);
+            $("#form").submit();
+        }
+
         function pdf(){
-            var id = $("#ingreso_almacen_id").val();
+            var id = $("#salida_almacen_id").val();
             var url = "{{ route('salida.sucursal.pdf',':id') }}";
             url = url.replace(':id',id);
             window.open(url, '_blank');

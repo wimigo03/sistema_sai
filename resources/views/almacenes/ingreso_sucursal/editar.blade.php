@@ -74,7 +74,7 @@
                 $("#fecha_ingreso").datepicker({
                     inline: false,
                     language: "es",
-                    dateFormat: "dd-mm-yy",
+                    dateFormat: "dd-mm-yyyy",
                     autoClose: true
                 });
             });

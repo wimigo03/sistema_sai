@@ -15,8 +15,10 @@ Route::prefix('salida-sucursal')->name('salida.sucursal.')->middleware(['auth'])
     Route::post('store', 'Almacenes\SalidaSucursalController@store')->name('store')->middleware('can:salida.sucursal.create');
     Route::get('show/{salida_almacen_id}', 'Almacenes\SalidaSucursalController@show')->name('show')->middleware('can:salida.sucursal.show');
     Route::post('egresar', 'Almacenes\SalidaSucursalController@egresar')->name('egresar')->middleware('can:salida.sucursal.egresar');
+    Route::post('anular', 'Almacenes\SalidaSucursalController@anular')->name('anular')->middleware('can:salida.sucursal.egresar');
+    Route::post('pendiente', 'Almacenes\SalidaSucursalController@pendiente')->name('pendiente')->middleware('can:salida.sucursal.egresar');
     Route::get('pdf/{salida_almacen_id}', 'Almacenes\SalidaSucursalController@pdf')->name('pdf')->middleware('can:salida.sucursal.pdf');
     Route::get('editar/{salida_almacen_id}', 'Almacenes\SalidaSucursalController@editar')->name('editar')->middleware('can:salida.sucursal.editar');
-    Route::get('eliminar_registro/{ingreso_almacen_detalle_id}', 'Almacenes\SalidaSucursalController@eliminarRegistro')->name('eliminar')->middleware('can:salida.sucursal.editar');
+    Route::get('eliminar_registro/{salida_almacen_detalle_id}', 'Almacenes\SalidaSucursalController@eliminarRegistro')->name('eliminar')->middleware('can:salida.sucursal.editar');
     Route::post('update', 'Almacenes\SalidaSucursalController@update')->name('update')->middleware('can:salida.sucursal.editar');
 });

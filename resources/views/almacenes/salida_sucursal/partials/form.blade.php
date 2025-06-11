@@ -1,7 +1,7 @@
 <form action="#" method="post" id="form">
     @csrf
-    @isset($ingreso_almacen)
-        <input type="hidden" name="ingreso_almacen_id" id="ingreso_almacen_id" value="{{ $ingreso_almacen->id }}">
+    @isset($salida_almacen)
+        <input type="hidden" name="salida_almacen_id" id="salida_almacen_id" value="{{ $salida_almacen->id }}">
     @endisset
     <div class="div_cabecera mb-4">
         <div class="row mb-2">
@@ -10,7 +10,7 @@
                 <select name="almacen_id" id="almacen_id" class="form-control select2">
                     @foreach ($almacenes as $index => $value)
                         <option value="{{ $index }}"
-                            @if (isset($ingreso_almacen) && $ingreso_almacen->almacen_id == $index)
+                            @if (isset($salida_almacen) && $salida_almacen->almacen_id == $index)
                                 selected
                             @elseif (old('almacen_id') == $index)
                                 selected
@@ -26,7 +26,7 @@
                     <option value="">-</option>
                     @foreach ($areas as $index => $value)
                         <option value="{{ $index }}"
-                            @if (isset($ingreso_almacen) && $ingreso_almacen->area_id == $index)
+                            @if (isset($salida_almacen) && $salida_almacen->area_id == $index)
                                 selected
                             @elseif (old('area_id') == $index)
                                 selected
@@ -40,7 +40,7 @@
                 <br>
                 <div class="d-flex flex-column flex-md-row gap-3 justify-content-center justify-content-md-end">
                     <button class="btn btn-primary w-100 w-md-auto btn-size mr-1 mb-2 mb-md-0 font-roboto-14" type="button" onclick="procesar();">
-                        <i class="fas fa-paper-plane fa-fw"></i> {{ isset($ingreso_almacen) ? 'Modificar Cambios' : 'Procesar' }}
+                        <i class="fas fa-paper-plane fa-fw"></i> {{ isset($salida_almacen) ? 'Modificar Cambios' : 'Procesar' }}
                     </button>
                     <button class="btn btn-danger w-100 w-md-auto btn-size font-roboto-14" type="button" onclick="cancelar();">
                         <i class="fas fa-times fa-fw"></i> Cancelar
@@ -52,7 +52,7 @@
             </div>
             <div class="col-12 col-md-6 col-lg-2 mb-2">
                 <label for="n_solicitud" class="form-label d-inline font-roboto-14">N° de Solicitud</label>
-                <input type="text" name="n_solicitud" id="n_solicitud" value="{{ isset($ingreso_almacen) ? $ingreso_almacen->n_solicitud : old('n_solicitud') }}" class="form-control font-roboto-14">
+                <input type="text" name="n_solicitud" id="n_solicitud" value="{{ isset($salida_almacen) ? $salida_almacen->n_solicitud : old('n_solicitud') }}" class="form-control font-roboto-14 intro">
             </div>
             <div class="col-12 col-md-6 col-lg-6 mb-2">
                 <label for="proveedor_id" class="form-label d-inline font-roboto-14">Proveedor</label>
@@ -60,7 +60,7 @@
                     <option value="">-</option>
                     @foreach ($proveedores as $index => $value)
                         <option value="{{ $index }}"
-                            @if (isset($ingreso_almacen) && $ingreso_almacen->proveedor_id == $index)
+                            @if (isset($salida_almacen) && $salida_almacen->proveedor_id == $index)
                                 selected
                             @elseif (old('proveedor_id') == $index)
                                 selected
@@ -72,15 +72,15 @@
             </div>
             <div class="col-12 col-md-6 col-lg-3 mb-2">
                 <label for="codigo" class="form-label d-inline font-roboto-14">N° de Salida</label>
-                <input type="text" name="codigo" id="codigo" value="{{ isset($ingreso_almacen) ? $ingreso_almacen->codigo : old('codigo') }}" class="form-control font-roboto-14">
+                <input type="text" name="codigo" id="codigo" value="{{ isset($salida_almacen) ? $salida_almacen->codigo : old('codigo') }}" class="form-control font-roboto-14 intro">
             </div>
             <div class="col-12 col-md-6 col-lg-2 mb-2">
                 <label for="fecha_salida" class="form-label d-inline font-roboto-14">Fecha de Salida</label>
-                <input type="text" name="fecha_salida" placeholder="dd-mm-yyyy" id="fecha_salida" value="{{ isset($ingreso_almacen) ? \Carbon\Carbon::parse($ingreso_almacen->fecha_salida)->format('d-m-Y') : old('fecha_salida') }}" class="form-control font-roboto-14">
+                <input type="text" name="fecha_salida" placeholder="dd-mm-yyyy" id="fecha_salida" value="{{ isset($salida_almacen) ? \Carbon\Carbon::parse($salida_almacen->fecha_salida)->format('d-m-Y') : old('fecha_salida') }}" class="form-control font-roboto-14 intro">
             </div>
             <div class="col-12 col-md-6 col-lg-12 mb-2">
                 <label for="glosa" class="form-label d-inline font-roboto-14">Glosa</label>
-                <textarea name="glosa" id="glosa" class="form-control font-roboto-14">{{ isset($ingreso_almacen) ? $ingreso_almacen->obs : old('glosa') }}</textarea>
+                <textarea name="glosa" id="glosa" class="form-control font-roboto-14">{{ isset($salida_almacen) ? $salida_almacen->obs : old('glosa') }}</textarea>
             </div>
         </div>
     </div>
@@ -145,25 +145,30 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @isset($ingreso_almacen_detalles)
-                            @foreach ($ingreso_almacen_detalles as $datos)
+                        @isset($salida_almacen_detalles)
+                            @foreach ($salida_almacen_detalles as $datos)
                                 @php
                                     $subtotal = $datos->cantidad * $datos->precio_unitario;
                                     $total += $subtotal;
                                 @endphp
                                 <tr class="font-roboto-14">
+                                    <td style="display: none;">
+                                        <input type="hidden" name="old_salida_almacen_detalle_id[]" value="{{ $datos->id }}">
+                                    </td>
                                     <td class="text-center p-2 text-nowrap" style='vertical-align: middle;'>
-                                        <input type="hidden" name="old_ingreso_almacen_detalle_id[]" value="{{ $datos->id }}">
+                                        <input type="hidden" name="old_categoria_programatica_id[]" value="{{ $datos->categoria_programatica_id }}">
                                         <span class="tts:right tts-slideIn tts-custom" aria-label="{{ $datos->categoria_programatica->nombre }}" style="cursor: pointer;">
                                             {{ $datos->categoria_programatica->codigo }}
                                         </span>
                                     </td>
                                     <td class="text-center p-2 text-nowrap" style='vertical-align: middle;'>
+                                        <input type="hidden" name="old_partida_presupuestaria_id[]" value="{{ $datos->partida_presupuestaria_id }}">
                                         <span class="tts:right tts-slideIn tts-custom" aria-label="{{ $datos->partida_presupuestaria->nombre }}" style="cursor: pointer;">
                                             {{ $datos->partida_presupuestaria->numeracion }}
                                         </span>
                                     </td>
                                     <td class="text-center p-2 text-nowrap" style='vertical-align: middle;'>
+                                        <input type="hidden" name="old_producto_id[]" class="producto_id" value="{{ $datos->producto_id }}">
                                         {{ $datos->producto->codigo }}
                                     </td>
                                     <td class="text-justify p-2 text-nowrap" style="vertical-align: middle; max-width: 200px; overflow: hidden; text-overflow: ellipsis;">
@@ -185,7 +190,7 @@
                                         <span class='btn btn-sm btn-danger tts:left tts-slideIn tts-custom'
                                             style="cursor: pointer;"
                                             aria-label="Eliminar"
-                                            onclick="if(confirm('¿Estás seguro de que quieres eliminar el registro?')) { eliminarItem(this, {{ $datos->id }}); }">
+                                            onclick="if(confirm('¿Estás seguro? El registro se eliminara de manera inmediata')) { eliminarItem(this, {{ $datos->id }}); }">
                                             <i class='fas fa-trash fa-fw'></i>
                                         </span>
                                     </td>

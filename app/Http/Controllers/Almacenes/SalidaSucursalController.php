@@ -57,25 +57,23 @@ class SalidaSucursalController extends Controller
             $almacenes = Almacen::byDea($dea_id)->byEncargado($user_id)->get();
         }
 
-        $ingresos_almacenes = IngresoAlmacen::byDea($dea_id)
+        $salidas_almacenes = SalidaAlmacen::byDea($dea_id)
                                             ->byAlmacenes($almacenes)
                                             ->byCodigo($request->codigo)
                                             ->bySucursal($request->sucursal)
                                             ->byProveedor($request->proveedor)
                                             ->bySolicitante($request->solicitante)
-                                            ->byNroPreventivo($request->nro_preventivo)
-                                            ->byNroOrdenCompra($request->nro_orden_compra)
                                             ->byNroSolicitud($request->nro_solicitud)
                                             ->byFechaRegistro($request->fecha_registro)
-                                            ->byFechaIngreso($request->fecha_ingreso)
+                                            ->byFechaSalida($request->fecha_salida)
                                             ->byEstado($request->estado)
                                             ->orderBy('estado','asc')
                                             ->orderBy('id','desc')
                                             ->paginate(10);
 
-        $estados = IngresoAlmacen::ESTADOS;
+        $estados = SalidaAlmacen::ESTADOS;
 
-        return view('almacenes.salida_sucursal.index',compact('ingresos_almacenes','estados'));
+        return view('almacenes.salida_sucursal.index',compact('salidas_almacenes','estados'));
     }
 
     public function create()
@@ -205,7 +203,7 @@ class SalidaSucursalController extends Controller
                     ->join('ingresos_almacen as ia', 'iad.ingreso_almacen_id', '=', 'ia.id')
                     ->where('ia.dea_id', $dea_id)
                     ->where('ia.almacen_id', $almacen_id)
-                    ->where('ia.estado', '1')
+                    ->where('ia.estado', '2')
                     ->where('iad.categoria_programatica_id', $categoria_programatica_ids[$index])
                     ->where('iad.partida_presupuestaria_id', $partida_presupuestaria_ids[$index])
                     ->where('iad.producto_id', $producto_id)
@@ -218,7 +216,7 @@ class SalidaSucursalController extends Controller
                             ->join('salidas_almacen as sa', 'sad.salida_almacen_id', '=', 'sa.id')
                             ->where('sa.dea_id', '=', $dea_id)
                             ->where('sa.almacen_id', '=', $almacen_id)
-                            ->where('sa.estado', '=', '1');
+                            ->where('sa.estado', '=', '2');
                     })
                     ->selectRaw('SUM(iad.cantidad) - COALESCE(SUM(sad.cantidad), 0) as stock_disponible')
                     ->groupBy('iad.producto_id')
@@ -255,7 +253,7 @@ class SalidaSucursalController extends Controller
                 ->join('ingresos_almacen as ia', 'iad.ingreso_almacen_id', '=', 'ia.id')
                 ->where('ia.dea_id', $dea_id)
                 ->where('ia.almacen_id', $almacen_id)
-                ->where('ia.estado', '1')
+                ->where('ia.estado', '2')
                 ->where('iad.categoria_programatica_id', $categoria_programatica_id)
                 ->where('iad.partida_presupuestaria_id', $partida_presupuestaria_id)
                 ->where('iad.producto_id', $producto_id)
@@ -269,7 +267,7 @@ class SalidaSucursalController extends Controller
                         ->join('salidas_almacen as sa', 'sad.salida_almacen_id', '=', 'sa.id')
                         ->where('sa.dea_id', '=', $dea_id)
                         ->where('sa.almacen_id', '=', $almacen_id)
-                        ->where('sa.estado', '=', '1');
+                        ->where('sa.estado', '=', '2');
                 })
                 ->selectRaw('SUM(iad.cantidad) - COALESCE(SUM(sad.cantidad), 0) as stock_disponible, MAX(iad.precio_unitario) as ultimo_precio_unitario')
                 ->groupBy('iad.producto_id')
@@ -350,9 +348,9 @@ class SalidaSucursalController extends Controller
     }
 
     public function editar($id)
-    {dd("En proceso");
-        $salida_almacen = IngresoAlmacen::find($id);
-        $salida_almacen_detalles = IngresoAlmacenDetalle::byEstado(IngresoAlmacenDetalle::HABILITADO)->where('ingreso_almacen_id', $id)->get();
+    {
+        $salida_almacen = SalidaAlmacen::find($id);
+        $salida_almacen_detalles = SalidaAlmacenDetalle::byEstado(SalidaAlmacenDetalle::HABILITADO)->where('salida_almacen_id', $id)->get();
         $total = 0;
 
         $dea_id = Auth::user()->dea->id;
@@ -372,15 +370,15 @@ class SalidaSucursalController extends Controller
                                                             ->pluck('data_completo','id');
         $areas = Area::byDea($dea_id)->byEstado(Area::HABILITADO)->pluck('nombrearea','idarea');
 
-        return view('almacenes.salida_sucursal.editar',compact('ingreso_almacen','ingreso_almacen_detalles','total','almacenes','proveedores','categorias_programaticas','areas'));
+        return view('almacenes.salida_sucursal.editar',compact('salida_almacen','salida_almacen_detalles','total','almacenes','proveedores','categorias_programaticas','areas'));
     }
 
     public function eliminarRegistro($id)
     {
-        $ingreso_almacen_detalle = IngresoAlmacenDetalle::find($id);
-        if($ingreso_almacen_detalle != null){
-            $ingreso_almacen_detalle->update([
-                'estado' => IngresoAlmacenDetalle::NO_HABILITADO
+        $salida_almacen_detalle = SalidaAlmacenDetalle::find($id);
+        if($salida_almacen_detalle != null){
+            $salida_almacen_detalle->update([
+                'estado' => SalidaAlmacenDetalle::NO_HABILITADO
             ]);
             return response()->json([
                 'Eliminado' => 'Eliminado'
@@ -395,64 +393,65 @@ class SalidaSucursalController extends Controller
         try{
             $data = DB::transaction(function () use ($request) {
                 $user_id = Auth::user()->id;
-                $ingreso_almacen = IngresoAlmacen::find($request->ingreso_almacen_id);
-                $ingreso_almacen->update([
+                $salida_almacen = SalidaAlmacen::find($request->salida_almacen_id);
+                $salida_almacen->update([
                     'almacen_id' => $request->almacen_id,
                     'user_id' => $user_id,
                     'proveedor_id' => $request->proveedor_id,
                     'area_id' => $request->area_id,
                     'codigo' => $request->codigo,
-                    'n_preventivo' => $request->n_preventivo,
                     'n_factura' => isset($request->n_factura) ? $request->n_factura : null,
-                    'n_orden_compra' => $request->n_orden_compra,
-                    'n_cotizacion' => isset($request->n_cotizacion) ? $request->n_cotizacion : null,
                     'n_solicitud' => $request->n_solicitud,
-                    'fecha_ingreso' => date('Y-m-d', strtotime($request->fecha_ingreso)),
+                    'fecha_salida' => date('Y-m-d', strtotime($request->fecha_salida)),
                     'obs' => $request->glosa
                 ]);
 
-                $cont = 0;
+                if ($request->filled('old_salida_almacen_detalle_id')) {
 
-                while($cont < count($request->old_ingreso_almacen_detalle_id)){
-                    $ingreso_almacen_detalle = IngresoAlmacenDetalle::find($request->old_ingreso_almacen_detalle_id[$cont]);
-                    $ingreso_almacen_detalle->update([
-                        'cantidad' => floatval(str_replace(",", "", $request->old_cantidad[$cont])),
-                        'precio_unitario' => floatval(str_replace(",", "", $request->old_precio_unitario[$cont])),
-                    ]);
-
-                    $cont++;
-                }
-
-                if ($request->filled('producto_id')) {
                     $cont = 0;
 
-                    while($cont < count($request->producto_id)){
-                        $ingreso_almacen_detalle = IngresoAlmacenDetalle::create([
-                            'ingreso_almacen_id' => $ingreso_almacen->id,
-                            'categoria_programatica_id' => $request->categoria_programatica_id[$cont],
-                            'partida_presupuestaria_id' => $request->partida_presupuestaria_id[$cont],
-                            'producto_id' => $request->producto_id[$cont],
-                            'cantidad' => floatval(str_replace(",", "", $request->cantidad[$cont])),
-                            'precio_unitario' => floatval(str_replace(",", "", $request->precio_unitario[$cont])),
-                            'estado' => IngresoAlmacenDetalle::HABILITADO,
+                    while($cont < count($request->old_salida_almacen_detalle_id)){
+                        $salida_almacen_detalle = SalidaAlmacenDetalle::find($request->old_salida_almacen_detalle_id[$cont]);
+                        $salida_almacen_detalle->update([
+                            'cantidad' => floatval(str_replace(",", "", $request->old_cantidad[$cont])),
+                            'precio_unitario' => floatval(str_replace(",", "", $request->old_precio_unitario[$cont])),
                         ]);
 
                         $cont++;
                     }
                 }
 
-                return $ingreso_almacen_detalle;
+                if ($request->filled('producto_id')) {
+
+                    $cont = 0;
+
+                    while($cont < count($request->producto_id)){
+                        $salida_almacen_detalle = SalidaAlmacenDetalle::create([
+                            'salida_almacen_id' => $salida_almacen->id,
+                            'categoria_programatica_id' => $request->categoria_programatica_id[$cont],
+                            'partida_presupuestaria_id' => $request->partida_presupuestaria_id[$cont],
+                            'producto_id' => $request->producto_id[$cont],
+                            'cantidad' => floatval(str_replace(",", "", $request->cantidad[$cont])),
+                            'precio_unitario' => floatval(str_replace(",", "", $request->precio_unitario[$cont])),
+                            'estado' => SalidaAlmacenDetalle::HABILITADO,
+                        ]);
+
+                        $cont++;
+                    }
+                }
+
+                return $salida_almacen_detalle;
             });
             Log::channel('ingresos_almacen')->info(
                 "\n" .
-                "Ingresos Almacen modificados con exito." . "\n" .
+                "Egresos Almacen modificados con exito." . "\n" .
                 "Por el usuario " . Auth::user()->id . "\n"
             );
-            return redirect()->route('ingreso.sucursal.index')->with('success_message', '[El ingreso fue registrado correctamente.]');
+            return redirect()->route('salida.sucursal.index')->with('success_message', '[El registro fue modificado correctamente.]');
         } catch (\Exception $e) {
             Log::channel('ingresos_almacen')->info(
                 "\n" .
-                "Error al modificar un registro de ingreso de almacen " . "\n" .
+                "Error al modificar un registro de egreso de almacen " . "\n" .
                 "Por el usuario  " . Auth::user()->id . "\n" .
                 "Error: " . $e->getMessage() . "\n"
             );
@@ -488,28 +487,86 @@ class SalidaSucursalController extends Controller
         return $pdf->stream('Salida-' . $salida_almacen->codigo);
     }
 
-    public function ingresar(Request $request)
+    public function egresar(Request $request)
     {
         try{
             $data = DB::transaction(function () use ($request) {
-                $ingreso_almacen = IngresoAlmacen::find($request->ingreso_almacen_id);
-                $ingreso_almacen->update([
+                $salida_almacen = SalidaAlmacen::find($request->salida_almacen_id);
+                $salida_almacen->update([
                     'user_id' => Auth::user()->id,
-                    'estado' => IngresoAlmacen::INGRESADO
+                    'estado' => SalidaAlmacen::EGRESADO
                 ]);
 
-                return $ingreso_almacen;
+                return $salida_almacen;
             });
             Log::channel('ingresos_almacen')->info(
                 "\n" .
-                "Materiales ingresados correctamente" . "\n" .
+                "Materiales egresados correctamente" . "\n" .
                 "Usuario: " . Auth::user()->id . "\n"
             );
-            return redirect()->route('ingreso.sucursal.index')->with('success_message', '[Registro procesado correctamente.]');
+            return redirect()->route('salida.sucursal.index')->with('info_message', '[Registro procesado correctamente.]');
         } catch (\Exception $e) {
             Log::channel('ingresos_almacen')->info(
                 "\n" .
-                "Error al ingresar los materiales: " . "\n" .
+                "Error al egresar los materiales: " . "\n" .
+                "Usuario: " . Auth::user()->id . "\n" .
+                "Error: " . $e->getMessage() . "\n"
+            );
+            return redirect()->back()->with('error_message','[Ocurrio un Error al procesar el registro]')->withInput();
+        }
+    }
+
+    public function pendiente(Request $request)
+    {
+        try{
+            $data = DB::transaction(function () use ($request) {
+                $salida_almacen = SalidaAlmacen::find($request->salida_almacen_id);
+                $salida_almacen->update([
+                    'user_id' => Auth::user()->id,
+                    'estado' => SalidaAlmacen::PENDIENTE
+                ]);
+
+                return $salida_almacen;
+            });
+            Log::channel('ingresos_almacen')->info(
+                "\n" .
+                "Estado modificado a pendiente correctamente" . "\n" .
+                "Usuario: " . Auth::user()->id . "\n"
+            );
+            return redirect()->route('salida.sucursal.index')->with('info_message', '[Registro procesado correctamente.]');
+        } catch (\Exception $e) {
+            Log::channel('ingresos_almacen')->info(
+                "\n" .
+                "Error al modificar el registro: " . "\n" .
+                "Usuario: " . Auth::user()->id . "\n" .
+                "Error: " . $e->getMessage() . "\n"
+            );
+            return redirect()->back()->with('error_message','[Ocurrio un Error al procesar el registro]')->withInput();
+        }
+    }
+
+    public function anular(Request $request)
+    {
+        try{
+            $data = DB::transaction(function () use ($request) {
+                $salida_almacen = SalidaAlmacen::find($request->salida_almacen_id);
+                $salida_almacen->update([
+                    'user_id' => Auth::user()->id,
+                    'estado' => SalidaAlmacen::ANULADO
+                ]);
+
+                return $salida_almacen;
+            });
+            Log::channel('ingresos_almacen')->info(
+                "\n" .
+                "Estado modificado a anulado correctamente" . "\n" .
+                "Usuario: " . Auth::user()->id . "\n"
+            );
+            return redirect()->route('salida.sucursal.index')->with('info_message', '[Registro procesado correctamente.]');
+        } catch (\Exception $e) {
+            Log::channel('ingresos_almacen')->info(
+                "\n" .
+                "Error al modificar el registro: " . "\n" .
                 "Usuario: " . Auth::user()->id . "\n" .
                 "Error: " . $e->getMessage() . "\n"
             );

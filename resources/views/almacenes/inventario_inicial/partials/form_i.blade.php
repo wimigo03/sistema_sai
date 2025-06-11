@@ -22,19 +22,7 @@
             </div>
             <div class="col-12 col-md-6 col-lg-4 mb-2">
                 <label for="area_id" class="form-label d-inline font-roboto-14">Solicitante</label>
-                <select name="area_id" id="area_id" class="form-control select2">
-                    <option value="">-</option>
-                    @foreach ($areas as $index => $value)
-                        <option value="{{ $index }}"
-                            @if (isset($ingreso_almacen) && $ingreso_almacen->area_id == $index)
-                                selected
-                            @elseif (old('area_id') == $index)
-                                selected
-                            @endif>
-                            {{ $value }}
-                        </option>
-                    @endforeach
-                </select>
+                <input type="text" value="UNIDAD DE ALMACENES" class="form-control font-roboto-12" disabled>
             </div>
             <div class="col-12 col-md-6 col-lg-4 mb-2">
                 <br>
@@ -50,37 +38,9 @@
                     <i class="fa fa-spinner fa-spin fa-lg spinner-btn" style="display: none;"></i>
                 </div>
             </div>
-            <div class="col-12 col-md-6 col-lg-2 mb-2">
-                <label for="n_preventivo" class="form-label d-inline font-roboto-14">N° Preventivo</label>
-                <input type="text" name="n_preventivo" id="n_preventivo" value="{{ isset($ingreso_almacen) ? $ingreso_almacen->n_preventivo : old('n_preventivo') }}" class="form-control font-roboto-14 intro">
-            </div>
-            <div class="col-12 col-md-6 col-lg-2 mb-2">
-                <label for="n_orden_compra" class="form-label d-inline font-roboto-14">N° de O.C.</label>
-                <input type="text" name="n_orden_compra" id="n_orden_compra" value="{{ isset($ingreso_almacen) ? $ingreso_almacen-> n_orden_compra : old('n_orden_compra') }}" class="form-control font-roboto-14 intro">
-            </div>
-            <div class="col-12 col-md-6 col-lg-2 mb-2">
-                <label for="n_solicitud" class="form-label d-inline font-roboto-14">N° de Solicitud</label>
-                <input type="text" name="n_solicitud" id="n_solicitud" value="{{ isset($ingreso_almacen) ? $ingreso_almacen->n_solicitud : old('n_solicitud') }}" class="form-control font-roboto-14 intro">
-            </div>
-            <div class="col-12 col-md-6 col-lg-6 mb-2">
-                <label for="proveedor_id" class="form-label d-inline font-roboto-14">Proveedor</label>
-                <select name="proveedor_id" id="proveedor_id" class="form-control select2">
-                    <option value="">-</option>
-                    @foreach ($proveedores as $index => $value)
-                        <option value="{{ $index }}"
-                            @if (isset($ingreso_almacen) && $ingreso_almacen->proveedor_id == $index)
-                                selected
-                            @elseif (old('proveedor_id') == $index)
-                                selected
-                            @endif>
-                            {{ $value }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
             <div class="col-12 col-md-6 col-lg-3 mb-2">
                 <label for="codigo" class="form-label d-inline font-roboto-14">N° de Ingreso</label>
-                <input type="text" name="codigo" id="codigo" value="{{ isset($ingreso_almacen) ? $ingreso_almacen->codigo : old('codigo') }}" class="form-control font-roboto-14 intro">
+                <input type="text" name="codigo" id="codigo" value="{{ isset($ingreso_almacen) ? $ingreso_almacen->codigo : old('codigo') }}" class="form-control font-roboto-14 intro" disabled>
             </div>
             <div class="col-12 col-md-6 col-lg-2 mb-2">
                 <label for="fecha_ingreso" class="form-label d-inline font-roboto-14">Fecha de Ingreso</label>

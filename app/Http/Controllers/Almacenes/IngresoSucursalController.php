@@ -11,6 +11,7 @@ use Luecano\NumeroALetras\NumeroALetras;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 
+use App\Models\Almacenes\InventarioInicial;
 use App\Models\Almacenes\IngresoAlmacen;
 use App\Models\Almacenes\IngresoAlmacenDetalle;
 use App\Models\User;
@@ -22,6 +23,12 @@ use App\Models\Almacenes\Producto;
 
 class IngresoSucursalController extends Controller
 {
+    public function inventarios_iniciales(){
+        $inventarios_iniciales = InventarioInicial::select('ingreso_almacen_id')->get();
+        $ingreso_almacen_ids = $inventarios_iniciales->pluck('ingreso_almacen_id')->toArray();
+        return $ingreso_almacen_ids;
+    }
+
     public function index()
     {
         $dea_id = Auth::user()->dea->id;
@@ -34,8 +41,11 @@ class IngresoSucursalController extends Controller
             $almacenes = Almacen::byDea($dea_id)->byEncargado($user_id)->get();
         }
 
+        $ingreso_almacen_ids = $this->inventarios_iniciales();
+
         $ingresos_almacenes = IngresoAlmacen::byDea($dea_id)
                                             ->byAlmacenes($almacenes)
+                                            ->whereNotIn('id', $ingreso_almacen_ids)
                                             ->orderBy('estado','asc')
                                             ->orderBy('id','desc')
                                             ->paginate(10);
@@ -57,8 +67,11 @@ class IngresoSucursalController extends Controller
             $almacenes = Almacen::byDea($dea_id)->byEncargado($user_id)->get();
         }
 
+        $ingreso_almacen_ids = $this->inventarios_iniciales();
+
         $ingresos_almacenes = IngresoAlmacen::byDea($dea_id)
                                             ->byAlmacenes($almacenes)
+                                            ->whereNotIn('id', $ingreso_almacen_ids)
                                             ->byCodigo($request->codigo)
                                             ->bySucursal($request->sucursal)
                                             ->byProveedor($request->proveedor)
@@ -298,6 +311,17 @@ class IngresoSucursalController extends Controller
 
     public function show($ingreso_almacen_id)
     {
+        $ingreso_almacen_ids = $this->inventarios_iniciales();
+
+        $cont = 0;
+
+        while($cont < count($ingreso_almacen_ids)){
+            if($ingreso_almacen_ids[$cont] == $ingreso_almacen_id){
+                return redirect()->route('ingreso.sucursal.index');
+            }
+            $cont++;
+        }
+
         $ingreso_almacen = IngresoAlmacen::find($ingreso_almacen_id);
         $ingreso_almacen_detalles = IngresoAlmacenDetalle::where('ingreso_almacen_id',$ingreso_almacen_id)->where('estado',IngresoAlmacenDetalle::HABILITADO)->get();
         $total = 0;
@@ -307,6 +331,17 @@ class IngresoSucursalController extends Controller
 
     public function editar($id)
     {
+        $ingreso_almacen_ids = $this->inventarios_iniciales();
+
+        $cont = 0;
+
+        while($cont < count($ingreso_almacen_ids)){
+            if($ingreso_almacen_ids[$cont] == $id){
+                return redirect()->route('ingreso.sucursal.index');
+            }
+            $cont++;
+        }
+
         $ingreso_almacen = IngresoAlmacen::find($id);
         $ingreso_almacen_detalles = IngresoAlmacenDetalle::byEstado(IngresoAlmacenDetalle::HABILITADO)->where('ingreso_almacen_id', $id)->get();
         $total = 0;
@@ -355,28 +390,31 @@ class IngresoSucursalController extends Controller
                 $ingreso_almacen->update([
                     'almacen_id' => $request->almacen_id,
                     'user_id' => $user_id,
-                    'proveedor_id' => $request->proveedor_id,
-                    'area_id' => $request->area_id,
-                    'codigo' => $request->codigo,
-                    'n_preventivo' => $request->n_preventivo,
+                    'proveedor_id' => isset($request->proveedor_id) ? $request->proveedor_id : null,
+                    'area_id' => isset($request->area_id) ? $request->area_id : null,
+                    'codigo' => isset($request->codigo) ? $request->codigo : null,
+                    'n_preventivo' => isset($request->n_preventivo) ? $request->n_preventivo : null,
                     'n_factura' => isset($request->n_factura) ? $request->n_factura : null,
-                    'n_orden_compra' => $request->n_orden_compra,
+                    'n_orden_compra' => isset($request->n_orden_compra) ? $request->n_orden_compra : null,
                     'n_cotizacion' => isset($request->n_cotizacion) ? $request->n_cotizacion : null,
-                    'n_solicitud' => $request->n_solicitud,
+                    'n_solicitud' => isset($request->n_solicitud) ? $request->n_solicitud : null,
                     'fecha_ingreso' => date('Y-m-d', strtotime($request->fecha_ingreso)),
                     'obs' => $request->glosa
                 ]);
 
-                $cont = 0;
+                if ($request->filled('old_ingreso_almacen_detalle_id')) {
 
-                while($cont < count($request->old_ingreso_almacen_detalle_id)){
-                    $ingreso_almacen_detalle = IngresoAlmacenDetalle::find($request->old_ingreso_almacen_detalle_id[$cont]);
-                    $ingreso_almacen_detalle->update([
-                        'cantidad' => floatval(str_replace(",", "", $request->old_cantidad[$cont])),
-                        'precio_unitario' => floatval(str_replace(",", "", $request->old_precio_unitario[$cont])),
-                    ]);
+                    $cont = 0;
 
-                    $cont++;
+                    while($cont < count($request->old_ingreso_almacen_detalle_id)){
+                        $ingreso_almacen_detalle = IngresoAlmacenDetalle::find($request->old_ingreso_almacen_detalle_id[$cont]);
+                        $ingreso_almacen_detalle->update([
+                            'cantidad' => floatval(str_replace(",", "", $request->old_cantidad[$cont])),
+                            'precio_unitario' => floatval(str_replace(",", "", $request->old_precio_unitario[$cont])),
+                        ]);
+
+                        $cont++;
+                    }
                 }
 
                 if ($request->filled('producto_id')) {
@@ -404,7 +442,12 @@ class IngresoSucursalController extends Controller
                 "Ingresos Almacen modificados con exito." . "\n" .
                 "Por el usuario " . Auth::user()->id . "\n"
             );
-            return redirect()->route('ingreso.sucursal.index')->with('success_message', '[El ingreso fue registrado correctamente.]');
+            if(isset($request->area_id)){
+                return redirect()->route('ingreso.sucursal.index')->with('success_message', '[El ingreso fue registrado correctamente.]');
+            }else{
+                return redirect()->route('inventario.inicial.index')->with('success_message', '[El ingreso fue registrado correctamente.]');
+            }
+
         } catch (\Exception $e) {
             Log::channel('ingresos_almacen')->info(
                 "\n" .
@@ -418,6 +461,17 @@ class IngresoSucursalController extends Controller
 
     public function pdf($ingreso_almacen_id)
     {
+        $ingreso_almacen_ids = $this->inventarios_iniciales();
+
+        $cont = 0;
+
+        while($cont < count($ingreso_almacen_ids)){
+            if($ingreso_almacen_ids[$cont] == $ingreso_almacen_id){
+                return redirect()->route('ingreso.sucursal.index');
+            }
+            $cont++;
+        }
+
         $ingreso_almacen = IngresoAlmacen::find($ingreso_almacen_id);
         $ingreso_almacen_detalles = IngresoAlmacenDetalle::with([
             'categoria_programatica:id,codigo,nombre',

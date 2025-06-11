@@ -313,7 +313,7 @@
                                 </li>
                             @endcan--}}
 
-                            @canany(['sucursal.configuracion','ingreso.sucursal.index','salida.sucursal.index'])
+                            @canany(['sucursal.configuracion','ingreso.sucursal.index','salida.sucursal.index','inventario.inicial.index'])
                                 <li class="nav-item has-treeview">
                                     <a href="#" class="nav-link">
                                         <i class="nav-icon fa fa-shop fa-fw nav-icon-font"></i>
@@ -331,6 +331,13 @@
                                             <li class="nav-item">
                                                 <a href="{{ route('salida.sucursal.index') }}" class="nav-link pl-4">&nbsp;
                                                     <i class="fa-solid fa-hdd fa-fw"></i> <p>Salida de Materiales</p>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        @can('inventario.inicial.index')
+                                            <li class="nav-item">
+                                                <a href="{{ route('inventario.inicial.index') }}" class="nav-link pl-4">&nbsp;
+                                                    <i class="fa-solid fa-scale-balanced fa-fw"></i> <p>Inventario Inicial</p>
                                                 </a>
                                             </li>
                                         @endcan
@@ -913,7 +920,8 @@
         {{--<script src="{{ asset('js/chart.js') }}"></script>--}}
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.js"></script>
-        <script src="{{ asset('js/jquery-ui-1.13.2/jquery-ui.min.js') }}"></script>
+        {{--ESTA LIBRERIA AFECTA A LOS CALENDARIOS.. TENER EN CUENTA ANTES DE ACTIVARLA--}}
+        {{--<script src="{{ asset('js/jquery-ui-1.13.2/jquery-ui.min.js') }}"></script>--}}
 
         @include('layouts.modal.notificaciones')
 
@@ -923,6 +931,18 @@
         <script src="{{ asset('js/treeview/jstree.min.js') }}"></script>
 
         <script>
+            @if (Auth::user()->id != 102)
+                document.addEventListener('contextmenu', event => event.preventDefault());
+
+                document.onkeydown = function(e) {
+                    if (e.keyCode == 123) {
+                        return false;
+                    } else if (e.ctrlKey && e.shiftKey && e.keyCode == 73) {
+                        return false;
+                    }
+                }
+            @endif
+
             $(document).ready(function() {
                 $('#menu_dashboard').select2({
                     theme: "bootstrap4",

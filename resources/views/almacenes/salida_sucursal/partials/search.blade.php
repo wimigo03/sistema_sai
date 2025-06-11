@@ -13,19 +13,13 @@
             <input type="text" name="solicitante" value="{{ request('solicitante') }}" id="solicitante" placeholder="--Solicitante--" class="form-control font-roboto-14 intro">
         </div>
         <div class="col mb-2">
-            <input type="text" name="nro_preventivo" value="{{ request('nro_preventivo') }}" id="nro_preventivo" placeholder="--N° de Preventivo--" class="form-control font-roboto-14 intro">
-        </div>
-        <div class="col mb-2">
-            <input type="text" name="nro_orden_compra" value="{{ request('nro_orden_compra') }}" id="nro_orden_compra" placeholder="--N° O.C.--" class="form-control font-roboto-14 intro">
-        </div>
-        <div class="col mb-2">
-            <input type="text" name="nro_solicitud" value="{{ request('nro_solicitud') }}" id="nro_solicitud" placeholder="--N° de Preventivo--" class="form-control font-roboto-14 intro">
+            <input type="text" name="nro_solicitud" value="{{ request('nro_solicitud') }}" id="nro_solicitud" placeholder="--N° de Solicitud--" class="form-control font-roboto-14 intro">
         </div>
         <div class="col mb-2">
             <input type="text" name="fecha_registro" value="{{ request('fecha_registro') }}" id="fecha_registro" placeholder="--Registro--" class="form-control font-roboto-14 intro">
         </div>
         <div class="col mb-2">
-            <input type="text" name="fecha_salida" value="{{ request('fecha_salida') }}" id="fecha_ingreso" placeholder="--Salida--" class="form-control font-roboto-14 intro">
+            <input type="text" name="fecha_salida" value="{{ request('fecha_salida') }}" id="fecha_salida" placeholder="--Salida--" class="form-control font-roboto-14 intro">
         </div>
         <div class="col mb-2">
             <select name="estado" id="estado" class="form-control">

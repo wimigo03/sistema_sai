@@ -46,7 +46,7 @@
     <div class="card">
         <div class="card-header">
             <div class="row d-flex align-items-center">
-                <i class="fa-solid fa-file-lines fa-fw"></i>&nbsp;<b class="title-size">DETALLE REGISTRO DE MATERIALES</b>
+                <i class="fa-solid fa-file-lines fa-fw"></i>&nbsp;<b class="title-size">DETALLE REGISTRO DE @if($ingreso_almacen->codigo != 1) MATERIALES @else INVENTARIO @endif</b>
             </div>
         </div>
 
@@ -63,8 +63,10 @@
                         <input type="text" id="almacen_id" value="{{ $ingreso_almacen->almacen->nombre }}" class="form-control font-roboto-14" disabled>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 mb-2">
-                        <label for="" class="form-label d-inline font-roboto-14">Solicitante</label>
-                        <input type="text" id="area_id" value="{{ $ingreso_almacen->area->nombrearea }}" class="form-control font-roboto-14" disabled>
+                        @isset($ingreso_almacen->area)
+                            <label for="" class="form-label d-inline font-roboto-14">Solicitante</label>
+                            <input type="text" id="area_id" value="{{ isset($ingreso_almacen->area) ? $ingreso_almacen->area->nombrearea : '' }}" class="form-control font-roboto-14" disabled>
+                        @endisset
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 mb-2">
                         <br>
@@ -77,7 +79,7 @@
                                     </button>
                                 @endif
                             @endcan
-                            <button class="btn btn-danger w-100 w-md-auto btn-size  mr-1 mb-2 mb-md-0 font-roboto-14" type="button" onclick="cancelar();">
+                            <button class="btn btn-danger w-100 w-md-auto btn-size  mr-1 mb-2 mb-md-0 font-roboto-14" type="button" @if($ingreso_almacen->codigo != 1) onclick="cancelar();" @else onclick="cancelar_i();" @endif>
                                 <i class="fas fa-times fa-fw"></i> Cancelar
                             </button>
                             @can('ingreso.sucursal.pdf')
@@ -90,22 +92,24 @@
                             <i class="fa fa-spinner fa-spin fa-lg spinner-btn" style="display: none;"></i>
                         </div>
                     </div>
-                    <div class="col-12 col-md-6 col-lg-2 mb-2">
-                        <label for="show" class="form-label d-inline font-roboto-14">N° Preventivo</label>
-                        <input type="text" id="n_preventivo" value="{{ $ingreso_almacen->n_preventivo }}" class="form-control font-roboto-14" disabled>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-2 mb-2">
-                        <label for="show" class="form-label d-inline font-roboto-14">N° de O.C.</label>
-                        <input type="text" id="n_orden_compra" value="{{ $ingreso_almacen->n_orden_compra }}" class="form-control font-roboto-14" disabled>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-2 mb-2">
-                        <label for="show" class="form-label d-inline font-roboto-14">N° de Solicitud</label>
-                        <input type="text" id="n_solicitud" value="{{ $ingreso_almacen->n_solicitud }}" class="form-control font-roboto-14" disabled>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-6 mb-2">
-                        <label for="show" class="form-label d-inline font-roboto-14">Proveedor</label>
-                        <input type="text" id="proveedor_id" value="{{ $ingreso_almacen->proveedor->nombre }}" class="form-control font-roboto-14" disabled>
-                    </div>
+                    @if ($ingreso_almacen->codigo != 1)
+                        <div class="col-12 col-md-6 col-lg-2 mb-2">
+                            <label for="show" class="form-label d-inline font-roboto-14">N° Preventivo</label>
+                            <input type="text" id="n_preventivo" value="{{ $ingreso_almacen->n_preventivo }}" class="form-control font-roboto-14" disabled>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-2 mb-2">
+                            <label for="show" class="form-label d-inline font-roboto-14">N° de O.C.</label>
+                            <input type="text" id="n_orden_compra" value="{{ $ingreso_almacen->n_orden_compra }}" class="form-control font-roboto-14" disabled>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-2 mb-2">
+                            <label for="show" class="form-label d-inline font-roboto-14">N° de Solicitud</label>
+                            <input type="text" id="n_solicitud" value="{{ $ingreso_almacen->n_solicitud }}" class="form-control font-roboto-14" disabled>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-6 mb-2">
+                            <label for="show" class="form-label d-inline font-roboto-14">Proveedor</label>
+                            <input type="text" id="proveedor_id" value="{{ isset($ingreso_almacen->proveedor) ? $ingreso_almacen->proveedor->nombre : '' }}" class="form-control font-roboto-14" disabled>
+                        </div>
+                    @endif
                     <div class="col-12 col-md-6 col-lg-3 mb-2">
                         <label for="show" class="form-label d-inline font-roboto-14">N° de Ingreso</label>
                         <input type="text" id="codigo" value="{{ $ingreso_almacen->codigo }}" class="form-control font-roboto-14" disabled>
@@ -226,13 +230,18 @@
 
         function pdf(){
             var id = $("#ingreso_almacen_id").val();
-            var url = "{{ route('ingreso.sucursal.pdf',':id') }}";
+            var url = "{{ route('inventario.inicial.pdf',':id') }}";
             url = url.replace(':id',id);
             window.open(url, '_blank');
         }
 
         function cancelar(){
             var url = "{{ route('ingreso.sucursal.index') }}";
+            window.location.href = url;
+        }
+
+        function cancelar_i(){
+            var url = "{{ route('inventario.inicial.index') }}";
             window.location.href = url;
         }
     </script>

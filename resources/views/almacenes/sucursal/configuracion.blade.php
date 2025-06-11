@@ -15,6 +15,17 @@
         <div class="card-body">
             <div class="container my-4">
                 <div class="d-flex flex-column gap-4">
+                    @can('inventario.inicial.index')
+                        <button type="button"
+                                class="btn btn-outline-dark mb-1 d-flex justify-content-between align-items-center fs-5 py-1 rounded shadow-sm"
+                                onclick="window.location.href='{{ route('inventario.inicial.index') }}'">
+                            Inventario Inicial
+                            <span class="badge bg-dark text-primary rounded-pill fs-5 p-3">
+                                <i class="fa-solid fa-scale-balanced fa-fw"></i>
+                            </span>
+                        </button>
+                    @endcan
+
                     @can('sucursal.index')
                         <button type="button"
                                 class="btn btn-outline-dark mb-1 d-flex justify-content-between align-items-center fs-5 py-1 rounded shadow-sm"

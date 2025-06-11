@@ -35,7 +35,8 @@
 
                 $("#fecha_registro").datepicker({
                     inline: false,
-                    dateFormat: "dd-mm-yy",
+                    language: "es",
+                    dateFormat: "dd-mm-yyyy",
                     autoClose: true,
                 });
 
@@ -47,7 +48,8 @@
 
                 $("#fecha_salida").datepicker({
                     inline: false,
-                    dateFormat: "dd-mm-yy",
+                    language: "es",
+                    dateFormat: "dd-mm-yyyy",
                     autoClose: true,
                 });
             });
