@@ -63,10 +63,10 @@
                         <input type="text" id="almacen_id" value="{{ $ingreso_almacen->almacen->nombre }}" class="form-control font-roboto-14" disabled>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 mb-2">
-                        @isset($ingreso_almacen->area)
+                        @if($ingreso_almacen->codigo != 1)
                             <label for="" class="form-label d-inline font-roboto-14">Solicitante</label>
                             <input type="text" id="area_id" value="{{ isset($ingreso_almacen->area) ? $ingreso_almacen->area->nombrearea : '' }}" class="form-control font-roboto-14" disabled>
-                        @endisset
+                        @endif
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 mb-2">
                         <br>

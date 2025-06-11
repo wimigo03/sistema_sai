@@ -171,13 +171,13 @@
     </table>
     <table class="table-encabezado">
         <tr>
-            <td style="width:20%; word-wrap: break-word;">
+            {{--<td style="width:20%; word-wrap: break-word;">
                 &nbsp;
-            </td>
+            </td>--}}
             <td style="width:20%; word-wrap: break-word;">
                 <b>N° SOLICITUD:</b> <span style="font-size: 11px;">{{ $salida_almacen->n_solicitud }}</span>
             </td>
-            <td style="width:60%; word-wrap: break-word;">
+            <td style="width:80%; word-wrap: break-word;">
                 <b>SOLICITANTE:</b> <span style="font-size: 11px;">{{ strtoupper($salida_almacen->area->nombrearea) }}</span>
             </td>
         </tr>
@@ -222,7 +222,7 @@
                 @foreach ($detalles as $detalle)
                     <tr>
                         <td align="center" style="width:10%; word-wrap: break-word;">{{ $detalle->producto->codigo ?? 'N/A' }}</td>
-                        <td style="width:10%; word-wrap: break-word;">{{ $detalle->producto->detalle ?? 'N/A' }}</td>
+                        <td style="width:10%; word-wrap: break-word;">{{ $detalle->producto->nombre ?? 'N/A' }}</td>
                         <td align="center" style="width:10%; word-wrap: break-word;">{{ $detalle->producto->unidad_medida->alias ?? 'N/A' }}</td>
                         <td align="right" style="width:10%; word-wrap: break-word;">{{ $detalle->cantidad }}</td>
                         <td align="right" style="width:10%; word-wrap: break-word;">{{ number_format($detalle->precio_unitario, 2) }}</td>

@@ -167,7 +167,7 @@
             </td>
         </tr>
     </table>
-    @isset($ingreso_almacen->proveedor)
+    @if($ingreso_almacen->codigo != 1)
         <table class="table-encabezado">
             <tr>
                 <td style="width:25%; word-wrap: break-word;">
@@ -178,8 +178,8 @@
                 </td>
             </tr>
         </table>
-    @endisset
-    @isset($ingreso_almacen->n_orden_compra)
+    @endif
+    @if($ingreso_almacen->codigo != 1)
         <table class="table-encabezado">
             <tr>
                 <td style="width:20%; word-wrap: break-word;">
@@ -193,7 +193,7 @@
                 </td>
             </tr>
         </table>
-    @endisset
+    @endif
     <br>
     <table class="table-contenido">
         @php
@@ -234,7 +234,7 @@
                 @foreach ($detalles as $detalle)
                     <tr>
                         <td align="center" style="width:10%; word-wrap: break-word;">{{ $detalle->producto->codigo ?? 'N/A' }}</td>
-                        <td style="width:10%; word-wrap: break-word;">{{ $detalle->producto->detalle ?? 'N/A' }}</td>
+                        <td style="width:10%; word-wrap: break-word;">{{ $detalle->producto->nombre ?? 'N/A' }}</td>
                         <td align="center" style="width:10%; word-wrap: break-word;">{{ $detalle->producto->unidad_medida->alias ?? 'N/A' }}</td>
                         <td align="right" style="width:10%; word-wrap: break-word;">{{ $detalle->cantidad }}</td>
                         <td align="right" style="width:10%; word-wrap: break-word;">{{ number_format($detalle->precio_unitario, 2) }}</td>
