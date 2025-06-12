@@ -21,7 +21,7 @@
                 </select>
             </div>
             <div class="col-12 col-md-6 col-lg-4 mb-2">
-                <label for="area_id" class="form-label d-inline font-roboto-14">Solicitante</label>
+                <label for="area_id" class="form-label d-inline font-roboto-14">Unidad Solicitante</label>
                 <select name="area_id" id="area_id" class="form-control select2">
                     <option value="">-</option>
                     @foreach ($areas as $index => $value)
@@ -77,6 +77,22 @@
             <div class="col-12 col-md-6 col-lg-2 mb-2">
                 <label for="fecha_salida" class="form-label d-inline font-roboto-14">Fecha de Salida</label>
                 <input type="text" name="fecha_salida" placeholder="dd-mm-yyyy" id="fecha_salida" value="{{ isset($salida_almacen) ? \Carbon\Carbon::parse($salida_almacen->fecha_salida)->format('d-m-Y') : old('fecha_salida') }}" class="form-control font-roboto-14 intro">
+            </div>
+            <div class="col-12 col-md-6 col-lg-10 mb-2">
+                <label for="solicitante_id" class="form-label d-inline font-roboto-14">Personal Solicitante</label>
+                <select name="solicitante_id" id="solicitante_id" class="form-control select2">
+                    <option value="">-</option>
+                    @foreach ($empleados_solicitantes as $index => $value)
+                        <option value="{{ $index }}"
+                            @if (isset($salida_almacen) && $salida_almacen->solicitante_id == $index)
+                                selected
+                            @elseif (old('solicitante_id') == $index)
+                                selected
+                            @endif>
+                            {{ $value }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
             <div class="col-12 col-md-6 col-lg-12 mb-2">
                 <label for="glosa" class="form-label d-inline font-roboto-14">Glosa</label>

@@ -95,7 +95,13 @@ class SalidaSucursalController extends Controller
                                                             ->pluck('data_completo','id');
         $areas = Area::byDea($dea_id)->byEstado(Area::HABILITADO)->pluck('nombrearea','idarea');
 
-        return view('almacenes.salida_sucursal.create',compact('almacenes','proveedores','categorias_programaticas','areas'));
+        $empleados_solicitantes = DB::table('empleados_contratos as a')
+                                        ->join('empleados as b', 'a.idemp', 'b.idemp')
+                                        ->join('areas as c', 'a.idarea_asignada', 'c.idarea')
+                                        ->select('a.idemp',DB::raw("CONCAT(nombres, ' ', ap_pat, ' ', ap_mat, ' (', c.nombrearea, ')') as solicitante"))
+                                        ->pluck('solicitante', 'idemp');
+
+        return view('almacenes.salida_sucursal.create',compact('almacenes','proveedores','categorias_programaticas','areas','empleados_solicitantes'));
     }
 
     public function getPartidasPresupuestarias(Request $request)
@@ -300,7 +306,8 @@ class SalidaSucursalController extends Controller
                     'n_solicitud' => $request->n_solicitud,
                     'fecha_salida' => date('Y-m-d', strtotime($request->fecha_salida)),
                     'obs' => $request->glosa,
-                    'estado' => salidaAlmacen::PENDIENTE
+                    'estado' => salidaAlmacen::PENDIENTE,
+                    'solicitante_id' => $request->solicitante_id
                 ]);
 
                 $cont = 0;
@@ -370,7 +377,13 @@ class SalidaSucursalController extends Controller
                                                             ->pluck('data_completo','id');
         $areas = Area::byDea($dea_id)->byEstado(Area::HABILITADO)->pluck('nombrearea','idarea');
 
-        return view('almacenes.salida_sucursal.editar',compact('salida_almacen','salida_almacen_detalles','total','almacenes','proveedores','categorias_programaticas','areas'));
+        $empleados_solicitantes = DB::table('empleados_contratos as a')
+                                        ->join('empleados as b', 'a.idemp', 'b.idemp')
+                                        ->join('areas as c', 'a.idarea_asignada', 'c.idarea')
+                                        ->select('a.idemp',DB::raw("CONCAT(nombres, ' ', ap_pat, ' ', ap_mat, ' (', c.nombrearea, ')') as solicitante"))
+                                        ->pluck('solicitante', 'idemp');
+
+        return view('almacenes.salida_sucursal.editar',compact('salida_almacen','salida_almacen_detalles','total','almacenes','proveedores','categorias_programaticas','areas','empleados_solicitantes'));
     }
 
     public function eliminarRegistro($id)
@@ -389,7 +402,7 @@ class SalidaSucursalController extends Controller
     }
 
     public function update(Request $request)
-    {//dd($request->all());
+    {
         try{
             $data = DB::transaction(function () use ($request) {
                 $user_id = Auth::user()->id;
@@ -403,7 +416,9 @@ class SalidaSucursalController extends Controller
                     'n_factura' => isset($request->n_factura) ? $request->n_factura : null,
                     'n_solicitud' => $request->n_solicitud,
                     'fecha_salida' => date('Y-m-d', strtotime($request->fecha_salida)),
-                    'obs' => $request->glosa
+                    'obs' => $request->glosa,
+                    'solicitante_id' => $request->solicitante_id
+                    //DILSON TE QUEDASTE AQUI SOLO HICISTE EL EDITAR
                 ]);
 
                 if ($request->filled('old_salida_almacen_detalle_id')) {

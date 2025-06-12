@@ -29,7 +29,8 @@ class SalidaAlmacen extends Model
         'n_solicitud',
         'fecha_salida',
         'obs',
-        'estado'
+        'estado',
+        'solicitante_id'
     ];
 
     const PENDIENTE = '1';
@@ -104,6 +105,10 @@ class SalidaAlmacen extends Model
 
     public function area(){
         return $this->belongsTo(Area::class,'area_id','idarea');
+    }
+
+    public function solicitante(){
+        return $this->belongsTo(User::class,'solicitante_id','id');
     }
 
     public function scopeByDea($query, $dea_id){
