@@ -14,7 +14,7 @@
     <div class="row mb-2 font-roboto-14">
         <div class="col-12 col-md-6 col-lg-3 mb-2">
             <label for="" class="form-label d-inline">Numeracion</label>
-            <input type="text" name="numeracion" id="numeracion" value="{{ old('numeracion') }}" class="form-control font-roboto-14 numero-entero">
+            <input type="text" name="numeracion" id="numeracion" value="{{ old('numeracion') }}" class="form-control font-roboto-14 {{-- numero-entero --}}">
         </div>
     </div>
     <div class="row mb-2 font-roboto-14">

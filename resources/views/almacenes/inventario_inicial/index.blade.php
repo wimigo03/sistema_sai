@@ -9,7 +9,7 @@
     <div class="card">
         <div class="card-header">
             <div class="row d-flex align-items-center">
-                <i class="fa-solid fa-scale-balanced fa-fw"></i>&nbsp;<b class="title-size">INVENTARIO INICIAL</b>
+                <i class="fa-solid fa-scale-balanced fa-fw"></i>&nbsp;<b class="title-size">BALANCE INICIAL</b>
             </div>
         </div>
 

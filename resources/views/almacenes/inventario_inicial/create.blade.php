@@ -32,14 +32,14 @@
 @section('breadcrumb')
     @parent
     <li class="breadcrumb-item font-roboto-14"><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a></li>
-    <li class="breadcrumb-item font-roboto-14"><a href="{{ route('inventario.inicial.index') }}"> Inventarios Iniciales</a></li>
+    <li class="breadcrumb-item font-roboto-14"><a href="{{ route('inventario.inicial.index') }}"> Balances Iniciales</a></li>
     <li class="breadcrumb-item font-roboto-14 active">Registrar</li>
 @endsection
 @section('content')
     <div class="card">
         <div class="card-header">
             <div class="row d-flex align-items-center">
-                <i class="fa-solid fa-file-lines fa-fw"></i>&nbsp;<b class="title-size">REGISTRAR INVENTARIO INICIAL</b>
+                <i class="fa-solid fa-file-lines fa-fw"></i>&nbsp;<b class="title-size">REGISTRAR BALANCE INICIAL</b>
             </div>
         </div>
 

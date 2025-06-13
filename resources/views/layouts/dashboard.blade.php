@@ -347,7 +347,7 @@
                                 @can('inventario.inicial.index')
                                     <li class="nav-item has-treeview">
                                         <a href="{{ route('inventario.inicial.index') }}" class="nav-link">
-                                            <i class="nav-icon fa-solid fa-scale-balanced fa-fw nav-icon-font"></i><p>Inventario Inicial</p>
+                                            <i class="nav-icon fa-solid fa-scale-balanced fa-fw nav-icon-font"></i><p>Balance Inicial</p>
                                         </a>
                                     </li>
                                 @endcan
