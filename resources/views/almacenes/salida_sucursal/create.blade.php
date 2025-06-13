@@ -329,7 +329,7 @@
                         numeral: true,
                         numeralDecimalMark: '.',
                         delimiter: ',',
-                        numeralDecimalScale: 1,
+                        numeralDecimalScale: 2,
                         numeralThousandsGroupStyle: 'thousand',
                     });
                 });
