@@ -273,6 +273,9 @@
             <td align="center" style="vertical-align: top;">
                 <b>RECIBI CONFORME</b>
                 <br>
+                {{ isset($salida_almacen->solicitante) ? $salida_almacen->solicitante->full_name : '-' }}
+                <br>
+                {{ isset($salida_almacen->solicitante) ? $salida_almacen->solicitante->area_asignada : '-' }}
             </td>
             <td align="center" style="vertical-align: top;">
                 <b>ENTREGUE CONFORME</b>

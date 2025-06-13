@@ -49,6 +49,15 @@
             .nav-icon-font {
                 font-size: 16px !important;
             }
+            .custom-divider {
+                border-top: 1px solid #ccc; /* o cualquier otro estilo */
+                margin: 10px 0; /* Ajusta el margen según tus necesidades */
+            }
+            .a-hover-disabled:hover {
+                background-color: #ffffff !important;
+                color: inherit !important;
+                text-decoration: none !important;
+            }
         </style>
         @yield('styles')
     </head>
@@ -312,44 +321,71 @@
                                     </a>
                                 </li>
                             @endcan--}}
-
-                            @canany(['sucursal.configuracion','ingreso.sucursal.index','salida.sucursal.index','inventario.inicial.index'])
-                                <li class="nav-item has-treeview">
-                                    <a href="#" class="nav-link">
-                                        <i class="nav-icon fa fa-shop fa-fw nav-icon-font"></i>
-                                        <p>Unidad de Almacenes<i class="right fa fa-angle-left nav-icon-font"></i></p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        @can('ingreso.sucursal.index')
-                                            <li class="nav-item">
-                                                <a href="{{ route('ingreso.sucursal.index') }}" class="nav-link pl-4">&nbsp;
-                                                    <i class="fa-solid fa-file-lines fa-fw"></i> <p>Ingreso de Materiales</p>
-                                                </a>
-                                            </li>
-                                        @endcan
-                                        @can('salida.sucursal.index')
-                                            <li class="nav-item">
-                                                <a href="{{ route('salida.sucursal.index') }}" class="nav-link pl-4">&nbsp;
-                                                    <i class="fa-solid fa-hdd fa-fw"></i> <p>Salida de Materiales</p>
-                                                </a>
-                                            </li>
-                                        @endcan
-                                        @can('inventario.inicial.index')
-                                            <li class="nav-item">
-                                                <a href="{{ route('inventario.inicial.index') }}" class="nav-link pl-4">&nbsp;
-                                                    <i class="fa-solid fa-scale-balanced fa-fw"></i> <p>Inventario Inicial</p>
-                                                </a>
-                                            </li>
-                                        @endcan
-                                        @can('sucursal.configuracion')
-                                            <li class="nav-item">
-                                                <a href="{{ route('sucursal.configuracion') }}" class="nav-link pl-4">&nbsp;
-                                                    <i class="fa-solid fa-gear fa-fw"></i> <p>Configuraciones</p>
-                                                </a>
-                                            </li>
-                                        @endcan
-                                    </ul>
-                                </li>
+                            @canany(['sucursal.configuracion','ingreso.sucursal.index','salida.sucursal.index','inventario.inicial.index','presupuesto.index'])
+                                <div class="custom-divider"></div>
+                                    <li class="nav-item has-treeview">
+                                        <span class="nav-link a-hover-disabled">
+                                            <i class="nav-icon fa-solid fa-house fa-fw nav-icon-font"></i>
+                                            <p>Unidad de Almacenes</p>
+                                        </span>
+                                    </li>
+                                <div class="custom-divider"></div>
+                                @can('ingreso.sucursal.index')
+                                    <li class="nav-item has-treeview">
+                                        <a href="{{ route('ingreso.sucursal.index') }}" class="nav-link">
+                                            <i class="nav-icon fa-solid fa-file-lines fa-fw nav-icon-font"></i><p>Ingreso de Materiales</p>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('salida.sucursal.index')
+                                    <li class="nav-item has-treeview">
+                                        <a href="{{ route('salida.sucursal.index') }}" class="nav-link">
+                                            <i class="nav-icon fa-solid fa-hdd fa-fw nav-icon-font"></i><p>Salida de Materiales</p>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('inventario.inicial.index')
+                                    <li class="nav-item has-treeview">
+                                        <a href="{{ route('inventario.inicial.index') }}" class="nav-link">
+                                            <i class="nav-icon fa-solid fa-scale-balanced fa-fw nav-icon-font"></i><p>Inventario Inicial</p>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('categoria.programatica.index')
+                                    <li class="nav-item has-treeview">
+                                        <a href="{{ route('categoria.programatica.index') }}" class="nav-link">
+                                            <i class="nav-icon fa-solid fa-bars-staggered fa-fw nav-icon-font"></i><p>Proyectos</p>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('proveedor.index')
+                                    <li class="nav-item has-treeview">
+                                        <a href="{{ route('proveedor.index') }}" class="nav-link">
+                                            <i class="nav-icon fa-solid fa-users fa-fw nav-icon-font"></i><p>Proveedores</p>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('presupuesto.index')
+                                    <li class="nav-item has-treeview">
+                                        <a href="{{ route('presupuesto.index') }}" class="nav-link">
+                                            <i class="nav-icon fa-solid fa-scale-unbalanced-flip fa-fw nav-icon-font"></i><p>Presupuestos</p>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('sucursal.index')
+                                    <li class="nav-item has-treeview">
+                                        <a href="{{ route('sucursal.index') }}" class="nav-link">
+                                            <i class="nav-icon fa-solid fa-house fa-fw nav-icon-font"></i><p>Sucursales</p>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('sucursal.configuracion')
+                                    <li class="nav-item has-treeview">
+                                        <a href="{{ route('sucursal.configuracion') }}" class="nav-link">
+                                            <i class="nav-icon fa-solid fa-gear fa-fw nav-icon-font"></i><p>Configuraciones</p>
+                                        </a>
+                                    </li>
+                                @endcan
                             @endcanany
 
                             @can('personerias.index')

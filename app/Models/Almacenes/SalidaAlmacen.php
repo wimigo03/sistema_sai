@@ -9,6 +9,7 @@ use Carbon\Carbon;
 
 use App\Models\Area;
 use App\Models\User;
+use App\Models\Empleado;
 use App\Models\Canasta\Dea;
 use App\Models\Almacenes\Proveedor;
 use App\Models\Almacenes\Almacen;
@@ -108,7 +109,7 @@ class SalidaAlmacen extends Model
     }
 
     public function solicitante(){
-        return $this->belongsTo(User::class,'solicitante_id','id');
+        return $this->belongsTo(Empleado::class,'solicitante_id','idemp');
     }
 
     public function scopeByDea($query, $dea_id){

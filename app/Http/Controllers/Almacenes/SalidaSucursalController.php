@@ -418,7 +418,6 @@ class SalidaSucursalController extends Controller
                     'fecha_salida' => date('Y-m-d', strtotime($request->fecha_salida)),
                     'obs' => $request->glosa,
                     'solicitante_id' => $request->solicitante_id
-                    //DILSON TE QUEDASTE AQUI SOLO HICISTE EL EDITAR
                 ]);
 
                 if ($request->filled('old_salida_almacen_detalle_id')) {

@@ -154,6 +154,12 @@ return [
             'level' => 'debug',
         ],
 
+        'varios' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/varios.log'),
+            'level' => 'debug',
+        ],
+
         'recursos_humanos' => [
             'driver' => 'single',
             'path' => storage_path('logs/recursos_humanos.log'),
