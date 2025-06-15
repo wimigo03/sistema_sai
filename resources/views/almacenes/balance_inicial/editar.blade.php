@@ -44,7 +44,7 @@
         </div>
 
         <div class="card-body">
-            @include('almacenes.inventario_inicial.partials.form_i')
+            @include('almacenes.balance_inicial.partials.form_i')
         </div>
     </div>
     @section('scripts')
@@ -434,7 +434,7 @@
             }
 
             function cancelar(){
-                var url = "{{ route('inventario.inicial.index') }}";
+                var url = "{{ route('balance.inicial.index') }}";
                 window.location.href = url;
             }
 

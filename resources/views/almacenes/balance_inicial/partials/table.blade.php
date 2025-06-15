@@ -6,7 +6,7 @@
                     <td class="text-center p-2 text-nowrap"><b>SUCURSAL</b></td>
                     <td class="text-center p-2 text-nowrap"><b>GESTION</b></td>
                     <td class="text-center p-2 text-nowrap"><b>ESTADO</b></td>
-                    @canany(['inventario.inicial.show','inventario.inicial.pdf','inventario.inicial.editar'])
+                    @canany(['balance.inicial.show','balance.inicial.pdf','balance.inicial.editar'])
                         <td class="text-center p-2 text-nowrap">
                             <b><i class="fa-solid fa-bars fa-fw"></i></b>
                         </td>
@@ -14,7 +14,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($inventarios_iniciales as $datos)
+                @foreach ($balances_iniciales as $datos)
                     <tr class="font-roboto-13">
                         <td class="text-center p-2 text-nowrap">{{ $datos->almacen->nombre }}</td>
                         <td class="text-center p-2 text-nowrap">{{ $datos->gestion }}</td>
@@ -23,27 +23,27 @@
                                 {{ $datos->ingreso_almacen->status }}
                             </span>
                         </td>
-                        @canany(['inventario.inicial.show','inventario.inicial.pdf','inventario.inicial.editar'])
+                        @canany(['balance.inicial.show','balance.inicial.pdf','balance.inicial.editar'])
                             <td class="text-center p-2 text-nowrap">
                                 <div class="d-flex justify-content-center">
-                                    @can('inventario.inicial.pdf')
+                                    @can('balance.inicial.pdf')
                                         <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Pdf" style="cursor: pointer;">
-                                            <a href="{{ route('inventario.inicial.pdf',$datos->ingreso_almacen_id) }}" target="_blank" class="btn btn-sm btn-outline-warning text-dark">
+                                            <a href="{{ route('balance.inicial.pdf',$datos->ingreso_almacen_id) }}" target="_blank" class="btn btn-sm btn-outline-warning text-dark">
                                                 <i class="fas fa-print fa-fw"></i>
                                             </a>
                                         </span>
                                     @endcan
-                                    @can('inventario.inicial.show')
+                                    @can('balance.inicial.show')
                                         <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Ir a detalle" style="cursor: pointer;">
-                                            <a href="{{ route('inventario.inicial.show',$datos->ingreso_almacen_id) }}" class="btn btn-sm btn-primary">
+                                            <a href="{{ route('balance.inicial.show',$datos->ingreso_almacen_id) }}" class="btn btn-sm btn-primary">
                                                 <i class="fas fa-eye fa-fw"></i>
                                             </a>
                                         </span>
                                     @endcan
-                                    @can('inventario.inicial.editar')
+                                    @can('balance.inicial.editar')
                                         @if ($datos->ingreso_almacen->status == 'PENDIENTE')
                                             <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar" style="cursor: pointer;">
-                                                <a href="{{ route('inventario.inicial.editar',$datos->ingreso_almacen_id) }}" class="btn btn-sm btn-warning">
+                                                <a href="{{ route('balance.inicial.editar',$datos->ingreso_almacen_id) }}" class="btn btn-sm btn-warning">
                                                     <i class="fas fa-edit fa-fw"></i>
                                                 </a>
                                             </span>
@@ -64,10 +64,10 @@
             <tfoot>
                 <tr>
                     <td colspan="11" class="font-roboto-14">
-                        {{ $inventarios_iniciales->appends(Request::all())->links() }}
+                        {{ $balances_iniciales->appends(Request::all())->links() }}
                         <p class="text- muted">Mostrando
-                            <strong>{{$inventarios_iniciales->count()}}</strong> registros de
-                            <strong>{{$inventarios_iniciales->total()}}</strong> totales
+                            <strong>{{$balances_iniciales->count()}}</strong> registros de
+                            <strong>{{$balances_iniciales->total()}}</strong> totales
                         </p>
                     </td>
                 </tr>

@@ -10,9 +10,9 @@
 </form>
 <div class="row">
     <div class="col-12 d-flex flex-column flex-md-row gap-2 justify-content-center justify-content-md-end">
-        @can('inventario.inicial.create')
+        @can('balance.inicial.create')
             <button class="btn btn-success w-100 w-md-auto btn-size mr-2 font-roboto-14" type="button" onclick="create();">
-                <i class="fas fa-plus fa-fw"></i> Nuevo Inventario
+                <i class="fas fa-plus fa-fw"></i> Nuevo Balance
             </button>
         @endcan
 

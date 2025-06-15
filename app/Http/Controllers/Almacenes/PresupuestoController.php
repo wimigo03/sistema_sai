@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
-use App\Models\Almacenes\InventarioInicial;
+use App\Models\Almacenes\BalanceInicial;
 use App\Models\Almacenes\CategoriaProgramatica;
 use App\Models\Almacenes\Presupuesto;
 
@@ -59,9 +59,9 @@ class PresupuestoController extends Controller
                                                             ->pluck('data_completo','id');
 
         $trimestres = Presupuesto::TRIMESTRES;
-        $gestion = InventarioInicial::where('gestion', date('Y'))->first()->gestion;
+        $gestion = BalanceInicial::where('gestion', date('Y'))->first()->gestion;
         if(!$gestion){
-            return redirect()->route('presupuesto.index')->with('error_message', '[ERROR] . La gestion actual aun no tiene inventario inicial.');
+            return redirect()->route('presupuesto.index')->with('error_message', '[ERROR] . La gestion actual aun no tiene balance inicial.');
         }
 
         return view('almacenes.presupuestos.create',compact('categorias_programaticas','trimestres', 'gestion'));
@@ -146,9 +146,9 @@ class PresupuestoController extends Controller
 
         $trimestres = Presupuesto::TRIMESTRES;
 
-        $gestion = InventarioInicial::where('gestion', date('Y'))->first()->gestion;
+        $gestion = BalanceInicial::where('gestion', date('Y'))->first()->gestion;
         if(!$gestion){
-            return redirect()->route('presupuesto.index')->with('error_message', '[ERROR] . La gestion actual aun no tiene inventario inicial.');
+            return redirect()->route('presupuesto.index')->with('error_message', '[ERROR] . La gestion actual aun no tiene balance inicial.');
         }
 
         return view('almacenes.presupuestos.editar',compact('presupuesto','categorias_programaticas','trimestres', 'gestion'));

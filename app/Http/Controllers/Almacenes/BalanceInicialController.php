@@ -12,7 +12,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers\Almacenes\IngresoSucursalController;;
-use App\Models\Almacenes\InventarioInicial;
+use App\Models\Almacenes\BalanceInicial;
 use App\Models\Almacenes\IngresoAlmacen;
 use App\Models\Almacenes\IngresoAlmacenDetalle;
 use App\Models\User;
@@ -22,7 +22,7 @@ use App\Models\Almacenes\CategoriaProgramatica;
 use App\Models\Area;
 use App\Models\Almacenes\Producto;
 
-class InventarioInicialController extends Controller
+class BalanceInicialController extends Controller
 {
     public function index()
     {
@@ -36,12 +36,12 @@ class InventarioInicialController extends Controller
             $almacenes = Almacen::byDea($dea_id)->byEncargado($user_id)->get();
         }
 
-        $inventarios_iniciales = InventarioInicial::byDea($dea_id)
+        $balances_iniciales = BalanceInicial::byDea($dea_id)
                                                     ->byAlmacenes($almacenes)
                                                     ->orderBy('id','desc')
                                                     ->paginate(10);
 
-        return view('almacenes.inventario_inicial.index',compact('almacenes','inventarios_iniciales'));
+        return view('almacenes.balance_inicial.index',compact('almacenes','balances_iniciales'));
     }
 
     public function search(Request $request)
@@ -56,14 +56,14 @@ class InventarioInicialController extends Controller
             $almacenes = Almacen::byDea($dea_id)->byEncargado($user_id)->get();
         }
 
-        $inventarios_iniciales = InventarioInicial::byDea($dea_id)
+        $balances_iniciales = BalanceInicial::byDea($dea_id)
                                                     ->byAlmacenes($almacenes)
                                                     ->bySucursal($request->sucursal)
                                                     ->byGestion($request->gestion)
                                                     ->orderBy('id','desc')
                                                     ->paginate(10);
 
-        return view('almacenes.inventario_inicial.index',compact('almacenes','inventarios_iniciales'));
+        return view('almacenes.balance_inicial.index',compact('almacenes','balances_iniciales'));
     }
 
     public function create()
@@ -78,14 +78,14 @@ class InventarioInicialController extends Controller
             $almacenes = Almacen::byDea($dea_id)->byEncargado($user_id)->pluck('nombre','id');
         }
 
-        return view('almacenes.inventario_inicial.create',compact('almacenes'));
+        return view('almacenes.balance_inicial.create',compact('almacenes'));
     }
 
     public function store(Request $request)
     {
-        $validar_gestion = InventarioInicial::byGestion($request->gestion)->get()->count();
+        $validar_gestion = BalanceInicial::byGestion($request->gestion)->get()->count();
         if($validar_gestion > 0){
-            return redirect()->route('inventario.inicial.create')->with('error_message', '[ERROR] . La gestion ya tiene un inventario inicial.');
+            return redirect()->route('balance.inicial.create')->with('error_message', '[ERROR] . La gestion ya tiene un balance inicial.');
         }
 
         try{
@@ -99,29 +99,29 @@ class InventarioInicialController extends Controller
                     'user_id' => $user_id,
                     'codigo' => 1,
                     'fecha_ingreso' => $request->gestion . '-01-01',
-                    'obs' => 'Inventario Inicial',
+                    'obs' => 'Balance Inicial',
                     'estado' => IngresoAlmacen::PENDIENTE
                 ]);
 
-                $inventario_inicial = InventarioInicial::create([
+                $balance_inicial = BalanceInicial::create([
                     'dea_id' => $dea_id,
                     'almacen_id' => $request->almacen_id,
                     'ingreso_almacen_id' => $ingreso_almacen->id,
                     'gestion' => $request->gestion
                 ]);
 
-                return $inventario_inicial;
+                return $balance_inicial;
             });
             Log::channel('ingresos_almacen')->info(
                 "\n" .
-                "Inventario Inicial registrado con exito." . "\n" .
+                "Balance Inicial registrado con exito." . "\n" .
                 "Por el usuario " . Auth::user()->id . "\n"
             );
-            return redirect()->route('inventario.inicial.index')->with('success_message', '[El ingreso fue registrado correctamente.]');
+            return redirect()->route('balance.inicial.index')->with('success_message', '[El ingreso fue registrado correctamente.]');
         } catch (\Exception $e) {
             Log::channel('ingresos_almacen')->info(
                 "\n" .
-                "Error al crear el inventario inicial " . "\n" .
+                "Error al crear el balance inicial " . "\n" .
                 "Por el usuario  " . Auth::user()->id . "\n" .
                 "Error: " . $e->getMessage() . "\n"
             );
@@ -132,7 +132,7 @@ class InventarioInicialController extends Controller
     public function editar($id)
     {
         $ingreso_sucursal_controller = new IngresoSucursalController();
-        $ingreso_almacen_ids = $ingreso_sucursal_controller->inventarios_iniciales();
+        $ingreso_almacen_ids = $ingreso_sucursal_controller->balances_iniciales();
 
         $cont = 0;
         $validado = false;
@@ -145,7 +145,7 @@ class InventarioInicialController extends Controller
         }
 
         if(!$validado){
-            return redirect()->route('inventario.inicial.index');
+            return redirect()->route('balance.inicial.index');
         }
 
         $ingreso_almacen = IngresoAlmacen::find($id);
@@ -169,13 +169,13 @@ class InventarioInicialController extends Controller
                                                             ->pluck('data_completo','id');
         $areas = Area::byDea($dea_id)->byEstado(Area::HABILITADO)->pluck('nombrearea','idarea');
 
-        return view('almacenes.inventario_inicial.editar',compact('ingreso_almacen','ingreso_almacen_detalles','total','almacenes','proveedores','categorias_programaticas','areas'));
+        return view('almacenes.balance_inicial.editar',compact('ingreso_almacen','ingreso_almacen_detalles','total','almacenes','proveedores','categorias_programaticas','areas'));
     }
 
     public function pdf($ingreso_almacen_id)
     {
         $ingreso_sucursal_controller = new IngresoSucursalController();
-        $ingreso_almacen_ids = $ingreso_sucursal_controller->inventarios_iniciales();
+        $ingreso_almacen_ids = $ingreso_sucursal_controller->balances_iniciales();
 
         $cont = 0;
         $validado = false;
@@ -188,7 +188,7 @@ class InventarioInicialController extends Controller
         }
 
         if(!$validado){
-            return redirect()->route('inventario.inicial.index');
+            return redirect()->route('balance.inicial.index');
         }
 
         $ingreso_almacen = IngresoAlmacen::find($ingreso_almacen_id);
@@ -220,7 +220,7 @@ class InventarioInicialController extends Controller
     public function show($ingreso_almacen_id)
     {
         $ingreso_sucursal_controller = new IngresoSucursalController();
-        $ingreso_almacen_ids = $ingreso_sucursal_controller->inventarios_iniciales();
+        $ingreso_almacen_ids = $ingreso_sucursal_controller->balances_iniciales();
 
         $cont = 0;
         $validado = false;
@@ -233,7 +233,7 @@ class InventarioInicialController extends Controller
         }
 
         if(!$validado){
-            return redirect()->route('inventario.inicial.index');
+            return redirect()->route('balance.inicial.index');
         }
 
         $ingreso_almacen = IngresoAlmacen::find($ingreso_almacen_id);

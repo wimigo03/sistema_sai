@@ -40,13 +40,13 @@
                                             <i class="fa-solid fa-house-laptop fa-fw"></i> Control de Secciones
                                         </a>
                                     @endcan--}}
-                                    @can('inventario.inicial.index')
+                                    {{--@can('balance.inicial.index')
                                         <span class="tts:left tts-slideIn tts-custom mr-1" aria-label="Inventario Inicial" style="cursor: pointer;">
-                                            <a href="{{ route('inventario.inicial.index',['almacen_id' => $datos->id]) }}" class="badge badge-dark p-2">
+                                            <a href="{{ route('balance.inicial.index',['almacen_id' => $datos->id]) }}" class="badge badge-dark p-2">
                                                 <i class="fa-solid fa-list-alt fa-fw"></i>
                                             </a>
                                         </span>
-                                    @endcan
+                                    @endcan--}}
                                 </div>
                             </td>
                         @endcanany

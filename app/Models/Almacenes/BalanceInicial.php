@@ -11,11 +11,11 @@ use App\Models\Canasta\Dea;
 use App\Models\Almacenes\Almacen;
 use App\Models\Almacenes\IngresoAlmacen;
 
-class InventarioInicial extends Model
+class BalanceInicial extends Model
 {
     use HasFactory;
 
-    protected $table = 'inventarios_iniciales';
+    protected $table = 'balances_iniciales';
     protected $fillable = [
         'dea_id',
         'almacen_id',

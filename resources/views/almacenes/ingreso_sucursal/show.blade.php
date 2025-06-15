@@ -46,7 +46,7 @@
     <div class="card">
         <div class="card-header">
             <div class="row d-flex align-items-center">
-                <i class="fa-solid fa-file-lines fa-fw"></i>&nbsp;<b class="title-size">DETALLE REGISTRO DE @if($ingreso_almacen->codigo != 1) MATERIALES @else INVENTARIO @endif</b>
+                <i class="fa-solid fa-file-lines fa-fw"></i>&nbsp;<b class="title-size">DETALLE REGISTRO DE @if($ingreso_almacen->codigo != 1) MATERIALES @else BALANCE @endif</b>
             </div>
         </div>
 
@@ -79,11 +79,11 @@
                                     </button>
                                 @endif
                             @endcan
-                            <button class="btn btn-danger w-100 w-md-auto btn-size  mr-1 mb-2 mb-md-0 font-roboto-14" type="button" @if($ingreso_almacen->codigo != 1) onclick="cancelar();" @else onclick="cancelar_i();" @endif>
+                            <button class="btn btn-danger w-100 w-md-auto btn-size  mr-1 mb-2 mb-md-0 font-roboto-14" type="button" @if($ingreso_almacen->codigo != 1) onclick="cancelar();" @else onclick="cancelar_balance();" @endif>
                                 <i class="fas fa-times fa-fw"></i> Cancelar
                             </button>
                             @can('ingreso.sucursal.pdf')
-                                <button class="btn btn-warning w-100 w-md-auto btn-size mr-1 mb-2 mb-md-0 font-roboto-14" type="button" onclick="pdf();">
+                                <button class="btn btn-warning w-100 w-md-auto btn-size mr-1 mb-2 mb-md-0 font-roboto-14" type="button" @if($ingreso_almacen->codigo != 1) onclick="pdf();" @else onclick="pdf_balance();" @endif>
                                     <i class="fas fa-print fa-fw"></i> Exportar
                                 </button>
                             @endcan
@@ -230,7 +230,14 @@
 
         function pdf(){
             var id = $("#ingreso_almacen_id").val();
-            var url = "{{ route('inventario.inicial.pdf',':id') }}";
+            var url = "{{ route('ingreso.sucursal.pdf',':id') }}";
+            url = url.replace(':id',id);
+            window.open(url, '_blank');
+        }
+
+        function pdf_balance(){
+            var id = $("#ingreso_almacen_id").val();
+            var url = "{{ route('balance.inicial.pdf',':id') }}";
             url = url.replace(':id',id);
             window.open(url, '_blank');
         }
@@ -240,8 +247,8 @@
             window.location.href = url;
         }
 
-        function cancelar_i(){
-            var url = "{{ route('inventario.inicial.index') }}";
+        function cancelar_balance(){
+            var url = "{{ route('balance.inicial.index') }}";
             window.location.href = url;
         }
     </script>

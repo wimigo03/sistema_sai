@@ -3,7 +3,7 @@
 @section('breadcrumb')
     @parent
     <li class="breadcrumb-item font-roboto-14"><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a></li>
-    <li class="breadcrumb-item font-roboto-14 active">Inventarios Iniciales</li>
+    <li class="breadcrumb-item font-roboto-14 active">Balances Iniciales</li>
 @endsection
 @section('content')
     <div class="card">
@@ -16,8 +16,8 @@
         <div class="row abs-center">
             <div class="col-md-6">
                 <div class="card-body">
-                    @include('almacenes.inventario_inicial.partials.search')
-                    @include('almacenes.inventario_inicial.partials.table')
+                    @include('almacenes.balance_inicial.partials.search')
+                    @include('almacenes.balance_inicial.partials.table')
                 </div>
             </div>
         </div>
@@ -40,18 +40,18 @@
             });
 
             function create(){
-                var url = "{{ route('inventario.inicial.create') }}";
+                var url = "{{ route('balance.inicial.create') }}";
                 window.location.href = url;
             }
 
             function search(){
-                var url = "{{ route('inventario.inicial.search') }}";
+                var url = "{{ route('balance.inicial.search') }}";
                 $("#form").attr('action', url);
                 $("#form").submit();
             }
 
             function limpiar(){
-                var url = "{{ route('inventario.inicial.index') }}";
+                var url = "{{ route('balance.inicial.index') }}";
                 window.location.href = url;
             }
         </script>

@@ -11,7 +11,7 @@ use Luecano\NumeroALetras\NumeroALetras;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 
-use App\Models\Almacenes\InventarioInicial;
+use App\Models\Almacenes\BalanceInicial;
 use App\Models\Almacenes\IngresoAlmacen;
 use App\Models\Almacenes\IngresoAlmacenDetalle;
 use App\Models\User;
@@ -23,9 +23,9 @@ use App\Models\Almacenes\Producto;
 
 class IngresoSucursalController extends Controller
 {
-    public function inventarios_iniciales(){
-        $inventarios_iniciales = InventarioInicial::select('ingreso_almacen_id')->get();
-        $ingreso_almacen_ids = $inventarios_iniciales->pluck('ingreso_almacen_id')->toArray();
+    public function balances_iniciales(){
+        $balances_iniciales = BalanceInicial::select('ingreso_almacen_id')->get();
+        $ingreso_almacen_ids = $balances_iniciales->pluck('ingreso_almacen_id')->toArray();
         return $ingreso_almacen_ids;
     }
 
@@ -41,7 +41,7 @@ class IngresoSucursalController extends Controller
             $almacenes = Almacen::byDea($dea_id)->byEncargado($user_id)->get();
         }
 
-        $ingreso_almacen_ids = $this->inventarios_iniciales();
+        $ingreso_almacen_ids = $this->balances_iniciales();
 
         $ingresos_almacenes = IngresoAlmacen::byDea($dea_id)
                                             ->byAlmacenes($almacenes)
@@ -67,7 +67,7 @@ class IngresoSucursalController extends Controller
             $almacenes = Almacen::byDea($dea_id)->byEncargado($user_id)->get();
         }
 
-        $ingreso_almacen_ids = $this->inventarios_iniciales();
+        $ingreso_almacen_ids = $this->balances_iniciales();
 
         $ingresos_almacenes = IngresoAlmacen::byDea($dea_id)
                                             ->byAlmacenes($almacenes)
@@ -311,7 +311,7 @@ class IngresoSucursalController extends Controller
 
     public function show($ingreso_almacen_id)
     {
-        $ingreso_almacen_ids = $this->inventarios_iniciales();
+        $ingreso_almacen_ids = $this->balances_iniciales();
 
         $cont = 0;
 
@@ -331,7 +331,7 @@ class IngresoSucursalController extends Controller
 
     public function editar($id)
     {
-        $ingreso_almacen_ids = $this->inventarios_iniciales();
+        $ingreso_almacen_ids = $this->balances_iniciales();
 
         $cont = 0;
 
@@ -445,7 +445,7 @@ class IngresoSucursalController extends Controller
             if(isset($request->area_id)){
                 return redirect()->route('ingreso.sucursal.index')->with('success_message', '[El ingreso fue registrado correctamente.]');
             }else{
-                return redirect()->route('inventario.inicial.index')->with('success_message', '[El ingreso fue registrado correctamente.]');
+                return redirect()->route('balance.inicial.index')->with('success_message', '[El ingreso fue registrado correctamente.]');
             }
 
         } catch (\Exception $e) {
@@ -461,7 +461,7 @@ class IngresoSucursalController extends Controller
 
     public function pdf($ingreso_almacen_id)
     {
-        $ingreso_almacen_ids = $this->inventarios_iniciales();
+        $ingreso_almacen_ids = $this->balances_iniciales();
 
         $cont = 0;
 

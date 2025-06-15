@@ -321,7 +321,7 @@
                                     </a>
                                 </li>
                             @endcan--}}
-                            @canany(['sucursal.configuracion','ingreso.sucursal.index','salida.sucursal.index','inventario.inicial.index','presupuesto.index'])
+                            @canany(['sucursal.configuracion','ingreso.sucursal.index','salida.sucursal.index','balance.inicial.index','presupuesto.index'])
                                 <div class="custom-divider"></div>
                                     <li class="nav-item has-treeview">
                                         <span class="nav-link a-hover-disabled">
@@ -344,9 +344,9 @@
                                         </a>
                                     </li>
                                 @endcan
-                                @can('inventario.inicial.index')
+                                @can('balance.inicial.index')
                                     <li class="nav-item has-treeview">
-                                        <a href="{{ route('inventario.inicial.index') }}" class="nav-link">
+                                        <a href="{{ route('balance.inicial.index') }}" class="nav-link">
                                             <i class="nav-icon fa-solid fa-scale-balanced fa-fw nav-icon-font"></i><p>Balance Inicial</p>
                                         </a>
                                     </li>
