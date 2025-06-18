@@ -58,6 +58,13 @@
                 color: inherit !important;
                 text-decoration: none !important;
             }
+
+            .dataTables_wrapper .dataTables_paginate a,
+            .dataTables_wrapper .dataTables_length select,
+            .dataTables_wrapper .dataTables_filter input {
+                font-family: 'Roboto', sans-serif;
+                font-size: 13px;
+            }
         </style>
         @yield('styles')
     </head>
