@@ -36,7 +36,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-2">
+            {{--<div class="col-12 col-md-6 col-lg-4 mb-2">
                 <br>
                 <div class="d-flex flex-column flex-md-row gap-3 justify-content-center justify-content-md-end">
                     <button class="btn btn-primary w-100 w-md-auto btn-size mr-2 mb-2 mb-md-0 font-roboto-14" type="button" onclick="procesar();">
@@ -49,7 +49,7 @@
                 <div class="text-center mt-3">
                     <i class="fa fa-spinner fa-spin fa-lg spinner-btn" style="display: none;"></i>
                 </div>
-            </div>
+            </div>--}}
             <div class="col-12 col-md-6 col-lg-2 mb-2">
                 <label for="n_preventivo" class="form-label d-inline font-roboto-14">N° Preventivo</label>
                 <input type="text" name="n_preventivo" id="n_preventivo" value="{{ isset($ingreso_almacen) ? $ingreso_almacen->n_preventivo : old('n_preventivo') }}" class="form-control font-roboto-14 intro">
@@ -78,7 +78,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-12 col-md-6 col-lg-3 mb-2">
+            <div class="col-12 col-md-6 col-lg-2 mb-2">
                 <label for="codigo" class="form-label d-inline font-roboto-14">N° de Ingreso</label>
                 <input type="text" name="codigo" id="codigo" value="{{ isset($ingreso_almacen) ? $ingreso_almacen->codigo : old('codigo') }}" class="form-control font-roboto-14 intro">
             </div>
@@ -126,6 +126,34 @@
             </div>
         </div>
 
+        <div class="row" style="display: flex; justify-content: space-between;">
+            <div class="col-12 col-md-6 {{ isset($ingreso_almacen) ? 'col-lg-6' : 'col-lg-9' }}">
+                <div class="d-flex flex-column flex-md-row gap-3 justify-content-center justify-content-md-end">
+                    <button class="btn btn-primary w-100 w-md-auto py-2 mr-2 font-roboto-14" type="button" onclick="procesar();">
+                        <i class="fas fa-paper-plane fa-fw"></i> {{ isset($ingreso_almacen) ? 'Procesar Cambios' : 'Procesar' }}
+                    </button>
+                    <button class="btn btn-danger w-100 w-md-auto py-2 font-roboto-14" type="button" onclick="cancelar();">
+                        <i class="fas fa-times fa-fw"></i> Cancelar
+                    </button>
+                </div>
+                <div class="text-center mt-3">
+                    <i class="fa fa-spinner fa-spin fa-lg spinner-btn" style="display: none;"></i>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3" id='total_fila'>
+                <div class="input-group">
+                    <span class="input-group-text font-roboto-14 border-dark bg-dark"><b>TOTAL</b></span>
+                    {{--<input type='text' class='form-control font-roboto-15 border-dark' style="text-align: right; font-weight: bold;" disabled>--}}
+                    <input type='text' value="{{ 'Bs. ' . number_format($old_total,2,'.',',') }}" class='form-control font-roboto-15 border-dark' style="text-align: right; font-weight: bold;" disabled>
+                </div>
+            </div>
+            @isset($ingreso_almacen)
+                <div class="col-12 col-md-6 col-lg-3" style="display: flex; justify-content: flex-end;" id="custom-search">
+                    <input type="search" id="_detalle_tabla_filter" class="form-control font-roboto-14 border-dark" placeholder="Buscar" aria-controls="detalle_tabla">
+                </div>
+            @endisset
+        </div>
+
         <div class="row mb-3">
             <div class="col-12 table-responsive">
                 <table id="detalle_tabla" class="table table-striped table-hover display responsive hover-orange">
@@ -149,16 +177,18 @@
                             @foreach ($ingreso_almacen_detalles as $datos)
                                 @php
                                     $subtotal = $datos->cantidad * $datos->precio_unitario;
-                                    $total += $subtotal;
+                                    //$total += $subtotal;
                                 @endphp
                                 <tr class="font-roboto-14">
                                     <td class="text-center p-2 text-nowrap" style='vertical-align: middle;'>
                                         <input type="hidden" name="old_ingreso_almacen_detalle_id[]" value="{{ $datos->id }}">
+                                        <input type="hidden" class="categoria_programatica_id" value={{ $datos->categoria_programatica_id }}>
                                         <span class="tts:right tts-slideIn tts-custom" aria-label="{{ $datos->categoria_programatica->nombre }}" style="cursor: pointer;">
                                             {{ $datos->categoria_programatica->codigo }}
                                         </span>
                                     </td>
                                     <td class="text-center p-2 text-nowrap" style='vertical-align: middle;'>
+                                        <input type="hidden" class="partida_presupuestaria_id" value={{ $datos->partida_presupuestaria_id }}>
                                         <span class="tts:right tts-slideIn tts-custom" aria-label="{{ $datos->partida_presupuestaria->nombre }}" style="cursor: pointer;">
                                             {{ $datos->partida_presupuestaria->numeracion }}
                                         </span>
@@ -174,10 +204,10 @@
                                         {{ $datos->producto->unidad_medida->alias }}
                                     </td>
                                     <td class="text-right p-2 text-nowrap" width='100px'>
-                                        <input type='text' value="{{ $datos->cantidad }}" name='old_cantidad[]' class='form-control font-roboto-14 text-right input-cantidad'>
+                                        <input type='text' value="{{ $datos->cantidad }}" name='old_cantidad[]' class='form-control font-roboto-14 text-right input-cantidad' oninput="cantidadPrecio(this);">
                                     </td>
                                     <td class="text-right p-2 text-nowrap" width='100px'>
-                                        <input type='text' value="{{ $datos->precio_unitario }}" name='old_precio_unitario[]' class='form-control font-roboto-14 text-right input-precio-unitario'>
+                                        <input type='text' value="{{ $datos->precio_unitario }}" name='old_precio_unitario[]' class='form-control font-roboto-14 text-right input-precio-unitario' oninput="cantidadPrecio(this);">
                                     </td>
                                     <td class="text-right p-2 text-nowrap" width='100px'>
                                         <input type='text' value="{{ number_format($subtotal, 2, '.', ',') }}" placeholder='0' class='form-control font-roboto-14 text-right input-subtotal' disabled>
@@ -194,11 +224,6 @@
                             @endforeach
                         @endisset
                     </tbody>
-                    <tr id='total_fila' class='ignore-row' style="display: none">
-                        <td colspan='7' class='text-right p-2 text-nowrap'><b>TOTAL</b></td>
-                        <td class='text-right p-2 text-nowrap'><input type='text' class='form-control form-control-sm font-roboto-14 text-right' disabled></td>
-                        <td>&nbsp;</td>
-                    </tr>
                 </table>
             </div>
         </div>

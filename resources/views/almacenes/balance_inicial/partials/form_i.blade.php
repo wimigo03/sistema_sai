@@ -75,10 +75,10 @@
         <div class="row" style="display: flex; justify-content: space-between;">
             <div class="col-12 col-md-6 col-lg-6">
                 <div class="d-flex flex-column flex-md-row gap-3 justify-content-center justify-content-md-end">
-                    <button class="btn btn-primary w-100 w-md-auto btn-size mr-2 mb-2 mb-md-0 font-roboto-14" type="button" onclick="procesar();">
+                    <button class="btn btn-primary w-100 w-md-auto py-2 mr-2 font-roboto-14" type="button" onclick="procesar();">
                         <i class="fas fa-paper-plane fa-fw"></i> {{ isset($ingreso_almacen) ? 'Procesar Cambios' : 'Procesar' }}
                     </button>
-                    <button class="btn btn-danger w-100 w-md-auto btn-size font-roboto-14" type="button" onclick="cancelar();">
+                    <button class="btn btn-danger w-100 w-md-auto py-2 font-roboto-14" type="button" onclick="cancelar();">
                         <i class="fas fa-times fa-fw"></i> Cancelar
                     </button>
                 </div>
@@ -120,16 +120,18 @@
                             @foreach ($ingreso_almacen_detalles as $datos)
                                 @php
                                     $subtotal = $datos->cantidad * $datos->precio_unitario;
-                                    $total += $subtotal;
+                                    //$total += $subtotal;
                                 @endphp
                                 <tr class="font-roboto-13">
                                     <td class="text-center p-2 text-nowrap" style='vertical-align: middle;'>
                                         <input type="hidden" name="old_ingreso_almacen_detalle_id[]" value="{{ $datos->id }}">
+                                        <input type="hidden" class="categoria_programatica_id" value={{ $datos->categoria_programatica_id }}>
                                         <span class="tts:right tts-slideIn tts-custom" aria-label="{{ $datos->categoria_programatica->nombre }}" style="cursor: pointer;">
                                             {{ $datos->categoria_programatica->codigo }}
                                         </span>
                                     </td>
                                     <td class="text-center p-2 text-nowrap" style='vertical-align: middle;'>
+                                        <input type="hidden" class="partida_presupuestaria_id" value={{ $datos->partida_presupuestaria_id }}>
                                         <span class="tts:right tts-slideIn tts-custom" aria-label="{{ $datos->partida_presupuestaria->nombre }}" style="cursor: pointer;">
                                             {{ $datos->partida_presupuestaria->numeracion }}
                                         </span>

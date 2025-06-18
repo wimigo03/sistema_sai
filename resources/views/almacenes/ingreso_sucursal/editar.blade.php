@@ -1,15 +1,8 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
 <style>
-    .section-title {
-        font-size: 1.25rem;
-        font-weight: bold;
-        margin-bottom: 10px;
-        color: #333;
-    }
-
     .div_detalle, .div_cabecera {
-        padding: 15px;
+        padding: 1px;
         border-radius: 8px;
         background-color: #f1f1f1;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -59,6 +52,46 @@
             $(document).ready(function() {
                 $("#categoria_programatica_id").val('').trigger('change');
 
+                var table = $('#detalle_tabla').DataTable({
+                    "responsive": true,
+                    //"stateSave": true,
+                    "language": {
+                        "sProcessing": "Procesando...",
+                        "sLengthMenu": "_MENU_",
+                        "sZeroRecords": "No se encontraron resultados",
+                        "sEmptyTable": "Ningún dato disponible en esta tabla",
+                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                        "sSearch": "",
+                        "sSearchPlaceholder": "Buscar",
+                        "oPaginate": {
+                            "sFirst": "Primero",
+                            "sPrevious": "Anterior",
+                            "sNext": "Siguiente",
+                            "sLast": "Último"
+                        }
+                    },
+                    "paging": false,
+                    "dom": '<"top">rt<"bottom"p><"clear">',
+                    "pageLength": 10000,
+                    "lengthChange": false,
+                    "initComplete": function() {
+                        $(".dataTables_info").addClass("font-roboto-13");
+                        $(".dataTables_length").find("label").addClass("font-roboto-13");
+                        $(".dataTables_filter").find("label").addClass("font-roboto-13");
+                        $(".dataTables_paginate").find("a").addClass("font-roboto-13");
+                    }
+                });
+
+                $('#custom-search input').on('input', function() {
+                    table.search(this.value).draw();
+                });
+
+                $('#_detalle_tabla_filter').on('input', function() {
+                    actualizarTotal();
+                });
+
                 $('.select2').select2({
                     theme: "bootstrap4",
                     placeholder: "--Seleccionar--",
@@ -76,6 +109,26 @@
                     language: "es",
                     dateFormat: "dd-mm-yyyy",
                     autoClose: true
+                });
+
+                $(".input-cantidad").each(function() {
+                    new Cleave(this, {
+                        numeral: true,
+                        numeralDecimalMark: '.',
+                        delimiter: ',',
+                        numeralDecimalScale: 4,
+                        numeralThousandsGroupStyle: 'thousand',
+                    });
+                });
+
+                $(".input-precio-unitario").each(function() {
+                    new Cleave(this, {
+                        numeral: true,
+                        numeralDecimalMark: '.',
+                        delimiter: ',',
+                        numeralDecimalScale: 4,
+                        numeralThousandsGroupStyle: 'thousand',
+                    });
                 });
             });
 
@@ -199,13 +252,21 @@
 
             function validarRepetidos(){
                 var productos = $("#detalle_tabla tbody tr");
-                if(productos.length>0){
-                    var producto = $("#producto_id >option:selected").val();
-                    for(var i=0;i<productos.length;i++){
+                if(productos.length > 0){
+                    var categoria_programatica_id = $("#categoria_programatica_id > option:selected").val();
+                    var partida_presupuestaria_id = $("#partida_presupuestaria_id > option:selected").val();
+                    var producto_id = $("#producto_id > option:selected").val();
+
+                    for(var i = 0; i < productos.length; i++){
                         var tr = productos[i];
-                        var producto_id = $(tr).find(".producto_id").val();
-                        if(producto == producto_id){
-                            Modal("[MATERIAL DUPLICADO]");
+                        var categoria_programatica = $(tr).find(".categoria_programatica_id").val();
+                        var partida_presupuestaria = $(tr).find(".partida_presupuestaria_id").val();
+                        var producto = $(tr).find(".producto_id").val();
+
+                        if(categoria_programatica == categoria_programatica_id &&
+                        partida_presupuestaria == partida_presupuestaria_id &&
+                        producto == producto_id){
+                            Modal("[REGISTRO DUPLICADO]");
                             return false;
                         }
                     }
@@ -246,12 +307,12 @@
                 var fila = "<tr class='font-roboto-14'>"+
                                 "<td class='text-center p-2 text-nowrap' style='vertical-align: middle;'>" +
                                     "<span class='tts:right tts-slideIn tts-custom' aria-label='" + categoria_programatica_nombre + "' style='cursor: pointer;'>" +
-                                        "<input type='hidden' name='categoria_programatica_id[]' value='" + categoria_programatica_id + "'>" + categoria_programatica_codigo +
+                                        "<input type='hidden' class='categoria_programatica_id' name='categoria_programatica_id[]' value='" + categoria_programatica_id + "'>" + categoria_programatica_codigo +
                                     "</span>" +
                                 "</td>" +
                                 "<td class='text-center p-2 text-nowrap' style='vertical-align: middle;'>" +
                                     "<span class='tts:right tts-slideIn tts-custom' aria-label='" + partida_presupuestaria_nombre + "' style='cursor: pointer;'>" +
-                                        "<input type='hidden' name='partida_presupuestaria_id[]' value='" + partida_presupuestaria_id + "'>" + partida_presupuestaria_codigo +
+                                        "<input type='hidden' class='partida_presupuestaria_id' name='partida_presupuestaria_id[]' value='" + partida_presupuestaria_id + "'>" + partida_presupuestaria_codigo +
                                     "</span>" +
                                 "</td>" +
                                 "<td class='text-center p-2 text-nowrap' style='vertical-align: middle;'>" +
@@ -264,10 +325,10 @@
                                     producto.alias +
                                 "</td>" +
                                 "<td class='text-right p-2 text-nowrap' width='100px'>"+
-                                    "<input type='text' placeholder='0' name='cantidad[]' class='form-control font-roboto-14 text-right input-cantidad'>" +
+                                    "<input type='text' placeholder='0' name='cantidad[]' class='form-control font-roboto-14 text-right input-cantidad' oninput='cantidadPrecio(this);'>" +
                                 "</td>" +
                                 "<td class='text-right p-2 text-nowrap' width='100px'>"+
-                                    "<input type='text' placeholder='0' name='precio_unitario[]' class='form-control font-roboto-14 text-right input-precio-unitario'>" +
+                                    "<input type='text' placeholder='0' name='precio_unitario[]' class='form-control font-roboto-14 text-right input-precio-unitario' oninput='cantidadPrecio(this);'>" +
                                 "</td>" +
                                 "<td class='text-right p-2 text-nowrap' width='100px'>"+
                                     "<input type='text' placeholder='0' class='form-control font-roboto-14 text-right input-subtotal' disabled>" +
@@ -279,14 +340,15 @@
                                 "</td>"
                             "</tr>";
 
-                $("#detalle_tabla").append(fila);
+                //$("#detalle_tabla").append(fila);
+                $("#detalle_tabla tbody").prepend(fila);
 
                 $(".input-cantidad").each(function() {
                     new Cleave(this, {
                         numeral: true,
                         numeralDecimalMark: '.',
                         delimiter: ',',
-                        numeralDecimalScale: 2,
+                        numeralDecimalScale: 4,
                         numeralThousandsGroupStyle: 'thousand',
                     });
                 });
@@ -296,7 +358,7 @@
                         numeral: true,
                         numeralDecimalMark: '.',
                         delimiter: ',',
-                        numeralDecimalScale: 2,
+                        numeralDecimalScale: 4,
                         numeralThousandsGroupStyle: 'thousand',
                     });
                 });
@@ -307,20 +369,21 @@
                     "text-overflow": "ellipsis"
                 });
 
-                $('#categoria_programatica_id').val('').trigger('change');
-                $('#partida_presupuestaria_id').val('').trigger('change');
-                $('#producto_id').val('').trigger('change');
-
-                $(".input-cantidad, .input-precio-unitario").on("input", function() {
-                    var tr = $(this).closest('tr');
-                    var cantidad = parseFloat(tr.find('.input-cantidad').val().replace(/,/g, '')) || 0;
-                    var precioUnitario = parseFloat(tr.find('.input-precio-unitario').val().replace(/,/g, '')) || 0;
-                    var subtotal = cantidad * precioUnitario;
-                    tr.find('.input-subtotal').val(subtotal.toFixed(2));
-                    actualizarTotal();
-                });
+                //$('#categoria_programatica_id').val('').trigger('change');
+                //$('#partida_presupuestaria_id').val('').trigger('change');
+                //$('#producto_id').val('').trigger('change');
 
                 contarRegistrosValidos();
+            }
+
+            function cantidadPrecio(element) {
+                var tr = $(element).closest('tr');
+                var cantidad = parseFloat(tr.find('.input-cantidad').val().replace(/,/g, '')) || 0;
+                var precioUnitario = parseFloat(tr.find('.input-precio-unitario').val().replace(/,/g, '')) || 0;
+                var subtotal = cantidad * precioUnitario;
+
+                tr.find('.input-subtotal').val(subtotal.toFixed(2));
+                actualizarTotal();
             }
 
             function actualizarTotal() {
@@ -331,9 +394,16 @@
                     total += subtotal;
                 });
 
+                var totalRedondeado = Math.round(total * 100) / 100;
+
+                var totalFormateado = totalRedondeado.toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+
                 var totalFila = $("#total_fila");
                 if (totalFila.length > 0) {
-                    totalFila.find("input").val(total.toFixed(2));
+                    totalFila.find("input").val('Bs. ' + totalFormateado);
                 }
             }
 

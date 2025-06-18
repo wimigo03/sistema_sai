@@ -140,7 +140,7 @@
             <td width="100%" align="center">
                 <b>
                     <span style="font-size: 18px;">
-                        @if ($ingreso_almacen->codigo != 1)
+                        @if ($ingreso_almacen->codigo != 0)
                             NOTA DE INGRESO
                         @else
                             INVENTARIO INICIAL
@@ -167,7 +167,7 @@
             </td>
         </tr>
     </table>
-    @if($ingreso_almacen->codigo != 1)
+    @if($ingreso_almacen->codigo != 0)
         <table class="table-encabezado">
             <tr>
                 <td style="width:25%; word-wrap: break-word;">
@@ -179,7 +179,7 @@
             </tr>
         </table>
     @endif
-    @if($ingreso_almacen->codigo != 1)
+    @if($ingreso_almacen->codigo != 0)
         <table class="table-encabezado">
             <tr>
                 <td style="width:20%; word-wrap: break-word;">

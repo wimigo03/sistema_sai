@@ -2,7 +2,7 @@
 @extends('layouts.dashboard')
 <style>
     .div_detalle, .div_cabecera {
-        padding: 15px;
+        padding: 1px;
         border-radius: 8px;
         background-color: #f1f1f1;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -60,7 +60,7 @@
 
                 var table = $('#detalle_tabla').DataTable({
                     "responsive": true,
-                    //"stateSave": true,
+                    "stateSave": true,
                     "language": {
                         "sProcessing": "Procesando...",
                         "sLengthMenu": "_MENU_",
@@ -313,12 +313,12 @@
                 var fila = "<tr class='font-roboto-13'>"+
                                 "<td class='text-center p-2 text-nowrap' style='vertical-align: middle;'>" +
                                     "<span class='tts:right tts-slideIn tts-custom' aria-label='" + categoria_programatica_nombre + "' style='cursor: pointer;'>" +
-                                        "<input type='hidden' name='categoria_programatica_id[]' value='" + categoria_programatica_id + "'>" + categoria_programatica_codigo +
+                                        "<input type='hidden' class='categoria_programatica_id' name='categoria_programatica_id[]' value='" + categoria_programatica_id + "'>" + categoria_programatica_codigo +
                                     "</span>" +
                                 "</td>" +
                                 "<td class='text-center p-2 text-nowrap' style='vertical-align: middle;'>" +
                                     "<span class='tts:right tts-slideIn tts-custom' aria-label='" + partida_presupuestaria_nombre + "' style='cursor: pointer;'>" +
-                                        "<input type='hidden' name='partida_presupuestaria_id[]' value='" + partida_presupuestaria_id + "'>" + partida_presupuestaria_codigo +
+                                        "<input type='hidden' class='partida_presupuestaria_id' name='partida_presupuestaria_id[]' value='" + partida_presupuestaria_id + "'>" + partida_presupuestaria_codigo +
                                     "</span>" +
                                 "</td>" +
                                 "<td class='text-center p-2 text-nowrap' style='vertical-align: middle;'>" +
@@ -375,18 +375,9 @@
                     "text-overflow": "ellipsis"
                 });
 
-                $('#categoria_programatica_id').val('').trigger('change');
-                $('#partida_presupuestaria_id').val('').trigger('change');
-                $('#producto_id').val('').trigger('change');
-
-                /*$(".input-cantidad, .input-precio-unitario").on("input", function() {
-                    var tr = $(this).closest('tr');
-                    var cantidad = parseFloat(tr.find('.input-cantidad').val().replace(/,/g, '')) || 0;
-                    var precioUnitario = parseFloat(tr.find('.input-precio-unitario').val().replace(/,/g, '')) || 0;
-                    var subtotal = cantidad * precioUnitario;
-                    tr.find('.input-subtotal').val(subtotal.toFixed(2));
-                    actualizarTotal();
-                });*/
+                //$('#categoria_programatica_id').val('').trigger('change');
+                //$('#partida_presupuestaria_id').val('').trigger('change');
+                //$('#producto_id').val('').trigger('change');
 
                 contarRegistrosValidos();
             }

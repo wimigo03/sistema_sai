@@ -97,7 +97,7 @@ class BalanceInicialController extends Controller
                     'dea_id' => $dea_id,
                     'almacen_id' => $request->almacen_id,
                     'user_id' => $user_id,
-                    'codigo' => 1,
+                    'codigo' => 0,
                     'fecha_ingreso' => $request->gestion . '-01-01',
                     'obs' => 'Balance Inicial',
                     'estado' => IngresoAlmacen::PENDIENTE
@@ -242,7 +242,9 @@ class BalanceInicialController extends Controller
 
         $ingreso_almacen = IngresoAlmacen::find($ingreso_almacen_id);
         $ingreso_almacen_detalles = IngresoAlmacenDetalle::where('ingreso_almacen_id',$ingreso_almacen_id)->where('estado',IngresoAlmacenDetalle::HABILITADO)->get();
-        $total = 0;
+        $total = $ingreso_almacen_detalles->map(function ($detalle) {
+            return $detalle->cantidad * $detalle->precio_unitario;
+        })->sum();
 
         return view('almacenes.ingreso_sucursal.show',compact('ingreso_almacen','ingreso_almacen_detalles','total'));
     }

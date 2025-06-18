@@ -986,13 +986,13 @@
                 }
             @endif
 
-            $(document).ready(function() {
+            /*$(document).ready(function() {
                 $('#menu_dashboard').select2({
                     theme: "bootstrap4",
                     placeholder: "--Seleccionar--",
                     width: '100%'
                 });
-            });
+            });*/
 
             function obtenerMontoCleave(montoString) {
                 if(montoString == ""){

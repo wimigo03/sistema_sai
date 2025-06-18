@@ -103,6 +103,8 @@ class IngresoSucursalController extends Controller
             $almacenes = Almacen::byDea($dea_id)->byEncargado($user_id)->pluck('nombre','id');
         }
 
+        $old_total = 0;
+
         $proveedores = Proveedor::byDea($dea_id)->pluck('nombre','id');
         $categorias_programaticas = CategoriaProgramatica::select(DB::raw("concat(codigo,' - ', nombre) as data_completo"),'id')
                                                             ->byDea($dea_id)
@@ -110,7 +112,7 @@ class IngresoSucursalController extends Controller
                                                             ->pluck('data_completo','id');
         $areas = Area::byDea($dea_id)->byEstado(Area::HABILITADO)->pluck('nombrearea','idarea');
 
-        return view('almacenes.ingreso_sucursal.create',compact('almacenes','proveedores','categorias_programaticas','areas'));
+        return view('almacenes.ingreso_sucursal.create',compact('almacenes','old_total','proveedores','categorias_programaticas','areas'));
     }
 
     public function getPartidasPresupuestarias(Request $request)
@@ -324,7 +326,9 @@ class IngresoSucursalController extends Controller
 
         $ingreso_almacen = IngresoAlmacen::find($ingreso_almacen_id);
         $ingreso_almacen_detalles = IngresoAlmacenDetalle::where('ingreso_almacen_id',$ingreso_almacen_id)->where('estado',IngresoAlmacenDetalle::HABILITADO)->get();
-        $total = 0;
+        $total = $ingreso_almacen_detalles->map(function ($detalle) {
+            return $detalle->cantidad * $detalle->precio_unitario;
+        })->sum();
 
         return view('almacenes.ingreso_sucursal.show',compact('ingreso_almacen','ingreso_almacen_detalles','total'));
     }
@@ -344,6 +348,10 @@ class IngresoSucursalController extends Controller
 
         $ingreso_almacen = IngresoAlmacen::find($id);
         $ingreso_almacen_detalles = IngresoAlmacenDetalle::byEstado(IngresoAlmacenDetalle::HABILITADO)->where('ingreso_almacen_id', $id)->get();
+        $old_total = $ingreso_almacen_detalles->map(function ($detalle) {
+            return $detalle->cantidad * $detalle->precio_unitario;
+        })->sum();
+
         $total = 0;
 
         $dea_id = Auth::user()->dea->id;
@@ -363,7 +371,7 @@ class IngresoSucursalController extends Controller
                                                             ->pluck('data_completo','id');
         $areas = Area::byDea($dea_id)->byEstado(Area::HABILITADO)->pluck('nombrearea','idarea');
 
-        return view('almacenes.ingreso_sucursal.editar',compact('ingreso_almacen','ingreso_almacen_detalles','total','almacenes','proveedores','categorias_programaticas','areas'));
+        return view('almacenes.ingreso_sucursal.editar',compact('ingreso_almacen','ingreso_almacen_detalles','total','old_total','almacenes','proveedores','categorias_programaticas','areas'));
     }
 
     public function eliminarRegistro($id)
