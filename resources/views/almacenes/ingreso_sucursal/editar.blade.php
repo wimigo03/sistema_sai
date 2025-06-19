@@ -37,10 +37,8 @@
 @endsection
 @section('content')
     <div class="card">
-        <div class="card-header">
-            <div class="row d-flex align-items-center">
-                <i class="fa-solid fa-file-lines fa-fw"></i>&nbsp;<b class="title-size">MODIFICAR REGISTRO INGRESO DE MATERIAL</b>
-            </div>
+        <div class="card-header bg-dark">
+            <i class="fa-solid fa-edit fa-fw"></i>&nbsp;<b class="font-verdana-16">REGISTRO INGRESO DE MATERIAL</b>
         </div>
 
         <div class="card-body">
@@ -58,8 +56,8 @@
                     "language": {
                         "sProcessing": "Procesando...",
                         "sLengthMenu": "_MENU_",
-                        "sZeroRecords": "No se encontraron resultados",
-                        "sEmptyTable": "Ningún dato disponible en esta tabla",
+                        "sZeroRecords": "",
+                        "sEmptyTable": "",
                         "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
                         "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
                         "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
@@ -231,6 +229,7 @@
                 if(!validarRepetidos()){
                     return false;
                 }
+
                 cargarProductos();
             }
 
@@ -295,7 +294,36 @@
                 });
             }
 
+            function insertarProductos() {
+                var categoria_programatica_id = $("#categoria_programatica_id >option:selected").val();
+                var partida_presupuestaria_id = $("#partida_presupuestaria_id >option:selected").val();
+                var producto_id = $("#producto_id >option:selected").val();
+                var ingreso_almacen_id = $("#ingreso_almacen_id").val();
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+                return new Promise((resolve, reject) => {
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ route('ingreso.sucursal.insertar.producto') }}",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            categoria_programatica_id: categoria_programatica_id,
+                            partida_presupuestaria_id: partida_presupuestaria_id,
+                            producto_id: producto_id,
+                            ingreso_almacen_id: ingreso_almacen_id,
+                        },
+                        success: function(data) {
+                            resolve(data.ingreso_almacen_detalle_id);
+                        },
+                        error: function(xhr) {
+                            reject(xhr.responseText);
+                        }
+                    });
+                });
+            }
+
             async function cargarProductos(){
+                var ingreso_almacen_detalle_id = await insertarProductos();
                 var categoria_programatica_id = $("#categoria_programatica_id >option:selected").val();
                 var categoria_programatica_codigo = $("#categoria_programatica_id option:selected").text().split(' - ')[0];
                 var categoria_programatica_nombre = $("#categoria_programatica_id option:selected").text().split(' - ')[1];
@@ -307,6 +335,7 @@
                 var fila = "<tr class='font-roboto-14'>"+
                                 "<td class='text-center p-2 text-nowrap' style='vertical-align: middle;'>" +
                                     "<span class='tts:right tts-slideIn tts-custom' aria-label='" + categoria_programatica_nombre + "' style='cursor: pointer;'>" +
+                                        "<input type='hidden' name='ingreso_almacen_detalle_id[]' value='" + ingreso_almacen_detalle_id + "'>" +
                                         "<input type='hidden' class='categoria_programatica_id' name='categoria_programatica_id[]' value='" + categoria_programatica_id + "'>" + categoria_programatica_codigo +
                                     "</span>" +
                                 "</td>" +
@@ -410,9 +439,13 @@
             function eliminarItem(thiss,id){
                 var tr = $(thiss).parents("tr:eq(0)");
                 tr.remove();
+
                 if (typeof id !== "undefined") {
                     eliminar_registro(id);
                 }
+
+                $('#detalle_tabla').DataTable().row(tr).remove().draw();
+
                 actualizarTotal();
                 contarRegistrosValidos();
             }
@@ -443,9 +476,10 @@
                     return false;
                 }
 
-                if(!validarInputCantidadPrecio()){
+                /*DESACTIVANDO LA OPCION DE REVISION DE 0 Y NULOS POR EDICION.*/
+                /*if(!validarInputCantidadPrecio()){
                     return false;
-                }
+                }*/
 
                 const nroPreventivoValido = await getNroPreventivo();
 
@@ -468,9 +502,11 @@
                     return false;
                 }
 
-                $('#modal_confirmacion').modal({
+                confirmar();
+
+                /*$('#modal_confirmacion').modal({
                     keyboard: false
-                })
+                });*/
             }
 
             function getNroPreventivo() {

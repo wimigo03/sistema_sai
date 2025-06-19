@@ -8,9 +8,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <div class="row d-flex align-items-center">
-                <i class="fa-solid fa-file-lines fa-fw"></i>&nbsp;<b class="title-size">INGRESO DE MATERIALES</b>
-            </div>
+            <i class="fa-solid fa-file-lines fa-fw"></i>&nbsp;<b class="font-verdana-18">INGRESO DE MATERIALES</b>
         </div>
 
         <div class="card-body">

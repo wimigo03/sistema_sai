@@ -75,11 +75,8 @@
         <div class="row" style="display: flex; justify-content: space-between;">
             <div class="col-12 col-md-6 col-lg-6">
                 <div class="d-flex flex-column flex-md-row gap-3 justify-content-center justify-content-md-end">
-                    <button class="btn btn-primary w-100 w-md-auto py-2 mr-2 font-roboto-14" type="button" onclick="procesar();">
-                        <i class="fas fa-paper-plane fa-fw"></i> {{ isset($ingreso_almacen) ? 'Procesar Cambios' : 'Procesar' }}
-                    </button>
-                    <button class="btn btn-danger w-100 w-md-auto py-2 font-roboto-14" type="button" onclick="cancelar();">
-                        <i class="fas fa-times fa-fw"></i> Cancelar
+                    <button class="btn btn-outline-primary w-100 w-md-auto py-2 mr-2 font-roboto-14" type="button" onclick="procesar();">
+                        <i class="fas fa-paper-plane fa-fw"></i> Finalizar
                     </button>
                 </div>
                 <div class="text-center mt-3">
@@ -124,7 +121,7 @@
                                 @endphp
                                 <tr class="font-roboto-13">
                                     <td class="text-center p-2 text-nowrap" style='vertical-align: middle;'>
-                                        <input type="hidden" name="old_ingreso_almacen_detalle_id[]" value="{{ $datos->id }}">
+                                        <input type="hidden" name="ingreso_almacen_detalle_id[]" value="{{ $datos->id }}">
                                         <input type="hidden" class="categoria_programatica_id" value={{ $datos->categoria_programatica_id }}>
                                         <span class="tts:right tts-slideIn tts-custom" aria-label="{{ $datos->categoria_programatica->nombre }}" style="cursor: pointer;">
                                             {{ $datos->categoria_programatica->codigo }}
@@ -147,10 +144,10 @@
                                         {{ $datos->producto->unidad_medida->alias }}
                                     </td>
                                     <td class="text-right p-2 text-nowrap" width='100px'>
-                                        <input type='text' value="{{ $datos->cantidad }}" name='old_cantidad[]' class='form-control font-roboto-13 text-right input-cantidad' oninput="cantidadPrecio(this);">
+                                        <input type='text' value="{{ $datos->cantidad }}" name='cantidad[]' class='form-control font-roboto-13 text-right input-cantidad' oninput="cantidadPrecio(this);">
                                     </td>
                                     <td class="text-right p-2 text-nowrap" width='100px'>
-                                        <input type='text' value="{{ $datos->precio_unitario }}" name='old_precio_unitario[]' class='form-control font-roboto-13 text-right input-precio-unitario' oninput="cantidadPrecio(this)">
+                                        <input type='text' value="{{ $datos->precio_unitario }}" name='precio_unitario[]' class='form-control font-roboto-13 text-right input-precio-unitario' oninput="cantidadPrecio(this)">
                                     </td>
                                     <td class="text-right p-2 text-nowrap" width='100px'>
                                         <input type='text' value="{{ number_format($subtotal, 2, '.', ',') }}" placeholder='0' class='form-control font-roboto-13 text-right input-subtotal' disabled>

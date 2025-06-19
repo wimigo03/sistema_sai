@@ -13,8 +13,8 @@
         ...
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary font-roboto-12" type="button" data-dismiss="modal">
-          <i class="fas fa-paper-plane fa-fw"></i> Entendido
+        <button class="btn btn-primary font-roboto-14" type="button" data-dismiss="modal">
+          <i class="fas fa-paper-plane fa-fw"></i> Aceptar
         </button>
       </div>
     </div>

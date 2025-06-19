@@ -9,4 +9,5 @@ Route::prefix('balance-inicial')->name('balance.inicial.')->middleware(['auth'])
     Route::get('show/{ingreso_almacen_id}', 'Almacenes\BalanceInicialController@show')->name('show')->middleware('can:balance.inicial.show');
     Route::get('pdf/{ingreso_almacen_id}', 'Almacenes\BalanceInicialController@pdf')->name('pdf')->middleware('can:balance.inicial.pdf');
     Route::get('editar/{ingreso_almacen_id}', 'Almacenes\BalanceInicialController@editar')->name('editar')->middleware('can:balance.inicial.editar');
+    Route::post('insertar-productos', 'Almacenes\BalanceInicialController@insertarProducto')->name('insertar.producto')->middleware('can:balance.inicial.editar');
 });

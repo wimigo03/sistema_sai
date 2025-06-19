@@ -40,16 +40,16 @@
 <div class="row">
     <div class="col-12 d-flex flex-column flex-md-row gap-2 justify-content-center justify-content-md-end">
         @can('ingreso.sucursal.create')
-            <button class="btn btn-success w-100 w-md-auto btn-size mr-2 font-roboto-14" type="button" onclick="create();">
-                <i class="fas fa-plus fa-fw"></i> Nuevo Ingreso
+            <button class="btn btn-outline-success w-100 w-md-auto py-2 btn-size mr-2 font-roboto-14" type="button" onclick="create();">
+                <i class="fas fa-plus fa-fw"></i> Registrar Nuevo Comprobante
             </button>
         @endcan
 
-        <button class="btn btn-outline-danger w-100 w-md-auto btn-size mr-2 font-roboto-14" type="button" onclick="limpiar();">
+        <button class="btn btn-outline-danger w-100 w-md-auto py-2 btn-size mr-2 font-roboto-14" type="button" onclick="limpiar();">
             <i class="fas fa-eraser fa-fw"></i> Limpiar
         </button>
 
-        <button class="btn btn-outline-primary w-100 w-md-auto btn-size font-roboto-14" type="button" onclick="search();">
+        <button class="btn btn-outline-primary w-100 w-md-auto py-2 btn-size font-roboto-14" type="button" onclick="search();">
             <i class="fas fa-search fa-fw"></i> Buscar
         </button>
     </div>

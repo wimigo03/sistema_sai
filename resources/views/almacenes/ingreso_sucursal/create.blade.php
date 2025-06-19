@@ -38,9 +38,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <div class="row d-flex align-items-center">
-                <i class="fa-solid fa-file-lines fa-fw"></i>&nbsp;<b class="title-size">REGISTRAR INGRESO DE MATERIAL</b>
-            </div>
+            <i class="fa-solid fa-plus fa-fw"></i>&nbsp;<b class="font-verdana-16">REGISTRO INGRESO DE MATERIAL</b>
         </div>
 
         <div class="card-body">
@@ -406,13 +404,13 @@
                     return false;
                 }
 
-                if(!contarRegistros()){
+                /*if(!contarRegistros()){
                     return false;
-                }
+                }*/
 
-                if(!validarInputCantidadPrecio()){
+                /*if(!validarInputCantidadPrecio()){
                     return false;
-                }
+                }*/
 
                 const nroPreventivoValido = await getNroPreventivo();
 

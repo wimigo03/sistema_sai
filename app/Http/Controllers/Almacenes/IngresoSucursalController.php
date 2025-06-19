@@ -276,7 +276,7 @@ class IngresoSucursalController extends Controller
                     'estado' => IngresoAlmacen::PENDIENTE
                 ]);
 
-                $cont = 0;
+                /*$cont = 0;
 
                 while($cont < count($request->producto_id)){
                     $ingreso_almacen_detalle = IngresoAlmacenDetalle::create([
@@ -290,16 +290,16 @@ class IngresoSucursalController extends Controller
                     ]);
 
                     $cont++;
-                }
+                }*/
 
-                return $ingreso_almacen_detalle;
+                return $ingreso_almacen;
             });
             Log::channel('ingresos_almacen')->info(
                 "\n" .
                 "Ingresos Almacen registrado con exito." . "\n" .
                 "Por el usuario " . Auth::user()->id . "\n"
             );
-            return redirect()->route('ingreso.sucursal.index')->with('success_message', '[El ingreso fue registrado correctamente.]');
+            return redirect()->route('ingreso.sucursal.editar', $data->id)->with('success_message', '[COMPROBANTE CREADO CON EXITO]');
         } catch (\Exception $e) {
             Log::channel('ingresos_almacen')->info(
                 "\n" .
@@ -347,7 +347,7 @@ class IngresoSucursalController extends Controller
         }
 
         $ingreso_almacen = IngresoAlmacen::find($id);
-        $ingreso_almacen_detalles = IngresoAlmacenDetalle::byEstado(IngresoAlmacenDetalle::HABILITADO)->where('ingreso_almacen_id', $id)->get();
+        $ingreso_almacen_detalles = IngresoAlmacenDetalle::byEstado(IngresoAlmacenDetalle::HABILITADO)->where('ingreso_almacen_id', $id)->orderBy('id','desc')->get();
         $old_total = $ingreso_almacen_detalles->map(function ($detalle) {
             return $detalle->cantidad * $detalle->precio_unitario;
         })->sum();
@@ -372,6 +372,45 @@ class IngresoSucursalController extends Controller
         $areas = Area::byDea($dea_id)->byEstado(Area::HABILITADO)->pluck('nombrearea','idarea');
 
         return view('almacenes.ingreso_sucursal.editar',compact('ingreso_almacen','ingreso_almacen_detalles','total','old_total','almacenes','proveedores','categorias_programaticas','areas'));
+    }
+
+    public function insertarProducto(Request $request)
+    {
+        try{
+            $ingreso_almacen_detalle = IngresoAlmacenDetalle::create([
+                'ingreso_almacen_id' => $request->ingreso_almacen_id,
+                'categoria_programatica_id' => $request->categoria_programatica_id,
+                'partida_presupuestaria_id' => $request->partida_presupuestaria_id,
+                'producto_id' => $request->producto_id,
+                'cantidad' => 0,
+                'precio_unitario' => 0,
+                'estado' => IngresoAlmacenDetalle::HABILITADO,
+            ]);
+
+            Log::channel('ingresos_almacen')->info(
+                "\n" .
+                "Ingreso detalle almacen registrado con exito." . "\n" .
+                "Por el usuario " . Auth::user()->id . "\n"
+            );
+
+            if($ingreso_almacen_detalle){
+                return response()->json([
+                    'ingreso_almacen_detalle_id' => $ingreso_almacen_detalle->id
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::channel('ingresos_almacen')->info(
+                "\n" .
+                "Error al crear un registro detalle de ingreso de almacen " . "\n" .
+                "Por el usuario  " . Auth::user()->id . "\n" .
+                "Error: " . $e->getMessage() . "\n"
+            );
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al insertar el producto: ' . $e->getMessage()
+            ]);
+        }
     }
 
     public function eliminarRegistro($id)
@@ -410,40 +449,22 @@ class IngresoSucursalController extends Controller
                     'obs' => $request->glosa
                 ]);
 
-                if ($request->filled('old_ingreso_almacen_detalle_id')) {
+                if ($request->filled('ingreso_almacen_detalle_id')) {
 
                     $cont = 0;
 
-                    while($cont < count($request->old_ingreso_almacen_detalle_id)){
-                        $ingreso_almacen_detalle = IngresoAlmacenDetalle::find($request->old_ingreso_almacen_detalle_id[$cont]);
+                    while($cont < count($request->ingreso_almacen_detalle_id)){
+                        $ingreso_almacen_detalle = IngresoAlmacenDetalle::find($request->ingreso_almacen_detalle_id[$cont]);
                         $ingreso_almacen_detalle->update([
-                            'cantidad' => floatval(str_replace(",", "", $request->old_cantidad[$cont])),
-                            'precio_unitario' => floatval(str_replace(",", "", $request->old_precio_unitario[$cont])),
-                        ]);
-
-                        $cont++;
-                    }
-                }
-
-                if ($request->filled('producto_id')) {
-                    $cont = 0;
-
-                    while($cont < count($request->producto_id)){
-                        $ingreso_almacen_detalle = IngresoAlmacenDetalle::create([
-                            'ingreso_almacen_id' => $ingreso_almacen->id,
-                            'categoria_programatica_id' => $request->categoria_programatica_id[$cont],
-                            'partida_presupuestaria_id' => $request->partida_presupuestaria_id[$cont],
-                            'producto_id' => $request->producto_id[$cont],
                             'cantidad' => floatval(str_replace(",", "", $request->cantidad[$cont])),
                             'precio_unitario' => floatval(str_replace(",", "", $request->precio_unitario[$cont])),
-                            'estado' => IngresoAlmacenDetalle::HABILITADO,
                         ]);
 
                         $cont++;
                     }
                 }
 
-                return $ingreso_almacen_detalle;
+                return $ingreso_almacen;
             });
             Log::channel('ingresos_almacen')->info(
                 "\n" .
@@ -451,9 +472,9 @@ class IngresoSucursalController extends Controller
                 "Por el usuario " . Auth::user()->id . "\n"
             );
             if(isset($request->area_id)){
-                return redirect()->route('ingreso.sucursal.index')->with('success_message', '[El ingreso fue registrado correctamente.]');
+                return redirect()->route('ingreso.sucursal.index')->with('success_message', '[Guardado correctamente.]');
             }else{
-                return redirect()->route('balance.inicial.index')->with('success_message', '[El ingreso fue registrado correctamente.]');
+                return redirect()->route('balance.inicial.index')->with('success_message', '[Guardado correctamente.]');
             }
 
         } catch (\Exception $e) {

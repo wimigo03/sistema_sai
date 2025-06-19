@@ -20,5 +20,6 @@ Route::prefix('ingreso-sucursal')->name('ingreso.sucursal.')->middleware(['auth'
     Route::get('pdf/{ingreso_almacen_id}', 'Almacenes\IngresoSucursalController@pdf')->name('pdf')->middleware('can:ingreso.sucursal.pdf');
     Route::get('editar/{ingreso_almacen_id}', 'Almacenes\IngresoSucursalController@editar')->name('editar')->middleware('can:ingreso.sucursal.editar');
     Route::get('eliminar_registro/{ingreso_almacen_detalle_id}', 'Almacenes\IngresoSucursalController@eliminarRegistro')->name('eliminar')->middleware('can:ingreso.sucursal.editar');
+    Route::post('insertar-productos', 'Almacenes\IngresoSucursalController@insertarProducto')->name('insertar.producto')->middleware('can:ingreso.sucursal.editar');
     Route::post('update', 'Almacenes\IngresoSucursalController@update')->name('update')->middleware('can:ingreso.sucursal.editar');
 });
