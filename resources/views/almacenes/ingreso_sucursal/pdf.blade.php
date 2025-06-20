@@ -7,113 +7,113 @@
         margin: 30px 50px 50px 55px;
         font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
         background-color: #ffffff;
-        }
+    }
 
-        .border-contorno {
-            border-bottom: 1px solid #000000;
-            border-top: 1px solid #000000;
-            border-left: 1px solid #000000;
-            border-right: 1px solid #000000;
-            border-collapse: collapse;
-        }
+    .border-contorno {
+        border-bottom: 1px solid #000000;
+        border-top: 1px solid #000000;
+        border-left: 1px solid #000000;
+        border-right: 1px solid #000000;
+        border-collapse: collapse;
+    }
 
-        .border-bottom {
-            border-bottom: 1px solid #000000;
-            border-collapse: collapse;
-        }
+    .border-bottom {
+        border-bottom: 1px solid #000000;
+        border-collapse: collapse;
+    }
 
-        .border-top {
-            border-top: 1px solid #000000;
-            border-collapse: collapse;
-        }
+    .border-top {
+        border-top: 1px solid #000000;
+        border-collapse: collapse;
+    }
 
-        .border-left {
-            border-left: 1px solid #000000;
-            border-collapse: collapse;
-        }
+    .border-left {
+        border-left: 1px solid #000000;
+        border-collapse: collapse;
+    }
 
-        .border-right {
-            border-right: 1px solid #000000;
-            border-collapse: collapse;
-        }
+    .border-right {
+        border-right: 1px solid #000000;
+        border-collapse: collapse;
+    }
 
-        .table-titulo{
-            width: 100%;
-        }
-        .table-titulo th,
-        .table-titulo td {
-            border-collapse: collapse;
-            padding: 1px;;
-            vertical-align: bottom;
-        }
+    .table-titulo{
+        width: 100%;
+    }
+    .table-titulo th,
+    .table-titulo td {
+        border-collapse: collapse;
+        padding: 1px;;
+        vertical-align: bottom;
+    }
 
-        .table-titulo-datos {
-            width: 100%;
-        }
+    .table-titulo-datos {
+        width: 100%;
+    }
 
-        .table-titulo-datos th,
-        .table-titulo-datos td {
-            border-collapse: collapse;
-        }
+    .table-titulo-datos th,
+    .table-titulo-datos td {
+        border-collapse: collapse;
+    }
 
-        .table-encabezado {
-            /*border: 1px solid #000000;*/
-            width: 100%;
-        }
+    .table-encabezado {
+        /*border: 1px solid #000000;*/
+        width: 100%;
+    }
 
-        .table-encabezado th,
-        .table-encabezado td {
-            border: 1px solid #000000;
-            border-collapse: collapse;
-            padding: 3px;
-            font-size: 10px;
-        }
+    .table-encabezado th,
+    .table-encabezado td {
+        border: 1px solid #000000;
+        border-collapse: collapse;
+        padding: 3px;
+        font-size: 10px;
+    }
 
-        .table-pie {
-            /* border: 1px solid #000000; */
-            border-collapse: collapse;
-            width: 100%;
-        }
+    .table-pie {
+        /* border: 1px solid #000000; */
+        border-collapse: collapse;
+        width: 100%;
+    }
 
-        .table-pie th,
-        .table-pie td {
-            border-collapse: collapse;
-            padding: 0px;
-            font-size: 10px;
-        }
+    .table-pie th,
+    .table-pie td {
+        border-collapse: collapse;
+        padding: 0px;
+        font-size: 10px;
+    }
 
-        .table-contenido {
-            border-collapse: collapse;
-            width: 100%;
-        }
+    .table-contenido {
+        border-collapse: collapse;
+        width: 100%;
+    }
 
-        .table-contenido th,
-        .table-contenido td {
-            border-collapse: collapse;
-            padding: 3px;
-            font-size: 10px;
-            vertical-align: top;
-        }
+    .table-contenido th,
+    .table-contenido td {
+        border-collapse: collapse;
+        padding: 3px;
+        font-size: 10px;
+        vertical-align: top;
+    }
 
-        .table-contenido tr:nth-child(even){background-color: #f2f2f2;}
+    .table-contenido tr:nth-child(even){background-color: #f2f2f2;}
 
-        .table-contenido tr:hover {background-color: #ddd;}
+    .table-contenido tr:hover {background-color: #ddd;}
 
-        .logo-gran-chaco{
-            width: 160px;
-            height:auto;
-            border-radius: 10%;
-            overflow: hidden;
-            opacity: 0.9;
-        }
+    .logo-gran-chaco{
+        width: 160px;
+        height:auto;
+        border-radius: 10%;
+        overflow: hidden;
+        opacity: 0.9;
+    }
 
-        .logo-nueva-historia{
-            width: 100px;
-            height:auto;
-            border-radius: 10%;
-            overflow: hidden;
-            opacity: 0.9;
-        }
+    .logo-nueva-historia{
+        width: 100px;
+        height:auto;
+        border-radius: 10%;
+        overflow: hidden;
+        opacity: 0.9;
+    }
 </style>
 <body>
     <table class="table-titulo">
@@ -264,7 +264,7 @@
         </tr>
         <tr>
             <td>
-                <p><b>GLOSA:</b> {{ strtoupper($ingreso_almacen->obs) }}</p>
+                <p style="text-align: justify;"><b>GLOSA:</b> {{ strtoupper($ingreso_almacen->obs) }}</p>
             </td>
         </tr>
     </table>

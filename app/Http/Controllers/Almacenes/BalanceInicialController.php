@@ -149,6 +149,7 @@ class BalanceInicialController extends Controller
         }
 
         $ingreso_almacen = IngresoAlmacen::find($id);
+        $ingreso_almacen_detalles_count = IngresoAlmacenDetalle::byEstado(IngresoAlmacenDetalle::HABILITADO)->where('ingreso_almacen_id', $id)->count();
         $ingreso_almacen_detalles = IngresoAlmacenDetalle::byEstado(IngresoAlmacenDetalle::HABILITADO)->where('ingreso_almacen_id', $id)->get();
         $old_total = $ingreso_almacen_detalles->map(function ($detalle) {
             return $detalle->cantidad * $detalle->precio_unitario;
@@ -173,7 +174,7 @@ class BalanceInicialController extends Controller
                                                             ->pluck('data_completo','id');
         $areas = Area::byDea($dea_id)->byEstado(Area::HABILITADO)->pluck('nombrearea','idarea');
 
-        return view('almacenes.balance_inicial.editar',compact('ingreso_almacen','ingreso_almacen_detalles','old_total','total','almacenes','proveedores','categorias_programaticas','areas'));
+        return view('almacenes.balance_inicial.editar',compact('ingreso_almacen','ingreso_almacen_detalles_count','ingreso_almacen_detalles','old_total','total','almacenes','proveedores','categorias_programaticas','areas'));
     }
 
     public function insertarProducto(Request $request)

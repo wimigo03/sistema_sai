@@ -118,6 +118,16 @@ class ProductoController extends Controller
             'nombre' => 'required|unique:productos,nombre,null,null,dea_id,'. Auth::user()->dea->id,
         ]);
 
+        /*$request->validate([
+            'nombre' => [
+                'required',
+                Rule::unique('productos')->where(function ($query) use($request) {
+                    return $query->where('dea_id', '!=', Auth::user()->dea->id)
+                                ->where('unidad_id', '!=', $request->unidad_id);
+                }),
+            ],
+        ]);*/
+
         $partida_presupuestaria = PartidaPresupuestaria::find($request->partida_presupuestaria_id);
         $codigo = $partida_presupuestaria->numeracion . '-' . (str_pad($request->numeracion,5,"0",STR_PAD_LEFT));
 

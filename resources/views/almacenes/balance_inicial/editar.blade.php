@@ -92,6 +92,12 @@
 
                 $('#custom-search input').on('input', function() {
                     table.search(this.value).draw();
+                    var searchTerm = this.value;
+                    if (searchTerm.length > 0) {
+                        bloquearCampos();
+                    } else {
+                        desbloquearCampos();
+                    }
                 });
 
                 $('#_detalle_tabla_filter').on('input', function() {
@@ -137,6 +143,16 @@
                     });
                 });
             });
+
+            function bloquearCampos() {
+                $('#detalle_tabla input[name="cantidad[]"]').prop('disabled', true).css('background-color', '#ccc');
+                $('#detalle_tabla input[name="precio_unitario[]"]').prop('disabled', true).css('background-color', '#ccc');
+            }
+
+            function desbloquearCampos() {
+                $('#detalle_tabla input[name="cantidad[]"]').prop('disabled', false).css('background-color', '');
+                $('#detalle_tabla input[name="precio_unitario[]"]').prop('disabled', false).css('background-color', '');
+            }
 
             var Modal = function(mensaje){
                 $("#modal-alert .modal-body").html(mensaje);
@@ -372,7 +388,7 @@
                                     "<input type='text' placeholder='0' class='form-control font-roboto-13 text-right input-subtotal' disabled>" +
                                 "</td>" +
                                 "<td class='text-center p-2 text-nowrap' style='vertical-align: middle;'>"+
-                                    "<span class='btn btn-sm btn-danger' onclick='eliminarItem(this);'>" +
+                                    "<span class='btn btn-sm btn-danger' onclick='eliminarItem(this," + ingreso_almacen_detalle_id + ");'>" +
                                         "<i class='fa-solid fa-trash fa-fw'></i>" +
                                     "</span>" +
                                 "</td>"
@@ -410,6 +426,8 @@
                 //$('#categoria_programatica_id').val('').trigger('change');
                 //$('#partida_presupuestaria_id').val('').trigger('change');
                 //$('#producto_id').val('').trigger('change');
+
+                contarRegistrosInsertados();
 
                 contarRegistrosValidos();
             }
@@ -457,6 +475,7 @@
 
                 actualizarTotal();
                 contarRegistrosValidos();
+                contarRegistrosInsertados();
             }
 
             function eliminar_registro(id){
@@ -495,6 +514,12 @@
                 /*$('#modal_confirmacion').modal({
                     keyboard: false
                 });*/
+            }
+
+            function contarRegistrosInsertados() {
+                var cantidadRegistros = $("#detalle_tabla tr:not(.ignore-row)").length;
+                $("#cantidad-registros b").text(cantidadRegistros);
+                return cantidadRegistros;
             }
 
             function validarInputCantidadPrecio() {

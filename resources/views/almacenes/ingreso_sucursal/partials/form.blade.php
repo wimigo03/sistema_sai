@@ -161,6 +161,7 @@
                 <div class="col-12 col-md-6 col-lg-3" id='total_fila'>
                     <div class="input-group">
                         <span class="input-group-text font-roboto-14 border-dark bg-dark"><b>TOTAL</b></span>
+                        <span id="cantidad-registros" class="input-group-text font-roboto-14 border-dark bg-info"><b>{{ $ingreso_almacen_detalles_count }}</b></span>
                         <input type='text' value="{{ 'Bs. ' . number_format($old_total,2,'.',',') }}" class='form-control font-roboto-15 border-dark' style="text-align: right; font-weight: bold;" disabled>
                     </div>
                 </div>
@@ -219,10 +220,10 @@
                                                 {{ $datos->producto->unidad_medida->alias }}
                                             </td>
                                             <td class="text-right p-2 text-nowrap" width='100px'>
-                                                <input type='text' value="{{ $datos->cantidad }}" name='cantidad[]' placeholder='0' class='form-control font-roboto-14 text-right input-cantidad' oninput="cantidadPrecio(this);">
+                                                <input type='text' value="{{ $datos->cantidad == 0 ? '' : $datos->cantidad }}" name='cantidad[]' placeholder='0' class='form-control font-roboto-14 text-right input-cantidad {{ $datos->cantidad == 0 ? 'is-invalid' : '' }}' oninput="cantidadPrecio(this);">
                                             </td>
                                             <td class="text-right p-2 text-nowrap" width='100px'>
-                                                <input type='text' value="{{ $datos->precio_unitario }}" name='precio_unitario[]' placeholder='0' class='form-control font-roboto-14 text-right input-precio-unitario' oninput="cantidadPrecio(this);">
+                                                <input type='text' value="{{ $datos->precio_unitario == 0 ? '' : $datos->precio_unitario }}" name='precio_unitario[]' placeholder='0' class='form-control font-roboto-14 text-right input-precio-unitario {{ $datos->precio_unitario == 0 ? 'is-invalid' : '' }}' oninput="cantidadPrecio(this);">
                                             </td>
                                             <td class="text-right p-2 text-nowrap" width='100px'>
                                                 <input type='text' value="{{ number_format($subtotal, 2, '.', ',') }}" placeholder='0' class='form-control font-roboto-14 text-right input-subtotal' disabled>
