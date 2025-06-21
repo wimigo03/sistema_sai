@@ -34,6 +34,21 @@
         overflow-y: auto;
         overflow-x: auto;
     }
+
+    .spinner {
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+        margin: 15px auto 0 auto;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
 </style>
 @section('breadcrumb')
     @parent
@@ -50,10 +65,21 @@
         <div class="card-body">
             @include('almacenes.ingreso_sucursal.partials.form')
         </div>
+
+        <div id="loadingOverlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999; display: flex; justify-content: center; align-items: center;">
+            <div style="background-color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                {{--<h3>Cargando tabla...</h3>--}}
+                <p>Por favor, espere mientras se cargan los datos...</p>
+                <div class="spinner"></div> </div>
+        </div>
     </div>
     @section('scripts')
         <script type="text/javascript">
             $(document).ready(function() {
+
+                $('#loadingOverlay').show();
+                $('#miFormulario').find('input, select, textarea, button').prop('disabled', true);
+
                 $("#categoria_programatica_id").val('').trigger('change');
 
                 var table = $('#detalle_tabla').DataTable({
@@ -85,17 +111,20 @@
                         $(".dataTables_length").find("label").addClass("font-roboto-13");
                         $(".dataTables_filter").find("label").addClass("font-roboto-13");
                         $(".dataTables_paginate").find("a").addClass("font-roboto-13");
+
+                        $('#loadingOverlay').hide();
+                        $('#miFormulario').find('input, select, textarea, button').prop('disabled', false);
                     }
                 });
 
                 $('#custom-search input').on('input', function() {
                     table.search(this.value).draw();
-                    var searchTerm = this.value;
+                    /*var searchTerm = this.value;
                     if (searchTerm.length > 0) {
                         bloquearCampos();
                     } else {
                         desbloquearCampos();
-                    }
+                    }*/
                 });
 
                 $('#_detalle_tabla_filter').on('input', function() {
@@ -141,6 +170,85 @@
                     });
                 });
             });
+
+            function updateRegistro(idRegistro, valorCantidad, valorPrecioUnitario) {
+
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+                return new Promise((resolve, reject) => {
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ route('ingreso.sucursal.update.registro') }}",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            id: idRegistro,
+                            cantidad: valorCantidad,
+                            precio_unitario: valorPrecioUnitario,
+                        },
+                        success: function(data) {
+                            //resolve(data.ingreso_almacen_detalle_id);
+                        },
+                        error: function(xhr) {
+                            reject(xhr.responseText);
+                        }
+                    });
+                });
+            }
+
+            document.getElementById('detalle_tabla').addEventListener('blur', function(event) {
+                if (event.target && event.target.classList.contains('input-cantidad')) {
+                    const idRegistro = event.target.getAttribute('data-id');
+                    const valorCantidad = event.target.value;
+                    const fila = event.target.closest('tr');
+                    const inputPrecioUnitario = fila.querySelector('.input-precio-unitario');
+                    const valorPrecioUnitario = inputPrecioUnitario ? inputPrecioUnitario.value : '';
+
+                    updateRegistro(idRegistro, valorCantidad, valorPrecioUnitario);
+                }
+            }, true);
+
+            document.getElementById('detalle_tabla').addEventListener('blur', function(event) {
+                if (event.target && event.target.classList.contains('input-precio-unitario')) {
+                    const idRegistro = event.target.getAttribute('data-id');
+                    const valorPrecioUnitario = event.target.value;
+                    const fila = event.target.closest('tr');
+                    const inputCantidad = fila.querySelector('.input-cantidad');
+                    const valorCantidad = inputCantidad ? inputCantidad.value : '';
+
+                    updateRegistro(idRegistro, valorCantidad, valorPrecioUnitario);
+                }
+            }, true);
+
+            document.getElementById('detalle_tabla').addEventListener('blur', function(event) {
+                // Verificamos que el evento proviene de un input con las clases 'input-precio-unitario' o 'input-cantidad'
+                if (event.target && (event.target.classList.contains('input-precio-unitario') || event.target.classList.contains('input-cantidad'))) {
+
+                    // Obtener el valor del input que disparó el evento
+                    const valor = event.target.value;
+
+                    // Verificar si el valor es igual a 0 o si el campo está vacío y agregar o quitar la clase 'is-invalid'
+                    if (valor === '0' || valor === 0 || valor === '') {
+                        event.target.classList.add('is-invalid');  // Agregar la clase 'is-invalid' al input
+                    } else {
+                        event.target.classList.remove('is-invalid');  // Quitar la clase 'is-invalid' del input
+                    }
+
+                    // Si el input es 'input-precio-unitario', verificamos también el 'input-cantidad'
+                    if (event.target.classList.contains('input-precio-unitario')) {
+                        // Obtener la fila (tr) que contiene los inputs
+                        const fila = event.target.closest('tr');
+                        const inputCantidad = fila.querySelector('.input-cantidad');
+                        const valorCantidad = inputCantidad ? inputCantidad.value : '';
+
+                        // Verificar el valor del 'input-cantidad' y agregar o quitar la clase 'is-invalid' según corresponda
+                        if (valorCantidad === '0' || valorCantidad === 0 || valorCantidad === '') {
+                            inputCantidad.classList.add('is-invalid');
+                        } else {
+                            inputCantidad.classList.remove('is-invalid');
+                        }
+                    }
+                }
+            }, true);
 
             function bloquearCampos() {
                 $('#detalle_tabla input[name="cantidad[]"]').prop('disabled', true).css('background-color', '#ccc');
@@ -357,15 +465,16 @@
                 var fila = "<tr class='font-roboto-13'>"+
                                 "<td class='text-center p-2 text-nowrap' style='vertical-align: middle;'>" +
                                     "<span class='tts:right tts-slideIn tts-custom' aria-label='" + categoria_programatica_nombre + "' style='cursor: pointer;'>" +
-                                        "<input type='hidden' name='ingreso_almacen_detalle_id[]' value='" + ingreso_almacen_detalle_id + "'>" +
+                                        //"<input type='hidden' name='ingreso_almacen_detalle_id[]' value='" + ingreso_almacen_detalle_id + "'>" +
                                         "<input type='hidden' class='categoria_programatica_id' name='categoria_programatica_id[]' value='" + categoria_programatica_id + "'>" + categoria_programatica_codigo +
-                                    "</span>" +
-                                "</td>" +
-                                "<td class='text-center p-2 text-nowrap' style='vertical-align: middle;'>" +
-                                    "<span class='tts:right tts-slideIn tts-custom' aria-label='" + partida_presupuestaria_nombre + "' style='cursor: pointer;'>" +
                                         "<input type='hidden' class='partida_presupuestaria_id' name='partida_presupuestaria_id[]' value='" + partida_presupuestaria_id + "'>" + partida_presupuestaria_codigo +
                                     "</span>" +
                                 "</td>" +
+                                //"<td class='text-center p-2 text-nowrap' style='vertical-align: middle;'>" +
+                                //    "<span class='tts:right tts-slideIn tts-custom' aria-label='" + partida_presupuestaria_nombre + "' style='cursor: pointer;'>" +
+                                //        "<input type='hidden' class='partida_presupuestaria_id' name='partida_presupuestaria_id[]' value='" + partida_presupuestaria_id + "'>" + partida_presupuestaria_codigo +
+                                //    "</span>" +
+                                //"</td>" +
                                 "<td class='text-center p-2 text-nowrap' style='vertical-align: middle;'>" +
                                     "<input type='hidden' class='producto_id' name='producto_id[]' value='" + producto_id + "'>" + producto.codigo +
                                 "</td>" +
@@ -376,10 +485,12 @@
                                     producto.alias +
                                 "</td>" +
                                 "<td class='text-right p-2 text-nowrap' width='100px'>"+
-                                    "<input type='text' placeholder='0' name='cantidad[]' class='form-control font-roboto-14 text-right input-cantidad' oninput='cantidadPrecio(this);'>" +
+                                    //"<input type='text' placeholder='0' name='cantidad[]' data-id='" + ingreso_almacen_detalle_id + "' class='form-control font-roboto-14 text-right input-cantidad' oninput='cantidadPrecio(this);'>" +
+                                    "<input type='text' placeholder='0' data-id='" + ingreso_almacen_detalle_id + "' class='form-control font-roboto-14 text-right input-cantidad is-invalid' oninput='cantidadPrecio(this);'>" +
                                 "</td>" +
                                 "<td class='text-right p-2 text-nowrap' width='100px'>"+
-                                    "<input type='text' placeholder='0' name='precio_unitario[]' class='form-control font-roboto-14 text-right input-precio-unitario' oninput='cantidadPrecio(this);'>" +
+                                    //"<input type='text' placeholder='0' name='precio_unitario[]' data-id='" + ingreso_almacen_detalle_id + "' class='form-control font-roboto-14 text-right input-precio-unitario' oninput='cantidadPrecio(this);'>" +
+                                    "<input type='text' placeholder='0' data-id='" + ingreso_almacen_detalle_id + "' class='form-control font-roboto-14 text-right input-precio-unitario is-invalid' oninput='cantidadPrecio(this);'>" +
                                 "</td>" +
                                 "<td class='text-right p-2 text-nowrap' width='100px'>"+
                                     "<input type='text' placeholder='0' class='form-control font-roboto-14 text-right input-subtotal' disabled>" +

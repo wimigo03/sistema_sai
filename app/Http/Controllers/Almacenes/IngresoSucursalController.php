@@ -414,6 +414,41 @@ class IngresoSucursalController extends Controller
         }
     }
 
+    public function updateRegistro(Request $request)
+    {
+        try{
+            $ingreso_almacen_detalle = IngresoAlmacenDetalle::find($request->id);
+            $ingreso_almacen_detalle->update([
+                'cantidad' => floatval(str_replace(",", "", $request->cantidad)),
+                'precio_unitario' => floatval(str_replace(",", "", $request->precio_unitario)),
+            ]);
+
+            Log::channel('ingresos_almacen')->info(
+                "\n" .
+                "Ingreso detalle almacen registrado con exito." . "\n" .
+                "Por el usuario " . Auth::user()->id . "\n"
+            );
+
+            if($ingreso_almacen_detalle){
+                return response()->json([
+                    'ingreso_almacen_detalle_id' => $ingreso_almacen_detalle->id
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::channel('ingresos_almacen')->info(
+                "\n" .
+                "Error al crear un registro detalle de ingreso de almacen " . "\n" .
+                "Por el usuario  " . Auth::user()->id . "\n" .
+                "Error: " . $e->getMessage() . "\n"
+            );
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al insertar el producto: ' . $e->getMessage()
+            ]);
+        }
+    }
+
     public function eliminarRegistro($id)
     {
         $ingreso_almacen_detalle = IngresoAlmacenDetalle::find($id);
@@ -430,7 +465,7 @@ class IngresoSucursalController extends Controller
     }
 
     public function update(Request $request)
-    {
+    {//dd($request->all());
         try{
             $data = DB::transaction(function () use ($request) {
                 $user_id = Auth::user()->id;
