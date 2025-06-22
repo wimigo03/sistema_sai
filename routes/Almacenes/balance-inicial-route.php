@@ -10,5 +10,6 @@ Route::prefix('balance-inicial')->name('balance.inicial.')->middleware(['auth'])
     Route::get('pdf/{ingreso_almacen_id}', 'Almacenes\BalanceInicialController@pdf')->name('pdf')->middleware('can:balance.inicial.pdf');
     Route::get('editar/{ingreso_almacen_id}', 'Almacenes\BalanceInicialController@editar')->name('editar')->middleware('can:balance.inicial.editar');
     Route::post('insertar-productos', 'Almacenes\BalanceInicialController@insertarProducto')->name('insertar.producto')->middleware('can:balance.inicial.editar');
-    Route::post('update-registro', 'Almacenes\BalanceInicialController@updateRegistro')->name('update.registro')->middleware('can:balance.inicial.editar');
+    Route::post('update-registro-cantidad', 'Almacenes\BalanceInicialController@updateRegistroCantidad')->name('update.registro.cantidad')->middleware('can:balance.inicial.editar');
+    Route::post('update-registro-precio-unitario', 'Almacenes\BalanceInicialController@updateRegistroPrecioUnitario')->name('update.registro.precio.unitario')->middleware('can:balance.inicial.editar');
 });

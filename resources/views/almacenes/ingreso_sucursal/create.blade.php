@@ -419,11 +419,13 @@
                     return false;
                 }
 
-                const nroOrdenCompraValido = await getNroOrdenCompra();
+                if($("#n_orden_compra").val() != ''){
+                    const nroOrdenCompraValido = await getNroOrdenCompra();
 
-                if (!nroOrdenCompraValido) {
-                    Modal("[N° DE ORDEN DE COMPRA DUPLICADO]");
-                    return false;
+                    if (!nroOrdenCompraValido) {
+                        Modal("[N° DE ORDEN DE COMPRA DUPLICADO]");
+                        return false;
+                    }
                 }
 
                 const codigoValido = await getCodigo();
@@ -579,18 +581,18 @@
                     Modal("Se debe agregar un <b>[N° PREVENTIVO]</b> para continuar.");
                     return false;
                 }
-                if($("#n_orden_compra").val() == ""){
+                /*if($("#n_orden_compra").val() == ""){
                     Modal("Se debe agregar un <b>[N° DE ORDEN DE COMPRA]</b> para continuar.");
                     return false;
-                }
+                }*/
                 if($("#n_solicitud").val() == ""){
                     Modal("Se debe agregar un <b>[N° DE SOLICITUD]</b> para continuar.");
                     return false;
                 }
-                if($("#proveedor_id").val() == ""){
+                /*if($("#proveedor_id").val() == ""){
                     Modal("Se debe agregar un <b>[PROVEEDOR]</b> para continuar.");
                     return false;
-                }
+                }*/
                 if($("#codigo").val() == ""){
                     Modal("Se debe agregar un <b>[N° DE INGRESO]</b> para continuar.");
                     return false;

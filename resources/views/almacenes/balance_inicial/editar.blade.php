@@ -57,6 +57,13 @@
     <li class="breadcrumb-item font-roboto-14 active">Modificar</li>
 @endsection
 @section('content')
+    <div id="loadingOverlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999; display: flex; justify-content: center; align-items: center;">
+        <div style="background-color: white; padding: 20px; border-radius: 8px; text-align: center;">
+            {{--<h3>Cargando tabla...</h3>--}}
+            <p>Por favor, espere mientras se cargan los datos...</p>
+            <div class="spinner"></div> </div>
+    </div>
+
     <div class="card">
         <div class="card-header">
             <div class="row d-flex align-items-center">
@@ -67,19 +74,12 @@
         <div class="card-body">
             @include('almacenes.balance_inicial.partials.form_i')
         </div>
-
-        <div id="loadingOverlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999; display: flex; justify-content: center; align-items: center;">
-            <div style="background-color: white; padding: 20px; border-radius: 8px; text-align: center;">
-                {{--<h3>Cargando tabla...</h3>--}}
-                <p>Por favor, espere mientras se cargan los datos...</p>
-                <div class="spinner"></div> </div>
-        </div>
     </div>
     @section('scripts')
         <script type="text/javascript">
             $(document).ready(function() {
 
-                $('#loadingOverlay').show();
+                //$('#loadingOverlay').show();
                 $('#miFormulario').find('input, select, textarea, button').prop('disabled', true);
 
                 $("#categoria_programatica_id").val('').trigger('change');
@@ -119,19 +119,31 @@
                     }
                 });
 
-                $('#custom-search input').on('input', function() {
-                    table.search(this.value).draw();
+                $('#custom-search input').on('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        table.search(this.value).draw();
+                    }
+                });
+
+                $('#custom-search input').on('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        actualizarTotal();
+                    }
+                });
+
+                //$('#custom-search input').on('input', function() {
+                    //table.search(this.value).draw();
                     /*var searchTerm = this.value;
                     if (searchTerm.length > 0) {
                         bloquearCampos();
                     } else {
                         desbloquearCampos();
                     }*/
-                });
+                //});
 
-                $('#_detalle_tabla_filter').on('input', function() {
-                    actualizarTotal();
-                });
+                //$('#_detalle_tabla_filter').on('input', function() {
+                    //actualizarTotal();
+                //});
 
                 $('.select2').select2({
                     theme: "bootstrap4",
@@ -173,18 +185,40 @@
                 });
             });
 
-            function updateRegistro(idRegistro, valorCantidad, valorPrecioUnitario) {
+            function updateRegistroCantidad(idRegistro, valorCantidad) {
 
                 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
                 return new Promise((resolve, reject) => {
                     $.ajax({
                         type: 'POST',
-                        url: "{{ route('balance.inicial.update.registro') }}",
+                        url: "{{ route('balance.inicial.update.registro.cantidad') }}",
                         data: {
                             _token: CSRF_TOKEN,
                             id: idRegistro,
                             cantidad: valorCantidad,
+                        },
+                        success: function(data) {
+                            //resolve(data.ingreso_almacen_detalle_id);
+                        },
+                        error: function(xhr) {
+                            reject(xhr.responseText);
+                        }
+                    });
+                });
+            }
+
+            function updateRegistroPrecioUnitario(idRegistro, valorPrecioUnitario) {
+
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+                return new Promise((resolve, reject) => {
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ route('balance.inicial.update.registro.precio.unitario') }}",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            id: idRegistro,
                             precio_unitario: valorPrecioUnitario,
                         },
                         success: function(data) {
@@ -201,11 +235,11 @@
                 if (event.target && event.target.classList.contains('input-cantidad')) {
                     const idRegistro = event.target.getAttribute('data-id');
                     const valorCantidad = event.target.value;
-                    const fila = event.target.closest('tr');
-                    const inputPrecioUnitario = fila.querySelector('.input-precio-unitario');
-                    const valorPrecioUnitario = inputPrecioUnitario ? inputPrecioUnitario.value : '';
+                    //const fila = event.target.closest('tr');
+                    //const inputPrecioUnitario = fila.querySelector('.input-precio-unitario');
+                    //const valorPrecioUnitario = inputPrecioUnitario ? inputPrecioUnitario.value : '';
 
-                    updateRegistro(idRegistro, valorCantidad, valorPrecioUnitario);
+                    updateRegistroCantidad(idRegistro, valorCantidad);
                 }
             }, true);
 
@@ -213,11 +247,11 @@
                 if (event.target && event.target.classList.contains('input-precio-unitario')) {
                     const idRegistro = event.target.getAttribute('data-id');
                     const valorPrecioUnitario = event.target.value;
-                    const fila = event.target.closest('tr');
-                    const inputCantidad = fila.querySelector('.input-cantidad');
-                    const valorCantidad = inputCantidad ? inputCantidad.value : '';
+                    //const fila = event.target.closest('tr');
+                    //const inputCantidad = fila.querySelector('.input-cantidad');
+                    //const valorCantidad = inputCantidad ? inputCantidad.value : '';
 
-                    updateRegistro(idRegistro, valorCantidad, valorPrecioUnitario);
+                    updateRegistroPrecioUnitario(idRegistro, valorPrecioUnitario);
                 }
             }, true);
 

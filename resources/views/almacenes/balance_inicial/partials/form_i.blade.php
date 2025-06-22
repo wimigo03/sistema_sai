@@ -118,38 +118,30 @@
                             @foreach ($ingreso_almacen_detalles as $datos)
                                 @php
                                     $subtotal = $datos->cantidad * $datos->precio_unitario;
-                                    //$total += $subtotal;
                                 @endphp
                                 <tr class="font-roboto-13">
                                     <td class="text-center p-2 text-nowrap" style='vertical-align: middle;'>
-                                        {{--<input type="hidden" name="ingreso_almacen_detalle_id[]" value="{{ $datos->id }}">--}}
-                                        <input type="hidden" class="categoria_programatica_id" value={{ $datos->categoria_programatica_id }}>
-                                        <input type="hidden" class="partida_presupuestaria_id" value={{ $datos->partida_presupuestaria_id }}>
-                                        <span class="tts:right tts-slideIn tts-custom" aria-label="{{ $datos->categoria_programatica->nombre }}" style="cursor: pointer;">
-                                            {{ $datos->categoria_programatica->codigo }}
+                                        <input type="hidden" class="categoria_programatica_id" value="{{ $datos->categoria_programatica_id }}">
+                                        <input type="hidden" class="partida_presupuestaria_id" value="{{ $datos->partida_presupuestaria_id }}">
+                                        <span class="tts:right tts-slideIn tts-custom" aria-label="{{ $datos->categoria_programatica->nombre ?? 'N/A' }}" style="cursor: pointer;">
+                                            {{ $datos->categoria_programatica->codigo ?? 'N/A' }}
                                         </span>
                                     </td>
-                                    {{--<td class="text-center p-2 text-nowrap" style='vertical-align: middle;'>
-                                        <input type="hidden" class="partida_presupuestaria_id" value={{ $datos->partida_presupuestaria_id }}>
-                                        <span class="tts:right tts-slideIn tts-custom" aria-label="{{ $datos->partida_presupuestaria->nombre }}" style="cursor: pointer;">
-                                            {{ $datos->partida_presupuestaria->numeracion }}
-                                        </span>
-                                    </td>--}}
                                     <td class="text-center p-2 text-nowrap" style='vertical-align: middle;'>
-                                        <input type="hidden" class="producto_id" value={{ $datos->producto_id }}>
-                                        {{ $datos->producto->codigo }}
+                                        <input type="hidden" class="producto_id" value="{{ $datos->producto_id }}">
+                                        {{ $datos->producto->codigo ?? 'N/A' }}
                                     </td>
                                     <td class="text-justify p-2 text-nowrap" style="vertical-align: middle; max-width: 200px; overflow: hidden; text-overflow: ellipsis;">
-                                        {{ $datos->producto->nombre }}
+                                        {{ $datos->producto->nombre ?? 'N/A' }}
                                     </td>
                                     <td class="text-center p-2 text-nowrap" style='vertical-align: middle;'>
-                                        {{ $datos->producto->unidad_medida->alias }}
+                                        {{ $datos->producto->unidad_medida->alias ?? 'N/A' }}
                                     </td>
                                     <td class="text-right p-2 text-nowrap" width='100px'>
-                                        <input type='text' value="{{ $datos->cantidad == 0 ? '' : $datos->cantidad }}" {{--name='cantidad[]'--}} placeholder='0' data-id="{{ $datos->id }}" class='form-control font-roboto-13 text-right input-cantidad {{ $datos->cantidad == 0 || $datos->cantidad == '' ? 'is-invalid' : '' }}' oninput="cantidadPrecio(this);">
+                                        <input type='text' value="{{ ($datos->cantidad === 0 || $datos->cantidad === null || $datos->cantidad === '') ? '' : $datos->cantidad }}" placeholder='0' data-id="{{ $datos->id }}" class='form-control font-roboto-13 text-right input-cantidad {{ ($datos->cantidad === 0 || $datos->cantidad === null || $datos->cantidad === '') ? 'is-invalid' : '' }}' oninput="cantidadPrecio(this);">
                                     </td>
                                     <td class="text-right p-2 text-nowrap" width='100px'>
-                                        <input type='text' value="{{ $datos->precio_unitario == 0 ? '' : $datos->precio_unitario }}" {{--name='precio_unitario[]'--}} placeholder='0' data-id="{{ $datos->id }}" class='form-control font-roboto-13 text-right input-precio-unitario {{ $datos->precio_unitario == 0 || $datos->precio_unitario == '' ? 'is-invalid' : '' }}' oninput="cantidadPrecio(this)">
+                                        <input type='text' value="{{ ($datos->precio_unitario === 0 || $datos->precio_unitario === null || $datos->precio_unitario === '') ? '' : $datos->precio_unitario }}" placeholder='0' data-id="{{ $datos->id }}" class='form-control font-roboto-13 text-right input-precio-unitario {{ ($datos->precio_unitario === 0 || $datos->precio_unitario === null || $datos->precio_unitario === '') ? 'is-invalid' : '' }}' oninput="cantidadPrecio(this)">
                                     </td>
                                     <td class="text-right p-2 text-nowrap" width='100px'>
                                         <input type='text' value="{{ number_format($subtotal, 2, '.', ',') }}" placeholder='0' class='form-control font-roboto-13 text-right input-subtotal' disabled>

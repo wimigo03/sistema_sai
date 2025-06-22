@@ -171,10 +171,10 @@
         <table class="table-encabezado">
             <tr>
                 <td style="width:25%; word-wrap: break-word;">
-                    <b>NIT:</b> <span style="font-size: 11px;">{{ $ingreso_almacen->proveedor->nit }}</span>
+                    <b>NIT:</b> <span style="font-size: 11px;">{{ $ingreso_almacen->proveedor != null ? $ingreso_almacen->proveedor->nit : '' }}</span>
                 </td>
                 <td style="width:75%; word-wrap: break-word;">
-                    <b>PROVEEDOR:</b> <span style="font-size: 11px;">{{ strtoupper($ingreso_almacen->proveedor->nombre) }}</span>
+                    <b>PROVEEDOR:</b> <span style="font-size: 11px;">{{ $ingreso_almacen->proveedor != null ? strtoupper($ingreso_almacen->proveedor->nombre) : '' }}</span>
                 </td>
             </tr>
         </table>

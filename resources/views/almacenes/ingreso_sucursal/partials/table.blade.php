@@ -25,7 +25,7 @@
                     <tr class="font-roboto-13">
                         <td class="text-center p-2 text-nowrap">{{ $datos->codigo }}</td>
                         <td class="text-center p-2 text-nowrap">{{ $datos->almacen->nombre }}</td>
-                        <td class="text-left p-2 text-nowrap">{{ $datos->proveedor->nombre }}</td>
+                        <td class="text-left p-2 text-nowrap">{{ $datos->proveedor != null ? $datos->proveedor->nombre : '' }}</td>
                         <td class="text-left p-2 text-nowrap" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">
                             {{ $datos->area->nombrearea }}
                         </td>

@@ -57,6 +57,13 @@
     <li class="breadcrumb-item font-roboto-14 active">Modificar</li>
 @endsection
 @section('content')
+    <div id="loadingOverlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999; display: flex; justify-content: center; align-items: center;">
+        <div style="background-color: white; padding: 20px; border-radius: 8px; text-align: center;">
+            {{--<h3>Cargando tabla...</h3>--}}
+            <p>Por favor, espere mientras se cargan los datos...</p>
+            <div class="spinner"></div> </div>
+    </div>
+
     <div class="card">
         <div class="card-header bg-dark">
             <i class="fa-solid fa-edit fa-fw"></i>&nbsp;<b class="font-verdana-16">REGISTRO INGRESO DE MATERIAL</b>
@@ -65,19 +72,12 @@
         <div class="card-body">
             @include('almacenes.ingreso_sucursal.partials.form')
         </div>
-
-        <div id="loadingOverlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999; display: flex; justify-content: center; align-items: center;">
-            <div style="background-color: white; padding: 20px; border-radius: 8px; text-align: center;">
-                {{--<h3>Cargando tabla...</h3>--}}
-                <p>Por favor, espere mientras se cargan los datos...</p>
-                <div class="spinner"></div> </div>
-        </div>
     </div>
     @section('scripts')
         <script type="text/javascript">
             $(document).ready(function() {
 
-                $('#loadingOverlay').show();
+                //$('#loadingOverlay').show();
                 $('#miFormulario').find('input, select, textarea, button').prop('disabled', true);
 
                 $("#categoria_programatica_id").val('').trigger('change');
@@ -117,19 +117,31 @@
                     }
                 });
 
-                $('#custom-search input').on('input', function() {
-                    table.search(this.value).draw();
+                $('#custom-search input').on('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        table.search(this.value).draw();
+                    }
+                });
+
+                $('#custom-search input').on('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        actualizarTotal();
+                    }
+                });
+
+                //$('#custom-search input').on('input', function() {
+                    //table.search(this.value).draw();
                     /*var searchTerm = this.value;
                     if (searchTerm.length > 0) {
                         bloquearCampos();
                     } else {
                         desbloquearCampos();
                     }*/
-                });
+                //});
 
-                $('#_detalle_tabla_filter').on('input', function() {
+                /*$('#_detalle_tabla_filter').on('input', function() {
                     actualizarTotal();
-                });
+                });*/
 
                 $('.select2').select2({
                     theme: "bootstrap4",
@@ -171,18 +183,40 @@
                 });
             });
 
-            function updateRegistro(idRegistro, valorCantidad, valorPrecioUnitario) {
+            function updateRegistroCantidad(idRegistro, valorCantidad) {
 
                 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
                 return new Promise((resolve, reject) => {
                     $.ajax({
                         type: 'POST',
-                        url: "{{ route('ingreso.sucursal.update.registro') }}",
+                        url: "{{ route('ingreso.sucursal.update.registro.cantidad') }}",
                         data: {
                             _token: CSRF_TOKEN,
                             id: idRegistro,
                             cantidad: valorCantidad,
+                        },
+                        success: function(data) {
+                            //resolve(data.ingreso_almacen_detalle_id);
+                        },
+                        error: function(xhr) {
+                            reject(xhr.responseText);
+                        }
+                    });
+                });
+            }
+
+            function updateRegistroPrecioUnitario(idRegistro, valorPrecioUnitario) {
+
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+                return new Promise((resolve, reject) => {
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ route('ingreso.sucursal.update.registro.precio.unitario') }}",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            id: idRegistro,
                             precio_unitario: valorPrecioUnitario,
                         },
                         success: function(data) {
@@ -199,11 +233,11 @@
                 if (event.target && event.target.classList.contains('input-cantidad')) {
                     const idRegistro = event.target.getAttribute('data-id');
                     const valorCantidad = event.target.value;
-                    const fila = event.target.closest('tr');
-                    const inputPrecioUnitario = fila.querySelector('.input-precio-unitario');
-                    const valorPrecioUnitario = inputPrecioUnitario ? inputPrecioUnitario.value : '';
+                    //const fila = event.target.closest('tr');
+                    //const inputPrecioUnitario = fila.querySelector('.input-precio-unitario');
+                    //const valorPrecioUnitario = inputPrecioUnitario ? inputPrecioUnitario.value : '';
 
-                    updateRegistro(idRegistro, valorCantidad, valorPrecioUnitario);
+                    updateRegistroCantidad(idRegistro, valorCantidad);
                 }
             }, true);
 
@@ -211,11 +245,11 @@
                 if (event.target && event.target.classList.contains('input-precio-unitario')) {
                     const idRegistro = event.target.getAttribute('data-id');
                     const valorPrecioUnitario = event.target.value;
-                    const fila = event.target.closest('tr');
-                    const inputCantidad = fila.querySelector('.input-cantidad');
-                    const valorCantidad = inputCantidad ? inputCantidad.value : '';
+                    //const fila = event.target.closest('tr');
+                    //const inputCantidad = fila.querySelector('.input-cantidad');
+                    //const valorCantidad = inputCantidad ? inputCantidad.value : '';
 
-                    updateRegistro(idRegistro, valorCantidad, valorPrecioUnitario);
+                    updateRegistroPrecioUnitario(idRegistro, valorPrecioUnitario);
                 }
             }, true);
 
@@ -624,13 +658,14 @@
                     return false;
                 }
 
-                const nroOrdenCompraValido = await getNroOrdenCompra();
+                if($("#n_orden_compra").val() != ''){
+                    const nroOrdenCompraValido = await getNroOrdenCompra();
 
-                if (!nroOrdenCompraValido) {
-                    Modal("[N° DE ORDEN DE COMPRA DUPLICADO]");
-                    return false;
+                    if (!nroOrdenCompraValido) {
+                        Modal("[N° DE ORDEN DE COMPRA DUPLICADO]");
+                        return false;
+                    }
                 }
-
                 const codigoValido = await getCodigo();
 
                 if (!codigoValido) {
@@ -798,18 +833,18 @@
                     Modal("Se debe agregar un <b>[N° PREVENTIVO]</b> para continuar.");
                     return false;
                 }
-                if($("#n_orden_compra").val() == ""){
+                /*if($("#n_orden_compra").val() == ""){
                     Modal("Se debe agregar un <b>[N° DE ORDEN DE COMPRA]</b> para continuar.");
                     return false;
-                }
+                }*/
                 if($("#n_solicitud").val() == ""){
                     Modal("Se debe agregar un <b>[N° DE SOLICITUD]</b> para continuar.");
                     return false;
                 }
-                if($("#proveedor_id").val() == ""){
+                /*if($("#proveedor_id").val() == ""){
                     Modal("Se debe agregar un <b>[PROVEEDOR]</b> para continuar.");
                     return false;
-                }
+                }*/
                 if($("#codigo").val() == ""){
                     Modal("Se debe agregar un <b>[N° DE INGRESO]</b> para continuar.");
                     return false;
