@@ -156,7 +156,7 @@ class BalanceInicialController extends Controller
             ->with(['categoria_programatica', 'partida_presupuestaria', 'producto.unidad_medida'])
             ->orderBy('id', 'desc')
             ->get();
-            
+
         $old_total = $ingreso_almacen_detalles->map(function ($detalle) {
             return $detalle->cantidad * $detalle->precio_unitario;
         })->sum();
@@ -329,7 +329,7 @@ class BalanceInicialController extends Controller
         $username = User::find(Auth::user()->id);
         $numero_letras = new NumeroALetras();
         $total_en_letras = $numero_letras->toInvoice($totalGeneral, 2, 'Bolivianos');
-        $username = $username != null ? $username->nombre_completo : $username->name;
+        $username = $username != null ? $username->name : '';
         $pdf = PDF::loadView('almacenes.ingreso_sucursal.pdf',compact('ingreso_almacen','ingreso_almacen_detalles','totalGeneral','total_en_letras','username'));
         $pdf->setPaper('LETTER', 'portrait');
         return $pdf->stream('Ingreso-' . $ingreso_almacen->codigo);
