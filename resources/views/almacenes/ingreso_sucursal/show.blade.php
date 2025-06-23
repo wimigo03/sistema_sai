@@ -210,15 +210,15 @@
                                                 {{ $datos->producto->unidad_medida->alias }}
                                             </td>
                                             <td class="text-right p-2 text-nowrap" width='100px'>
-                                                <input type='text' value="{{ $datos->cantidad }}" class='form-control font-roboto-14 text-right input-cantidad' disabled>
+                                                <input type='text' value="{{ $datos->cantidad }}" class='form-control font-roboto-14 text-right input-cantidad' readonly>
                                                 {{-- $datos->cantidad --}}
                                             </td>
                                             <td class="text-right p-2 text-nowrap" width='100px'>
-                                                <input type='text' value="{{ $datos->precio_unitario }}" class='form-control font-roboto-14 text-right input-precio-unitario' disabled>
+                                                <input type='text' value="{{ $datos->precio_unitario }}" class='form-control font-roboto-14 text-right input-precio-unitario' readonly>
                                                 {{-- $datos->precio_unitario --}}
                                             </td>
                                             <td class="text-right p-2 text-nowrap" width='100px'>
-                                                <input type='text' value="{{ number_format($subtotal, 2, '.', ',') }}" class='form-control font-roboto-13 text-right input-subtotal' disabled>
+                                                <input type='text' value="{{ number_format($subtotal, 2, '.', ',') }}" class='form-control font-roboto-13 text-right input-subtotal' readonly>
                                                 {{-- number_format($subtotal, 2, '.', ',') --}}
                                             </td>
                                         </tr>

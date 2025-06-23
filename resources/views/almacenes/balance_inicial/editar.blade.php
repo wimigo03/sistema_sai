@@ -113,6 +113,7 @@
                 $('#custom-search input').on('keydown', function(e) {
                     if (e.key === 'Enter') {
                         actualizarTotal();
+                        contarRegistrosInsertados();
                     }
                 });
 
@@ -489,7 +490,7 @@
                                     "<span class='tts:right tts-slideIn tts-custom' aria-label='" + categoria_programatica_nombre + "' style='cursor: pointer;'>" +
                                         //"<input type='hidden' name='ingreso_almacen_detalle_id[]' value='" + ingreso_almacen_detalle_id + "'>" +
                                         "<input type='hidden' class='categoria_programatica_id' name='categoria_programatica_id[]' value='" + categoria_programatica_id + "'>" + categoria_programatica_codigo +
-                                        "<input type='hidden' class='partida_presupuestaria_id' name='partida_presupuestaria_id[]' value='" + partida_presupuestaria_id + "'>" + partida_presupuestaria_codigo +
+                                        "<input type='hidden' class='partida_presupuestaria_id' name='partida_presupuestaria_id[]' value='" + partida_presupuestaria_id + "'>" +
                                     "</span>" +
                                 "</td>" +
                                 //"<td class='text-center p-2 text-nowrap' style='vertical-align: middle;'>" +

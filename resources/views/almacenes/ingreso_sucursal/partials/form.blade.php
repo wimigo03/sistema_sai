@@ -162,7 +162,7 @@
                     <div class="input-group">
                         <span class="input-group-text font-roboto-14 border-dark bg-dark"><b>TOTAL</b></span>
                         <span id="cantidad-registros" class="input-group-text font-roboto-14 border-dark bg-info"><b>{{ $ingreso_almacen_detalles_count }}</b></span>
-                        <input type='text' value="{{ 'Bs. ' . number_format($old_total,2,'.',',') }}" class='form-control font-roboto-15 border-dark' style="text-align: right; font-weight: bold;" disabled>
+                        <input type='text' value="{{ 'Bs. ' . number_format($old_total,2,'.',',') }}" class='form-control font-roboto-15 border-dark' style="text-align: right; font-weight: bold;" readonly>
                     </div>
                 </div>
                 <div class="col-12 col-md-6 col-lg-3" style="display: flex; justify-content: flex-end;" id="custom-search">
@@ -213,13 +213,13 @@
                                                 {{ $datos->producto->unidad_medida->alias ?? 'N/A' }}
                                             </td>
                                             <td class="text-right p-2 text-nowrap" width='100px'>
-                                                <input type='text' value="{{ ($datos->cantidad === 0 || $datos->cantidad === null || $datos->cantidad === '') ? '' : $datos->cantidad }}" placeholder='0' data-id="{{ $datos->id }}" class='form-control font-roboto-13 text-right input-cantidad {{ ($datos->cantidad === 0 || $datos->cantidad === null || $datos->cantidad === '') ? 'is-invalid' : '' }}' oninput="cantidadPrecio(this);">
+                                                <input type='text' value="{{ ($datos->cantidad === '0' || $datos->cantidad === null || $datos->cantidad === '') ? '' : $datos->cantidad }}" placeholder='0' data-id="{{ $datos->id }}" class='form-control font-roboto-13 text-right input-cantidad {{ ($datos->cantidad === 0 || $datos->cantidad === null || $datos->cantidad === '') ? 'is-invalid' : '' }}' oninput="cantidadPrecio(this);">
                                             </td>
                                             <td class="text-right p-2 text-nowrap" width='100px'>
-                                                <input type='text' value="{{ ($datos->precio_unitario === 0 || $datos->precio_unitario === null || $datos->precio_unitario === '') ? '' : $datos->precio_unitario }}" placeholder='0' data-id="{{ $datos->id }}" class='form-control font-roboto-13 text-right input-precio-unitario {{ ($datos->precio_unitario === 0 || $datos->precio_unitario === null || $datos->precio_unitario === '') ? 'is-invalid' : '' }}' oninput="cantidadPrecio(this)">
+                                                <input type='text' value="{{ ($datos->precio_unitario === '0' || $datos->precio_unitario === null || $datos->precio_unitario === '') ? '' : $datos->precio_unitario }}" placeholder='0' data-id="{{ $datos->id }}" class='form-control font-roboto-13 text-right input-precio-unitario {{ ($datos->precio_unitario === 0 || $datos->precio_unitario === null || $datos->precio_unitario === '') ? 'is-invalid' : '' }}' oninput="cantidadPrecio(this)">
                                             </td>
                                             <td class="text-right p-2 text-nowrap" width='100px'>
-                                                <input type='text' value="{{ number_format($subtotal, 2, '.', ',') }}" placeholder='0' class='form-control font-roboto-13 text-right input-subtotal' disabled>
+                                                <input type='text' value="{{ number_format($subtotal, 2, '.', ',') }}" placeholder='0' class='form-control font-roboto-13 text-right input-subtotal' readonly>
                                             </td>
                                             <td class="text-center p-2 text-nowrap" style="vertical-align: middle;">
                                                 <span class='btn btn-sm btn-danger tts:left tts-slideIn tts-custom'

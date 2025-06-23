@@ -47,6 +47,7 @@ class IngresoSucursalController extends Controller
                                             ->byAlmacenes($almacenes)
                                             ->whereNotIn('id', $ingreso_almacen_ids)
                                             ->orderBy('estado','asc')
+                                            ->orderBy('fecha_ingreso','desc')
                                             ->orderBy('id','desc')
                                             ->paginate(10);
 
@@ -83,6 +84,7 @@ class IngresoSucursalController extends Controller
                                             ->byFechaIngreso($request->fecha_ingreso)
                                             ->byEstado($request->estado)
                                             ->orderBy('estado','asc')
+                                            ->orderBy('fecha_ingreso','desc')
                                             ->orderBy('id','desc')
                                             ->paginate(10);
 
