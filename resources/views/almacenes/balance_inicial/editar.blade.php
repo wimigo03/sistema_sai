@@ -34,21 +34,6 @@
         overflow-y: auto;
         overflow-x: auto;
     }
-
-    .spinner {
-        border: 4px solid rgba(0, 0, 0, 0.1);
-        border-top: 4px solid #3498db;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        animation: spin 1s linear infinite;
-        margin: 15px auto 0 auto;
-    }
-
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
 </style>
 @section('breadcrumb')
     @parent
@@ -59,9 +44,9 @@
 @section('content')
     <div id="loadingOverlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999; display: flex; justify-content: center; align-items: center;">
         <div style="background-color: white; padding: 20px; border-radius: 8px; text-align: center;">
-            {{--<h3>Cargando tabla...</h3>--}}
             <p>Por favor, espere mientras se cargan los datos...</p>
-            <div class="spinner"></div> </div>
+            <div class="spinner"></div>
+        </div>
     </div>
 
     <div class="card">
@@ -80,7 +65,7 @@
             $(document).ready(function() {
 
                 //$('#loadingOverlay').show();
-                $('#miFormulario').find('input, select, textarea, button').prop('disabled', true);
+                $('.card').find('input, select, textarea, button').prop('disabled', true);
 
                 $("#categoria_programatica_id").val('').trigger('change');
 
@@ -115,7 +100,7 @@
                         $(".dataTables_paginate").find("a").addClass("font-roboto-13");
 
                         $('#loadingOverlay').hide();
-                        $('#miFormulario').find('input, select, textarea, button').prop('disabled', false);
+                        $('.card').find('input, select, textarea, button').prop('disabled', false);
                     }
                 });
 

@@ -42,6 +42,13 @@
     <li class="breadcrumb-item font-roboto-14 active">Detalle</li>
 @endsection
 @section('content')
+    <div id="loadingOverlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999; display: flex; justify-content: center; align-items: center;">
+        <div style="background-color: white; padding: 20px; border-radius: 8px; text-align: center;">
+            <p>Por favor, espere mientras se cargan los datos...</p>
+            <div class="spinner"></div>
+        </div>
+    </div>
+
     <div class="card">
         <div class="card-header bg-dark">
             <i class="fa-solid fa-eye fa-fw"></i>&nbsp;<b class="font-verdana-16">REGISTRO DE @if($ingreso_almacen->codigo != 0) MATERIALES @else BALANCE INICIAL @endif</b>
@@ -168,7 +175,7 @@
                                 <thead class="bg-dark text-white">
                                     <tr class="font-roboto-13 ignore-row">
                                         <td class="text-center p-2 text-nowrap"><b>PROYECTO</b></td>
-                                        <td class="text-center p-2 text-nowrap"><b>P. PRES.</b></td>
+                                        {{--<td class="text-center p-2 text-nowrap"><b>P. PRES.</b></td>--}}
                                         <td class="text-center p-2 text-nowrap"><b>CODIGO</b></td>
                                         <td class="text-justify p-2 text-nowrap"><b>DETALLE</b></td>
                                         <td class="text-center p-2 text-nowrap"><b>UNIDAD</b></td>
@@ -188,11 +195,11 @@
                                                     {{ $datos->categoria_programatica->codigo }}
                                                 </span>
                                             </td>
-                                            <td class="text-center p-2 text-nowrap">
+                                            {{--<td class="text-center p-2 text-nowrap">
                                                 <span class="tts:right tts-slideIn tts-custom" aria-label="{{ $datos->partida_presupuestaria->nombre }}" style="cursor: pointer;">
                                                     {{ $datos->partida_presupuestaria->numeracion }}
                                                 </span>
-                                            </td>
+                                            </td>--}}
                                             <td class="text-center p-2 text-nowrap">
                                                 {{ $datos->producto->codigo }}
                                             </td>
@@ -227,6 +234,9 @@
     @section('scripts')
         <script type="text/javascript">
             $(document).ready(function() {
+
+                $('.card').find('input, select, textarea, button').prop('disabled', true);
+
                 var table = $('#detalle_tabla').DataTable({
                     "responsive": true,
                     //"stateSave": true,
@@ -256,6 +266,9 @@
                         $(".dataTables_length").find("label").addClass("font-roboto-13");
                         $(".dataTables_filter").find("label").addClass("font-roboto-13");
                         $(".dataTables_paginate").find("a").addClass("font-roboto-13");
+
+                        $('#loadingOverlay').hide();
+                        $('.card').find('input, select, textarea, button').prop('disabled', false);
                     }
                 });
 

@@ -26,6 +26,21 @@
         <link rel="stylesheet" href="{{ asset('js/datepicker/themes/jquery-ui.css') }}">
         <link rel="stylesheet" href="{{ asset('css/toastr.min.css') }}">
         <style>
+            .spinner {
+                border: 4px solid rgba(0, 0, 0, 0.1);
+                border-top: 4px solid #3498db;
+                border-radius: 50%;
+                width: 30px;
+                height: 30px;
+                animation: spin 1s linear infinite;
+                margin: 15px auto 0 auto;
+            }
+
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+
             body, .form-control, .form-label, textarea, button {
                 font-family: 'Poppins', sans-serif;
             }
