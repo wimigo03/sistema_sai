@@ -2,19 +2,22 @@
 @section('breadcrumb')
     @parent
     <li class="breadcrumb-item font-roboto-14"><a href="{{ route('home.index') }}"><i class="fa fa-home"></i> Inicio</a></li>
-    <li class="breadcrumb-item font-roboto-14 active">Inventario</li>
+    <li class="breadcrumb-item font-roboto-14 active">Inventario de Productos</li>
 @endsection
 @section('content')
     <div class="card">
         <div class="card-header">
             <div class="row d-flex align-items-center">
-                <i class="fas fa-warehouse fa-fw"></i>&nbsp;<b class="title-size">INVENTARIO</b>
+                <i class="fas fa-warehouse fa-fw"></i>&nbsp;<b class="title-size">INVENTARIO DE PRODUCTOS</b>
             </div>
         </div>
 
         <div class="card-body">
-            @include('almacenes.inventario.partials.search')
-            @include('almacenes.inventario.partials.table')
+            @include('almacenes.inventario_almacen.partials.search')
+
+            @isset($inventarios_almacens)
+                @include('almacenes.inventario_almacen.partials.table')
+            @endisset
         </div>
     </div>
 @endsection
@@ -39,9 +42,9 @@
                 width: '100%'
             });
 
-            $('#unidad_id').select2({
+            $('#producto_id').select2({
                 theme: "bootstrap4",
-                placeholder: "--Unidad--",
+                placeholder: "--Productos--",
                 width: '100%'
             });
         });
@@ -58,39 +61,14 @@
             }
         });
 
-        $('#almacen_id').change(function() {
-            var id = $(this).val();
-            search();
-        });
-
-        $('#partida_presupuestaria_id').change(function() {
-            var id = $(this).val();
-            search();
-        });
-
-        $('#categoria_programatica_id').change(function() {
-            var id = $(this).val();
-            search();
-        });
-
-        $('#unidad_id').change(function() {
-            var id = $(this).val();
-            search();
-        });
-
         function search(){
-            var url = "{{ route('inventario.search') }}";
+            var url = "{{ route('inventario.almacen.search') }}";
             $("#form").attr('action', url);
             $("#form").submit();
         }
 
         function limpiar(){
-            var url = "{{ route('inventario.index') }}";
-            window.location.href = url;
-        }
-
-        function sucursales(){
-            var url = "{{ route('sucursal.index') }}";
+            var url = "{{ route('inventario.almacen.index') }}";
             window.location.href = url;
         }
     </script>

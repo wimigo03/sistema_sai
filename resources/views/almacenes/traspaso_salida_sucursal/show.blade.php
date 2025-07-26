@@ -38,7 +38,7 @@
 @section('breadcrumb')
     @parent
     <li class="breadcrumb-item font-roboto-14"><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a></li>
-    <li class="breadcrumb-item font-roboto-14"><a href="{{ route('ingreso.sucursal.index') }}"> Ingresos de materiales</a></li>
+    <li class="breadcrumb-item font-roboto-14"><a href="{{ route('traspaso.salida.sucursal.index') }}"> Traspaso de materiales</a></li>
     <li class="breadcrumb-item font-roboto-14 active">Detalle</li>
 @endsection
 @section('content')
@@ -51,70 +51,40 @@
 
     <div class="card">
         <div class="card-header bg-dark">
-            <i class="fa-solid fa-eye fa-fw"></i>&nbsp;<b class="font-verdana-16">REGISTRO DE @if($ingreso_almacen->codigo != 0) MATERIALES @else BALANCE INICIAL @endif</b>
+            <i class="fa-solid fa-eye fa-fw"></i>&nbsp;<b class="font-verdana-16">TRASPASO DE MATERIALES - SALIDA</b>
         </div>
 
         <div class="card-body">
             <form action="#" method="post" id="form">
                 @csrf
-                <input type="hidden" name="ingreso_almacen_id" value="{{ $ingreso_almacen->id }}" id="ingreso_almacen_id">
+                <input type="hidden" name="traspaso_almacen_id" value="{{ $traspaso_almacen->id }}" id="traspaso_almacen_id">
             </form>
 
             <div class="div_cabecera mb-2">
                 <div class="card card-body">
                     <div class="row mb-2">
-                        <div class="col-12 col-md-6 col-lg-5 mb-2">
-                            <label for="sucursal" class="form-label d-inline font-roboto-14">Sucursal</label>
-                            <input type="text" id="almacen_id" value="{{ $ingreso_almacen->almacen->nombre }}" class="form-control font-roboto-14" disabled>
+                        <div class="col-12 col-md-6 col-lg-2 mb-2">
+                            <label for="show" class="form-label d-inline font-roboto-14">N°</label>
+                            <input type="text" id="codigo" value="{{ $traspaso_almacen->codigo }}" class="form-control font-roboto-14" disabled>
                         </div>
-                        @if($ingreso_almacen->codigo != 0)
-                            <div class="col-12 col-md-6 col-lg-7 mb-2">
-                                <label for="area_id" class="form-label d-inline font-roboto-14">Solicitante</label>
-                                <input type="text" id="area_id" value="{{ isset($ingreso_almacen->area) ? $ingreso_almacen->area->nombrearea : '' }}" class="form-control font-roboto-14" disabled>
-                            </div>
-                        @endif
-                        @if ($ingreso_almacen->codigo != 0)
-                            <div class="col-12 col-md-6 col-lg-2 mb-2">
-                                <label for="show" class="form-label d-inline font-roboto-14">N° Preventivo</label>
-                                <input type="text" id="n_preventivo" value="{{ $ingreso_almacen->n_preventivo }}" class="form-control font-roboto-14" disabled>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-2 mb-2">
-                                <label for="show" class="form-label d-inline font-roboto-14">N° de O.C.</label>
-                                <input type="text" id="n_orden_compra" value="{{ $ingreso_almacen->n_orden_compra }}" class="form-control font-roboto-14" disabled>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-2 mb-2">
-                                <label for="show" class="form-label d-inline font-roboto-14">N° de Solicitud</label>
-                                <input type="text" id="n_solicitud" value="{{ $ingreso_almacen->n_solicitud }}" class="form-control font-roboto-14" disabled>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-6 mb-2">
-                                <label for="show" class="form-label d-inline font-roboto-14">Proveedor</label>
-                                <input type="text" id="proveedor_id" value="{{ isset($ingreso_almacen->proveedor) ? $ingreso_almacen->proveedor->nombre : '' }}" class="form-control font-roboto-14" disabled>
-                            </div>
-                        @endif
-                        <div class="col-12 col-md-6 col-lg-3 mb-2">
-                            <label for="show" class="form-label d-inline font-roboto-14">N° de Ingreso</label>
-                            <input type="text" id="codigo" value="{{ $ingreso_almacen->codigo }}" class="form-control font-roboto-14" disabled>
+                        <div class="col-12 col-md-6 col-lg-4 mb-2">
+                            <label for="origen" class="form-label d-inline font-roboto-14">Origen</label>
+                            <input type="text" id="almacen_origen_id" value="{{ $traspaso_almacen->almacen_origen->nombre }}" class="form-control font-roboto-14" disabled>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4 mb-2">
+                            <label for="destino" class="form-label d-inline font-roboto-14">Destino</label>
+                            <input type="text" id="almacen_destino_id" value="{{ $traspaso_almacen->almacen_destino->nombre }}" class="form-control font-roboto-14" disabled>
                         </div>
                         <div class="col-12 col-md-6 col-lg-2 mb-2">
-                            <label for="show" class="form-label d-inline font-roboto-14">Fecha de Registro</label>
-                            <input type="text" id="fecha_registro" value="{{ $ingreso_almacen->created_at != null ? \Carbon\Carbon::parse($ingreso_almacen->created_at)->format('d-m-Y') : '' }}" class="form-control font-roboto-14" disabled>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-2 mb-2">
-                            <label for="show" class="form-label d-inline font-roboto-14">Fecha de Ingreso</label>
-                            <input type="text" id="fecha_ingreso" value="{{ $ingreso_almacen->fecha_ingreso != null ? \Carbon\Carbon::parse($ingreso_almacen->fecha_ingreso)->format('d-m-Y') : '' }}" class="form-control font-roboto-14" disabled>
+                            <br>
+                            <button class="btn btn-outline-danger w-100 w-md-auto py-2 mr-2 font-roboto-14 font-weight-bold" type="button" onclick="cancelar()";>
+                                <i class="fas fa-times fa-fw"></i> Cancelar
+                            </button>
                         </div>
                         <div class="col-12 col-md-6 col-lg-12 mb-2">
-                            <label for="glosa" class="form-label d-inline font-roboto-14">Glosa</label>
-                            <textarea id="glosa" class="form-control font-roboto-14" disabled>{{ $ingreso_almacen->obs }}</textarea>
+                            <label for="obs" class="form-label d-inline font-roboto-14">Observaciones</label>
+                            <textarea id="obs" class="form-control font-roboto-14" disabled>{{ $traspaso_almacen->obs }}</textarea>
                         </div>
-                        {{--<div class="col-12 col-md-6 col-lg-2 mb-2">
-                            <label for="n_cotizacion" class="form-label d-inline font-roboto-14">N° Cotización</label>
-                            <input type="text" name="n_cotizacion" id="n_cotizacion" value="{{ old('n_cotizacion') }}" class="form-control font-roboto-14">
-                        </div>--}}
-                        {{--<div class="col-12 col-md-6 col-lg-2 mb-2">
-                            <label for="n_factura" class="form-label d-inline font-roboto-14">N° de Factura</label>
-                            <input type="text" name="n_factura" id="n_factura" value="{{ old('n_factura') }}" class="form-control font-roboto-14">
-                        </div>--}}
                     </div>
                 </div>
             </div>
@@ -123,36 +93,17 @@
                 <div class="row" style="display: flex; justify-content: space-between;">
                     <div class="col-12 col-md-6 col-lg-6">
                         <div class="d-flex flex-column flex-md-row gap-3 justify-content-center justify-content-md-end">
-                            @can('ingreso.sucursal.ingresar')
-                                {{-- SI ESTA EN ESTADO PENDIENTE MOSTRAR BOTON DE INGRESAR --}}
-                                @if ($ingreso_almacen->estado == '1')
-                                    <button class="btn btn-outline-success w-100 w-md-auto py-2 mr-2 font-roboto-14 font-weight-bold" type="button" onclick="procesar();">
-                                        <i class="fas fa-paper-plane fa-fw"></i> Ingresar
+                            @can('traspaso.sucursal.aprobar')
+                                {{-- SI ESTA EN ESTADO GENERADO MOSTRAR BOTON DE APROBAR --}}
+                                @if ($traspaso_almacen->estado == '1')
+                                    <button class="btn btn-outline-success w-100 w-md-auto py-2 mr-2 font-roboto-14 font-weight-bold" type="button" onclick="aprobar();">
+                                        <i class="fas fa-paper-plane fa-fw"></i> Aprobar
                                     </button>
 
-                                    @if ($ingreso_almacen->codigo != 0)
-                                        @can('ingreso.sucursal.editar')
-                                            <button class="btn btn-outline-secondary w-100 w-md-auto py-2 mr-2 font-roboto-14 font-weight-bold" type="button" onclick="editar();">
-                                                <i class="fas fa-edit fa-fw"></i> Modificar
-                                            </button>
-                                        @endcan
-                                    @else
-                                        @can('balance.inicial.editar')
-                                            <button class="btn btn-outline-secondary w-100 w-md-auto py-2 mr-2 font-roboto-14 font-weight-bold" type="button" onclick="editar_balance();">
-                                                <i class="fas fa-edit fa-fw"></i> Modificar
-                                            </button>
-                                        @endcan
-                                    @endif
+                                    <button class="btn btn-outline-warning w-100 w-md-auto py-2 mr-2 font-roboto-14 font-weight-bold text-dark" type="button" onclick="rechazar();">
+                                        <i class="fas fa-times fa-fw"></i> Rechazar
+                                    </button>
                                 @endif
-                            @endcan
-
-                            <button class="btn btn-outline-danger w-100 w-md-auto py-2 mr-2 font-roboto-14 font-weight-bold" type="button" @if($ingreso_almacen->codigo != 0) onclick="cancelar();" @else onclick="cancelar_balance();" @endif>
-                                <i class="fas fa-times fa-fw"></i> Cancelar
-                            </button>
-                            @can('ingreso.sucursal.pdf')
-                                <button class="btn btn-outline-warning w-100 w-md-auto py-2 font-roboto-14 text-dark font-weight-bold" type="button" @if($ingreso_almacen->codigo != 0) onclick="pdf();" @else onclick="pdf_balance();" @endif>
-                                    <i class="fas fa-print fa-fw"></i> Exportar
-                                </button>
                             @endcan
                         </div>
                         <div class="text-center mt-3">
@@ -165,9 +116,6 @@
                             <input type='text' value="{{ 'Bs. ' . number_format($total,2,'.',',') }}" class='form-control font-roboto-15 border-dark' style="text-align: right; font-weight: bold;" disabled>
                         </div>
                     </div>
-                    <div class="col-12 col-md-6 col-lg-3" style="display: flex; justify-content: flex-end;" id="custom-search">
-                        <input type="search" id="_detalle_tabla_filter" class="form-control font-roboto-14 border-dark" placeholder="Buscar" aria-controls="detalle_tabla">
-                    </div>
                 </div>
                 <div class="card card-body">
                     <div class="row mb-3">
@@ -176,7 +124,6 @@
                                 <thead class="bg-dark text-white">
                                     <tr class="font-roboto-13 ignore-row">
                                         <td class="text-center p-2 text-nowrap"><b>PROYECTO</b></td>
-                                        {{--<td class="text-center p-2 text-nowrap"><b>P. PRES.</b></td>--}}
                                         <td class="text-center p-2 text-nowrap"><b>CODIGO</b></td>
                                         <td class="text-justify p-2 text-nowrap"><b>DETALLE</b></td>
                                         <td class="text-center p-2 text-nowrap"><b>UNIDAD</b></td>
@@ -186,7 +133,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($ingreso_almacen_detalles as $datos)
+                                    @foreach ($traspaso_almacen_detalles as $datos)
                                         @php
                                             $subtotal = $datos->cantidad * $datos->precio_unitario;
                                         @endphp
@@ -196,11 +143,6 @@
                                                     {{ $datos->categoria_programatica->codigo }}
                                                 </span>
                                             </td>
-                                            {{--<td class="text-center p-2 text-nowrap">
-                                                <span class="tts:right tts-slideIn tts-custom" aria-label="{{ $datos->partida_presupuestaria->nombre }}" style="cursor: pointer;">
-                                                    {{ $datos->partida_presupuestaria->numeracion }}
-                                                </span>
-                                            </td>--}}
                                             <td class="text-center p-2 text-nowrap">
                                                 {{ $datos->producto->codigo }}
                                             </td>
@@ -212,15 +154,12 @@
                                             </td>
                                             <td class="text-right p-2 text-nowrap" width='100px'>
                                                 <input type='text' value="{{ $datos->cantidad }}" class='form-control font-roboto-14 text-right input-cantidad' readonly>
-                                                {{-- $datos->cantidad --}}
                                             </td>
                                             <td class="text-right p-2 text-nowrap" width='100px'>
                                                 <input type='text' value="{{ $datos->precio_unitario }}" class='form-control font-roboto-14 text-right input-precio-unitario' readonly>
-                                                {{-- $datos->precio_unitario --}}
                                             </td>
                                             <td class="text-right p-2 text-nowrap" width='100px'>
                                                 <input type='text' value="{{ number_format($subtotal, 2, '.', ',') }}" class='form-control font-roboto-13 text-right input-subtotal' readonly>
-                                                {{-- number_format($subtotal, 2, '.', ',') --}}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -272,44 +211,14 @@
                         $('.card').find('input, select, textarea, button').prop('disabled', false);
                     }
                 });
-
-                $('#custom-search input').on('input', function() {
-                    table.search(this.value).draw();
-                });
-
-                $('#_detalle_tabla_filter').on('input', function() {
-                    actualizarTotal();
-                });
             });
-
-
-            function actualizarTotal() {
-                var total = 0;
-
-                $(".input-subtotal").each(function() {
-                    var subtotal = parseFloat($(this).val().replace(/,/g, '')) || 0;
-                    total += subtotal;
-                });
-
-                var totalRedondeado = Math.round(total * 100) / 100;
-
-                var totalFormateado = totalRedondeado.toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-
-                var totalFila = $("#total_fila");
-                if (totalFila.length > 0) {
-                    totalFila.find("input").val('Bs. ' + totalFormateado);
-                }
-            }
 
             var Modal = function(mensaje){
                 $("#modal-alert .modal-body").html(mensaje);
                 $('#modal-alert').modal({keyboard: false});
             }
 
-            function procesar() {
+            function aprobar() {
                 if(!validarInputCantidadPrecio()){
                     return false;
                 }
@@ -346,37 +255,9 @@
                 submitButton.disabled = true;
                 submitButton.innerHTML = 'Procesando...';
 
-                var url = "{{ route('ingreso.sucursal.ingresar') }}";
+                var url = "{{ route('traspaso.salida.sucursal.aprobar') }}";
                 $("#form").attr('action', url);
                 $("#form").submit();
-            }
-
-            function pdf(){
-                var id = $("#ingreso_almacen_id").val();
-                var url = "{{ route('ingreso.sucursal.pdf',':id') }}";
-                url = url.replace(':id',id);
-                window.open(url, '_blank');
-            }
-
-            function editar(){
-                var id = $("#ingreso_almacen_id").val();
-                var url = "{{ route('ingreso.sucursal.editar',':id') }}";
-                url = url.replace(':id',id);
-                window.location.href = url;
-            }
-
-            function editar_balance(){
-                var id = $("#ingreso_almacen_id").val();
-                var url = "{{ route('balance.inicial.editar',':id') }}";
-                url = url.replace(':id',id);
-                window.location.href = url;
-            }
-
-            function pdf_balance(){
-                var id = $("#ingreso_almacen_id").val();
-                var url = "{{ route('balance.inicial.pdf',':id') }}";
-                url = url.replace(':id',id);
-                window.open(url, '_blank');
             }
 
             function cancelar(){

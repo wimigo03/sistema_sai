@@ -310,27 +310,78 @@ class BalanceInicialController extends Controller
         }
 
         $ingreso_almacen = IngresoAlmacen::find($ingreso_almacen_id);
-        $ingreso_almacen_detalles = IngresoAlmacenDetalle::with([
-            'categoria_programatica:id,codigo,nombre',
-            'partida_presupuestaria:id,numeracion,nombre',
-            'producto:id,codigo,nombre,detalle,unidad_id',
-            'producto.unidad_medida:id,nombre,alias'
-        ])
-        ->where('estado', IngresoAlmacenDetalle::HABILITADO)
-        ->where('ingreso_almacen_id', $ingreso_almacen_id)
-        ->get()
-        ->groupBy([
-            fn($item) => optional($item->categoria_programatica)->nombre ?? 'Sin categoría',
-            fn($item) => optional($item->partida_presupuestaria)->nombre ?? 'Sin partida',
-        ]);
 
-        $totalGeneral = $ingreso_almacen_detalles->flatten()->sum(fn($d) => $d->cantidad * $d->precio_unitario);
+        $datos = DB::table('ingresos_almacen_detalles as iad')
+            ->join('categorias_presupuestarias as cp', function ($join) {
+                $join->on('iad.categoria_programatica_id', '=', 'cp.categoria_programatica_id')
+                    ->on('iad.partida_presupuestaria_id', '=', 'cp.partida_presupuestaria_id');
+            })
+            ->join('categorias_programaticas as cat', 'iad.categoria_programatica_id', '=', 'cat.id')
+            ->join('partidas_presupuestarias as pp', 'iad.partida_presupuestaria_id', '=', 'pp.id')
+            ->join('productos as prod', 'iad.producto_id', '=', 'prod.id')
+            ->leftJoin('unidades as u', 'prod.unidad_id', '=', 'u.id')
+            ->select(
+                'cat.codigo as codigo_categoria',
+                'cat.nombre as nombre_categoria',
+                'pp.numeracion as numeracion_partida',
+                'pp.nombre as nombre_partida',
+                'prod.codigo as codigo_producto',
+                'prod.nombre as nombre_producto',
+                'u.alias as unidad',
+                'iad.cantidad',
+                'iad.precio_unitario',
+                DB::raw('(iad.cantidad * iad.precio_unitario) as subtotal')
+            )
+            ->where('iad.estado', '1')
+            ->where('cp.estado', '1')
+            ->where('iad.ingreso_almacen_id', $ingreso_almacen_id)
+            ->orderBy('iad.id')
+            ->orderBy('cat.codigo')
+            ->orderBy('pp.numeracion')
+            ->orderBy('prod.codigo')
+            ->get();
+
+        $estructura = [];
+        $totalGeneral = 0;
+
+        foreach ($datos as $item) {
+            $categoriaKey = $item->codigo_categoria . ' - ' . $item->nombre_categoria;
+            $partidaKey = $item->numeracion_partida . ' - ' . $item->nombre_partida;
+
+            if (!isset($estructura[$categoriaKey])) {
+                $estructura[$categoriaKey] = [
+                    'total_categoria' => 0,
+                    'partidas' => []
+                ];
+            }
+
+            if (!isset($estructura[$categoriaKey]['partidas'][$partidaKey])) {
+                $estructura[$categoriaKey]['partidas'][$partidaKey] = [
+                    'total_partida' => 0,
+                    'productos' => []
+                ];
+            }
+
+            $estructura[$categoriaKey]['partidas'][$partidaKey]['productos'][] = [
+                'codigo_producto' => $item->codigo_producto,
+                'nombre_producto' => $item->nombre_producto,
+                'unidad' => $item->unidad ?? 'N/A',
+                'cantidad' => $item->cantidad,
+                'precio_unitario' => $item->precio_unitario,
+                'subtotal' => $item->subtotal,
+            ];
+
+            // Sumar totales
+            $estructura[$categoriaKey]['total_categoria'] += $item->subtotal;
+            $estructura[$categoriaKey]['partidas'][$partidaKey]['total_partida'] += $item->subtotal;
+            $totalGeneral += $item->subtotal;
+        }
 
         $username = User::find(Auth::user()->id);
         $numero_letras = new NumeroALetras();
         $total_en_letras = $numero_letras->toInvoice($totalGeneral, 2, 'Bolivianos');
         $username = $username != null ? $username->name : '';
-        $pdf = PDF::loadView('almacenes.ingreso_sucursal.pdf',compact('ingreso_almacen','ingreso_almacen_detalles','totalGeneral','total_en_letras','username'));
+        $pdf = PDF::loadView('almacenes.ingreso_sucursal.pdf',compact('ingreso_almacen','estructura','totalGeneral','total_en_letras','username'));
         $pdf->setPaper('LETTER', 'portrait');
         return $pdf->stream('Ingreso-' . $ingreso_almacen->codigo);
     }

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 use App\Models\Almacenes\Almacen;
 use App\Models\User;
@@ -55,6 +56,17 @@ class SucursalController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'nombre' => [
+                'required',
+                Rule::unique('almacenes', 'nombre')->where(function ($query) use ($request) {
+                    return $query->where('dea_id',Auth::user()->dea->id);
+                }),
+            ]
+        ], [
+            'nombre.unique' => '[NOMBRE DE ALMACEN DUPLICADO]',
+        ]);
+
         try{
             $function = DB::transaction(function () use ($request) {
                 $almacen = Almacen::create([
@@ -71,7 +83,8 @@ class SucursalController extends Controller
                 "Almacen Creada con éxito" . "\n" .
                 "Usuario: " . Auth::user()->id . "\n"
             );
-            return redirect()->route('almacen.index')->with('success_message', '[El almacen fue registrado correctamente.]');
+
+            return redirect()->route('sucursal.index')->with('success_message', '[El almacen fue registrado correctamente.]');
         } catch (\Exception $e) {
             Log::channel('almacenes')->info(
                 "\n" .

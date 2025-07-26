@@ -11,6 +11,7 @@ use Luecano\NumeroALetras\NumeroALetras;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 
+use App\Http\Controllers\Almacenes\IngresoSuursalController;
 use App\Models\Almacenes\BalanceInicial;
 use App\Models\Almacenes\IngresoAlmacen;
 use App\Models\Almacenes\IngresoAlmacenDetalle;
@@ -20,32 +21,16 @@ use App\Models\Almacenes\Proveedor;
 use App\Models\Almacenes\CategoriaProgramatica;
 use App\Models\Area;
 use App\Models\Almacenes\Producto;
+use App\Models\Almacenes\TraspasoAlmacen;
+use App\Models\Almacenes\TraspasoAlmacenDetalle;
 use App\Models\Almacenes\InventarioAlmacen;
-use App\Models\Almacenes\MovimientoInventario;
 
-class IngresoSucursalController extends Controller
+class TraspasoSucursalController extends Controller
 {
-    public function balances_iniciales(){
-        $balances_iniciales = BalanceInicial::select('ingreso_almacen_id')->get();
-        $ingreso_almacen_ids = $balances_iniciales->pluck('ingreso_almacen_id')->toArray();
-        return $ingreso_almacen_ids;
-    }
-
     public function index()
     {
         $dea_id = Auth::user()->dea->id;
         $user_id = Auth::user()->id;
-
-        /**
-         * dilson inicio de balance inicial
-         */
-        /*if($user_id == 102)
-        {
-            $fakeRequest = new Request([
-                'ingreso_almacen_id' => 4
-            ]);
-            $this->ingresar($fakeRequest);
-        }*/
 
         if($user_id == 102)
         {
@@ -54,7 +39,7 @@ class IngresoSucursalController extends Controller
             $almacenes = Almacen::byDea($dea_id)->byEncargado($user_id)->get();
         }
 
-        $ingreso_almacen_ids = $this->balances_iniciales();
+        /*$ingreso_almacen_ids = $this->balances_iniciales();
 
         $ingresos_almacenes = IngresoAlmacen::byDea($dea_id)
                                             ->byAlmacenes($almacenes)
@@ -62,11 +47,15 @@ class IngresoSucursalController extends Controller
                                             ->orderBy('estado','asc')
                                             ->orderBy('fecha_ingreso','desc')
                                             ->orderBy('id','desc')
+                                            ->paginate(10);*/
+
+        $traspasos_almacenes = TraspasoAlmacen::byDea($dea_id)
+                                            ->byAlmacenesSalida($almacenes)
                                             ->paginate(10);
 
-        $estados = IngresoAlmacen::ESTADOS;
+        //$estados = IngresoAlmacen::ESTADOS;
 
-        return view('almacenes.ingreso_sucursal.index',compact('ingresos_almacenes','estados'));
+        return view('almacenes.traspaso_sucursal.index', compact('traspasos_almacenes'));
     }
 
     public function search(Request $request)
@@ -113,40 +102,32 @@ class IngresoSucursalController extends Controller
 
         if($user_id == 102)
         {
-            $almacenes = Almacen::byDea($dea_id)->pluck('nombre','id');
+            $almacenes_origenes = Almacen::byDea($dea_id)->pluck('nombre','id');
         }else{
-            $almacenes = Almacen::byDea($dea_id)->byEncargado($user_id)->pluck('nombre','id');
+            $almacenes_origenes = Almacen::byDea($dea_id)->byEncargado($user_id)->pluck('nombre','id');
         }
 
-        $old_total = 0;
+        $almacenes_destinos = Almacen::byDea($dea_id)->pluck('nombre','id');
 
-        $proveedores = Proveedor::byDea($dea_id)->pluck('nombre','id');
-        $categorias_programaticas = CategoriaProgramatica::select(DB::raw("concat(codigo,' - ', nombre) as data_completo"),'id')
-                                                            ->byDea($dea_id)
-                                                            ->byEstado(CategoriaProgramatica::HABILITADO)
-                                                            ->pluck('data_completo','id');
-        $areas = Area::byDea($dea_id)->byEstado(Area::HABILITADO)->pluck('nombrearea','idarea');
-
-        return view('almacenes.ingreso_sucursal.create',compact('almacenes','old_total','proveedores','categorias_programaticas','areas'));
+        return view('almacenes.traspaso_sucursal.create',compact('almacenes_origenes', 'almacenes_destinos'));
     }
 
-    public function getPartidasPresupuestarias(Request $request)
+    public function getIngresoMateriales(Request $request)
     {
         $dea_id = Auth::user()->dea->id;
         try{
-            $partidas_presupuestarias = DB::table('categorias_presupuestarias as a')
-                            ->join('partidas_presupuestarias as b','a.partida_presupuestaria_id','b.id')
-                            ->where('b.dea_id', $dea_id)
-                            ->where('b.estado', '1')
-                            ->where('b.detalle', '1')
-                            ->where('a.estado', '1')
-                            ->where('a.categoria_programatica_id',$request->id)
-                            ->select(DB::raw("concat(b.numeracion,' - ',b.nombre) as data_completo"),'b.id as partida_presupuestaria_id')
+            $ingresos_materiales = DB::table('ingresos_almacen')
+                            ->where('dea_id', $dea_id)
+                            ->where('almacen_id', $request->id)
+                            ->where('codigo', '!=', 0) // NO SE PERMITE EL BALANCE INICIAL
+                            ->where('estado', '2') //SOLO INGRESADOS
+                            ->whereYear('fecha_ingreso', date('Y'))
+                            ->select(DB::raw("concat('N° ', codigo, ' / ', EXTRACT(YEAR FROM fecha_ingreso), ' | ', obs) as data_completo"), 'id')
                             ->get()
                             ->toJson();
-            if($partidas_presupuestarias){
+            if($ingresos_materiales){
                 return response()->json([
-                    'partidas_presupuestarias' => $partidas_presupuestarias
+                    'ingresos_materiales' => $ingresos_materiales
                 ]);
             }
         } catch (\Exception $e) {
@@ -154,172 +135,109 @@ class IngresoSucursalController extends Controller
         }
     }
 
-    public function getProductos(Request $request)
+    public function comprobarStockDisponible($ingresos_almacen_detalles)
     {
-        $dea_id = Auth::user()->dea->id;
-        try{
-            $productos = DB::table('productos as a')
-                            ->join('unidades as b','a.unidad_id','b.id')
-                            ->where('a.dea_id', $dea_id)
-                            ->where('a.tipo', Producto::PRODUCTO)
-                            ->where('a.estado', Producto::HABILITADO)
-                            ->where('a.partida_presupuestaria_id',$request->id)
-                            ->select(DB::raw("concat(a.codigo,' - ',a.nombre, ' - ', b.nombre ) as data_completo"),'a.id as producto_id')
-                            ->get()
-                            ->toJson();
-            if($productos){
-                return response()->json([
-                    'productos' => $productos
-                ]);
+        $stock_disponible = true;
+
+        foreach($ingresos_almacen_detalles as $datos){
+            $inventario_almacen = InventarioAlmacen::select('stock_actual')
+                                ->byDea($datos->dea_id)
+                                ->byAlmacen($datos->almacen_id)
+                                ->byCategoriaProgramatica($datos->categoria_programatica_id)
+                                ->byPartidaPresupuestaria($datos->partida_presupuestaria_id)
+                                ->byProducto($datos->producto_id)
+                                ->first();
+
+            if($inventario_almacen === null || $inventario_almacen->stock_actual <= 0){
+                $stock_disponible = false;
+                break;
             }
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
         }
-    }
 
-    public function getProductoData(Request $request)
-    {
-        try{
-            $producto = DB::table('productos as a')
-                            ->join('unidades as b','a.unidad_id','b.id')
-                            ->where('a.id',$request->id)
-                            ->select('a.codigo','a.nombre','b.alias')
-                            ->first();
-            if($producto){
-                return response()->json([
-                    'producto' => $producto
-                ]);
-            }
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-    }
-
-    public function getNroPreventivo(Request $request)
-    {
-        $dea_id = Auth::user()->dea->id;
-        $ingreso_almacen_id = isset($request->ingreso_almacen_id) ? $request->ingreso_almacen_id : null;
-
-        try{
-            $nro_preventivo = DB::table('ingresos_almacen')
-                            ->where('dea_id', $dea_id)
-                            ->where('n_preventivo',$request->nro_preventivo)
-                            ->where('id','!=',$ingreso_almacen_id)
-                            ->whereYear('fecha_ingreso',date('Y'))
-                            ->get()
-                            ->count();
-
-            $nro_preventivo = !($nro_preventivo > 0);
-
-            return response()->json([
-                'n_preventivo' => $nro_preventivo
-            ]);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-    }
-
-    public function getNroOrdenCompra(Request $request)
-    {
-        $dea_id = Auth::user()->dea->id;
-        $ingreso_almacen_id = isset($request->ingreso_almacen_id) ? $request->ingreso_almacen_id : null;
-
-        try{
-            $nro_orden_compra = DB::table('ingresos_almacen')
-                            ->where('dea_id', $dea_id)
-                            ->where('n_orden_compra',$request->nro_orden_compra)
-                            ->where('id','!=',$ingreso_almacen_id)
-                            ->whereYear('fecha_ingreso',date('Y'))
-                            ->get()
-                            ->count();
-
-            $nro_orden_compra = !($nro_orden_compra > 0);
-
-            return response()->json([
-                'n_orden_compra' => $nro_orden_compra
-            ]);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-    }
-
-    public function getCodigo(Request $request)
-    {
-        $dea_id = Auth::user()->dea->id;
-        $ingreso_almacen_id = isset($request->ingreso_almacen_id) ? $request->ingreso_almacen_id : null;
-
-        try{
-            $codigo = DB::table('ingresos_almacen')
-                            ->where('dea_id', $dea_id)
-                            ->where('codigo',$request->codigo)
-                            ->where('id','!=',$ingreso_almacen_id)
-                            ->whereYear('fecha_ingreso',date('Y'))
-                            ->get()
-                            ->count();
-
-            $codigo = !($codigo > 0);
-
-            return response()->json([
-                'codigo' => $codigo
-            ]);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
+        return $stock_disponible;
     }
 
     public function store(Request $request)
     {
         try{
             $data = DB::transaction(function () use ($request) {
-                $dea_id = Auth::user()->dea->id;
                 $user_id = Auth::user()->id;
+                $ingreso_almacen = IngresoAlmacen::find($request->ingreso_almacen_id);
+                if (!$ingreso_almacen) {
+                    throw new \Exception('Ingreso de almacén no encontrado');
+                }
 
-                $ingreso_almacen = IngresoAlmacen::create([
-                    'dea_id' => $dea_id,
-                    'almacen_id' => $request->almacen_id,
-                    'user_id' => $user_id,
-                    'proveedor_id' => $request->proveedor_id,
-                    'area_id' => $request->area_id,
-                    'codigo' => $request->codigo,
-                    'n_preventivo' => $request->n_preventivo,
-                    'n_factura' => isset($request->n_factura) ? $request->n_factura : null,
-                    'n_orden_compra' => $request->n_orden_compra,
-                    'n_cotizacion' => isset($request->n_cotizacion) ? $request->n_cotizacion : null,
-                    'n_solicitud' => $request->n_solicitud,
-                    'fecha_ingreso' => date('Y-m-d', strtotime($request->fecha_ingreso)),
-                    'obs' => $request->glosa,
-                    'estado' => IngresoAlmacen::PENDIENTE,
-                    'tipo' => IngresoAlmacen::INGRESO
-                ]);
+                $ingresos_almacen_detalles = IngresoAlmacenDetalle::where('ingreso_almacen_id', $request->ingreso_almacen_id)->where('estado',IngresoAlmacenDetalle::HABILITADO)->get();
 
-                /*$cont = 0;
+                $stock_disponible = $this->comprobarStockDisponible($ingresos_almacen_detalles);
 
-                while($cont < count($request->producto_id)){
-                    $ingreso_almacen_detalle = IngresoAlmacenDetalle::create([
+                if($stock_disponible){
+                    $gestion = substr(date('Y'), -2);
+                    $count = TraspasoAlmacen::where('dea_id', $ingreso_almacen->dea_id)->whereYear('fecha_traspaso',date('Y'))->get()->count() + 1;
+                    $codigo = $gestion . '-' . str_pad($count, 3, '0', STR_PAD_LEFT);
+
+                    $traspaso_almacen = TraspasoAlmacen::create([
+                        'dea_id' => $ingreso_almacen->dea_id,
                         'ingreso_almacen_id' => $ingreso_almacen->id,
-                        'categoria_programatica_id' => $request->categoria_programatica_id[$cont],
-                        'partida_presupuestaria_id' => $request->partida_presupuestaria_id[$cont],
-                        'producto_id' => $request->producto_id[$cont],
-                        'cantidad' => floatval(str_replace(",", "", $request->cantidad[$cont])),
-                        'precio_unitario' => floatval(str_replace(",", "", $request->precio_unitario[$cont])),
-                        'estado' => IngresoAlmacenDetalle::HABILITADO,
+                        'almacen_origen_id' => $ingreso_almacen->almacen_id, //ALMACEN DE DONDE ESTA SALIENDO LOS PRODUCTOS
+                        'almacen_destino_id' => $request->almacen_destino_id,
+                        'user_traspaso_id' => $ingreso_almacen->user_id,
+                        'codigo' => $codigo,
+                        'fecha_traspaso' => date('Y-m-d H:i:s'),
+                        'obs' => $request->obs,
+                        'estado' => '1'
                     ]);
 
-                    $cont++;
-                }*/
+                    foreach ($ingresos_almacen_detalles as $datos) {
+                        $traspaso_almacen_detalle = TraspasoAlmacenDetalle::create([
+                            'traspaso_almacen_id' => $traspaso_almacen->id,
+                            'categoria_programatica_id' => $datos->categoria_programatica_id,
+                            'partida_presupuestaria_id' => $datos->partida_presupuestaria_id,
+                            'producto_id' => $datos->producto_id,
+                            'cantidad' => $datos->cantidad,
+                            'precio_unitario' => $datos->precio_unitario,
+                            'estado' => '1' //HABILITADO POR DEFECTO
+                        ]);
 
-                return $ingreso_almacen;
+                        $inventarioAlmacenController = new IngresoSucursalController();
+                        $inventario_almacen = $inventarioAlmacenController->obtenerInventarioAlmacenId([
+                            'dea_id' => $ingreso_almacen->dea_id,
+                            'almacen_id' => $ingreso_almacen->almacen_id,
+                            'categoria_programatica_id' => $datos->categoria_programatica_id,
+                            'partida_presupuestaria_id' => $datos->partida_presupuestaria_id,
+                            'producto_id' => $datos->producto_id
+                        ]);
+
+                        $inventarioAlmacen = InventarioAlmacen::find($inventario_almacen['id']);
+                        if (!$inventarioAlmacen) {
+                            throw new \Exception('Inventario de almacén no encontrado');
+                        }
+
+                        $inventarioAlmacen->update([
+                            'stock_actual' => $inventario_almacen['cantidad'] - $datos->cantidad,
+                            'stock_reservado' => $inventario_almacen['cantidad_reservada'] + $datos->cantidad
+                        ]);
+                    }
+
+                    $ingreso_almacen->update([
+                        'estado' => '4' //CAMBIA EL ESTADO A TRASPASO_SALIDA
+                    ]);
+                }else{
+                    return redirect()->back()->with('error_message','[No existe stock disponible para realizar el proceso.]')->withInput();
+                }
+
+                return $traspaso_almacen;
             });
-            Log::channel('ingresos_almacen')->info(
+            Log::channel('traspasos_almacen')->info(
                 "\n" .
-                "Ingresos Almacen registrado con exito." . "\n" .
+                "Traspaso Almacen registrado con exito." . "\n" .
                 "Por el usuario " . Auth::user()->id . "\n"
             );
-            return redirect()->route('ingreso.sucursal.editar', $data->id)->with('success_message', '[COMPROBANTE CREADO CON EXITO]');
+            return redirect()->route('traspaso.sucursal.index', $data->id)->with('success_message', '[COMPROBANTE CREADO CON EXITO]');
         } catch (\Exception $e) {
-            Log::channel('ingresos_almacen')->info(
+            Log::channel('traspasos_almacen')->info(
                 "\n" .
-                "Error al crear un registro de ingreso de almacen " . "\n" .
+                "Error al crear un registro de traspaso de almacen " . "\n" .
                 "Por el usuario  " . Auth::user()->id . "\n" .
                 "Error: " . $e->getMessage() . "\n"
             );
@@ -327,26 +245,15 @@ class IngresoSucursalController extends Controller
         }
     }
 
-    public function show($ingreso_almacen_id)
+    public function show($id)
     {
-        $ingreso_almacen_ids = $this->balances_iniciales();
-
-        $cont = 0;
-
-        while($cont < count($ingreso_almacen_ids)){
-            if($ingreso_almacen_ids[$cont] == $ingreso_almacen_id){
-                return redirect()->route('ingreso.sucursal.index');
-            }
-            $cont++;
-        }
-
-        $ingreso_almacen = IngresoAlmacen::find($ingreso_almacen_id);
-        $ingreso_almacen_detalles = IngresoAlmacenDetalle::where('ingreso_almacen_id',$ingreso_almacen_id)->where('estado',IngresoAlmacenDetalle::HABILITADO)->get();
-        $total = $ingreso_almacen_detalles->map(function ($detalle) {
+        $traspaso_almacen = TraspasoAlmacen::find($id);
+        $traspaso_almacen_detalles = TraspasoAlmacenDetalle::where('traspaso_almacen_id',$id)->where('estado',TraspasoAlmacenDetalle::HABILITADO)->get();
+        $total = $traspaso_almacen_detalles->map(function ($detalle) {
             return $detalle->cantidad * $detalle->precio_unitario;
         })->sum();
 
-        return view('almacenes.ingreso_sucursal.show',compact('ingreso_almacen','ingreso_almacen_detalles','total'));
+        return view('almacenes.traspaso_sucursal.show',compact('traspaso_almacen','traspaso_almacen_detalles','total'));
     }
 
     public function editar($id)
@@ -669,107 +576,24 @@ class IngresoSucursalController extends Controller
         return $pdf->stream('Ingreso-' . $ingreso_almacen->codigo);
     }
 
-    public function obtenerInventarioAlmacenId($data)
-    {
-        $inventario_almacen = InventarioAlmacen::byDea($data['dea_id'])
-                                ->byAlmacen($data['almacen_id'])
-                                ->byCategoriaProgramatica($data['categoria_programatica_id'])
-                                ->byPartidaPresupuestaria($data['partida_presupuestaria_id'])
-                                ->byProducto($data['producto_id'])
-                                ->first();
-        if(isset($inventario_almacen)){
-            $id = $inventario_almacen->id;
-            $cantidad = $inventario_almacen->stock_actual;
-            $cantidad_reservada = $inventario_almacen->stock_reservado;
-        }else{
-            $inventario_almacen = InventarioAlmacen::create([
-                'dea_id' => $data['dea_id'],
-                'almacen_id' => $data['almacen_id'],
-                'categoria_programatica_id' => $data['categoria_programatica_id'],
-                'partida_presupuestaria_id' => $data['partida_presupuestaria_id'],
-                'producto_id' => $data['producto_id'],
-                'stock_actual' => 0,
-                'stock_reservado' => 0
-            ]);
-
-            $id = $inventario_almacen->id;
-            $cantidad = $inventario_almacen->stock_actual;
-            $cantidad_reservada = $inventario_almacen->stock_reservado;
-        }
-
-        return [
-            'id' => $id,
-            'cantidad' => $cantidad,
-            'cantidad_reservada' => $cantidad_reservada,
-        ];
-    }
-
     public function ingresar(Request $request)
     {
         try{
             $data = DB::transaction(function () use ($request) {
                 $ingreso_almacen = IngresoAlmacen::find($request->ingreso_almacen_id);
-                if (!$ingreso_almacen) {
-                    throw new \Exception('Ingreso de almacén no encontrado');
-                }
-
-                $ingresos_almacen_detalles = IngresoAlmacenDetalle::where('ingreso_almacen_id', $request->ingreso_almacen_id)
-                    ->where('estado',IngresoAlmacenDetalle::HABILITADO)
-                    ->get();
-
-                $movimiento_inventario = null;
-
-                foreach ($ingresos_almacen_detalles as $datos) {
-                    $inventario_almacen = $this->obtenerInventarioAlmacenId([
-                        'dea_id' => $ingreso_almacen->dea_id,
-                        'almacen_id' => $ingreso_almacen->almacen_id,
-                        'categoria_programatica_id' => $datos->categoria_programatica_id,
-                        'partida_presupuestaria_id' => $datos->partida_presupuestaria_id,
-                        'producto_id' => $datos->producto_id
-                    ]);
-
-                    $inventarioAlmacen = InventarioAlmacen::find($inventario_almacen['id']);
-                    if (!$inventarioAlmacen) {
-                        throw new \Exception('Inventario de almacén no encontrado');
-                    }
-
-                    $inventarioAlmacen->update([
-                        'stock_actual' => $inventario_almacen['cantidad'] + $datos->cantidad
-                    ]);
-
-                    $movimiento_inventario = MovimientoInventario::create([
-                        'dea_id' => $ingreso_almacen->dea_id,
-                        'almacen_id' => $ingreso_almacen->almacen_id,
-                        'categoria_programatica_id' => $datos->categoria_programatica_id,
-                        'partida_presupuestaria_id' => $datos->partida_presupuestaria_id,
-                        'producto_id' => $datos->producto_id,
-                        'tipo_movimiento' => '1', //INGRESO
-                        'cantidad' => $datos->cantidad,
-                        'fecha' => $ingreso_almacen->fecha_ingreso,
-                        'referencia_id' => $ingreso_almacen->id,
-                        'estado' => '1' //HABILITADO
-                    ]);
-
-                    if (!$movimiento_inventario) {
-                        throw new \Exception('Error al crear el movimiento de inventario');
-                    }
-                }
-
                 $ingreso_almacen->update([
                     'user_id' => Auth::user()->id,
                     'estado' => IngresoAlmacen::INGRESADO
                 ]);
 
-                return $movimiento_inventario;
+                return $ingreso_almacen;
             });
             Log::channel('ingresos_almacen')->info(
                 "\n" .
                 "Materiales ingresados correctamente" . "\n" .
                 "Usuario: " . Auth::user()->id . "\n"
             );
-
-            //return redirect()->route('ingreso.sucursal.index')->with('success_message', '[Registro procesado correctamente.]');
-            return redirect()->back()->with('success_message','[Registro procesado correctamente]')->withInput();
+            return redirect()->route('ingreso.sucursal.index')->with('success_message', '[Registro procesado correctamente.]');
         } catch (\Exception $e) {
             Log::channel('ingresos_almacen')->info(
                 "\n" .

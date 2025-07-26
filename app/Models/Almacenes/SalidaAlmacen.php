@@ -31,17 +31,26 @@ class SalidaAlmacen extends Model
         'fecha_salida',
         'obs',
         'estado',
-        'solicitante_id'
+        'solicitante_id',
+        'tipo'
     ];
 
     const PENDIENTE = '1';
     const EGRESADO = '2';
     const ANULADO = '3';
 
+    const SALIDA = '1';
+    const SALIDA_TRASPASO = '2';
+
     const ESTADOS = [
         '1' => 'PENDIENTE',
         '2' => 'EGRESADO',
         '3' => 'ANULADO'
+    ];
+
+    const TIPOS_SALIDA = [
+        '1' => 'SALIDAS',
+        '2' => 'SALIDAS POR TRASPASO'
     ];
 
     public function getStatusAttribute(){
@@ -52,6 +61,15 @@ class SalidaAlmacen extends Model
                 return "EGRESADO";
             case '3':
                 return "ANULADO";
+        }
+    }
+
+    public function getTiposSalidasAttribute(){
+        switch ($this->tipo) {
+            case '1':
+                return "SALIDA";
+            case '2':
+                return "SALIDA POR TRASPASO";
         }
     }
 

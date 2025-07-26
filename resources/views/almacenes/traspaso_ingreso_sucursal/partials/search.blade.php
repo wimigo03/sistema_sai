@@ -1,4 +1,4 @@
-<form action="#" method="get" id="form">
+{{--<form action="#" method="get" id="form">
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-5 g-2">
         <div class="col mb-2">
             <input type="text" name="codigo" value="{{ request('codigo') }}" id="codigo" placeholder="--Codigo--" class="form-control font-roboto-14 intro">
@@ -13,13 +13,19 @@
             <input type="text" name="solicitante" value="{{ request('solicitante') }}" id="solicitante" placeholder="--Solicitante--" class="form-control font-roboto-14 intro">
         </div>
         <div class="col mb-2">
+            <input type="text" name="nro_preventivo" value="{{ request('nro_preventivo') }}" id="nro_preventivo" placeholder="--N° de Preventivo--" class="form-control font-roboto-14 intro">
+        </div>
+        <div class="col mb-2">
+            <input type="text" name="nro_orden_compra" value="{{ request('nro_orden_compra') }}" id="nro_orden_compra" placeholder="--N° O.C.--" class="form-control font-roboto-14 intro">
+        </div>
+        <div class="col mb-2">
             <input type="text" name="nro_solicitud" value="{{ request('nro_solicitud') }}" id="nro_solicitud" placeholder="--N° de Solicitud--" class="form-control font-roboto-14 intro">
         </div>
         <div class="col mb-2">
             <input type="text" name="fecha_registro" value="{{ request('fecha_registro') }}" id="fecha_registro" placeholder="--Registro--" class="form-control font-roboto-14 intro">
         </div>
         <div class="col mb-2">
-            <input type="text" name="fecha_salida" value="{{ request('fecha_salida') }}" id="fecha_salida" placeholder="--Salida--" class="form-control font-roboto-14 intro">
+            <input type="text" name="fecha_ingreso" value="{{ request('fecha_ingreso') }}" id="fecha_ingreso" placeholder="--Ingreso--" class="form-control font-roboto-14 intro">
         </div>
         <div class="col mb-2">
             <select name="estado" id="estado" class="form-control">
@@ -30,20 +36,20 @@
             </select>
         </div>
     </div>
-</form>
+</form>--}}
 <div class="row">
     <div class="col-12 d-flex flex-column flex-md-row gap-2 justify-content-center justify-content-md-end">
-        @can('salida.sucursal.create')
+        @can('traspaso.sucursal.create')
             <button class="btn btn-outline-success w-100 w-md-auto py-2 btn-size mr-2 font-roboto-14" type="button" onclick="create();">
-                <i class="fas fa-plus fa-fw"></i> Registrar nuevo comprobante de salida
+                <i class="fas fa-plus fa-fw"></i> Generar Traspaso
             </button>
         @endcan
 
-        <button class="btn btn-outline-danger w-100 w-md-auto btn-size mr-2 font-roboto-14" type="button" onclick="limpiar();">
+        <button class="btn btn-outline-danger w-100 w-md-auto py-2 btn-size mr-2 font-roboto-14" type="button" onclick="limpiar();">
             <i class="fas fa-eraser fa-fw"></i> Limpiar
         </button>
 
-        <button class="btn btn-outline-primary w-100 w-md-auto btn-size font-roboto-14" type="button" onclick="search();">
+        <button class="btn btn-outline-primary w-100 w-md-auto py-2 btn-size font-roboto-14" type="button" onclick="search();">
             <i class="fas fa-search fa-fw"></i> Buscar
         </button>
     </div>

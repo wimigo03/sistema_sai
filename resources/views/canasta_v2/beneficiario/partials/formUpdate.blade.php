@@ -156,6 +156,8 @@
                         <option value="1" @if (isset($beneficiario) ? $beneficiario->categoria == '1' : old('categoria')) selected @endif>A</option>
                         <option value="2" @if (isset($beneficiario) ? $beneficiario->categoria == '2' : old('categoria')) selected @endif>B</option>
                         <option value="3" @if (isset($beneficiario) ? $beneficiario->categoria == '3' : old('categoria')) selected @endif>C</option>
+                        <option value="4" @if (isset($beneficiario) ? $beneficiario->categoria == '4' : old('categoria')) selected @endif>O</option>
+                        <option value="5" @if (isset($beneficiario) ? $beneficiario->categoria == '5' : old('categoria')) selected @endif>V</option>
                     </select>
                 </div>
                 <div class="col-md-4 pr-1 pl-1 mb-2">

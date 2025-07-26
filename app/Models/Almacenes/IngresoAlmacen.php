@@ -32,17 +32,26 @@ class IngresoAlmacen extends Model
         'n_solicitud',
         'fecha_ingreso',
         'obs',
-        'estado'
+        'estado',
+        'tipo'
     ];
 
     const PENDIENTE = '1';
     const INGRESADO = '2';
     const ANULADO = '3';
 
+    const INGRESO = '1';
+    const INGRESO_TRASPASO = '2';
+
     const ESTADOS = [
         '1' => 'PENDIENTE',
         '2' => 'INGRESADO',
         '3' => 'ANULADO'
+    ];
+
+    const TIPOS_INGRESOS = [
+        '1' => 'INGRESOS',
+        '2' => 'INGRESOS POR TRASPASO'
     ];
 
     public function getStatusAttribute(){
@@ -53,6 +62,15 @@ class IngresoAlmacen extends Model
                 return "INGRESADO";
             case '3':
                 return "ANULADO";
+        }
+    }
+
+    public function getTiposIngresosAttribute(){
+        switch ($this->tipo) {
+            case '1':
+                return "INGRESO";
+            case '2':
+                return "INGRESO POR TRASPASO";
         }
     }
 

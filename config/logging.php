@@ -148,9 +148,27 @@ return [
             'level' => 'debug',
         ],
 
+        'almacenes' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/almacenes.log'),
+            'level' => 'debug',
+        ],
+
         'ingresos_almacen' => [
             'driver' => 'single',
             'path' => storage_path('logs/ingresos_almacen.log'),
+            'level' => 'debug',
+        ],
+
+        'salidas_almacen' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/salidas_almacen.log'),
+            'level' => 'debug',
+        ],
+
+        'traspasos_almacen' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/traspasos_almacen.log'),
             'level' => 'debug',
         ],
 

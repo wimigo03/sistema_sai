@@ -87,24 +87,30 @@
     <br>
     <table class="table-contenido">
         @php
-            $formato = fn($n) => number_format($n, 2, '.', ',');
+            $formato = fn($n) => number_format($n, 2, ',', '.');
         @endphp
-        @foreach ($estructura as $categoria => $catData)
+        @foreach ($ingreso_almacen_detalles as $categoriaNombre => $partidas)
+            @php
+                $categoriaTotal = $partidas->flatten()->sum(fn($d) => $d->cantidad * $d->precio_unitario);
+            @endphp
             <tr class="border-bottom">
                 <td colspan="4">
-                    <b>PROYECTO:</b> {{ $categoria }}
+                    <b>PROYECTO:</b> {{ $partidas->first()->first()->categoria_programatica->codigo ?? '' }} - {{ $categoriaNombre }}
                 </td>
                 <td colspan="2" align="right">
-                    <b>TOTAL:</b> {{ $formato($catData['total_categoria']) }}
+                    <b>TOTAL:</b> {{ $formato($categoriaTotal) }}
                 </td>
             </tr>
-            @foreach ($catData['partidas'] as $partida => $partidaData)
-                <tr class="border-bottom border-top">
+            @foreach ($partidas as $partidaNombre => $detalles)
+                @php
+                    $partidaTotal = $detalles->sum(fn($d) => $d->cantidad * $d->precio_unitario);
+                @endphp
+                <tr class="border-bottom">
                     <td colspan="4">
-                        <b>PARTIDA PRESUPUESTARIA:</b> {{ $partida }}
+                        <b>PARTIDA PRESUPUESTARIA:</b> {{ $detalles->first()->first()->partida_presupuestaria->numeracion ?? '' }} - {{ $partidaNombre }}
                     </td>
                     <td colspan="2" align="right">
-                        <b>SUB TOTAL:</b> {{ $formato($partidaData['total_partida']) }}
+                        <b>SUB TOTAL:</b> {{ $formato($partidaTotal) }}
                     </td>
                 </tr>
                 <tr>
@@ -115,18 +121,18 @@
                     <td align="right" style="width:10%; word-wrap: break-word;"><b>P.U./NETO<b></td>
                     <td align="right" style="width:10%; word-wrap: break-word;"><b>TOTAL<b></td>
                 </tr>
-                @foreach ($partidaData['productos'] as $producto)
+                @foreach ($detalles as $detalle)
                     <tr>
-                        <td align="center" style="width:10%; word-wrap: break-word;">{{ $producto['codigo_producto'] }}</td>
-                        <td style="width:10%; word-wrap: break-word;">{{ $producto['nombre_producto'] }}</td>
-                        <td align="center" style="width:10%; word-wrap: break-word;">{{ $producto['unidad'] }}</td>
-                        <td align="right" style="width:10%; word-wrap: break-word;">{{ $producto['cantidad'] }}</td>
-                        <td align="right" style="width:10%; word-wrap: break-word;">{{ $producto['precio_unitario'] }}</td>
-                        <td align="right" style="width:10%; word-wrap: break-word;">{{ $formato($producto['subtotal']) }}</td>
+                        <td align="center" style="width:10%; word-wrap: break-word;">{{ $detalle->producto->codigo ?? 'N/A' }}</td>
+                        <td style="width:10%; word-wrap: break-word;">{{ $detalle->producto->nombre ?? 'N/A' }}</td>
+                        <td align="center" style="width:10%; word-wrap: break-word;">{{ $detalle->producto->unidad_medida->alias ?? 'N/A' }}</td>
+                        <td align="right" style="width:10%; word-wrap: break-word;">{{ $detalle->cantidad }}</td>
+                        <td align="right" style="width:10%; word-wrap: break-word;">{{ number_format($detalle->precio_unitario, 2) }}</td>
+                        <td align="right" style="width:10%; word-wrap: break-word;">{{ number_format($detalle->cantidad * $detalle->precio_unitario, 2) }}</td>
                     </tr>
                 @endforeach
             @endforeach
-            <tr style="background-color: white;">
+            <tr>
                 <td colspan="6">&nbsp;</td>
             </tr>
         @endforeach

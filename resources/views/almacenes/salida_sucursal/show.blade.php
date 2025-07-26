@@ -49,7 +49,7 @@
                 <input type="hidden" name="salida_almacen_id" value="{{ $salida_almacen->id }}" id="salida_almacen_id">
             </form>
 
-            <div class="div_cabecera mb-4">
+            <div class="div_cabecera_x">
                 <div class="row mb-2">
                     <div class="col-12 col-md-6 col-lg-4 mb-2">
                         <label for="" class="form-label d-inline font-roboto-14">Sucursal</label>
@@ -59,8 +59,31 @@
                         <label for="" class="form-label d-inline font-roboto-14">Solicitante</label>
                         <input type="text" id="area_id" value="{{ $salida_almacen->area->nombrearea }}" class="form-control font-roboto-14" disabled>
                     </div>
-                    <div class="col-12 col-md-6 col-lg-4 mb-2">
-                        <br>
+                    <div class="col-12 col-md-6 col-lg-2 mb-2">
+                        <label for="" class="form-label d-inline font-roboto-14">N° de Solicitud</label>
+                        <input type="text" id="n_solicitud" value="{{ $salida_almacen->n_solicitud }}" class="form-control font-roboto-14" disabled>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-2 mb-2">
+                        <label for="" class="form-label d-inline font-roboto-14">Fecha de Registro</label>
+                        <input type="text" id="fecha_registro" value="{{ $salida_almacen->created_at != null ? \Carbon\Carbon::parse($salida_almacen->created_at)->format('d-m-Y') : '' }}" class="form-control font-roboto-14" disabled>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-6 mb-2">
+                        <label for="" class="form-label d-inline font-roboto-14">Proveedor</label>
+                        <input type="text" id="proveedor_id" value="{{ $salida_almacen->proveedor_id != null ? $salida_almacen->proveedor->nombre : '' }}" class="form-control font-roboto-14" disabled>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3 mb-2">
+                        <label for="" class="form-label d-inline font-roboto-14">N° de Salida</label>
+                        <input type="text" id="codigo" value="{{ $salida_almacen->codigo }}" class="form-control font-roboto-14" disabled>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-2 mb-2">
+                        <label for="" class="form-label d-inline font-roboto-14">Fecha de Salida</label>
+                        <input type="text" id="fecha_salida" value="{{ $salida_almacen->fecha_salida != null ? \Carbon\Carbon::parse($salida_almacen->fecha_salida)->format('d-m-Y') : '' }}" class="form-control font-roboto-14" disabled>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-12 mb-2">
+                        <label for="glosa" class="form-label d-inline font-roboto-14">Glosa</label>
+                        <textarea id="glosa" class="form-control font-roboto-14" disabled>{{ $salida_almacen->obs }}</textarea>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-12 mb-2">
                         <div class="d-flex flex-column flex-md-row gap-3 justify-content-center justify-content-md-end">
                             @can('salida.sucursal.egresar')
                                 {{-- SI ESTA EN ESTADO PENDIENTE MOSTRAR BOTON DE INGRESAR --}}
@@ -69,11 +92,11 @@
                                         <i class="fas fa-paper-plane fa-fw"></i> Confirmar Egreso
                                     </button>
                                 @endif
-                                @if ($salida_almacen->estado == '2')
+                                {{--@if ($salida_almacen->estado == '2')
                                     <button class="btn btn-outline-danger w-100 w-md-auto btn-size mr-2 mb-2 mb-md-0 font-roboto-14" type="button" onclick="anular();">
                                         <i class="fas fa-paper-plane fa-fw"></i> Anular Egreso
                                     </button>
-                                @endif
+                                @endif--}}
                                 @if ($salida_almacen->estado == '3')
                                     <button class="btn btn-outline-secondary w-100 w-md-auto btn-size mr-2 mb-2 mb-md-0 font-roboto-14" type="button" onclick="pendiente();">
                                         <i class="fas fa-paper-plane fa-fw"></i> Volver a Pendiente
@@ -93,34 +116,10 @@
                             <i class="fa fa-spinner fa-spin fa-lg spinner-btn" style="display: none;"></i>
                         </div>
                     </div>
-                    <div class="col-12 col-md-6 col-lg-2 mb-2">
-                        <label for="" class="form-label d-inline font-roboto-14">N° de Solicitud</label>
-                        <input type="text" id="n_solicitud" value="{{ $salida_almacen->n_solicitud }}" class="form-control font-roboto-14" disabled>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-6 mb-2">
-                        <label for="" class="form-label d-inline font-roboto-14">Proveedor</label>
-                        <input type="text" id="proveedor_id" value="{{ $salida_almacen->proveedor->nombre }}" class="form-control font-roboto-14" disabled>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-3 mb-2">
-                        <label for="" class="form-label d-inline font-roboto-14">N° de Salida</label>
-                        <input type="text" id="codigo" value="{{ $salida_almacen->codigo }}" class="form-control font-roboto-14" disabled>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-2 mb-2">
-                        <label for="" class="form-label d-inline font-roboto-14">Fecha de Registro</label>
-                        <input type="text" id="fecha_registro" value="{{ $salida_almacen->created_at != null ? \Carbon\Carbon::parse($salida_almacen->created_at)->format('d-m-Y') : '' }}" class="form-control font-roboto-14" disabled>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-2 mb-2">
-                        <label for="" class="form-label d-inline font-roboto-14">Fecha de Salida</label>
-                        <input type="text" id="fecha_salida" value="{{ $salida_almacen->fecha_salida != null ? \Carbon\Carbon::parse($salida_almacen->fecha_salida)->format('d-m-Y') : '' }}" class="form-control font-roboto-14" disabled>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-12 mb-2">
-                        <label for="glosa" class="form-label d-inline font-roboto-14">Glosa</label>
-                        <textarea id="glosa" class="form-control font-roboto-14" disabled>{{ $salida_almacen->obs }}</textarea>
-                    </div>
                 </div>
             </div>
 
-            <div class="div_detalle mb-4">
+            <div class="div_detalle_x">
                 <div class="row mb-3">
                     <div class="col-12 table-responsive">
                         <table id="detalle_tabla" class="table table-striped table-hover display responsive hover-orange">
@@ -142,7 +141,7 @@
                                         $subtotal = $datos->cantidad * $datos->precio_unitario;
                                         $total += $subtotal;
                                     @endphp
-                                    <tr class="font-roboto-14">
+                                    <tr class="font-roboto-13">
                                         <td class="text-center p-2 text-nowrap">
                                             <span class="tts:right tts-slideIn tts-custom" aria-label="{{ $datos->categoria_programatica->nombre }}" style="cursor: pointer;">
                                                 {{ $datos->categoria_programatica->codigo }}

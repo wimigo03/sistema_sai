@@ -3,8 +3,8 @@
     @isset($ingreso_almacen)
         <input type="hidden" name="ingreso_almacen_id" id="ingreso_almacen_id" value="{{ $ingreso_almacen->id }}">
     @endisset
-    <div class="mb-4">
-        <div class="card card-body">
+    <div class="div_cabecera mb-4">
+        {{--<div class="card card-body">--}}
             <div class="row mb-2">
                 <div class="col-12 col-md-6 col-lg-4 mb-2">
                     <label for="almacen_id" class="form-label d-inline font-roboto-14">Sucursal</label>
@@ -92,7 +92,7 @@
                     <textarea name="glosa" id="glosa" class="form-control font-roboto-14">{{ isset($ingreso_almacen) ? $ingreso_almacen->obs : old('glosa') }}</textarea>
                 </div>
             </div>
-        </div>
+        {{--</div>--}}
     </div>
 
     @if (!isset($ingreso_almacen))
@@ -213,10 +213,10 @@
                                                 {{ $datos->producto->unidad_medida->alias ?? 'N/A' }}
                                             </td>
                                             <td class="text-right p-2 text-nowrap" width='100px'>
-                                                <input type='text' value="{{ ($datos->cantidad === '0' || $datos->cantidad === null || $datos->cantidad === '') ? '' : $datos->cantidad }}" placeholder='0' data-id="{{ $datos->id }}" class='form-control font-roboto-13 text-right input-cantidad {{ ($datos->cantidad === 0 || $datos->cantidad === null || $datos->cantidad === '') ? 'is-invalid' : '' }}' oninput="cantidadPrecio(this);">
+                                                <input type='text' value="{{ ($datos->cantidad == 0) ? '' : $datos->cantidad }}" placeholder='0' data-id="{{ $datos->id }}" class='form-control font-roboto-13 text-right input-cantidad {{ ($datos->cantidad == 0 || $datos->cantidad == null) ? 'is-invalid' : '' }}' oninput="cantidadPrecio(this);">
                                             </td>
                                             <td class="text-right p-2 text-nowrap" width='100px'>
-                                                <input type='text' value="{{ ($datos->precio_unitario === '0' || $datos->precio_unitario === null || $datos->precio_unitario === '') ? '' : $datos->precio_unitario }}" placeholder='0' data-id="{{ $datos->id }}" class='form-control font-roboto-13 text-right input-precio-unitario {{ ($datos->precio_unitario === 0 || $datos->precio_unitario === null || $datos->precio_unitario === '') ? 'is-invalid' : '' }}' oninput="cantidadPrecio(this)">
+                                                <input type='text' value="{{ ($datos->precio_unitario == 0) ? '' : $datos->precio_unitario }}" placeholder='0' data-id="{{ $datos->id }}" class='form-control font-roboto-13 text-right input-precio-unitario {{ ($datos->precio_unitario == 0 || $datos->precio_unitario == null) ? 'is-invalid' : '' }}' oninput="cantidadPrecio(this)">
                                             </td>
                                             <td class="text-right p-2 text-nowrap" width='100px'>
                                                 <input type='text' value="{{ number_format($subtotal, 2, '.', ',') }}" placeholder='0' class='form-control font-roboto-13 text-right input-subtotal' readonly>

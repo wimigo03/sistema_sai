@@ -355,10 +355,10 @@
                                 <div class="custom-divider"></div>
 
                                 {{-- Submenú para Operaciones de Almacén --}}
-                                @canany(['ingreso.sucursal.index', 'salida.sucursal.index', 'balance.inicial.index'])
+                                @canany(['ingreso.sucursal.index','salida.sucursal.index','traspaso.sucursal.index','inventario.almacen.index','balance.inicial.index'])
                                     <li class="nav-item has-treeview">
                                         <a href="#" class="nav-link">
-                                            <i class="nav-icon fa-solid fa-boxes-stacked fa-fw nav-icon-font"></i> {{-- Icono para agrupar operaciones --}}
+                                            <i class="nav-icon fa-solid fa-boxes-stacked fa-fw nav-icon-font"></i>
                                             <p>
                                                 Movimientos
                                                 <i class="right fa-solid fa-angle-left"></i>
@@ -368,7 +368,7 @@
                                             @can('ingreso.sucursal.index')
                                                 <li class="nav-item">
                                                     <a href="{{ route('ingreso.sucursal.index') }}" class="nav-link pl-4">
-                                                        <i class="nav-icon fa-solid fa-file-import fa-fw nav-icon-font"></i> {{-- Icono para ingreso --}}
+                                                        <i class="nav-icon fa-solid fa-file-import fa-fw nav-icon-font"></i>
                                                         <p>Ingreso de Materiales</p>
                                                     </a>
                                                 </li>
@@ -376,16 +376,32 @@
                                             @can('salida.sucursal.index')
                                                 <li class="nav-item">
                                                     <a href="{{ route('salida.sucursal.index') }}" class="nav-link pl-4">
-                                                        <i class="nav-icon fa-solid fa-file-export fa-fw nav-icon-font"></i> {{-- Icono para salida --}}
+                                                        <i class="nav-icon fa-solid fa-file-export fa-fw nav-icon-font"></i>
                                                         <p>Salida de Materiales</p>
+                                                    </a>
+                                                </li>
+                                            @endcan
+                                            @can('traspaso.sucursal.index')
+                                                <li class="nav-item">
+                                                    <a href="{{ route('traspaso.salida.sucursal.index') }}" class="nav-link pl-4">
+                                                        <i class="nav-icon fas fa-exchange-alt fa-fw nav-icon-font"></i>
+                                                        <p>Traspaso de Materiales</p>
                                                     </a>
                                                 </li>
                                             @endcan
                                             @can('balance.inicial.index')
                                                 <li class="nav-item">
                                                     <a href="{{ route('balance.inicial.index') }}" class="nav-link pl-4">
-                                                        <i class="nav-icon fa-solid fa-chart-line fa-fw nav-icon-font"></i> {{-- Icono para balance/inventario --}}
+                                                        <i class="nav-icon fa-solid fa-chart-line fa-fw nav-icon-font"></i>
                                                         <p>Balance Inicial</p>
+                                                    </a>
+                                                </li>
+                                            @endcan
+                                            @can('inventario.almacen.index')
+                                                <li class="nav-item">
+                                                    <a href="{{ route('inventario.almacen.index') }}" class="nav-link pl-4">
+                                                        <i class="nav-icon fa-solid fa-chart-line fa-fw nav-icon-font"></i>
+                                                        <p>Inventario General</p>
                                                     </a>
                                                 </li>
                                             @endcan

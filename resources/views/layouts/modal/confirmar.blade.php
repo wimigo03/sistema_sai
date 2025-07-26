@@ -13,7 +13,7 @@
         Estas por <b>[Confirmar]</b> este proceso.<br>¿Esta seguro que desea continuar?
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary font-verdana-12" type="button" onclick="confirmar();">
+        <button id="confirmar" class="btn btn-primary font-verdana-12" type="button" onclick="confirmar();">
           <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>&nbsp;Confirmar
         </button>
         <button class="btn btn-secondary font-verdana-12 text-white" type="button" data-dismiss="modal">
