@@ -89,6 +89,8 @@ Route::get('/', function () {
 Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('/login', 'Auth\LoginController@login');
 
+Route::get('/landing','LandingController@index')->name('landing.index');
+
 Route::middleware(['auth'])->group(function () {
     Route::get('admin/', 'Admin\HomeController@index')->name('home.index');
 

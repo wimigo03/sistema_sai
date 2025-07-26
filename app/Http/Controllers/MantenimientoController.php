@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
-use DB;
-use PDF;
+use Illuminate\Support\Facades\DB;
+//use PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use DataTables;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -25,6 +26,11 @@ use App\Models\TipoArchivo;*/
 
 class MantenimientoController extends Controller
 {
+    public function pagina()
+    {
+        return view('mantenimiento.pagina');
+    }
+
     public function index()
     {
         $dea_id = Auth::user()->dea->id;

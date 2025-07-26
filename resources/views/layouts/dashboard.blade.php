@@ -66,7 +66,7 @@
             }
             .custom-divider {
                 border-top: 1px solid #ccc; /* o cualquier otro estilo */
-                margin: 10px 0; /* Ajusta el margen según tus necesidades */
+                margin: 2px 0; /* Ajusta el margen según tus necesidades */
             }
             .a-hover-disabled:hover {
                 background-color: #ffffff !important;
@@ -79,6 +79,17 @@
             .dataTables_wrapper .dataTables_filter input {
                 font-family: 'Roboto', sans-serif;
                 font-size: 13px;
+            }
+
+            .link-centrado {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .link-centrado p {
+                margin: 0;
+                text-align: center;
             }
         </style>
         @yield('styles')
@@ -211,13 +222,20 @@
                                                 </a>
                                             </li>
                                         @endcan--}}
-                                        @can('facebook.index')
+                                        {{--@can('facebook.index')
                                             <li class="nav-item">
                                                 <a href="{{ route('facebook.index') }}" class="nav-link pl-4">&nbsp;
                                                     <i class="fa-brands fa-twitter fa-fw"></i> <p>Redes Sociales</p>
                                                 </a>
                                             </li>
-                                        @endcan
+                                        @endcan--}}
+                                        {{--@can('landing.index')
+                                            <li class="nav-item">
+                                                <a href="{{ route('landing.index') }}" class="nav-link pl-4">&nbsp;
+                                                    <i class="fa-brands fa-twitter fa-fw"></i> <p>Landing</p>
+                                                </a>
+                                            </li>
+                                        @endcan--}}
                                     </ul>
                                 </li>
                             @endcanany
@@ -345,15 +363,15 @@
                             @endcan--}}
 
                             @canany(['sucursal.configuracion','ingreso.sucursal.index','salida.sucursal.index','balance.inicial.index','presupuesto.index','partida.presupuestaria.index','producto.index','unidad.medida.index', 'categoria.programatica.index', 'proveedor.index', 'sucursal.index'])
-                                <div class="custom-divider"></div>
-                                <li class="nav-item has-treeview">
-                                    <span class="nav-link a-hover-disabled">
-                                        <i class="nav-icon fa-solid fa-warehouse fa-fw nav-icon-font"></i> {{-- Icono general para la sección de Almacenes --}}
-                                        <p>Gestión de Almacenes</p>
-                                    </span>
-                                </li>
-                                <div class="custom-divider"></div>
-
+                                @if (Auth::user()->id == 102)
+                                    <div class="custom-divider"></div>
+                                    <li class="nav-item has-treeview">
+                                        <span class="nav-link a-hover-disabled  link-centrado">
+                                            <p>Almacenes</p>
+                                        </span>
+                                    </li>
+                                    <div class="custom-divider"></div>
+                                @endif
                                 {{-- Submenú para Operaciones de Almacén --}}
                                 @canany(['ingreso.sucursal.index','salida.sucursal.index','traspaso.sucursal.index','inventario.almacen.index','balance.inicial.index'])
                                     <li class="nav-item has-treeview">
