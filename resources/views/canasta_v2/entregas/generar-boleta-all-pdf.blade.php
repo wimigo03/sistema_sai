@@ -13,7 +13,7 @@
         .container {
             position: relative;
             width: 100%;
-            height: 100%; /*311.81 pt*/
+            height: 100%;
             background-color: #ffffff;
         }
 
@@ -48,7 +48,7 @@
             margin: 0;
             padding: 0;
             position: absolute;
-            top: 70%;
+            top: 65%;
             left: 62.5%;
             transform: translateX(-50%);
         }
@@ -176,6 +176,7 @@
                         <td class="align-center linea-derecha">
                             <br>
                             <br>
+                            <br>
                         </td>
                         <td class="align-center linea-derecha font-verdana-7">
                             {{ Auth::user()->nombre_completo }}
@@ -185,7 +186,8 @@
                     </tr>
                     <tr>
                         <td colspan="3" class="align-center linea-izquierda linea-inferior linea-derecha linea-superior font-verdana-9">
-                            <b class="text-color-green">Una Nueva Historia... Jose Luis Abrego Gobernador - Gestion {{ $array_entrega[$cont]->paquete->gestion }} RUMBO AL BICENTENARIO</b>
+                            {{--<b class="text-color-green">Una Nueva Historia... Jose Luis Abrego Gobernador - Gestion {{ $array_entrega[$cont]->paquete->gestion }} RUMBO AL BICENTENARIO</b>--}}
+                            <b class="text-color-green">Gestion {{ $array_entrega[$cont]->paquete->gestion }}</b>
                         </td>
                     </tr>
                 </table>

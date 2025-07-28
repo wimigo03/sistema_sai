@@ -6,6 +6,11 @@
         html {
             margin: 20px 30px 15px 30px;
         }
+
+        .container {
+            width: 20cm;
+            height: 9cm;
+        }
     </style>
     <body>
         <div class="container">
@@ -115,6 +120,7 @@
                     <td class="align-center linea-derecha">
                         <br>
                         <br>
+                        <br>
                     </td>
                     <td class="align-center linea-derecha font-verdana-8">
                         {{ Auth::user()->nombre_completo }}
@@ -124,7 +130,8 @@
                 </tr>
                 <tr>
                     <td colspan="3" class="align-center linea-izquierda linea-inferior linea-derecha linea-superior">
-                        <b class="text-color-green">Una Nueva Historia... Jose Luis Abrego Gobernador - Gestion {{ $entrega->paquete->gestion }} RUMBO AL BICENTENARIO</b>
+                        {{--<b class="text-color-green">Una Nueva Historia... Jose Luis Abrego Gobernador - Gestion {{ $entrega->paquete->gestion }} RUMBO AL BICENTENARIO</b>--}}
+                        <b class="text-color-green">Gestion {{ $entrega->paquete->gestion }}</b>
                     </td>
                 </tr>
             </table>

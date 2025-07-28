@@ -2,22 +2,22 @@
 @extends('layouts.dashboard')
 <style>
     .div_detalle, .div_cabecera {
-        padding: 15px;
+        padding: 0px;
         border-radius: 8px;
         background-color: #f1f1f1;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
     .div_cabecera {
-        margin-bottom: 20px;
+        margin-bottom: 0px;
     }
 
     .div_detalle {
-        margin-top: 20px;
+        margin-top: 0px;
     }
 
     .row {
-        margin-bottom: 15px;
+        margin-bottom: 10px;
     }
 
     .form-control {
@@ -27,6 +27,24 @@
 
     .is-invalid {
         border: 1px solid red;
+    }
+
+    .hr-form {
+        border-top: 1px solid black; opacity: 0.5;
+    }
+
+    .red-color {
+        color: #b71c1c;
+    }
+
+    .input-group > .select2-container {
+        width: auto !important;
+        flex: 1 1 auto;
+    }
+
+    .input-group > .select2-container .select2-selection--single {
+        height: 100%;
+        line-height: inherit;
     }
 </style>
 @section('breadcrumb')
@@ -560,7 +578,7 @@
                     var fila = thiss.closest('tr');
                     var cantidad = parseFloat(fila.querySelector('.input-cantidad').value.replace(",", "")) || 0;
                 }
-                console.log(id);
+
                 var tr = $(thiss).parents("tr:eq(0)");
                 tr.remove();
 
@@ -798,9 +816,9 @@
                     return false;
                 }
 
-                if(!validarInputCantidadPrecio()){
+                /*if(!validarInputCantidadPrecio()){
                     return false;
-                }
+                }*/
 
                 const codigoValido = await getCodigo();
 

@@ -264,7 +264,7 @@ class EntregasV2Controller extends Controller
             $pdf = PDF::loadView('canasta_v2.entregas.generar-boleta-pdf', compact(['entrega','qrCode']));
             $pdf->setPaper(array(0,0,612,311.81));
             $pdf->render();
-            return $pdf->stream('Bolenta_de_entrega.pdf');
+            return $pdf->stream('Boleta_de_entrega.pdf');
 
         } catch (\Throwable $th) {
             return response()->view('errors.500', [

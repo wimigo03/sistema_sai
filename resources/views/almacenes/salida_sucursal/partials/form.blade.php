@@ -4,88 +4,139 @@
         <input type="hidden" name="salida_almacen_id" id="salida_almacen_id" value="{{ $salida_almacen->id }}">
     @endisset
     <div class="div_cabecera mb-4">
+        <h6>
+            <i class="fas fa-clipboard-list me-2"></i> <span class="red-color">Datos Generales</span>
+        </h6>
+        <hr class="hr-form my-2">
+
         <div class="row mb-2">
-            <div class="col-12 col-md-6 col-lg-4 mb-2">
-                <label for="almacen_id" class="form-label d-inline font-roboto-14">Sucursal</label>
-                <select name="almacen_id" id="almacen_id" class="form-control select2">
-                    @foreach ($almacenes as $index => $value)
-                        <option value="{{ $index }}"
-                            @if (isset($salida_almacen) && $salida_almacen->almacen_id == $index)
-                                selected
-                            @elseif (old('almacen_id') == $index)
-                                selected
-                            @endif>
-                            {{ $value }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-2">
+            <div class="col-6 mb-2">
                 <label for="area_id" class="form-label d-inline font-roboto-14">Unidad Solicitante</label>
-                <select name="area_id" id="area_id" class="form-control select2">
-                    <option value="">-</option>
-                    @foreach ($areas as $index => $value)
-                        <option value="{{ $index }}"
-                            @if (isset($salida_almacen) && $salida_almacen->area_id == $index)
-                                selected
-                            @elseif (old('area_id') == $index)
-                                selected
-                            @endif>
-                            {{ $value }}
-                        </option>
-                    @endforeach
-                </select>
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="fas fa-users fa-fw"></i>
+                    </span>
+                    <select name="area_id" id="area_id" class="form-control select2 select2-height-match-form-control">
+                        <option value="">-</option>
+                        @foreach ($areas as $index => $value)
+                            <option value="{{ $index }}"
+                                @if (isset($salida_almacen) && $salida_almacen->area_id == $index)
+                                    selected
+                                @elseif (old('area_id') == $index)
+                                    selected
+                                @endif>
+                                {{ $value }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
-            <div class="col-12 col-md-6 col-lg-2 mb-2">
-                <label for="n_solicitud" class="form-label d-inline font-roboto-14">N° de Solicitud</label>
-                <input type="text" name="n_solicitud" id="n_solicitud" value="{{ isset($salida_almacen) ? $salida_almacen->n_solicitud : old('n_solicitud') }}" class="form-control font-roboto-14 intro">
+            <div class="col-6 mb-2">
+                <label for="solicitante_id" class="form-label d-inline font-roboto-14">Personal Solicitante</label>
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="fas fa-user fa-fw"></i>
+                    </span>
+                    <select name="solicitante_id" id="solicitante_id" class="form-control select2 select2-height-match-form-control">
+                        <option value="">-</option>
+                        @foreach ($empleados_solicitantes as $index => $value)
+                            <option value="{{ $index }}"
+                                @if (isset($salida_almacen) && $salida_almacen->solicitante_id == $index)
+                                    selected
+                                @elseif (old('solicitante_id') == $index)
+                                    selected
+                                @endif>
+                                {{ $value }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-12 col-md-6 col-lg-3 mb-2">
+                <label for="almacen_id" class="form-label d-inline font-roboto-14">Sucursal</label>
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="fas fa-house fa-fw"></i>
+                    </span>
+                    <select name="almacen_id" id="almacen_id" class="form-control select2 select2-height-match-form-control">
+                        @foreach ($almacenes as $index => $value)
+                            <option value="{{ $index }}"
+                                @if (isset($salida_almacen) && $salida_almacen->almacen_id == $index)
+                                    selected
+                                @elseif (old('almacen_id') == $index)
+                                    selected
+                                @endif>
+                                {{ $value }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
             <div class="col-12 col-md-6 col-lg-2 mb-2">
                 <label for="codigo" class="form-label d-inline font-roboto-14">N° de Salida</label>
-                <input type="text" name="codigo" id="codigo" value="{{ isset($salida_almacen) ? $salida_almacen->codigo : old('codigo') }}" class="form-control font-roboto-14 intro">
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="fa-solid fa-barcode fa-fw"></i>
+                    </span>
+                    <input type="text" name="codigo" id="codigo" value="{{ isset($salida_almacen) ? $salida_almacen->codigo : old('codigo') }}" class="form-control font-roboto-14 intro">
+                </div>
             </div>
             <div class="col-12 col-md-6 col-lg-2 mb-2">
+                <label for="n_solicitud" class="form-label d-inline font-roboto-14">N° de Solicitud</label>
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="fa-solid fa-file-invoice fa-fw"></i>
+                    </span>
+                    <input type="text" name="n_solicitud" id="n_solicitud" value="{{ isset($salida_almacen) ? $salida_almacen->n_solicitud : old('n_solicitud') }}" class="form-control font-roboto-14 intro">
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-2 mb-2">
                 <label for="fecha_salida" class="form-label d-inline font-roboto-14">Fecha de Salida</label>
-                <input type="text" name="fecha_salida" placeholder="dd-mm-yyyy" id="fecha_salida" value="{{ isset($salida_almacen) ? \Carbon\Carbon::parse($salida_almacen->fecha_salida)->format('d-m-Y') : old('fecha_salida') }}" class="form-control font-roboto-14 intro">
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="fa-solid fa-calendar-alt fa-fw"></i>
+                    </span>
+                    <input type="text" name="fecha_salida" placeholder="dd-mm-yyyy" id="fecha_salida" value="{{ isset($salida_almacen) ? \Carbon\Carbon::parse($salida_almacen->fecha_salida)->format('d-m-Y') : old('fecha_salida') }}" class="form-control font-roboto-14 intro">
+                </div>
             </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-2">
+            <div class="col-12 col-md-6 col-lg-3 mb-2">
                 <label for="proveedor_id" class="form-label d-inline font-roboto-14">Proveedor</label>
-                <select name="proveedor_id" id="proveedor_id" class="form-control select2">
-                    <option value="">-</option>
-                    @foreach ($proveedores as $index => $value)
-                        <option value="{{ $index }}"
-                            @if (isset($salida_almacen) && $salida_almacen->proveedor_id == $index)
-                                selected
-                            @elseif (old('proveedor_id') == $index)
-                                selected
-                            @endif>
-                            {{ $value }}
-                        </option>
-                    @endforeach
-                </select>
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="fas fa-truck fa-fw"></i>
+                    </span>
+                    <select name="proveedor_id" id="proveedor_id" class="form-control select2 select2-height-match-form-control">
+                        <option value="">-</option>
+                        @foreach ($proveedores as $index => $value)
+                            <option value="{{ $index }}"
+                                @if (isset($salida_almacen) && $salida_almacen->proveedor_id == $index)
+                                    selected
+                                @elseif (old('proveedor_id') == $index)
+                                    selected
+                                @endif>
+                                {{ $value }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
-            <div class="col-12 col-md-6 col-lg-6 mb-2">
-                <label for="solicitante_id" class="form-label d-inline font-roboto-14">Personal Solicitante</label>
-                <select name="solicitante_id" id="solicitante_id" class="form-control select2">
-                    <option value="">-</option>
-                    @foreach ($empleados_solicitantes as $index => $value)
-                        <option value="{{ $index }}"
-                            @if (isset($salida_almacen) && $salida_almacen->solicitante_id == $index)
-                                selected
-                            @elseif (old('solicitante_id') == $index)
-                                selected
-                            @endif>
-                            {{ $value }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-12 col-md-6 col-lg-12 mb-2">
+        </div>
+        <div class="row mb-2">
+            <div class="col-12 col-md-6 col-lg-12">
                 <label for="glosa" class="form-label d-inline font-roboto-14">Glosa</label>
-                <textarea name="glosa" id="glosa" class="form-control font-roboto-14">{{ isset($salida_almacen) ? $salida_almacen->obs : old('glosa') }}</textarea>
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="fa-solid fa-file-alt fa-fw"></i>
+                    </span>
+                    <textarea name="glosa" id="glosa" class="form-control font-roboto-14">{{ isset($salida_almacen) ? $salida_almacen->obs : old('glosa') }}</textarea>
+                </div>
             </div>
         </div>
     </div>
+    <br>
 
     @if (!isset($salida_almacen))
         <div class="row" style="display: flex; justify-content: space-between;">
@@ -106,29 +157,51 @@
     @else
         <div class="div_detalle mb-4">
             <div class="card card-body">
-                <div class="row mb-2">
+                <h6>
+                    <i class="fas fa-list-ul me-2"></i> <span class="red-color">Registro de Detalles</span>
+                </h6>
+                <hr class="hr-form my-2">
+                <div class="row">
                     <div class="col-12 col-md-6 col-lg-12 mb-2">
                         <label for="categoria_programatica_id" class="form-label d-inline font-roboto-14">Categoria Programatica</label>
-                        <select name="categoria_programatica_id" id="categoria_programatica_id" class="form-control select2">
-                            <option value="">-</option>
-                            @foreach ($categorias_programaticas as $index => $value)
-                                <option value="{{ $index }}" @if(old('categoria_programatica_id') == $index) selected @endif >{{ $value }}</option>
-                            @endforeach
-                        </select>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-project-diagram fa-fw"></i>
+                            </span>
+                            <select name="categoria_programatica_id" id="categoria_programatica_id" class="form-control select2">
+                                <option value="">-</option>
+                                @foreach ($categorias_programaticas as $index => $value)
+                                    <option value="{{ $index }}" @if(old('categoria_programatica_id') == $index) selected @endif >{{ $value }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col-12 col-md-6 col-lg-6 mb-2">
                         <label for="partida_presupuestaria_id" class="form-label d-inline font-roboto-14">Partida Presupuestaria</label>
-                        <select id="partida_presupuestaria_id" name="partida_presupuestaria_id" class="form-control select2">
-                            <option value="">--Seleccionar--</option>
-                        </select>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-chart-pie fa-fw"></i>
+                            </span>
+                            <select id="partida_presupuestaria_id" name="partida_presupuestaria_id" class="form-control select2">
+                                <option value="">--Seleccionar--</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-6 mb-2">
                         <label for="producto_id" class="form-label d-inline font-roboto-14">Material</label>
-                        <select id="producto_id" name="producto_id" class="form-control select2">
-                            <option value="">--Seleccionar--</option>
-                        </select>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-box-open fa-fw"></i>
+                            </span>
+                            <select id="producto_id" name="producto_id" class="form-control select2">
+                                <option value="">--Seleccionar--</option>
+                            </select>
+                        </div>
                     </div>
-
+                </div>
+                <div class="row">
                     <div class="col-12 col-md-6 col-lg-4 mb-2">
                         <br>
                         <div class="d-flex flex-column flex-md-row gap-3 justify-content-center justify-content-md-end">
@@ -141,11 +214,21 @@
                     <div class="col-12 col-md-6 col-lg-2 mb-2">
                         <input type="hidden" id="inventario_almacen_id">
                         <label for="stock_actual" class="form-label d-inline font-roboto-14">Disponible</label>
-                        <input type="text" id="stock_actual" class="form-control font-roboto-14 bg-dark">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-check-circle fa-fw"></i>
+                            </span>
+                            <input type="text" id="stock_actual" class="form-control font-roboto-14 bg-dark">
+                        </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-2 mb-2">
                         <label for="stock_reserva" class="form-label d-inline font-roboto-14">Reserva</label>
-                        <input type="text" id="stock_reserva" class="form-control font-roboto-14 bg-dark">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-hourglass-half fa-fw"></i>
+                            </span>
+                            <input type="text" id="stock_reserva" class="form-control font-roboto-14 bg-dark">
+                        </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 mb-2">
                         <br>
@@ -156,7 +239,9 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
+            <div class="card card-body">
                 <div class="row" style="display: flex; justify-content: space-between;">
                     <div class="col-12 col-md-6 col-lg-6">
                         <div class="d-flex flex-column flex-md-row gap-3 justify-content-center justify-content-md-end">
@@ -179,11 +264,12 @@
                         <input type="search" id="_detalle_tabla_filter" class="form-control font-roboto-14 border-dark" placeholder="Buscar" aria-controls="detalle_tabla">
                     </div>
                 </div>
-            </div>
 
-            <div class="card card-body">
                 <div class="row">
                     <div class="col-12 table-responsive">
+                        <h6>
+                            <i class="fas fa-boxes me-2"></i>  <span class="red-color">Materiales Registrados</span>
+                        </h6>
                         <table id="detalle_tabla" class="table table-striped table-hover display responsive hover-orange">
                             <thead class="bg-dark text-white">
                                 <tr class="font-roboto-13 ignore-row">

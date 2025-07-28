@@ -212,10 +212,10 @@
                 {{ $mantenimiento->funcionario->full_name }}
             </td>
             <td align="center" style="vertical-align: top;">
-                <b>Tecnico</b>
+                <b>Tecnico Asignado</b>
             </td>
         </tr>
-        {{-- <tr>
+        <tr>
             <td colspan="2">&nbsp;</td>
         </tr>
         <tr>
@@ -228,9 +228,9 @@
         </tr>
         <tr>
             <td align="center" colspan="2">
-                <b>V° B°</b>
+                <b>V° B° Enc. - Unidad de Sistemas</b>
             </td>
-        </tr> --}}
+        </tr>
     </table>
 </body>
 <script type="text/php">
