@@ -133,7 +133,7 @@
                         <br>
                         <div class="d-flex flex-column flex-md-row gap-3 justify-content-center justify-content-md-end">
                             <button class="btn btn-secondary w-100 w-md-auto btn-size mb-2 mb-md-0 font-roboto-14" type="button" onclick="cargarMateriales();" id="btnCargarMateriales">
-                                <i class="fas fa-plus fa-fw"></i> Cargar datos desde Ingreso
+                                <i class="fas fa-database fa-fw"></i> Cargar Materiales Existentes
                             </button>
                         </div>
                     </div>
@@ -151,7 +151,7 @@
                         <br>
                         <div class="d-flex flex-column flex-md-row gap-3 justify-content-center justify-content-md-end">
                             <button class="btn btn-outline-success w-100 w-md-auto btn-size mb-2 mb-md-0 font-roboto-14" type="button" onclick="agregarMaterial();">
-                                <i class="fas fa-plus fa-fw"></i> Registrar producto en el comprobante de salida
+                                <i class="fas fa-plus-circle fa-fw"></i> Agregar Material al Comprobante
                             </button>
                         </div>
                     </div>
@@ -161,7 +161,7 @@
                     <div class="col-12 col-md-6 col-lg-6">
                         <div class="d-flex flex-column flex-md-row gap-3 justify-content-center justify-content-md-end">
                             <button class="btn btn-primary w-100 w-md-auto py-2 mr-2 font-roboto-14 font-weight-bold" type="button" onclick="procesar();">
-                                <i class="fas fa-paper-plane fa-fw"></i> Finalizar
+                                <i class="fas fa-check-circle fa-fw"></i> Finalizar Registro de Materiales
                             </button>
                         </div>
                         <div class="text-center mt-3">

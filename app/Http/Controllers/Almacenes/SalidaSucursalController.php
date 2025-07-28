@@ -661,7 +661,9 @@ class SalidaSucursalController extends Controller
 
     public function egresar(Request $request)
     {
-        $salida_almacen_detalles = SalidaAlmacenDetalle::where('salida_almacen_id', $request->salida_almacen_id)->get();
+        $salida_almacen_detalles = SalidaAlmacenDetalle::where('salida_almacen_id', $request->salida_almacen_id)
+            ->where('estado',SalidaAlmacenDetalle::HABILITADO)
+            ->get();
 
         if ($salida_almacen_detalles->isEmpty()) {
             return redirect()->route('salida.sucursal.index')->with('error_message', '[Algo salió mal. Intenta nuevamente.]');

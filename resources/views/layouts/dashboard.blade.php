@@ -91,6 +91,23 @@
                 margin: 0;
                 text-align: center;
             }
+            /*
+            * Para las imagenes de las tablas de la canasta
+            */
+            .imagen-beneficiario-table {
+                width: 25px;
+                height: auto;
+                transition: width 0.3s ease, height 0.3s ease;
+                border-radius: 10%;
+                overflow: hidden;
+            }
+
+            .imagen-beneficiario-table:hover {
+                transform: scale(7.33);
+                z-index: 10;
+                border-radius: 5%;
+                overflow: hidden;
+            }
         </style>
         @yield('styles')
     </head>
