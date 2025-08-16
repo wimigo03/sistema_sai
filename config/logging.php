@@ -172,6 +172,12 @@ return [
             'level' => 'debug',
         ],
 
+        'recinto_electoral' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/recinto_electoral.log'),
+            'level' => 'debug',
+        ],
+
         'varios' => [
             'driver' => 'single',
             'path' => storage_path('logs/varios.log'),

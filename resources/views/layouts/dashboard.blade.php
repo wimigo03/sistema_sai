@@ -232,6 +232,13 @@
                                                 </a>
                                             </li>
                                         @endcan
+                                        @can('recintos.index')
+                                            <li class="nav-item">
+                                                <a href="{{ route('recintos.index') }}" class="nav-link pl-4">&nbsp;
+                                                    <i class="fa-solid fa-box-ballot fa-fw"></i> <p>Recintos Electorales</p>
+                                                </a>
+                                            </li>
+                                        @endcan
                                         {{--@can('archivos.index.general')
                                             <li class="nav-item">
                                                 <a href="{{ route('archivos.index.general') }}" class="nav-link pl-4">&nbsp;

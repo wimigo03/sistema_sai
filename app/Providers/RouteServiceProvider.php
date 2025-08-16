@@ -110,5 +110,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/CanastaV2disc/entregas-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/CanastaV2disc/entrega-beneficiario-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/CanastaV2disc/periodos-route.php'));
+
+        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/recintos-route.php'));
     }
 }
