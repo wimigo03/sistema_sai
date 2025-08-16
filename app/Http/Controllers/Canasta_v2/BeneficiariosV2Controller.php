@@ -382,8 +382,8 @@ class BeneficiariosV2Controller extends Controller
             'ci' => [
                 'required',
                 Rule::unique('beneficiarios', 'ci')->where(function ($query) use ($request) {
-                    return $query->where('dea_id',Auth::user()->dea->id)
-                                    ->where('id_tipo',Beneficiario::TERCERA_EDAD);
+                    return $query->where('dea_id',Auth::user()->dea->id);
+                                    //->where('id_tipo',Beneficiario::TERCERA_EDAD);
                 }),
             ]
         ], [

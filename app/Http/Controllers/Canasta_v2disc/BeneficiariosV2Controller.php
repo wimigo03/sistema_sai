@@ -339,6 +339,18 @@ class BeneficiariosV2Controller extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'ci' => [
+                'required',
+                Rule::unique('beneficiarios', 'ci')->where(function ($query) use ($request) {
+                    return $query->where('dea_id',Auth::user()->dea->id);
+                                    //->where('id_tipo',Beneficiario::TERCERA_EDAD);
+                }),
+            ]
+        ], [
+            'ci.unique' => 'Numero de Carnet DUPLICADO',
+        ]);
+
         $personal = User::find(Auth::user()->id);
         $id_usuario = $personal->id;
         $dea_id = $personal->dea_id;

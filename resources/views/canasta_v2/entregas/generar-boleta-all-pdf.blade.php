@@ -123,6 +123,11 @@
                             <b><u>PRODUCTOS POR CANASTA ALIMENTARIA</u></b>
                             <p class="text-justify">
                                 {{ $array_entrega[$cont]->paquete->items }}
+                                @if ($array_entrega[$cont]->id_paquete == 23)
+                                    <br>
+                                    <br>
+                                    <br>
+                                @endif
                             </p>
                         </td>
                         <td class="align-center align-superior linea-derecha">
