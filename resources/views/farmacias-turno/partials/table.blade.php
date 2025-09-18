@@ -25,7 +25,9 @@
                         @can('farmacias.index')
                             <td class="text-center p-2 text-nowrap">
                                 <span class="tts:right tts-slideIn tts-custom" aria-label="Eliminar" style="cursor: pointer;">
-                                    <a href="{{ route('farmacias.turnos.delete',$datos->id) }}" class="btn btn-sm btn-danger">
+                                    <a href="{{ route('farmacias.turnos.delete',$datos->id) }}"
+                                    class="btn btn-sm btn-danger btn-delete"
+                                    data-href="{{ route('farmacias.turnos.delete',$datos->id) }}">
                                         <i class="fas fa-trash fa-fw"></i>
                                     </a>
                                 </span>
@@ -131,5 +133,28 @@
         </button>
       </div>
     </form>
+  </div>
+</div>
+
+
+<!-- Modal único de confirmación -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="confirmDeleteModalLabel">
+          <i class="fas fa-exclamation-triangle"></i> Confirmar eliminación
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        ¿Estás seguro de que deseas <strong>eliminar este turno</strong>?
+        Esta acción no se puede deshacer.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <a href="#" class="btn btn-danger" id="btnConfirmDelete">Sí, eliminar</a>
+      </div>
+    </div>
   </div>
 </div>

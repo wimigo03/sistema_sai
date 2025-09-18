@@ -68,17 +68,25 @@
                 autoClose: true
             });
 
-            var cleave = new Cleave('#fecha_f', {
-                date: true,
-                datePattern: ['d', 'm', 'Y'],
-                delimiter: '-'
+            var cleave = new Cleave('#cantidad', {
+                numeral: true,
+                numeralDecimalScale: 0,
+                numeralThousandsGroupStyle: 'none',
+                rawValueTrimPrefix: false,
             });
 
-            $("#fecha_f").datepicker({
-                inline: false,
-                language: "es",
-                dateFormat: "dd-mm-yyyy",
-                autoClose: true
+            // Bloquear flechas ↑ ↓ que restan/suman
+            document.getElementById('cantidad').addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                    e.preventDefault();
+                }
+            });
+
+            // Sanitizar siempre que cambie el valor
+            document.getElementById('cantidad').addEventListener('input', function(e) {
+                if (this.rawValue && parseInt(this.rawValue) < 0) {
+                    this.setRawValue('');
+                }
             });
 
             var Modal = function(mensaje){

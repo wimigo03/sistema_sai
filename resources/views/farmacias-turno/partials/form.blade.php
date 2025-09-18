@@ -3,13 +3,13 @@
     <div class="div_cabecera mb-4">
         <div class="row mb-2">
             <div class="col-12 col-md-6 col-lg-4 mb-2">
-                <label for="fecha_i" class="form-label d-inline font-roboto-14">Fecha Inicio</label>
+                <label for="fecha_i" class="form-label d-inline font-roboto-14">Fecha del turno</label>
                 <input type="text" name="fecha_i" id="fecha_i" class="form-control font-roboto-14 intro">
             </div>
 
             <div class="col-12 col-md-6 col-lg-4 mb-2">
-                <label for="fecha_f" class="form-label d-inline font-roboto-14">Fecha Final</label>
-                <input type="text" name="fecha_f" id="fecha_f" class="form-control font-roboto-14 intro">
+                <label for="fecha_f" class="form-label d-inline font-roboto-14">Cantidad Registros</label>
+                <input type="text" name="cantidad" id="cantidad" class="form-control font-roboto-14 intro">
             </div>
         </div>
     </div>

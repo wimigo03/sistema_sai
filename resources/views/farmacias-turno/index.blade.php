@@ -93,6 +93,27 @@
             $('#formModificar').on('submit', function () {
                 $('.btn-submit').prop('disabled', true);
             });
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const deleteButtons = document.querySelectorAll('.btn-delete');
+                const confirmDeleteBtn = document.getElementById('btnConfirmDelete');
+                let deleteUrl = '';
+
+                deleteButtons.forEach(btn => {
+                    btn.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        deleteUrl = this.getAttribute('data-href');
+                        const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+                        modal.show();
+                    });
+                });
+
+                confirmDeleteBtn.addEventListener('click', function () {
+                    if (deleteUrl) {
+                        window.location.href = deleteUrl;
+                    }
+                });
+            });
         </script>
     @endsection
 @endsection

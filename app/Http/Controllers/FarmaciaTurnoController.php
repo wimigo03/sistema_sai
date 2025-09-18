@@ -25,7 +25,7 @@ class FarmaciaTurnoController extends Controller
             ->where('b.dea_id', Auth::user()->dea->id)
             ->pluck('a.nombre', 'a.id');
 
-        $farmaciasTurnos = FarmaciaTurno::paginate();
+        $farmaciasTurnos = FarmaciaTurno::where('estado', FarmaciaTurno::HABILITADO)->paginate();
 
         return view('farmacias-turno.index',compact('farmacias', 'farmaciasTurnos'));
     }
@@ -38,7 +38,8 @@ class FarmaciaTurnoController extends Controller
             ->where('b.dea_id', Auth::user()->dea->id)
             ->pluck('a.nombre', 'a.id');
 
-        $farmaciasTurnos = FarmaciaTurno::byFechas($request->fecha_i, $request->fecha_f)
+        $farmaciasTurnos = FarmaciaTurno::where('estado', FarmaciaTurno::HABILITADO)
+            ->byFechas($request->fecha_i, $request->fecha_f)
             ->byFarmacia($request->farmacia)
             ->paginate();
 
@@ -53,93 +54,66 @@ class FarmaciaTurnoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'fecha_i' => ['required','date'],
-            'fecha_f' => ['required','date','after_or_equal:fecha_i'],
+            'fecha_i'  => ['required','date'],
+            'cantidad' => ['required','integer','min:1','max:1000'], // ajusta max según tu caso
         ]);
 
         try {
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');
 
-            $start = Carbon::parse($request->fecha_i)->startOfDay();
-            $end   = Carbon::parse($request->fecha_f)->endOfDay();
+            $fi = Carbon::parse($request->fecha_i)->startOfDay();    // 00:00:00
+            $ff = Carbon::parse($request->fecha_i)->endOfDay();      // 23:59:59
+            $cantidad = (int) $request->cantidad;
 
             $insertedCount = 0;
-            $skippedCount  = 0;
 
-            DB::transaction(function () use ($start, $end, &$insertedCount, &$skippedCount) {
+            DB::transaction(function () use ($fi, $ff, $cantidad, &$insertedCount) {
 
-                // 1) Construir el rango día a día
-                $period = CarbonPeriod::create($start, '1 day', $end);
+                // (Opcional) Si NO quieres duplicados de ese día, descomenta este bloque:
+                /*
+                $yaExisten = DB::table('farmacias_turno')
+                    ->whereDate('fecha_i', $fi->toDateString())
+                    ->exists();
 
-                $rows      = [];
-                $fechaIs   = [];
-                $fechaFs   = [];
+                if ($yaExisten) {
+                    // Si ya existen, no insertamos (o decide otra lógica)
+                    return;
+                }
+                */
 
-                foreach ($period as $day) {
-                    $fi = $day->copy()->startOfDay();
-                    $ff = $day->copy()->endOfDay();
-
+                $rows = [];
+                for ($i = 0; $i < $cantidad; $i++) {
                     $rows[] = [
-                        'fecha_i' => $fi,
-                        'fecha_f' => $ff,
-                        'estado'  => FarmaciaTurno::HABILITADO,
+                        'fecha_i' => $fi->copy(),
+                        'fecha_f' => $ff->copy(),
+                        'estado'  => FarmaciaTurno::HABILITADO, // o el valor que uses por defecto
+                        'created_at' => now(),
+                        'updated_at' => now(),
                     ];
-
-                    $fechaIs[] = $fi;
-                    $fechaFs[] = $ff;
                 }
 
-                // 2) Consultar duplicados existentes (por fecha_i o por fecha_f)
-                $existentes = DB::table('farmacias_turno')
-                    ->whereIn('fecha_i', $fechaIs)
-                    ->orWhereIn('fecha_f', $fechaFs)
-                    ->get(['fecha_i', 'fecha_f']);
-
-                // Sets para filtrar rápido
-                $setFi = $existentes->pluck('fecha_i')->map(fn($v)=>Carbon::parse($v)->toDateTimeString())->flip();
-                $setFf = $existentes->pluck('fecha_f')->map(fn($v)=>Carbon::parse($v)->toDateTimeString())->flip();
-
-                // 3) Filtrar filas que NO estén repetidas
-                $rowsNuevos = [];
-                foreach ($rows as $r) {
-                    $fiStr = Carbon::parse($r['fecha_i'])->toDateTimeString();
-                    $ffStr = Carbon::parse($r['fecha_f'])->toDateTimeString();
-
-                    if (!$setFi->has($fiStr) && !$setFf->has($ffStr)) {
-                        $rowsNuevos[] = $r;
-                    }
+                if (!empty($rows)) {
+                    DB::table('farmacias_turno')->insert($rows);
+                    $insertedCount = count($rows);
                 }
-
-                // 4) Insertar solo los nuevos
-                if (!empty($rowsNuevos)) {
-                    DB::table('farmacias_turno')->insert($rowsNuevos);
-                    $insertedCount = count($rowsNuevos);
-                }
-
-                // 5) Conteo de saltados
-                $skippedCount = count($rows) - $insertedCount;
             });
 
             Log::channel('farmacia')->info(
-                "\nTurnos registrados: {$insertedCount} | Duplicados omitidos: {$skippedCount}\n".
+                "\nTurnos registrados: {$insertedCount}\n".
                 "Usuario: ".Auth::id()."\n".
-                "Rango: {$request->fecha_i} a {$request->fecha_f}\n"
+                "Día: {$fi->toDateString()} (fi={$fi->toDateTimeString()} | ff={$ff->toDateTimeString()})\n".
+                "Cantidad solicitada: {$request->cantidad}\n"
             );
 
-            $msg = "[Insertados: {$insertedCount}";
-            if ($skippedCount > 0) {
-                $msg .= " | Omitidos por fechas repetidas: {$skippedCount}";
-            }
-            $msg .= "]";
-
+            $msg = "[Insertados: {$insertedCount}]";
             return redirect()
                 ->route('farmacias.turnos.index')
                 ->with('success_message', $msg);
 
         } catch (\Throwable $e) {
             Log::channel('farmacia')->error(
-                "\nError al crear turnos por rango\n".
+                "\nError al crear turnos por día\n".
                 "Usuario: ".Auth::id()."\n".
                 "Error: ".$e->getMessage()."\n"
             );
@@ -208,7 +182,8 @@ class FarmaciaTurnoController extends Controller
             $data = DB::transaction(function () use ($farmacia_turno_id) {
                 $farmacia_turno = FarmaciaTurno::find($farmacia_turno_id);
                 $farmacia_turno->update([
-                    'farmacia_id' => NULL
+                    'farmacia_id' => NULL,
+                    'estado' => FarmaciaTurno::NO_HABILITADO
                 ]);
             });
 
