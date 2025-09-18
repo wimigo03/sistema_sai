@@ -178,6 +178,12 @@ return [
             'level' => 'debug',
         ],
 
+        'farmacia' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/farmacia.log'),
+            'level' => 'debug',
+        ],
+
         'varios' => [
             'driver' => 'single',
             'path' => storage_path('logs/varios.log'),

@@ -78,7 +78,7 @@ use App\Http\Controllers\Activo\VehiculoController;
 |
 */
 
-Route::get('elecciones-predidenciales-2025', 'EleccionesController@index')->name('elecciones.index');
+// Route::get('elecciones-predidenciales-2025', 'EleccionesController@index')->name('elecciones.index');
 
 Route::get('/', function () {
     //return redirect()->away('https://www.granchaco.gob.bo');

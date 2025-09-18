@@ -11,26 +11,32 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use DataTables;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use App\Models\Recinto;
 
 class EleccionesController extends Controller
 {
     public function index(Request $request)
     {
         $tiposGobernantes = [
-            '4' => 'Presindenciales',
-            '3' => 'Senadores',
-            '2' => 'Diputados',
-            '1' => 'Supraestatales',
+            '1' => 'Presidenciales',
+            '2' => 'Diputados'
         ];
 
         $zonas = [
+            '3' => 'Urbana y Rural',
             '1' => 'Urbana',
             '2' => 'Rural',
-            '3' => 'Urbana y Rural',
         ];
 
-        $tipoSeleccionado = $request->input('tipo', '4');
+        // Se obtiene una lista de recintos electorales para el filtro
+        $recintosElectorales = Recinto::pluck('nombre', 'id');
+
+        // Se añade la opción "Todos" al inicio del array de recintos
+        $recintosElectorales->prepend('Todos los Recintos Electorales', 'all');
+
+        $tipoSeleccionado = $request->input('tipo', '1');
         $zonaSeleccionada = $request->input('zona', '3');
+        $recintoSeleccionado = $request->input('recinto', 'all'); // Nueva variable para el recinto seleccionado
 
         $conteoVotaciones = DB::table('votos_por_mesa as a')
             ->select(
@@ -49,11 +55,25 @@ class EleccionesController extends Controller
             ->when($zonaSeleccionada !== '3', function ($query) use ($zonaSeleccionada) {
                 return $query->where('c.zona', $zonaSeleccionada);
             })
+            // Nuevo filtro para recintos electorales
+            ->when($recintoSeleccionado !== 'all', function ($query) use ($recintoSeleccionado) {
+                return $query->where('c.id', $recintoSeleccionado);
+            })
             ->groupBy('d.alias')
+            ->orderBy('total_votos', 'desc')
             ->get();
 
         $totalVotosGeneral = $conteoVotaciones->sum('total_votos');
 
-        return view('elecciones.index', compact('tiposGobernantes', 'zonas', 'conteoVotaciones', 'totalVotosGeneral', 'tipoSeleccionado', 'zonaSeleccionada'));
+        return view('elecciones.index', compact(
+            'tiposGobernantes',
+            'zonas',
+            'recintosElectorales',
+            'conteoVotaciones',
+            'totalVotosGeneral',
+            'tipoSeleccionado',
+            'zonaSeleccionada',
+            'recintoSeleccionado'
+        ));
     }
 }

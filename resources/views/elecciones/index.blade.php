@@ -62,30 +62,38 @@
             }
         }
 
-        .filters {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
+        /* Estilo base de los select */
         .filters select {
             padding: 0.75rem 1rem;
             border: 1px solid var(--border-color);
             border-radius: 8px;
             font-size: 1rem;
             cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .filters button {
-            padding: 0.75rem 2rem;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
+        /* Efecto hover/focus */
+        .filters select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 6px rgba(0, 123, 255, 0.4);
+        }
+
+        /* 📱 Ajustes para pantallas pequeñas */
+        @media (max-width: 600px) {
+            .filters {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .filters select {
+                width: 100%;
+            }
+
+            .filters button {
+                width: 100%;
+            }
         }
 
         .table-container {
@@ -156,6 +164,13 @@
 
     <div class="filters">
         <form action="{{ route('elecciones.index') }}" method="GET">
+            <select name="recinto" onchange="this.form.submit()">
+                @foreach ($recintosElectorales as $key => $value)
+                    <option value="{{ $key }}" {{ $recintoSeleccionado == $key ? 'selected' : '' }}>
+                        {{ $value }}
+                    </option>
+                @endforeach
+            </select>
             <select name="tipo" onchange="this.form.submit()">
                 @foreach ($tiposGobernantes as $key => $value)
                     <option value="{{ $key }}" {{ $tipoSeleccionado == $key ? 'selected' : '' }}>
@@ -226,14 +241,51 @@
     document.addEventListener('DOMContentLoaded', function() {
         const conteoVotaciones = @json($conteoVotaciones);
         const totalVotosGeneral = {{ $totalVotosGeneral }};
+
+        // Calcular la suma de los votos de los partidos mostrados
+        const sumaVotosMostrados = conteoVotaciones.reduce((acc, curr) => acc + curr.total_votos, 0);
+
+        // Calcular los "otros votos" que no se muestran en la tabla (la diferencia)
+        const otrosVotos = totalVotosGeneral - sumaVotosMostrados;
+
+        // Crear las etiquetas y los datos del gráfico, incluyendo la categoría "Otros"
         const labels = conteoVotaciones.map(voto => voto.sigla);
         const data = conteoVotaciones.map(voto => voto.total_votos);
 
+        // Si hay "otros votos", agréguelos a los datos del gráfico
+        if (otrosVotos > 0) {
+            labels.push('Otros');
+            data.push(otrosVotos);
+        }
+
+        // Gama de colores más diferenciada
         const backgroundColors = [
-            '#007BFF', '#28a745', '#dc3545', '#fd7e14', '#6610f2',
-            '#e83e8c', '#20c997', '#ffc107', '#17a2b8', '#6c757d',
-            '#0056b3', '#1e7e34', '#c82333', '#c65300', '#5c00d6'
+            '#264653', // Azul oscuro
+            '#2a9d8f', // Verde azulado
+            '#e9c46a', // Amarillo mostaza
+            '#f4a261', // Naranja quemado
+            '#e76f51', // Rojo anaranjado
+            '#8ac926', // Verde lima
+            '#198c7e', // Verde esmeralda oscuro
+            '#ffca3a', // Amarillo brillante
+            '#ff8c61', // Salmón
+            '#6a4c93', // Morado
+            '#035aa6', // Azul brillante
+            '#f06449', // Rojo coral
+            '#468189', // Azul acero
+            '#a05195', // Magenta oscuro
+            '#d45087', // Rosa fuerte
+            '#ff7a5a', // Naranja rojizo
+            '#3a0ca3', // Violeta oscuro
+            '#4cc9f0', // Celeste
+            '#b56576', // Rosa antiguo
+            '#00b4d8'  // Azul turquesa
         ];
+
+        // Añadir un color para la categoría "Otros" si existe
+        if (otrosVotos > 0) {
+            backgroundColors.push('#A9A9A9'); // Color gris para los otros votos
+        }
 
         const ctx = document.getElementById('votosChart').getContext('2d');
         new Chart(ctx, {
@@ -243,7 +295,7 @@
                 datasets: [{
                     label: 'Total de Votos',
                     data: data,
-                    backgroundColor: backgroundColors,
+                    backgroundColor: backgroundColors.slice(0, labels.length), // Asegura que no haya más colores que etiquetas
                     hoverOffset: 4
                 }]
             },
