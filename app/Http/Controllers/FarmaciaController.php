@@ -122,7 +122,7 @@ class FarmaciaController extends Controller
                 "farmacia registrada con exito." . "\n" .
                 "Por el usuario " . Auth::user()->id . "\n"
             );
-            return redirect()->route('farmacias.index')->with('info_message');
+            return redirect()->route('farmacias.index')->with('info_message','[]');
 
         } catch (\Exception $e) {
             Log::channel('farmacia')->info(

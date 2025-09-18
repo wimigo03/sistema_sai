@@ -41,11 +41,11 @@
             </div>
             <div class="col-12 col-md-6 col-lg-2 mb-2">
                 <label for="latitud" class="form-label d-inline font-roboto-14">Coordenada Maps X</label>
-                <input type="text" name="latitud" id="latitud" value="{{ isset($farmacia) ? $farmacia->latitud : old('latitud') }}" class="form-control font-roboto-14 intro">
+                <input type="text" name="latitud" id="latitud" value="{{ isset($farmacia) ? $farmacia->lat: old('latitud') }}" class="form-control font-roboto-14 intro">
             </div>
             <div class="col-12 col-md-6 col-lg-2 mb-2">
                 <label for="longitud" class="form-label d-inline font-roboto-14">Coordenada Maps Y</label>
-                <input type="text" name="longitud" id="longitud" value="{{ isset($farmacia) ? $farmacia->longitud : old('longitud') }}" class="form-control font-roboto-14 intro">
+                <input type="text" name="longitud" id="longitud" value="{{ isset($farmacia) ? $farmacia->lng : old('longitud') }}" class="form-control font-roboto-14 intro">
             </div>
             <div class="col-12 col-md-6 col-lg-1">
                 <br>
