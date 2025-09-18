@@ -126,11 +126,11 @@
 
             function validar(){
                 if($("#fecha_i").val() == ""){
-                    Modal("Se debe agregar una <b>[FECHA DE INCIO]</b> para continuar");
+                    Modal("Se debe agregar una <b>[FECHA]</b> para continuar");
                     return false;
                 }
-                if($("#fecha_f").val() == ""){
-                    Modal("Se debe agregar una <b>[FECHA FINAL]</b> para continuar.");
+                if($("#cantidad").val() == ""){
+                    Modal("Se debe agregar una <b>[CANTIDAD]</b> para continuar.");
                     return false;
                 }
                 return true;

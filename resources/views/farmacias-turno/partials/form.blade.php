@@ -8,7 +8,7 @@
             </div>
 
             <div class="col-12 col-md-6 col-lg-4 mb-2">
-                <label for="fecha_f" class="form-label d-inline font-roboto-14">Cantidad Registros</label>
+                <label for="cantidad" class="form-label d-inline font-roboto-14">Cantidad Registros</label>
                 <input type="text" name="cantidad" id="cantidad" class="form-control font-roboto-14 intro">
             </div>
         </div>

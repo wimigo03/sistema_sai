@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+
 use App\Models\Farmacia;
 
 class FarmaciaTurno extends Model
@@ -42,6 +44,17 @@ class FarmaciaTurno extends Model
             case '2':
                 return "badge-with-padding badge badge-secondary";
         }
+    }
+
+    public function getObtenerDeaAttribute()
+    {
+        $data = DB::table('farmacias as a')
+            ->join('deas as b', 'a.dea_id', '=', 'b.id')
+            ->where('a.id', $this->farmacia_id)
+            ->select('b.descripcion')
+            ->first();
+
+        return $data ? $data->descripcion : null;
     }
 
     public function farmacia(){

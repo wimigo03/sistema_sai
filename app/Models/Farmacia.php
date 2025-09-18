@@ -4,14 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Canasta\Barrio;
+use App\Models\Canasta\Dea;
 
 class Farmacia extends Model
 {
     protected $table = 'farmacias';
     // public $timestamps = false;
     protected $fillable = [
-        'barrio_id',
+        'dea_id',
         'nombre',
         'direccion',
         'whatsapp',
@@ -47,8 +47,8 @@ class Farmacia extends Model
         }
     }
 
-    public function barrio(){
-        return $this->belongsTo(Barrio::class,'barrio_id','id');
+    public function dea(){
+        return $this->belongsTo(Dea::class,'dea_id','id');
     }
 
     public function scopeByEstado($query, $estado){
@@ -57,11 +57,11 @@ class Farmacia extends Model
         }
     }
 
-    public function scopeByBarrio($query, $barrio)
+    public function scopeByDea($query, $dea)
     {
-        if (filled($barrio)) {
-            return $query->whereHas('barrio', function ($q) use ($barrio) {
-                $q->where('nombre', 'ILIKE', '%'.$barrio.'%');
+        if (filled($dea)) {
+            return $query->whereHas('dea', function ($q) use ($dea) {
+                $q->where('descripcion', 'ILIKE', '%'.$dea.'%');
             });
         }
 

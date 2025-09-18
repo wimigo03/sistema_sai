@@ -8,6 +8,7 @@
                             <b><i class="fa-solid fa-trash fa-fw"></i></b>
                         </td>
                     @endcan
+                    <td class="text-center p-2 text-nowrap"><b>D.A.</b></td>
                     <td class="text-center p-2 text-nowrap"><b>FECHA TURNO</b></td>
                     <td class="p-2 text-nowrap"><b>FARMACIA</b></td>
                     <td class="p-2 text-nowrap"><b>DIRECCION</b></td>
@@ -33,6 +34,7 @@
                                 </span>
                             </td>
                         @endcan
+                        <td class="text-center p-2 text-nowrap">{{ $datos->obtenerDea }}</td>
                         <td class="text-center p-2 text-nowrap">{{ \Carbon\Carbon::parse($datos->fecha_i)->format('d-m-Y') }}</td>
                         @if (isset($datos->farmacia))
                             <td class="p-2 text-nowrap">{{ strtoupper($datos->farmacia->nombre) }}</td>

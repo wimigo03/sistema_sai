@@ -3,7 +3,7 @@
         <table class="table table-striped table-hover display responsive hover-orange">
             <thead class="bg-dark text-white">
                 <tr class="font-roboto-13">
-                    <td class="p-2 text-nowrap"><b>BARRIO</b></td>
+                    <td class="text-center p-2 text-nowrap"><b>D.A.</b></td>
                     <td class="p-2 text-nowrap"><b>NOMBRE</b></td>
                     <td class="p-2 text-nowrap"><b>DIRECCION</b></td>
                     <td class="text-left p-2 text-nowrap"><b>WHATSAPP</b></td>
@@ -20,7 +20,7 @@
             <tbody>
                 @foreach ($farmacias as $datos)
                     <tr class="font-roboto-13">
-                        <td class="p-2 text-nowrap">{{ strtoupper($datos->barrio->nombre) }}</td>
+                        <td class="text-center p-2 text-nowrap">{{ strtoupper($datos->dea->descripcion) }}</td>
                         <td class="p-2 text-nowrap">{{ strtoupper($datos->nombre) }}</td>
                         <td class="p-2 text-nowrap" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">
                             {{ strtoupper($datos->direccion) }}

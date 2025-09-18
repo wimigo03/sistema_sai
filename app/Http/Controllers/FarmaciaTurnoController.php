@@ -13,19 +13,21 @@ use Carbon\CarbonPeriod;
 
 use App\Models\Farmacia;
 use App\Models\FarmaciaTurno;
-use App\Models\Canasta\Barrio;
+use App\Models\Canasta\Dea;
 
 class FarmaciaTurnoController extends Controller
 {
     public function index()
     {
         $farmacias = DB::table('farmacias as a')
-            ->join('barrios as b','a.barrio_id','b.id')
+            ->join('deas as b','a.dea_id','=','b.id')
             ->where('a.estado', 1)
-            ->where('b.dea_id', Auth::user()->dea->id)
-            ->pluck('a.nombre', 'a.id');
+            ->where('a.dea_id', Auth::user()->dea->id)
+            ->select(DB::raw("CONCAT(b.nombre, ' - ', a. nombre) as detalle"), 'a.id as id')
+            ->orderBy('a.id', 'desc')
+            ->pluck('detalle', 'id');
 
-        $farmaciasTurnos = FarmaciaTurno::where('estado', FarmaciaTurno::HABILITADO)->paginate();
+        $farmaciasTurnos = FarmaciaTurno::where('estado', FarmaciaTurno::HABILITADO)->orderBy('id', 'desc')->paginate();
 
         return view('farmacias-turno.index',compact('farmacias', 'farmaciasTurnos'));
     }
@@ -33,14 +35,17 @@ class FarmaciaTurnoController extends Controller
     public function search(Request $request)
     {
         $farmacias = DB::table('farmacias as a')
-            ->join('barrios as b','a.barrio_id','b.id')
+            ->join('deas as b','a.dea_id','=','b.id')
             ->where('a.estado', 1)
-            ->where('b.dea_id', Auth::user()->dea->id)
-            ->pluck('a.nombre', 'a.id');
+            ->where('a.dea_id', Auth::user()->dea->id)
+            ->select(DB::raw("CONCAT(b.nombre, ' - ', a. nombre) as detalle"), 'a.id as id')
+            ->orderBy('a.id', 'desc')
+            ->pluck('detalle', 'id');
 
         $farmaciasTurnos = FarmaciaTurno::where('estado', FarmaciaTurno::HABILITADO)
             ->byFechas($request->fecha_i, $request->fecha_f)
             ->byFarmacia($request->farmacia)
+            ->orderBy('id', 'desc')
             ->paginate();
 
         return view('farmacias-turno.index',compact('farmacias', 'farmaciasTurnos'));

@@ -1,7 +1,7 @@
 <form action="#" method="get" id="form">
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-2">
         <div class="col mb-2">
-            <input type="text" name="barrio" value="{{ request('barrio') }}" id="barrio" placeholder="--Barrio--" class="form-control font-roboto-14 intro">
+            <input type="text" name="dea" value="{{ request('dea') }}" id="dea" placeholder="--Direccion Administrativa--" class="form-control font-roboto-14 intro">
         </div>
         <div class="col mb-2">
             <input type="text" name="farmacia" value="{{ request('farmacia') }}" id="farmacia" placeholder="--Farmacia--" class="form-control font-roboto-14 intro">

@@ -6,14 +6,14 @@
     <div class="div_cabecera mb-4">
         <div class="row mb-2">
             <div class="col-12 col-md-6 col-lg-5 mb-2">
-                <label for="barrio_id" class="form-label d-inline font-roboto-14">Barrio</label>
-                <select name="barrio_id" id="barrio_id" class="form-control select2">
+                <label for="dea_id" class="form-label d-inline font-roboto-14">Dirección Administrativa</label>
+                <select name="dea_id" id="dea_id" class="form-control select2">
                     <option value="">-</option>
-                    @foreach ($barrios as $index => $value)
+                    @foreach ($deas as $index => $value)
                         <option value="{{ $index }}"
-                            @if (isset($farmacia) && $farmacia->barrio_id == $index)
+                            @if (isset($farmacia) && $farmacia->dea_id == $index)
                                 selected
-                            @elseif (old('barrio_id') == $index)
+                            @elseif (old('dea_id') == $index)
                                 selected
                             @endif>
                             {{ $value }}

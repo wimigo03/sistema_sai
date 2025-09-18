@@ -10,30 +10,32 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Farmacia;
-use App\Models\Canasta\Barrio;
+use App\Models\Canasta\Dea;
 
 class FarmaciaController extends Controller
 {
     public function index()
     {
-        $farmacias = Farmacia::paginate();
+        $farmacias = Farmacia::orderBy('id', 'desc')->paginate();
         return view('farmacias.index',compact('farmacias'));
     }
 
     public function search(Request $request)
     {
-        $farmacias = Farmacia::byBarrio($request->barrio)
+        $farmacias = Farmacia::byDea($request->dea)
             ->byFarmacia($request->farmacia)
+            ->orderBy('id', 'desc')
             ->paginate();
         return view('farmacias.index',compact('farmacias'));
     }
 
     public function create()
     {
-        $dea_id = Auth::user()->dea->id;
-        $barrios = Barrio::where('dea_id',$dea_id)->pluck('nombre', 'id');
+        $deas = Dea::where('id', '!=', 4)
+            ->where('estado', 1)
+            ->pluck('descripcion', 'id');
 
-        return view('farmacias.create',compact('barrios'));
+        return view('farmacias.create',compact('deas'));
     }
 
     public function store(Request $request)
@@ -48,7 +50,7 @@ class FarmaciaController extends Controller
 
             $data = DB::transaction(function () use ($request) {
                 $farmacia = Farmacia::create([
-                    'barrio_id' => $request->barrio_id,
+                    'dea_id' => $request->dea_id,
                     'nombre' => $request->nombre,
                     'direccion' => $request->direccion,
                     'whatsapp' => $request->whatsapp,
@@ -84,10 +86,11 @@ class FarmaciaController extends Controller
     public function editar($farmacia_id)
     {
         $farmacia = Farmacia::find($farmacia_id);
-        $dea_id = Auth::user()->dea->id;
-        $barrios = Barrio::where('dea_id',$dea_id)->pluck('nombre', 'id');
+        $deas = Dea::where('id', '!=', 4)
+            ->where('estado', 1)
+            ->pluck('descripcion', 'id');
 
-        return view('farmacias.editar',compact('farmacia','barrios'));
+        return view('farmacias.editar',compact('farmacia','deas'));
     }
 
     public function update(Request $request)
@@ -106,7 +109,7 @@ class FarmaciaController extends Controller
             $data = DB::transaction(function () use ($request) {
                 $farmacia = Farmacia::find($request->farmacia_id);
                 $farmacia->update([
-                    'barrio_id' => $request->barrio_id,
+                    'dea_id' => $request->dea_id,
                     'nombre' => $request->nombre,
                     'direccion' => $request->direccion,
                     'whatsapp' => $request->whatsapp,
