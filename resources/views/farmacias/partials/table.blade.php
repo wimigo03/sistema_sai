@@ -28,16 +28,16 @@
                         <td class="text-left p-2 text-nowrap">{{ $datos->whatsapp }}</td>
                         <td class="text-center p-2 text-nowrap">
                             @if ($datos->url_img)
-                                <a href="{{ asset('storage/farmacias/' . $datos->url_img) }}" target="_blank">
-                                    <img src="{{ asset('storage/farmacias/' . $datos->url_img) }}"
+                                <a href="{{ asset('farmacias/' . $datos->url_img) }}" target="_blank">
+                                    <img src="{{ asset('farmacias/' . $datos->url_img) }}"
                                         alt="Imagen farmacia"
                                         class="img-hover-zoom img-rounded"
                                         height="30"
                                         width="30" />
                                 </a>
                             @else
-                                <a href="{{ asset('storage/farmacias/cruz-azul.png') }}" target="_blank">
-                                    <img src="{{ asset('storage/farmacias/cruz-azul.png') }}"
+                                <a href="{{ asset('farmacias/cruz-azul.png') }}" target="_blank">
+                                    <img src="{{ asset('farmacias/cruz-azul.png') }}"
                                         alt="Farmacia turno"
                                         class="img-hover-zoom img-rounded"
                                         height="30"

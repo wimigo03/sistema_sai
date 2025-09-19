@@ -62,13 +62,13 @@
             <div class="row mb-2">
                 <div class="col-12 text-center"> {{-- centramos la columna completa --}}
                     @if ($farmacia->url_img)
-                        <img src="{{ asset('storage/farmacias/' . $farmacia->url_img) }}"
+                        <img src="{{ asset('farmacias/' . $farmacia->url_img) }}"
                             alt="Imagen farmacia"
                             class="img-rounded"
                             height="120"
                             width="120" />
                     @else
-                        <img src="{{ asset('storage/farmacias/cruz-azul.png') }}"
+                        <img src="{{ asset('farmacias/cruz-azul.png') }}"
                             alt="Farmacia turno"
                             class="img-rounded"
                             height="120"
