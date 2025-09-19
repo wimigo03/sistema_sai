@@ -8,4 +8,5 @@ Route::prefix('farmacias')->name('farmacias.')->middleware(['auth'])->group(func
     Route::post('/store','FarmaciaController@store')->name('store')->middleware('can:farmacias.index');
     Route::get('/editar/{farmacia_id}','FarmaciaController@editar')->name('editar')->middleware('can:farmacias.index');
     Route::post('/update','FarmaciaController@update')->name('update')->middleware('can:farmacias.index');
+    Route::post('/subir-imagen','FarmaciaController@subirImagen')->name('subir.imagen')->middleware('can:farmacias.index');
 });

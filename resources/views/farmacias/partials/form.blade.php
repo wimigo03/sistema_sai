@@ -57,6 +57,38 @@
                 </a>
             </div>
         </div>
+
+        @if (isset($farmacia))
+            <div class="row mb-2">
+                <div class="col-12 text-center"> {{-- centramos la columna completa --}}
+                    @if ($farmacia->url_img)
+                        <img src="{{ asset('storage/farmacias/' . $farmacia->url_img) }}"
+                            alt="Imagen farmacia"
+                            class="img-rounded"
+                            height="120"
+                            width="120" />
+                    @else
+                        <img src="{{ asset('storage/farmacias/cruz-azul.png') }}"
+                            alt="Farmacia turno"
+                            class="img-rounded"
+                            height="120"
+                            width="120" />
+                    @endif
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-12 col-md-6 col-lg-4 mx-auto text-center"> {{-- centramos input --}}
+                    <label for="file_img" class="form-label d-inline font-roboto-14">Imagen</label>
+                    <input type="file" name="file_img" id="file_img"
+                        class="form-control font-roboto-12 text-center" accept="image/*">
+                    <input type="hidden" id="farmacia_id" value="{{ $farmacia->id ?? '' }}">
+                    <small id="img_help" class="text-muted d-block mt-1">JPG/PNG/WebP hasta 5MB.</small>
+                    <img id="preview_img" class="img-thumbnail mt-2 d-none mx-auto"
+                        style="max-width: 240px;">
+                </div>
+            </div>
+        @endif
     </div>
 
 

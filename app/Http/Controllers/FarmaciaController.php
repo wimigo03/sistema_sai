@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 use App\Models\Farmacia;
 use App\Models\Canasta\Dea;
@@ -91,6 +93,55 @@ class FarmaciaController extends Controller
             ->pluck('descripcion', 'id');
 
         return view('farmacias.editar',compact('farmacia','deas'));
+    }
+
+    public function subirImagen(Request $request)
+    {
+        $validated = $request->validate([
+            'farmacia_id' => ['required','exists:farmacias,id'],
+            'file_img'    => ['required','image','mimes:jpg,jpeg,png,webp','max:5120'], // 5MB
+        ]);
+
+        $farmacia = Farmacia::findOrFail($validated['farmacia_id']);
+        $file     = $request->file('file_img');
+
+        // Nombre de archivo: slug-nombre_YYYYmmddHHMMSS.ext
+        $ext      = $file->getClientOriginalExtension();
+        $base     = Str::slug($farmacia->nombre ?: 'farmacia');
+        $filename = $base . '_' . now()->format('YmdHis') . '.' . $ext;
+
+        // 📂 Ruta física dentro de public/farmacias
+        $destinationPath = public_path('farmacias');
+
+        // Crear la carpeta si no existe
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0775, true);
+        }
+
+        // Mover archivo a public/farmacias
+        $file->move($destinationPath, $filename);
+
+        // Si quieres borrar la imagen anterior
+        if ($farmacia->url_img && $farmacia->url_img !== $filename) {
+            $oldPath = $destinationPath . '/' . $farmacia->url_img;
+            if (file_exists($oldPath)) {
+                unlink($oldPath);
+            }
+        }
+
+        // Guardar SOLO el nombre en DB
+        $farmacia->url_img = $filename;
+        $farmacia->save();
+
+        // URL pública directa
+        $publicUrl = asset('farmacias/' . $filename);
+
+        return response()->json([
+            'ok'       => true,
+            'filename' => $filename,
+            'url'      => $publicUrl,
+            'message'  => 'Imagen subida correctamente en public/farmacias.',
+        ]);
     }
 
     public function update(Request $request)

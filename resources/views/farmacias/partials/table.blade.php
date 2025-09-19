@@ -7,7 +7,7 @@
                     <td class="p-2 text-nowrap"><b>NOMBRE</b></td>
                     <td class="p-2 text-nowrap"><b>DIRECCION</b></td>
                     <td class="text-left p-2 text-nowrap"><b>WHATSAPP</b></td>
-                    <td class="text-center p-2 text-nowrap"><b>FACEBOOK</b></td>
+                    <td class="text-center p-2 text-nowrap"><b>IMG</b></td>
                     <td class="text-center p-2 text-nowrap"><b>MAPS</b></td>
                     <td class="text-center p-2 text-nowrap"><b>ESTADO</b></td>
                     @can('farmacias.index')
@@ -26,7 +26,25 @@
                             {{ strtoupper($datos->direccion) }}
                         </td>
                         <td class="text-left p-2 text-nowrap">{{ $datos->whatsapp }}</td>
-                        <td class="text-center p-2 text-nowrap">{{ $datos->facebooñ }}</td>
+                        <td class="text-center p-2 text-nowrap">
+                            @if ($datos->url_img)
+                                <a href="{{ asset('storage/farmacias/' . $datos->url_img) }}" target="_blank">
+                                    <img src="{{ asset('storage/farmacias/' . $datos->url_img) }}"
+                                        alt="Imagen farmacia"
+                                        class="img-hover-zoom img-rounded"
+                                        height="30"
+                                        width="30" />
+                                </a>
+                            @else
+                                <a href="{{ asset('storage/farmacias/cruz-azul.png') }}" target="_blank">
+                                    <img src="{{ asset('storage/farmacias/cruz-azul.png') }}"
+                                        alt="Farmacia turno"
+                                        class="img-hover-zoom img-rounded"
+                                        height="30"
+                                        width="30" />
+                                </a>
+                            @endif
+                        </td>
                         <td class="text-center p-2 text-nowrap">
                             @if ($datos->lat != null && $datos->lng != null)
                                 <a href="https://google.com/maps/place/{{ $datos->lat }},{{ $datos->lng }}" target="_blank">

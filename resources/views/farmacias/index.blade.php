@@ -5,6 +5,22 @@
     <li class="breadcrumb-item font-roboto-14"><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a></li>
     <li class="breadcrumb-item font-roboto-14 active">Farmacias</li>
 @endsection
+<style>
+    .img-hover-zoom {
+        transition: transform 0.3s ease; /* animación suave */
+        cursor: pointer;                /* para indicar que se puede interactuar */
+    }
+
+    .img-hover-zoom:hover {
+        transform: scale(2.5);          /* zoom razonable */
+        z-index: 999;                   /* para que quede por encima de otros elementos */
+        position: relative;             /* ayuda a que z-index funcione */
+    }
+
+    .img-rounded {
+        border-radius: 8px; /* ajusta el valor: 8px = leve, 50% = círculo */
+    }
+</style>
 @section('content')
     <div class="card">
         <div class="card-header">
