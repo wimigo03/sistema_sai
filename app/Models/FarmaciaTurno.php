@@ -17,7 +17,8 @@ class FarmaciaTurno extends Model
         'farmacia_id',
         'fecha_i',
         'fecha_f',
-        'estado'
+        'estado',
+        'cont'
     ];
 
     const HABILITADO = 1;
@@ -73,6 +74,17 @@ class FarmaciaTurno extends Model
             try {
                 $inicio = Carbon::createFromFormat('d-m-Y', $fecha_i)->startOfDay();
                 $fin    = Carbon::createFromFormat('d-m-Y', $fecha_f)->endOfDay();
+
+                return $query->whereBetween('fecha_i', [$inicio, $fin]);
+            } catch (\Exception $e) {
+                return $query;
+            }
+        }
+
+        if ($fecha_i && !$fecha_f) {
+            try {
+                $inicio = Carbon::createFromFormat('d-m-Y', $fecha_i)->startOfDay();
+                $fin    = Carbon::createFromFormat('d-m-Y', $fecha_i)->endOfDay();
 
                 return $query->whereBetween('fecha_i', [$inicio, $fin]);
             } catch (\Exception $e) {

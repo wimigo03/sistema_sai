@@ -69,8 +69,8 @@ class Farmacia extends Model
     }
 
     public function scopeByFarmacia($query, $farmacia){
-        if($farmacia != null){
-            return $query->where('nombre', 'like', '%' . $farmacia . '%');
+        if(!empty($farmacia)){
+            return $query->where('nombre', 'ILIKE', '%' . $farmacia . '%');
         }
     }
 }

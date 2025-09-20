@@ -22,8 +22,9 @@ class FarmaciaTurnoController extends Controller
         $farmacias = DB::table('farmacias as a')
             ->join('deas as b','a.dea_id','=','b.id')
             ->where('a.estado', 1)
-            ->where('a.dea_id', Auth::user()->dea->id)
-            ->select(DB::raw("CONCAT(b.nombre, ' - ', a. nombre) as detalle"), 'a.id as id')
+            //->where('a.dea_id', Auth::user()->dea->id)
+            ->where('a.dea_id', '!=', 4)
+            ->select(DB::raw("CONCAT(b.descripcion, ' - ', a.nombre) as detalle"), 'a.id as id')
             ->orderBy('a.id', 'desc')
             ->pluck('detalle', 'id');
 
@@ -37,8 +38,9 @@ class FarmaciaTurnoController extends Controller
         $farmacias = DB::table('farmacias as a')
             ->join('deas as b','a.dea_id','=','b.id')
             ->where('a.estado', 1)
-            ->where('a.dea_id', Auth::user()->dea->id)
-            ->select(DB::raw("CONCAT(b.nombre, ' - ', a. nombre) as detalle"), 'a.id as id')
+            //->where('a.dea_id', Auth::user()->dea->id)
+            ->where('a.dea_id', '!=', 4)
+            ->select(DB::raw("CONCAT(b.descripcion, ' - ', a.nombre) as detalle"), 'a.id as id')
             ->orderBy('a.id', 'desc')
             ->pluck('detalle', 'id');
 
