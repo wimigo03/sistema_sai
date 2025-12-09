@@ -54,7 +54,7 @@
                     "responsive": true,
                     //"stateSave": true,
                     "language": {
-                        "sProcessing": "Procesando...",
+                        "sProcessing": "Procesando..."cleave,
                         "sLengthMenu": "_MENU_",
                         "sZeroRecords": "No se encontraron resultados",
                         "sEmptyTable": "Ningún dato disponible en esta tabla",
