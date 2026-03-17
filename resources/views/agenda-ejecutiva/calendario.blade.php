@@ -28,7 +28,7 @@
                 <div class="row font-roboto-12">
                     <div class="col text-center border border-white table-responsive"><b>L</b></div>
                     <div class="col text-center border border-white table-responsive"><b>M</b></div>
-                    <div class="col text-center border border-white table-responsive"><b>X</b></div>
+                    <div class="col text-center border border-white table-responsive"><b>M</b></div>
                     <div class="col text-center border border-white table-responsive"><b>J</b></div>
                     <div class="col text-center border border-white table-responsive"><b>V</b></div>
                     <div class="col text-center border border-white table-responsive"><b>S</b></div>

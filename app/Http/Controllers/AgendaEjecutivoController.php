@@ -20,7 +20,7 @@ class AgendaEjecutivoController extends Controller
         $mes = $data['month'];
         $mespanish = $this->spanish_month($mes);
         $mes = $data['month'];
-        return view('agenda-ejecutiva.calendario',compact('data','mes','mespanish'));
+        return view('agenda-ejecutiva.calendario', compact('data', 'mes', 'mespanish'));
     }
 
     public function index_month($month)
@@ -29,7 +29,7 @@ class AgendaEjecutivoController extends Controller
         $mes = $data['month'];
         $mespanish = $this->spanish_month($mes);
         $mes = $data['month'];
-        return view('agenda-ejecutiva.calendario',compact('data','mes','mespanish'));
+        return view('agenda-ejecutiva.calendario', compact('data', 'mes', 'mespanish'));
     }
 
     public function details($dia, $mes, $anio)
@@ -40,7 +40,7 @@ class AgendaEjecutivoController extends Controller
         $eventos = Evento::where('fecha', $date)->orderby('horaini', 'asc')->get();
         $fecha2 = Carbon::parse($date);
         $fechaliteral = ucfirst($fecha2->dayName) . ' ' . $fecha2->day . ' ' . 'de' . ' ' . $fecha2->monthName . ' ' . 'del' . ' ' . $fecha2->year;
-        return view('agenda-ejecutiva.evento',compact('eventos','date','fechaliteral'));
+        return view('agenda-ejecutiva.evento', compact('eventos', 'date', 'fechaliteral'));
     }
 
     public function show($id)
@@ -48,7 +48,7 @@ class AgendaEjecutivoController extends Controller
         $evento = Evento::find($id);
         $fecha = Carbon::parse($evento->fecha);
         $fechaliteral = ucfirst($fecha->dayName) . ' ' . $fecha->day . ' ' . 'de' . ' ' . $fecha->monthName . ' ' . 'del' . ' ' . $fecha->year;
-        return view('agenda-ejecutiva.show',compact('evento','fechaliteral'));
+        return view('agenda-ejecutiva.show', compact('evento', 'fechaliteral'));
     }
 
     public function form($fecha)
@@ -57,7 +57,7 @@ class AgendaEjecutivoController extends Controller
         $id = $personal->id;
         $personal = User::find($id)->usuariosempleados;
         $personalArea = Empleado::find($personal->idemp)->empleadosareas;
-        return view('agenda-ejecutiva.form',compact('fecha','personal'));
+        return view('agenda-ejecutiva.form', compact('fecha', 'personal'));
     }
 
     public function create(Request $request)
@@ -75,18 +75,18 @@ class AgendaEjecutivoController extends Controller
 
         $dia = date("d", strtotime($request->fecha));
         $timestamp = strtotime($request->fecha);
-        $mes_literal = \IntlDateFormatter::create('es_ES',\IntlDateFormatter::FULL,\IntlDateFormatter::NONE,'UTC',\IntlDateFormatter::GREGORIAN,'MMMM')->format($timestamp);
+        $mes_literal = \IntlDateFormatter::create('es_ES', \IntlDateFormatter::FULL, \IntlDateFormatter::NONE, 'UTC', \IntlDateFormatter::GREGORIAN, 'MMMM')->format($timestamp);
         $mes = ucfirst($mes_literal);
         $anho = date("Y", strtotime($request->fecha));
 
-        return redirect()->route('agenda.ejecutiva.detalle',['id' => $dia,'id2' => $mes,'id3' => $anho])->with('success_message', '[Evento creado correctamente.]');
+        return redirect()->route('agenda.ejecutiva.detalle', ['id' => $dia, 'id2' => $mes, 'id3' => $anho])->with('success_message', '[Evento creado correctamente.]');
     }
 
     public function details2($fecha)
     {
         $eventos = Evento::where('fecha', $fecha)->orderby('horaini', 'desc')->get();
         $fecha2 = Carbon::parse($fecha);
-        $fechaliteral = $fecha2->dayName.' '.$fecha2->day.' '.'de'.' '.$fecha2->monthName.' '.'del'.' '.$fecha2->year;
+        $fechaliteral = $fecha2->dayName . ' ' . $fecha2->day . ' ' . 'de' . ' ' . $fecha2->monthName . ' ' . 'del' . ' ' . $fecha2->year;
         $pdf = PDF::loadView('agenda-ejecutiva.pdf-evento', compact(['eventos', 'fecha', 'fechaliteral']));
         $pdf->setPaper('LETTER', 'landscape');
         return $pdf->stream();
@@ -95,7 +95,7 @@ class AgendaEjecutivoController extends Controller
     public function editar($id)
     {
         $evento = Evento::find($id);
-        return view('agenda-ejecutiva.actualizar',compact('evento'));
+        return view('agenda-ejecutiva.actualizar', compact('evento'));
     }
 
     public function actualizar(Request $request)
@@ -114,78 +114,79 @@ class AgendaEjecutivoController extends Controller
 
         $dia = date("d", strtotime($request->fecha));
         $timestamp = strtotime($request->fecha);
-        $mes_literal = \IntlDateFormatter::create('es_ES',\IntlDateFormatter::FULL,\IntlDateFormatter::NONE,'UTC',\IntlDateFormatter::GREGORIAN,'MMMM')->format($timestamp);
+        $mes_literal = \IntlDateFormatter::create('es_ES', \IntlDateFormatter::FULL, \IntlDateFormatter::NONE, 'UTC', \IntlDateFormatter::GREGORIAN, 'MMMM')->format($timestamp);
         $mes = ucfirst($mes_literal);
         $anho = date("Y", strtotime($request->fecha));
 
-        return redirect()->route('agenda.ejecutiva.detalle',['id' => $dia,'id2' => $mes,'id3' => $anho])->with('success_message', '[Evento actualizado correctamente.]');
+        return redirect()->route('agenda.ejecutiva.detalle', ['id' => $dia, 'id2' => $mes, 'id3' => $anho])->with('success_message', '[Evento actualizado correctamente.]');
     }
 
     public static function calendar_month($month)
     {
         $mes = $month;
-        $daylast =  date("Y-m-d", strtotime("last day of " . $mes));
-        //sacar el dia de dia del mes
-        $fecha      =  date("Y-m-d", strtotime("first day of " . $mes));
-        $daysmonth  =  date("d", strtotime($fecha));
-        $montmonth  =  date("m", strtotime($fecha));
-        $yearmonth  =  date("Y", strtotime($fecha));
-        // sacar el lunes de la primera semana
-        $nuevaFecha = mktime(0, 0, 0, $montmonth, $daysmonth, $yearmonth);
-        $diaDeLaSemana = date("w", $nuevaFecha);
-        $nuevaFecha = $nuevaFecha - ($diaDeLaSemana * 24 * 3600); //Restar los segundos totales de los dias transcurridos de la semana
-        $dateini = date("Y-m-d", $nuevaFecha);
-        // numero de primer semana del mes
-        $semana1 = date("W", strtotime($fecha));
-        // numero de ultima semana del mes
-        $semana2 = date("W", strtotime($daylast));
-        // semana todal del mes
-        // en caso si es diciembre
-        if (date("m", strtotime($mes)) == 12) {
-            $semana = 5;
-        } else {
-            $semana = ($semana2 - $semana1) + 1;
-        }
-        // semana todal del mes
+
+        // Primer y último día del mes
+        $firstDayOfMonth = date("Y-m-01", strtotime($mes));
+        $lastDayOfMonth  = date("Y-m-t", strtotime($mes));
+
+        // INICIO del calendario visual: lunes de la semana donde cae el día 1
+        $startTimestamp = strtotime($firstDayOfMonth);
+        $dayOfWeekStart = (int)date("N", $startTimestamp); // 1=lunes, 7=domingo
+        $daysBack = $dayOfWeekStart - 1;
+        $startTimestamp = $startTimestamp - ($daysBack * 86400);
+        $dateini = date("Y-m-d", $startTimestamp);
+
+        // FIN del calendario visual: domingo de la semana donde cae el último día
+        $endTimestamp = strtotime($lastDayOfMonth);
+        $dayOfWeekEnd = (int)date("N", $endTimestamp); // 1=lunes, 7=domingo
+        $daysForward = 7 - $dayOfWeekEnd;
+        $endTimestamp = $endTimestamp + ($daysForward * 86400);
+        $dateend = date("Y-m-d", $endTimestamp);
+
+        // Cantidad real de semanas visibles
+        $totalDays = ((strtotime($dateend) - strtotime($dateini)) / 86400) + 1;
+        $semana = (int)($totalDays / 7);
+
         $datafecha = $dateini;
         $calendario = array();
-        $iweek = 0;
-        while ($iweek < $semana) :
-            $iweek++;
-            //echo "Semana $iweek <br>";
-            //
+
+        for ($iweek = 1; $iweek <= $semana; $iweek++) {
             $weekdata = [];
+
             for ($iday = 0; $iday < 7; $iday++) {
-                // code...
-                $datafecha = date("Y-m-d", strtotime($datafecha . "+ 1 day"));
+                $datanew = [];
                 $datanew['mes'] = date("M", strtotime($datafecha));
                 $datanew['dia'] = date("d", strtotime($datafecha));
                 $datanew['fecha'] = $datafecha;
-                //AGREGAR CONSULTAS EVENTO
-                // consulta evento y filtra por fecha
                 $datanew['evento'] = Evento::where("fecha", $datafecha)
-                    ->orderby('horaini', 'desc')
+                    ->orderBy('horaini', 'desc')
                     ->get();
-                array_push($weekdata, $datanew);
+
+                $weekdata[] = $datanew;
+
+                // avanzar al siguiente día DESPUÉS de guardar el actual
+                $datafecha = date("Y-m-d", strtotime($datafecha . " +1 day"));
             }
+
+            $dataweek = [];
             $dataweek['semana'] = $iweek;
             $dataweek['datos'] = $weekdata;
-            //$datafecha['horario'] = $datahorario;
-            array_push($calendario, $dataweek);
-        endwhile;
-        $nextmonth = date("Y-M", strtotime($mes . "+ 1 month"));
-        $lastmonth = date("Y-M", strtotime($mes . "- 1 month"));
-        $month = date("M", strtotime($mes));
+
+            $calendario[] = $dataweek;
+        }
+
+        $nextmonth = date("Y-M", strtotime($mes . " +1 month"));
+        $lastmonth = date("Y-M", strtotime($mes . " -1 month"));
+        $monthName = date("M", strtotime($mes));
         $yearmonth = date("Y", strtotime($mes));
-        //$month = date("M",strtotime("2019-03"));
-        $data = array(
+
+        return array(
             'next' => $nextmonth,
-            'month' => $month,
+            'month' => $monthName,
             'year' => $yearmonth,
             'last' => $lastmonth,
             'calendar' => $calendario,
         );
-        return $data;
     }
 
     public static function spanish_month($month)
