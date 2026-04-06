@@ -84,7 +84,7 @@ class ArchivosController extends Controller
                     ->where('a.dea_id',Auth::user()->dea->id);
                     /* ->where('ar.idarea', $contratos->idarea_asignada) */
 
-        $query = Auth::user()->hasRole('administrator') ? $query : $query->where('ar.idarea',$contratos->idarea_asignada);
+        $query = Auth::user()->hasRole('trabajador') ? $query : $query->where('ar.idarea',$contratos->idarea_asignada);
 
         $query = !is_null($request->area_id) ? $query->where('a.idarea',$request->area_id) : $query;
         $query = !is_null($request->gestion) ? $query->where('a.gestion',$request->gestion) : $query;
