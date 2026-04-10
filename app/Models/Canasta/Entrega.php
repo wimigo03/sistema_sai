@@ -26,6 +26,8 @@ class Entrega extends Model
         'fecha',
         'user_id',
         'estado',
+        'created_at',
+        'updated_at',
         'resagado',
         'observacion',
         'id_tipo'

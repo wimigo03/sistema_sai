@@ -14,7 +14,9 @@ class HistorialMod extends Model
         'id_beneficiario',
         'user_id',
         'dea_id',
-        'fecha'
+        'fecha',
+        'created_at',
+        'updated_at'
     ];
 
     public function user(){

@@ -49,6 +49,7 @@ class MantenimientoController extends Controller
 
         $mantenimiento_detalles = MantenimientoDetalle::query()
                                     ->byDea($dea_id)
+                                    ->orderBy('fecha_r', 'desc')
                                     ->orderBy('id','desc')
                                     ->paginate(10);
 
@@ -82,6 +83,7 @@ class MantenimientoController extends Controller
                                     ->byEstado($request->estado)
                                     ->byEstadoDetalle($request->estado_detalle)
                                     ->byAsignado($request->usuario)
+                                    ->orderBy('fecha_r', 'desc')
                                     ->orderBy('id','desc')
                                     ->paginate(10);
 

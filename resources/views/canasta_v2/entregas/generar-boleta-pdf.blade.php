@@ -120,7 +120,8 @@
                 </tr>
                 <tr>
                     <td class="align-center linea-izquierda linea-derecha">
-                        Fecha de impresion: {{ \Carbon\Carbon::now()->translatedFormat('F \\d\\e Y') }}
+                        {{--Fecha de impresion: {{ \Carbon\Carbon::now()->translatedFormat('F \\d\\e Y') }}--}}
+                        Fecha de impresion: julio de 2025
                     </td>
                     <td class="align-center linea-derecha">
                         <br>

@@ -177,11 +177,11 @@
     </body>
 </html>
 <script type="text/php">
-    if ( isset($pdf) ) {
+    if (isset($pdf)) {
         $pdf->page_script('
-            $font = $fontMetrics->get_font("verdana");
-            $pdf->text(30, 770, "{{ date('d-m-Y H:i') }} / {{ Auth()->user()->name }}", $font, 7);
-            $pdf->text(530, 770, "Pagina $PAGE_NUM de $PAGE_COUNT", $font, 7);
+            $font = $fontMetrics->get_font("Helvetica", "normal");
+            $pdf->text(30, 770, "' . date('d-m-Y H:i') . ' / ' . addslashes(auth()->user()->name ?? '') . '", $font, 7);
+            $pdf->text(500, 770, "Pagina $PAGE_NUM de $PAGE_COUNT", $font, 7);
         ');
     }
 </script>
