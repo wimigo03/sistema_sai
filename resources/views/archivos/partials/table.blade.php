@@ -10,7 +10,7 @@
                     <td class="text-left p-1 font-roboto-11"><b>REFERENCIA</b></td>
                     <td class="text-left p-1 font-roboto-11"><b>TIPO</b></td>
                     <td class="text-center p-1" width="6%">
-                        @canany(['archivos.documentacion','archivos.editar','archivos.generar.qr'])
+                        @canany(['archivos.documentacion','archivos.editar','archivos.generar.qr','archivos.eliminar'])
                             <i class="fa fa-bars" aria-hidden="true"></i>
                         @endcanany
                     </td>

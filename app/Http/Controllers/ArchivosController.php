@@ -24,23 +24,24 @@ use App\Models\TipoArchivo;
 use App\Models\AnioModel;
 use App\Models\Area;
 use App\Exportar\ArchivosExcel;
+use Illuminate\Support\Facades\File;
 
 
 class ArchivosController extends Controller
 {
     private function generar_qr_general()
     {
-        try{
-            ini_set('memory_limit','-1');
-            ini_set('max_execution_time','-1');
+        try {
+            ini_set('memory_limit', '-1');
+            ini_set('max_execution_time', '-1');
             //$archivos = Archivo::where('idarchivo','>=',35001)->where('idarchivo','<=',40000)->orderBy('idarchivo','asc')->get();
             //dd($archivos);
-            foreach($archivos as $datos){
-                $archivo = Archivo::select('idarchivo')->where('idarchivo',$datos->idarchivo)->first();
+            foreach ($archivos as $datos) {
+                $archivo = Archivo::select('idarchivo')->where('idarchivo', $datos->idarchivo)->first();
                 $url = 'https://sistemas.granchaco.gob.bo/archivos/documentacion/' . $archivo->idarchivo;
                 $qr = QrCode::format('png')->margin(0)->size(300)->generate($url, public_path() . '/documentos/qr/' . $archivo->idarchivo . '.png');
             }
-        }finally{
+        } finally {
             ini_restore('memory_limit');
             ini_restore('max_execution_time');
         }
@@ -50,73 +51,75 @@ class ArchivosController extends Controller
     public function index()
     {
         //if(Auth::user()->id == 102){
-            //$this->generar_qr_general();
+        //$this->generar_qr_general();
         //}
         $dea_id = Auth::user()->dea->id;
-        $contratos = EmpleadoContrato::select('idarea_asignada')->where('idemp',Auth::user()->idemp)->orderBy('id','desc')->take(1)->first();
+        $contratos = EmpleadoContrato::select('idarea_asignada')->where('idemp', Auth::user()->idemp)->orderBy('id', 'desc')->take(1)->first();
         $personal = Area::find($contratos->idarea_asignada);
 
         $areas = Area::query()
-                        ->byDea($dea_id)
-                        ->pluck('nombrearea','idarea');
+            ->byDea($dea_id)
+            ->pluck('nombrearea', 'idarea');
 
         $tipos = DB::table('tipoarea as a')
-                    ->join('tipoarchivo as b','b.idtipo','a.idtipo')
-                    ->select('b.nombretipo as tipo','b.idtipo as id')
-                    ->where('a.idarea',Auth::user()->area_asignada_id)
-                    ->where('a.dea_id',Auth::user()->dea->id)
-                    ->pluck('tipo','id');
+            ->join('tipoarchivo as b', 'b.idtipo', 'a.idtipo')
+            ->select('b.nombretipo as tipo', 'b.idtipo as id')
+            ->where('a.idarea', Auth::user()->area_asignada_id)
+            ->where('a.dea_id', Auth::user()->dea->id)
+            ->pluck('tipo', 'id');
 
-        return view('archivos.index', compact('personal','areas','tipos'));
+        return view('archivos.index', compact('personal', 'areas', 'tipos'));
     }
 
     public function indexAjax(Request $request)
     {
         $contratos = EmpleadoContrato::select('idarea_asignada')
-                    ->where('idemp',Auth::user()->idemp)
-                    ->orderBy('id','desc')
-                    ->take(1)
-                    ->first();
+            ->where('idemp', Auth::user()->idemp)
+            ->orderBy('id', 'desc')
+            ->take(1)
+            ->first();
 
         $query = DB::table('archivos as a')
-                    ->join('areas as ar', 'ar.idarea', 'a.idarea')
-                    ->join('tipoarchivo as t', 'a.idtipo', 't.idtipo')
-                    ->where('a.dea_id',Auth::user()->dea->id);
-                    /* ->where('ar.idarea', $contratos->idarea_asignada) */
+            ->join('areas as ar', 'ar.idarea', 'a.idarea')
+            ->join('tipoarchivo as t', 'a.idtipo', 't.idtipo')
+            ->where('a.dea_id', Auth::user()->dea->id);
+        /* ->where('ar.idarea', $contratos->idarea_asignada) */
 
-        $query = Auth::user()->hasRole('trabajador') ? $query : $query->where('ar.idarea',$contratos->idarea_asignada);
-
-        $query = !is_null($request->area_id) ? $query->where('a.idarea',$request->area_id) : $query;
-        $query = !is_null($request->gestion) ? $query->where('a.gestion',$request->gestion) : $query;
-        if(!is_null($request->fecha)){
-            $formattedKeyword =  Carbon::createFromFormat('d/m/Y', $request->fecha)->format('Y-m-d');
-            $query = $query->whereDate('a.fecha',$formattedKeyword);
+        if (!Auth::user()->hasRole('trabajador') && !Auth::user()->hasRole('administrator')) {
+            $query->where('ar.idarea', $contratos->idarea_asignada);
         }
-        $query = !is_null($request->nro_documento) ? $query->where('a.nombrearchivo',$request->nro_documento) : $query;
-        $query = !is_null($request->referencia) ? $query->where('a.referencia', 'like','%' . $request->referencia . '%') : $query;
-        $query = !is_null($request->tipo_id) ? $query->where('a.idtipo',$request->tipo_id) : $query;
+
+        $query = !is_null($request->area_id) ? $query->where('a.idarea', $request->area_id) : $query;
+        $query = !is_null($request->gestion) ? $query->where('a.gestion', $request->gestion) : $query;
+        if (!is_null($request->fecha)) {
+            $formattedKeyword =  Carbon::createFromFormat('d/m/Y', $request->fecha)->format('Y-m-d');
+            $query = $query->whereDate('a.fecha', $formattedKeyword);
+        }
+        $query = !is_null($request->nro_documento) ? $query->where('a.nombrearchivo', $request->nro_documento) : $query;
+        $query = !is_null($request->referencia) ? $query->where('a.referencia', 'like', '%' . $request->referencia . '%') : $query;
+        $query = !is_null($request->tipo_id) ? $query->where('a.idtipo', $request->tipo_id) : $query;
 
 
         $query->select(
-                        'a.idarchivo',
-                        'a.referencia',
-                        'a.fecha',
-                        DB::raw("TO_CHAR(a.fecha, 'dd/mm/yyyy') as fecha_c"),
-                        'a.gestion',
-                        'a.nombrearchivo',
-                        'a.documento',
-                        'ar.idarea',
-                        'ar.nombrearea',
-                        't.nombretipo'
+            'a.idarchivo',
+            'a.referencia',
+            'a.fecha',
+            DB::raw("TO_CHAR(a.fecha, 'dd/mm/yyyy') as fecha_c"),
+            'a.gestion',
+            'a.nombrearchivo',
+            'a.documento',
+            'ar.idarea',
+            'ar.nombrearea',
+            't.nombretipo'
         );
 
         return datatables()
             ->query($query)
-            ->filterColumn('a.fecha', function($query, $keyword) {
+            ->filterColumn('a.fecha', function ($query, $keyword) {
                 $sql = "TO_CHAR(a.fecha, 'dd/mm/yyyy') like ?";
                 $query->whereRaw($sql, ["%{$keyword}%"]);
             })
-            ->addColumn('btn','archivos.btn')
+            ->addColumn('btn', 'archivos.btn')
             ->rawColumns(['btn'])
             ->toJson();
     }
@@ -154,8 +157,8 @@ class ArchivosController extends Controller
     public function excel(Request $request)
     {
         try {
-            ini_set('memory_limit','-1');
-            ini_set('max_execution_time','-1');
+            ini_set('memory_limit', '-1');
+            ini_set('max_execution_time', '-1');
 
             $archivos = Archivo::query()->byDea(Auth::user()->dea->id);
 
@@ -166,20 +169,20 @@ class ArchivosController extends Controller
             }
 
             $archivos = $archivos->byGestion($request->gestion)
-                                ->byFecha($request->fecha)
-                                ->byNumero($request->nro_documento)
-                                ->byReferencia($request->referencia)
-                                ->byTipo($request->tipo_id)
-                                ->orderBy('fecha', 'desc')
-                                ->orderBy('nombrearchivo')
-                                ->get();
+                ->byFecha($request->fecha)
+                ->byNumero($request->nro_documento)
+                ->byReferencia($request->referencia)
+                ->byTipo($request->tipo_id)
+                ->orderBy('fecha', 'desc')
+                ->orderBy('nombrearchivo')
+                ->get();
 
-                $cont = 1;
+            $cont = 1;
 
-                return Excel::download(new ArchivosExcel($archivos, $cont),'archivos_locales.xlsx');
+            return Excel::download(new ArchivosExcel($archivos, $cont), 'archivos_locales.xlsx');
         } catch (\Throwable $th) {
             return view('errors.500');
-        }finally{
+        } finally {
             ini_restore('memory_limit');
             ini_restore('max_execution_time');
         }
@@ -188,42 +191,41 @@ class ArchivosController extends Controller
     public function pdf(Request $request)
     {
         try {
-            ini_set('memory_limit','-1');
-            ini_set('max_execution_time','-1');
+            ini_set('memory_limit', '-1');
+            ini_set('max_execution_time', '-1');
 
-                $archivos = Archivo::query()->byDea(Auth::user()->dea->id);
+            $archivos = Archivo::query()->byDea(Auth::user()->dea->id);
 
-                if (Auth::user()->hasRole('administrator')) {
-                    $archivos->byArea($request->area_id);
-                } else {
-                    $archivos->byArea(Auth::user()->area_asignada_id);
-                }
+            if (Auth::user()->hasRole('administrator') || Auth::user()->hasRole('trabajador')) {
+                $archivos->byArea($request->area_id);
+            } else {
+                $archivos->byArea(Auth::user()->area_asignada_id);
+            }
 
-                $archivos = $archivos->byGestion($request->gestion)
-                                    ->byFecha($request->fecha)
-                                    ->byNumero($request->nro_documento)
-                                    ->byReferencia($request->referencia)
-                                    ->byTipo($request->tipo_id)
-                                    ->orderBy('fecha','desc')
-                                    ->orderBy('nombrearchivo','asc')
-                                    ->orderBy('idtipo','asc')
-                                    ->get();
+            $archivos = $archivos->byGestion($request->gestion)
+                ->byFecha($request->fecha)
+                ->byNumero($request->nro_documento)
+                ->byReferencia($request->referencia)
+                ->byTipo($request->tipo_id)
+                ->orderBy('fecha', 'desc')
+                ->orderBy('nombrearchivo', 'asc')
+                ->orderBy('idtipo', 'asc')
+                ->get();
 
-                $cont = 1;
-                $username = User::find(Auth::user()->id);
-                if (Auth::user()->hasRole('administrator')) {
-                    $area = Area::find($request->area_id);
-                } else {
-                    $area = Area::find($username->area_asignada_id);
-                }
-                $username = $username != null ? $username->nombre_completo : $username->name;
-                $pdf = PDF::loadView('archivos.pdf',compact('archivos','cont','username','area'));
-                $pdf->setPaper('LETTER', 'portrait');
-                return $pdf->stream();
-
+            $cont = 1;
+            $username = User::find(Auth::user()->id);
+            if (Auth::user()->hasRole('administrator') || Auth::user()->hasRole('trabajador')) {
+                $area = Area::find($request->area_id);
+            } else {
+                $area = Area::find($username->area_asignada_id);
+            }
+            $username = $username != null ? $username->nombre_completo : $username->name;
+            $pdf = PDF::loadView('archivos.pdf', compact('archivos', 'cont', 'username', 'area'));
+            $pdf->setPaper('LETTER', 'portrait');
+            return $pdf->stream();
         } catch (\Throwable $th) {
             return view('errors.500');
-        }finally{
+        } finally {
             ini_restore('memory_limit');
             ini_restore('max_execution_time');
         }
@@ -244,18 +246,18 @@ class ArchivosController extends Controller
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
         $personalArea2 = Empleado::find($userdate->idemp);
-        $contratos = EmpleadoContrato::select('idarea_asignada')->where('idemp',$userdate->idemp)->orderBy('id','desc')->take(1)->first();
+        $contratos = EmpleadoContrato::select('idarea_asignada')->where('idemp', $userdate->idemp)->orderBy('id', 'desc')->take(1)->first();
 
         $personalArea = Area::find($contratos->idarea_asignada);
         //dd($personalArea);
 
         $tipoarea = DB::table('tipoarea as tt')
-                        ->join('areas as ar', 'ar.idarea', 'tt.idarea')
-                        ->join('tipoarchivo as t', 't.idtipo', 'tt.idtipo')
-                        ->select('tt.idtipoarea', 'tt.idtipo', 'tt.idarea', 't.nombretipo')
-                        ->where('tt.idarea', $personalArea->idarea)
-                        ->orderBy('tt.idtipoarea', 'desc')
-                        ->get();
+            ->join('areas as ar', 'ar.idarea', 'tt.idarea')
+            ->join('tipoarchivo as t', 't.idtipo', 'tt.idtipo')
+            ->select('tt.idtipoarea', 'tt.idtipo', 'tt.idarea', 't.nombretipo')
+            ->where('tt.idarea', $personalArea->idarea)
+            ->orderBy('tt.idtipoarea', 'desc')
+            ->get();
         $date = Carbon::now();
         $date = $date->format('Y');
         $anio = DB::table('anio')->get();
@@ -265,55 +267,55 @@ class ArchivosController extends Controller
 
     public function store(Request $request)
     {
-        try{
-            ini_set('memory_limit','-1');
-            ini_set('max_execution_time','-1');
-                $dea_id = Auth::user()->dea->id;
-                $personal = User::find(Auth::user()->id);
-                $id = $personal->id;
-                $userdate = User::find($id)->usuariosempleados;
-                $personalArea2 = Empleado::find($userdate->idemp);
-                $contratos = EmpleadoContrato::select('idarea_asignada')->where('idemp',$userdate->idemp)->orderBy('id','desc')->take(1)->first();
+        try {
+            ini_set('memory_limit', '-1');
+            ini_set('max_execution_time', '-1');
+            $dea_id = Auth::user()->dea->id;
+            $personal = User::find(Auth::user()->id);
+            $id = $personal->id;
+            $userdate = User::find($id)->usuariosempleados;
+            $personalArea2 = Empleado::find($userdate->idemp);
+            $contratos = EmpleadoContrato::select('idarea_asignada')->where('idemp', $userdate->idemp)->orderBy('id', 'desc')->take(1)->first();
 
-                $personalArea = Area::find($contratos->idarea_asignada);
-                //dd($personalArea);
-                $fecha_recepcion = substr($request->fecha, 6, 4) . '-' . substr($request->fecha, 3, 2) . '-' . substr($request->fecha, 0, 2);
-                $fecha_gestion = substr($request->fecha, 6, 4);
-                if ($request->hasFile("documento")) {
-                    $file = $request->file("documento");
-                    $file_name = $file->getClientOriginalName();
-                    $nombre = "pdf_" . time() . "." . $file->guessExtension();
+            $personalArea = Area::find($contratos->idarea_asignada);
+            //dd($personalArea);
+            $fecha_recepcion = substr($request->fecha, 6, 4) . '-' . substr($request->fecha, 3, 2) . '-' . substr($request->fecha, 0, 2);
+            $fecha_gestion = substr($request->fecha, 6, 4);
+            if ($request->hasFile("documento")) {
+                $file = $request->file("documento");
+                $file_name = $file->getClientOriginalName();
+                $nombre = "pdf_" . time() . "." . $file->guessExtension();
 
-                    $ruta = public_path("/documentos/" . $personalArea->nombrearea . '/' . $nombre);
+                $ruta = public_path("/documentos/" . $personalArea->nombrearea . '/' . $nombre);
 
-                    if ($file->guessExtension() == "pdf") {
-                        copy($file, $ruta);
-                    } else {
-                        return back()->with(["error" => "File not available!"]);
-                    }
+                if ($file->guessExtension() == "pdf") {
+                    copy($file, $ruta);
+                } else {
+                    return back()->with(["error" => "File not available!"]);
                 }
+            }
 
-                $archivos = new Archivo();
-                $archivos->nombrearchivo = $request->input('nombredocumento');
-                $archivos->referencia = $request->input('referencia');
-                $archivos->gestion = $fecha_gestion;
-                $archivos->documento = $personalArea->nombrearea . '/' . $nombre;
-                $archivos->idarea = $personalArea->idarea;
-                $archivos->estado1 = 1;
-                $archivos->idtipo = $request->input('tipodocumento');
-                $archivos->id = $personal->id;
-                $archivos->fecha = $fecha_recepcion;
-                $archivos->dea_id = $dea_id;
-                $archivos->save();
+            $archivos = new Archivo();
+            $archivos->nombrearchivo = $request->input('nombredocumento');
+            $archivos->referencia = $request->input('referencia');
+            $archivos->gestion = $fecha_gestion;
+            $archivos->documento = $personalArea->nombrearea . '/' . $nombre;
+            $archivos->idarea = $personalArea->idarea;
+            $archivos->estado1 = 1;
+            $archivos->idtipo = $request->input('tipodocumento');
+            $archivos->id = $personal->id;
+            $archivos->fecha = $fecha_recepcion;
+            $archivos->dea_id = $dea_id;
+            $archivos->save();
 
-                $url = 'https://sistemas.granchaco.gob.bo/archivos/documentacion/' . $archivos->idarchivo;
-                $qr = QrCode::format('png')->margin(0)->size(300)->generate($url, public_path() . '/documentos/qr/' . $archivos->idarchivo . '.png');
+            $url = 'https://sistemas.granchaco.gob.bo/archivos/documentacion/' . $archivos->idarchivo;
+            $qr = QrCode::format('png')->margin(0)->size(300)->generate($url, public_path() . '/documentos/qr/' . $archivos->idarchivo . '.png');
 
-                //return redirect()->route('archivos2.index', ['idd' => $personalArea])->with('success_message', 'Archivo cargado correctamente...');
+            //return redirect()->route('archivos2.index', ['idd' => $personalArea])->with('success_message', 'Archivo cargado correctamente...');
 
-        } catch (\Throwable $th){
+        } catch (\Throwable $th) {
             return '[ERROR_500]';
-        }finally{
+        } finally {
             ini_restore('memory_limit');
             ini_restore('max_execution_time');
         }
@@ -325,18 +327,18 @@ class ArchivosController extends Controller
         $id = $personal->id;
         $userdate = User::find($id)->usuariosempleados;
         $personalArea2 = Empleado::find($userdate->idemp);
-        $contratos = EmpleadoContrato::select('idarea_asignada')->where('idemp',$userdate->idemp)->orderBy('id','desc')->take(1)->first();
+        $contratos = EmpleadoContrato::select('idarea_asignada')->where('idemp', $userdate->idemp)->orderBy('id', 'desc')->take(1)->first();
 
         $personalArea = Area::find($contratos->idarea_asignada);
-//dd($personalArea->nombrearea);
+        //dd($personalArea->nombrearea);
 
         $tipoarea = DB::table('tipoarea as tt')
-                        ->join('areas as ar', 'ar.idarea', 'tt.idarea')
-                        ->join('tipoarchivo as t', 't.idtipo', 'tt.idtipo')
-                        ->select('tt.idtipoarea', 'tt.idtipo', 'tt.idarea', 't.nombretipo')
-                        ->where('tt.idarea', $personalArea->idarea)
-                        ->orderBy('tt.idtipoarea', 'desc')
-                        ->get();
+            ->join('areas as ar', 'ar.idarea', 'tt.idarea')
+            ->join('tipoarchivo as t', 't.idtipo', 'tt.idtipo')
+            ->select('tt.idtipoarea', 'tt.idtipo', 'tt.idarea', 't.nombretipo')
+            ->where('tt.idarea', $personalArea->idarea)
+            ->orderBy('tt.idtipoarea', 'desc')
+            ->get();
 
         $archivos = Archivo::find($idarchivo);
         $date = Carbon::now();
@@ -356,10 +358,10 @@ class ArchivosController extends Controller
         $userdate = User::find($id)->usuariosempleados;
         $personalArea2 = Empleado::find($userdate->idemp);
 
-        $contratos = EmpleadoContrato::select('idarea_asignada')->where('idemp',$userdate->idemp)->orderBy('id','desc')->take(1)->first();
+        $contratos = EmpleadoContrato::select('idarea_asignada')->where('idemp', $userdate->idemp)->orderBy('id', 'desc')->take(1)->first();
 
         $personalArea = Area::find($contratos->idarea_asignada);
-//dd($personalArea->nombrearea);
+        //dd($personalArea->nombrearea);
         $fecha_recepcion = substr($request->fecha, 6, 4) . '-' . substr($request->fecha, 3, 2) . '-' . substr($request->fecha, 0, 2);
         $fecha_gestion = substr($request->fecha, 6, 4);
         $archivos = Archivo::find($idarchivo);
@@ -416,5 +418,24 @@ class ArchivosController extends Controller
     {
         $url = 'documentos/qr/' . $archivo_id . '.png';
         return redirect()->to(url($url));
+    }
+
+    public function eliminar($id)
+    {
+        $archivo = Archivo::findOrFail($id);
+
+        if (!empty($archivo->documento)) {
+            $rutaArchivo = public_path("/documentos/" . $archivo->documento);
+
+            if (File::exists($rutaArchivo)) {
+                File::delete($rutaArchivo);
+            }
+        }
+
+        $archivo->delete();
+
+        return redirect()
+            ->route('archivos.index')
+            ->with('success_message', 'Registro eliminado correctamente.');
     }
 }

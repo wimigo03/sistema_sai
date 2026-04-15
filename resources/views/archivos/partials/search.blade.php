@@ -1,6 +1,6 @@
 <form action="#" method="get" id="form">
     <div class="form-group row">
-        @if(Auth::user()->hasRole('administrator'))
+        @if(Auth::user()->hasRole('administrator') || Auth::user()->hasRole('trabajador'))
             <div class="col-md-6 mb-2 pr-1 pl-1">
                 <select name="area_id" id="area_id" class="form-control font-roboto-12">
                     <option value="">-</option>

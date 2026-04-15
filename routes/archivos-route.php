@@ -13,6 +13,7 @@ Route::prefix('archivos')->name('archivos.')->middleware(['auth'])->group(functi
     Route::post('/update','ArchivosController@update')->name('update')->middleware('can:archivos.editar');
     /* Route::get('/documentacion/{id}','ArchivosController@documentacion')->name('documentacion')->middleware('can:archivos.documentacion'); */
     Route::get('/generar-qr/{id}','ArchivosController@generar_qr')->name('generar.qr')->middleware('can:archivos.generar.qr');
+    Route::delete('/eliminar/{id}', 'ArchivosController@eliminar')->name('eliminar')->middleware('can:archivos.eliminar');
 });
 
 Route::get('/archivos/documentacion/{id}', 'ArchivosController@documentacion')->name('archivos.documentacion');
