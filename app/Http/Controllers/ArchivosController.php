@@ -2,59 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests;
-use DB;
+use Illuminate\Support\Facades\DB;
 use PDF;
 use Carbon\Carbon;
-use DataTables;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\User;
 use App\Models\Empleado;
 use Illuminate\Http\Request;
-use App\Models\ProveedoresModel;
-use App\Models\DocProveedorModel;
 use App\Models\EmpleadoContrato;
-use App\Models\TipoArea;
 use App\Models\Archivo;
-use App\Models\TipoArchivo;
-use App\Models\AnioModel;
 use App\Models\Area;
 use App\Exportar\ArchivosExcel;
 use Illuminate\Support\Facades\File;
 
 
+
 class ArchivosController extends Controller
 {
-    private function generar_qr_general()
-    {
-        try {
-            ini_set('memory_limit', '-1');
-            ini_set('max_execution_time', '-1');
-            //$archivos = Archivo::where('idarchivo','>=',35001)->where('idarchivo','<=',40000)->orderBy('idarchivo','asc')->get();
-            //dd($archivos);
-            foreach ($archivos as $datos) {
-                $archivo = Archivo::select('idarchivo')->where('idarchivo', $datos->idarchivo)->first();
-                $url = 'https://sistemas.granchaco.gob.bo/archivos/documentacion/' . $archivo->idarchivo;
-                $qr = QrCode::format('png')->margin(0)->size(300)->generate($url, public_path() . '/documentos/qr/' . $archivo->idarchivo . '.png');
-            }
-        } finally {
-            ini_restore('memory_limit');
-            ini_restore('max_execution_time');
-        }
-        dd("Generar Qr Finalizado...");
-    }
-
     public function index()
     {
-        //if(Auth::user()->id == 102){
-        //$this->generar_qr_general();
-        //}
         $dea_id = Auth::user()->dea->id;
-        $contratos = EmpleadoContrato::select('idarea_asignada')->where('idemp', Auth::user()->idemp)->orderBy('id', 'desc')->take(1)->first();
+
+        $contratos = EmpleadoContrato::select('idarea_asignada')
+            ->where('idemp', Auth::user()->idemp)
+            ->orderBy('id', 'desc')
+            ->take(1)
+            ->first();
+
         $personal = Area::find($contratos->idarea_asignada);
 
         $areas = Area::query()
@@ -83,22 +60,41 @@ class ArchivosController extends Controller
             ->join('areas as ar', 'ar.idarea', 'a.idarea')
             ->join('tipoarchivo as t', 'a.idtipo', 't.idtipo')
             ->where('a.dea_id', Auth::user()->dea->id);
-        /* ->where('ar.idarea', $contratos->idarea_asignada) */
 
+        // Si NO es trabajador ni administrator, limitar por área asignada
         if (!Auth::user()->hasRole('trabajador') && !Auth::user()->hasRole('administrator')) {
             $query->where('ar.idarea', $contratos->idarea_asignada);
         }
 
-        $query = !is_null($request->area_id) ? $query->where('a.idarea', $request->area_id) : $query;
-        $query = !is_null($request->gestion) ? $query->where('a.gestion', $request->gestion) : $query;
-        if (!is_null($request->fecha)) {
-            $formattedKeyword =  Carbon::createFromFormat('d/m/Y', $request->fecha)->format('Y-m-d');
-            $query = $query->whereDate('a.fecha', $formattedKeyword);
+        // Filtros superiores del search
+        if ($request->filled('area_id')) {
+            $query->where('a.idarea', $request->area_id);
         }
-        $query = !is_null($request->nro_documento) ? $query->where('a.nombrearchivo', $request->nro_documento) : $query;
-        $query = !is_null($request->referencia) ? $query->where('a.referencia', 'like', '%' . $request->referencia . '%') : $query;
-        $query = !is_null($request->tipo_id) ? $query->where('a.idtipo', $request->tipo_id) : $query;
 
+        if ($request->filled('gestion')) {
+            $query->where('a.gestion', $request->gestion);
+        }
+
+        if ($request->filled('fecha')) {
+            try {
+                $formattedKeyword = Carbon::createFromFormat('d/m/Y', trim($request->fecha))->format('Y-m-d');
+                $query->whereDate('a.fecha', $formattedKeyword);
+            } catch (\Exception $e) {
+                // si la fecha no viene válida, no aplicar filtro
+            }
+        }
+
+        if ($request->filled('nro_documento')) {
+            $query->where('a.nombrearchivo', trim($request->nro_documento));
+        }
+
+        if ($request->filled('referencia')) {
+            $query->where('a.referencia', 'like', '%' . trim($request->referencia) . '%');
+        }
+
+        if ($request->filled('tipo_id')) {
+            $query->where('a.idtipo', $request->tipo_id);
+        }
 
         $query->select(
             'a.idarchivo',
@@ -422,20 +418,29 @@ class ArchivosController extends Controller
 
     public function eliminar($id)
     {
-        $archivo = Archivo::findOrFail($id);
+        try {
+            $archivo = Archivo::findOrFail($id);
 
-        if (!empty($archivo->documento)) {
-            $rutaArchivo = public_path("/documentos/" . $archivo->documento);
+            if (!empty($archivo->documento)) {
+                $rutaArchivo = public_path('/documentos/' . $archivo->documento);
 
-            if (File::exists($rutaArchivo)) {
-                File::delete($rutaArchivo);
+                if (File::exists($rutaArchivo)) {
+                    File::delete($rutaArchivo);
+                }
             }
+
+            $archivo->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Registro eliminado correctamente.'
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No se pudo eliminar el registro.',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        $archivo->delete();
-
-        return redirect()
-            ->route('archivos.index')
-            ->with('success_message', 'Registro eliminado correctamente.');
     }
 }
