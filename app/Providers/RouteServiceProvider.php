@@ -66,29 +66,8 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/CanastaV2/entrega-beneficiario-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/CanastaV2/periodos-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/CanastaV2/reportes-route.php'));
-        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Almacenes/proveedor-route.php'));
-        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Almacenes/categoria-programatica-route.php'));
-        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Almacenes/programa-route.php'));
-        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Almacenes/partida-presupuestaria-route.php'));
-        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Compras/solicitud-compra-route.php'));
-        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Almacenes/sucursal-route.php'));
-        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Almacenes/producto-route.php'));
-        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Almacenes/unidad-medida-route.php'));
-        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Almacenes/inventario-almacen-route.php'));
-        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Almacenes/movimiento-inventario-route.php'));
-        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Compras/orden-compra-route.php'));
-        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Almacenes/balance-inicial-route.php'));
-        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Almacenes/presupuesto-route.php'));
-        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Almacenes/ingreso-sucursal-route.php'));
-        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Almacenes/traspaso-salida-sucursal-route.php'));
-        //Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Almacenes/traspaso-ingreso-sucursal-route.php'));
-        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Almacenes/salida-sucursal-route.php'));
-        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Compras/solicitud-material-route.php'));
-        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Compras/salida-almacen-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/Expochaco/solicitud-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/sereges/sereges-route.php'));
-        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/informatica/informatica-route.php'));
-        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/facebook/facebook-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/ventanilla/correspondencia-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/ventanilla/correspondencia-local-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/ventanilla/correspondencia-derivada-route.php'));
@@ -110,8 +89,6 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/CanastaV2disc/entregas-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/CanastaV2disc/entrega-beneficiario-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/CanastaV2disc/periodos-route.php'));
-
-        Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/recintos-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/farmacias-route.php'));
         Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/farmacias-turnos-route.php'));
     }

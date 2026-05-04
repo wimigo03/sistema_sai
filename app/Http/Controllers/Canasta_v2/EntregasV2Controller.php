@@ -174,7 +174,7 @@ class EntregasV2Controller extends Controller
         $entrega->update([
             'estado' => '4',
             'observacion' => $request->observacion,
-            'resagado' => '1'
+            'resagado' => '1',
         ]);
 
         return back()->with('success_message', '[Canasta entregada]');

@@ -1,22 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\Canasta_v2disc;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Log;
 use App\Models\CanastaDisc\Paquetes;
 use App\Models\CanastaDisc\Periodos;
 use App\Models\CanastaDisc\PaquetePeriodo;
-use App\Models\CanastaDisc\Dea;
-use App\Http\Requests;
-use Maatwebsite\Excel\Facades\Excel;
 use DB;
-use PDF;
-use Carbon\Carbon;
 
 class PeriodosV2Controller extends Controller
 {

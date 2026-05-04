@@ -1,15 +1,11 @@
 <?php
 
 namespace App\Http\Controllers\Canasta_v2disc;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Log;
 use App\Models\CanastaDisc\Barrio;
 use App\Models\CanastaDisc\Entrega;
-use App\Models\CanastaDisc\Distrito;
 use App\Models\CanastaDisc\Beneficiario;
 use App\Models\CanastaDisc\PaqueteBarrio;
 use Maatwebsite\Excel\Facades\Excel;
@@ -17,7 +13,6 @@ use App\Exportar\Canasta\EntregasExcel;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use DB;
 use PDF;
-use Carbon\Carbon;
 
 class EntregasV2Controller extends Controller
 {

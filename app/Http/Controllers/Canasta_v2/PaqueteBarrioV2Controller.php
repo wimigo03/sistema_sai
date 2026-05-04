@@ -1,34 +1,16 @@
 <?php
 
 namespace App\Http\Controllers\Canasta_v2;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Support\Facades\Log;
-use App\Models\Canasta\Barrio;
-use App\Models\Canasta\Entrega;
 use App\Models\Canasta\Distrito;
-use App\Models\Canasta\Beneficiario;
-use App\Models\Canasta\Ocupaciones;
 use App\Models\Canasta\Paquetes;
-use App\Models\Canasta\BarrioEntrega;
-use App\Models\Canasta\Periodos;
-use App\Models\Canasta\PaquetePeriodo;
-use App\Models\Canasta\Dea;
-use App\Http\Requests;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exportar\Canasta\PaquetesBarrioExcel;
 use DB;
 use PDF;
-use Carbon\Carbon;
 use App\Models\Canasta\PaqueteBarrio;
-use App\Models\User;
-use App\Models\Empleado;
 
 class PaqueteBarrioV2Controller extends Controller
 {

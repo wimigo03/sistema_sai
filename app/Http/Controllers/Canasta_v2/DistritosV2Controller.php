@@ -21,24 +21,8 @@ use PDF;
 
 class DistritosV2Controller extends Controller
 {
-    private function copiardistritos()
-    {
-         $distritos = DB::connection('mysql_canasta')->table("barrios")->get();
-        foreach ($distritos as $data){
-            $datos = ([
-                'nombre'=>$data->distrito,
-                'user_id'=>16,
-                'dea_id'=>1,
-                'estado'=>1
-                ]);
-
-            $distrito=Distrito::CREATE($datos);
-        }
-    }
-
     public function index()
     {
-        //$this->copiardistritos();
         $dea_id = Auth::user()->dea->id;
         $estados = Distrito::ESTADOS;
         $distritos = Distrito::query()

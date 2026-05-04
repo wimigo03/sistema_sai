@@ -4,23 +4,16 @@ namespace App\Http\Controllers\Canasta_v2disc;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Support\Facades\Log;
 use App\Models\CanastaDisc\Barrio;
 use App\Models\CanastaDisc\Distrito;
 use App\Models\CanastaDisc\Beneficiario;
 use App\Models\CanastaDisc\Discgrado;
 use App\Models\CanastaDisc\Ocupaciones;
 use App\Models\CanastaDisc\HistorialMod;
-use App\Models\CanastaDisc\HistorialBaja;
 use App\Models\User;
 use App\Models\Empleado;
-use App\Models\Canasta\Dea;
-use App\Http\Requests;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exportar\Canasta\BeneficiariosExcel;
 use DataTables;
@@ -29,163 +22,8 @@ use PDF;
 
 class BeneficiariosV2Controller extends Controller
 {
-     private function copiarbeneficiarios()
-     {
-         $beneficiarios = DB::connection('mysql_canasta')
-                                ->table("usuarios")
-                                //->join('ocupaciones as o', 'o.id_ocupacion', '=', 'u.id_ocupacion')
-                                // ->select('o.ocupacion','u.nombres')
-                                ->where('idUsuario','<=',14923)
-                                //->where('idUsuario','<',12000)
-                                ->get();
-
-        foreach ($beneficiarios as $data){
-            $datos = ([
-                'id' => $data->idUsuario,
-                'nombres' => $data->nombres,
-                'ap' => $data->ap,
-                'am' => $data->am,
-                'ci' => $data->ci,
-                'expedido' => $data->expedido,
-                'fecha_nac' => $data->fecha_nac,
-                'estado_civil' => $data->estado_civil,
-                'sexo' => $data->sexo,
-                'direccion' => $data->direccion,
-                'dir_foto' => $data->dir_foto,
-                'firma' => $data->firma,
-                'obs' => $data->obs,
-                'id_ocupacion' => $data->id_ocupacion,
-                'id_barrio' => $data->id_barrio,
-                'dea_id' => 1,
-                'user_id' => 29,
-                'created_att' => $data->_registrado,
-                'updated_att' => $data->_modificado,
-                'id_barrio' => $data->id_barrio,
-                'estado' => $data->estado
-            ]);
-            $beneficiario=Beneficiario::create($datos);
-        }
-    }
-
-    private function copiarbeneficiarios2()
-    {
-        $beneficiarios = DB::connection('mysql_canasta')
-                               ->table("beneficiarios")
-                               //->join('ocupaciones as o', 'o.id_ocupacion', '=', 'u.id_ocupacion')
-                               // ->select('o.ocupacion','u.nombres')
-                               ->where('id','>=',14921)
-                               //->where('id','<=',15499)
-                               //->where('idUsuario','<',12000)
-                               ->get();
-//dd( $beneficiarios);
-       foreach ($beneficiarios as $data){
-        $newestUser = Beneficiario::orderBy('id', 'desc')->first();
-        $maxId = $newestUser->id;
-
-           $datos = ([
-              // 'id' => $data->idUsuario,
-              'id' => $maxId + 1,
-              'codigo' => $data->codigo,
-               'nombres' => $data->nombres,
-               'ap' => $data->ap,
-               'am' => $data->am,
-               'ci' => $data->cedula,
-               'expedido' => $data->expedido,
-               'fecha_nac' => $data->fnacimiento,
-               'estado_civil' => 'VACIO',
-               'sexo' => $data->sexo,
-               'direccion' => $data->direccion,
-               'dir_foto' =>'../imagenes/fotosdisc/'.$data->foto2,
-               'firma' => $data->firma,
-               'obs' => '',
-               'id_ocupacion' => 67,
-               'id_barrio' => $data->barrio,
-               'distrito_id' => $data->distrito,
-               'id_discgrado' => $data->id_discgrado,
-               'tutor' => $data->tutor,
-               'parentesco' => $data->firmatutor,
-               'celular' => $data->celular,
-               'id_tipo' => 2,
-               'dea_id' => 1,
-               'user_id' => 29,
-               'created_att' => $data->fafiliacion,
-               'updated_att' => $data->fafiliacion,
-
-               'estado' => $data->estado2
-           ]);
-           $beneficiario=Beneficiario::create($datos);
-       }
-   }
-
-    private function actualizar_distritos(){
-        try{
-            ini_set('memory_limit','-1');
-            ini_set('max_execution_time','-1');
-
-            $beneficiarios = Beneficiario::where('distrito_id',null)->get();
-            foreach($beneficiarios as $datos){
-                $barrio = Barrio::select('distrito_id')->where('id',$datos->id_barrio)->first();
-                $beneficiario = Beneficiario::find($datos->id);
-                $beneficiario->update([
-                    'distrito_id' => $barrio->distrito_id
-                ]);
-            }
-        } catch (\Throwable $th) {
-            return view('errors.500');
-        }finally{
-            ini_restore('memory_limit');
-            ini_restore('max_execution_time');
-        }
-        dd("Finalizado...");
-    }
-
-    private function actualizar_historial(){
-        try{
-            ini_set('memory_limit','-1');
-            ini_set('max_execution_time','-1');
-
-            $historials = HistorialMod::get();
-            foreach($historials as $datos){
-                $historial = HistorialMod::find($datos->id);
-                $historial->update([
-                    'fecha' => $historial->created_at
-                ]);
-            }
-
-            $historial_baja = DB::table('historialbaja')->get();
-            foreach($historial_baja as $baja){
-                $newestUser = HistorialMod::orderBy('id', 'desc')->first();
-                $maxId = $newestUser->id + 1;
-                $data = ([
-                    'id' => $maxId,
-                    'observacion' => $baja->observacion,
-                    'id_beneficiario' => $baja->id_beneficiario,
-                    'user_id' => $baja->user_id,
-                    'dea_id' => $baja->dea_id,
-                    'fecha' => $baja->created_at
-                ]);
-
-                $baja_historial = HistorialMod::create($data);
-            }
-
-        } catch (\Throwable $th) {
-            return view('errors.500');
-        }finally{
-            ini_restore('memory_limit');
-            ini_restore('max_execution_time');
-        }
-        dd("actualizar_historial Finalizado...");
-    }
-
     public function index(Request $request)
     {
-        //dd('hola');
-        /*if(Auth::user()->dea->id == 1){
-            $this->copiarbeneficiarios();
-            $this->actualizar_distritos();
-            $this->actualizar_historial();
-        }*/
-
         if ($request->ajax()) {
             $data = DB::table('beneficiarios as a')
                     ->join('barrios as b','b.id','a.id_barrio')
@@ -223,7 +61,7 @@ class BeneficiariosV2Controller extends Controller
                             ->rawColumns(['columna_foto','columna_estado','columna_btn'])
                             ->make(true);
         }
- //$this->copiarbeneficiarios2();
+ 
         $dea_id = Auth::user()->dea->id;
         $tipos = Barrio::TIPOS;
         $distritos = Distrito::where('dea_id',$dea_id)->pluck('nombre','id');

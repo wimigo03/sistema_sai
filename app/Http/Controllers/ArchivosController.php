@@ -16,7 +16,6 @@ use App\Models\EmpleadoContrato;
 use App\Models\Archivo;
 use App\Models\Area;
 use App\Exportar\ArchivosExcel;
-use Illuminate\Support\Facades\File;
 
 
 
@@ -61,8 +60,7 @@ class ArchivosController extends Controller
             ->join('tipoarchivo as t', 'a.idtipo', 't.idtipo')
             ->where('a.dea_id', Auth::user()->dea->id);
 
-        // Si NO es trabajador ni administrator, limitar por área asignada
-        if (!Auth::user()->hasRole('trabajador') && !Auth::user()->hasRole('administrator')) {
+        if (!Auth::user()->hasRole('administrator')) {
             $query->where('ar.idarea', $contratos->idarea_asignada);
         }
 
@@ -192,7 +190,7 @@ class ArchivosController extends Controller
 
             $archivos = Archivo::query()->byDea(Auth::user()->dea->id);
 
-            if (Auth::user()->hasRole('administrator') || Auth::user()->hasRole('trabajador')) {
+            if (Auth::user()->hasRole('administrator')) {
                 $archivos->byArea($request->area_id);
             } else {
                 $archivos->byArea(Auth::user()->area_asignada_id);
@@ -210,7 +208,7 @@ class ArchivosController extends Controller
 
             $cont = 1;
             $username = User::find(Auth::user()->id);
-            if (Auth::user()->hasRole('administrator') || Auth::user()->hasRole('trabajador')) {
+            if (Auth::user()->hasRole('administrator')) {
                 $area = Area::find($request->area_id);
             } else {
                 $area = Area::find($username->area_asignada_id);
@@ -414,33 +412,5 @@ class ArchivosController extends Controller
     {
         $url = 'documentos/qr/' . $archivo_id . '.png';
         return redirect()->to(url($url));
-    }
-
-    public function eliminar($id)
-    {
-        try {
-            $archivo = Archivo::findOrFail($id);
-
-            if (!empty($archivo->documento)) {
-                $rutaArchivo = public_path('/documentos/' . $archivo->documento);
-
-                if (File::exists($rutaArchivo)) {
-                    File::delete($rutaArchivo);
-                }
-            }
-
-            $archivo->delete();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Registro eliminado correctamente.'
-            ]);
-        } catch (\Throwable $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'No se pudo eliminar el registro.',
-                'error' => $e->getMessage()
-            ], 500);
-        }
     }
 }

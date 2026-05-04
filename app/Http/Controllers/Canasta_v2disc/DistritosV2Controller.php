@@ -7,38 +7,16 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Support\Facades\Log;
 use App\Models\CanastaDisc\Distrito;
-use App\Models\CanastaDisc\Dea;
-use App\Http\Requests;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exportar\Canasta\DistritosExcel;
-use App\Models\User;
 use DB;
 use PDF;
 
 class DistritosV2Controller extends Controller
 {
-    private function copiardistritos()
-    {
-         $distritos = DB::connection('mysql_canasta')->table("barrios")->get();
-        foreach ($distritos as $data){
-            $datos = ([
-                'nombre'=>$data->distrito,
-                'user_id'=>16,
-                'dea_id'=>1,
-                'estado'=>1
-                ]);
-
-            $distrito=Distrito::CREATE($datos);
-        }
-    }
-
     public function index()
     {
-        //$this->copiardistritos();
         $dea_id = Auth::user()->dea->id;
         $estados = Distrito::ESTADOS;
         $distritos = Distrito::query()

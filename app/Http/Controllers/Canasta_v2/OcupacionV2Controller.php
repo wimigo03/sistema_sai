@@ -4,18 +4,9 @@ namespace App\Http\Controllers\Canasta_v2;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests;
-use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Support\Facades\Log;
-
-use App\Models\Canasta\Dea;
 use App\Models\Canasta\Ocupaciones;
-use App\Models\User;
 use DB;
 use PDF;
 

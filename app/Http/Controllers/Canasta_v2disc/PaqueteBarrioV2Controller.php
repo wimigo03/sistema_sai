@@ -1,34 +1,16 @@
 <?php
 
 namespace App\Http\Controllers\Canasta_v2disc;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Support\Facades\Log;
-use App\Models\CanastaDisc\Barrio;
-use App\Models\CanastaDisc\Entrega;
 use App\Models\CanastaDisc\Distrito;
-use App\Models\CanastaDisc\Beneficiario;
-use App\Models\CanastaDisc\Ocupaciones;
 use App\Models\CanastaDisc\Paquetes;
-use App\Models\CanastaDisc\BarrioEntrega;
-use App\Models\CanastaDisc\Periodos;
-use App\Models\CanastaDisc\PaquetePeriodo;
-use App\Models\CanastaDisc\Dea;
-use App\Http\Requests;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exportar\CanastaDisc\PaquetesBarrioExcel;
 use DB;
 use PDF;
-use Carbon\Carbon;
 use App\Models\CanastaDisc\PaqueteBarrio;
-use App\Models\User;
-use App\Models\Empleado;
 
 class PaqueteBarrioV2Controller extends Controller
 {

@@ -27,18 +27,6 @@
                 </span>
                 &nbsp;
             @endcan
-
-            @can('archivos.eliminar')
-                <span class="tts:left tts-slideIn tts-custom" aria-label="Eliminar" style="cursor: pointer;">
-                    <form action="{{ route('archivos.eliminar', $idarchivo) }}" method="POST" class="d-inline formulario-eliminar">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="badge-with-padding badge badge-danger border-0">
-                            <i class="fas fa-trash-alt fa-fw"></i>
-                        </button>
-                    </form>
-                </span>
-            @endcan
         </div>
     @endcanany
 </td>
