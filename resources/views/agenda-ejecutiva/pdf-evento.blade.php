@@ -15,7 +15,8 @@
                     <b>GOBIERNO AUTONOMO REGIONAL DEL GRAN CHACO<br>YACUIBA</b>
                 </td>
                 <td width="15%" class="align-right">
-                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('logos/logoderecha.png'))) }}" class="logo-nueva-historia" alt="#"/>
+                    &nbsp;
+                    <!--img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('logos/logoderecha.png'))) }}" class="logo-nueva-historia" alt="#"/-->
                 </td>
             </tr>
             <tr>
@@ -25,7 +26,7 @@
             </tr>
             <tr>
                 <td colspan="3" class="font-verdana-13 align-center align-middle">
-                    <b>JOSE LUIS ABREGO EJECUTIVO REGIONAL DEL GRAN CHACO</b>
+                    <b>DAVID ROJAS EJECUTIVO REGIONAL DEL GRAN CHACO</b>
                 </td>
             </tr>
             <tr>

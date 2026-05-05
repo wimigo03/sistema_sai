@@ -141,7 +141,7 @@ class Beneficiario extends Model
 
     const ESTADOS_CENSO = [
         '1' => 'PENDIENTE',
-        '2' => 'CENSADO'
+        '2' => 'VERIFICADO'
     ];
 
     const _SEGUROS = [

@@ -59,7 +59,7 @@
 
             $('#estado_censo').select2({
                 theme: "bootstrap4",
-                placeholder: "--Censo--",
+                placeholder: "--Verificacion--",
                 width: '100%'
             });
 
@@ -272,7 +272,7 @@
                             if(row.censo_2024 === 'PENDIENTE'){
                                 return '<span class="badge-with-padding badge badge-secondary btn-block">PENDIENTE</span>';
                             }else{
-                                return '<span class="badge-with-padding badge badge-success btn-block">CENSADO</span>';
+                                return '<span class="badge-with-padding badge badge-success btn-block">VERIFICADO</span>';
                             }
                         }
                     },
