@@ -9,14 +9,14 @@
         <table class="table-100">
             <tr>
                 <td width="15%">
-                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('logos/gobiernoregional.jpg'))) }}" class="logo-gran-chaco" alt="#"/>
+                    <!--img src="data:image/png;base64,{{-- base64_encode(file_get_contents(public_path('logos/gobiernoregional.jpg'))) --}}" class="logo-gran-chaco" alt="#"/-->
                 </td>
                 <td class="font-verdana-13 align-center align-inferior">
                     <b>GOBIERNO AUTONOMO REGIONAL DEL GRAN CHACO<br>YACUIBA</b>
                 </td>
                 <td width="15%" class="align-right">
                     &nbsp;
-                    <!--img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('logos/logoderecha.png'))) }}" class="logo-nueva-historia" alt="#"/-->
+                    <!--img src="data:image/png;base64,{{-- base64_encode(file_get_contents(public_path('logos/logoderecha.png'))) --}}" class="logo-nueva-historia" alt="#"/-->
                 </td>
             </tr>
             <tr>
@@ -26,7 +26,7 @@
             </tr>
             <tr>
                 <td colspan="3" class="font-verdana-13 align-center align-middle">
-                    <b>DAVID ROJAS EJECUTIVO REGIONAL DEL GRAN CHACO</b>
+                    <b>ABG. MSC. DAVID ROJAS CORVERA EJECUTIVO REGIONAL DEL GRAN CHACO</b>
                 </td>
             </tr>
             <tr>
